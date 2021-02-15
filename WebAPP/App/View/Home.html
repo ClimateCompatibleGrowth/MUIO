@@ -1,0 +1,87 @@
+<div class=" text-left" style="padding-top:25px; color: #3a3f51; font-weight:bold; ">
+  <div class="row">
+    <div class="col-md-11 col-md-offset-1">
+      <h1 lang="en" data-lang-token="else">OS<small>E</small>MOSYS<span class="hidden-xs"> - Open source modelling system</span> </h1>
+    </div>
+    <div class="col-md-1 col-md-offset-1">
+      <i id="icon" class="fa fa-cubes" style="
+        text-shadow: #d9d9d9; font-size: 77px; 
+        color: #fff; height: 129px; width: 129px; 
+        line-height: 129px; border-radius: 12%; 
+        text-align: center; background-color: #3a3f51;">
+      </i>
+    </div>
+    <div class="col-md-10">
+      <h3 lang="en">Sustainable Development </h3>
+      <h5 lang="en">Department of Economic and Social Affairs</h5>
+      <h5 lang="en">United Nations</h5>
+    </div>
+  </div>
+  <div class="separator"></div>
+
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <section id="widget-grid" class="">
+        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-x" data-widget-colorbutton="false"
+          data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false"
+          data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+          <header>
+            <h2> <i id="icon" class="fa fa-cubes"></i> OSeMOSYS case studies</h2>
+            <div class="widget-toolbar smart-form">
+              <label class="input">
+                <input type="text" placeholder="Search ..." class="nav-search-input" id="CaseSearch" />
+                <i class="ace-icon fa fa-search nav-search-icon"></i>
+              </label>
+            </div>
+            <div class="widget-toolbar smart-form">
+              <div class="input" data-toggle="modal" data-target="#modalrestore" id="restoreCS">
+                <i class="fa fa-upload white icon-btn"></i>
+                <b class="white">Upload case</b>
+              </div>
+            </div>
+          </header>
+          <div>
+            <div class="jarviswidget-editbox">
+            </div>
+            <div class="widget-body">
+              <div id="cases"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div id="modaldescriptionps" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" lang="en" data-lang-token="description" id="mtitleps_desc"></h4>
+      </div>
+      <div class="modal-body">
+        <div id="mdescriptionps"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal restore cs -->
+<div id="modalrestore" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Restore case study</h4>
+      </div>
+      <div class="modal-body">
+        <!-- <form action="http://127.0.0.1:5000/upload" class="dropzone" id="myDropzone"></form> -->
+        <div class="dropzone" id="myDropzone"></div>
+      </div>
+      <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-nest btn-sm" data-dismiss="modal" ><span class='glyphicon glyphicon-remove'></span>Close</button>
+        </div> -->
+    </div>
+  </div>
+</div>

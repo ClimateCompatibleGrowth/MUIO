@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<title> Osemosys.ver.1.0 </title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+			
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		
+		<!-- #CSS Links -->
+		<!-- Basic Styles -->
+
+
+		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/bootstrap.min.css">
+
+		<!-- <link rel="stylesheet" media="all" href="{{ url_for('static', filename='References/smartadmin/css/bootstrap.min.css')}}"> -->
+		<!-- <script  src="{{ url_for('static', filename='script.js')}}" data-turbolinks-track="reload"></script> -->
+
+		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/font-awesome.min.css">
+
+		<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/smartadmin-production-plugins.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/smartadmin-production.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/smartadmin-skins.min.css">
+
+		<link rel="stylesheet" href="References/jqwidgets/styles/jqx.base.css" type="text/css" />
+		<link rel="stylesheet" href="References/jqwidgets/styles/jqx.bootstrap.css" type="text/css" />
+
+		<!-- We recommend you use "your_style.css" to override SmartAdmin-->
+		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/osy.css"> 
+
+		<!-- #FAVICONS -->
+		<link rel="shortcut icon" href="References/smartadmin/img/favicon/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="References/smartadmin/img/favicon/favicon.ico" type="image/x-icon">
+
+		<!-- jquery-->    
+		<script type="text/javascript" src="References/jquery/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="References/jquery/jquery-1.12.1.ui.min.js"></script>
+		<!-- <script type="text/javascript" src="References/jquery/jquery.cookie.js"></script> -->
+
+    	<!-- jqx widgets-->
+		<script type="text/javascript" src="References/jqwidgets/jqx-all.js"></script>
+		<!--crossroad-->
+		<script type="text/javascript" src="References/signals/signals.min.js"></script>
+		<script type="text/javascript" src="References/crossroad/crossroad.min.js"></script>
+		<script type="text/javascript" src="References/hasher/hasher.min.js"></script>
+
+		<!--bootbox-->
+		<!-- <script type="text/javascript" src="References/bootbox/bootbox.min.js"></script> -->
+
+		<!-- #GOOGLE FONT -->
+		<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700"> -->
+		
+		<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	</head>
+
+	<body class=" minified smart-style-4  fixed-header ">
+		<div id="loadermain" style="display: none;">
+            <div class="loader "></div>
+			<h4></h4>
+		</div>
+
+		<!-- #HEADER -->
+		<header id="header"></header>
+		<!-- END HEADER -->
+
+		<!-- #NAVIGATION -->
+		<!-- Left panel : Navigation area -->
+		<!-- Note: This width of the aside area can be adjusted through LESS/SASS variables -->
+		<aside id="left-panel"></aside>
+		
+		<!-- #MAIN PANEL -->
+		<div id="main" role="main">	
+			<div id="osy-danger"></div>	
+			<div id="osy-warning"></div>	
+			<div id="osy-info"></div>	
+			<div id="osy-success"></div>			
+			<div class="osy-content pace-done" id="content"></div>
+		</div>
+
+		<!-- #PAGE FOOTER -->
+		<footer></footer>
+
+		<div id="modals"></div>
+		<script> $("aside").load("Includes/sidebar.html"); </script>
+        <script> $("header").load("App/View/Navbar.html"); </script>
+		<script> $("footer").load("Includes/footer.html"); </script>
+		
+		<script data-pace-options='{ "restartOnRequestAfter": true }' src="References/smartadmin/js/plugin/pace/pace.js"></script>
+
+		<!-- IMPORTANT: APP CONFIG -->
+		<script src="References/smartadmin/js/app.config.js"></script>
+
+		<!-- BOOTSTRAP JS -->
+		<script src="References/smartadmin/js/bootstrap/bootstrap.min.js"></script>
+
+		<!-- CUSTOM NOTIFICATION -->
+		<script src="References/smartadmin/js/notification/SmartNotification.min.js"></script>
+
+		<!-- JARVIS WIDGETS -->
+		<script src="References/smartadmin/js/smartwidgets/jarvis.widget.min.js"></script>
+
+		<!-- EASY PIE CHARTS -->
+		<script src="References/smartadmin/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+		<!-- SPARKLINES -->
+		<script src="References/smartadmin/js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+		<!-- MAIN APP JS FILE -->
+		<script src="References/smartadmin/js/app.min.js"></script>
+
+		<!--ROUTES-->
+		<!-- <script src="{{ url_for('static', filename='Routes/routes.js')}}"></script> -->
+		<!-- <script type="module" src="Routes/routes.js"></script> -->
+
+		<!-- Radilo sa reg edit promjenom -->
+		<!-- <script type="module" src="{{ url_for('static', filename='Routes/routes.js')}}" data-turbolinks-track="reload"></script>  -->
+
+		<script type="module" src="{{ url_for('static', filename='Routes/routes.js') }}"></script>
+	</body>
+</html>

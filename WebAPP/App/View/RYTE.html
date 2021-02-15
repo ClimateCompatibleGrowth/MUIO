@@ -1,0 +1,109 @@
+
+<div class="row">
+	<div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+		<h2 class="page-title txt-color-blueDark" id="osy-title"><i class="fa-fw fa fa-home"></i> Parameters <small>[Year, Technology, Commodity]</small> <span></span></h2>
+	</div>
+	<div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
+		<ul id="sparks" class="">
+			<li class="sparks-info">
+				<h5> Selected model: <span class="txt-color-blue" id="osy-case"></span></h5>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <section>
+            <div class="widget-body-toolbar-osy">
+				<fieldset>
+					<div class="form-inline">
+						
+						<div class="btn-toolbar">
+							<button id="osy-saveRYTEdata" class="btn btn-success">
+								Save data <i class="fa fa-save"></i>
+							 </button>
+							<select id="osy-ryt" name="osy-ryt" class="form-control inline"></select>
+
+
+							<div  class="btn-group pull-right">
+								<button type="button" class="btn btn-default" id="resizeColumns" data-toggle="tooltip" data-placement="top" title="Resize columns">
+									<i class="ace-icon fa fa-arrows-h "></i>
+								</button>
+							</div>
+
+							<div  class="btn-group pull-right">
+								<button type="button" class="btn btn-default toggleLabels" data-toggle="tooltip" data-placement="top" title="Labels on/off">
+									<i class="ace-icon fa fa-tags danger "></i>
+								</button>
+							</div>
+							<div  class="btn-group pull-right">
+								<button type="button" class="btn btn-default" id="xlsAll" data-toggle="tooltip" data-placement="top" title="Exportgrid to excel">
+									<i class="ace-icon fa fa-file-excel-o green "></i>
+								</button>
+								<button type="button" class="btn btn-default" id="exportPng" data-toggle="tooltip" data-placement="top" title="Export Chart as png">
+									<i class="ace-icon fa fa-file-image-o primary "></i>
+								</button>
+							</div>
+							<div class="btn-group pull-right">
+								<button type="button" class="btn btn-default switchChart" id="stackedcolumn" data-chartType="stackedcolumn" id-chart="6"  data-toggle="tooltip" data-placement="top" title="Stacked Column Chart">
+									<i class="ace-icon fa fa-bars "></i>
+								</button>							
+								<button type="button" class="btn btn-default switchChart" id="coulmn" data-chartType="column" id-chart="6"  data-toggle="tooltip" data-placement="top" title="Stacked Area Chart">
+									<i class="ace-icon fa fa-bar-chart "></i>
+								</button>
+								<button type="button" class="btn btn-default switchChart"  id="line" data-chartType="line" id-chart="6"  data-toggle="tooltip" data-placement="top" title="Line Chart">
+									<i class="ace-icon fa fa-line-chart "></i>
+								</button>
+							</div>
+							<div  class="btn-group pull-right">
+								<button type="button" class="btn btn-default" id="decDown" data-toggle="tooltip" data-placement="top" title="Decrease decimal places">
+									<sub>0.0  &nbsp; &nbsp; </sub> <i class="ace-icon fa fa-chevron-left"></i>
+								</button>
+								<button type="button" class="btn btn-default"  id="decUp" data-toggle="tooltip" data-placement="top" title="Increase decimal places">
+									<sub>0.000</sub> <i class="ace-icon fa fa-chevron-right"></i>
+								</button>
+							</div>
+							<div  class="btn-group pull-right">
+								<select id="osy-techs" name="osy-techs" class="form-control inline"></select>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="jarviswidget" >   
+	<div>
+		<div class="widget-body no-padding-bottom">
+			<fieldset>
+				<section>
+					<div id="osy-chartRYTE" style="width: 100%; height: 230px;"></div>
+				</section>
+			</fieldset>
+		</div>
+	</div>         
+</div>
+<div class="jarviswidget" >            
+	<div>
+		<div class="widget-body no-padding">
+			<fieldset>
+				<section>
+					<div id="osy-gridRYTE" class="no-padding-bottom"></div>
+				</section>
+			</fieldset>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,17 @@
+Flask_Cors-3.0.9.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+Flask_Cors-3.0.9.dist-info/LICENSE,sha256=bhob3FSDTB4HQMvOXV9vLK4chG_Sp_SCsRZJWU-vvV0,1069
+Flask_Cors-3.0.9.dist-info/METADATA,sha256=cUytRTISWTyZGDu2VxycuGloLxldjEGw7gTLKe1irAU,5368
+Flask_Cors-3.0.9.dist-info/RECORD,,
+Flask_Cors-3.0.9.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+Flask_Cors-3.0.9.dist-info/WHEEL,sha256=ADKeyaGyKF5DwBNE0sRE5pvW-bSkFMJfBuhzZ3rceP4,110
+Flask_Cors-3.0.9.dist-info/top_level.txt,sha256=aWye_0QNZPp_QtPF4ZluLHqnyVLT9CPJsfiGhwqkWuo,11
+flask_cors/__init__.py,sha256=oJExwfR7yU3HAsmQ_EfL6KoLK3zq3J9HsET9r-56sfM,791
+flask_cors/__pycache__/__init__.cpython-39.pyc,,
+flask_cors/__pycache__/core.cpython-39.pyc,,
+flask_cors/__pycache__/decorator.cpython-39.pyc,,
+flask_cors/__pycache__/extension.cpython-39.pyc,,
+flask_cors/__pycache__/version.cpython-39.pyc,,
+flask_cors/core.py,sha256=N6dEVe5dffaQTw79Mc8IvEeTzvY_YsKCiOZ1lJ_PyNk,13894
+flask_cors/decorator.py,sha256=iiwjUi0lVeCm4OJJHY5Cvuzj2nENbUns3Iq6zqKXuss,4937
+flask_cors/extension.py,sha256=5PvNVLg6GsR6bWS0izBx737kZMw0vf3DUYUNdSDcBtA,7585
+flask_cors/version.py,sha256=GgzlXELdHTkTAUXqLnCAGFr2E0nwjjBPe-3RxfSkl6c,22
