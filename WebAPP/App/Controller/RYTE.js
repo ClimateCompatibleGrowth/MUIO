@@ -5,11 +5,11 @@ import { Model } from "../Model/RYTE.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { PARAMETERS } from "../../Classes/Const.Class.js";
+import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTE {
-    static onLoad(){
+    static onLoad(group, param){
         Base.getSession()
         .then(response =>{
             let casename = response['session']
@@ -28,7 +28,7 @@ export default class RYTE {
                 Message.smallBoxWarning('WARNING', 'Selected model does not have Emission activity ratio defined for any technology.', null);
 
             }else{
-                let model = new Model(casename, genData, RYTCdata, PARAMETERS['RYTE'][0]['id']);
+                let model = new Model(casename, genData, RYTCdata, group, param);
                 if(casename){
                     this.initPage(model);
                     this.initEvents(model);
@@ -45,8 +45,8 @@ export default class RYTE {
     static initPage(model){
         Message.clearMessages();
         //Navbar.initPage(model.casename);
-        Html.title(model.casename);
-        Html.ddlRYT( PARAMETERS['RYTE'], model.defaultParam);
+        Html.title(model.casename, model.paramVals[model.param], PARAMNAMES[model.group]);
+        Html.ddlRYT( PARAMETERS['RYTE'], model.param);
         Html.ddlTechs( model.techs, model.techs[0]['TechId']);
         
         let $divGrid = $('#osy-gridRYTE');
@@ -113,6 +113,7 @@ export default class RYTE {
 
         //change of ddl parameters
         $('#osy-ryt').on('change', function() {
+            Html.title(model.casename, model.paramVals[this.value], PARAMNAMES[model.group]);
             let $divGrid = $('#osy-gridRYTE');
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');

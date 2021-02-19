@@ -1,6 +1,6 @@
 {
     "osy-version": "1.0",
-    "osy-casename": "DEMO FULL",
+    "osy-casename": "DEMO FULL_copy",
     "osy-desc": "",
     "osy-date": "02/15/2021",
     "osy-currency": "EUR",
@@ -16,8 +16,7 @@
                 "EMI_2fyjq"
             ],
             "IAR": [
-                "COM_qz2wv",
-                "COM_s2rhi"
+                "COM_qz2wv"
             ],
             "OAR": [
                 "COM_qz2wv"

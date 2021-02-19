@@ -5,11 +5,11 @@ import { Model } from "../Model/RYTTs.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { PARAMETERS } from "../../Classes/Const.Class.js";
+import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTTs {
-    static onLoad(){
+    static onLoad(group, param){
         Base.getSession()
         .then(response =>{
             let casename = response['session']
@@ -23,7 +23,7 @@ export default class RYTTs {
         })
         .then(data => {
             let [casename, genData, RYTTsdata] = data;
-            let model = new Model(casename, genData, RYTTsdata, PARAMETERS['RYTTs'][0]['id']);
+            let model = new Model(casename, genData, RYTTsdata, group, param);
             if(casename){
                 this.initPage(model);
                 this.initEvents(model);
@@ -39,8 +39,8 @@ export default class RYTTs {
     static initPage(model){
         Message.clearMessages();
         //Navbar.initPage(model.casename);
-        Html.title(model.casename);
-        // Html.ddlRYT( PARAMETERS['RYTTs'], model.defaultParam);
+        Html.title(model.casename, model.paramVals[model.param], PARAMNAMES[model.group]);
+        // Html.ddlRYT( PARAMETERS['RYTTs'], model.param);
         Html.ddlTechs( model.techs, model.techs[0]['TechId']);
         
         let $divGrid = $('#osy-gridRYTTs');
@@ -66,7 +66,7 @@ export default class RYTTs {
         })
         .then(data => {
             let [casename, genData, RYTTsdata] = data;
-            let model = new Model(casename, genData, RYTTsdata,  PARAMETERS['RYTTs'][0]['id']);
+            let model = new Model(casename, genData, RYTTsdata, 'RYTTs', PARAMETERS['RYTTs'][0]['id']);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -95,9 +95,9 @@ export default class RYTTs {
             let daRYTData = JSON.stringify(rytData,['TechId', 'Timeslice'].concat(model.years));
             //let RYTmodel = JSON.stringify(rytData,['TechId', 'Tech', 'CommId', 'Comm'].concat(model.years));
             //potrebno dodati za koji param vrsimo update
-            Osemosys.updateData(JSON.parse(daRYTData), model.defaultParam, "RYTTs.json")
+            Osemosys.updateData(JSON.parse(daRYTData), model.param, "RYTTs.json")
             .then(response =>{
-                //model.gridData[model.defaultParam] = JSON.parse(RYTmodel);
+                //model.gridData[model.param] = JSON.parse(RYTmodel);
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
             })
             .catch(error=>{
@@ -120,7 +120,7 @@ export default class RYTTs {
         $('#osy-techs').on('change', function() {
             //var param = $( "#osy-ryt" ).val();
             var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
-            configChart.source.records = model.chartData[model.defaultParam][this.value];
+            configChart.source.records = model.chartData[model.param][this.value];
             configChart.update();
         });
 
@@ -149,12 +149,12 @@ export default class RYTTs {
                             });
                             chartData.push(chunk);
                         });
-                        model.chartData[model.defaultParam][tech['TechId']] =  chartData;
+                        model.chartData[model.param][tech['TechId']] =  chartData;
                     });
                     //update grid model
-                    model.gridData[model.defaultParam] = gridData;
+                    model.gridData[model.param] = gridData;
                     var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
-                    configChart.source.records = model.chartData[model.defaultParam][tech];
+                    configChart.source.records = model.chartData[model.param][tech];
                     configChart.update();
                 }, 1000);
             }
@@ -171,7 +171,7 @@ export default class RYTTs {
                 let tech = $( "#osy-techs" ).val();
 
                 //update chart model
-                $.each(model.chartData[model.defaultParam][techId], function (id, obj) {
+                $.each(model.chartData[model.param][techId], function (id, obj) {
                     if(obj.Year == year){
                         if(value){
                             obj[timeslice] = value;
@@ -182,10 +182,10 @@ export default class RYTTs {
                 });
 
                 var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
-                configChart.source.records = model.chartData[model.defaultParam][tech];
+                configChart.source.records = model.chartData[model.param][tech];
                 configChart.update();
                 //update chart model
-                $.each(model.gridData[model.defaultParam], function (id, obj) {
+                $.each(model.gridData[model.param], function (id, obj) {
                     if(obj.TechId == techId && obj.Timeslice == timeslice){
                         if(value){
                             obj[year] = value;

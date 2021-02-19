@@ -1,3 +1,16 @@
+import { PARAMETERS } from "../../Classes/Const.Class.js";
+
+// $("aside").load('App/View/Sidebar.html');
+// import('../App/Controller/Sidebar.js')
+// .then(Sidebar => {
+//     Sidebar.default.onLoad();
+// });
+
+//$("aside").load('App/View/Sidebar.html');
+//import('../App/Controller/Sidebar.js')
+
+
+
 crossroads.addRoute('/', function() {
     $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
     import('../App/Controller/Home.js')
@@ -5,7 +18,6 @@ crossroads.addRoute('/', function() {
         $(".osy-content").load('App/View/Home.html');
         Home.default.onLoad();
     });
-    
 });
 
 crossroads.addRoute('/AddCase', function() {
@@ -18,21 +30,37 @@ crossroads.addRoute('/AddCase', function() {
 });
 
 
+function addRoute(group, id){
+
+    return crossroads.addRoute(`/${group}/${id}`, function() {
+        $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+        //console.log(group, id);
+        import(`../App/Controller/${group}.js`)
+        .then(f => {
+            $(".osy-content").load(`App/View/${group}.html`);
+            f.default.onLoad(group, id);
+        });
+    });
+}
+
+$.each(PARAMETERS, function (param, array) {                    
+    $.each(array, function (id, obj) {
+        //console.log(param, obj.id)
+        addRoute(param, obj.id)
+    });
+});
+
+
+
+
+
+/*
 crossroads.addRoute('/RYT', function() {
     $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
     import('../App/Controller/RYT.js')
     .then(RYT => {
         $(".osy-content").load('App/View/RYT.html');
         RYT.default.onLoad();
-    });
-});
-
-crossroads.addRoute('/RYT/{param}', function(param) {
-    $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-    import('../App/Controller/RYT.js')
-    .then(RYT => {
-        $(".osy-content").load('App/View/RYT.html');
-        RYT.default.onLoad(param);
     });
 });
 
@@ -98,6 +126,8 @@ crossroads.addRoute('/RYCTs', function() {
         RYCTs.default.onLoad();
     });
 });
+
+*/
 
 crossroads.bypassed.add(function(request) {
     console.error(request + ' seems to be a dead end...');

@@ -5,11 +5,11 @@ import { Model } from "../Model/RYCTs.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { PARAMETERS } from "../../Classes/Const.Class.js";
+import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYCTs {
-    static onLoad(){
+    static onLoad(group, param){
         Base.getSession()
         .then(response =>{
             let casename = response['session']
@@ -23,7 +23,7 @@ export default class RYCTs {
         })
         .then(data => {
             let [casename, genData, RYCTsdata] = data;
-            let model = new Model(casename, genData, RYCTsdata, PARAMETERS['RYCTs'][0]['id']);
+            let model = new Model(casename, genData, RYCTsdata, group, param);
             if(casename){
                 this.initPage(model);
                 this.initEvents(model);
@@ -39,7 +39,7 @@ export default class RYCTs {
     static initPage(model){
         Message.clearMessages();
         //Navbar.initPage(model.casename);
-        Html.title(model.casename);
+        Html.title(model.casename, model.paramVals[model.param], PARAMNAMES[model.group]);
         Html.ddlComms( model.comms, model.comms[0]['CommId']);
         
         let $divGrid = $('#osy-gridRYCTs');
@@ -65,7 +65,7 @@ export default class RYCTs {
         })
         .then(data => {
             let [casename, genData, RYCTsdata] = data;
-            let model = new Model(casename, genData, RYCTsdata,  PARAMETERS['RYCTs'][0]['id']);
+            let model = new Model(casename, genData, RYCTsdata, 'RYCTs', PARAMETERS['RYCTs'][0]['id']);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -91,7 +91,7 @@ export default class RYCTs {
             event.stopImmediatePropagation();
             let rytData = $('#osy-gridRYCTs').jqxGrid('getrows');
             let daRYTData = JSON.stringify(rytData,['CommId', 'Timeslice'].concat(model.years));
-            Osemosys.updateData(JSON.parse(daRYTData), model.defaultParam, "RYCTs.json")
+            Osemosys.updateData(JSON.parse(daRYTData), model.param, "RYCTs.json")
             .then(response =>{
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
             })
@@ -103,7 +103,7 @@ export default class RYCTs {
         //change of ddl techs
         $('#osy-comms').on('change', function() {
             var configChart = $('#osy-chartRYCTs').jqxChart('getInstance');
-            configChart.source.records = model.chartData[model.defaultParam][this.value];
+            configChart.source.records = model.chartData[model.param][this.value];
             configChart.update();
         });
 
@@ -131,12 +131,12 @@ export default class RYCTs {
                             });
                             chartData.push(chunk);
                         });
-                        model.chartData[model.defaultParam][comm['CommId']] =  chartData;
+                        model.chartData[model.param][comm['CommId']] =  chartData;
                     });
                     //update grid model
-                    model.gridData[model.defaultParam] = gridData;
+                    model.gridData[model.param] = gridData;
                     var configChart = $('#osy-chartRYCTs').jqxChart('getInstance');
-                    configChart.source.records = model.chartData[model.defaultParam][comm];
+                    configChart.source.records = model.chartData[model.param][comm];
                     configChart.update();
                 }, 1000);
             }
@@ -152,7 +152,7 @@ export default class RYCTs {
                 let comm = $( "#osy-comms" ).val();
 
                 //update chart model
-                $.each(model.chartData[model.defaultParam][commId], function (id, obj) {
+                $.each(model.chartData[model.param][commId], function (id, obj) {
                     if(obj.Year == year){
                         if(value){
                             obj[timeslice] = value;
@@ -163,10 +163,10 @@ export default class RYCTs {
                 });
 
                 var configChart = $('#osy-chartRYCTs').jqxChart('getInstance');
-                configChart.source.records = model.chartData[model.defaultParam][comm];
+                configChart.source.records = model.chartData[model.param][comm];
                 configChart.update();
                 //update chart model
-                $.each(model.gridData[model.defaultParam], function (id, obj) {
+                $.each(model.gridData[model.param], function (id, obj) {
                     if(obj.TechId == commId && obj.Timeslice == timeslice){
                         if(value){
                             obj[year] = value;

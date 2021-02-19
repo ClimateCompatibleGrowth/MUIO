@@ -28,9 +28,10 @@ export class Grid {
             var items = editor.jqxDropDownList('getItems');
             editor.jqxDropDownList('uncheckAll');
             //console.log('cellvalues ', cellvalue)
+            //console.log('items ', items)
             if(Array.isArray(cellvalue)){
                 var values = cellvalue;
-                console.log('values array ', values)
+                //console.log('values array ', values)
             }else{
                 var values = cellvalue.split(/,\s*/);
                 // console.log('values strig ', values)
@@ -38,7 +39,8 @@ export class Grid {
            
             for (var j = 0; j < values.length; j++) {
                 for (var i = 0; i < items.length; i++) {
-                    if (items[i].label === values[j]) {
+                    //if (items[i].label === values[j]) {
+                    if (items[i].value === values[j]) {
                         editor.jqxDropDownList('checkIndex', i);
                     }
                 }
@@ -47,6 +49,7 @@ export class Grid {
 
         var getEditorValue = function (row, cellvalue, editor) {
             // return the editor's value.
+            //console.log(editor, editor.text())
             return editor.val();
         }
         
@@ -295,7 +298,7 @@ export class Grid {
     }
 
 
-    
+
     ///////////////////////////////////////////////////////////ELSE
 
     static unitsGrid(data){

@@ -1,8 +1,9 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
+import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
     
-    constructor (casename, genData, RYTTsdata, param) {
+    constructor (casename, genData, RYTTsdata, group, param) {
         this.d = 2;
         this.decimal = 'd' + this.d;
 
@@ -57,7 +58,10 @@ export class Model {
                 series.push({ dataField: obj, displayText: obj });
             });
 
-            console.log('RYTTschart ', RYTTschart);
+            let paramVals = {};
+            $.each(PARAMETERS[group], function (id, obj) {
+                paramVals[obj.id] = obj.value;
+            });
             
             var srcGrid = {
                 datatype: "json",
@@ -83,7 +87,9 @@ export class Model {
             this.gridData = RYTTsgrid;
             this.chartData = RYTTschart;
             this.genData = genData;
-            this.defaultParam = param;
+            this.param = param;
+            this.paramVals = paramVals;
+            this.group = group;
             this.srcGrid = srcGrid;
             this.srcChart = srcChart;
         }else{
@@ -97,7 +103,9 @@ export class Model {
             this.gridData = null;
             this.chartData = null;
             this.genData = null; 
-            this.defaultParam = param;
+            this.param = param;
+            this.paramVals = paramVals;
+            this.group = group;
             this.srcGrid = null;
             this.srcChart = null;
         }

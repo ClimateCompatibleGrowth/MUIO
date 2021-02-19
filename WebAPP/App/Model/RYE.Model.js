@@ -1,8 +1,9 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
+import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
     
-    constructor (casename, genData, RYEdata,  param) {
+    constructor (casename, genData, RYEdata, group, param) {
         this.d = 2;
         this.decimal = 'd' + this.d;
         if(casename){
@@ -53,6 +54,11 @@ export class Model {
             let RYEgrid = DataModel.RYEgrid(genData, RYEdata);
             let RYEchart = DataModel.RYEchart(genData, RYEdata);
 
+            let paramVals = {};
+            $.each(PARAMETERS[group], function (id, obj) {
+                paramVals[obj.id] = obj.value;
+            });
+
             let srcGrid = {
                 datatype: "json",
                 localdata: RYEgrid,
@@ -77,7 +83,9 @@ export class Model {
             this.gridData = RYEgrid;
             this.chartData = RYEchart;
             this.genData = genData;
-            this.defaultParam = param;
+            this.param = param;
+            this.paramVals = paramVals;
+            this.group = group;
             this.srcGrid = srcGrid,
             this.srcChart = srcChart
         }else{
@@ -91,10 +99,11 @@ export class Model {
             this.gridData = null;
             this.chartData = null;
             this.genData = null; 
-            this.defaultParam = param;
+            this.param = param;
+            this.paramVals = paramVals;
+            this.group = group;
             this.srcGrid = srcGrid
             this.srcChart = srcChart
         }
-
     }
 }

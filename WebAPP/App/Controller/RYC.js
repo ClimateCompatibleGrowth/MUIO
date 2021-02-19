@@ -5,11 +5,11 @@ import { Model } from "../Model/RYC.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { PARAMETERS } from "../../Classes/Const.Class.js";
+import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYC {
-    static onLoad(){
+    static onLoad(group, param){
         Base.getSession()
         .then(response =>{
             let casename = response['session']
@@ -23,7 +23,7 @@ export default class RYC {
         })
         .then(data => {
             let [casename, genData, RYCdata] = data;
-            let model = new Model(casename, genData, RYCdata, PARAMETERS['RYC'][0]['id']);
+            let model = new Model(casename, genData, RYCdata,group, param);
             if(casename){
                 this.initPage(model);
                 this.initEvents(model);
@@ -41,8 +41,8 @@ export default class RYC {
         Message.clearMessages();
         //Navbar.initPage(model.casename);
 
-        Html.title(model.casename);
-        Html.ddlRYT( PARAMETERS['RYC'], model.defaultParam);
+        Html.title(model.casename, model.paramVals[model.param], PARAMNAMES[model.group]);
+        Html.ddlRYT( PARAMETERS[model.group], model.param);
 
         let $divGrid = $('#osy-gridRYC');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
@@ -67,7 +67,7 @@ export default class RYC {
         })
         .then(data => {
             let [casename, genData, RYCdata] = data;
-            let model = new Model(casename, genData, RYCdata,  PARAMETERS['RYC'][0]['id']);
+            let model = new Model(casename, genData, RYCdata, 'RYC', PARAMETERS['RYC'][0]['id']);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -105,6 +105,7 @@ export default class RYC {
 
         //change of ddl parameters
         $('#osy-ryt').on('change', function() {
+            Html.title(model.casename, model.paramVals[this.value], PARAMNAMES[model.group]);
             let $divGrid = $('#osy-gridRYC');
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');

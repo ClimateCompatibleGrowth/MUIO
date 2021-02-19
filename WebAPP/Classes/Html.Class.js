@@ -105,8 +105,9 @@ export class Html {
             .addClass("glyphicon-check danger"); 
     }
 
-    static title(casename){
+    static title(casename, title, group, ){
         $("#osy-case").html(casename);
+        $("#osy-title").html('<i class="fa-fw fa fa-home"></i>' +title+ ' <small>[' + group +']</small>'  );
     }
 
     static genData(model){

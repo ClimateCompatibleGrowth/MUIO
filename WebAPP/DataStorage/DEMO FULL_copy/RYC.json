@@ -1,7 +1,6 @@
 {
-    "IAR": [
+    "AAD": [
         {
-            "TechId": "TEC_dj1hd",
             "CommId": "COM_qz2wv",
             "2020": 0,
             "2025": 0,
@@ -12,7 +11,6 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_dj1hd",
             "CommId": "COM_s2rhi",
             "2020": 0,
             "2025": 0,
@@ -23,18 +21,6 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_iohcy",
-            "CommId": "COM_s2rhi",
-            "2020": 0,
-            "2025": 0,
-            "2030": 0,
-            "2035": 0,
-            "2040": 0,
-            "2045": 0,
-            "2050": 0
-        },
-        {
-            "TechId": "TEC_iohcy",
             "CommId": "COM_rbc2e",
             "2020": 0,
             "2025": 0,
@@ -45,9 +31,8 @@
             "2050": 0
         }
     ],
-    "OAR": [
+    "SAD": [
         {
-            "TechId": "TEC_dj1hd",
             "CommId": "COM_qz2wv",
             "2020": 0,
             "2025": 0,
@@ -58,7 +43,6 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_iohcy",
             "CommId": "COM_s2rhi",
             "2020": 0,
             "2025": 0,
@@ -69,7 +53,6 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_iohcy",
             "CommId": "COM_rbc2e",
             "2020": 0,
             "2025": 0,

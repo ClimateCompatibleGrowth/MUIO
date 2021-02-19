@@ -7,6 +7,7 @@ export class Model {
 
       if(genData){
         this.casename = genData['osy-casename'];
+        this.title = "Case study";
         this.desc = genData['osy-desc'];
         this.date = genData['osy-date'];
         this.dr = genData['osy-dr'];
@@ -34,6 +35,7 @@ export class Model {
         for(var i = 2020; i <= 2050; i++) { years.push(String(i)); }
 
         this.casename = null;
+        this.title = "Case study";
         this.desc = null;
         this.date = null;
         this.dr = null;

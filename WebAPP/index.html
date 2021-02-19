@@ -70,7 +70,12 @@
 		<!-- #NAVIGATION -->
 		<!-- Left panel : Navigation area -->
 		<!-- Note: This width of the aside area can be adjusted through LESS/SASS variables -->
-		<aside id="left-panel"></aside>
+		<aside id="left-panel">
+			
+			<!-- <nav>
+				<ul id="Navi"></ul>
+			</nav> -->
+		</aside>
 		
 		<!-- #MAIN PANEL -->
 		<div id="main" role="main">	
@@ -88,6 +93,7 @@
 		<script> $("aside").load("Includes/sidebar.html"); </script>
         <script> $("header").load("App/View/Navbar.html"); </script>
 		<script> $("footer").load("Includes/footer.html"); </script>
+		<script type="module" src="{{ url_for('static', filename='Routes/routes.js') }}"></script>
 		
 		<script data-pace-options='{ "restartOnRequestAfter": true }' src="References/smartadmin/js/plugin/pace/pace.js"></script>
 
@@ -110,7 +116,7 @@
 		<script src="References/smartadmin/js/plugin/sparkline/jquery.sparkline.min.js"></script>
 
 		<!-- MAIN APP JS FILE -->
-		<script src="References/smartadmin/js/app.min.js"></script>
+		<script src="References/smartadmin/js/app.min.js"></script> 
 
 		<!--ROUTES-->
 		<!-- <script src="{{ url_for('static', filename='Routes/routes.js')}}"></script> -->
@@ -119,6 +125,6 @@
 		<!-- Radilo sa reg edit promjenom -->
 		<!-- <script type="module" src="{{ url_for('static', filename='Routes/routes.js')}}" data-turbolinks-track="reload"></script>  -->
 
-		<script type="module" src="{{ url_for('static', filename='Routes/routes.js') }}"></script>
+		
 	</body>
 </html>

@@ -5,11 +5,11 @@ import { Model } from "../Model/RYTs.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { PARAMETERS } from "../../Classes/Const.Class.js";
+import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTs {
-    static onLoad(){
+    static onLoad(group, param){
         Base.getSession()
         .then(response =>{
             let casename = response['session']
@@ -23,7 +23,7 @@ export default class RYTs {
         })
         .then(data => {
             let [casename, genData, RYTsdata] = data;
-            let model = new Model(casename, genData, RYTsdata, PARAMETERS['RYTs'][0]['id']);
+            let model = new Model(casename, genData, RYTsdata,group, param);
             if(casename){
                 this.initPage(model);
                 this.initEvents(model);
@@ -40,7 +40,7 @@ export default class RYTs {
     static initPage(model){
         Message.clearMessages();
         //Navbar.initPage(model.casename);
-        Html.title(model.casename);
+        Html.title(model.casename, model.paramVals[model.param], PARAMNAMES[model.group]);
 
         let $divGrid = $('#osy-gridRYTs');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
@@ -65,7 +65,7 @@ export default class RYTs {
         })
         .then(data => {
             let [casename, genData, RYTsdata] = data;
-            let model = new Model(casename, genData, RYTsdata, PARAMETERS['RYTs'][0]['id']);
+            let model = new Model(casename, genData, RYTsdata, 'RYTs', PARAMETERS['RYTs'][0]['id']);
             this.initPage(model);
             this.initEvents(model);
         })

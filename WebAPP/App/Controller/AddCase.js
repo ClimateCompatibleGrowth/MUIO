@@ -33,7 +33,7 @@ export default class AddCase {
         Message.clearMessages();
         $('a[href="#tabComms"]').click();
         //Navbar.initPage(model.casename, model.pageId);
-        Html.title(model.casename);
+        Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);
 
         Grid.commGrid(model.commodities);
@@ -372,7 +372,7 @@ export default class AddCase {
                     if(column != 'IAR' && column != 'OAR'&& column != 'EAR'){
                         obj[column] = value;
                     }else{
-                        console.log('save value ', value)
+                        //console.log('save value ', value)
                         if(value.includes(',') && value){
                             var array = value.split(',');
                         }else if (value){
