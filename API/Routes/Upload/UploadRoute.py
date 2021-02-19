@@ -70,7 +70,7 @@ def uploadCase():
                             if genDataPath in zf.namelist():
                                 data = json.loads(zf.read(genDataPath))
                                 #name = data['else-version']
-                                name = data.get('else-version', None)
+                                name = data.get('osy-version', None)
                                 if name == '1.0':
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
                                     msg.append({
@@ -79,12 +79,12 @@ def uploadCase():
                                     })
                                 else:
                                     msg.append({
-                                        "message": "Case " + case +" is not valid ELSE ver 1.0 case!",
+                                        "message": "Case " + case +" is not valid OSEMOSYS ver 1.0 case!",
                                         "status_code": "error"
                                     })
                             else:
                                 msg.append({
-                                    "message": "Case " + case +" is not valid ELSE ver 1.0 case!",
+                                    "message": "Case " + case +" is not valid OSEMOSYS ver 1.0 case!",
                                     "status_code": "error"
                                 })
                         
