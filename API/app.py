@@ -43,7 +43,7 @@ CORS(app)
 #potrebno kad je front end na drugom serveru 127.0.0.1
 @app.after_request
 def add_headers(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost')
+    response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     #response.headers['Content-Type'] = 'application/javascript'
@@ -89,4 +89,4 @@ if __name__ == '__main__':
     import mimetypes
     mimetypes.add_type('application/javascript', '.js')
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='127.0.0.1', port=port, debug=True)
