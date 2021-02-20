@@ -4,7 +4,7 @@ import { Html } from "./Html.Class.js";
 export class Base {
     
     static apiUrl() {
-        let apiUrl = "hhttps://osemosys.herokuapp.com/";
+        let apiUrl = "https://osemosys.herokuapp.com/";
         return apiUrl
     }
 
