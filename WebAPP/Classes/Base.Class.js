@@ -4,7 +4,7 @@ import { Html } from "./Html.Class.js";
 export class Base {
     
     static apiUrl() {
-        let apiUrl = "http://127.0.0.1:5000/";
+        let apiUrl = "https://0.0.0.0:5000/";
         return apiUrl
     }
 
