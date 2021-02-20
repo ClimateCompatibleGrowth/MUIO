@@ -1,1 +1,1 @@
-web: guinicorn API:app
+web: guinicorn --chdir API app:app 
