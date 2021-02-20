@@ -4,6 +4,9 @@ import { Html } from "./Html.Class.js";
 export class Base {
     
     static apiUrl() {
+        //localhost
+        //let apiUrl = "http://127.0.0.1:5000";
+        //HEROKU
         let apiUrl = "https://osemosys.herokuapp.com/";
         return apiUrl
     }
