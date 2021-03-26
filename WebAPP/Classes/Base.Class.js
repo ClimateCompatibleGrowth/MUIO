@@ -5,7 +5,7 @@ export class Base {
 
     static HEROKU = 1
     //static AWS = 1
-    static AWS_SYNC = 1
+    static AWS_SYNC = 0
     
     static apiUrl() {
         let apiUrl
