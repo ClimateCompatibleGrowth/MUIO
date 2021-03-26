@@ -3,9 +3,9 @@ import { Html } from "./Html.Class.js";
 
 export class Base {
 
-    static HEROKU = 0
+    static HEROKU = 1
     //static AWS = 1
-    static AWS_SYNC = 0
+    static AWS_SYNC = 1
     
     static apiUrl() {
         let apiUrl
