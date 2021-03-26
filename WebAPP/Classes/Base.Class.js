@@ -215,7 +215,7 @@ export class Base {
         });
     }
 
-    static backupCaseStudy(titlecs) {
+    static backupCaseStudy(casename) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "backupCase",
