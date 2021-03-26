@@ -1,5 +1,7 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_file, session
 from Classes.Case.DataFileClass import DataFile
+from pathlib import Path
+from Classes.Base import Config
 
 datafile_api = Blueprint('DataFileRoute', __name__)
 
@@ -33,17 +35,23 @@ def readDataFile():
     except(IOError):
         return jsonify('No existing cases!'), 404
 
-@datafile_api.route("/downloadDataFile", methods=['POST'])
+@datafile_api.route("/downloadDataFile", methods=['GET'])
 def downloadDataFile():
     try:
-        casename = request.json['casename']
-        txtFile = DataFile(casename)
-        downloadPath = txtFile.downloadDataFile()
-        response = {
-            "message": "You have downloaded data.txt to "+ str(downloadPath) +"!",
-            "status_code": "success"
-        }         
-        return jsonify(response), 200
+        #casename = request.json['casename']
+        #casename = 'DEMO CASE'
+        # txtFile = DataFile(casename)
+        # downloadPath = txtFile.downloadDataFile()
+        # response = {
+        #     "message": "You have downloaded data.txt to "+ str(downloadPath) +"!",
+        #     "status_code": "success"
+        # }         
+        # return jsonify(response), 200
+        #path = "/Examples.pdf"
+        case = session.get('osycase', None)
+        dataFile = Path(Config.DATA_STORAGE,case,'data.txt')
+        return send_file(dataFile.resolve(), as_attachment=True)
+    
     except(IOError):
         return jsonify('No existing cases!'), 404
 

@@ -3,7 +3,7 @@ import { Html } from "./Html.Class.js";
 
 export class Base {
 
-    static HEROKU = 1
+    static HEROKU = 0
     //static AWS = 1
     static AWS_SYNC = 0
     
@@ -215,14 +215,37 @@ export class Base {
         });
     }
 
+    // static backupCaseStudy(casename) {
+    //     return new Promise((resolve, reject) => {
+    //         $.ajax({
+    //             url:Base.apiUrl() + "backupCase",
+    //             async: true,  
+    //             type: 'POST',
+    //             dataType: 'json',
+    //             data: JSON.stringify({ "casename": casename }),
+    //             contentType: 'application/json; charset=utf-8',
+    //             // credentials: 'include',
+    //             // xhrFields: { withCredentials: true},
+    //             // crossDomain: true,
+    //             success: function (result) {             
+    //                 resolve(result);
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+    //                 reject(error);
+    //             }
+    //         });
+    //     });
+    // }
+
     static backupCaseStudy(casename) {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url:Base.apiUrl() + "backupCase",
+                url:Base.apiUrl() + "backupCase?case="+casename,
                 async: true,  
-                type: 'POST',
+                type: 'GET',
                 dataType: 'json',
-                data: JSON.stringify({ "casename": casename }),
+                //data: JSON.stringify({ "casename": casename }),
                 contentType: 'application/json; charset=utf-8',
                 // credentials: 'include',
                 // xhrFields: { withCredentials: true},
@@ -235,21 +258,6 @@ export class Base {
                     reject(error);
                 }
             });
-
-            // $.ajax({
-            //     url:this.apiUrl() + "backupCase",
-            //     async: true,  
-            //     type: 'POST',
-            //     data: { "case": titlecs },
-            //     dataType: 'json',
-            //     success: function (result) {            
-            //         resolve(result);
-            //     },
-            //     error: function(xhr, status, error) {
-            //         if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-            //         reject(error);
-            //     }
-            // });
         });
     }
 

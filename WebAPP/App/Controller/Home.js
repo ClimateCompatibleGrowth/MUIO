@@ -110,26 +110,26 @@ export default class Home {
         });
 
         //backup case
-        $(document).delegate(".backupCS","click",function(e){
-            e.stopImmediatePropagation();
-            var titleps = $(this).attr('data-ps');
-            Base.backupCaseStudy(titleps)
-            .then(response => {
-                Message.clearMessages();
-                if(response.status_code=="success"){
-                    Message.bigBoxInfo('Backup info', response.message, 5000)
-                }
-                if(response.status_code=="info"){
-                    Message.info(response.message);
-                }
-                if(response.status_code=="warning"){
-                    Message.bigBoxWarning('Backup warning', response.message, 5000)
-                }
-            })
-            .catch(error =>{ 
-                Message.danger(error);
-            });
-        });
+        // $(document).delegate(".backupCS","click",function(e){
+        //     e.stopImmediatePropagation();
+        //     var titleps = $(this).attr('data-ps');
+        //     Base.backupCaseStudy(titleps)
+        //     .then(response => {
+        //         Message.clearMessages();
+        //         if(response.status_code=="success"){
+        //             Message.bigBoxInfo('Backup info', response.message, 5000)
+        //         }
+        //         if(response.status_code=="info"){
+        //             Message.info(response.message);
+        //         }
+        //         if(response.status_code=="warning"){
+        //             Message.bigBoxWarning('Backup warning', response.message, 5000)
+        //         }
+        //     })
+        //     .catch(error =>{ 
+        //         Message.danger(error);
+        //     });
+        // });
 
         //get descrition
         $(document).delegate(".descriptionPS","click",function(e){

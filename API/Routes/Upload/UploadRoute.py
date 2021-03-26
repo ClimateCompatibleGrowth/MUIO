@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
 from zipfile import ZipFile
 from pathlib import Path
 from werkzeug.utils import secure_filename
@@ -91,67 +91,130 @@ def upload_dir(s3, localDir, awsInitDir, bucketName, tag, prefix='\\'):
             # S3.resource.meta.client.upload_file(FullfileName, bucketName, awsPath)
             s3.resource.meta.client.upload_file(FullfileName, bucketName, awsPath)
 
-@upload_api.route("/backupCase", methods=['POST'])
+
+@upload_api.route("/backupCase", methods=['GET'])
 def backupCase():
     try:    
         '''prvo ispitamo da li u Downloads folderu vec imamo backup case sa istim imenom''' 
         #case = request.form['case']
-        case = request.json['casename']
+        #case = request.json['casename']
+        case = request.args.get('case')
+
         casePath = Path('WebAPP', 'DataStorage',case)
+        
         pathHome = str(Path.home())
-        zipPath = Path(pathHome, 'Downloads')
-        zippedFile = Path(pathHome, 'Downloads', case+'.zip')
-        if(os.path.exists(zippedFile)):
-            response = {
-                "message": 'Case <b>'+case + '.zip</b> already exists in <b>'+ str(zipPath) +'</b>!',
-                "status_code": "warning"
-            }
+        #zippedFile = Path(pathHome, 'Downloads', case+'.zip')
+        zippedFile = Path('WebAPP', 'DataStorage', case+'.zip')
+
+        '''File system data storage'''
+        if Config.AWS_STORAGE != 1:
+            casePath = Path('WebAPP', 'DataStorage', case)
+            with ZipFile(zippedFile, 'w') as zipObj:
+                # Iterate over all the files in directory
+                for folderName, subfolders, filenames in os.walk(str(casePath)):
+                    for filename in filenames:
+                        #create complete filepath of file in directory
+                        filePath = os.path.join(folderName, filename)
+                        # Add file to zip
+                        zipObj.write(filePath)      
+
+            return send_file(zippedFile.resolve(), as_attachment=True)      
+            # response = {
+            #     "message": 'Case <b>'+ case + '</b> is downloaded</b>!',
+            #     "status_code": "success"
+            # }
+            '''AWS S3 data storage'''
         else:
-            '''File system data storage'''
-            if Config.AWS_STORAGE != 1:
-                casePath = Path('WebAPP', 'DataStorage', case)
-                with ZipFile(zippedFile, 'w') as zipObj:
-                    # Iterate over all the files in directory
-                    for folderName, subfolders, filenames in os.walk(str(casePath)):
-                        for filename in filenames:
-                            #create complete filepath of file in directory
-                            filePath = os.path.join(folderName, filename)
-                            # Add file to zip
-                            zipObj.write(filePath)            
-                response = {
-                    "message": 'Case <b>'+ case + '</b> is saved to <b>'+ str(zipPath) +'</b>!',
+            #casePath = Path(pathHome, 'Downloads', case)
+            '''download folder from S3 bucket'''
+            downloadPath = Path('WebAPP', 'DataStorage')
+            casePath = Path('WebAPP', 'DataStorage', case)
+            s3 = S3()
+            download_dir(case, downloadPath, Config.S3_BUCKET, client=s3.client)
+            '''zip downloaded folder'''
+            with ZipFile(zippedFile, 'w') as zipObj:
+                # Iterate over all the files in directory
+                for folderName, subfolders, filenames in os.walk(str(casePath)):
+                    for filename in filenames:
+                        #create complete filepath of file in directory
+                        filePath = os.path.join(folderName, filename)
+                        # Add file to zip
+                        zipObj.write(filePath) 
+            #remove downloaded folder from local
+            shutil.rmtree(casePath)
+            response = {
+                    "message": 'Case <b>'+ case + '</b> is downloaded</b>!',
                     "status_code": "success"
                 }
-                '''AWS S3 data storage'''
-            else:
-                #casePath = Path(pathHome, 'Downloads', case)
-                '''download folder from S3 bucket'''
-                downloadPath = Path('WebAPP', 'DataStorage')
-                casePath = Path('WebAPP', 'DataStorage', case)
-                s3 = S3()
-                download_dir(case, downloadPath, Config.S3_BUCKET, client=s3.client)
-                '''zip downloaded folder'''
-                with ZipFile(zippedFile, 'w') as zipObj:
-                    # Iterate over all the files in directory
-                    for folderName, subfolders, filenames in os.walk(str(casePath)):
-                        for filename in filenames:
-                            #create complete filepath of file in directory
-                            filePath = os.path.join(folderName, filename)
-                            # Add file to zip
-                            zipObj.write(filePath) 
-                #remove downloaded folder from local
-                #casePath = Path(zipPath, case)
-                shutil.rmtree(casePath)
-                response = {
-                        "message": 'Case <b>'+ case + '</b> is saved to <b>'+ str(zipPath) +'</b>!',
-                        "status_code": "success"
-                    }
 
-        return jsonify(response), 200
+        #return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
     except OSError:
         raise OSError
+
+#####radi backup sa localnim i S3 storage
+# @upload_api.route("/backupCase", methods=['POST'])
+# def backupCase():
+#     try:    
+#         '''prvo ispitamo da li u Downloads folderu vec imamo backup case sa istim imenom''' 
+#         #case = request.form['case']
+#         case = request.json['casename']
+#         casePath = Path('WebAPP', 'DataStorage',case)
+#         pathHome = str(Path.home())
+#         zipPath = Path(pathHome, 'Downloads')
+#         zippedFile = Path(pathHome, 'Downloads', case+'.zip')
+#         if(os.path.exists(zippedFile)):
+#             response = {
+#                 "message": 'Case <b>'+case + '.zip</b> already exists in <b>'+ str(zipPath) +'</b>!',
+#                 "status_code": "warning"
+#             }
+#         else:
+#             '''File system data storage'''
+#             if Config.AWS_STORAGE != 1:
+#                 casePath = Path('WebAPP', 'DataStorage', case)
+#                 with ZipFile(zippedFile, 'w') as zipObj:
+#                     # Iterate over all the files in directory
+#                     for folderName, subfolders, filenames in os.walk(str(casePath)):
+#                         for filename in filenames:
+#                             #create complete filepath of file in directory
+#                             filePath = os.path.join(folderName, filename)
+#                             # Add file to zip
+#                             zipObj.write(filePath)            
+#                 response = {
+#                     "message": 'Case <b>'+ case + '</b> is saved to <b>'+ str(zipPath) +'</b>!',
+#                     "status_code": "success"
+#                 }
+#                 '''AWS S3 data storage'''
+#             else:
+#                 #casePath = Path(pathHome, 'Downloads', case)
+#                 '''download folder from S3 bucket'''
+#                 downloadPath = Path('WebAPP', 'DataStorage')
+#                 casePath = Path('WebAPP', 'DataStorage', case)
+#                 s3 = S3()
+#                 download_dir(case, downloadPath, Config.S3_BUCKET, client=s3.client)
+#                 '''zip downloaded folder'''
+#                 with ZipFile(zippedFile, 'w') as zipObj:
+#                     # Iterate over all the files in directory
+#                     for folderName, subfolders, filenames in os.walk(str(casePath)):
+#                         for filename in filenames:
+#                             #create complete filepath of file in directory
+#                             filePath = os.path.join(folderName, filename)
+#                             # Add file to zip
+#                             zipObj.write(filePath) 
+#                 #remove downloaded folder from local
+#                 #casePath = Path(zipPath, case)
+#                 shutil.rmtree(casePath)
+#                 response = {
+#                         "message": 'Case <b>'+ case + '</b> is saved to <b>'+ str(zipPath) +'</b>!',
+#                         "status_code": "success"
+#                     }
+
+#         return jsonify(response), 200
+#     except(IOError):
+#         return jsonify('No existing cases!'), 404
+#     except OSError:
+#         raise OSError
 
 #File extension checking
 def allowed_filename(filename):

@@ -46,9 +46,10 @@ export class Html {
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
-                                <span class="backupCS" data-ps="${value}"
+                                <span class="backupCS" data-ps="${value}" 
                                 data-toggle="tooltip" data-placement="top" title="Backup case study" >
-                                <span class="glyphicon glyphicon-download-alt text-info icon-btn"></span>
+                                <a href="backupCase?case=${value}"> <span class="glyphicon glyphicon-download-alt text-info icon-btn"></span></a>
+                               
                                 </span>
                                 </td>
                             <td style="width:40px; text-align:center">

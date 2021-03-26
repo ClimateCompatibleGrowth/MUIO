@@ -325,23 +325,23 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
-    def downloadDataFile( self ):
-        try:
-            pathHome = str(Path.home())
-            downloadPath = Path(pathHome, 'Downloads')
-            dataFilePath = Path(downloadPath, 'data.txt')
-            datafile = self.readDataFile()
+    # def downloadDataFile( self ):
+    #     try:
+    #         pathHome = str(Path.home())
+    #         downloadPath = Path(pathHome, 'Downloads')
+    #         dataFilePath = Path(downloadPath, 'data.txt')
+            
+    #         datafile = self.readDataFile()
+    #         f = open(dataFilePath, mode="w")
+    #         f.write(datafile)
+    #         f.close
 
-            f = open(dataFilePath, mode="w")
-            f.write(datafile)
-            f.close
-
-            return downloadPath
-            # urllib.request.urlretrieve(self.dataFile, dataFile)
-        except(IOError, IndexError):
-            raise IndexError
-        except OSError:
-            raise OSError
+    #         return downloadPath
+    #         # urllib.request.urlretrieve(self.dataFile, dataFile)
+    #     except(IOError, IndexError):
+    #         raise IndexError
+    #     except OSError:
+    #         raise OSError
 
     def run( self ):
         try:

@@ -142,18 +142,18 @@ export default class DataFile {
         });
 
         
-        $("#osy-downloadDataFile").off('click');
-        $("#osy-downloadDataFile").on('click', function (event) {
-            Pace.restart();
-            Osemosys.downloadDataFile(model.casename)
-            .then(response => {
-                Message.clearMessages();
-                Message.bigBoxSuccess('Downlaoad message', response.message, 3000);
-            })
-            .catch(error=>{
-                Message.bigBoxDanger('Error message', error, null);
-            })
-        });
+        // $("#osy-downloadDataFile").off('click');
+        // $("#osy-downloadDataFile").on('click', function (event) {
+        //     Pace.restart();
+        //     Osemosys.downloadDataFile(model.casename)
+        //     .then(response => {
+        //         Message.clearMessages();
+        //         Message.bigBoxSuccess('Downlaoad message', response.message, 3000);
+        //     })
+        //     .catch(error=>{
+        //         Message.bigBoxDanger('Error message', error, null);
+        //     })
+        // });
 
         $("#osy-run").off('click');
         $("#osy-run").on('click', function (event) {
