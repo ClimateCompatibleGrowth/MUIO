@@ -16,6 +16,7 @@ export default class AddCase {
             let casename = response.session;
             const promise = [];
             let genData = Osemosys.getData(casename, 'genData.json');
+            console.log(genData)
             promise.push(genData);
             return Promise.all(promise);
         })
@@ -247,17 +248,27 @@ export default class AddCase {
                     Message.bigBoxSuccess('Case study message', response.message, 3000);
                     Html.appendCasePicker(casename, casename);
                     $("#osy-case").html(casename);
+                    if (Base.AWS_SYNC == 1){
+                        Base.uploadSync(casename);
+                    }
                 }
                 if(response.status_code=="edited"){
-                    $("#osy-case").html(casename);
+                    //$("#osy-case").html(casename);
+                    console.log(casename, 'Case study', 'create & edit')
+                    Html.title(casename, 'Case study', 'create & edit');
                     $("#osy-new").show();
                     Navbar.initPage(casename);
                     Message.bigBoxInfo('Case study message', response.message, 3000);
+                    if (Base.AWS_SYNC == 1){
+                        Base.uploadSync(casename);
+                    }
                 }
                 if(response.status_code=="exist"){
                     $("#osy-new").show();
                     Message.bigBoxWarning('Case study message', response.message, 3000);
                 }
+
+
             })
             .catch(error=>{
                 Message.bigBoxDanger('Error message', error, null);

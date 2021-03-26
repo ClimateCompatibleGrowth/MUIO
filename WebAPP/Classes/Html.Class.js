@@ -1,4 +1,4 @@
-import { CURRENCY, UNITS, FUELS, COMMODITY } from './Const.Class.js';
+import { CURRENCY } from './Const.Class.js';
 import { Message } from "./Message.Class.js";
 
 export class Html {

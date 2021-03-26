@@ -4,20 +4,21 @@ from flask import Flask, jsonify, request, session, render_template, make_respon
 from flask_cors import CORS
 from pathlib import Path
 from datetime import timedelta
+
 #import json
+from Classes.Base import Config
+from Classes.Base.S3 import S3
+from Classes.Base.SyncS3 import SyncS3
 
 from Routes.Upload.UploadRoute import upload_api
 from Routes.Case.CaseRoute import case_api
-from Routes.Calculation.CalculationRoute import calc_api
-
-
+from Routes.DataFile.DataFileRoute import datafile_api
 
 # template_dir = os.path.abspath('WebAPP')
 # static_dir = os.path.abspath('WebAPP')
 
 template_dir = os.path.abspath('WebAPP')
 static_dir = os.path.abspath('WebAPP')
-
 
 # template_dir = os.path.join(sys._MEIPASS, 'WebAPP') 
 # static_dir = os.path.join(sys._MEIPASS, 'WebAPP') 
@@ -27,7 +28,6 @@ static_dir = os.path.abspath('WebAPP')
 #template_dir = 'WebAPP'
 #static_dir = '../WebAPP'
 
-
 app = Flask(__name__, static_url_path='', static_folder=static_dir,  template_folder=template_dir)
 
 app.permanent_session_lifetime = timedelta(days=5)
@@ -35,18 +35,19 @@ app.config['SECRET_KEY'] = '12345'
 
 app.register_blueprint(upload_api)
 app.register_blueprint(case_api)
-app.register_blueprint(calc_api)
-
+app.register_blueprint(datafile_api)
 
 CORS(app)
 
 #potrebno kad je front end na drugom serveru 127.0.0.1
 @app.after_request
 def add_headers(response):
-    #localhost
-    #response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1')
-    #HEROKU
-    response.headers.add('Access-Control-Allow-Origin', 'https://osemosys.herokuapp.com/')
+    if Config.HEROKU_DEPLOY == 0: 
+        #localhost
+        response.headers.add('Access-Control-Allow-Origin', 'http://127.0.0.1')
+    else:
+        #HEROKU
+        response.headers.add('Access-Control-Allow-Origin', 'https://osemosys.herokuapp.com/')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     #response.headers['Content-Type'] = 'application/javascript'
@@ -61,6 +62,12 @@ def add_headers(response):
 #entry point to frontend
 @app.route("/", methods=['GET'])
 def home():
+    #sync bucket with local storage
+    if Config.AWS_SYNC == 1:
+        s3 = SyncS3()
+        cases = s3.getCases()
+        for case in cases:
+            s3.downloadSync(case, Config.DATA_STORAGE, Config.S3_BUCKET)
     return render_template('index.html')
 
 
@@ -92,7 +99,9 @@ if __name__ == '__main__':
     import mimetypes
     mimetypes.add_type('application/javascript', '.js')
     port = int(os.environ.get("PORT", 5000))
-    #localhost
-    #app.run(host='127.0.0.1', port=port, debug=True)
-    #HEROKU
-    app.run(host='0.0.0.0', port=port, debug=True)
+    if Config.HEROKU_DEPLOY == 0: 
+        #localhost
+        app.run(host='127.0.0.1', port=port, debug=True)
+    else:
+        #HEROKU
+        app.run(host='0.0.0.0', port=port, debug=True)

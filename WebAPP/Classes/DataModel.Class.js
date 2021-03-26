@@ -233,8 +233,8 @@ export class DataModel{
             RYTC[param] = {};
             $.each(array, function (id, obj) {
                 $.each(obj, function (key, val) {
-                    if(!RYTC[param][key]){ RYTC[param][key] = {}; }
                     if(key != 'TechId' && key != 'CommId'){
+                        if(!RYTC[param][key]){ RYTC[param][key] = {}; }
                         if(!RYTC[param][key][obj['TechId']]){ RYTC[param][key][obj['TechId']] = {}; }
                         RYTC[param][key][obj['TechId']][obj['CommId']] = val;
                     }
@@ -259,26 +259,30 @@ export class DataModel{
 
     static RYTCchart(genData, RYTCdata){
         let RYTCchart = {};
-        let techData = this.RYTC(RYTCdata);
-        //console.log('techData ', techData)
+        let RYCT = this.RYTC(RYTCdata);
+        // console.log('RYTCdata ', RYTCdata)
+        // console.log('RYCT ', RYCT)
         $.each(RYTCdata, function (param, array) {
             RYTCchart[param] = {};
             $.each(genData['osy-tech'], function (idT, tech) {
                 RYTCchart[param][tech.TechId] = {};
                 let chartData = [];
-                $.each(genData['osy-years'], function (idY, year) {
-                    if ( typeof techData[param][year][tech.TechId] !== "undefined"   ){
-                        let chunk = {};
-                        chunk['Year'] = year;
-                        $.each(genData['osy-comm'], function (idC, comm) {
-                            if (typeof techData[param][year][tech.TechId][comm.CommId]  !== "undefined" ){
-                                chunk[comm['CommId']] = techData[param][year][tech.TechId][comm.CommId];
-                            }
-                        });
-                        //console.log('param ', param, ' tech ', tech.TechId, ' year ', year, ' chunk ', chunk)
-                        chartData.push(chunk);
-                    }
-                });
+                if (array.length !== 0){
+                    $.each(genData['osy-years'], function (idY, year) {
+                        //console.log('RYCT chunk ', RYCT[param][year][tech.TechId])
+                        if ( typeof RYCT[param][year][tech.TechId] !== "undefined" ){
+                            let chunk = {};
+                            chunk['Year'] = year;
+                            $.each(genData['osy-comm'], function (idC, comm) {
+                                if (typeof RYCT[param][year][tech.TechId][comm.CommId]  !== "undefined" ){
+                                    chunk[comm['CommId']] = RYCT[param][year][tech.TechId][comm.CommId];
+                                }
+                            });
+                            //console.log('param ', param, ' tech ', tech.TechId, ' year ', year, ' chunk ', chunk)
+                            chartData.push(chunk);
+                        }
+                    });
+                }
                 RYTCchart[param][tech.TechId] = chartData; 
             });
         });

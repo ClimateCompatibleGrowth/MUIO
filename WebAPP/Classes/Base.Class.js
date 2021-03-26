@@ -2,13 +2,90 @@ import { Message } from "./Message.Class.js";
 import { Html } from "./Html.Class.js";
 
 export class Base {
+
+    static HEROKU = 0
+    //static AWS = 1
+    static AWS_SYNC = 0
     
     static apiUrl() {
-        //localhost
-        //let apiUrl = "http://127.0.0.1:5000";
-        //HEROKU
-        let apiUrl = "https://osemosys.herokuapp.com/";
+        let apiUrl
+        if (this.HEROKU == 0){
+            //localhost
+            apiUrl = "http://127.0.0.1:5000/";
+        }else{
+            //HEROKU
+            apiUrl = "https://osemosys.herokuapp.com/";
+        }
         return apiUrl
+    }
+
+    static updateSync(casename, file) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "updateSync",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, "file": file }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }        
+
+    static uploadSync(casename) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "uploadSync",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static deleteSync(casename) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "deleteSync",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
     }
 
     static getSession() {
@@ -62,7 +139,8 @@ export class Base {
                 async: true,  
                 type: 'GET',
                 dataType: 'json',
-                credentials: 'include',
+                contentType: 'application/json; charset=utf-8',
+                //credentials: 'include',
                 success: function (result) {                
                     resolve(result);
                 },
@@ -140,12 +218,16 @@ export class Base {
     static backupCaseStudy(titlecs) {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url:this.apiUrl() + "backupCase",
+                url:Base.apiUrl() + "backupCase",
                 async: true,  
                 type: 'POST',
-                data: { "case": titlecs },
                 dataType: 'json',
-                success: function (result) {            
+                data: JSON.stringify({ "casename": casename }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
                     resolve(result);
                 },
                 error: function(xhr, status, error) {
@@ -153,6 +235,21 @@ export class Base {
                     reject(error);
                 }
             });
+
+            // $.ajax({
+            //     url:this.apiUrl() + "backupCase",
+            //     async: true,  
+            //     type: 'POST',
+            //     data: { "case": titlecs },
+            //     dataType: 'json',
+            //     success: function (result) {            
+            //         resolve(result);
+            //     },
+            //     error: function(xhr, status, error) {
+            //         if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+            //         reject(error);
+            //     }
+            // });
         });
     }
 
@@ -174,7 +271,7 @@ export class Base {
           dictResponseError: 'Error uploading file!',
           dictFileTooBig:  ` <i class="fa fa-caret-right text-danger"></i>Filers too big!`,
           dictRemoveFile: `Remove Case!`,
-          dictInvalidFileType: "Not valid ELSE ver 1.0 case!",
+          dictInvalidFileType: "Not valid Osemosys ver 1.0 case!",
           // accept: function(file, done) {
           //   console.log('file', file)
           //   console.log('done' , done)
@@ -186,9 +283,17 @@ export class Base {
           successmultiple: function(file, response) {
             $.each( file, function( key, value ) {
                 if(response.response[key]['status_code'] == 'success'){
-                    Html.apendCase(value.name.slice(0, -4));
+                    
+                    let casename = value.name.slice(0, -4)
+                    Html.apendCase(casename);
                     Message.bigBoxSuccess("Upload response", response.response[key]['message'], null); 
                     value.previewElement.innerHTML = "";
+                    console.log('this.AWS_SYNC ', this.AWS_SYNC )
+                    if (Base.AWS_SYNC == 1){
+                        console.log('sync ', value.name )
+                        Base.uploadSync(casename);
+                    }
+
                 }else if (response.response[key]['status_code'] == 'warning'){
                     $('.dz-file-preview').removeClass("dz-success").addClass("dz-error")
                     //$(".dz-error-mark svg").css("background", "red"); 

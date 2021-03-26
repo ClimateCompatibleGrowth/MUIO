@@ -1,9 +1,8 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
-import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
     
-    constructor (casename, genData, RYCdata, group, param) {
+    constructor (casename, genData, RYCdata, group, PARAMETERS, param) {
         this.d = 2;
         this.decimal = 'd' + this.d;
         if(casename){
@@ -51,9 +50,9 @@ export class Model {
                 series.push({ dataField: obj.CommId, displayText: obj.Comm });
             });
 
-            let paramVals = {};
+            let PARAMNAMES = {};
             $.each(PARAMETERS[group], function (id, obj) {
-                paramVals[obj.id] = obj.value;
+                PARAMNAMES[obj.id] = obj.value;
             });
 
             let RYCgrid = DataModel.RYCgrid(genData, RYCdata);
@@ -75,35 +74,31 @@ export class Model {
 
             this.casename = casename; 
             this.years = years;
-            // this.techs = techs;
-            // this.datafields = datafields; 
-            // this.datafieldsChart = datafieldsChart; 
             this.columns = columns;
             this.series = series;
             this.gridData = RYCgrid;
             this.chartData = RYCchart;
             this.genData = genData;
             this.param = param;
-            this.paramVals = paramVals;
+            this.PARAMNAMES = PARAMNAMES;
             this.group = group;
-            this.srcGrid = srcGrid,
-            this.srcChart = srcChart
+            this.srcGrid = srcGrid;
+            this.srcChart = srcChart;
+            this.PARAMETERS = PARAMETERS;
         }else{
             this.casename = null; 
             this.years = null;
-            // this.techs = null;
-            // this.datafields = null; 
-            // this.datafieldsChart = null; 
             this.columns = null;
             this.series = null;
             this.gridData = null;
             this.chartData = null;
             this.genData = null; 
-            this.paramVals = null;
+            this.PARAMNAMES = null;
             this.param = param;
             this.group = group;
-            this.srcGrid = srcGrid
-            this.srcChart = srcChart
+            this.srcGrid = srcGrid;
+            this.srcChart = srcChart;
+            this.PARAMETERS = PARAMETERS;
         }
 
     }

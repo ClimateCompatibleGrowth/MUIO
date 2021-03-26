@@ -1,9 +1,8 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
-import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
     
-    constructor (casename, genData, RYTEdata, group, param) {
+    constructor (casename, genData, RYTEdata, group, PARAMETERS, param) {
         this.d = 2;
         this.decimal = 'd' + this.d;
         if(casename){
@@ -67,9 +66,9 @@ export class Model {
                 }
             });
 
-            let paramVals = {};
+            let PARAMNAMES = {};
             $.each(PARAMETERS[group], function (id, obj) {
-                paramVals[obj.id] = obj.value;
+                PARAMNAMES[obj.id] = obj.value;
             });
 
             var srcGrid = {
@@ -97,10 +96,11 @@ export class Model {
             this.chartData = RYTEchart;
             this.genData = genData;
             this.param = param;
-            this.paramVals = paramVals;
+            this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid;
             this.srcChart = srcChart;
+            this.PARAMETERS = PARAMETERS;
         }else{
             this.casename = null; 
             this.years = null;
@@ -113,11 +113,11 @@ export class Model {
             this.chartData = null;
             this.genData = null; 
             this.param = param;
-            this.paramVals = paramVals;
+            this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = null;
             this.srcChart = null;
+            this.PARAMETERS = PARAMETERS;
         }
-
     }
 }

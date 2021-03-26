@@ -5,7 +5,7 @@ import { Model } from "../Model/RYT.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
+import { GROUPNAMES } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYT {
@@ -17,13 +17,15 @@ export default class RYT {
             promise.push(casename);
             const genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData); 
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
             const RYTdata = Osemosys.getData(casename, 'RYT.json');
             promise.push(RYTdata); 
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, genData, RYTdata] = data;
-            let model = new Model(casename, genData, RYTdata, group, param);
+            let [casename, genData, PARAMETERS, RYTdata] = data;
+            let model = new Model(casename, genData, RYTdata, group, PARAMETERS, param);
             if(casename){
                 this.initPage(model);
                 this.initEvents(model);
@@ -40,9 +42,9 @@ export default class RYT {
     static initPage(model){
         Message.clearMessages();
         //Navbar.initPage(model.casename);
-        //console.log('param ',  model.paramVals[model.param])
-        Html.title(model.casename, model.paramVals[model.param], PARAMNAMES[model.group]);
-        Html.ddlRYT( PARAMETERS[model.group], model.param);
+        //console.log('param ',  model.PARAMNAMES[model.param])
+        Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
+        Html.ddlRYT( model.PARAMETERS[model.group], model.param);
 
         let $divGrid = $('#osy-gridRYT');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
@@ -50,7 +52,7 @@ export default class RYT {
         
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
         let $divChart = $('#osy-chartRYT');
-        Chart.chartRYT($divChart, daChart, "RYT", model.series);
+        Chart.Chart($divChart, daChart, "RYT", model.series);
         //pageSetUp();
     }
 
@@ -61,13 +63,15 @@ export default class RYT {
             promise.push(casename);
             const genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData); 
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
             const RYTdata = Osemosys.getData(casename, 'RYT.json');
             promise.push(RYTdata); 
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, genData, RYTdata] = data;
-            let model = new Model(casename, genData, RYTdata, 'RYT', PARAMETERS['RYT'][0]['id']);
+            let [casename, genData, PARAMETERS,RYTdata] = data;
+            let model = new Model(casename, genData, RYTdata, 'RYT', PARAMETERS, PARAMETERS['RYT'][0]['id']);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -97,6 +101,10 @@ export default class RYT {
             Osemosys.updateData(JSON.parse(daRYTData), param, "RYT.json")
             .then(response =>{
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
+                //sync S3
+                if (Base.AWS_SYNC == 1){
+                    Base.updateSync(model.casename, "RYT.json");
+                }
             })
             .catch(error=>{
                 Message.bigBoxDanger('Error message', error, null);
@@ -105,7 +113,7 @@ export default class RYT {
 
         //change of ddl parameters
         $('#osy-ryt').on('change', function() {
-            Html.title(model.casename, model.paramVals[this.value], PARAMNAMES[model.group]);
+            Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             let $divGrid = $('#osy-gridRYT');
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
@@ -138,7 +146,7 @@ export default class RYT {
                     model.chartData[param] = chartData;
                     model.gridData[param] = gridData;
 
-                    var configChart = $('#osy-chartRYT').jqxChart('getInstance');
+                    var configChart = $('#osy-Chart').jqxChart('getInstance');
                     configChart.source.records = model.chartData[param];
                     configChart.update();
                 }, 1000);

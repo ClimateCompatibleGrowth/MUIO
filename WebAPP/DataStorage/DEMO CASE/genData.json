@@ -1,0 +1,124 @@
+{
+    "osy-version": "1.0",
+    "osy-casename": "DEMO CASE",
+    "osy-desc": "",
+    "osy-date": "03/24/2021",
+    "osy-currency": "EUR",
+    "osy-dr": "9",
+    "osy-dm": "0",
+    "osy-ns": "3",
+    "osy-dt": "2",
+    "osy-tech": [
+        {
+            "CAU": 0,
+            "Desc": "Default technology",
+            "EAR": [
+                "EMI_1hl8f"
+            ],
+            "IAR": [
+                "COM_rg06s"
+            ],
+            "OAR": [
+                "COM_rg06s"
+            ],
+            "OL": 1,
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "Tech": "TEC_1",
+            "TechId": "TEC_q9gtv"
+        },
+        {
+            "TechId": "TEC_4fv1e",
+            "Tech": "TEC_2",
+            "Desc": "Default technology",
+            "IAR": [],
+            "OAR": [],
+            "EAR": [],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_l7rk7",
+            "Tech": "TEC_3",
+            "Desc": "Default technology",
+            "IAR": [
+                "COM_paxek",
+                "COM_31zkj"
+            ],
+            "OAR": [
+                "COM_paxek",
+                "COM_31zkj"
+            ],
+            "EAR": [],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_7u24d",
+            "Tech": "TEC_4",
+            "Desc": "Default technology",
+            "IAR": [],
+            "OAR": [],
+            "EAR": [
+                "EMI_1hl8f",
+                "EMI_r6k8l"
+            ],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        }
+    ],
+    "osy-comm": [
+        {
+            "CommId": "COM_rg06s",
+            "COM_rg06s": "COM_1",
+            "Comm": "COM_1",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
+        },
+        {
+            "CommId": "COM_paxek",
+            "COM_paxek": "COM_2",
+            "Comm": "COM_2",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
+        },
+        {
+            "CommId": "COM_31zkj",
+            "COM_31zkj": "COM_3",
+            "Comm": "COM_3",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
+        }
+    ],
+    "osy-emis": [
+        {
+            "EmisId": "EMI_1hl8f",
+            "EMI_1hl8f": "EMI_1",
+            "Emis": "EMI_1",
+            "Desc": "Default emission",
+            "UnitId": "Ton"
+        },
+        {
+            "EmisId": "EMI_r6k8l",
+            "EMI_r6k8l": "EMI_2",
+            "Emis": "EMI_2",
+            "Desc": "Default emission",
+            "UnitId": "Ton"
+        }
+    ],
+    "osy-years": [
+        "2020",
+        "2025",
+        "2030",
+        "2035",
+        "2040",
+        "2045",
+        "2050"
+    ]
+}

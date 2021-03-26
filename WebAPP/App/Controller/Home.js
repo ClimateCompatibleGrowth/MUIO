@@ -85,19 +85,24 @@ export default class Home {
         //copy case
         $(document).delegate(".copyCS","click",function(e){
             e.stopImmediatePropagation();
-            var titleps = $(this).attr('data-ps');
-            Base.copyCaseStudy(titleps)
+            var casename = $(this).attr('data-ps');
+            Base.copyCaseStudy(casename)
             .then(response => {
                 Message.clearMessages();
                 if(response.status_code=="success"){
                     Message.bigBoxSuccess('Copy message', response.message, 3000);
                     //REFRESH
-                    Html.apendCase(titleps+'_copy');
-                    Html.appendCasePicker(titleps+'_copy', null)
+                    Html.apendCase(casename+'_copy');
+                    Html.appendCasePicker(casename+'_copy', null)
+                    //sync S3
+                    if (Base.AWS_SYNC == 1){
+                        Base.uploadSync(casename+'_copy');
+                    }
                 }
                 if(response.status_code=="warning"){
                     Message.bigBoxWarning('Copy message', response.message, 3000);
                 }
+
             })
             .catch(error =>{ 
                 Message.danger(error);
@@ -140,26 +145,33 @@ export default class Home {
 
         //delete case
         $(document).delegate(".DeletePS","click",function(e){
-            var titleps = $(this).attr('data-ps');
+            var casename = $(this).attr('data-ps');
             $.SmartMessageBox({
                 title : "Confirmation Box!",
-                content : "You are about to delete <b class='danger'>" + titleps + "</b> case study! Are you sure?",
+                content : "You are about to delete <b class='danger'>" + casename + "</b> case study! Are you sure?",
                 buttons : '[No][Yes]'
             }, function(ButtonPressed) {
                 if (ButtonPressed === "Yes") {
-                    Base.deleteCaseStudy(titleps)
+                    Base.deleteCaseStudy(casename)
                     .then(response => {
                         Message.clearMessages();
                         if(response.status_code=="success"){
                             Message.bigBoxSuccess('Delete message', response.message, 3000);
                             //REFRESH
-                            Html.removeCase(titleps);
+                            Html.removeCase(casename);
+                            //sync with s3
+                            if (Base.AWS_SYNC == 1){
+                                Base.deleteSync(casename);
+                            }
                         }
                         if(response.status_code=="success_session"){
                             Message.bigBoxSuccess('Delete message', response.message, 3000);
                             Message.info( "Please select existing or create new case to proceed!");
                             //REFRESH
-                            Html.removeCase(titleps);
+                            Html.removeCase(casename);
+                            if (Base.AWS_SYNC == 1){
+                                Base.deleteSync(casename);
+                            }
                         }
                         if(response.status_code=="info"){
                             Message.info(response.message);
@@ -167,6 +179,7 @@ export default class Home {
                         if(response.status_code=="warning"){
                             Message.warning(response.message);
                         }  
+                        
                     })
                     .catch(error =>{ 
                         Message.danger(error);

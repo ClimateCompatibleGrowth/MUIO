@@ -5,7 +5,7 @@ import { Model } from "../Model/RYTE.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
+import { GROUPNAMES } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTE {
@@ -17,18 +17,20 @@ export default class RYTE {
             promise.push(casename);
             const genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData); 
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
             const RYTCdata = Osemosys.getData(casename, "RYTE.json");
             promise.push(RYTCdata); 
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, genData, RYTCdata] = data;
+            let [casename, genData, PARAMETERS, RYTCdata] = data;
             if (RYTCdata['EAR'].length == 0){
                 Message.warning('Selected model does not have Emission activity ratio defined for any technology.');
                 Message.smallBoxWarning('WARNING', 'Selected model does not have Emission activity ratio defined for any technology.', null);
 
             }else{
-                let model = new Model(casename, genData, RYTCdata, group, param);
+                let model = new Model(casename, genData, RYTCdata, group, PARAMETERS, param);
                 if(casename){
                     this.initPage(model);
                     this.initEvents(model);
@@ -45,8 +47,8 @@ export default class RYTE {
     static initPage(model){
         Message.clearMessages();
         //Navbar.initPage(model.casename);
-        Html.title(model.casename, model.paramVals[model.param], PARAMNAMES[model.group]);
-        Html.ddlRYT( PARAMETERS['RYTE'], model.param);
+        Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
+        Html.ddlRYT( model.PARAMETERS['RYTE'], model.param);
         Html.ddlTechs( model.techs, model.techs[0]['TechId']);
         
         let $divGrid = $('#osy-gridRYTE');
@@ -55,7 +57,7 @@ export default class RYTE {
 
         let $divChart = $('#osy-chartRYTE');
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        Chart.chartRYT($divChart, daChart, "RYTE", model.series);        
+        Chart.Chart($divChart, daChart, "RYTE", model.series);        
         //pageSetUp();
     }
 
@@ -66,13 +68,15 @@ export default class RYTE {
             promise.push(casename);
             const genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData); 
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
             const RYTCdata = Osemosys.getData(casename, 'RYTE.json');
             promise.push(RYTCdata); 
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, genData, RYTCdata] = data;
-            let model = new Model(casename, genData, RYTCdata,  PARAMETERS['RYTE'][0]['id']);
+            let [casename, genData, PARAMETERS, RYTCdata] = data;
+            let model = new Model(casename, genData, RYTCdata, PARAMETERS, PARAMETERS['RYTE'][0]['id']);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -105,6 +109,10 @@ export default class RYTE {
             .then(response =>{
                 //model.gridData[param] = JSON.parse(RYTmodel);
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
+                //sync S3
+                if (Base.AWS_SYNC == 1){
+                    Base.updateSync(model.casename, "RYTE.json");
+                }
             })
             .catch(error=>{
                 Message.bigBoxDanger('Error message', error, null);
@@ -113,7 +121,7 @@ export default class RYTE {
 
         //change of ddl parameters
         $('#osy-ryt').on('change', function() {
-            Html.title(model.casename, model.paramVals[this.value], PARAMNAMES[model.group]);
+            Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             let $divGrid = $('#osy-gridRYTE');
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');

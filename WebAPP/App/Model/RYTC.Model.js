@@ -1,19 +1,20 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
-import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
     
-    constructor (casename, genData, RYTCdata, group, param) {
+    constructor (casename, genData, RYTCdata, group, PARAMETERS, param) {
         this.d = 2;
         this.decimal = 'd' + this.d;
         if(casename){
-
+            console.log('data ', RYTCdata)
             let datafields = [];
             let datafieldsChart = [];
             let columns = [];
             let series = [];
             let RYTCgrid = DataModel.RYTCgrid(genData, RYTCdata);
+            console.log('grid ',RYTCgrid)
             let RYTCchart = DataModel.RYTCchart(genData, RYTCdata);
+            console.log('chart ',RYTCchart)
             let years = genData['osy-years'];
             let comms = genData['osy-comm'];
             let techs = genData['osy-tech'];
@@ -66,9 +67,9 @@ export class Model {
                 }
             });
 
-            let paramVals = {};
+            let PARAMNAMES = {};
             $.each(PARAMETERS[group], function (id, obj) {
-                paramVals[obj.id] = obj.value;
+                PARAMNAMES[obj.id] = obj.value;
             });
 
             var srcGrid = {
@@ -92,14 +93,16 @@ export class Model {
             this.datafieldsChart = datafieldsChart; 
             this.columns = columns;
             this.series = series;
+            this.RYTCdata = RYTCdata;
             this.gridData = RYTCgrid;
             this.chartData = RYTCchart;
             this.genData = genData;
             this.param = param;
-            this.paramVals = paramVals;
+            this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid;
             this.srcChart = srcChart;
+            this.PARAMETERS = PARAMETERS;
         }else{
             this.casename = null; 
             this.years = null;
@@ -107,15 +110,17 @@ export class Model {
             this.datafields = null; 
             this.datafieldsChart = null; 
             this.columns = null;
-            this.columns = null;
+            this.series = null;
+            this.RYTCdata = RYTCdata;
             this.gridData = null;
             this.chartData = null;
             this.genData = null; 
             this.param = null;
-            this.paramVals = paramVals;
+            this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = null;
             this.srcChart = null;
+            this.PARAMETERS = PARAMETERS;
         }
 
     }

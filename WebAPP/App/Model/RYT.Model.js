@@ -1,9 +1,9 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
-import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
+import { GROUPNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
     
-    constructor (casename, genData, RYTdata, group, param) {
+    constructor (casename, genData, RYTdata, group, PARAMETERS, param) {
         this.d = 2;
         this.decimal = 'd' + this.d;
         if(casename){
@@ -51,12 +51,12 @@ export class Model {
                 series.push({ dataField: obj.TechId, displayText: obj.Tech });
             });
 
-            let paramVals = {};
+            let PARAMNAMES = {};
             $.each(PARAMETERS[group], function (id, obj) {
-                paramVals[obj.id] = obj.value;
+                PARAMNAMES[obj.id] = obj.value;
             });
 
-            //console.log('paramVals ', paramVals)
+            //console.log('PARAMNAMES ', PARAMNAMES)
 
             let RYTgrid = DataModel.RYTgrid(genData, RYTdata);
             let RYTchart = DataModel.RYTchart(genData, RYTdata);
@@ -86,10 +86,11 @@ export class Model {
             this.chartData = RYTchart;
             this.genData = genData;
             this.param = param;
-            this.paramVals = paramVals;
+            this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid,
-            this.srcChart = srcChart
+            this.srcChart = srcChart,
+            this.PARAMETERS = PARAMETERS
         }else{
             this.casename = null; 
             this.years = null;
@@ -101,11 +102,12 @@ export class Model {
             this.gridData = null;
             this.chartData = null;
             this.genData = null; 
-            this.paramVals = null;
+            this.PARAMNAMES = null;
             this.param = param;
             this.group = group;
             this.srcGrid = srcGrid
-            this.srcChart = srcChart
+            this.srcChart = srcChartm
+            this.PARAMETERS = PARAMETERS
         }
 
     }

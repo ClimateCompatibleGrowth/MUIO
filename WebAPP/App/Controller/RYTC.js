@@ -5,7 +5,7 @@ import { Model } from "../Model/RYTC.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { PARAMETERS, PARAMNAMES } from "../../Classes/Const.Class.js";
+import { GROUPNAMES } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTC {
@@ -17,18 +17,20 @@ export default class RYTC {
             promise.push(casename);
             const genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData); 
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
             const RYTCdata = Osemosys.getData(casename, "RYTC.json");
             promise.push(RYTCdata); 
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, genData, RYTCdata] = data;
+            let [casename, genData, PARAMETERS, RYTCdata] = data;
             if (RYTCdata['IAR'].length == 0 &&  RYTCdata['OAR'].length == 0){
                 Message.warning('Selected model does not have Input nor Output activity ratio defined for any technology.');
                 Message.smallBoxWarning('WARNING', 'Selected model does not have Input nor Output activity ratio defined for any technology.', null);
 
             }else{
-                let model = new Model(casename, genData, RYTCdata, group, param);
+                let model = new Model(casename, genData, RYTCdata, group, PARAMETERS, param);
                 if(casename){
                     this.initPage(model);
                     this.initEvents(model);
@@ -45,18 +47,21 @@ export default class RYTC {
     static initPage(model){
         Message.clearMessages();
         //Navbar.initPage(model.casename);
-        Html.title(model.casename, model.paramVals[model.param], PARAMNAMES[model.group]);
-        Html.ddlRYT( PARAMETERS['RYTC'], model.param);
+        Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
+        Html.ddlRYT( model.PARAMETERS['RYTC'], model.param);
         Html.ddlTechs( model.techs, model.techs[0]['TechId']);
         
         let $divGrid = $('#osy-gridRYTC');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns);
+        Grid.Grid($divGrid, daGrid, model.columns, true);
 
         let $divChart = $('#osy-chartRYTC');
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        Chart.chartRYT($divChart, daChart, "RYTC", model.series);        
-        //pageSetUp();
+        Chart.Chart($divChart, daChart, "RYTC", model.series);  
+        if (model.RYTCdata[model.param].length === 0 ){
+            Message.warning('Selected model does not have '+ model.param +' defined for any technology.');
+            Message.smallBoxWarning('WARNING', 'Selected model does not have '+ model.param +' defined for any technology.', 3000);
+        }
     }
 
     static refreshPage(casename){
@@ -66,13 +71,15 @@ export default class RYTC {
             promise.push(casename);
             const genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData); 
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
             const RYTCdata = Osemosys.getData(casename, 'RYTC.json');
             promise.push(RYTCdata); 
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, genData, RYTCdata] = data;
-            let model = new Model(casename, genData, RYTCdata,  PARAMETERS['RYTC'][0]['id']);
+            let [casename, genData, PARAMETERS, RYTCdata] = data;
+            let model = new Model(casename, genData, RYTCdata, PARAMETERS, PARAMETERS['RYTC'][0]['id']);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -105,6 +112,10 @@ export default class RYTC {
             .then(response =>{
                 //model.gridData[param] = JSON.parse(RYTmodel);
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
+                //sync S3
+                if (Base.AWS_SYNC == 1){
+                    Base.updateSync(model.casename, "RYTC.json");
+                }
             })
             .catch(error=>{
                 Message.bigBoxDanger('Error message', error, null);
@@ -113,7 +124,12 @@ export default class RYTC {
 
         //change of ddl parameters
         $('#osy-ryt').on('change', function() {
-            Html.title(model.casename, model.paramVals[this.value], PARAMNAMES[model.group]);
+            Message.clearMessages();
+            if (model.RYTCdata[this.value].length === 0 ){
+                Message.warning('Selected model does not have '+ model.param +' defined for any technology.');
+                Message.smallBoxWarning('WARNING', 'Selected model does not have '+ model.param +' defined for any technology.', 3000);
+            }
+            Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             let $divGrid = $('#osy-gridRYTC');
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');

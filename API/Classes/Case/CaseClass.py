@@ -1,169 +1,206 @@
 from pathlib import Path
-import os
-import shutil
-from distutils.dir_util import copy_tree
-
 from Classes.Base import Config
 from Classes.Base.FileClass import File
 
-class OsemosysCase:
-    def __init__(self, case):
+class Case:
+    def __init__(self, case, genData):
         self.case = case
-        self.casePath = Path(Config.DATA_STORAGE,case)
-        self.zipPath = Path(Config.DATA_STORAGE,case+'.zip')
-        self.genData = Path(Config.DATA_STORAGE,case,'genData.json')
-        self.rytPath = Path(Config.DATA_STORAGE,case,'RYT.json')
-        self.rytcPath = Path(Config.DATA_STORAGE,case,'RYTC.json')
-        self.rytsPath = Path(Config.DATA_STORAGE,case,'RYTs.json')
-        self.rycPath = Path(Config.DATA_STORAGE,case,'RYC.json')
-        self.ryePath = Path(Config.DATA_STORAGE,case,'RYE.json')
-        self.ryttsPath = Path(Config.DATA_STORAGE,case,'RYTTs.json')
-        self.ryctsPath = Path(Config.DATA_STORAGE,case,'RYCTs.json')
-        self.rytePath = Path(Config.DATA_STORAGE,case,'RYTE.json')
+        self.PARAMETERS = File.readParamFile(Path(Config.CLASS_FOLDER, 'Parameters.json'))
+        self.genData =  genData
+        self.RYTpath = Path(Config.DATA_STORAGE, case, "RYT.json")
+        self.RYTCpath = Path(Config.DATA_STORAGE, case, "RYTC.json")
+        self.RYTspath = Path(Config.DATA_STORAGE, case, "RYTs.json")
+        self.RYCpath = Path(Config.DATA_STORAGE, case, "RYC.json")
+        self.RYEpath = Path(Config.DATA_STORAGE, case, "RYE.json")
+        self.RYTTspath = Path(Config.DATA_STORAGE, case, "RYTTs.json")
+        self.RYCTspath = Path(Config.DATA_STORAGE, case, "RYCTs.json")
+        self.RYTEpath = Path(Config.DATA_STORAGE, case, "RYTE.json")
 
-    def getYears(self):
-        genData = File.readFile(self.genData)
-        years = genData['osy-years']
-        return years
+    def default_RYT(self):
+        try:
+            years = self.genData['osy-years']
+            techs = self.genData['osy-tech']
+            
+            RYTdata = {}
+            for ryt in self.PARAMETERS['RYT']:
+                RYTdata[ryt['id']] = []
+                for tech in techs:
+                    chunk = {}
+                    chunk['TechId'] = tech['TechId']
+                    for year in years:
+                        chunk[year] = 0  
+                    RYTdata[ryt['id']].append(chunk)
 
-    def getTechIds(self):
-        genData = File.readFile(self.genData)
-        techIds = [ tech['TechId'] for tech in genData["osy-tech"]]
-        return techIds
+            File.writeFile( RYTdata, self.RYTpath)
+        except(IOError):
+            raise IOError
 
-    def getCommIds(self):
-        genData = File.readFile(self.genData)
-        commIds = [ tech['CommId'] for tech in genData["osy-comm"]]
-        return commIds
-    
-    def getActivityTechIds(self):
-        genData = File.readFile(self.genData)
-        techIds = [ tech['TechId'] for tech in genData["osy-tech"] if tech['IAR'] or tech['OAR'] ]
-        return techIds
+    def default_RYTC(self):
+        try:
+            years = self.genData['osy-years']
+            techs = self.genData['osy-tech']
+            
+            RYTCdata = {}
+            for ryt in self.PARAMETERS['RYTC']:
+                RYTCdata[ryt['id']] = []
+                for tech in techs:
+                    if tech[ryt['id']]:
+                        for comm in tech[ryt['id']]:
+                            chunk = {}
+                            chunk['TechId'] = tech['TechId']
+                            chunk['CommId'] = comm
+                            for year in years:
+                                chunk[year] = 0  
+                            RYTCdata[ryt['id']].append(chunk)
 
-    def getActivityCommIds(self):
-        genData = File.readFile(self.genData)
-        commIds = {}
-        for param in Config.PARAMETERS['RYTC']:
-            commIds[param['id']] = {}
-            for tech in genData["osy-tech"]:
-                if tech[param['id']]: 
-                    commIds[param['id']][tech['TechId']] = tech[param['id']]
-        return commIds
+            File.writeFile( RYTCdata, self.RYTCpath)
+        except(IOError):
+            raise IOError
 
-    def getJsonData(self, JsonFile):
-        path = Path(Config.DATA_STORAGE,self.case,JsonFile)
-        JsonData = File.readFile(path)
-        return JsonData
+    def default_RYTE(self):
+        try:
+            years = self.genData['osy-years']
+            techs = self.genData['osy-tech']
+            
+            RYTEdata = {}
+            for ryt in self.PARAMETERS['RYTE']:
+                RYTEdata[ryt['id']] = []
+                for tech in techs:
+                    if tech[ryt['id']]:
+                        for comm in tech[ryt['id']]:
+                            chunk = {}
+                            chunk['TechId'] = tech['TechId']
+                            chunk['EmisId'] = comm
+                            for year in years:
+                                chunk[year] = 0  
+                            RYTEdata[ryt['id']].append(chunk)
 
-    def RYT(self, RYTdata):
-        RYT = {}
-        for param, array in RYTdata.items():
-            RYT[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYT[param]:
-                        RYT[param][year] = {}
-                    if (year != 'TechId'):
-                        if obj['TechId'] not in RYT[param][year]:
-                            RYT[param][year][obj['TechId']] = {}
-                        RYT[param][year][obj['TechId']] = val
-        return RYT
+            File.writeFile( RYTEdata, self.RYTEpath)
+        except(IOError):
+            raise IOError
 
-    def RYTs(self, RYTsdata):
-        RYTs = {}
-        for param, array in RYTsdata.items():
-            RYTs[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYTs:
-                        RYTs[year] = {}
-                    if (year != 'YearSplit'):
-                        if obj['YearSplit'] not in RYTs[year]:
-                            RYTs[year][obj['YearSplit']] = {}
-                        RYTs[year][obj['YearSplit']] = val
-        return RYTs
+    def default_RYC(self):
+        try:
+            years = self.genData['osy-years']
+            comms = self.genData['osy-comm']
+            
+            RYCdata = {}
+            for ryt in self.PARAMETERS['RYC']:
+                RYCdata[ryt['id']] = []
+                for comm in comms:
+                    chunk = {}
+                    chunk['CommId'] = comm['CommId']
+                    for year in years:
+                        chunk[year] = 0  
+                    RYCdata[ryt['id']].append(chunk)
 
-    def RYTC(self, RYTCdata):
-        RYTC = {}
-        for param, array in RYTCdata.items():
-            RYTC[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYTC[param]:
-                        RYTC[param][year] = {}
-                    if (year != 'TechId' and year != 'CommId'):
-                        if obj['TechId'] not in RYTC[param][year]:
-                            RYTC[param][year][obj['TechId']] = {}
-                        RYTC[param][year][obj['TechId']][obj['CommId']] = val
-        return RYTC
+            File.writeFile( RYCdata, self.RYCpath)
+        except(IOError):
+            raise IOError
 
-    def RYTE(self, RYTEdata):
-        RYTE = {}
-        for param, array in RYTEdata.items():
-            RYTE[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYTE[param]:
-                        RYTE[param][year] = {}
-                    if (year != 'TechId' and year != 'EmisId'):
-                        if obj['TechId'] not in RYTE[param][year]:
-                            RYTE[param][year][obj['TechId']] = {}
-                        RYTE[param][year][obj['TechId']][obj['EmisId']] = val
-        return RYTE
+    def default_RYE(self):
+        try:
+            years = self.genData['osy-years']
+            emis = self.genData['osy-emis']
+            
+            RYEdata = {}
+            for ryt in self.PARAMETERS['RYE']:
+                RYEdata[ryt['id']] = []
+                for emi in emis:
+                    chunk = {}
+                    chunk['EmisId'] = emi['EmisId']
+                    for year in years:
+                        chunk[year] = 0  
+                    RYEdata[ryt['id']].append(chunk)
 
-    def RYC(self, RYCdata):
-        RYC = {}
-        for param, array in RYCdata.items():
-            RYC[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYC[param]:
-                        RYC[param][year] = {}
-                    if (year != 'CommId'):
-                        if obj['CommId'] not in RYC[param][year]:
-                            RYC[param][year][obj['CommId']] = {}
-                        RYC[param][year][obj['CommId']] = val
-        return RYC
+            File.writeFile( RYEdata, self.RYEpath)
+        except(IOError):
+            raise IOError
 
-    def RYE(self, RYEdata):
-        RYE = {}
-        for param, array in RYEdata.items():
-            RYE[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYE[param]:
-                        RYE[param][year] = {}
-                    if (year != 'EmisId'):
-                        if obj['EmisId'] not in RYE[param][year]:
-                            RYE[param][year][obj['EmisId']] = {}
-                        RYE[param][year][obj['EmisId']] = val
-        return RYE
+    def default_RYTs(self):
+        try:
+            years = self.genData['osy-years']
+            seasons = int(self.genData['osy-ns'])
+            days = int(self.genData['osy-dt'])
+            
+            RYTsdata = {}
+            for ryt in self.PARAMETERS['RYTs']:
+                RYTsdata[ryt['id']] = []
+                for season in range(seasons):
+                    for day in range(days):
+                        chunk = {}
+                        s = str(season + 1)
+                        d = str(day + 1)
+                        chunk['YearSplit'] = "S"+s+d
+                        for year in years:
+                            chunk[year] = 0  
+                        RYTsdata[ryt['id']].append(chunk)
 
-    def RYTTs(self, RYTTsdata):
-        RYTTs = {}
-        for param, array in RYTTsdata.items():
-            RYTTs[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYTTs[param]:
-                        RYTTs[param][year] = {}
-                    if (year != 'TechId' and year != 'Timeslice'):
-                        if obj['TechId'] not in RYTTs[param][year]:
-                            RYTTs[param][year][obj['TechId']] = {}
-                        RYTTs[param][year][obj['TechId']][obj['Timeslice']] = val
-        return RYTTs
+            File.writeFile( RYTsdata, self.RYTspath)
+        except(IOError):
+            raise IOError
 
-    def RYCTs(self, RYCTsdata):
-        RYCTs = {}
-        for param, array in RYCTsdata.items():
-            RYCTs[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYCTs[param]:
-                        RYCTs[param][year] = {}
-                    if (year != 'CommId' and year != 'Timeslice'):
-                        if obj['CommId'] not in RYCTs[param][year]:
-                            RYCTs[param][year][obj['CommId']] = {}
-                        RYCTs[param][year][obj['CommId']][obj['Timeslice']] = val
-        return RYCTs
+    def default_RYTTs(self):
+        try:
+            years = self.genData['osy-years']
+            techs = self.genData['osy-tech']
+            ns = int(self.genData['osy-ns'])
+            nd = int(self.genData['osy-dt'])
+            
+            RYTTsdata = {}
+            for ryt in self.PARAMETERS['RYTTs']:
+                RYTTsdata[ryt['id']] = []
+                for tech in techs:
+                    for season in range(ns):
+                        for day in range(nd):
+                            chunk = {}
+                            chunk['TechId'] = tech['TechId']
+                            s = str(season + 1)
+                            d = str(day + 1)
+                            chunk['Timeslice'] = "S"+s+d
+                            for year in years:
+                                chunk[year] = 0  
+                            RYTTsdata[ryt['id']].append(chunk)
+
+            File.writeFile( RYTTsdata, self.RYTTspath)
+        except(IOError):
+            raise IOError
+
+    def default_RYCTs(self):
+        try:
+            years = self.genData['osy-years']
+            comms = self.genData['osy-comm']
+            ns = int(self.genData['osy-ns'])
+            nd = int(self.genData['osy-dt'])
+            
+            RYCTsdata = {}
+            for ryt in self.PARAMETERS['RYCTs']:
+                RYCTsdata[ryt['id']] = []
+                for comm in comms:
+                    for season in range(ns):
+                        for day in range(nd):
+                            chunk = {}
+                            chunk['CommId'] = comm['CommId']
+                            s = str(season + 1)
+                            d = str(day + 1)
+                            chunk['Timeslice'] = "S"+s+d
+                            for year in years:
+                                chunk[year] = 0  
+                            RYCTsdata[ryt['id']].append(chunk)
+
+            File.writeFile( RYCTsdata, self.RYCTspath)
+        except(IOError):
+            raise IOError
+
+    def createCase(self):
+        try:
+            self.default_RYT()
+            self.default_RYTC()
+            self.default_RYTs()
+            self.default_RYC()
+            self.default_RYE()
+            self.default_RYTTs()
+            self.default_RYCTs()
+            self.default_RYTE()
+        except(IOError):
+            raise IOError
