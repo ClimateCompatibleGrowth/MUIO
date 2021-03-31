@@ -31,7 +31,7 @@ let res = `
 </nav> 
 <span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span>`
 $("aside").html(res);
-console.log(res)
+//console.log(res)
 
 //sa parent PARAM
 /*
@@ -85,7 +85,7 @@ export default class Sidebar {
         $.each(PARAMETERS, function (param, array) {
             
             $.each(array, function (id, obj) {
-                console.log(param, obj.id, obj.value)
+                //console.log(param, obj.id, obj.value)
                 let res = `
                     <li  class="">
                         <a href="#/${param}/${obj.id}" title="Year and technology parameters">${obj.value}</a>

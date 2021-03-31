@@ -48,7 +48,7 @@ class DataFile(Osemosys):
             for timesliceId in timesliceIDs:
                 timeslices += '{:<50}'.format(timesliceId)
 
-            path = '"{}"'.format(self.resPath.resolve())
+            #path = '"{}"'.format(self.resPath.resolve())
 
             if Config.AWS_STORAGE != 1:
                 f = open(self.dataFile, mode="w")
@@ -64,16 +64,16 @@ class DataFile(Osemosys):
             f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('set', 'EMISSION',':=', emis, ';', '\n'))
             f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('set', 'REGION',':=', 'RE1', ';', '\n'))
             f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('set', 'MODE_OF_OPERATION',':=', '1', ';', '\n'))
-            f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('set', 'FUEL',':=', comms, ';', '\n'))
+            f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('set', 'COMMODITY',':=', comms, ';', '\n'))
             f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('set', 'STORAGE',':=','', ';', '\n'))
             f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('set', 'TECHNOLOGY',':=', techs, ';', '\n'))
             f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('set', 'YEAR',':=', years, ';', '\n'))
             f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('set', 'TIMESLICE',':=', timeslices, ';', '\n'))
 
             f.write('####################\n#     Parameters     #\n####################\n')
-            f.write('{:<50}{}'.format('#', '\n'))
-            f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+            # f.write('{:<50}{}'.format('#', '\n'))
+            # f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
+            # f.write('{:<50}{}'.format('', '\n'))
 
             #R
             r = self.R()

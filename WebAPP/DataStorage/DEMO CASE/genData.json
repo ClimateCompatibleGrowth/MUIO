@@ -28,8 +28,50 @@
             "TechId": "TEC_q9gtv"
         },
         {
-            "TechId": "TEC_4fv1e",
+            "CAU": 0,
+            "Desc": "Default technology",
+            "EAR": [],
+            "IAR": [],
+            "OAR": [],
+            "OL": 1,
+            "TMPAL": 0,
+            "TMPAU": 9999,
             "Tech": "TEC_2",
+            "TechId": "TEC_4fv1e"
+        },
+        {
+            "CAU": 0,
+            "Desc": "Default technology",
+            "EAR": [],
+            "IAR": [],
+            "OAR": [],
+            "OL": 1,
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "Tech": "TEC_3",
+            "TechId": "TEC_l7rk7"
+        },
+        {
+            "CAU": 0,
+            "Desc": "Default technology",
+            "EAR": [
+                "EMI_1hl8f"
+            ],
+            "IAR": [
+                "COM_rg06s"
+            ],
+            "OAR": [
+                "COM_rg06s"
+            ],
+            "OL": 1,
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "Tech": "TEC_4",
+            "TechId": "TEC_7u24d"
+        },
+        {
+            "TechId": "TEC_ifbr7",
+            "Tech": "TEC_5",
             "Desc": "Default technology",
             "IAR": [],
             "OAR": [],
@@ -40,16 +82,50 @@
             "OL": 1
         },
         {
-            "TechId": "TEC_l7rk7",
-            "Tech": "TEC_3",
+            "TechId": "TEC_c6j0l",
+            "Tech": "TEC_6",
             "Desc": "Default technology",
             "IAR": [
-                "COM_paxek",
-                "COM_31zkj"
+                "COM_rg06s",
+                "COM_tlpci",
+                "COM_qmosv"
             ],
             "OAR": [
-                "COM_paxek",
-                "COM_31zkj"
+                "COM_rg06s",
+                "COM_tlpci",
+                "COM_qmosv"
+            ],
+            "EAR": [
+                "EMI_1hl8f",
+                "EMI_f5e7c",
+                "EMI_nsdlo"
+            ],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_bq4p8",
+            "Tech": "TEC_7",
+            "Desc": "Default technology",
+            "IAR": [],
+            "OAR": [],
+            "EAR": [],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_5j4dr",
+            "Tech": "TEC_8",
+            "Desc": "Default technology",
+            "IAR": [
+                "COM_0ynr7"
+            ],
+            "OAR": [
+                "COM_0ynr7"
             ],
             "EAR": [],
             "TMPAL": 0,
@@ -58,14 +134,50 @@
             "OL": 1
         },
         {
-            "TechId": "TEC_7u24d",
-            "Tech": "TEC_4",
+            "TechId": "TEC_n7l3c",
+            "Tech": "TEC_9",
             "Desc": "Default technology",
             "IAR": [],
             "OAR": [],
             "EAR": [
-                "EMI_1hl8f",
-                "EMI_r6k8l"
+                "EMI_f5e7c"
+            ],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_6zwu8",
+            "Tech": "TEC_10",
+            "Desc": "Default technology",
+            "IAR": [
+                "COM_tlpci",
+                "COM_uzhnd"
+            ],
+            "OAR": [
+                "COM_tlpci",
+                "COM_uzhnd"
+            ],
+            "EAR": [],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_tg5zu",
+            "Tech": "TEC_11",
+            "Desc": "Default technology",
+            "IAR": [
+                "COM_rx7zn"
+            ],
+            "OAR": [
+                "COM_y9zzh"
+            ],
+            "EAR": [
+                "EMI_f5e7c",
+                "EMI_nsdlo"
             ],
             "TMPAL": 0,
             "TMPAU": 9999,
@@ -82,16 +194,51 @@
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_paxek",
-            "COM_paxek": "COM_2",
+            "CommId": "COM_rx7zn",
+            "COM_rx7zn": "COM_2",
             "Comm": "COM_2",
             "Desc": "Default commodity",
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_31zkj",
-            "COM_31zkj": "COM_3",
+            "CommId": "COM_y9zzh",
+            "COM_y9zzh": "COM_3",
             "Comm": "COM_3",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
+        },
+        {
+            "CommId": "COM_q50wb",
+            "COM_q50wb": "COM_4",
+            "Comm": "COM_4",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
+        },
+        {
+            "CommId": "COM_tlpci",
+            "COM_tlpci": "COM_5",
+            "Comm": "COM_5",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
+        },
+        {
+            "CommId": "COM_uzhnd",
+            "COM_uzhnd": "COM_6",
+            "Comm": "COM_6",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
+        },
+        {
+            "CommId": "COM_qmosv",
+            "COM_qmosv": "COM_7",
+            "Comm": "COM_7",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
+        },
+        {
+            "CommId": "COM_0ynr7",
+            "COM_0ynr7": "COM_8",
+            "Comm": "COM_8",
             "Desc": "Default commodity",
             "UnitId": "PJ"
         }
@@ -105,20 +252,36 @@
             "UnitId": "Ton"
         },
         {
-            "EmisId": "EMI_r6k8l",
-            "EMI_r6k8l": "EMI_2",
+            "EmisId": "EMI_f5e7c",
+            "EMI_f5e7c": "EMI_2",
             "Emis": "EMI_2",
+            "Desc": "Default emission",
+            "UnitId": "Ton"
+        },
+        {
+            "EmisId": "EMI_nsdlo",
+            "EMI_nsdlo": "EMI_3",
+            "Emis": "EMI_3",
             "Desc": "Default emission",
             "UnitId": "Ton"
         }
     ],
     "osy-years": [
         "2020",
-        "2025",
+        "2022",
+        "2024",
+        "2026",
+        "2028",
         "2030",
-        "2035",
+        "2032",
+        "2034",
+        "2036",
+        "2038",
         "2040",
-        "2045",
+        "2042",
+        "2044",
+        "2046",
+        "2048",
         "2050"
     ]
 }

@@ -7,21 +7,22 @@ export class Grid {
         return theme
     }
 
-    static techsGrid(srcTech, srcComm, srcEmi){
+    // static techsGrid(srcTech, srcComm, srcEmi){
+    static techsGrid(daTechs,ddlComms, ddlEmis){
    
-        let daTechs = new $.jqx.dataAdapter(srcTech);
-        let daComms = new $.jqx.dataAdapter(srcComm);
-        let daEmi = new $.jqx.dataAdapter(srcEmi);
+        // let daTechs = new $.jqx.dataAdapter(srcTech);
+        // let daComms = new $.jqx.dataAdapter(srcComm);
+        // let daEmi = new $.jqx.dataAdapter(srcEmi);
 
-        var ddlComms = function(row, value, editor) {
-            //console.log('editor ', editor)
-            editor.jqxDropDownList({ source: daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true });
-        }
+        // var ddlComms = function(row, value, editor) {
+        //     //console.log('editor ', editor)
+        //     editor.jqxDropDownList({ source: daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true });
+        // }
 
-        var ddlEmis = function(row, value, editor) {
-            //console.log('editor ', editor)
-            editor.jqxDropDownList({ source: daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true });
-        }
+        // var ddlEmis = function(row, value, editor) {
+        //     //console.log('editor ', editor)
+        //     editor.jqxDropDownList({ source: daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true });
+        // }
 
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
             // set the editor's current value. The callback is called each time the editor is displayed.
@@ -50,6 +51,7 @@ export class Grid {
         var getEditorValue = function (row, cellvalue, editor) {
             // return the editor's value.
             //console.log(editor, editor.text())
+           // console.log(cellvalue, editor.val(), editor)
             return editor.val();
         }
         
@@ -175,11 +177,11 @@ export class Grid {
         }
 
         var cellsrendererbutton = function (row, column, value) {
-            var id = $("#osy-gridComm").jqxGrid('getrowid', row);
-            if (id == 0) {
+            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
+            if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteComm" data-id='+ id+'><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteComm" data-id='+ row+' ><i class="fa  fa-minus-circle danger"></i>Delete</span>';
         }
 
         $("#osy-gridComm").jqxGrid({
@@ -249,11 +251,11 @@ export class Grid {
         }
 
         var cellsrendererbutton = function (row, column, value) {
-            var id = $("#osy-gridEmis").jqxGrid('getrowid', row);
-            if (id == 0) {
+            //var id = $("#osy-gridEmis").jqxGrid('getrowid', row);
+            if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteEmis" data-id='+ id+'><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteEmis" data-id='+ row+'><i class="fa  fa-minus-circle danger"></i>Delete</span>';
         }
 
         $("#osy-gridEmis").jqxGrid({

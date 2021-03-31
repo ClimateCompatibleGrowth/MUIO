@@ -6,15 +6,15 @@ export class Model {
         this.d = 2;
         this.decimal = 'd' + this.d;
         if(casename){
-            console.log('data ', RYTCdata)
+            //console.log('data ', RYTCdata)
             let datafields = [];
             let datafieldsChart = [];
             let columns = [];
             let series = [];
             let RYTCgrid = DataModel.RYTCgrid(genData, RYTCdata);
-            console.log('grid ',RYTCgrid)
+            //console.log('grid ',RYTCgrid)
             let RYTCchart = DataModel.RYTCchart(genData, RYTCdata);
-            console.log('chart ',RYTCchart)
+            //console.log('chart ',RYTCchart)
             let years = genData['osy-years'];
             let comms = genData['osy-comm'];
             let techs = genData['osy-tech'];

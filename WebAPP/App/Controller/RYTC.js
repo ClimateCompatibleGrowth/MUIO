@@ -272,7 +272,7 @@ export default class RYTC {
             e.stopImmediatePropagation();
             model.d++;
             model.decimal = 'd' + parseInt(model.d);
-            console.log('model.d ', model.d)
+            //console.log('model.d ', model.d)
             $('#osy-gridRYTC').jqxGrid('refresh');
         });
 

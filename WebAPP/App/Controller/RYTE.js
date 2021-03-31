@@ -264,7 +264,7 @@ export default class RYTE {
             e.stopImmediatePropagation();
             model.d++;
             model.decimal = 'd' + parseInt(model.d);
-            console.log('model.d ', model.d)
+            //console.log('model.d ', model.d)
             $('#osy-gridRYTE').jqxGrid('refresh');
         });
 

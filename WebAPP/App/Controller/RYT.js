@@ -146,7 +146,7 @@ export default class RYT {
                     model.chartData[param] = chartData;
                     model.gridData[param] = gridData;
 
-                    var configChart = $('#osy-Chart').jqxChart('getInstance');
+                    var configChart = $('#osy-chartRYT').jqxChart('getInstance');
                     configChart.source.records = model.chartData[param];
                     configChart.update();
                 }, 1000);

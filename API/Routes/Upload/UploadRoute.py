@@ -101,14 +101,10 @@ def backupCase():
         case = request.args.get('case')
 
         casePath = Path('WebAPP', 'DataStorage',case)
-        
-        pathHome = str(Path.home())
-        #zippedFile = Path(pathHome, 'Downloads', case+'.zip')
         zippedFile = Path('WebAPP', 'DataStorage', case+'.zip')
 
         '''File system data storage'''
         if Config.AWS_STORAGE != 1:
-            casePath = Path('WebAPP', 'DataStorage', case)
             with ZipFile(zippedFile, 'w') as zipObj:
                 # Iterate over all the files in directory
                 for folderName, subfolders, filenames in os.walk(str(casePath)):
@@ -118,11 +114,6 @@ def backupCase():
                         # Add file to zip
                         zipObj.write(filePath)      
 
-            return send_file(zippedFile.resolve(), as_attachment=True)      
-            # response = {
-            #     "message": 'Case <b>'+ case + '</b> is downloaded</b>!',
-            #     "status_code": "success"
-            # }
             '''AWS S3 data storage'''
         else:
             #casePath = Path(pathHome, 'Downloads', case)
@@ -142,11 +133,8 @@ def backupCase():
                         zipObj.write(filePath) 
             #remove downloaded folder from local
             shutil.rmtree(casePath)
-            response = {
-                    "message": 'Case <b>'+ case + '</b> is downloaded</b>!',
-                    "status_code": "success"
-                }
 
+        return send_file(zippedFile.resolve(), as_attachment=True)
         #return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
@@ -229,43 +217,94 @@ def uploadCase():
         for files in submitted_storage.items():
             file = files[1]
             submitted_file = file.filename
-            #check if case exists
+            
             case = os.path.splitext(submitted_file)[0]
 
             if Config.AWS_STORAGE != 1:
-                if not os.path.exists(Path(Config.DATA_STORAGE,case)):
-                    if submitted_file and allowed_filename(submitted_file):
-                        filename = secure_filename(submitted_file)
-                        file.save(os.path.join(Config.DATA_STORAGE, filename))
-                        with ZipFile(os.path.join(Config.DATA_STORAGE, filename)) as zf:
-                            #lists = zf.namelist()
-                            genDataPath = 'WebAPP/DataStorage/'+case + '/genData.json'
-                            if genDataPath in zf.namelist():
-                                data = json.loads(zf.read(genDataPath))
-                                #name = data['else-version']
-                                name = data.get('osy-version', None)
-                                if name == '1.0':
-                                    zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
-                                    msg.append({
-                                        "message": "Case " + case +" have been uploaded!",
-                                        "status_code": "success"
-                                    })
+                if submitted_file and allowed_filename(submitted_file):
+                    filename = secure_filename(submitted_file)
+                    #spasiti zip u data storage
+                    file.save(os.path.join(Config.DATA_STORAGE, filename))
+                    #zipfiles = []
+                    with ZipFile(os.path.join(Config.DATA_STORAGE, filename)) as zf:
+                        errorcode = 1
+                        for zippedfile in zf.namelist():
+                            # one = zippedfile
+                            # two = Path(zippedfile)
+                            # name = two.name
+                            #zipfiles.append(Path(zippedfile).name)
+                            zippedfilepath = Path(zippedfile)
+                            zippedfilename = zippedfilepath.name
+                            casename = zippedfilepath.parent.name
+                            if 'genData.json' == zippedfilename:
+                                errorcode = 0
+                                
+                                if not os.path.exists(Path(Config.DATA_STORAGE,casename)):
+                                    data = json.loads(zf.read(zippedfile))
+                                    #name = data['else-version']
+                                    name = data.get('osy-version', None)
+                                    if name == '1.0':
+                                        zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                        msg.append({
+                                            "message": "Case " + casename +" have been uploaded!",
+                                            "status_code": "success",
+                                            "casename": casename
+                                        })
+                                    else:
+                                        msg.append({
+                                            "message": "Case " + casename +" is not valid OSEMOSYS ver 1.0 case!",
+                                            "status_code": "error"
+                                        })
                                 else:
                                     msg.append({
-                                        "message": "Case " + case +" is not valid OSEMOSYS ver 1.0 case!",
-                                        "status_code": "error"
+                                        "message": "Case " + casename + " already exists!",
+                                        "status_code": "warning"
                                     })
-                            else:
-                                msg.append({
-                                    "message": "Case " + case +" is not valid OSEMOSYS ver 1.0 case!",
-                                    "status_code": "error"
-                                })
-                        os.remove(os.path.join(Config.DATA_STORAGE, filename))
-                else:
-                    msg.append({
-                        "message": "Case " + case + " already exists!",
-                        "status_code": "warning"
-                    })
+                                
+                        if errorcode == 1:
+                            msg.append({
+                                "message": "ZIP archive " + case +" is not valid archive!",
+                                "status_code": "error"
+                            })
+                    os.remove(os.path.join(Config.DATA_STORAGE, filename))
+
+
+
+
+                # #check if case exists
+                # if not os.path.exists(Path(Config.DATA_STORAGE,case)):
+                #     if submitted_file and allowed_filename(submitted_file):
+                #         filename = secure_filename(submitted_file)
+                #         file.save(os.path.join(Config.DATA_STORAGE, filename))
+                #         with ZipFile(os.path.join(Config.DATA_STORAGE, filename)) as zf:
+                #             #lists = zf.namelist()
+                #             genDataPath = 'WebAPP/DataStorage/'+case + '/genData.json'
+                #             if genDataPath in zf.namelist():
+                #                 data = json.loads(zf.read(genDataPath))
+                #                 #name = data['else-version']
+                #                 name = data.get('osy-version', None)
+                #                 if name == '1.0':
+                #                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                #                     msg.append({
+                #                         "message": "Case " + case +" have been uploaded!",
+                #                         "status_code": "success"
+                #                     })
+                #                 else:
+                #                     msg.append({
+                #                         "message": "Case " + case +" is not valid OSEMOSYS ver 1.0 case!",
+                #                         "status_code": "error"
+                #                     })
+                #             else:
+                #                 msg.append({
+                #                     "message": "Case " + case +" is not valid OSEMOSYS ver 1.0 case!",
+                #                     "status_code": "error"
+                #                 })
+                #         os.remove(os.path.join(Config.DATA_STORAGE, filename))
+                # else:
+                #     msg.append({
+                #         "message": "Case " + case + " already exists!",
+                #         "status_code": "warning"
+                #     })
             else:
                 # my_bucket = S3.resource.Bucket(Config.S3_BUCKET)
                 # result = my_bucket.meta.client.list_objects(Bucket=my_bucket.name, Delimiter='/')

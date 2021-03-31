@@ -50,7 +50,7 @@ export class JqxSources{
        
       
         var ddlComms = function(row, value, editor) {
-          console.log('editor ', editor)
+          //console.log('editor ', editor)
           editor.jqxDropDownList({ source: daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true });
         }
   
@@ -58,13 +58,13 @@ export class JqxSources{
             // set the editor's current value. The callback is called each time the editor is displayed.
             var items = editor.jqxDropDownList('getItems');
             editor.jqxDropDownList('uncheckAll');
-            console.log('cellvalues ', cellvalue)
+            //console.log('cellvalues ', cellvalue)
             if(Array.isArray(cellvalue)){
                 var values = cellvalue;
-                console.log('values array ', values)
+                //console.log('values array ', values)
             }else{
                 var values = cellvalue.split(/,\s*/);
-                console.log('values strig ', values)
+                //console.log('values strig ', values)
             } 
           
             for (var j = 0; j < values.length; j++) {

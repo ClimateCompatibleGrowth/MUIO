@@ -16,7 +16,6 @@ export default class AddCase {
             let casename = response.session;
             const promise = [];
             let genData = Osemosys.getData(casename, 'genData.json');
-            console.log(genData)
             promise.push(genData);
             return Promise.all(promise);
         })
@@ -40,6 +39,11 @@ export default class AddCase {
         Grid.commGrid(model.commodities);
         //Grid.techsGrid(model.srcTech, model.srcComm);
         Grid.emisGrid(model.emissions);
+
+        // model.srcTech = JqxSources.srcTech(model.techs);
+        // model.srcComm = JqxSources.srcComm(model.commodities);
+        // model.srcEmi = JqxSources.srcEmi(model.emissions);
+        // Grid.techsGrid(model.srcTech, model.srcComm, model.srcEmi);
 
         // var daGrid = new $.jqx.dataAdapter(model.srcTech);
         // let $divGrid = $("#osy-gridTech");
@@ -254,7 +258,7 @@ export default class AddCase {
                 }
                 if(response.status_code=="edited"){
                     //$("#osy-case").html(casename);
-                    console.log(casename, 'Case study', 'create & edit')
+                    //console.log(casename, 'Case study', 'create & edit')
                     Html.title(casename, 'Case study', 'create & edit');
                     $("#osy-new").show();
                     Navbar.initPage(casename);
@@ -267,8 +271,6 @@ export default class AddCase {
                     $("#osy-new").show();
                     Message.bigBoxWarning('Case study message', response.message, 3000);
                 }
-
-
             })
             .catch(error=>{
                 Message.bigBoxDanger('Error message', error, null);
@@ -319,9 +321,18 @@ export default class AddCase {
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
             if(id!=0){
-                $("#osy-gridComm").jqxGrid('deleterow', id);
+                var commId = $('#osy-gridComm').jqxGrid('getcellvalue', id, 'CommId');
+
+                var rowid = $('#osy-gridComm').jqxGrid('getrowid', id);
+                $("#osy-gridComm").jqxGrid('deleterow', rowid);
                 model.commCount--;
                 $("#commCount").text(model.commCount);
+
+                //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
+                $.each(model.techs, function (id, techObj) {
+                    techObj['IAR'] =  techObj['IAR'].filter(item => item !== commId);
+                    techObj['OAR'] =  techObj['OAR'].filter(item => item !== commId);
+                });
             }
         });
 
@@ -333,6 +344,7 @@ export default class AddCase {
             $("#osy-gridEmis").jqxGrid('addrow', null, defaultEmi);
             model.emisCount++;
             $("#emisCount").text(model.emisCount);
+            $('#osy-gridTech').jqxGrid('refresh');
         });
 
         $(document).undelegate(".deleteEmis","click");
@@ -341,9 +353,24 @@ export default class AddCase {
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
             if(id!=0){
-                $("#osy-gridEmis").jqxGrid('deleterow', id);
+                var emisId = $('#osy-gridEmis').jqxGrid('getcellvalue', id, 'EmisId');
+                // console.log('id ', id)
+                // console.log('emisId ', emisId)
+
+                //izbrisi red u aabeli
+                var rowid = $('#osy-gridEmis').jqxGrid('getrowid', id);
+                //console.log('rowid ', rowid)
+
+                $("#osy-gridEmis").jqxGrid('deleterow', rowid);
+                //smanji counter za broj emisjia i update html
                 model.emisCount--;
                 $("#emisCount").text(model.emisCount);
+
+                //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
+                $.each(model.techs, function (id, techObj) {
+                    techObj['EAR'] =  techObj['EAR'].filter(item => item !== emisId);
+                    model.techs[id]['EAR'] = techObj['EAR'];
+                });
             }
         });
 
@@ -355,19 +382,34 @@ export default class AddCase {
                 model.commodities = commData;
                 let emiData = $('#osy-gridEmis').jqxGrid('getrows');
                 model.emissions = emiData;
+
                 model.srcTech = JqxSources.srcTech(model.techs);
                 model.srcComm = JqxSources.srcComm(model.commodities);
                 model.srcEmi = JqxSources.srcEmi(model.emissions);
-                // model.columnsTech = JqxSources.techGridColumns(new $.jqx.dataAdapter(model.commodities));
 
-                // var daGrid = new $.jqx.dataAdapter(model.srcTech);
-                // let $divGrid = $("#osy-gridTech");
-                // Grid.Grid($divGrid, daGrid, model.columnsTech)
+                let daTechs = new $.jqx.dataAdapter(model.srcTech);
+                let daComms = new $.jqx.dataAdapter(model.srcComm);
+                let daEmi = new $.jqx.dataAdapter(model.srcEmi);
+        
+                var ddlComms = function(row, value, editor) {
+                    //console.log('editor ', editor)
+                    editor.jqxDropDownList({ source: daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true });
+                }
+        
+                var ddlEmis = function(row, value, editor) {
+                    //console.log('editor ', editor)
+                    editor.jqxDropDownList({ source: daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true });
+                }
 
+                // console.log('daTechs ',daTechs)
+                // console.log('ddlComms ',  model.srcComm)
+                // console.log('ddlEmis ',  model.srcEmi )
+                
+                Grid.techsGrid(daTechs,ddlComms, ddlEmis);
+                // Grid.techsGrid(model.srcTech, model.srcComm, model.srcEmi);
                 //console.log(model.srcEmi);
-                Grid.techsGrid(model.srcTech, model.srcComm, model.srcEmi);
-                // $('#osy-gridTech').jqxGrid('updatebounddata');
-                // $('#osy-gridTech').jqxGrid('refresh');
+                //$('#osy-gridTech').jqxGrid('updatebounddata');
+                //$('#osy-gridTech').jqxGrid('refresh');
             }
         });
 

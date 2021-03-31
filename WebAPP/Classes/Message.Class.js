@@ -135,7 +135,7 @@ export class Message {
 
     static SmartMessageBoxDDL(cases, init_f){
         var casesArr = '"[' + cases.join('][') + ']"';
-        console.log(casesArr)
+        //console.log(casesArr)
         $.SmartMessageBox({
             title : "No active case studt: Select",
             content : "Please select on of existing cases to proceed.",
@@ -145,7 +145,7 @@ export class Message {
             options: casesArr,
             //options : "[Costa Rica][United States][Autralia][Spain]"
         }, function(ButtonPress, Value) {
-            console.log(Value);
+            //console.log(Value);
             init_f(Value);
             //alert(ButtonPress + " " + Value);
         });

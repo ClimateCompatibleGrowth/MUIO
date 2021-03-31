@@ -292,13 +292,14 @@ export class Base {
             $.each( file, function( key, value ) {
                 if(response.response[key]['status_code'] == 'success'){
                     
-                    let casename = value.name.slice(0, -4)
+                    //let casename = value.name.slice(0, -4)
+                    let casename = response.response[key]['casename'];
                     Html.apendCase(casename);
                     Message.bigBoxSuccess("Upload response", response.response[key]['message'], null); 
                     value.previewElement.innerHTML = "";
-                    console.log('this.AWS_SYNC ', this.AWS_SYNC )
+                    //console.log('this.AWS_SYNC ', this.AWS_SYNC )
                     if (Base.AWS_SYNC == 1){
-                        console.log('sync ', value.name )
+                        //console.log('sync ', value.name )
                         Base.uploadSync(casename);
                     }
 

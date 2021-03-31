@@ -88,7 +88,7 @@ export default class DataFile {
         $("#osy-generateDataFile").off('click');
         $("#osy-generateDataFile").on('click', function (event) {
             Pace.restart();
-            console.log('model casenam ', model.casename);
+            //console.log('model casenam ', model.casename);
             Osemosys.generateDataFile(model.casename)
             .then(response =>{
                 if(response.status_code=="success"){
@@ -111,7 +111,7 @@ export default class DataFile {
                     //var cells = rows[i].split(",");
                     var cells = rows[i].match(/.{1,50}/g);
                     if (cells !== null){
-                        console.log('cells ', cells)
+                        //console.log('cells ', cells)
                         for (var j = 0; j < cells.length; j++) {
                             var cell = $("<td />");
                             cells[j] = cells[j].replace(/ /g, '&nbsp;');
@@ -160,7 +160,7 @@ export default class DataFile {
             Pace.restart();
             Osemosys.run(model.casename)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 if(response.status_code=="success"){
                     $("#runOutput").show();
                     $("#osy-runOutput").empty();
