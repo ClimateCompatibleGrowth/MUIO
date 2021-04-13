@@ -13,8 +13,248 @@ class DataFile(Osemosys):
         
     #     Osemosys.__init__(self, case)
 
-
     def generateDatafile( self ):
+        try:
+            emiIDs = self.getEmiIds()
+            techIDs = self.getTechIds()
+            commIDs = self.getCommIds()
+            yearIDs = self.getYears()
+            timesliceIDs = self.getTimeslices()
+
+            activityTechIDs = self.getActivityTechIds()
+            activityCommIDs = self.getActivityCommIds()
+
+            emissionTechIDs = self.getActivityEmissionTechIds()
+            activityEmissionIDs = self.getActivityEmisionIds()
+
+            emis = ''
+            for emiId in emiIDs:
+                #emis += '{:<50}'.format(emiId) 
+                emis += ' {}'.format(emiId) 
+
+            techs = ''
+            for techId in techIDs:
+                # techs += '{:<50}'.format(techId) 
+                techs += ' {}'.format(techId) 
+
+            comms = ''
+            for commId in commIDs:
+                # comms += '{:<50}'.format(commId) 
+                comms += ' {}'.format(commId) 
+
+            years = ''
+            for yearId in yearIDs:
+                # years += '{:<50}'.format(yearId)
+                years += ' {}'.format(yearId)
+
+            timeslices = ''
+            for timesliceId in timesliceIDs:
+                # timeslices += '{:<50}'.format(timesliceId)
+                timeslices += ' {}'.format(timesliceId)
+
+            #path = '"{}"'.format(self.resPath.resolve())
+
+            if Config.AWS_STORAGE != 1:
+                f = open(self.dataFile, mode="w")
+            else:
+                '''ako se koristi aws S3 storage direktno'''
+                if not os.path.exists(Path(Config.S3_BUCKET_LOCAL,self.case)):
+                    os.makedirs(Path(Config.S3_BUCKET_LOCAL,self.case))
+                f = open(self.dataFileS3, mode="w")
+
+            #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
+            f.write('####################\n#    Sets    #\n####################\n')
+            f.write('{} {}'.format('#', '\n'))
+            f.write('{} {} {}{}{}{}'.format('set', 'EMISSION',':=', emis, ';', '\n'))
+            f.write('{} {} {}{}{}{}'.format('set', 'REGION',':=', 'RE1', ';', '\n'))
+            f.write('{} {} {}{}{}{}'.format('set', 'MODE_OF_OPERATION',':=', '1', ';', '\n'))
+            f.write('{} {} {}{}{}{}'.format('set', 'COMMODITY',':=', comms, ';', '\n'))
+            f.write('{} {} {}{}{}{}'.format('set', 'STORAGE',':=','', ';', '\n'))
+            f.write('{} {} {}{}{}{}'.format('set', 'TECHNOLOGY',':=', techs, ';', '\n'))
+            f.write('{} {} {}{}{}{}'.format('set', 'YEAR',':=', years, ';', '\n'))
+            f.write('{} {} {}{}{}{}'.format('set', 'TIMESLICE',':=', timeslices, ';', '\n'))
+
+            f.write('####################\n#     Parameters     #\n####################\n')
+            # f.write('{:<50}{}'.format('#', '\n'))
+            # f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
+            # f.write('{:<50}{}'.format('', '\n'))
+
+            #R
+            r = self.R()
+            for id, param in self.PARAM['R'].items():
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {}'.format('RE1', r[id], '\n'))
+                f.write('{} {}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+            #T
+            t = self.T()
+            for id, param in self.PARAM['T'].items():
+                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{}{:<50}{}'.format( techs, ':=', '\n'))
+                rtString = ''
+                for techId in techIDs:
+                    rtString += '{:<50f}'.format(t[id][techId])
+                f.write('{:<50}{}{}'.format('RE1', rtString, '\n'))
+                f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+            #RT
+            rt = self.RT()
+            for id, param in self.PARAM['RT'].items():
+                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{}{:<50}{}'.format(techs, ':=', '\n'))
+                rtString = ''
+                for techId in techIDs:
+                    rtString += '{:<50f}'.format(rt[id][techId])
+                f.write('{:<50}{}{}'.format('RE1', rtString, '\n'))
+                f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+            #RYC
+            ryc = self.RYC(File.readFile(self.rycPath))
+            for id, param in self.PARAM['RYC'].items():
+                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{:<50}{}'.format('[RE1,*,*]:', '\n'))
+                f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                for commId in commIDs:
+                    rycString = ''
+                    for yearId in yearIDs:
+                        rycString += '{:<50f}'.format(ryc[id][yearId][commId])
+                    f.write('{:<50}{}{}'.format(commId, rycString, '\n'))
+                f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+            #RYE 
+            rye = self.RYE(File.readFile(self.ryePath))
+            for id, param in self.PARAM['RYE'].items():
+                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{:<50}{}'.format('[RE1,*,*]:', '\n'))
+                f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                for emiId in emiIDs:
+                    ryeString = ''
+                    for yearId in yearIDs:
+                        ryeString += '{:<50}'.format(rye[id][yearId][emiId])
+                    f.write('{:<50}{}{}'.format(emiId, ryeString, '\n'))
+                f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+            #RYT
+            ryt = self.RYT(File.readFile(self.rytPath))
+            for id, param in self.PARAM['RYT'].items():
+                if id != 'VC':
+                    f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                    f.write('{:<50}{}'.format('[RE1,*,*]:', '\n'))
+                    f.write('{}{:<50}{}'.format( years, ':=', '\n'))
+                    for techId in techIDs:
+                        rytString = ''
+                        for yearId in yearIDs:
+                            rytString += '{:<50}'.format(ryt[id][yearId][techId])
+                        f.write('{:<50}{}{}'.format(techId, rytString, '\n'))
+                    f.write('{:<50}{}'.format(';', '\n'))
+                else:
+                    f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                    for techId in techIDs:
+                        f.write('{:<50}{}'.format('[RE1,'+ techId +',*,*]:', '\n'))
+                        f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                        rytString = ''
+                        for yearId in yearIDs:
+                            rytString += '{:<50}'.format(ryt[id][yearId][techId])
+                        f.write('{:<50}{}{}'.format(1, rytString, '\n'))
+                    f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+            #RYTTs
+            rytts = self.RYTTs(File.readFile(self.ryttsPath))
+            for id, param in self.PARAM['RYTTs'].items():
+                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+ 
+                for techId in techIDs:
+                    f.write('{:<50}{}'.format('[RE1,'+ techId +',*,*]:', '\n'))
+                    f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                    for timesliceId in timesliceIDs:
+                        ryttsString = ''
+                        for yearId in yearIDs:
+                            ryttsString += '{:<50}'.format(rytts[id][yearId][techId][timesliceId])
+                        f.write('{:<50}{}{}'.format(timesliceId, ryttsString, '\n'))
+            f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+            #RYCTs
+            rycts = self.RYCTs(File.readFile(self.ryctsPath))
+            for id, param in self.PARAM['RYCTs'].items():
+                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+ 
+                for commId in commIDs:
+                    f.write('{:<50}{}'.format('[RE1,'+ commId +',*,*]:', '\n'))
+                    f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                    for timesliceId in timesliceIDs:
+                        ryctsString = ''
+                        for yearId in yearIDs:
+                            ryctsString += '{:<50}'.format(rycts[id][yearId][commId][timesliceId])
+                        f.write('{:<50}{}{}'.format(timesliceId, ryctsString, '\n'))
+            f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+            #RYTs
+            ryts = self.RYTs(File.readFile(self.rytsPath))
+            for id, param in self.PARAM['RYTs'].items():
+                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                for timesliceId in timesliceIDs:
+                    rytsString = ''
+                    for yearId in yearIDs:
+                        rytsString += '{:<50}'.format(ryts[yearId][timesliceId])
+                    f.write('{:<50}{}{}'.format(timesliceId, rytsString, '\n'))
+            f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+            #RYTC
+            rytc = self.RYTC(File.readFile(self.rytcPath))
+            for id, param in self.PARAM['RYTC'].items():
+                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                for activityTechId in activityTechIDs[id]:
+                    for activityCommId in activityCommIDs[id][activityTechId]:
+                        f.write('{:<50}{}'.format('[RE1,'+ activityTechId + ','+ activityCommId +',*,*]:', '\n'))
+                        f.write('{}{:<50}{}'.format( years, ':=', '\n'))
+                        rytcString = ''
+                        for yearId in yearIDs:
+                            rytcString += '{:<50}'.format(rytc[id][yearId][activityTechId][activityCommId])
+                        f.write('{:<50}{}{}'.format(1, rytcString, '\n'))
+                f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+
+            #RYTE
+            ryte = self.RYTE(File.readFile(self.rytePath))
+            for id, param in self.PARAM['RYTE'].items():
+                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                for emissionTechId in emissionTechIDs[id]:
+                    for activityEmissionId in activityEmissionIDs[id][emissionTechId]:
+                        f.write('{:<50}{}'.format('[RE1,'+ emissionTechId +  ','+ activityEmissionId + ',*,*]:', '\n'))
+                        f.write('{}{:<50}{}'.format( years, ':=', '\n'))
+                        ryteString = ''
+                        for yearId in yearIDs:
+                            ryteString += '{:<50}'.format(ryte[id][yearId][emissionTechId][activityEmissionId])
+                        f.write('{:<50}{}{}'.format(1, ryteString, '\n'))
+                f.write('{:<50}{}'.format(';', '\n'))
+            f.write('{:<50}{}'.format('', '\n'))
+
+
+            f.write('{:<50}{}'.format('#', '\n'))
+            f.write('{:<50}'.format('end;'))
+            f.close
+
+            if not os.path.exists(Path(Config.DATA_STORAGE,self.case,'res', 'csv')):
+                os.makedirs(Path(Config.DATA_STORAGE,self.case,'res', 'csv'))
+
+        #ovako prosljedjujemo exception u prethodnom slucaju vracamo response u funkciju koja poziva writeFile
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+
+    def generateDatafile_bkp( self ):
         try:
             emiIDs = self.getEmiIds()
             techIDs = self.getTechIds()
