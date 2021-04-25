@@ -18,6 +18,11 @@ class DataFile(Osemosys):
             emiIDs = self.getEmiIds()
             techIDs = self.getTechIds()
             commIDs = self.getCommIds()
+
+            emiMap = self.getEmisMap()
+            techMap = self.getTechsMap()
+            commMap = self.getCommsMap()
+            
             yearIDs = self.getYears()
             timesliceIDs = self.getTimeslices()
 
@@ -30,27 +35,30 @@ class DataFile(Osemosys):
             emis = ''
             for emiId in emiIDs:
                 #emis += '{:<50}'.format(emiId) 
-                emis += ' {}'.format(emiId) 
+                #emis += '{} '.format(next(iter(emiId.items()))[1]) 
+                emis += '{} '.format(emiId)
 
             techs = ''
             for techId in techIDs:
                 # techs += '{:<50}'.format(techId) 
-                techs += ' {}'.format(techId) 
+                #techs += '{} '.format(next(iter(techId.items()))[1]) 
+                techs += '{} '.format(techId) 
 
             comms = ''
             for commId in commIDs:
                 # comms += '{:<50}'.format(commId) 
-                comms += ' {}'.format(commId) 
+                #comms += '{} '.format(next(iter(commId.items()))[1]) 
+                comms += '{} '.format(commId) 
 
             years = ''
             for yearId in yearIDs:
                 # years += '{:<50}'.format(yearId)
-                years += ' {}'.format(yearId)
+                years += '{} '.format(yearId)
 
             timeslices = ''
             for timesliceId in timesliceIDs:
                 # timeslices += '{:<50}'.format(timesliceId)
-                timeslices += ' {}'.format(timesliceId)
+                timeslices += '{} '.format(timesliceId)
 
             #path = '"{}"'.format(self.resPath.resolve())
 
@@ -65,14 +73,14 @@ class DataFile(Osemosys):
             #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
             f.write('####################\n#    Sets    #\n####################\n')
             f.write('{} {}'.format('#', '\n'))
-            f.write('{} {} {}{}{}{}'.format('set', 'EMISSION',':=', emis, ';', '\n'))
-            f.write('{} {} {}{}{}{}'.format('set', 'REGION',':=', 'RE1', ';', '\n'))
-            f.write('{} {} {}{}{}{}'.format('set', 'MODE_OF_OPERATION',':=', '1', ';', '\n'))
-            f.write('{} {} {}{}{}{}'.format('set', 'COMMODITY',':=', comms, ';', '\n'))
-            f.write('{} {} {}{}{}{}'.format('set', 'STORAGE',':=','', ';', '\n'))
-            f.write('{} {} {}{}{}{}'.format('set', 'TECHNOLOGY',':=', techs, ';', '\n'))
-            f.write('{} {} {}{}{}{}'.format('set', 'YEAR',':=', years, ';', '\n'))
-            f.write('{} {} {}{}{}{}'.format('set', 'TIMESLICE',':=', timeslices, ';', '\n'))
+            f.write('{} {} {} {}{}{}'.format('set', 'EMISSION',':=', emis, ';', '\n'))
+            f.write('{} {} {} {}{}{}'.format('set', 'REGION',':=', 'RE1', ';', '\n'))
+            f.write('{} {} {} {}{}{}'.format('set', 'MODE_OF_OPERATION',':=', '1', ';', '\n'))
+            f.write('{} {} {} {}{}{}'.format('set', 'COMMODITY',':=', comms, ';', '\n'))
+            f.write('{} {} {} {}{}{}'.format('set', 'STORAGE',':=','', ';', '\n'))
+            f.write('{} {} {} {}{}{}'.format('set', 'TECHNOLOGY',':=', techs, ';', '\n'))
+            f.write('{} {} {} {}{}{}'.format('set', 'YEAR',':=', years, ';', '\n'))
+            f.write('{} {} {} {}{}{}'.format('set', 'TIMESLICE',':=', timeslices, ';', '\n'))
 
             f.write('####################\n#     Parameters     #\n####################\n')
             # f.write('{:<50}{}'.format('#', '\n'))
@@ -85,164 +93,167 @@ class DataFile(Osemosys):
                 f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
                 f.write('{} {} {}'.format('RE1', r[id], '\n'))
                 f.write('{} {}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+            f.write('{}{}'.format('', '\n'))
+
+            #next(iter(word_freq.items()))[1]
+            #next(iter(commId))
 
             #T
             t = self.T()
             for id, param in self.PARAM['T'].items():
-                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':','\n'))
-                f.write('{}{:<50}{}'.format( techs, ':=', '\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{}{}{}'.format( techs, ':=', '\n'))
                 rtString = ''
                 for techId in techIDs:
-                    rtString += '{:<50f}'.format(t[id][techId])
-                f.write('{:<50}{}{}'.format('RE1', rtString, '\n'))
-                f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                    rtString += '{} '.format(t[id][techId])
+                f.write('{} {}{}'.format('RE1', rtString, '\n'))
+                f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
             #RT
             rt = self.RT()
             for id, param in self.PARAM['RT'].items():
-                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':','\n'))
-                f.write('{}{:<50}{}'.format(techs, ':=', '\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{}{}{}'.format(techs, ':=', '\n'))
                 rtString = ''
                 for techId in techIDs:
-                    rtString += '{:<50f}'.format(rt[id][techId])
-                f.write('{:<50}{}{}'.format('RE1', rtString, '\n'))
-                f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                    rtString += '{} '.format(rt[id][techId])
+                f.write('{}{}{}'.format('RE1', rtString, '\n'))
+                f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
             #RYC
             ryc = self.RYC(File.readFile(self.rycPath))
             for id, param in self.PARAM['RYC'].items():
-                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
-                f.write('{:<50}{}'.format('[RE1,*,*]:', '\n'))
-                f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+                f.write('{}{}{}'.format(years, ':=', '\n'))
                 for commId in commIDs:
                     rycString = ''
                     for yearId in yearIDs:
-                        rycString += '{:<50f}'.format(ryc[id][yearId][commId])
-                    f.write('{:<50}{}{}'.format(commId, rycString, '\n'))
-                f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                        rycString += '{} '.format(ryc[id][yearId][commId])
+                    f.write('{} {}{}'.format(commMap[commId], rycString, '\n'))
+                f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
             #RYE 
             rye = self.RYE(File.readFile(self.ryePath))
             for id, param in self.PARAM['RYE'].items():
-                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
-                f.write('{:<50}{}'.format('[RE1,*,*]:', '\n'))
-                f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+                f.write('{}{}{}'.format( years, ':=', '\n'))
                 for emiId in emiIDs:
                     ryeString = ''
                     for yearId in yearIDs:
-                        ryeString += '{:<50}'.format(rye[id][yearId][emiId])
-                    f.write('{:<50}{}{}'.format(emiId, ryeString, '\n'))
-                f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                        ryeString += '{} '.format(rye[id][yearId][emiId])
+                    f.write('{}{}{}'.format(emiMap[emiId], ryeString, '\n'))
+                f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
             #RYT
             ryt = self.RYT(File.readFile(self.rytPath))
             for id, param in self.PARAM['RYT'].items():
                 if id != 'VC':
-                    f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
-                    f.write('{:<50}{}'.format('[RE1,*,*]:', '\n'))
-                    f.write('{}{:<50}{}'.format( years, ':=', '\n'))
+                    f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                    f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+                    f.write('{}{}{}'.format( years, ':=', '\n'))
                     for techId in techIDs:
                         rytString = ''
                         for yearId in yearIDs:
-                            rytString += '{:<50}'.format(ryt[id][yearId][techId])
-                        f.write('{:<50}{}{}'.format(techId, rytString, '\n'))
-                    f.write('{:<50}{}'.format(';', '\n'))
+                            rytString += '{} '.format(ryt[id][yearId][techId])
+                        f.write('{} {}{}'.format(techMap[techId], rytString, '\n'))
+                    f.write('{}{}'.format(';', '\n'))
                 else:
-                    f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                    f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
                     for techId in techIDs:
-                        f.write('{:<50}{}'.format('[RE1,'+ techId +',*,*]:', '\n'))
-                        f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                        f.write('{} {}'.format('[RE1,'+ techMap[techId] +',*,*]:', '\n'))
+                        f.write('{}{}{}'.format(years, ':=', '\n'))
                         rytString = ''
                         for yearId in yearIDs:
-                            rytString += '{:<50}'.format(ryt[id][yearId][techId])
-                        f.write('{:<50}{}{}'.format(1, rytString, '\n'))
-                    f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                            rytString += '{} '.format(ryt[id][yearId][techId])
+                        f.write('{} {}{}'.format(1, rytString, '\n'))
+                    f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
             #RYTTs
             rytts = self.RYTTs(File.readFile(self.ryttsPath))
             for id, param in self.PARAM['RYTTs'].items():
-                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
  
                 for techId in techIDs:
-                    f.write('{:<50}{}'.format('[RE1,'+ techId +',*,*]:', '\n'))
-                    f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                    f.write('{} {}'.format('[RE1,'+ techMap[techId] +',*,*]:', '\n'))
+                    f.write('{}{}{}'.format( years, ':=', '\n'))
                     for timesliceId in timesliceIDs:
                         ryttsString = ''
                         for yearId in yearIDs:
-                            ryttsString += '{:<50}'.format(rytts[id][yearId][techId][timesliceId])
-                        f.write('{:<50}{}{}'.format(timesliceId, ryttsString, '\n'))
-            f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                            ryttsString += '{} '.format(rytts[id][yearId][techId][timesliceId])
+                        f.write('{}{}{}'.format(timesliceId, ryttsString, '\n'))
+            f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
             #RYCTs
             rycts = self.RYCTs(File.readFile(self.ryctsPath))
             for id, param in self.PARAM['RYCTs'].items():
-                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
  
                 for commId in commIDs:
-                    f.write('{:<50}{}'.format('[RE1,'+ commId +',*,*]:', '\n'))
-                    f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                    f.write('{} {}'.format('[RE1,'+ commMap[commId] +',*,*]:', '\n'))
+                    f.write('{}{}{}'.format( years, ':=', '\n'))
                     for timesliceId in timesliceIDs:
                         ryctsString = ''
                         for yearId in yearIDs:
-                            ryctsString += '{:<50}'.format(rycts[id][yearId][commId][timesliceId])
-                        f.write('{:<50}{}{}'.format(timesliceId, ryctsString, '\n'))
-            f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                            ryctsString += '{} '.format(rycts[id][yearId][commId][timesliceId])
+                        f.write('{}{}{}'.format(timesliceId, ryctsString, '\n'))
+            f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
             #RYTs
             ryts = self.RYTs(File.readFile(self.rytsPath))
             for id, param in self.PARAM['RYTs'].items():
-                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':','\n'))
-                f.write('{:<50}{}{:<50}{}'.format('', years, ':=', '\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{}{}{}'.format( years, ':=', '\n'))
                 for timesliceId in timesliceIDs:
                     rytsString = ''
                     for yearId in yearIDs:
-                        rytsString += '{:<50}'.format(ryts[yearId][timesliceId])
-                    f.write('{:<50}{}{}'.format(timesliceId, rytsString, '\n'))
-            f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                        rytsString += '{} '.format(ryts[yearId][timesliceId])
+                    f.write('{}{}{}'.format(timesliceId, rytsString, '\n'))
+            f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
             #RYTC
             rytc = self.RYTC(File.readFile(self.rytcPath))
             for id, param in self.PARAM['RYTC'].items():
-                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
                 for activityTechId in activityTechIDs[id]:
                     for activityCommId in activityCommIDs[id][activityTechId]:
-                        f.write('{:<50}{}'.format('[RE1,'+ activityTechId + ','+ activityCommId +',*,*]:', '\n'))
-                        f.write('{}{:<50}{}'.format( years, ':=', '\n'))
+                        f.write('{}{}'.format('[RE1,'+ techMap[activityTechId] + ','+ commMap[activityCommId] +',*,*]:', '\n'))
+                        f.write('{}{}{}'.format( years, ':=', '\n'))
                         rytcString = ''
                         for yearId in yearIDs:
-                            rytcString += '{:<50}'.format(rytc[id][yearId][activityTechId][activityCommId])
-                        f.write('{:<50}{}{}'.format(1, rytcString, '\n'))
-                f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                            rytcString += '{} '.format(rytc[id][yearId][activityTechId][activityCommId])
+                        f.write('{} {}{}'.format(1, rytcString, '\n'))
+                f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
 
             #RYTE
             ryte = self.RYTE(File.readFile(self.rytePath))
             for id, param in self.PARAM['RYTE'].items():
-                f.write('{:<50}{:<50}{:<50}{:<50}{:<50}{}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
                 for emissionTechId in emissionTechIDs[id]:
                     for activityEmissionId in activityEmissionIDs[id][emissionTechId]:
-                        f.write('{:<50}{}'.format('[RE1,'+ emissionTechId +  ','+ activityEmissionId + ',*,*]:', '\n'))
-                        f.write('{}{:<50}{}'.format( years, ':=', '\n'))
+                        f.write('{}{}'.format('[RE1,'+ techMap[emissionTechId] +  ','+ emiMap[activityEmissionId] + ',*,*]:', '\n'))
+                        f.write('{}{}{}'.format( years, ':=', '\n'))
                         ryteString = ''
                         for yearId in yearIDs:
-                            ryteString += '{:<50}'.format(ryte[id][yearId][emissionTechId][activityEmissionId])
-                        f.write('{:<50}{}{}'.format(1, ryteString, '\n'))
-                f.write('{:<50}{}'.format(';', '\n'))
-            f.write('{:<50}{}'.format('', '\n'))
+                            ryteString += '{} '.format(ryte[id][yearId][emissionTechId][activityEmissionId])
+                        f.write('{} {}{}'.format(1, ryteString, '\n'))
+                f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
 
 
-            f.write('{:<50}{}'.format('#', '\n'))
-            f.write('{:<50}'.format('end;'))
+            f.write('{}{}'.format('#', '\n'))
+            f.write('{}'.format('end;'))
             f.close
 
             if not os.path.exists(Path(Config.DATA_STORAGE,self.case,'res', 'csv')):

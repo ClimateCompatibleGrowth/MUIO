@@ -5,7 +5,6 @@ from distutils.dir_util import copy_tree
 
 from Classes.Base import Config
 from Classes.Base.FileClass import File
-#from Classes.Case.CaseClass import Case
 
 class Osemosys():
     def __init__(self, case):
@@ -37,14 +36,8 @@ class Osemosys():
             for de in l:
                 tmp[de['id']] = de['value'].replace(" ", "")
             d[k] = tmp
-            #d[k] = {de['id']: de['value'].replace(" ", "") }
-            #d[k] = {l['id']: l['value'].replace(" ", "") for key, value in d}
         self.PARAM = d
 
-    # def getJsonData(self, JsonFile):
-    #     path = Path(Config.DATA_STORAGE,self.case,JsonFile)
-    #     JsonData = File.readFile(path)
-    #     return JsonData
     def keys_exists(self, element, *keys):
         '''
         Check if *keys (nested) exists in `element` (dict).
@@ -78,23 +71,47 @@ class Osemosys():
         return timeslice 
 
     def getTechIds(self):
-        #genData = File.readFile(self.genData)
         techIds = [ tech['TechId'] for tech in self.genData["osy-tech"]]
         return techIds
+
+    def getTechs(self):
+        techs = [ {tech['TechId']:tech['Tech']} for tech in self.genData["osy-tech"]]
+        return techs
+
+    def getTechsMap(self):
+        techs = {tech['TechId']: tech['Tech'] for tech in self.genData["osy-tech"] }
+        return techs
 
     def getEmiIds(self):
         emiIds = [ tech['EmisId'] for tech in self.genData["osy-emis"]]
         return emiIds
 
+    def getEmis(self):
+        emis = [ {tech['EmisId']: tech['Emis']} for tech in self.genData["osy-emis"]]
+        return emis
+
+    def getEmisMap(self):
+        emis = {tech['EmisId']: tech['Emis'] for tech in self.genData["osy-emis"] }
+        return emis
+
     def getCommIds(self):
         commIds = [ tech['CommId'] for tech in self.genData["osy-comm"]]
         return commIds
+
+    def getComms(self):
+        comms = [ {tech['CommId']: tech['Comm']} for tech in self.genData["osy-comm"]]
+        return comms
+
+    def getCommsMap(self):
+        comms = {tech['CommId']: tech['Comm'] for tech in self.genData["osy-comm"] }
+        return comms
     
     # def getActivityTechIds(self):
     #     genData = File.readFile(self.genData)
     #     techIds = [ tech['TechId'] for tech in genData["osy-tech"] if tech['IAR'] or tech['OAR'] ]
     #     return techIds
 
+    #output actTech['IAR'] = ['Tech_1', 'Tech_2'...]
     def getActivityTechIds(self):
         techIds = {}
         for param in self.PARAMETERS['RYTC']:
@@ -104,6 +121,7 @@ class Osemosys():
                     techIds[param['id']].append(tech['TechId'])
         return techIds
 
+    #output actTech['IAR']['Tech_1'] = ['Comm_1', 'Comm_2'...]
     def getActivityCommIds(self):
         commIds = {}
         for param in self.PARAMETERS['RYTC']:

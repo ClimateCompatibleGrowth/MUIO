@@ -108,8 +108,8 @@ export default class DataFile {
                 var rows = DataFile.split("\n");               
                 for (var i = 0; i < rows.length; i++) {
                     var row = $("<tr />");
-                    //var cells = rows[i].split(",");
-                    var cells = rows[i].match(/.{1,50}/g);
+                    var cells = rows[i].split(" ");
+                    //var cells = rows[i].match(/.{1,50}/g);
                     if (cells !== null){
                         //console.log('cells ', cells)
                         for (var j = 0; j < cells.length; j++) {
