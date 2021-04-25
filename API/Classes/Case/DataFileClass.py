@@ -36,19 +36,19 @@ class DataFile(Osemosys):
             for emiId in emiIDs:
                 #emis += '{:<50}'.format(emiId) 
                 #emis += '{} '.format(next(iter(emiId.items()))[1]) 
-                emis += '{} '.format(emiId)
+                emis += '{} '.format(emiMap[emiId])
 
             techs = ''
             for techId in techIDs:
                 # techs += '{:<50}'.format(techId) 
                 #techs += '{} '.format(next(iter(techId.items()))[1]) 
-                techs += '{} '.format(techId) 
+                techs += '{} '.format(techMap[techId]) 
 
             comms = ''
             for commId in commIDs:
                 # comms += '{:<50}'.format(commId) 
                 #comms += '{} '.format(next(iter(commId.items()))[1]) 
-                comms += '{} '.format(commId) 
+                comms += '{} '.format(commMap[commId]) 
 
             years = ''
             for yearId in yearIDs:
@@ -71,7 +71,7 @@ class DataFile(Osemosys):
                 f = open(self.dataFileS3, mode="w")
 
             #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
-            f.write('####################\n#    Sets    #\n####################\n')
+            f.write('####################\n#Sets#\n####################\n')
             f.write('{} {}'.format('#', '\n'))
             f.write('{} {} {} {}{}{}'.format('set', 'EMISSION',':=', emis, ';', '\n'))
             f.write('{} {} {} {}{}{}'.format('set', 'REGION',':=', 'RE1', ';', '\n'))
@@ -82,7 +82,7 @@ class DataFile(Osemosys):
             f.write('{} {} {} {}{}{}'.format('set', 'YEAR',':=', years, ';', '\n'))
             f.write('{} {} {} {}{}{}'.format('set', 'TIMESLICE',':=', timeslices, ';', '\n'))
 
-            f.write('####################\n#     Parameters     #\n####################\n')
+            f.write('####################\n#Parameters#\n####################\n')
             # f.write('{:<50}{}'.format('#', '\n'))
             # f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
             # f.write('{:<50}{}'.format('', '\n'))

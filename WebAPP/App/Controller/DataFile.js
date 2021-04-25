@@ -105,16 +105,17 @@ export default class DataFile {
                 $("#osy-runOutput").empty();
                 $("#runOutput").hide();
                 var table = $("<table />");
-                var rows = DataFile.split("\n");               
+                var rows = DataFile.split("\n"); 
+
                 for (var i = 0; i < rows.length; i++) {
                     var row = $("<tr />");
                     var cells = rows[i].split(" ");
                     //var cells = rows[i].match(/.{1,50}/g);
                     if (cells !== null){
-                        //console.log('cells ', cells)
+                        console.log('cells ', cells)
                         for (var j = 0; j < cells.length; j++) {
-                            var cell = $("<td />");
-                            cells[j] = cells[j].replace(/ /g, '&nbsp;');
+                            var cell = $(" <td style='padding-right:5px'></td>");
+                            //cells[j] = cells[j].replace(/ /g, '&nbsp;');
                             cell.html(cells[j]);
                             row.append(cell);
                         }
