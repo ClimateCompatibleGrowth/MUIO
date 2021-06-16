@@ -28,14 +28,14 @@ export class Grid {
             // set the editor's current value. The callback is called each time the editor is displayed.
             var items = editor.jqxDropDownList('getItems');
             editor.jqxDropDownList('uncheckAll');
-            //console.log('cellvalues ', cellvalue)
-            //console.log('items ', items)
+            console.log('cellvalues ', cellvalue)
+            console.log('items ', items)
             if(Array.isArray(cellvalue)){
                 var values = cellvalue;
-                //console.log('values array ', values)
+                console.log('values array ', values)
             }else{
                 var values = cellvalue.split(/,\s*/);
-                // console.log('values strig ', values)
+                 console.log('values strig ', values)
             } 
            
             for (var j = 0; j < values.length; j++) {
@@ -91,16 +91,18 @@ export class Grid {
         var tooltiprenderer = function (element) {
             let id = $(element).text();
             let tooltip = {
-                'IAR': 'Input Activity Ratio',
-                'OAR': 'Output Activity Ratio',
-                'EAR': 'Emission Activity Ratio',
-                'TMPAL': 'Total Technology Model Period Activity Lower Limit',
-                'TMPAU': 'Total Technology Model Period Activity Upper Limit',
-                'CAU': 'Capacity To Activity Unit',
+                'IAR': 'Input  <br />Activity Ratio',
+                'OAR': 'Output  <br />Activity Ratio',
+                'EAR': 'Emission  <br />Activity Ratio',
+                'TMPAL': 'Total Technology Model <br />Period Activity Lower Limit',
+                'TMPAU': 'Total Technology Model <br />Period Activity Upper Limit',
+                'CAU': 'Capacity To Activity <br />Unit',
                 'OL': 'Operational Life'
             }
             //console.log(id, tooltip.id, tooltip[id] );
             $(element).parent().jqxTooltip({ position: 'mouse', content: tooltip[id] });
+
+            //$("#filmPicture1").jqxTooltip({ content: '<b>Title:</b> <i>The Amazing Spider-man</i><br /><b>Year:</b> 2012', position: 'mouse', name: 'movieTooltip'});
         }
 
         $("#osy-gridTech").jqxGrid({
@@ -203,6 +205,64 @@ export class Grid {
         }); 
     }
 
+    static scenarioGrid(data){
+
+        var source =  {
+            localdata: data,
+            datatype: "json",
+            datafields:
+            [
+                { name: 'ScenarioId', type: 'string' },
+                { name: 'Scenario', type: 'string' },
+                { name: 'Desc', type: 'string' }
+            ],
+        };
+
+        var dataAdapter = new $.jqx.dataAdapter(source);
+
+        var validation_1 = function (cell, value) {
+            var validationResult = true;
+            var rows = $('#osy-gridScenario').jqxGrid('getrows');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].Comm.trim() == value.trim() && i != cell.row) {
+                    validationResult = false;
+                    break;
+                }
+            };
+
+            if (validationResult == false) {
+                Message.smallBoxWarning("Input message", "Scenario name should be unique!", 3000);
+                return { result: false, message: "" };
+            }
+            return true;
+        }
+
+        var cellsrendererbutton = function (row, column, value) {
+            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
+            if (row == 0) {
+                return '';
+            }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteScenario" data-id='+ row+' ><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+        }
+
+        $("#osy-gridScenario").jqxGrid({
+            width: '100%',
+            autoheight: true,
+            columnsheight: 20,
+            theme: this.theme(),
+            source: dataAdapter,
+            editable: true,
+            selectionmode: 'none',
+            enablehover: false,
+            columns: [
+              { text: 'ScenarioId', datafield: 'ScenarioId', hidden: true },
+              { text: 'Scenario name', datafield: 'Scenario', width: '35%',align: 'center',cellsalign: 'left', validation:validation_1 },
+              { text: 'Description', datafield: 'Desc', width: '50%', align: 'center',cellsalign: 'left' },
+              { text: '', datafield: 'Delete', width: '15%',  cellsrenderer: cellsrendererbutton, editable:false  },
+            ]
+        }); 
+    }
+
     static emisGrid(data){
 
         var source =  {
@@ -277,22 +337,27 @@ export class Grid {
         }); 
     }
 
-    static Grid($div, daGrid, columns, groupable= false){
+    static Grid($div, daGrid, columns, groupable= false, filterable= false, clipboard=true){
         $div.jqxGrid({
             width: '100%',
             autoheight: true,
             //rowsheight: 25,
             source: daGrid,
-            columnsautoresize: true,
+            columnsautoresize: false,
             columnsresize:true,
             groupable: groupable,
+            filterable: filterable,
+            filtermode: 'excel',
+            autoshowfiltericon: true,
             theme: this.theme(),
             // pageable: true,
             // pagerheight: 26,
             editable: true,
             altrows: true,
             pagesize: 20,
+            clipboard: clipboard, 
             selectionmode: 'multiplecellsadvanced',
+            //selectionmode: 'singlecell',
             enablehover: true,
             editmode: 'selectedcell',
             columns:columns

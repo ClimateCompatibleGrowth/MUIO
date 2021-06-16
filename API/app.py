@@ -12,6 +12,7 @@ from Classes.Base.SyncS3 import SyncS3
 
 from Routes.Upload.UploadRoute import upload_api
 from Routes.Case.CaseRoute import case_api
+from Routes.Case.ViewDataRoute import viewdata_api
 from Routes.DataFile.DataFileRoute import datafile_api
 
 # template_dir = os.path.abspath('WebAPP')
@@ -35,6 +36,7 @@ app.config['SECRET_KEY'] = '12345'
 
 app.register_blueprint(upload_api)
 app.register_blueprint(case_api)
+app.register_blueprint(viewdata_api)
 app.register_blueprint(datafile_api)
 
 CORS(app)
@@ -68,14 +70,17 @@ def home():
         cases = s3.getCases()
         for case in cases:
             s3.downloadSync(case, Config.DATA_STORAGE, Config.S3_BUCKET)
+        #downoload param file from S3 bucket
+        s3.downloadSync('Parameters.json', Config.DATA_STORAGE, Config.S3_BUCKET)
     return render_template('index.html')
 
 
 @app.route("/getSession", methods=['GET'])
 def getSession():
     try:
+        ses = session.get('osycase', None) or None
         response = {
-            "session": session.get('osycase', None)
+            "session":ses
         }
         return jsonify(response), 200
     except( KeyError ):

@@ -106,7 +106,7 @@ class DataFile(Osemosys):
                 rtString = ''
                 for techId in techIDs:
                     rtString += '{} '.format(t[id][techId])
-                f.write('{} {}{}'.format('RE1', rtString, '\n'))
+                f.write('{} {}{}'.format('RE1 ', rtString, '\n'))
                 f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
 
@@ -118,7 +118,19 @@ class DataFile(Osemosys):
                 rtString = ''
                 for techId in techIDs:
                     rtString += '{} '.format(rt[id][techId])
-                f.write('{}{}{}'.format('RE1', rtString, '\n'))
+                f.write('{}{}{}'.format('RE1 ', rtString, '\n'))
+                f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
+
+            #RY
+            ry = self.RY(File.readFile(self.ryPath))
+            for id, param in self.PARAM['RY'].items():
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{}{}{}'.format(years, ':=', '\n'))
+                ryString = ''
+                for yearId in yearIDs:
+                    ryString += '{} '.format(ry[id][yearId])
+                f.write('{}{}{}'.format('RE1 ', ryString, '\n'))
                 f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
 
@@ -146,7 +158,7 @@ class DataFile(Osemosys):
                     ryeString = ''
                     for yearId in yearIDs:
                         ryeString += '{} '.format(rye[id][yearId][emiId])
-                    f.write('{}{}{}'.format(emiMap[emiId], ryeString, '\n'))
+                    f.write('{} {}{}'.format(emiMap[emiId], ryeString, '\n'))
                 f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
 
@@ -187,7 +199,7 @@ class DataFile(Osemosys):
                         ryttsString = ''
                         for yearId in yearIDs:
                             ryttsString += '{} '.format(rytts[id][yearId][techId][timesliceId])
-                        f.write('{}{}{}'.format(timesliceId, ryttsString, '\n'))
+                        f.write('{} {}{}'.format(timesliceId, ryttsString, '\n'))
             f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
 
@@ -203,7 +215,7 @@ class DataFile(Osemosys):
                         ryctsString = ''
                         for yearId in yearIDs:
                             ryctsString += '{} '.format(rycts[id][yearId][commId][timesliceId])
-                        f.write('{}{}{}'.format(timesliceId, ryctsString, '\n'))
+                        f.write('{} {}{}'.format(timesliceId, ryctsString, '\n'))
             f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
 
@@ -216,7 +228,7 @@ class DataFile(Osemosys):
                     rytsString = ''
                     for yearId in yearIDs:
                         rytsString += '{} '.format(ryts[yearId][timesliceId])
-                    f.write('{}{}{}'.format(timesliceId, rytsString, '\n'))
+                    f.write('{} {}{}'.format(timesliceId, rytsString, '\n'))
             f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
 
@@ -594,13 +606,17 @@ class DataFile(Osemosys):
     #     except OSError:
     #         raise OSError
 
-    def run( self ):
+    def run( self, solver ):
         try:
             modelfile = '"{}"'.format(self.osemosysFile.resolve())
             datafile = '"{}"'.format(self.dataFile.resolve())
             resultfile = '"{}"'.format(self.resFile.resolve())
-            out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.glpkFolder,  capture_output=True, text=True, shell=True)
+            if solver == 'glpk':
+                out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.glpkFolder,  capture_output=True, text=True, shell=True)
+            else:
+                out = subprocess.run('cbc ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.cbcFolder,  capture_output=True, text=True, shell=True)
             if out.returncode != 0:
+            
                 response = {
                     "message": out.stdout,
                     "stdmsg": out.stderr,

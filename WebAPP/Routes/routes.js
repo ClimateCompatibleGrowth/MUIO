@@ -3,6 +3,8 @@ import { Base } from "../../Classes/Base.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { Message } from "../../Classes/Message.Class.js";
 
+import { Sidebar } from "../../App/Controller/Sidebar.js";
+
 
 // $("aside").load('App/View/Sidebar.html');
 // import('../App/Controller/Sidebar.js')
@@ -16,6 +18,7 @@ import { Message } from "../../Classes/Message.Class.js";
 
 Osemosys.getParamFile()
     .then(PARAMETERS =>{
+        Sidebar.Load(PARAMETERS);
         crossroads.addRoute('/', function() {
             $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
             import('../App/Controller/Home.js')
@@ -43,6 +46,14 @@ Osemosys.getParamFile()
             });
         });
         
+        crossroads.addRoute('/ViewData', function() {
+            $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+            import('../App/Controller/ViewData.js')
+            .then(ViewData => {
+                $(".osy-content").load('App/View/ViewData.html');
+                ViewData.default.onLoad();
+            });
+        });
         
         function addRoute(group, id){
             return crossroads.addRoute(`/${group}/${id}`, function() {

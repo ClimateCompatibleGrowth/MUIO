@@ -1,13 +1,9 @@
 import { Message } from "../../Classes/Message.Class.js";
-import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
-import { Grid } from "../../Classes/Grid.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { SmartAdmin } from "../../Classes/SmartAdmin.Class.js";
 import { Model } from "../Model/DataFile.Model.js";
-import { Navbar } from "./Navbar.js";
-import { JqxSources } from "../../Classes/JqxSources.Class.js";
+import { MessageSelect } from "./MessageSelect.js";
 
 export default class DataFile {
     static onLoad(){
@@ -62,6 +58,7 @@ export default class DataFile {
             $("#osy-DataFile").empty();
             $("#osy-runOutput").empty();
             $("#osy-downloadDataFile").hide();
+            $("#osy-solver").hide();
             $("#osy-run").hide();
             $("#runOutput").hide();
             DataFile.initPage(model);
@@ -73,6 +70,8 @@ export default class DataFile {
     }
 
     static initEvents(model){
+
+        
 
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function(e) {
@@ -87,6 +86,7 @@ export default class DataFile {
 
         $("#osy-generateDataFile").off('click');
         $("#osy-generateDataFile").on('click', function (event) {
+            console.log('initila gen')
             Pace.restart();
             //console.log('model casenam ', model.casename);
             Osemosys.generateDataFile(model.casename)
@@ -112,7 +112,6 @@ export default class DataFile {
                     var cells = rows[i].split(" ");
                     //var cells = rows[i].match(/.{1,50}/g);
                     if (cells !== null){
-                        console.log('cells ', cells)
                         for (var j = 0; j < cells.length; j++) {
                             var cell = $(" <td style='padding-right:5px'></td>");
                             //cells[j] = cells[j].replace(/ /g, '&nbsp;');
@@ -133,33 +132,23 @@ export default class DataFile {
                 }
                 if(Base.HEROKU == 0){
                     $("#osy-run").show();
+                    $("#osy-solver").show();
                 }
-                Message.clearMessages();
-                Message.bigBoxSuccess('Generate message', message, 3000);
+                //Message.clearMessages();
+                //Message.bigBoxSuccess('Generate message', message, 3000);
             })
             .catch(error=>{
                 Message.bigBoxDanger('Error message', error, null);
             })
         });
 
-        
-        // $("#osy-downloadDataFile").off('click');
-        // $("#osy-downloadDataFile").on('click', function (event) {
-        //     Pace.restart();
-        //     Osemosys.downloadDataFile(model.casename)
-        //     .then(response => {
-        //         Message.clearMessages();
-        //         Message.bigBoxSuccess('Downlaoad message', response.message, 3000);
-        //     })
-        //     .catch(error=>{
-        //         Message.bigBoxDanger('Error message', error, null);
-        //     })
-        // });
+        $( "#osy-generateDataFile" ).trigger( "click" );
 
         $("#osy-run").off('click');
         $("#osy-run").on('click', function (event) {
             Pace.restart();
-            Osemosys.run(model.casename)
+            let solver = $('input[name="solver"]:checked').val();
+            Osemosys.run(model.casename, solver)
             .then(response => {
                 //console.log(response)
                 if(response.status_code=="success"){

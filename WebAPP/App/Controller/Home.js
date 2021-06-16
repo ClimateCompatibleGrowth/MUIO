@@ -2,6 +2,7 @@ import { Message } from "../../Classes/Message.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
 import { Model } from "../Model/Home.Model.js";
+import { DEF } from "../../Classes/Definition.Class.js";
 import { Navbar } from "./Navbar.js";
 
 export default class Home {
@@ -27,7 +28,7 @@ export default class Home {
         Message.clearMessages();
         Navbar.initPage(model.casename);
         Html.renderCases(model.cases, model.casename);
-        Home.initEvents();
+        Home.initEvents(model);
         loadScript("References/smartadmin/js/plugin/dropzone/dropzone.min.js", Base.uploadFunction);
     }
 
@@ -50,7 +51,7 @@ export default class Home {
         })
     }
 
-    static initEvents(){
+    static initEvents(model){
         
         $("#cases").tooltip({ selector: '[data-toggle=tooltip]' });
 
@@ -203,5 +204,14 @@ export default class Home {
                 else $this.closest('.panel').fadeIn();
             });
         })
+
+        $("#showLog").click(function (e) {
+            e.preventDefault();
+            $('#definition').html(`
+                <h5>${DEF[model.pageID].title}</h5>
+                ${DEF[model.pageID].definition}
+            `);
+            $('#definition').toggle('slow');
+        });
     }
 }

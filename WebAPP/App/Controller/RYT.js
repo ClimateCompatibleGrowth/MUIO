@@ -6,33 +6,37 @@ import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { GROUPNAMES } from "../../Classes/Const.Class.js";
+import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
+// import { Sidebar } from "./Sidebar.js";
 
 export default class RYT {
     static onLoad(group, param){
         Base.getSession()
         .then(response =>{
-            let casename = response['session']
-            const promise = [];
-            promise.push(casename);
-            const genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData); 
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
-            const RYTdata = Osemosys.getData(casename, 'RYT.json');
-            promise.push(RYTdata); 
-            return Promise.all(promise);
-        })
-        .then(data => {
-            let [casename, genData, PARAMETERS, RYTdata] = data;
-            let model = new Model(casename, genData, RYTdata, group, PARAMETERS, param);
+            let casename = response['session'];
             if(casename){
-                this.initPage(model);
-                this.initEvents(model);
+                const promise = [];
+                promise.push(casename);
+                const genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData); 
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS); 
+                const RYTdata = Osemosys.getData(casename, 'RYT.json');
+                promise.push(RYTdata); 
+                // const RYTscenarios = Base.getScenarios(casename);
+                // promise.push(RYTscenarios); 
+                return Promise.all(promise);
                 ;
             }else{
                 MessageSelect.init(RYT.refreshPage.bind(RYT));
             }
+        })
+        .then(data => {
+            let [casename, genData, PARAMETERS, RYTdata] = data;
+            let model = new Model(casename, genData, RYTdata, group, PARAMETERS, param);
+            this.initPage(model);
+            this.initEvents(model);
         })
         .catch(error =>{ 
             Message.warning(error);
@@ -41,6 +45,8 @@ export default class RYT {
 
     static initPage(model){
         Message.clearMessages();
+        // console.log('param ',  model.PARAMETERS)
+        // Sidebar.Load(model.PARAMETERS);
         //Navbar.initPage(model.casename);
         //console.log('param ',  model.PARAMNAMES[model.param])
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
@@ -250,6 +256,15 @@ export default class RYT {
             model.d--;
             model.decimal = 'd' + parseInt(model.d);
             $('#osy-gridRYT').jqxGrid('refresh');
+        });
+
+        $("#showLog").click(function (e) {
+            e.preventDefault();
+            $('#definition').html(`
+                <h5>${DEF[model.group].title}</h5>
+                ${DEF[model.group].definition}
+            `);
+            $('#definition').toggle('slow');
         });
     }
 }

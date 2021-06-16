@@ -1,12 +1,14 @@
 from pathlib import Path
+import os
 from Classes.Base import Config
 from Classes.Base.FileClass import File
 
 class Case:
     def __init__(self, case, genData):
         self.case = case
-        self.PARAMETERS = File.readParamFile(Path(Config.CLASS_FOLDER, 'Parameters.json'))
+        self.PARAMETERS = File.readParamFile(Path(Config.DATA_STORAGE, 'Parameters.json'))
         self.genData =  genData
+        self.RYpath = Path(Config.DATA_STORAGE, case, "RY.json")
         self.RYTpath = Path(Config.DATA_STORAGE, case, "RYT.json")
         self.RYTCpath = Path(Config.DATA_STORAGE, case, "RYTC.json")
         self.RYTspath = Path(Config.DATA_STORAGE, case, "RYTs.json")
@@ -15,6 +17,29 @@ class Case:
         self.RYTTspath = Path(Config.DATA_STORAGE, case, "RYTTs.json")
         self.RYCTspath = Path(Config.DATA_STORAGE, case, "RYCTs.json")
         self.RYTEpath = Path(Config.DATA_STORAGE, case, "RYTE.json")
+
+    def default_SC(self):
+        try:
+            scenarios = self.genData['osy-scenarios']
+            for scenario in scenarios:
+                os.makedirs(Path(Config.DATA_STORAGE, self.case,scenario['ScenarioId']))
+        except(IOError):
+            raise IOError
+
+    def default_RY(self):
+        try:
+            years = self.genData['osy-years']
+            RYdata = {}
+            for ry in self.PARAMETERS['RY']:
+                RYdata[ry['id']] = []
+                chunk = {}
+                for year in years:
+                    chunk[year] = ry['default']  
+                RYdata[ry['id']].append(chunk)
+
+            File.writeFile( RYdata, self.RYpath)
+        except(IOError):
+            raise IOError
 
     def default_RYT(self):
         try:
@@ -28,7 +53,7 @@ class Case:
                     chunk = {}
                     chunk['TechId'] = tech['TechId']
                     for year in years:
-                        chunk[year] = 0  
+                        chunk[year] = ryt['default']  
                     RYTdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTdata, self.RYTpath)
@@ -50,7 +75,7 @@ class Case:
                             chunk['TechId'] = tech['TechId']
                             chunk['CommId'] = comm
                             for year in years:
-                                chunk[year] = 0  
+                                chunk[year] = ryt['default'] 
                             RYTCdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTCdata, self.RYTCpath)
@@ -72,7 +97,7 @@ class Case:
                             chunk['TechId'] = tech['TechId']
                             chunk['EmisId'] = comm
                             for year in years:
-                                chunk[year] = 0  
+                                chunk[year] = ryt['default'] 
                             RYTEdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTEdata, self.RYTEpath)
@@ -91,7 +116,7 @@ class Case:
                     chunk = {}
                     chunk['CommId'] = comm['CommId']
                     for year in years:
-                        chunk[year] = 0  
+                        chunk[year] = ryt['default']
                     RYCdata[ryt['id']].append(chunk)
 
             File.writeFile( RYCdata, self.RYCpath)
@@ -110,7 +135,7 @@ class Case:
                     chunk = {}
                     chunk['EmisId'] = emi['EmisId']
                     for year in years:
-                        chunk[year] = 0  
+                        chunk[year] = ryt['default']  
                     RYEdata[ryt['id']].append(chunk)
 
             File.writeFile( RYEdata, self.RYEpath)
@@ -133,7 +158,7 @@ class Case:
                         d = str(day + 1)
                         chunk['YearSplit'] = "S"+s+d
                         for year in years:
-                            chunk[year] = 0  
+                            chunk[year] = ryt['default']
                         RYTsdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTsdata, self.RYTspath)
@@ -159,7 +184,7 @@ class Case:
                             d = str(day + 1)
                             chunk['Timeslice'] = "S"+s+d
                             for year in years:
-                                chunk[year] = 0  
+                                chunk[year] = ryt['default']
                             RYTTsdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTTsdata, self.RYTTspath)
@@ -185,7 +210,7 @@ class Case:
                             d = str(day + 1)
                             chunk['Timeslice'] = "S"+s+d
                             for year in years:
-                                chunk[year] = 0  
+                                chunk[year] = ryt['default'] 
                             RYCTsdata[ryt['id']].append(chunk)
 
             File.writeFile( RYCTsdata, self.RYCTspath)
@@ -194,6 +219,8 @@ class Case:
 
     def createCase(self):
         try:
+            #self.default_SC()
+            self.default_RY()
             self.default_RYT()
             self.default_RYTC()
             self.default_RYTs()

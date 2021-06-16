@@ -37,6 +37,51 @@ export class DataModel{
         return ts;
     }
 
+    static RY(RYdata){
+        let RY = {};
+        $.each(RYdata, function (param, array) {
+            RY[param] = {};
+            $.each(array, function (id, obj) {
+                $.each(obj, function (key, val) {
+                    RY[param][key] = val;
+                });
+            });
+        });
+        return RY;
+    }
+
+    static RYgrid(genData, RYdata){
+        let RYgrid = JSON.parse(JSON.stringify(RYdata));
+        $.each(RYdata, function (param, array) {
+            $.each(array, function (id, obj) {
+                RYgrid[param][id]['param'] = param;
+            });
+        });
+        return RYgrid;
+    }
+
+    static RYchart(genData, RYdata){
+        let RYchart = {};
+        let RY = this.RY(RYdata);
+
+        $.each(RY, function (param, array) {
+            let chartData = [];
+            $.each(genData['osy-years'], function (idY, year) { 
+                let chunk = {};
+                chunk['Year'] = year;
+
+                if (typeof RY[param][year] !== "undefined" ){
+                    chunk['param'] = RY[param][year];
+                }
+                //console.log('param ', param, ' tech ', tech.TechId, ' year ', year, ' chunk ', chunk)
+                chartData.push(chunk);
+            });
+            RYchart[param] = chartData; 
+            
+        });
+        return RYchart;
+    }
+
     static RYT(RYTdata){
         let RYT = {};
         $.each(RYTdata, function (param, array) {

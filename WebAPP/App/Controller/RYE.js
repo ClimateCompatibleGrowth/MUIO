@@ -6,33 +6,34 @@ import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { GROUPNAMES } from "../../Classes/Const.Class.js";
+import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYE {
     static onLoad(group, param){
         Base.getSession()
         .then(response =>{
-            let casename = response['session']
-            const promise = [];
-            promise.push(casename);
-            const genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData); 
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
-            const RYEdata = Osemosys.getData(casename, 'RYE.json');
-            promise.push(RYEdata); 
-            return Promise.all(promise);
-        })
-        .then(data => {
-            let [casename, genData, PARAMETERS, RYEdata] = data;
-            let model = new Model(casename, genData, RYEdata, group, PARAMETERS, param);
+            let casename = response['session'];
             if(casename){
-                this.initPage(model);
-                this.initEvents(model);
+                const promise = [];
+                promise.push(casename);
+                const genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData); 
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS); 
+                const RYEdata = Osemosys.getData(casename, 'RYE.json');
+                promise.push(RYEdata); 
+                return Promise.all(promise);
                 ;
             }else{
                 MessageSelect.init(RYE.refreshPage.bind(RYE));
             }
+        })
+        .then(data => {
+            let [casename, genData, PARAMETERS, RYEdata] = data;
+            let model = new Model(casename, genData, RYEdata, group, PARAMETERS, param);
+            this.initPage(model);
+            this.initEvents(model);
         })
         .catch(error =>{ 
             Message.warning(error);
@@ -250,6 +251,14 @@ export default class RYE {
             model.d--;
             model.decimal = 'd' + parseInt(model.d);
             $('#osy-gridRYE').jqxGrid('refresh');
+        });
+        $("#showLog").click(function (e) {
+            e.preventDefault();
+            $('#definition').html(`
+                <h5>${DEF[model.group].title}</h5>
+                ${DEF[model.group].definition}
+            `);
+            $('#definition').toggle('slow');
         });
     }
 }

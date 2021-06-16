@@ -17,78 +17,85 @@ $(document).ready(function(){
             <a href="#/Config" title="Add case"><i class="fa fa-lg fa-fw fa-cog"></i> <span class="menu-item-parent">Configuration</span></a>
         </li> -->
         <li class="">
+            <a href="#/Config" title="Configure parameters"><i class="fa fa-lg fa-fw fa-file-text-o"></i> <span class="menu-item-parent">Parameters</span></a>
+        </li>
+        <li class="">
             <a href="#/AddCase" title="Add case"><i class="fa fa-lg fa-fw fa-plus-circle"></i> <span class="menu-item-parent">Add case</span></a>
         </li>
 
         <li>
             <a href="#" title="Data entry"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Data entry</span></a>
-            <ul>
-                        <li  class="">
-                            <a href="#/RYT/VC" title="Year and technology parameters"><span >Variable Cost</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/AF" title="Year and technology parameters"><span >Availability Factor</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/CC" title="Year and technology parameters"><span >Capital Cost</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/FC" title="Year and technology parameters"><span >Fixed Cost</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/RC" title="Year and technology parameters"><span >Residual Capacity</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/TAMaxC" title="Year and technology parameters"><span >Total Annual Max Capacity</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/TAMaxCI" title="Year and technology parameters"><span >Total Annual Max Capacity Investment</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/TAMinC" title="Year and technology parameters"><span >Total Annual Min Capacity</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/TAMinCI" title="Year and technology parameters"><span >Total Annual Min Capacity Investment</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/TAL" title="Year and technology parameters"><span >Total Technology Annual Activity Lower Limit</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYT/TAU" title="Year and technology parameters"><span >Total Technology Annual Activity Upper Limit</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYTC/IAR" title="Year and technology parameters"><span >Input Activity Ratio</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYTC/OAR" title="Year and technology parameters"><span >Output Activity Ratio</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYTs/YS" title="Year and technology parameters"><span >Year Split</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYC/AAD" title="Year and technology parameters"><span >Accumulated Annual Demand</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYC/SAD" title="Year and technology parameters"><span >Specified Annual Demand</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYE/AEL" title="Year and technology parameters"><span >Annual Emission Limit</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYE/EP" title="Year and technology parameters"><span >Emissions Penalty</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYTTs/CF" title="Year and technology parameters"><span >Capacity Factor</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYCTs/SDP" title="Year and technology parameters"><span >Specified Demand Profile</span></a>
-                        </li>
-                        <li  class="">
-                            <a href="#/RYTE/EAR" title="Year and technology parameters"><span >Emission Activity Ratio</span></a>
-                        </li></ul>
+            <ul id='dynamicRoutes'>
+                <!-- <li  class="">
+                    <a href="#/RYT/VC" title="Year and technology parameters"><span >Variable Cost</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/AF" title="Year and technology parameters"><span >Availability Factor</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/CC" title="Year and technology parameters"><span >Capital Cost</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/FC" title="Year and technology parameters"><span >Fixed Cost</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/RC" title="Year and technology parameters"><span >Residual Capacity</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/TAMaxC" title="Year and technology parameters"><span >Total Annual Max Capacity</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/TAMaxCI" title="Year and technology parameters"><span >Total Annual Max Capacity Investment</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/TAMinC" title="Year and technology parameters"><span >Total Annual Min Capacity</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/TAMinCI" title="Year and technology parameters"><span >Total Annual Min Capacity Investment</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/TAL" title="Year and technology parameters"><span >Total Technology Annual Activity Lower Limit</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYT/TAU" title="Year and technology parameters"><span >Total Technology Annual Activity Upper Limit</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYTC/IAR" title="Year and technology parameters"><span >Input Activity Ratio</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYTC/OAR" title="Year and technology parameters"><span >Output Activity Ratio</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYTs/YS" title="Year and technology parameters"><span >Year Split</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYC/AAD" title="Year and technology parameters"><span >Accumulated Annual Demand</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYC/SAD" title="Year and technology parameters"><span >Specified Annual Demand</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYE/AEL" title="Year and technology parameters"><span >Annual Emission Limit</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYE/EP" title="Year and technology parameters"><span >Emissions Penalty</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYTTs/CF" title="Year and technology parameters"><span >Capacity Factor</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYCTs/SDP" title="Year and technology parameters"><span >Specified Demand Profile</span></a>
+                </li>
+                <li  class="">
+                    <a href="#/RYTE/EAR" title="Year and technology parameters"><span >Emission Activity Ratio</span></a>
+                </li> -->
+            </ul>
         </li>
         <li class="">
-            <a href="#/DataFile" title="generate data file"><i class="fa fa-lg fa-fw fa-cogs"></i> <span class="menu-item-parent">Data file</span></a>
+            <a href="#/ViewData" title="Add case"><i class="fa fa-lg fa-fw  fa-search-plus"></i> <span class="menu-item-parent">View data</span></a>
+        </li>
+        <li class="">
+            <a href="#/DataFile" title="Run"><i class="fa fa-lg fa-fw fa-play danger"></i> <span class="menu-item-parent">Run</span></a>
         </li>
     </ul>
 </nav> 

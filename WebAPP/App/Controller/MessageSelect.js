@@ -6,8 +6,16 @@ export class MessageSelect {
     static init(init_f){
         Base.getCaseStudies()
         .then(cases => {
-            let model = new Model(cases);
-            Message.SmartMessageBoxDDL(model.cases, init_f);
+            
+            if (cases.length != 0) {
+                console.log('cases ', cases)
+                let model = new Model(cases);
+                Message.SmartMessageBoxDDL(model.cases, init_f);
+            }else{
+                hasher.setHash('');
+                hasher.setHash("AddCase");
+            }
+
         })
         .catch(error =>{ 
             Message.danger(error);

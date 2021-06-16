@@ -6,22 +6,27 @@ import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { GROUPNAMES } from "../../Classes/Const.Class.js";
+import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTE {
     static onLoad(group, param){
         Base.getSession()
         .then(response =>{
-            let casename = response['session']
-            const promise = [];
-            promise.push(casename);
-            const genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData); 
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
-            const RYTCdata = Osemosys.getData(casename, "RYTE.json");
-            promise.push(RYTCdata); 
-            return Promise.all(promise);
+            let casename = response['session'];
+            if(casename){
+                const promise = [];
+                promise.push(casename);
+                const genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData); 
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS); 
+                const RYTCdata = Osemosys.getData(casename, "RYTE.json");
+                promise.push(RYTCdata); 
+                return Promise.all(promise);
+            }else{
+                MessageSelect.init(RYTE.refreshPage.bind(RYTE));
+            }
         })
         .then(data => {
             let [casename, genData, PARAMETERS, RYTCdata] = data;
@@ -31,12 +36,8 @@ export default class RYTE {
 
             }else{
                 let model = new Model(casename, genData, RYTCdata, group, PARAMETERS, param);
-                if(casename){
-                    this.initPage(model);
-                    this.initEvents(model);
-                }else{
-                    MessageSelect.init(RYTE.refreshPage.bind(RYTE));
-                }
+                this.initPage(model);
+                this.initEvents(model);
             }
         })
         .catch(error =>{ 
@@ -246,6 +247,7 @@ export default class RYTE {
         $("#resizeColumns").click(function () {
             if(res){
                 $('#osy-gridRYTE').jqxGrid('autoresizecolumn', 'Tech');
+                $('#osy-gridRYTE').jqxGrid('autoresizecolumn', 'Emis');
             }
             else{
                 $('#osy-gridRYTE').jqxGrid('autoresizecolumns');
@@ -276,6 +278,13 @@ export default class RYTE {
             model.decimal = 'd' + parseInt(model.d);
             $('#osy-gridRYTE').jqxGrid('refresh');
         });
-    
+        $("#showLog").click(function (e) {
+            e.preventDefault();
+            $('#definition').html(`
+                <h5>${DEF[model.group].title}</h5>
+                ${DEF[model.group].definition}
+            `);
+            $('#definition').toggle('slow');
+        });
     }
 }

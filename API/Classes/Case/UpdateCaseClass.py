@@ -8,6 +8,28 @@ class UpdateCase(Osemosys):
         Osemosys.__init__(self, case)
         self.genDataUpdate =  genData
 
+    def updateRYmodel(self):
+        try:
+            ryJson = File.readFile(self.ryPath) 
+            RYsource = self.RY(ryJson)
+            years = self.genDataUpdate['osy-years']
+            RYdata = {}
+            for ry in self.PARAMETERS['RY']:
+                RYdata[ry['id']] = []
+                chunk = {}
+                #chunk['ryVar'] = ry['id']
+                
+                for year in years:
+                    if self.keys_exists(RYsource, ry['id'], year):
+                        chunk[year] = RYsource[ry['id']][year]
+                    else:
+                        chunk[year] = ry['default']
+                RYdata[ry['id']].append(chunk)
+
+            File.writeFile( RYdata, self.ryPath)
+        except(IOError):
+            raise IOError
+
     def updateRYTmodel(self):
         try:
             #OsemosysModel = Osemosys(case)
@@ -27,7 +49,7 @@ class UpdateCase(Osemosys):
                         if self.keys_exists(RYTsource, ryt['id'], year, tech['TechId']):
                             chunk[year] = RYTsource[ryt['id']][year][tech['TechId']]
                         else:
-                            chunk[year] = 0  
+                            chunk[year] = ryt['default']
                     RYTdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTdata, self.rytPath)
@@ -58,7 +80,7 @@ class UpdateCase(Osemosys):
                             if self.keys_exists(RYTssource, year, "S"+s+d):
                                 chunk[year] = RYTssource[year]["S"+s+d]
                             else:
-                                chunk[year] = 0  
+                                chunk[year] = ryt['default']
                         RYTsdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTsdata, self.rytsPath)
@@ -89,7 +111,7 @@ class UpdateCase(Osemosys):
                                 if self.keys_exists(RYTCsource, ryt['id'], year, tech['TechId'], comm):
                                     chunk[year] = RYTCsource[ryt['id']][year][tech['TechId']][comm]
                                 else:
-                                    chunk[year] = 0 
+                                    chunk[year] = ryt['default']
                             RYTCdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTCdata, self.rytcPath)
@@ -121,7 +143,7 @@ class UpdateCase(Osemosys):
                                 if self.keys_exists(RYTEsource, ryt['id'], year, tech['TechId'], comm):
                                     chunk[year] = RYTEsource[ryt['id']][year][tech['TechId']][comm]
                                 else:
-                                    chunk[year] = 0 
+                                    chunk[year] = ryt['default'] 
                             RYTEdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTEdata, self.rytePath)
@@ -148,7 +170,7 @@ class UpdateCase(Osemosys):
                         if self.keys_exists(RYCsource, ryt['id'], year, comm['CommId']):
                             chunk[year] = RYCsource[ryt['id']][year][comm['CommId']]
                         else:
-                            chunk[year] = 0  
+                            chunk[year] = ryt['default']
                     RYCdata[ryt['id']].append(chunk)
 
             File.writeFile( RYCdata, self.rycPath)
@@ -174,7 +196,7 @@ class UpdateCase(Osemosys):
                         if self.keys_exists(RYEsource, ryt['id'], year, emi['EmisId']):
                             chunk[year] = RYEsource[ryt['id']][year][emi['EmisId']]
                         else:
-                            chunk[year] = 0  
+                            chunk[year] = ryt['default']
                     RYEdata[ryt['id']].append(chunk)
 
             File.writeFile( RYEdata, self.ryePath)
@@ -208,7 +230,7 @@ class UpdateCase(Osemosys):
                                 if self.keys_exists(RYTTssource, ryt['id'], year, tech['TechId'], "S"+s+d):
                                     chunk[year] = RYTTssource[ryt['id']][year][tech['TechId']]["S"+s+d]
                                 else:
-                                    chunk[year] = 0  
+                                    chunk[year] = ryt['default'] 
                             RYTTsdata[ryt['id']].append(chunk)
 
             File.writeFile( RYTTsdata, self.ryttsPath)
@@ -242,7 +264,7 @@ class UpdateCase(Osemosys):
                                 if self.keys_exists(RYCTssource, ryt['id'], year, comm['CommId'], "S"+s+d):
                                     chunk[year] = RYCTssource[ryt['id']][year][comm['CommId']]["S"+s+d]
                                 else:
-                                    chunk[year] = 0  
+                                    chunk[year] = ryt['default']
                             RYCTsdata[ryt['id']].append(chunk)
 
             File.writeFile( RYCTsdata, self.ryctsPath)
@@ -251,6 +273,7 @@ class UpdateCase(Osemosys):
 
     def updateCase(self):
         try:
+            self.updateRYmodel()
             self.updateRYTmodel()
             self.updateRYTCmodel()
             self.updateRYTsmodel()

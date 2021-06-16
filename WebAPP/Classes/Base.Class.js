@@ -40,7 +40,27 @@ export class Base {
                 }
             });
         });
-    }        
+    }    
+    
+    static updateSyncParamFile() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "updateSyncParamFile",
+                async: true,  
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                //credentials: 'include',
+                success: function (result) {                
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }   
 
     static uploadSync(casename) {
         return new Promise((resolve, reject) => {
@@ -147,6 +167,26 @@ export class Base {
                 error: function(xhr, status, error) {
                     if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
 
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static getScenarios(casename) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:this.apiUrl() + "getScenarios",
+                async: true,  
+                type: 'POST',
+                data: JSON.stringify({ "casename": casename }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {                
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
                     reject(error);
                 }
             });

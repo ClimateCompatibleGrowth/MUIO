@@ -1,62 +1,57 @@
-import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
-import { JqxSources } from "../../Classes/JqxSources.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { GROUPNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
-    constructor (genData, pageId) {
+    
+    constructor (PARAMETERS) {
 
+        // console.log('PARAMETERS ', PARAMETERS)
 
-      if(genData){
-        this.casename = genData['osy-casename'];
-        this.title = "Case study";
-        this.desc = genData['osy-desc'];
-        this.date = genData['osy-date'];
-        this.dr = genData['osy-dr'];
-        this.dm = genData['osy-dm'];
-        this.ns = genData['osy-ns'];
-        this.dt = genData['osy-dt'];
-        this.currency = genData['osy-currency'];
-        this.years = genData['osy-years'];
-        this.techs = genData['osy-tech'];
-        this.commodities = genData['osy-comm'];
-        this.emissions = genData['osy-emis'];
+        let datafields = [];
+        let columns = [];
 
-        this.srcTech = JqxSources.srcTech(this.techs);
-        this.srcComm = JqxSources.srcComm(this.commodities);
-        this.srcEmi = JqxSources.srcEmi(this.emissions);
+        let gridData = []
+        $.each(PARAMETERS, function (group, array) {
+            $.each(array, function (id, obj) {
+                //console.log(group)
+                let tmp = {};
+                tmp['groupId'] = group;
+                tmp['groupName'] = GROUPNAMES[group];
+                tmp['id'] = obj.id;
+                tmp['value'] = obj.value;
+                tmp['default'] = obj.default;
+                tmp['enable'] = obj.enable;
+                tmp['menu'] = obj.menu;
+                gridData.push(tmp);
+            });
+        });
 
-        //this.columnsTech = JqxSources.techGridColumns(new $.jqx.dataAdapter(this.commodities));
+       //console.log('gridData ', gridData);
 
-        this.techCount = genData['osy-tech'].length;
-        this.commCount = genData['osy-comm'].length;
-        this.emisCount = genData['osy-emis'].length;
-        this.pageId = pageId;
-      }else{
-        let years=[];
-        for(var i = 2020; i <= 2050; i++) { years.push(String(i)); }
+        datafields.push({ name: 'groupId', type:'string' });
+        datafields.push({ name: 'groupName', type:'string' });        
+        datafields.push({ name: 'id', type:'string' }); 
+        datafields.push({ name: 'value', type:'string' }); 
+        datafields.push({ name: 'default', type:'number' }); 
+        datafields.push({ name: 'menu', type:'number' }); 
+        datafields.push({ name: 'enable', type:'bool' });    
 
-        this.casename = null;
-        this.title = "Case study";
-        this.desc = null;
-        this.date = null;
-        this.dr = null;
-        this.dm = null;
-        this.ns = null;
-        this.dt = null;
-        this.currency = null;
-        this.years = years;
-        this.techs = DefaultObj.defaultTech();
-        this.commodities = DefaultObj.defaultComm();
-        this.emissions = DefaultObj.defaultEmi();
+        columns.push({ text: 'groupId', datafield: 'groupId', editable: false, align: 'left',  hidden: true})
+        columns.push({ text: 'PARAMETER GROUP', datafield: 'groupName', editable: false, align: 'left', width: '35%'})
+        columns.push({ text: 'id', datafield: 'id', editable: false, align: 'left',  hidden: true})
+        columns.push({ text: 'PARAMETER NAME', datafield: 'value', editable: false, align: 'left', width: '50%'})
+        columns.push({ text: 'DEFAULT VALUE', datafield: 'default', align: 'right', cellsalign: 'right', cellsformat: 'd2', width: '15%'})
+        columns.push({ text: 'ACTIVE', datafield: 'enable', columntype: 'checkbox', align: 'center', width: '15%',  hidden: true}),
+        columns.push({ text: 'menu', datafield: 'menu', editable: false, align: 'left',  hidden: true})
 
-        this.srcTech = JqxSources.srcTech(this.techs);
-        this.srcComm = JqxSources.srcComm(this.commodities);
-        this.srcEmi = JqxSources.srcEmi(this.emissions);
-        //this.columnsTech = JqxSources.techGridColumns(new $.jqx.dataAdapter(this.commodities));
-        
-        this.techCount = 1;
-        this.commCount = 1;
-        this.emisCount = 1;
-        this.pageId = pageId;
-      }
+        let srcGrid = {
+            datatype: "json",
+            localdata: gridData,
+            datafields: datafields
+        };
+
+        this.columns = columns;
+        this.gridData = gridData;
+        this.srcGrid = srcGrid;
     }
 }

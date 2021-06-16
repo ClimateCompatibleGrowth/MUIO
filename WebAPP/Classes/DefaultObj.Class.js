@@ -5,9 +5,31 @@ export class DefaultObj{
         // after the decimal.
         return type+'_' + Math.random().toString(36).substr(2, 5);
     }
+    
+    static defaultScenario(first=false){
+        let id;
+        if(first){
+            id = 'SC_0';
+        }else{
+            id = this.getId('SC');
+        }
+        let defaultObj = [
+            {
+                "ScenarioId": id,
+                "Scenario":id,
+                "Desc": "Base scenario"
+            }
+        ];
+        return defaultObj;
+    }
 
-    static defaultTech(){
-        let id = this.getId('TEC');
+    static defaultTech(first=false){
+        let id;
+        if(first){
+            id = 'TEC_0';
+        }else{
+            id = this.getId('TEC');
+        }
         let emptyArray = [];
         let defaultObj = [
             {
@@ -26,8 +48,13 @@ export class DefaultObj{
         return defaultObj;
     }
 
-    static defaultComm(){
-        let id = this.getId('COM');
+    static defaultComm(first=false){
+        let id;
+        if(first){
+            id = 'COM_0';
+        }else{
+            id = this.getId('COM');
+        }
         let defaultComm = [
             {
                 "CommId": id,
@@ -39,8 +66,13 @@ export class DefaultObj{
         return defaultComm;
     }
 
-    static defaultEmi(){
-        let id = this.getId('EMI');
+    static defaultEmi(first=false){
+        let id;
+        if(first){
+            id = 'EMI_0';
+        }else{
+            id = this.getId('EMI');
+        }
         let defaultEmi = [
             {
                 "EmisId": id,

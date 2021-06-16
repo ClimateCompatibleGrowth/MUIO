@@ -17,53 +17,74 @@
         <section>
             <div class="widget-body-toolbar-osy">
                 <div class="row">
-                    <div class="col-sm-6">
-                        <button id="osy-generateDataFile" class="btn btn btn-info">
-                            Generate Data File <i class="fa fa-cogs icon-2x"></i>
-                        </button>
-                        <a id="osy-downloadDataFile" class="btn btn btn-default" style="display: none;" href="downloadDataFile"> Download Data File <i class="fa fa-download"></i></a> 
-                        <!-- <button id="osy-downloadDataFile" class="btn btn btn-default" style="display: none;">
-                             Download Data File <i class="fa fa-download"></i>
-                        </button> -->
-                        <button id="osy-run" class="btn btn btn-danger" style="display: none;">
-                            RUN MODEL <i class="fa fa-calculator"></i>
-                        </button>
+                    <div class="col-sm-12">
+                        <div class="form-inline">
+
+                            <div class="input-group">
+                                <button id="osy-generateDataFile" class="btn btn btn-info"  style="display: none;">
+                                    Generate Data File <i class="fa fa-cogs icon-2x"></i>
+                                </button>
+
+                    
+
+                                <!-- <button id="osy-downloadDataFile" class="btn btn btn-default" style="display: none;">
+                                     Download Data File <i class="fa fa-download"></i>
+                                </button> -->
+                            </div>
+                            <div class="input-group" id='osy-solver' style="display: none;">
+                                <div class="smart-form">
+                                    <div class="inline-group">
+                                        <label class="radio">
+                                            <input type="radio" name="solver" value="glpk" checked="checked"><i></i>GLPK
+                                        </label>
+                                        <label class="radio">
+                                            <input type="radio" name="solver"  value="cbc"><i></i>CBC
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <button id="osy-run" class="btn btn btn-danger" style="display: none;">
+                                    RUN MODEL <i class="fa fa-calculator"></i>
+                                </button>
+                            </div>
+
+                            <a id="osy-downloadDataFile" class="btn btn btn-default pull-right" style="display: none;"
+                            href="downloadDataFile"> Download Data File <i class="fa fa-download"></i></a>
+                        </div>
                     </div>
                 </div>
+
+
+
+
+
             </div>
         </section>
     </div>
 </div>
 
-<div class="jarviswidget" id="runOutput" style="display: none;">   
-	<div style="background-color: black!important; color: white;">
-		<div class="widget-body no-padding-bottom">
-			<fieldset>
+<div class="jarviswidget" id="runOutput" style="display: none;">
+    <div style="background-color: black!important; color: white;">
+        <div class="widget-body no-padding-bottom">
+            <fieldset>
                 <section style="background-color: black!important; color: white;">
                     <div id="osy-runOutput"></div>
-				</section>
+                </section>
             </fieldset>
-		</div>
-	</div>         
+        </div>
+    </div>
 </div>
 
 <!-- 002082 -->
-<div class="jarviswidget" id="DataFile" style="display: none;">   
-	<div style="background-color: #3a3f51!important; color: white;">
-		<div class="widget-body no-padding-bottom" >
+<div class="jarviswidget" id="DataFile" style="display: none;">
+    <div style="background-color: #3a3f51!important; color: white;">
+        <div class="widget-body no-padding-bottom">
             <fieldset>
-				<section style="overflow-x: scroll;">
-                    <div id="osy-DataFile" ></div>
-				</section>
-			</fieldset>
-		</div>
-	</div>         
+                <section style="overflow-x: scroll;">
+                    <div id="osy-DataFile"></div>
+                </section>
+            </fieldset>
+        </div>
+    </div>
 </div>
-
-
-
-
-
-
-
-

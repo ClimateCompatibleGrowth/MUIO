@@ -24,7 +24,7 @@ export class Model {
             datafields.push({ name: 'Emis', type:'string' });            
 
             columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center',  minWidth: 90, maxWidth: 200 })
-            columns.push({ text: 'Emission', datafield: 'Emis', pinned:true, editable: false, align: 'center',  minWidth: 900, maxWidth: 200 })
+            columns.push({ text: 'Emission', datafield: 'Emis', pinned:true, editable: false, align: 'center',  minWidth: 90, maxWidth: 200 })
             
 
             let validation = function(cell, value) {

@@ -46,6 +46,20 @@ export class JqxSources{
         return srcEmi;
     }
 
+    static srcScenario(scenarios){
+        var srcScenario = {
+            localdata: scenarios,
+            datatype: "json",
+            datafields:
+            [
+                { name: 'ScenarioId', type: 'string' },
+                { name: 'Scenario', type: 'string' },
+                { name: 'Desc', type: 'string' }
+            ],
+        }
+        return srcScenario;
+    }
+
     static techGridColumns(daComms){
        
       

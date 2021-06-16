@@ -15,67 +15,11 @@ DATA_STORAGE = Path("WebAPP", 'DataStorage')
 S3_BUCKET_LOCAL = Path("WebAPP", 'S3BucketLocal')
 CLASS_FOLDER = Path("WebAPP", 'Classes')
 EXTRACT_FOLDER = Path("")
-GLPK_FOLDER = Path('API', 'GLPK')
+SOLVERs_FOLDER = Path('API', 'SOLVERs')
 HEROKU_DEPLOY = 1
 AWS_STORAGE = 0
 AWS_SYNC = 0
 
-
-# PARAMS = {
-#     "R": 
-#     {
-#         "DM": "DepreciationMethod",
-#         "DR": "DiscountRate"
-#     },
-#     "T": 
-#     {
-#         "TMPAL": "TotalTechnologyModelPeriodActivityLowerLimit",
-#         "TMPAU": "TotalTechnologyModelPeriodActivityUpperLimit"
-#     },
-#     "RT": 
-#     {
-#             "CAU": "CapacityToActivityUnit",
-#             "OL": "OperationalLife"
-#     },
-#     "RYT": 
-#     {
-#         "VC"       : "VariableCost",
-#         "AF"       : "AvailabilityFactor",
-#         "CC"       : "CapitalCost",
-#         "FC"       : "FixedCost",
-#         "RC"       : "ResidualCapacity",
-#         "TAMaxC"   : "TotalAnnualMaxCapacity",
-#         "TAMaxCI"  : "TotalAnnualMaxCapacityInvestment",
-#         "TAMinC"   : "TotalAnnualMinCapacity",
-#         "TAMinCI"  : "TotalAnnualMinCapacityInvestment",
-#         "TAL"      : "TotalTechnologyAnnualActivityLowerLimit",
-#         "TAU"      : "TotalTechnologyAnnualActivityUpperLimit"
-#     },
-#     "RYTC": 
-#     {
-#             "IAR": "InputActivityRatio",
-#             "OAR": "OutputActivityRatio"
-#     },
-#     "RYTs": 
-#         {"YS": "YearSplit"},
-#     "RYC": 
-#         {
-#         "AAD": "AccumulatedAnnualDemand",
-#         "SAD": "SpecifiedAnnualDemand"
-#         },
-#     "RYE": 
-#         {
-#             "AEL": "AnnualEmissionLimit",
-#             "EP": "EmissionsPenalty"
-#         },
-#     "RYTTs": 
-#         {"CF": "CapacityFactor"},
-#     "RYCTs": 
-#     {
-#         "SDP": "SpecifiedDemandProfile"
-#     },
-#     "RYTE": 
-#         {
-#             "EAR": "EmissionActivityRatio"
-#         }
-# }
+TECH_GROUPS = ('RYT', 'RYTC', 'RYTE', 'RYTTs')
+COMM_GROUPS = ('RYC', 'RYTC', 'RYCTs')
+EMIS_GROUPS = ('RYE', 'RYTE')

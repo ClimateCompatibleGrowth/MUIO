@@ -1,8 +1,8 @@
 {
     "IAR": [
         {
-            "TechId": "TEC_q9gtv",
-            "CommId": "COM_rg06s",
+            "TechId": "TEC_wj4zu",
+            "CommId": "COM_0",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -21,8 +21,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_7u24d",
-            "CommId": "COM_rg06s",
+            "TechId": "TEC_1soli",
+            "CommId": "COM_h7ll4",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -41,8 +41,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_c6j0l",
-            "CommId": "COM_rg06s",
+            "TechId": "TEC_1soli",
+            "CommId": "COM_my4xa",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -61,8 +61,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_c6j0l",
-            "CommId": "COM_tlpci",
+            "TechId": "TEC_6v953",
+            "CommId": "COM_h7ll4",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -81,8 +81,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_c6j0l",
-            "CommId": "COM_qmosv",
+            "TechId": "TEC_6v953",
+            "CommId": "COM_my4xa",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -101,8 +101,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_5j4dr",
-            "CommId": "COM_0ynr7",
+            "TechId": "TEC_6v953",
+            "CommId": "COM_yz7tj",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -121,8 +121,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_6zwu8",
-            "CommId": "COM_tlpci",
+            "TechId": "TEC_ou9hw",
+            "CommId": "COM_0",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -141,28 +141,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_6zwu8",
-            "CommId": "COM_uzhnd",
-            "2020": 0,
-            "2022": 0,
-            "2024": 0,
-            "2026": 0,
-            "2028": 0,
-            "2030": 0,
-            "2032": 0,
-            "2034": 0,
-            "2036": 0,
-            "2038": 0,
-            "2040": 0,
-            "2042": 0,
-            "2044": 0,
-            "2046": 0,
-            "2048": 0,
-            "2050": 0
-        },
-        {
-            "TechId": "TEC_tg5zu",
-            "CommId": "COM_rx7zn",
+            "TechId": "TEC_ou9hw",
+            "CommId": "COM_h7ll4",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -183,8 +163,8 @@
     ],
     "OAR": [
         {
-            "TechId": "TEC_q9gtv",
-            "CommId": "COM_rg06s",
+            "TechId": "TEC_wj4zu",
+            "CommId": "COM_0",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -203,8 +183,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_7u24d",
-            "CommId": "COM_rg06s",
+            "TechId": "TEC_1soli",
+            "CommId": "COM_h7ll4",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -223,8 +203,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_c6j0l",
-            "CommId": "COM_rg06s",
+            "TechId": "TEC_1soli",
+            "CommId": "COM_my4xa",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -243,8 +223,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_c6j0l",
-            "CommId": "COM_tlpci",
+            "TechId": "TEC_6v953",
+            "CommId": "COM_h7ll4",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -263,8 +243,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_c6j0l",
-            "CommId": "COM_qmosv",
+            "TechId": "TEC_6v953",
+            "CommId": "COM_my4xa",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -283,8 +263,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_5j4dr",
-            "CommId": "COM_0ynr7",
+            "TechId": "TEC_6v953",
+            "CommId": "COM_yz7tj",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -303,8 +283,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_6zwu8",
-            "CommId": "COM_tlpci",
+            "TechId": "TEC_ou9hw",
+            "CommId": "COM_0",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -323,28 +303,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_6zwu8",
-            "CommId": "COM_uzhnd",
-            "2020": 0,
-            "2022": 0,
-            "2024": 0,
-            "2026": 0,
-            "2028": 0,
-            "2030": 0,
-            "2032": 0,
-            "2034": 0,
-            "2036": 0,
-            "2038": 0,
-            "2040": 0,
-            "2042": 0,
-            "2044": 0,
-            "2046": 0,
-            "2048": 0,
-            "2050": 0
-        },
-        {
-            "TechId": "TEC_tg5zu",
-            "CommId": "COM_y9zzh",
+            "TechId": "TEC_ou9hw",
+            "CommId": "COM_h7ll4",
             "2020": 0,
             "2022": 0,
             "2024": 0,

@@ -59,8 +59,9 @@ def downloadDataFile():
 def run():
     try:
         casename = request.json['casename']
+        solver = request.json['solver']
         txtFile = DataFile(casename)
-        response = txtFile.run()     
+        response = txtFile.run(solver)     
         return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404

@@ -6,33 +6,33 @@ import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { GROUPNAMES } from "../../Classes/Const.Class.js";
+import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTs {
     static onLoad(group, param){
         Base.getSession()
         .then(response =>{
-            let casename = response['session']
-            const promise = [];
-            promise.push(casename);
-            const genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData); 
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
-            const RYTsdata = Osemosys.getData(casename, 'RYTs.json');
-            promise.push(RYTsdata); 
-            return Promise.all(promise);
+            let casename = response['session'];
+            if(casename){
+                const promise = [];
+                promise.push(casename);
+                const genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData); 
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS); 
+                const RYTsdata = Osemosys.getData(casename, 'RYTs.json');
+                promise.push(RYTsdata); 
+                return Promise.all(promise);
+            }else{
+                MessageSelect.init(RYTs.refreshPage.bind(RYTs));
+            }
         })
         .then(data => {
             let [casename, genData, PARAMETERS, RYTsdata] = data;
             let model = new Model(casename, genData, RYTsdata,group, PARAMETERS, param);
-            if(casename){
-                this.initPage(model);
-                this.initEvents(model);
-                ;
-            }else{
-                MessageSelect.init(RYTs.refreshPage.bind(RYTs));
-            }
+            this.initPage(model);
+            this.initEvents(model);
         })
         .catch(error =>{ 
             Message.warning(error);
@@ -224,6 +224,14 @@ export default class RYTs {
             model.decimal = 'd' + parseInt(model.d);
             $('#osy-gridRYTs').jqxGrid('refresh');
         });
-    
+        $("#showLog").click(function (e) {
+            e.preventDefault();
+            console.log(model.group, DEF[model.group].title)
+            $('#definition').html(`
+                <h5>${DEF[model.group].title}</h5>
+                ${DEF[model.group].definition}
+            `);
+            $('#definition').toggle('slow');
+        });
     }
 }

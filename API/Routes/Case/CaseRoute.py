@@ -12,7 +12,6 @@ from Classes.Case.CaseClass import Case
 from Classes.Case.UpdateCaseClass import UpdateCase
 from Classes.Case.DataFileClass import DataFile
 
-
 case_api = Blueprint('CaseRoute', __name__)
 
 @case_api.route("/getCases", methods=['GET'])
@@ -27,6 +26,16 @@ def getCases():
             return jsonify(cases), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
+
+@case_api.route("/getScenarios", methods=['POST'])
+def getScenarios():
+    try:
+        casename = request.json['casename']
+        caseFolder = Path(Config.DATA_STORAGE,casename)
+        scenarios = [ f.name for f in os.scandir(caseFolder) if f.is_dir() ]
+        return jsonify(scenarios), 200
+    except(IOError):
+        return jsonify('No existing scenario!'), 404
 
 @case_api.route("/getDesc", methods=['POST'])
 def getDesc():
@@ -144,9 +153,24 @@ def getData():
 @case_api.route("/getParamFile", methods=['GET'])
 def getParamFile():
     try:
-        configPath = Path(Config.CLASS_FOLDER, 'Parameters.json')
+        configPath = Path(Config.DATA_STORAGE, 'Parameters.json')
         ConfigFile = File.readParamFile(configPath)
         response = ConfigFile       
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@case_api.route("/saveParamFile", methods=['POST'])
+def saveParamFile():
+    try:
+        data = request.json['data']
+        configPath = Path(Config.DATA_STORAGE, 'Parameters.json')
+        File.writeFile( data, configPath)
+        response = {
+            "message": "You have updated parameters data!",
+            "status_code": "success"
+        }
+       
         return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
@@ -338,6 +362,26 @@ def updateSync():
 
         s3 = SyncS3()
         localDir = Path(Config.DATA_STORAGE, case, str(filename))
+        s3.updateSync(localDir, case, Config.S3_BUCKET)
+
+        response = {
+            "message": 'Case <b>'+ case + '</b> deleted!',
+            "status_code": "success"
+        }
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+    except OSError:
+        raise OSError
+
+@case_api.route("/updateSyncParamFile", methods=['GET'])
+def updateSyncParamFile():
+    try:        
+
+        case = ''
+        s3 = SyncS3()
+        localDir = Path(Config.DATA_STORAGE, "Parameters.json")
+
         s3.updateSync(localDir, case, Config.S3_BUCKET)
 
         response = {

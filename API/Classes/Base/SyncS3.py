@@ -61,6 +61,7 @@ class SyncS3(S3):
                 os.makedirs(os.path.dirname(dest_pathname))
             client.download_file(bucket, k, dest_pathname)
 
+    #s3.uploadSync(localDir, case, Config.S3_BUCKET, '*')
     def uploadSync(self, localDir, awsInitDir, bucketName, tag, prefix='\\'):
         """
         from current working directory, upload a 'localDir' with all its subcontents (files and subdirectories...)
@@ -82,8 +83,8 @@ class SyncS3(S3):
         # mydirs daje listu svvih file i folder u localDir npr WebApp/DataStorage/Demo/genData.json
         mydirs = list(localDir.glob('**'))
         for mydir in mydirs:
-            fileNames = glob.glob(os.path.join(mydir, tag))
-            fileNames = [f for f in fileNames if not Path(f).is_dir()]
+            dirNames = glob.glob(os.path.join(mydir, tag))
+            fileNames = [f for f in dirNames if not Path(f).is_dir()]
             #rows = len(fileNames)
             for i, FullfileName in enumerate(fileNames):
                 #dobijemo ime file npr, genData.json
@@ -111,5 +112,8 @@ class SyncS3(S3):
         resource = self.resource
         fileName = localFile.name
         localFile = str(localFile).replace('\\', '/')
-        awsPath = str(awsInitDir) + '/' + str(fileName)
+        if awsInitDir != '':
+            awsPath = str(awsInitDir) + '/' + str(fileName)
+        else:
+            awsPath = str(fileName)
         resource.meta.client.upload_file(localFile, bucketName, awsPath)

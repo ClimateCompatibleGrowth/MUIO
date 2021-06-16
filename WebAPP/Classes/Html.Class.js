@@ -147,12 +147,14 @@ export class Html {
         $("#osy-desc").val(model.desc);
         $("#osy-dr").val(model.dr);
         $("#osy-dm").val(model.dm);
+        $("#osy-rmpt").val(model.rmpt);
         $("#osy-ns").val(model.ns);
         $("#osy-dt").val(model.dt);
 
         $("#commCount").text(model.commCount);
         $("#techCount").text(model.techCount);
         $("#emisCount").text(model.emisCount);
+        $("#scenariosCount").text(model.scenariosCount);
 
     }
 
@@ -200,6 +202,18 @@ export class Html {
                 container.append('<option value="'+ obj.CommId+'" selected>'+obj.Comm+'</option>');
             }else{
                 container.append('<option value="'+ obj.CommId+'" >'+obj.Comm+'</option>');
+            }
+        });   
+    }
+
+    static ddlEmis(emis, emi){
+        var container =  $('#osy-emis');
+        container.empty();
+        $.each(emis, function (id, obj) {
+            if (obj.id == emi ){
+                container.append('<option value="'+ obj.EmisId+'" selected>'+obj.Emis+'</option>');
+            }else{
+                container.append('<option value="'+ obj.EmisId+'" >'+obj.Emis+'</option>');
             }
         });   
     }

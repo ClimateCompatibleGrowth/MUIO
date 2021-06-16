@@ -1,0 +1,165 @@
+{
+    "osy-version": "1.0",
+    "osy-casename": "S3 CASE",
+    "osy-desc": "S3 bucket data storage",
+    "osy-date": "06/14/2021",
+    "osy-currency": "EUR",
+    "osy-dr": "9",
+    "osy-dm": "1",
+    "osy-rmpt": "1",
+    "osy-ns": "3",
+    "osy-dt": "2",
+    "osy-tech": [
+        {
+            "TechId": "TEC_0",
+            "Tech": "TEC_0",
+            "Desc": "Default technology",
+            "IAR": [
+                "COM_0"
+            ],
+            "OAR": [
+                "COM_0"
+            ],
+            "EAR": [
+                "EMI_0"
+            ],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_dgnmm",
+            "Tech": "TEC_1",
+            "Desc": "Default technology",
+            "IAR": [],
+            "OAR": [],
+            "EAR": [
+                "EMI_i2a31"
+            ],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_6y00p",
+            "Tech": "TEC_2",
+            "Desc": "Default technology",
+            "IAR": [
+                "COM_fgxvy",
+                "COM_ddpsy"
+            ],
+            "OAR": [
+                "COM_fgxvy",
+                "COM_ddpsy"
+            ],
+            "EAR": [],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_diu1h",
+            "Tech": "TEC_3",
+            "Desc": "Default technology",
+            "IAR": [],
+            "OAR": [],
+            "EAR": [],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        },
+        {
+            "TechId": "TEC_dwjxs",
+            "Tech": "TEC_4",
+            "Desc": "Default technology",
+            "IAR": [
+                "COM_0",
+                "COM_fgxvy",
+                "COM_ddpsy"
+            ],
+            "OAR": [
+                "COM_0",
+                "COM_fgxvy",
+                "COM_ddpsy"
+            ],
+            "EAR": [],
+            "TMPAL": 0,
+            "TMPAU": 9999,
+            "CAU": 0,
+            "OL": 1
+        }
+    ],
+    "osy-comm": [
+        {
+            "CommId": "COM_0",
+            "COM_0": "COM_0",
+            "Comm": "COM_0",
+            "Desc": "Lignite",
+            "UnitId": "PJ"
+        },
+        {
+            "CommId": "COM_fgxvy",
+            "COM_fgxvy": "COM_1",
+            "Comm": "COM_1",
+            "Desc": "Wind",
+            "UnitId": "PJ"
+        },
+        {
+            "CommId": "COM_ddpsy",
+            "COM_ddpsy": "COM_2",
+            "Comm": "COM_2",
+            "Desc": "Nuclear",
+            "UnitId": "PJ"
+        }
+    ],
+    "osy-emis": [
+        {
+            "EmisId": "EMI_0",
+            "EMI_0": "EMI_0",
+            "Emis": "EMI_0",
+            "Desc": "Default emission",
+            "UnitId": "Ton"
+        },
+        {
+            "EmisId": "EMI_i2a31",
+            "EMI_i2a31": "EMI_1",
+            "Emis": "EMI_1",
+            "Desc": "Default emission",
+            "UnitId": "Ton"
+        },
+        {
+            "EmisId": "EMI_1f7hs",
+            "EMI_1f7hs": "EMI_2",
+            "Emis": "EMI_2",
+            "Desc": "Default emission",
+            "UnitId": "Ton"
+        }
+    ],
+    "osy-scenarios": [
+        {
+            "ScenarioId": "SC_0",
+            "SC_0": "SC_0",
+            "Scenario": "SC_0",
+            "Desc": "Base scenario"
+        },
+        {
+            "ScenarioId": "SC_r4q2l",
+            "SC_r4q2l": "SC_r4q2l",
+            "Scenario": "SC_r4q2l",
+            "Desc": "Efficinecy scenario"
+        }
+    ],
+    "osy-years": [
+        "2020",
+        "2025",
+        "2030",
+        "2035",
+        "2040",
+        "2045",
+        "2050"
+    ]
+}

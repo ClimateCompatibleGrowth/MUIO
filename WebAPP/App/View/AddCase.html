@@ -29,6 +29,11 @@
                         <button id="osy-new" class="btn btn btn-info" style="display: none;">
                             Configure new case <i class="fa fa-plus"></i>
                         </button>
+                        <div  class="btn-group pull-right">
+                            <button type="button" class="btn btn-default" id="showLog" data-toggle="tooltip" data-placement="top" title="Parameters definitions">
+                                <i class="ace-icon fa fa-question-circle warning "></i>
+                            </button>
+                        </div>
                     </div>
                     <!-- <div class="col-sm-6 text-right">
                         <div class="onoffswitch-container">
@@ -55,6 +60,12 @@
                 </div>
             </div>
         </section>
+    </div>
+</div>
+<div id="row">
+    <div class="col-lg-12">
+        <div  id="definition" style="display:none">
+        </div>
     </div>
 </div>
 <form id="osy-caseForm">
@@ -190,6 +201,13 @@
                                             </label>
                                         </section>
                                         <section class="col col-2">
+                                            <label class="label">Min Production Target</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="Min Production Target" class="input-sm"
+                                                    name="osy-rmpt" id="osy-rmpt">
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
                                             <label class="label">Number of seasons</label>
                                             <label class="input">
                                                 <input type="text" placeholder="number of seasons" class="input-sm"
@@ -218,10 +236,11 @@
                     <header>
                         <h2></h2>
                         <ul class="nav nav-tabs pull-right in">
+
                             <li class="active">
-                                <a data-toggle="tab" href="#tabComms" id='Comms'> <i class="fa fa-lg fa-cog danger"></i>
+                                <a data-toggle="tab" href="#tabComms" id='Comms'> <i class="fa fa-lg fa-cog orange"></i>
                                     <span class="hidden-mobile hidden-tablet"> Commodities 
-                                        <span class="label bg-color-blue txt-color-white" id="commCount"> 23 </span> </span> </a>
+                                        <span class="label bg-color-orange txt-color-white" id="commCount"> 23 </span> </span> </a>
                             </li>
                             <li >
                                 <a data-toggle="tab" href="#tabTechs" id='Techs'> <i class="fa fa-lg fa-cog info"></i>
@@ -231,11 +250,16 @@
                             <li>
                                 <a data-toggle="tab" href="#tabEmiss" id='Emiss'> <i class="fa fa-lg fa-industry success"></i>
                                     <span class="hidden-mobile hidden-tablet"> Emissions 
-                                        <span class="label  bg-color-blue txt-color-white" id="emisCount"> 23 </span> </span> </a>  
+                                        <span class="label  bg-color-green txt-color-white" id="emisCount"> 23 </span> </span> </a>  
                             </li>
                             <!-- <li>
                                 <a data-toggle="tab" href="#tabUnits" id='Units'> <i class="fa fa-lg fa-arrow-circle-o-down"></i>
                                     <span class="hidden-mobile hidden-tablet"> Units </span> </a>
+                            </li> -->
+                            <!-- <li>
+                                <a data-toggle="tab" href="#tabScenarios" id='Scenarios'> <i class="fa fa-lg fa-line-chart danger"></i>
+                                    <span class="hidden-mobile hidden-tablet"> Scenarios 
+                                        <span class="label  bg-color-red txt-color-white" id="scenariosCount"> 23 </span> </span> </a>               
                             </li> -->
                         </ul>
                     </header>
@@ -244,6 +268,32 @@
                     <!-- widget content -->
                     <div class="widget-body">
                         <div class="tab-content">
+                            <!-- <div class="tab-pane " id="tabScenarios">
+                                <div class="jarviswidget">
+                                    <div>
+                                        <div class="widget-body no-padding">
+                                            <div class="smart-form">
+                                                <header>
+                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                                    Define scenarios
+                                                    <div class="pull-right">
+                                                        <small class="pointer btn" id="osy-addScenario">
+                                                            <span class="widget-icon"> <i class="fa fa-plus"></i>
+                                                            </span>
+                                                            Add scenario
+                                                        </small>
+                                                    </div>
+                                                </header>
+                                                <fieldset>
+                                                    <section>
+                                                        <div id="osy-gridScenario"></div>
+                                                    </section>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
                             <div class="tab-pane " id="tabTechs">
                                 <div class="jarviswidget">
                                     <div>
@@ -274,8 +324,7 @@
                                                     </div>
                                                 </div> -->
 
-
-                                                <fieldset style="padding-top:0px">
+                                                <fieldset >
                                                     <section>
                                                         <div id="osy-gridTech"></div>
                                                     </section>

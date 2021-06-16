@@ -8,6 +8,7 @@ import { SmartAdmin } from "../../Classes/SmartAdmin.Class.js";
 import { Model } from "../Model/AddCase.Model.js";
 import { Navbar } from "./Navbar.js";
 import { JqxSources } from "../../Classes/JqxSources.Class.js";
+import { DEF } from "../../Classes/Definition.Class.js";
 
 export default class AddCase {
     static onLoad(){
@@ -21,7 +22,7 @@ export default class AddCase {
         })
         .then(data => {
             let [genData] = data;
-            let model = new Model(genData);
+            let model = new Model(genData, "AddCase");
             this.initPage(model);
         })
         .catch(error =>{
@@ -39,6 +40,7 @@ export default class AddCase {
         Grid.commGrid(model.commodities);
         //Grid.techsGrid(model.srcTech, model.srcComm);
         Grid.emisGrid(model.emissions);
+        //Grid.scenarioGrid(model.scenarios);
 
         // model.srcTech = JqxSources.srcTech(model.techs);
         // model.srcComm = JqxSources.srcComm(model.commodities);
@@ -124,6 +126,12 @@ export default class AddCase {
                          return dr < 0 || isNaN(dr) ? false : true;
                     }
                 },
+                { input: '#osy-rmpt', message: "Min Production Target is required field!", action: 'keyup', rule: 'required' },
+                { input: '#osy-rmpt', message: "Min Production Target should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
+                         var dr = $( "#osy-rmpt" ).val();
+                         return dr < 0 || isNaN(dr) ? false : true;
+                    }
+                },
                 { input: '#osy-ns', message: "Number of seasons is required field!", action: 'keyup', rule: 'required' },
                 { input: '#osy-ns', message: "Number of seasons should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
                          var dr = $( "#osy-ns" ).val();
@@ -172,30 +180,37 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
 
-            //let techData = $('#osy-gridTech').jqxGrid('getrows');
+            let techData = $('#osy-gridTech').jqxGrid('getrows');
+            console.log('techData ', techData)
             // let TECH = [];
             // $.each(techData, function (index, value) {
             //     let tmp = {};
             //     tmp.TechId = value.TechId;
-            //     tmp[value.TechId] = value.Tech;
+            //     //tmp[value.TechId] = value.Tech;
             //     tmp.Tech = value.Tech;
             //     tmp.Desc = value.Desc;
             //     tmp.IAR = value.IAR;
             //     tmp.OAR = value.OAR;
+            //     tmp.EAR = value.EAR;
             //     tmp.TMPAL = value.TMPAL;
             //     tmp.TMPAU = value.TMPAU;
+            //     tmp.CAU = value.CAU;
+            //     tmp.OL = value.OL;
 
             //     TECH.push(tmp);
             // });
 
+            // console.log('tech ', model.techs)
             let TECH = model.techs;
+            
+            //console.log('TECH ', TECH)
 
             let commData = $('#osy-gridComm').jqxGrid('getrows');
             let COMM = [];
             $.each(commData, function (index, value) {
                 let tmp = {};
                 tmp.CommId = value.CommId;
-                tmp[value.CommId] = value.Comm;
+                //tmp[value.CommId] = value.Comm;
                 tmp.Comm = value.Comm;
                 tmp.Desc = value.Desc;
                 tmp.UnitId = value.UnitId;
@@ -207,13 +222,23 @@ export default class AddCase {
             $.each(emisData, function (index, value) {
                 let tmp = {};
                 tmp.EmisId = value.EmisId;
-                tmp[value.EmisId] = value.Emis;
+                //tmp[value.EmisId] = value.Emis;
                 tmp.Emis = value.Emis;
                 tmp.Desc = value.Desc;
                 tmp.UnitId = value.UnitId;
                 EMIS.push(tmp);
             });
 
+            // let scenarioData = $('#osy-gridScenario').jqxGrid('getrows');
+            // let SCENARIOS = [];
+            // $.each(scenarioData, function (index, value) {
+            //     let tmp = {};
+            //     tmp.ScenarioId = value.ScenarioId;
+            //     //tmp[value.ScenarioId] = value.Scenario;
+            //     tmp.Scenario = value.Scenario;
+            //     tmp.Desc = value.Desc;
+            //     SCENARIOS.push(tmp);
+            // });
 
             var casename = $( "#osy-casename" ).val();
             var desc = $( "#osy-desc" ).val();
@@ -221,6 +246,7 @@ export default class AddCase {
             var currency = $( "#osy-currency" ).val();
             var dr = $( "#osy-dr" ).val();
             var dm = $( "#osy-dm" ).val();
+            var rmpt = $( "#osy-rmpt" ).val();
             var ns = $( "#osy-ns" ).val();
             var dt = $( "#osy-dt" ).val();
 
@@ -237,13 +263,16 @@ export default class AddCase {
                 "osy-currency":currency,
                 "osy-dr": dr,
                 "osy-dm": dm,
+                "osy-rmpt": rmpt,
                 "osy-ns": ns,
                 "osy-dt": dt,
                 "osy-tech": TECH,
                 "osy-comm": COMM,
                 "osy-emis": EMIS,
+                //"osy-scenarios": SCENARIOS,
                 "osy-years": years
             }
+
             Osemosys.saveCase(POSTDATA)
             .then(response =>{
                 if(response.status_code=="created"){
@@ -257,8 +286,6 @@ export default class AddCase {
                     }
                 }
                 if(response.status_code=="edited"){
-                    //$("#osy-case").html(casename);
-                    //console.log(casename, 'Case study', 'create & edit')
                     Html.title(casename, 'Case study', 'create & edit');
                     $("#osy-new").show();
                     Navbar.initPage(casename);
@@ -298,7 +325,20 @@ export default class AddCase {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
+            console.log('id ', id)
+            console.log('model.techs ', model.techs)
             if(id!=0){
+                // var TechId = $('#osy-gridTech').jqxGrid('getcellvalue', id, "TechId");
+                // console.log('TechId ', TechId)
+                // $.each(model.techs, function (id, techObj) {
+                //     if(techObj.TechId == TechId){
+                       
+                //     }
+                //     techObj['IAR'] =  techObj['IAR'].filter(item => item !== commId);
+                //     techObj['OAR'] =  techObj['OAR'].filter(item => item !== commId);
+                // });
+                model.techs.splice(id, 1);
+                //console.log('model.techs ', model.techs)
                 $("#osy-gridTech").jqxGrid('deleterow', id);
                 model.techCount--;
                 $("#techCount").text(model.techCount);
@@ -310,6 +350,7 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultComm = DefaultObj.defaultComm();
+            //model.commodities.push(JSON.parse(JSON.stringify(defaultComm[0])));
             $("#osy-gridComm").jqxGrid('addrow', null, defaultComm);
             model.commCount++;
             $("#commCount").text(model.commCount);
@@ -341,10 +382,11 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultEmi = DefaultObj.defaultEmi();
+            //model.emissions.push(JSON.parse(JSON.stringify(defaultEmi[0])));
             $("#osy-gridEmis").jqxGrid('addrow', null, defaultEmi);
             model.emisCount++;
             $("#emisCount").text(model.emisCount);
-            $('#osy-gridTech').jqxGrid('refresh');
+            $('#osy-gridEmis').jqxGrid('refresh');
         });
 
         $(document).undelegate(".deleteEmis","click");
@@ -354,13 +396,8 @@ export default class AddCase {
             var id = $(this).attr('data-id');
             if(id!=0){
                 var emisId = $('#osy-gridEmis').jqxGrid('getcellvalue', id, 'EmisId');
-                // console.log('id ', id)
-                // console.log('emisId ', emisId)
-
                 //izbrisi red u aabeli
                 var rowid = $('#osy-gridEmis').jqxGrid('getrowid', id);
-                //console.log('rowid ', rowid)
-
                 $("#osy-gridEmis").jqxGrid('deleterow', rowid);
                 //smanji counter za broj emisjia i update html
                 model.emisCount--;
@@ -373,6 +410,37 @@ export default class AddCase {
                 });
             }
         });
+
+        // $("#osy-addScenario").off('click');
+        // $("#osy-addScenario").on("click", function(event) {
+        //     event.preventDefault();
+        //     event.stopImmediatePropagation();
+        //     let defaultSc = DefaultObj.defaultScenario();
+        //     //model.scenarios.push(JSON.parse(JSON.stringify(defaultSc[0])));
+        //     $("#osy-gridScenario").jqxGrid('addrow', null, defaultSc);
+        //     model.scenariosCount++;
+        //     $("#scenariosCount").text(model.scenariosCount);
+        //     $('#osy-gridScenario').jqxGrid('refresh');
+        // });
+
+        // $(document).undelegate(".deleteScenario","click");
+        // $(document).delegate(".deleteScenario","click",function(e){
+        //     e.preventDefault();
+        //     e.stopImmediatePropagation();
+        //     var id = $(this).attr('data-id');
+        //     if(id!=0){
+        //         var emisId = $('#osy-gridScenario').jqxGrid('getcellvalue', id, 'ScenarioId');
+        //         //izbrisi red u aabeli
+        //         var rowid = $('#osy-gridScenario').jqxGrid('getrowid', id);
+        //         //console.log('rowid ', rowid)
+
+        //         $("#osy-gridScenario").jqxGrid('deleterow', rowid);
+        //         //smanji counter za broj emisjia i update html
+        //         model.scenariosCount--;
+        //         $("#scenariosCount").text(model.scenariosCount);
+
+        //     }
+        // });
 
         $(".nav-tabs li a").off('click');
         $('.nav-tabs li a').on("click", function(event, ui) { 
@@ -478,7 +546,15 @@ export default class AddCase {
             });
             $("#osy-caseForm").jqxValidator('validateInput', '#osy-years');
         });
-
+        $("#showLog").click(function (e) {
+            e.preventDefault();
+            console.log(model.pageId)
+            $('#definition').html(`
+                <h5>${DEF[model.pageId].title}</h5>
+                ${DEF[model.pageId].definition}
+            `);
+            $('#definition').toggle('slow');
+        });
     }
 }
 

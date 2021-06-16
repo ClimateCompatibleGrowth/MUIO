@@ -6,32 +6,33 @@ import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { GROUPNAMES } from "../../Classes/Const.Class.js";
+import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTTs {
     static onLoad(group, param){
         Base.getSession()
         .then(response =>{
-            let casename = response['session']
-            const promise = [];
-            promise.push(casename);
-            const genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData); 
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
-            const RYTTsdata = Osemosys.getData(casename, "RYTTs.json");
-            promise.push(RYTTsdata); 
-            return Promise.all(promise);
+            let casename = response['session'];
+            if(casename){
+                const promise = [];
+                promise.push(casename);
+                const genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData); 
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS); 
+                const RYTTsdata = Osemosys.getData(casename, "RYTTs.json");
+                promise.push(RYTTsdata); 
+                return Promise.all(promise);
+            }else{
+                MessageSelect.init(RYTTs.refreshPage.bind(RYTTs));
+            }
         })
         .then(data => {
             let [casename, genData, PARAMETERS, RYTTsdata] = data;
             let model = new Model(casename, genData, RYTTsdata, group, PARAMETERS, param);
-            if(casename){
-                this.initPage(model);
-                this.initEvents(model);
-            }else{
-                MessageSelect.init(RYTTs.refreshPage.bind(RYTTs));
-            }
+            this.initPage(model);
+            this.initEvents(model);
         })
         .catch(error =>{ 
             Message.warning(error);
@@ -239,7 +240,8 @@ export default class RYTTs {
         let res = true;
         $("#resizeColumns").click(function () {
             if(res){
-                $('#osy-gridRYTTs').jqxGrid('autoresizecolumn', 'Tech', 'Timeslice');
+                $('#osy-gridRYTTs').jqxGrid('autoresizecolumn', 'Tech');
+                $('#osy-gridRYTTs').jqxGrid('autoresizecolumn', 'Timeslice');
             }
             else{
                 $('#osy-gridRYTTs').jqxGrid('autoresizecolumns');
@@ -270,5 +272,13 @@ export default class RYTTs {
             $('#osy-gridRYTTs').jqxGrid('refresh');
         });
     
+        $("#showLog").click(function (e) {
+            e.preventDefault();
+            $('#definition').html(`
+                <h5>${DEF[model.group].title}</h5>
+                ${DEF[model.group].definition}
+            `);
+            $('#definition').toggle('slow');
+        });
     }
 }

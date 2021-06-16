@@ -12,10 +12,12 @@ export class Model {
         this.date = genData['osy-date'];
         this.dr = genData['osy-dr'];
         this.dm = genData['osy-dm'];
+        this.rmpt = genData['osy-rmpt'];
         this.ns = genData['osy-ns'];
         this.dt = genData['osy-dt'];
         this.currency = genData['osy-currency'];
         this.years = genData['osy-years'];
+        this.scenarios = genData['osy-scenarios'];
         this.techs = genData['osy-tech'];
         this.commodities = genData['osy-comm'];
         this.emissions = genData['osy-emis'];
@@ -23,12 +25,14 @@ export class Model {
         this.srcTech = JqxSources.srcTech(this.techs);
         this.srcComm = JqxSources.srcComm(this.commodities);
         this.srcEmi = JqxSources.srcEmi(this.emissions);
+        this.srcScenario = JqxSources.srcScenario(this.scenarios);
 
         //this.columnsTech = JqxSources.techGridColumns(new $.jqx.dataAdapter(this.commodities));
 
         this.techCount = genData['osy-tech'].length;
         this.commCount = genData['osy-comm'].length;
         this.emisCount = genData['osy-emis'].length;
+        this.scenariosCount = genData['osy-scenarios'].length;
         this.pageId = pageId;
       }else{
         let years=[];
@@ -40,13 +44,15 @@ export class Model {
         this.date = null;
         this.dr = null;
         this.dm = null;
+        this.rmpt = null;
         this.ns = null;
         this.dt = null;
         this.currency = null;
         this.years = years;
-        this.techs = DefaultObj.defaultTech();
-        this.commodities = DefaultObj.defaultComm();
-        this.emissions = DefaultObj.defaultEmi();
+        this.scenarios = DefaultObj.defaultScenario(true);
+        this.techs = DefaultObj.defaultTech(true);
+        this.commodities = DefaultObj.defaultComm(true);
+        this.emissions = DefaultObj.defaultEmi(true);
 
         this.srcTech = JqxSources.srcTech(this.techs);
         this.srcComm = JqxSources.srcComm(this.commodities);
@@ -56,6 +62,7 @@ export class Model {
         this.techCount = 1;
         this.commCount = 1;
         this.emisCount = 1;
+        this.scenariosCount = 1;
         this.pageId = pageId;
       }
     }

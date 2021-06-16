@@ -1,8 +1,8 @@
 {
     "EAR": [
         {
-            "TechId": "TEC_q9gtv",
-            "EmisId": "EMI_1hl8f",
+            "TechId": "TEC_0",
+            "EmisId": "EMI_04qqh",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -21,8 +21,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_7u24d",
-            "EmisId": "EMI_1hl8f",
+            "TechId": "TEC_0",
+            "EmisId": "EMI_ihqm7",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -41,8 +41,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_c6j0l",
-            "EmisId": "EMI_1hl8f",
+            "TechId": "TEC_wj4zu",
+            "EmisId": "EMI_0",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -61,8 +61,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_c6j0l",
-            "EmisId": "EMI_f5e7c",
+            "TechId": "TEC_6v953",
+            "EmisId": "EMI_0",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -81,8 +81,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_c6j0l",
-            "EmisId": "EMI_nsdlo",
+            "TechId": "TEC_6v953",
+            "EmisId": "EMI_04qqh",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -101,8 +101,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_n7l3c",
-            "EmisId": "EMI_f5e7c",
+            "TechId": "TEC_6v953",
+            "EmisId": "EMI_ihqm7",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -121,8 +121,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_tg5zu",
-            "EmisId": "EMI_f5e7c",
+            "TechId": "TEC_ou9hw",
+            "EmisId": "EMI_0",
             "2020": 0,
             "2022": 0,
             "2024": 0,
@@ -141,8 +141,8 @@
             "2050": 0
         },
         {
-            "TechId": "TEC_tg5zu",
-            "EmisId": "EMI_nsdlo",
+            "TechId": "TEC_ou9hw",
+            "EmisId": "EMI_04qqh",
             "2020": 0,
             "2022": 0,
             "2024": 0,
