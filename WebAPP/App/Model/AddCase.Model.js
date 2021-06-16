@@ -25,14 +25,14 @@ export class Model {
         this.srcTech = JqxSources.srcTech(this.techs);
         this.srcComm = JqxSources.srcComm(this.commodities);
         this.srcEmi = JqxSources.srcEmi(this.emissions);
-        this.srcScenario = JqxSources.srcScenario(this.scenarios);
+        //this.srcScenario = JqxSources.srcScenario(this.scenarios);
 
         //this.columnsTech = JqxSources.techGridColumns(new $.jqx.dataAdapter(this.commodities));
 
         this.techCount = genData['osy-tech'].length;
         this.commCount = genData['osy-comm'].length;
         this.emisCount = genData['osy-emis'].length;
-        this.scenariosCount = genData['osy-scenarios'].length;
+        //this.scenariosCount = genData['osy-scenarios'].length;
         this.pageId = pageId;
       }else{
         let years=[];
@@ -49,7 +49,7 @@ export class Model {
         this.dt = null;
         this.currency = null;
         this.years = years;
-        this.scenarios = DefaultObj.defaultScenario(true);
+        //this.scenarios = DefaultObj.defaultScenario(true);
         this.techs = DefaultObj.defaultTech(true);
         this.commodities = DefaultObj.defaultComm(true);
         this.emissions = DefaultObj.defaultEmi(true);
@@ -62,7 +62,7 @@ export class Model {
         this.techCount = 1;
         this.commCount = 1;
         this.emisCount = 1;
-        this.scenariosCount = 1;
+        //this.scenariosCount = 1;
         this.pageId = pageId;
       }
     }
