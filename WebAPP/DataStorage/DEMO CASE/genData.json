@@ -2,7 +2,7 @@
     "osy-version": "1.0",
     "osy-casename": "DEMO CASE",
     "osy-desc": "",
-    "osy-date": "06/16/2021",
+    "osy-date": "06/17/2021",
     "osy-currency": "EUR",
     "osy-dr": "9",
     "osy-dm": "1",
@@ -16,27 +16,24 @@
             "Desc": "Default technology",
             "IAR": [],
             "OAR": [],
-            "EAR": [
-                "EMI_04qqh",
-                "EMI_ihqm7"
-            ],
+            "EAR": [],
             "TMPAL": 0,
             "TMPAU": 9999,
             "CAU": 0,
             "OL": 1
         },
         {
-            "TechId": "TEC_wj4zu",
+            "TechId": "TEC_dd4oc",
             "Tech": "TEC_1",
             "Desc": "Default technology",
             "IAR": [
-                "COM_0"
+                "COM_dvbz0"
             ],
             "OAR": [
-                "COM_0"
+                "COM_dvbz0"
             ],
             "EAR": [
-                "EMI_0"
+                "EMI_mn52b"
             ],
             "TMPAL": 0,
             "TMPAU": 9999,
@@ -44,7 +41,7 @@
             "OL": 1
         },
         {
-            "TechId": "TEC_m8ebz",
+            "TechId": "TEC_ea4it",
             "Tech": "TEC_2",
             "Desc": "Default technology",
             "IAR": [],
@@ -56,16 +53,18 @@
             "OL": 1
         },
         {
-            "TechId": "TEC_1soli",
+            "TechId": "TEC_sciap",
             "Tech": "TEC_3",
             "Desc": "Default technology",
             "IAR": [
-                "COM_h7ll4",
-                "COM_my4xa"
+                "COM_dvbz0",
+                "COM_yqbib",
+                "COM_7jcis"
             ],
             "OAR": [
-                "COM_h7ll4",
-                "COM_my4xa"
+                "COM_dvbz0",
+                "COM_yqbib",
+                "COM_7jcis"
             ],
             "EAR": [],
             "TMPAL": 0,
@@ -74,44 +73,15 @@
             "OL": 1
         },
         {
-            "TechId": "TEC_6v953",
+            "TechId": "TEC_rr4x6",
             "Tech": "TEC_4",
             "Desc": "Default technology",
-            "IAR": [
-                "COM_h7ll4",
-                "COM_my4xa",
-                "COM_yz7tj"
-            ],
-            "OAR": [
-                "COM_h7ll4",
-                "COM_my4xa",
-                "COM_yz7tj"
-            ],
+            "IAR": [],
+            "OAR": [],
             "EAR": [
                 "EMI_0",
-                "EMI_04qqh",
-                "EMI_ihqm7"
-            ],
-            "TMPAL": 0,
-            "TMPAU": 9999,
-            "CAU": 0,
-            "OL": 1
-        },
-        {
-            "TechId": "TEC_ou9hw",
-            "Tech": "TEC_5",
-            "Desc": "Default technology",
-            "IAR": [
-                "COM_0",
-                "COM_h7ll4"
-            ],
-            "OAR": [
-                "COM_0",
-                "COM_h7ll4"
-            ],
-            "EAR": [
-                "EMI_0",
-                "EMI_04qqh"
+                "EMI_mn52b",
+                "EMI_6r7dx"
             ],
             "TMPAL": 0,
             "TMPAU": 9999,
@@ -127,19 +97,19 @@
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_h7ll4",
+            "CommId": "COM_dvbz0",
             "Comm": "COM_1",
             "Desc": "Default commodity",
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_my4xa",
+            "CommId": "COM_yqbib",
             "Comm": "COM_2",
             "Desc": "Default commodity",
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_yz7tj",
+            "CommId": "COM_7jcis",
             "Comm": "COM_3",
             "Desc": "Default commodity",
             "UnitId": "PJ"
@@ -153,13 +123,13 @@
             "UnitId": "Ton"
         },
         {
-            "EmisId": "EMI_04qqh",
+            "EmisId": "EMI_mn52b",
             "Emis": "EMI_1",
             "Desc": "Default emission",
             "UnitId": "Ton"
         },
         {
-            "EmisId": "EMI_ihqm7",
+            "EmisId": "EMI_6r7dx",
             "Emis": "EMI_2",
             "Desc": "Default emission",
             "UnitId": "Ton"

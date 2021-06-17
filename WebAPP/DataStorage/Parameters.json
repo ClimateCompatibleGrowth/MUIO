@@ -22,6 +22,22 @@
             "menu": 0
         }
     ],
+    "T": [
+        {
+            "id": "TMPAL",
+            "value": "Total Technology Model Period Activity Lower Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 0
+        },
+        {
+            "id": "TMPAU",
+            "value": "Total Technology Model Period Activity Upper Limit",
+            "default": 9999,
+            "enable": true,
+            "menu": 0
+        }
+    ],
     "RT": [
         {
             "id": "CAU",
@@ -228,6 +244,34 @@
             "default": 0,
             "enable": true,
             "menu": 1
+        },
+        {
+            "id": "TAMLL",
+            "value": "Technology Activity By Mode Lower Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TAMUL",
+            "value": "Technology Activity By Mode Upper Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TADML",
+            "value": "Technology Activity Decrease By Mode Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TAIML",
+            "value": "Technology Activity Increase By Mode Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
         }
     ],
     "RYTC": [
@@ -271,22 +315,6 @@
             "default": 0.0104,
             "enable": true,
             "menu": 1
-        }
-    ],
-    "T": [
-        {
-            "id": "TMPAL",
-            "value": "Total Technology Model Period Activity Lower Limit",
-            "default": 0,
-            "enable": true,
-            "menu": 0
-        },
-        {
-            "id": "TMPAU",
-            "value": "Total Technology Model Period Activity Upper Limit",
-            "default": 9999,
-            "enable": true,
-            "menu": 0
         }
     ]
 }

@@ -12,15 +12,15 @@ export default class Config {
         Base.getSession()
         .then(response =>{
             let casename = response['session'];
-            if(casename){
+            //if(casename){
                 const promise = [];
                 promise.push(casename);
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS); 
                 return Promise.all(promise);
-            }else{
-                MessageSelect.init(Config.refreshPage.bind(Config));
-            }
+            // }else{
+            //     MessageSelect.init(Config.refreshPage.bind(Config));
+            // }
         })
         .then(data => {
             let [casename, PARAMETERS] = data;
