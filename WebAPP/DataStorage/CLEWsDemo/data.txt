@@ -69,14 +69,6 @@ COA 0 0 0 0
 ELC001 0 0 0 0 
 ELC002 0 0 0 0 
 ;
-param TradeRoute default 0 := 
-[RE1,*,*]: 
-2019 2020 2021 2022 :=
-GAS 0 0 0 0 
-COA 0 0 0 0 
-ELC001 0 0 0 0 
-ELC002 0 0 0 0 
-;
 param RETagFuel default 0 := 
 [RE1,*,*]: 
 2019 2020 2021 2022 :=
