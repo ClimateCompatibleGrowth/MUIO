@@ -88,13 +88,6 @@
             "menu": 1
         },
         {
-            "id": "TR",
-            "value": "Trade Route",
-            "default": 0,
-            "enable": false,
-            "menu": 1
-        },
-        {
             "id": "RTF",
             "value": "RE Tag Fuel",
             "default": 0,
