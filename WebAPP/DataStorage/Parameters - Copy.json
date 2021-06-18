@@ -1,23 +1,25 @@
 {
     "R": [
         {
-            "id": "DM",
-            "value": "Depreciation Method",
-            "default": 1,
-            "enable": true,
-            "menu": 0
-        },
-        {
             "id": "DR",
             "value": "Discount Rate",
-            "default": 0.09,
+            "default": 0.05,
+            "enable": true,
+            "menu": 0
+        }
+    ],
+    "T": [
+        {
+            "id": "TMPAL",
+            "value": "Total Technology Model Period Activity Lower Limit",
+            "default": 0,
             "enable": true,
             "menu": 0
         },
         {
-            "id": "RMPT",
-            "value": "RE Min Production Target",
-            "default": 0,
+            "id": "TMPAU",
+            "value": "Total Technology Model Period Activity Upper Limit",
+            "default": 9999,
             "enable": true,
             "menu": 0
         }
@@ -45,6 +47,29 @@
             "default": 0,
             "enable": true,
             "menu": 1
+        },
+        {
+            "id": "RMPT",
+            "value": "RE Min Production Target",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        }
+    ],
+    "RE":[
+        {
+            "id": "MPEL",
+            "value": "Model Period Emission Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 0
+        },
+        {
+            "id": "MPEE",
+            "value": "Model Period Exogenous Emission",
+            "default": 0,
+            "enable": true,
+            "menu": 0
         }
     ],
     "RYC": [
@@ -58,13 +83,6 @@
         {
             "id": "SAD",
             "value": "Specified Annual Demand",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "TR",
-            "value": "Trade Route",
             "default": 0,
             "enable": true,
             "menu": 1
@@ -104,20 +122,6 @@
         {
             "id": "EP",
             "value": "Emissions Penalty",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "MPEL",
-            "value": "Model Period Emission Limit",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "MPEE",
-            "value": "Model Period Exogenous Emission",
             "default": 0,
             "enable": true,
             "menu": 1
@@ -228,6 +232,34 @@
             "default": 0,
             "enable": true,
             "menu": 1
+        },
+        {
+            "id": "TAMLL",
+            "value": "Technology Activity By Mode Lower Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TAMUL",
+            "value": "Technology Activity By Mode Upper Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TADML",
+            "value": "Technology Activity Decrease By Mode Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TAIML",
+            "value": "Technology Activity Increase By Mode Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
         }
     ],
     "RYTC": [
@@ -271,22 +303,6 @@
             "default": 0.0104,
             "enable": true,
             "menu": 1
-        }
-    ],
-    "T": [
-        {
-            "id": "TMPAL",
-            "value": "Total Technology Model Period Activity Lower Limit",
-            "default": 0,
-            "enable": true,
-            "menu": 0
-        },
-        {
-            "id": "TMPAU",
-            "value": "Total Technology Model Period Activity Upper Limit",
-            "default": 9999,
-            "enable": true,
-            "menu": 0
         }
     ]
 }
