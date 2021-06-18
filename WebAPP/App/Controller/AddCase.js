@@ -26,6 +26,7 @@ export default class AddCase {
             this.initPage(model);
         })
         .catch(error =>{
+            console.log('error ', error)
             Message.danger(error);
         });
     }
@@ -37,6 +38,7 @@ export default class AddCase {
         Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);
 
+        console.log('model ', model)
         Grid.commGrid(model.commodities);
         //Grid.techsGrid(model.srcTech, model.srcComm);
         Grid.emisGrid(model.emissions);
@@ -117,18 +119,6 @@ export default class AddCase {
                          var dr = $( "#osy-dr" ).val();
                         //  console.log(dr)
                         //  console.log(dr < 0 ? true : false);
-                         return dr < 0 || isNaN(dr) ? false : true;
-                    }
-                },
-                { input: '#osy-dm', message: "Depreciation method is required field!", action: 'keyup', rule: 'required' },
-                { input: '#osy-dm', message: "Depreciation method should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
-                         var dr = $( "#osy-dm" ).val();
-                         return dr < 0 || isNaN(dr) ? false : true;
-                    }
-                },
-                { input: '#osy-rmpt', message: "Min Production Target is required field!", action: 'keyup', rule: 'required' },
-                { input: '#osy-rmpt', message: "Min Production Target should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
-                         var dr = $( "#osy-rmpt" ).val();
                          return dr < 0 || isNaN(dr) ? false : true;
                     }
                 },
@@ -225,6 +215,8 @@ export default class AddCase {
                 //tmp[value.EmisId] = value.Emis;
                 tmp.Emis = value.Emis;
                 tmp.Desc = value.Desc;
+                tmp.MPEL = value.MPEL;
+                tmp.MPEE = value.MPEE;
                 tmp.UnitId = value.UnitId;
                 EMIS.push(tmp);
             });
@@ -245,8 +237,8 @@ export default class AddCase {
             var date = $( "#osy-date" ).val();
             var currency = $( "#osy-currency" ).val();
             var dr = $( "#osy-dr" ).val();
-            var dm = $( "#osy-dm" ).val();
-            var rmpt = $( "#osy-rmpt" ).val();
+            // var dm = $( "#osy-dm" ).val();
+            // var rmpt = $( "#osy-rmpt" ).val();
             var ns = $( "#osy-ns" ).val();
             var dt = $( "#osy-dt" ).val();
 
@@ -262,8 +254,8 @@ export default class AddCase {
                 "osy-date": date,
                 "osy-currency":currency,
                 "osy-dr": dr,
-                "osy-dm": dm,
-                "osy-rmpt": rmpt,
+                // "osy-dm": dm,
+                // "osy-rmpt": rmpt,
                 "osy-ns": ns,
                 "osy-dt": dt,
                 "osy-tech": TECH,
@@ -546,6 +538,7 @@ export default class AddCase {
             });
             $("#osy-caseForm").jqxValidator('validateInput', '#osy-years');
         });
+
         $("#showLog").click(function (e) {
             e.preventDefault();
             console.log(model.pageId)

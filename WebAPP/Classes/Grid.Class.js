@@ -272,6 +272,8 @@ export class Grid {
             [
                 { name: 'EmisId', type: 'string' },
                 { name: 'Emis', type: 'string' },
+                { name: 'MPEL', type: 'number' },
+                { name: 'MPEE', type: 'number' },
                 { name: 'Desc', type: 'string' },
                 { name: 'UnitId', type: 'string' }
             ],
@@ -310,12 +312,32 @@ export class Grid {
             return true;
         }
 
+        var validation_2 = function(cell, value){
+            if(value < 0 ){
+                return { result: false, message: "Vlaue should be positive" };
+            }else{
+                return true;
+            }
+        }
+
         var cellsrendererbutton = function (row, column, value) {
             //var id = $("#osy-gridEmis").jqxGrid('getrowid', row);
             if (row == 0) {
                 return '';
             }
             return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteEmis" data-id='+ row+'><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+        }
+
+        var tooltiprenderer = function (element) {
+            let id = $(element).text();
+            let tooltip = {
+                'MPEL': 'Model Period <br /> Emission Limit',
+                'MPEE': 'Model Period <br /> Exogenous Emission'
+            }
+            //console.log(id, tooltip.id, tooltip[id] );
+            $(element).parent().jqxTooltip({ position: 'mouse', content: tooltip[id] });
+
+            //$("#filmPicture1").jqxTooltip({ content: '<b>Title:</b> <i>The Amazing Spider-man</i><br /><b>Year:</b> 2012', position: 'mouse', name: 'movieTooltip'});
         }
 
         $("#osy-gridEmis").jqxGrid({
@@ -330,9 +352,11 @@ export class Grid {
             columns: [
               { text: 'EmisId', datafield: 'EmisId', hidden: true },
               { text: 'Emission name', datafield: 'Emis', width: '25%',align: 'center',cellsalign: 'left', validation:validation_1 },
-              { text: 'Description', datafield: 'Desc', width: '40%', align: 'center',cellsalign: 'left'},
-              { text: 'Unit', datafield: 'UnitId', width: '20%',  columntype: 'dropdownlist',  createeditor: ddlEditor, align: 'center',cellsalign: 'center'},
-              { text: '', datafield: 'Delete', width: '15%',  cellsrenderer: cellsrendererbutton, editable:false  },
+              { text: 'Description', datafield: 'Desc', width: '35%', align: 'center',cellsalign: 'left'},
+              { text: 'MPEL', datafield: 'MPEL', width: '10%', rendered: tooltiprenderer, align: 'center',cellsalign: 'right', cellsformat: 'n', validation:validation_2, columntype: 'numberinput'},
+              { text: 'MPEE', datafield: 'MPEE', width: '10%', rendered: tooltiprenderer, align: 'center',cellsalign: 'right', cellsformat: 'n', validation:validation_2, columntype: 'numberinput'},
+              { text: 'Unit', datafield: 'UnitId', width: '10%',  columntype: 'dropdownlist',  createeditor: ddlEditor, align: 'center',cellsalign: 'center'},
+              { text: '', datafield: 'Delete', width: '10%',  cellsrenderer: cellsrendererbutton, editable:false  },
             ]
         }); 
     }

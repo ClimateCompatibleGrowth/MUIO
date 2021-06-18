@@ -171,6 +171,14 @@ class Osemosys():
                 RT[id][tech['TechId']] = tech[id]
         return RT
 
+    def RE(self):
+        RE = {}
+        for id in self.PARAM['RE']:
+            RE[id] = {}
+            for emi in self.genData["osy-emis"]:
+                RE[id][emi['EmisId']] = emi[id]
+        return RE
+
     def RY(self, RYdata):
         RY = {}
         for param, array in RYdata.items():

@@ -4,6 +4,7 @@ export const GROUPNAMES = {
     "R": "Region",
     "T": "Technology",
     "RT": "Region & technology",
+    "RE": "Region & emission",
     "RY": "Region & year",
     "RYT": "Year & technology",
     "RYTC": "Year & technology & commodity",

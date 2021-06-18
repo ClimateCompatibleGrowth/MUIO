@@ -78,6 +78,8 @@ export class DefaultObj{
                 "EmisId": id,
                 "Emis":id,
                 "Desc": "Default emission",
+                "MPEL":0,
+                "MPEE":0,
                 "UnitId": "Ton"
             }
         ];

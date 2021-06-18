@@ -11,8 +11,8 @@ export class Model {
         this.desc = genData['osy-desc'];
         this.date = genData['osy-date'];
         this.dr = genData['osy-dr'];
-        this.dm = genData['osy-dm'];
-        this.rmpt = genData['osy-rmpt'];
+        // this.dm = genData['osy-dm'];
+        // this.rmpt = genData['osy-rmpt'];
         this.ns = genData['osy-ns'];
         this.dt = genData['osy-dt'];
         this.currency = genData['osy-currency'];
@@ -43,8 +43,8 @@ export class Model {
         this.desc = null;
         this.date = null;
         this.dr = null;
-        this.dm = null;
-        this.rmpt = null;
+        // this.dm = null;
+        // this.rmpt = null;
         this.ns = null;
         this.dt = null;
         this.currency = null;

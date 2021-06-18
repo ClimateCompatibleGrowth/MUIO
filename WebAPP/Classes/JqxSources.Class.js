@@ -40,7 +40,10 @@ export class JqxSources{
             datafields:
             [
                 { name: 'EmisId', type: 'string' },
-                { name: 'Emis', type: 'string' }
+                { name: 'Emis', type: 'string' },
+
+                { name: 'MPEL', type: 'number'},
+                { name: 'MPEE', type: 'number'}
             ],
         }
         return srcEmi;

@@ -146,8 +146,8 @@ export class Html {
         $("#osy-casename").val(model.casename);
         $("#osy-desc").val(model.desc);
         $("#osy-dr").val(model.dr);
-        $("#osy-dm").val(model.dm);
-        $("#osy-rmpt").val(model.rmpt);
+        // $("#osy-dm").val(model.dm);
+        // $("#osy-rmpt").val(model.rmpt);
         $("#osy-ns").val(model.ns);
         $("#osy-dt").val(model.dt);
 

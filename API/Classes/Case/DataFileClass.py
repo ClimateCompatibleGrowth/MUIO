@@ -122,6 +122,18 @@ class DataFile(Osemosys):
                 f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
 
+            #RE
+            re = self.RE()
+            for id, param in self.PARAM['RE'].items():
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{}{}{}'.format(emis, ':=', '\n'))
+                reString = ''
+                for emiId in emiIDs:
+                    reString += '{} '.format(re[id][emiId])
+                f.write('{}{}{}'.format('RE1 ', reString, '\n'))
+                f.write('{}{}'.format(';', '\n'))
+            f.write('{}{}'.format('', '\n'))
+
             #RY
             ry = self.RY(File.readFile(self.ryPath))
             for id, param in self.PARAM['RY'].items():
