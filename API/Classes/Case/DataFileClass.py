@@ -177,7 +177,7 @@ class DataFile(Osemosys):
             #RYT
             ryt = self.RYT(File.readFile(self.rytPath))
             for id, param in self.PARAM['RYT'].items():
-                if id != 'VC':
+                if id not in ('VC', 'TAMLL', 'TAMUL', 'TADML', 'TAIML'):
                     f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
                     f.write('{} {}'.format('[RE1,*,*]:', '\n'))
                     f.write('{}{}{}'.format( years, ':=', '\n'))

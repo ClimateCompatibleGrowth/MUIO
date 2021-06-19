@@ -237,40 +237,72 @@ PWRCOA 0 0 0 0
 PWRTRN 0 0 0 0 
 ;
 param TechnologyActivityByModeLowerLimit default 0 := 
-[RE1,*,*]: 
+[RE1,MINGAS,*,*]: 
 2019 2020 2021 2022 :=
-MINGAS 0 0 0 0 
-MINCOA 0 0 0 0 
-PWRGAS 0 0 0 0 
-PWRCOA 0 0 0 0 
-PWRTRN 0 0 0 0 
+1 0 0 0 0 
+[RE1,MINCOA,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRGAS,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRCOA,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRTRN,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
 ;
 param TechnologyActivityByModeUpperLimit default 0 := 
-[RE1,*,*]: 
+[RE1,MINGAS,*,*]: 
 2019 2020 2021 2022 :=
-MINGAS 0 0 0 0 
-MINCOA 0 0 0 0 
-PWRGAS 0 0 0 0 
-PWRCOA 0 0 0 0 
-PWRTRN 0 0 0 0 
+1 0 0 0 0 
+[RE1,MINCOA,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRGAS,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRCOA,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRTRN,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
 ;
 param TechnologyActivityDecreaseByModeLimit default 0 := 
-[RE1,*,*]: 
+[RE1,MINGAS,*,*]: 
 2019 2020 2021 2022 :=
-MINGAS 0 0 0 0 
-MINCOA 0 0 0 0 
-PWRGAS 0 0 0 0 
-PWRCOA 0 0 0 0 
-PWRTRN 0 0 0 0 
+1 0 0 0 0 
+[RE1,MINCOA,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRGAS,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRCOA,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRTRN,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
 ;
 param TechnologyActivityIncreaseByModeLimit default 0 := 
-[RE1,*,*]: 
+[RE1,MINGAS,*,*]: 
 2019 2020 2021 2022 :=
-MINGAS 0 0 0 0 
-MINCOA 0 0 0 0 
-PWRGAS 0 0 0 0 
-PWRCOA 0 0 0 0 
-PWRTRN 0 0 0 0 
+1 0 0 0 0 
+[RE1,MINCOA,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRGAS,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRCOA,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
+[RE1,PWRTRN,*,*]: 
+2019 2020 2021 2022 :=
+1 0 0 0 0 
 ;
 
 param CapacityFactor default 0 := 
