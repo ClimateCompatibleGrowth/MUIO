@@ -8,18 +8,18 @@
             "menu": 0
         }
     ],
-    "T": [
+    "RE": [
         {
-            "id": "TMPAL",
-            "value": "Total Technology Model Period Activity Lower Limit",
-            "default": 0,
+            "id": "MPEL",
+            "value": "Model Period Emission Limit",
+            "default": 999999,
             "enable": true,
             "menu": 0
         },
         {
-            "id": "TMPAU",
-            "value": "Total Technology Model Period Activity Upper Limit",
-            "default": 9999,
+            "id": "MPEE",
+            "value": "Model Period Exogenous Emission",
+            "default": 0,
             "enable": true,
             "menu": 0
         }
@@ -54,22 +54,6 @@
             "default": 0,
             "enable": true,
             "menu": 1
-        }
-    ],
-    "RE":[
-        {
-            "id": "MPEL",
-            "value": "Model Period Emission Limit",
-            "default": 0,
-            "enable": true,
-            "menu": 0
-        },
-        {
-            "id": "MPEE",
-            "value": "Model Period Exogenous Emission",
-            "default": 0,
-            "enable": true,
-            "menu": 0
         }
     ],
     "RYC": [
@@ -115,7 +99,7 @@
         {
             "id": "AEL",
             "value": "Annual Emission Limit",
-            "default": 9999,
+            "default": 999999,
             "enable": true,
             "menu": 1
         },
@@ -173,14 +157,14 @@
         {
             "id": "TAMaxC",
             "value": "Total Annual Max Capacity",
-            "default": 9999,
+            "default": 999999,
             "enable": true,
             "menu": 1
         },
         {
             "id": "TAMaxCI",
             "value": "Total Annual Max Capacity Investment",
-            "default": 9999,
+            "default": 999999,
             "enable": true,
             "menu": 1
         },
@@ -208,7 +192,7 @@
         {
             "id": "TAU",
             "value": "Total Technology Annual Activity Upper Limit",
-            "default": 9999,
+            "default": 999999,
             "enable": true,
             "menu": 1
         },
@@ -243,7 +227,7 @@
         {
             "id": "TAMUL",
             "value": "Technology Activity By Mode Upper Limit",
-            "default": 0,
+            "default": 999999,
             "enable": true,
             "menu": 1
         },
@@ -303,6 +287,22 @@
             "default": 0.0104,
             "enable": true,
             "menu": 1
+        }
+    ],
+    "T": [
+        {
+            "id": "TMPAL",
+            "value": "Total Technology Model Period Activity Lower Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 0
+        },
+        {
+            "id": "TMPAU",
+            "value": "Total Technology Model Period Activity Upper Limit",
+            "default": 999999,
+            "enable": true,
+            "menu": 0
         }
     ]
 }

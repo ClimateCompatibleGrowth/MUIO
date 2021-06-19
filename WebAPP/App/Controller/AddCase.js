@@ -236,7 +236,7 @@ export default class AddCase {
             var desc = $( "#osy-desc" ).val();
             var date = $( "#osy-date" ).val();
             var currency = $( "#osy-currency" ).val();
-            var dr = $( "#osy-dr" ).val();
+            var dr = $( "#osy-dr" ).val()/100;
             // var dm = $( "#osy-dm" ).val();
             // var rmpt = $( "#osy-rmpt" ).val();
             var ns = $( "#osy-ns" ).val();

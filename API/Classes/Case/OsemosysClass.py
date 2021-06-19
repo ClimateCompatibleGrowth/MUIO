@@ -37,6 +37,13 @@ class Osemosys():
             d[k] = tmp
         self.PARAM = d
 
+    def getParamDefaultValues(self):
+        d = {}
+        for k, l in self.PARAMETERS.items():
+            for de in l:
+                d[de['id']] = de['default']
+        return d
+
     def keys_exists(self, element, *keys):
         '''
         Check if *keys (nested) exists in `element` (dict).

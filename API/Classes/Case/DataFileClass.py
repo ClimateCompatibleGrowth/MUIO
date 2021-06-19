@@ -15,6 +15,7 @@ class DataFile(Osemosys):
 
     def generateDatafile( self ):
         try:
+            defaultValue = self.getParamDefaultValues()
             emiIDs = self.getEmiIds()
             techIDs = self.getTechIds()
             commIDs = self.getCommIds()
@@ -87,10 +88,15 @@ class DataFile(Osemosys):
             # f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
             # f.write('{:<50}{}'.format('', '\n'))
 
+            #trade route hard code
+            f.write('{} {} {} {} {} {}'.format('param', 'TradeRoute ','default', '0', ':=','\n'))
+            f.write('{} {}'.format(';', '\n'))
+            f.write('{} {}'.format('', '\n'))
+
             #R
             r = self.R()
             for id, param in self.PARAM['R'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
                 f.write('{} {} {}'.format('RE1', r[id], '\n'))
                 f.write('{} {}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
@@ -101,7 +107,7 @@ class DataFile(Osemosys):
             #T
             t = self.T()
             for id, param in self.PARAM['T'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
                 f.write('{}{}{}'.format( techs, ':=', '\n'))
                 rtString = ''
                 for techId in techIDs:
@@ -113,7 +119,7 @@ class DataFile(Osemosys):
             #RT
             rt = self.RT()
             for id, param in self.PARAM['RT'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
                 f.write('{}{}{}'.format(techs, ':=', '\n'))
                 rtString = ''
                 for techId in techIDs:
@@ -125,7 +131,7 @@ class DataFile(Osemosys):
             #RE
             re = self.RE()
             for id, param in self.PARAM['RE'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
                 f.write('{}{}{}'.format(emis, ':=', '\n'))
                 reString = ''
                 for emiId in emiIDs:
@@ -137,7 +143,7 @@ class DataFile(Osemosys):
             #RY
             ry = self.RY(File.readFile(self.ryPath))
             for id, param in self.PARAM['RY'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
                 f.write('{}{}{}'.format(years, ':=', '\n'))
                 ryString = ''
                 for yearId in yearIDs:
@@ -149,7 +155,7 @@ class DataFile(Osemosys):
             #RYC
             ryc = self.RYC(File.readFile(self.rycPath))
             for id, param in self.PARAM['RYC'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
                 f.write('{} {}'.format('[RE1,*,*]:', '\n'))
                 f.write('{}{}{}'.format(years, ':=', '\n'))
                 for commId in commIDs:
@@ -163,7 +169,7 @@ class DataFile(Osemosys):
             #RYE 
             rye = self.RYE(File.readFile(self.ryePath))
             for id, param in self.PARAM['RYE'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
                 f.write('{} {}'.format('[RE1,*,*]:', '\n'))
                 f.write('{}{}{}'.format( years, ':=', '\n'))
                 for emiId in emiIDs:
@@ -178,7 +184,7 @@ class DataFile(Osemosys):
             ryt = self.RYT(File.readFile(self.rytPath))
             for id, param in self.PARAM['RYT'].items():
                 if id not in ('VC', 'TAMLL', 'TAMUL', 'TADML', 'TAIML'):
-                    f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                    f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
                     f.write('{} {}'.format('[RE1,*,*]:', '\n'))
                     f.write('{}{}{}'.format( years, ':=', '\n'))
                     for techId in techIDs:
@@ -188,7 +194,7 @@ class DataFile(Osemosys):
                         f.write('{} {}{}'.format(techMap[techId], rytString, '\n'))
                     f.write('{}{}'.format(';', '\n'))
                 else:
-                    f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                    f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
                     for techId in techIDs:
                         f.write('{} {}'.format('[RE1,'+ techMap[techId] +',*,*]:', '\n'))
                         f.write('{}{}{}'.format(years, ':=', '\n'))
@@ -202,7 +208,7 @@ class DataFile(Osemosys):
             #RYTTs
             rytts = self.RYTTs(File.readFile(self.ryttsPath))
             for id, param in self.PARAM['RYTTs'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
  
                 for techId in techIDs:
                     f.write('{} {}'.format('[RE1,'+ techMap[techId] +',*,*]:', '\n'))
@@ -218,7 +224,7 @@ class DataFile(Osemosys):
             #RYCTs
             rycts = self.RYCTs(File.readFile(self.ryctsPath))
             for id, param in self.PARAM['RYCTs'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
  
                 for commId in commIDs:
                     f.write('{} {}'.format('[RE1,'+ commMap[commId] +',*,*]:', '\n'))
@@ -234,7 +240,7 @@ class DataFile(Osemosys):
             #RYTs
             ryts = self.RYTs(File.readFile(self.rytsPath))
             for id, param in self.PARAM['RYTs'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
                 f.write('{}{}{}'.format( years, ':=', '\n'))
                 for timesliceId in timesliceIDs:
                     rytsString = ''
@@ -247,7 +253,7 @@ class DataFile(Osemosys):
             #RYTC
             rytc = self.RYTC(File.readFile(self.rytcPath))
             for id, param in self.PARAM['RYTC'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
                 for activityTechId in activityTechIDs[id]:
                     for activityCommId in activityCommIDs[id][activityTechId]:
                         f.write('{}{}'.format('[RE1,'+ techMap[activityTechId] + ','+ commMap[activityCommId] +',*,*]:', '\n'))
@@ -263,7 +269,7 @@ class DataFile(Osemosys):
             #RYTE
             ryte = self.RYTE(File.readFile(self.rytePath))
             for id, param in self.PARAM['RYTE'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', '0', ':=','\n'))
+                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
                 for emissionTechId in emissionTechIDs[id]:
                     for activityEmissionId in activityEmissionIDs[id][emissionTechId]:
                         f.write('{}{}'.format('[RE1,'+ techMap[emissionTechId] +  ','+ emiMap[activityEmissionId] + ',*,*]:', '\n'))

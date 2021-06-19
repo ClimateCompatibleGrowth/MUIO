@@ -40,7 +40,7 @@ export class DefaultObj{
                 "OAR": emptyArray,
                 "EAR": emptyArray,
                 "TMPAL":0,
-                "TMPAU":9999,
+                "TMPAU":999999,
                 "CAU": 0,
                 "OL": 1
             }
@@ -78,7 +78,7 @@ export class DefaultObj{
                 "EmisId": id,
                 "Emis":id,
                 "Desc": "Default emission",
-                "MPEL":0,
+                "MPEL":999999,
                 "MPEE":0,
                 "UnitId": "Ton"
             }

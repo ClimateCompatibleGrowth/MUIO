@@ -145,7 +145,7 @@ export class Html {
         $("#osy-date").datepicker().datepicker("setDate", model.date);
         $("#osy-casename").val(model.casename);
         $("#osy-desc").val(model.desc);
-        $("#osy-dr").val(model.dr);
+        $("#osy-dr").val(model.dr*100);
         // $("#osy-dm").val(model.dm);
         // $("#osy-rmpt").val(model.rmpt);
         $("#osy-ns").val(model.ns);

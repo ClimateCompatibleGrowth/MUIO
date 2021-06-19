@@ -4,7 +4,7 @@
     "osy-desc": "CLEWs demo model",
     "osy-date": "06/17/2021",
     "osy-currency": "USD",
-    "osy-dr": "5",
+    "osy-dr": 0.05,
     "osy-ns": "1",
     "osy-dt": "1",
     "osy-tech": [
@@ -18,7 +18,7 @@
             ],
             "OL": 30,
             "TMPAL": 0,
-            "TMPAU": 9999,
+            "TMPAU": 999999,
             "Tech": "MINGAS",
             "TechId": "TEC_0"
         },
@@ -32,7 +32,7 @@
             ],
             "OL": 50,
             "TMPAL": 0,
-            "TMPAU": 9999,
+            "TMPAU": 999999,
             "Tech": "MINCOA",
             "TechId": "TEC_qf29a"
         },
@@ -48,7 +48,7 @@
             ],
             "OL": 1,
             "TMPAL": 0,
-            "TMPAU": 9999,
+            "TMPAU": 999999,
             "Tech": "PWRGAS",
             "TechId": "TEC_s8wdv"
         },
@@ -64,7 +64,7 @@
             ],
             "OL": 1,
             "TMPAL": 0,
-            "TMPAU": 9999,
+            "TMPAU": 999999,
             "Tech": "PWRCOA",
             "TechId": "TEC_uxqgd"
         },
@@ -80,7 +80,7 @@
             ],
             "OL": 1,
             "TMPAL": 0,
-            "TMPAU": 9999,
+            "TMPAU": 999999,
             "Tech": "PWRTRN",
             "TechId": "TEC_fw406"
         }
@@ -116,7 +116,7 @@
             "EmisId": "EMI_0",
             "Emis": "CO2",
             "Desc": "Carbon dioxide",
-            "MPEL": 0,
+            "MPEL": 999999,
             "MPEE": 0,
             "UnitId": "Ton"
         }

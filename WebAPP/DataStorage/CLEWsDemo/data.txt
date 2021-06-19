@@ -13,31 +13,34 @@ set TIMESLICE := S11 ;
 ####################
 #Parameters#
 ####################
-param DiscountRate default 0 := 
-RE1 5 
+param TradeRoute  default 0 := 
+; 
+ 
+param DiscountRate default 0.05 := 
+RE1 0.05 
 ; 
 
 param TotalTechnologyModelPeriodActivityLowerLimit default 0 : 
 MINGAS MINCOA PWRGAS PWRCOA PWRTRN :=
 RE1  0 0 0 0 0 
 ;
-param TotalTechnologyModelPeriodActivityUpperLimit default 0 : 
+param TotalTechnologyModelPeriodActivityUpperLimit default 999999 : 
 MINGAS MINCOA PWRGAS PWRCOA PWRTRN :=
-RE1  9999 9999 9999 9999 9999 
+RE1  999999 999999 999999 999999 999999 
 ;
 
 param CapacityToActivityUnit default 0 : 
 MINGAS MINCOA PWRGAS PWRCOA PWRTRN :=
 RE1 1 1 31.53 31.53 31.53 
 ;
-param OperationalLife default 0 : 
+param OperationalLife default 1 : 
 MINGAS MINCOA PWRGAS PWRCOA PWRTRN :=
 RE1 30 50 1 1 1 
 ;
 
-param ModelPeriodEmissionLimit default 0 : 
+param ModelPeriodEmissionLimit default 999999 : 
 CO2 :=
-RE1 0 
+RE1 999999 
 ;
 param ModelPeriodExogenousEmission default 0 : 
 CO2 :=
@@ -86,10 +89,10 @@ ELC001 0 0 0 0
 ELC002 0 0 0 0 
 ;
 
-param AnnualEmissionLimit default 0 := 
+param AnnualEmissionLimit default 999999 := 
 [RE1,*,*]: 
 2019 2020 2021 2022 :=
-CO2 9999 9999 9999 9999 
+CO2 999999 999999 999999 999999 
 ;
 param EmissionsPenalty default 0 := 
 [RE1,*,*]: 
@@ -102,7 +105,7 @@ param AnnualExogenousEmission default 0 :=
 CO2 0 0 0 0 
 ;
 
-param VariableCost default 0 := 
+param VariableCost default 0.0001 := 
 [RE1,MINGAS,*,*]: 
 2019 2020 2021 2022 :=
 1 0.0001 0.0001 0.0001 0.0001 
@@ -119,7 +122,7 @@ param VariableCost default 0 :=
 2019 2020 2021 2022 :=
 1 0.0001 0.0001 0.0001 0.0001 
 ;
-param AvailabilityFactor default 0 := 
+param AvailabilityFactor default 1 := 
 [RE1,*,*]: 
 2019 2020 2021 2022 :=
 MINGAS 1 1 1 1 
@@ -128,7 +131,7 @@ PWRGAS 1 1 1 1
 PWRCOA 1 1 1 1 
 PWRTRN 1 1 1 1 
 ;
-param CapitalCost default 0 := 
+param CapitalCost default 0.0001 := 
 [RE1,*,*]: 
 2019 2020 2021 2022 :=
 MINGAS 0.0001 0.0001 0.0001 0.0001 
@@ -155,23 +158,23 @@ PWRGAS 0 0 0 0
 PWRCOA 0 0 0 0 
 PWRTRN 0 0 0 0 
 ;
-param TotalAnnualMaxCapacity default 0 := 
+param TotalAnnualMaxCapacity default 999999 := 
 [RE1,*,*]: 
 2019 2020 2021 2022 :=
-MINGAS 9999 9999 9999 9999 
-MINCOA 9999 9999 9999 9999 
-PWRGAS 9999 9999 9999 9999 
-PWRCOA 9999 9999 9999 9999 
-PWRTRN 9999 9999 9999 9999 
+MINGAS 999999 999999 999999 999999 
+MINCOA 999999 999999 999999 999999 
+PWRGAS 999999 999999 999999 999999 
+PWRCOA 999999 999999 999999 999999 
+PWRTRN 999999 999999 999999 999999 
 ;
-param TotalAnnualMaxCapacityInvestment default 0 := 
+param TotalAnnualMaxCapacityInvestment default 999999 := 
 [RE1,*,*]: 
 2019 2020 2021 2022 :=
-MINGAS 9999 9999 9999 9999 
-MINCOA 9999 9999 9999 9999 
-PWRGAS 9999 9999 9999 9999 
-PWRCOA 9999 9999 9999 9999 
-PWRTRN 9999 9999 9999 9999 
+MINGAS 999999 999999 999999 999999 
+MINCOA 999999 999999 999999 999999 
+PWRGAS 999999 999999 999999 999999 
+PWRCOA 999999 999999 999999 999999 
+PWRTRN 999999 999999 999999 999999 
 ;
 param TotalAnnualMinCapacity default 0 := 
 [RE1,*,*]: 
@@ -200,14 +203,14 @@ PWRGAS 0 0 0 0
 PWRCOA 0 0 0 0 
 PWRTRN 0 0 0 0 
 ;
-param TotalTechnologyAnnualActivityUpperLimit default 0 := 
+param TotalTechnologyAnnualActivityUpperLimit default 999999 := 
 [RE1,*,*]: 
 2019 2020 2021 2022 :=
-MINGAS 9999 9999 9999 9999 
-MINCOA 9999 9999 9999 9999 
-PWRGAS 9999 9999 9999 9999 
-PWRCOA 9999 9999 9999 9999 
-PWRTRN 9999 9999 9999 9999 
+MINGAS 999999 999999 999999 999999 
+MINCOA 999999 999999 999999 999999 
+PWRGAS 999999 999999 999999 999999 
+PWRCOA 999999 999999 999999 999999 
+PWRTRN 999999 999999 999999 999999 
 ;
 param ReserveMarginTagTechnology default 0 := 
 [RE1,*,*]: 
@@ -253,22 +256,22 @@ param TechnologyActivityByModeLowerLimit default 0 :=
 2019 2020 2021 2022 :=
 1 0 0 0 0 
 ;
-param TechnologyActivityByModeUpperLimit default 0 := 
+param TechnologyActivityByModeUpperLimit default 999999 := 
 [RE1,MINGAS,*,*]: 
 2019 2020 2021 2022 :=
-1 0 0 0 0 
+1 999999 999999 999999 999999 
 [RE1,MINCOA,*,*]: 
 2019 2020 2021 2022 :=
-1 0 0 0 0 
+1 999999 999999 999999 999999 
 [RE1,PWRGAS,*,*]: 
 2019 2020 2021 2022 :=
-1 0 0 0 0 
+1 999999 999999 999999 999999 
 [RE1,PWRCOA,*,*]: 
 2019 2020 2021 2022 :=
-1 0 0 0 0 
+1 999999 999999 999999 999999 
 [RE1,PWRTRN,*,*]: 
 2019 2020 2021 2022 :=
-1 0 0 0 0 
+1 999999 999999 999999 999999 
 ;
 param TechnologyActivityDecreaseByModeLimit default 0 := 
 [RE1,MINGAS,*,*]: 
@@ -305,7 +308,7 @@ param TechnologyActivityIncreaseByModeLimit default 0 :=
 1 0 0 0 0 
 ;
 
-param CapacityFactor default 0 := 
+param CapacityFactor default 1 := 
 [RE1,MINGAS,*,*]: 
 2019 2020 2021 2022 :=
 S11 1 1 1 1 
@@ -338,7 +341,7 @@ S11 0 0 0 0
 S11 0 0 0 0 
 ;
 
-param YearSplit default 0 : 
+param YearSplit default 0.0104 : 
 2019 2020 2021 2022 :=
 S11 0.0104 0.0104 0.0104 0.0104 
 ;
