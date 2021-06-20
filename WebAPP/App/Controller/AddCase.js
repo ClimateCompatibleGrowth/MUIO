@@ -42,7 +42,7 @@ export default class AddCase {
         Grid.commGrid(model.commodities);
         //Grid.techsGrid(model.srcTech, model.srcComm);
         Grid.emisGrid(model.emissions);
-        //Grid.scenarioGrid(model.scenarios);
+        Grid.scenarioGrid(model.scenarios);
 
         // model.srcTech = JqxSources.srcTech(model.techs);
         // model.srcComm = JqxSources.srcComm(model.commodities);
@@ -221,16 +221,16 @@ export default class AddCase {
                 EMIS.push(tmp);
             });
 
-            // let scenarioData = $('#osy-gridScenario').jqxGrid('getrows');
-            // let SCENARIOS = [];
-            // $.each(scenarioData, function (index, value) {
-            //     let tmp = {};
-            //     tmp.ScenarioId = value.ScenarioId;
-            //     //tmp[value.ScenarioId] = value.Scenario;
-            //     tmp.Scenario = value.Scenario;
-            //     tmp.Desc = value.Desc;
-            //     SCENARIOS.push(tmp);
-            // });
+            let scenarioData = $('#osy-gridScenario').jqxGrid('getrows');
+            let SCENARIOS = [];
+            $.each(scenarioData, function (index, value) {
+                let tmp = {};
+                tmp.ScenarioId = value.ScenarioId;
+                //tmp[value.ScenarioId] = value.Scenario;
+                tmp.Scenario = value.Scenario;
+                tmp.Desc = value.Desc;
+                SCENARIOS.push(tmp);
+            });
 
             var casename = $( "#osy-casename" ).val();
             var desc = $( "#osy-desc" ).val();
@@ -261,7 +261,7 @@ export default class AddCase {
                 "osy-tech": TECH,
                 "osy-comm": COMM,
                 "osy-emis": EMIS,
-                //"osy-scenarios": SCENARIOS,
+                "osy-scenarios": SCENARIOS,
                 "osy-years": years
             }
 
@@ -403,36 +403,36 @@ export default class AddCase {
             }
         });
 
-        // $("#osy-addScenario").off('click');
-        // $("#osy-addScenario").on("click", function(event) {
-        //     event.preventDefault();
-        //     event.stopImmediatePropagation();
-        //     let defaultSc = DefaultObj.defaultScenario();
-        //     //model.scenarios.push(JSON.parse(JSON.stringify(defaultSc[0])));
-        //     $("#osy-gridScenario").jqxGrid('addrow', null, defaultSc);
-        //     model.scenariosCount++;
-        //     $("#scenariosCount").text(model.scenariosCount);
-        //     $('#osy-gridScenario').jqxGrid('refresh');
-        // });
+        $("#osy-addScenario").off('click');
+        $("#osy-addScenario").on("click", function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultSc = DefaultObj.defaultScenario();
+            //model.scenarios.push(JSON.parse(JSON.stringify(defaultSc[0])));
+            $("#osy-gridScenario").jqxGrid('addrow', null, defaultSc);
+            model.scenariosCount++;
+            $("#scenariosCount").text(model.scenariosCount);
+            $('#osy-gridScenario').jqxGrid('refresh');
+        });
 
-        // $(document).undelegate(".deleteScenario","click");
-        // $(document).delegate(".deleteScenario","click",function(e){
-        //     e.preventDefault();
-        //     e.stopImmediatePropagation();
-        //     var id = $(this).attr('data-id');
-        //     if(id!=0){
-        //         var emisId = $('#osy-gridScenario').jqxGrid('getcellvalue', id, 'ScenarioId');
-        //         //izbrisi red u aabeli
-        //         var rowid = $('#osy-gridScenario').jqxGrid('getrowid', id);
-        //         //console.log('rowid ', rowid)
+        $(document).undelegate(".deleteScenario","click");
+        $(document).delegate(".deleteScenario","click",function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            if(id!=0){
+                var emisId = $('#osy-gridScenario').jqxGrid('getcellvalue', id, 'ScenarioId');
+                //izbrisi red u aabeli
+                var rowid = $('#osy-gridScenario').jqxGrid('getrowid', id);
+                //console.log('rowid ', rowid)
 
-        //         $("#osy-gridScenario").jqxGrid('deleterow', rowid);
-        //         //smanji counter za broj emisjia i update html
-        //         model.scenariosCount--;
-        //         $("#scenariosCount").text(model.scenariosCount);
+                $("#osy-gridScenario").jqxGrid('deleterow', rowid);
+                //smanji counter za broj emisjia i update html
+                model.scenariosCount--;
+                $("#scenariosCount").text(model.scenariosCount);
 
-        //     }
-        // });
+            }
+        });
 
         $(".nav-tabs li a").off('click');
         $('.nav-tabs li a').on("click", function(event, ui) { 
