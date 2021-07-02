@@ -113,6 +113,48 @@ export const DEF = {
             </article>
         `
     },
+    R: {
+        title: `Region parameters`,
+        definition: 
+        `
+        <article class="col-xs-12 col-sm-12">
+            
+            <div class="jarviswidget" id="wid-id-5" 
+                data-widget-colorbutton="false"	
+                data-widget-editbutton="false" 
+                data-widget-togglebutton="false" 
+                data-widget-deletebutton="false" 
+                data-widget-fullscreenbutton="false" 
+                data-widget-custombutton="false" 
+                data-widget-collapsed="false" 
+                data-widget-sortable="false">
+                <header>
+                    <h2>Global parameters</h2>				
+                </header>
+                <div>
+                    <div class="widget-body no-padding">
+                        <div class="table-responsive no-margin custom-scroll" >             
+                            <table class="table highlight table-border-0 table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th class="hidden-xs" colspan="2">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="v-align-m">DiscountRate[r]</td>
+                                        <td class="hidden-xs">Region specific value for the discount rate, expressed in decimals (e.g. 0.05)</td>
+                                    </tr>													
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </article>       
+        `
+    },
     RY: {
         title: `Year parameter`,
         definition: 
@@ -146,6 +188,135 @@ export const DEF = {
                                         <td class="v-align-m">ReserveMargin[r,y]</td>
                                         <td class="hidden-xs">Minimum level of the reserve margin required to be provided for all the tagged commodities, by the tagged technologies. If no reserve margin is required, the parameter will have value 1; if, for instance, 20% reserve margin is required, the parameter will have value 1.2.</td>
                                     </tr>													
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </article>       
+        `
+    },
+    RT: {
+        title: `Technology parameter`,
+        definition: 
+        `
+        <article class="col-xs-12 col-sm-12">
+            
+            <div class="jarviswidget" id="wid-id-5" 
+                data-widget-colorbutton="false"	
+                data-widget-editbutton="false" 
+                data-widget-togglebutton="false" 
+                data-widget-deletebutton="false" 
+                data-widget-fullscreenbutton="false" 
+                data-widget-custombutton="false" 
+                data-widget-collapsed="false" 
+                data-widget-sortable="false">
+                <header>
+                    <h2>Activity constraints</h2>				
+                </header>
+                <div>
+                    <div class="widget-body no-padding">
+                        <div class="table-responsive no-margin custom-scroll" >             
+                            <table class="table highlight table-border-0 table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th class="hidden-xs" colspan="2">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="v-align-m">TotalTechnologyModelPeriodActivityUpperLimit[r,t]</td>
+                                        <td class="hidden-xs">Total maximum level of activity allowed for a technology in the entire modelled period.</td>
+                                    </tr>	
+                                    <tr>
+                                        <td class="v-align-m">TotalTechnologyModelPeriodActivityLowerLimit[r,t]</td>
+                                        <td class="hidden-xs">Total minimum level of activity allowed for a technology in the entire modelled period.</td>
+                                    </tr>												
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+            <div class="jarviswidget" id="wid-id-5" 
+                data-widget-colorbutton="false"	
+                data-widget-editbutton="false" 
+                data-widget-togglebutton="false" 
+                data-widget-deletebutton="false" 
+                data-widget-fullscreenbutton="false" 
+                data-widget-custombutton="false" 
+                data-widget-collapsed="false" 
+                data-widget-sortable="false">
+                <header>
+                    <h2>Performance</h2>				
+                </header>
+                <div>
+                    <div class="widget-body no-padding">
+                        <div class="table-responsive no-margin custom-scroll" >             
+                            <table class="table highlight table-border-0 table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th class="hidden-xs" colspan="2">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="v-align-m">CapacityToActivityUnit[r,t]</td>
+                                        <td class="hidden-xs">Conversion factor relating the energy that would be produced when one unit of capacity is fully used in one year.</td>
+                                    </tr>	
+                                    <tr>
+                                        <td class="v-align-m">OperationalLife[r,t]</td>
+                                        <td class="hidden-xs">Useful lifetime of a technology, expressed in years.</td>
+                                    </tr>												
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </article>       
+        `
+    },
+    RE: {
+        title: `Emission parameter`,
+        definition: 
+        `
+        <article class="col-xs-12 col-sm-12">
+            
+            <div class="jarviswidget" id="wid-id-5" 
+                data-widget-colorbutton="false"	
+                data-widget-editbutton="false" 
+                data-widget-togglebutton="false" 
+                data-widget-deletebutton="false" 
+                data-widget-fullscreenbutton="false" 
+                data-widget-custombutton="false" 
+                data-widget-collapsed="false" 
+                data-widget-sortable="false">
+                <header>
+                    <h2>Emissions</h2>				
+                </header>
+                <div>
+                    <div class="widget-body no-padding">
+                        <div class="table-responsive no-margin custom-scroll" >             
+                            <table class="table highlight table-border-0 table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th class="hidden-xs" colspan="2">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="v-align-m">ModelPeriodExogenousEmission[r,e]</td>
+                                        <td class="hidden-xs">It allows the user to account for additional emissions over the entire modelled period, on top of those computed endogenously by the model (e.g. generated outside the region).</td>
+                                    </tr>	
+                                    <tr>
+                                        <td class="v-align-m">ModelPeriodEmissionLimit[r,e]</td>
+                                        <td class="hidden-xs">Annual upper limit for a specific emission generated in the whole modelled region, over the entire modelled period.</td>
+                                    </tr>												
                                 </tbody>
                             </table>
                         </div>

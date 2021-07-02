@@ -5,39 +5,7 @@
             "value": "Discount Rate",
             "default": 0.05,
             "enable": true,
-            "menu": 0
-        }
-    ],
-    "T": [
-        {
-            "id": "TMPAL",
-            "value": "Total Technology Model Period Activity Lower Limit",
-            "default": 0,
-            "enable": true,
-            "menu": 0
-        },
-        {
-            "id": "TMPAU",
-            "value": "Total Technology Model Period Activity Upper Limit",
-            "default": 9999,
-            "enable": true,
-            "menu": 0
-        }
-    ],
-    "RT": [
-        {
-            "id": "CAU",
-            "value": "Capacity To Activity Unit",
-            "default": 0,
-            "enable": true,
-            "menu": 0
-        },
-        {
-            "id": "OL",
-            "value": "Operational Life",
-            "default": 1,
-            "enable": true,
-            "menu": 0
+            "menu": 1
         }
     ],
     "RY": [
@@ -56,80 +24,57 @@
             "menu": 1
         }
     ],
-    "RE":[
+    "RT": [
+        {
+            "id": "CAU",
+            "value": "Capacity To Activity Unit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "OL",
+            "value": "Operational Life",
+            "default": 1,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TMPAL",
+            "value": "Total Technology Model Period Activity Lower Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TMPAU",
+            "value": "Total Technology Model Period Activity Upper Limit",
+            "default": 999999,
+            "enable": true,
+            "menu": 1
+        }
+    ],
+    "RE": [
         {
             "id": "MPEL",
             "value": "Model Period Emission Limit",
-            "default": 0,
+            "default": 999999,
             "enable": true,
-            "menu": 0
+            "menu": 1
         },
         {
             "id": "MPEE",
             "value": "Model Period Exogenous Emission",
             "default": 0,
             "enable": true,
-            "menu": 0
-        }
-    ],
-    "RYC": [
-        {
-            "id": "AAD",
-            "value": "Accumulated Annual Demand",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "SAD",
-            "value": "Specified Annual Demand",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "RTF",
-            "value": "RE Tag Fuel",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "RMTF",
-            "value": "Reserve Margin Tag Fuel",
-            "default": 0,
-            "enable": true,
             "menu": 1
         }
     ],
-    "RYCTs": [
+    "RYTs": [
         {
-            "id": "SDP",
-            "value": "Specified Demand Profile",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        }
-    ],
-    "RYE": [
-        {
-            "id": "AEL",
-            "value": "Annual Emission Limit",
-            "default": 9999,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "EP",
-            "value": "Emissions Penalty",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "AEE",
-            "value": "Annual Exogenous Emission",
-            "default": 0,
+            "id": "YS",
+            "value": "Year Split",
+            "default": 0.0104,
             "enable": true,
             "menu": 1
         }
@@ -173,14 +118,14 @@
         {
             "id": "TAMaxC",
             "value": "Total Annual Max Capacity",
-            "default": 9999,
+            "default": 999999,
             "enable": true,
             "menu": 1
         },
         {
             "id": "TAMaxCI",
             "value": "Total Annual Max Capacity Investment",
-            "default": 9999,
+            "default": 999999,
             "enable": true,
             "menu": 1
         },
@@ -208,7 +153,7 @@
         {
             "id": "TAU",
             "value": "Total Technology Annual Activity Upper Limit",
-            "default": 9999,
+            "default": 999999,
             "enable": true,
             "menu": 1
         },
@@ -243,7 +188,7 @@
         {
             "id": "TAMUL",
             "value": "Technology Activity By Mode Upper Limit",
-            "default": 0,
+            "default": 999999,
             "enable": true,
             "menu": 1
         },
@@ -257,6 +202,59 @@
         {
             "id": "TAIML",
             "value": "Technology Activity Increase By Mode Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        }
+    ],
+    "RYC": [
+        {
+            "id": "AAD",
+            "value": "Accumulated Annual Demand",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "SAD",
+            "value": "Specified Annual Demand",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "RTF",
+            "value": "RE Tag Fuel",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "RMTF",
+            "value": "Reserve Margin Tag Fuel",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        }
+    ],
+    "RYE": [
+        {
+            "id": "AEL",
+            "value": "Annual Emission Limit",
+            "default": 999999,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "EP",
+            "value": "Emissions Penalty",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "AEE",
+            "value": "Annual Exogenous Emission",
             "default": 0,
             "enable": true,
             "menu": 1
@@ -296,11 +294,11 @@
             "menu": 1
         }
     ],
-    "RYTs": [
+    "RYCTs": [
         {
-            "id": "YS",
-            "value": "Year Split",
-            "default": 0.0104,
+            "id": "SDP",
+            "value": "Specified Demand Profile",
+            "default": 0,
             "enable": true,
             "menu": 1
         }

@@ -3,15 +3,16 @@ export class Chart {
         let theme = "bootstrap";
         return theme
     }
-    static Chart($div, dataAdapter, unit, series ) {
+    static Chart($div, dataAdapter, unit, series, dataField='Year' ) {
 
         var settings = {
             title: "",
             description: "",
             theme: this.theme(),
+            //legendLayout: { left: 45, bottom: 10, width: '100%', height: 200, flow: 'horizontal' },
             enableAnimations: true,
             showLegend: true,
-            padding: { left: 10, top: 5, right: 10, bottom: 5 },
+            padding: { left: 5, top: 5, right: 5, bottom: 5 },
             titlePadding: { left: 10, top: 0, right: 0, bottom: 10 },
             source: dataAdapter,
             enableCrosshairs: true,
@@ -21,14 +22,35 @@ export class Chart {
             borderLineColor: 'transparent',
             xAxis:
             {
-                dataField: 'Year',
+                dataField: dataField,
+                displayField: 'Tech',
                 type: 'basic',
+                visible: true,
                 valuesOnTicks: true,
                 labels: 'Years',
+                                // {
+                //     formatFunction: function (value) {
+                //         return value.getDate();
+                //     }
+                // }
                 // {
                 //     formatFunction: function (value) {
                 //         return value.getDate();
                 //     }
+                // }
+                // minValue: 2000,
+                // maxValue: 2020,
+                // //gridLinesInterval: 24, 
+                // flip: false,
+                // //valuesOnTicks: true,
+                // rangeSelector: {
+                //     serieType: 'line',
+                //     unitInterval: 2,
+                //     padding: { /*left: 0, right: 0,*/ top: 10, bottom: 0 },
+                //     // Uncomment the line below to render the selector in a separate container
+                //     //renderTo: $('#selectorContainer'),
+                //     //backgroundColor: "#E1E1E6",
+                //     size: 55,
                 // }
             },
             valueAxis:

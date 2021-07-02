@@ -18,6 +18,7 @@ import { Sidebar } from "../../App/Controller/Sidebar.js";
 
 Osemosys.getParamFile()
     .then(PARAMETERS =>{
+        //console.log('PARAMETERS ', PARAMETERS)
         Sidebar.Load(PARAMETERS);
         crossroads.addRoute('/', function() {
             $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');

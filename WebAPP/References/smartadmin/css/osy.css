@@ -267,3 +267,71 @@ top: 10px;
     padding-right:  -16px!important;
     padding-left:  -16px!important;
   }
+
+  /*scenario cells*/
+    .SC_1 {
+        background-color: #ffe6e6;
+    }
+    .SC_2 {
+        background-color: #e6ffe6;
+    }
+    .SC_3 {
+        background-color: #e6eeff;
+    }
+    .SC_4 {
+        background-color: #ffffe6;
+    }
+    .SC_5 {
+        background-color: #f2e6ff;
+    }
+
+    .SC_6 {
+        background-color: #e6faff;
+    }
+    .SC_7 {
+        background-color: #f7ffe6;
+    }
+    .SC_8 {
+        background-color: #faebf5;
+    }
+    .SC_9 {
+        background-color: #e6ffff;
+    }
+    .SC_10 {
+        background-color: #f0f0f5;
+    }
+
+
+
+    .jarviswidget {
+        margin: 0 0 10px!important;
+    }
+
+    /*sortable za dispatch order*/
+    #osy-scOrder {
+        margin: 2px;
+        padding: 4px;
+        float: left;
+        width: 400px;
+        /*border: var(--main-color) !important; solid 1px;*/
+        
+    }
+    #osy-scOrder div {
+        border-radius: 5px;
+        padding: 4px;
+        cursor: pointer;
+        background-color: white;
+        color: black;
+        border: 1px solid transparent;
+    }
+    #osy-scOrder div:hover {
+        border: 1px solid var(--second-color) !important;
+        background-color: var(--second-color)!important;
+        color: #fff!important;
+    }
+    .sortable-item{
+        color:var(--main-color)!important;
+        border: 1px solid #d9d9d9!important;
+        border-radius: 0px!important;
+        margin-bottom: 5px!important;
+    }

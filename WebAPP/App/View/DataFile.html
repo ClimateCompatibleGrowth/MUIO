@@ -20,16 +20,16 @@
                     <div class="col-sm-12">
                         <div class="form-inline">
 
+                            <div class="input-group" id='scCommand' style="display: none;">                    
+                                <a data-toggle="modal" id='osy-btnScOrder' href="#osy-order" class="btn btn-info hidden-mobile">
+                                    <i class="fa fa-sort"></i> Scenario order
+                                </a>
+                            </div>
                             <div class="input-group">
-                                <button id="osy-generateDataFile" class="btn btn btn-info"  style="display: none;">
-                                    Generate Data File <i class="fa fa-cogs icon-2x"></i>
+                                <button id="osy-generateDataFile" class="btn btn btn-warning"  style="margin-right: 20px;">
+                                    <i class="fa fa-cogs"></i> Generate Data File 
                                 </button>
-
-                    
-
-                                <!-- <button id="osy-downloadDataFile" class="btn btn btn-default" style="display: none;">
-                                     Download Data File <i class="fa fa-download"></i>
-                                </button> -->
+       
                             </div>
                             <div class="input-group" id='osy-solver' style="display: none;">
                                 <div class="smart-form">
@@ -45,20 +45,15 @@
                             </div>
                             <div class="input-group">
                                 <button id="osy-run" class="btn btn btn-danger" style="display: none;">
-                                    RUN MODEL <i class="fa fa-calculator"></i>
+                                    <i class="fa fa-calculator"></i> RUN MODEL 
                                 </button>
                             </div>
 
                             <a id="osy-downloadDataFile" class="btn btn btn-default pull-right" style="display: none;"
-                            href="downloadDataFile"> Download Data File <i class="fa fa-download"></i></a>
+                            href="downloadDataFile"><i class="fa fa-download"></i> Download Data File </a>
                         </div>
                     </div>
                 </div>
-
-
-
-
-
             </div>
         </section>
     </div>
@@ -87,4 +82,42 @@
             </fieldset>
         </div>
     </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="osy-order" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button> -->
+				<h4 class="modal-title">
+					Scenario order
+				</h4>
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                        <i class="fa fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                </div>
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-info btn-sm" id='btnSaveOrder'>
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
+
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+                        <div id='osy-scOrder'></div>
+                    </div>
+                </div>
+                <footer>
+
+                </footer>
+            </div>
+        </div>
+	</div>
 </div>

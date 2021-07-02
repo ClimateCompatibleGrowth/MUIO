@@ -1,10 +1,9 @@
 {
     "osy-version": "1.0",
-    "osy-casename": "Scenario demo",
+    "osy-casename": "demo",
     "osy-desc": "",
-    "osy-date": "06/20/2021",
-    "osy-currency": "EUR",
-    "osy-dr": 0.09,
+    "osy-date": "06/29/2021",
+    "osy-currency": "EEK",
     "osy-ns": "3",
     "osy-dt": "2",
     "osy-tech": [
@@ -14,81 +13,48 @@
             "Desc": "Default technology",
             "IAR": [],
             "OAR": [],
-            "EAR": [],
-            "TMPAL": 0,
-            "TMPAU": 999999,
-            "CAU": 0,
-            "OL": 1
+            "EAR": []
         },
         {
-            "TechId": "TEC_9haqj",
+            "TechId": "TEC_40fsn",
             "Tech": "TEC_1",
             "Desc": "Default technology",
             "IAR": [
-                "COM_buq5x"
+                "COM_0"
             ],
             "OAR": [
-                "COM_buq5x"
+                "COM_0"
             ],
             "EAR": [
-                "EMI_9x4m5"
-            ],
-            "TMPAL": 0,
-            "TMPAU": 999999,
-            "CAU": 0,
-            "OL": 1
+                "EMI_0"
+            ]
         },
         {
-            "TechId": "TEC_32x5x",
+            "TechId": "TEC_mm25u",
             "Tech": "TEC_2",
             "Desc": "Default technology",
             "IAR": [],
             "OAR": [],
             "EAR": [
-                "EMI_9x4m5"
-            ],
-            "TMPAL": 0,
-            "TMPAU": 999999,
-            "CAU": 0,
-            "OL": 1
+                "EMI_0",
+                "EMI_9yvti"
+            ]
         },
         {
-            "TechId": "TEC_kbjlg",
+            "TechId": "TEC_l9jhe",
             "Tech": "TEC_3",
             "Desc": "Default technology",
             "IAR": [
-                "COM_0",
-                "COM_buq5x",
-                "COM_td1ps"
+                "COM_6exqi",
+                "COM_9o3q1"
             ],
             "OAR": [
-                "COM_0",
-                "COM_buq5x",
-                "COM_td1ps"
+                "COM_6exqi",
+                "COM_9o3q1"
             ],
             "EAR": [
-                "EMI_0",
-                "EMI_9x4m5",
-                "EMI_0cit9"
-            ],
-            "TMPAL": 0,
-            "TMPAU": 999999,
-            "CAU": 0,
-            "OL": 1
-        },
-        {
-            "TechId": "TEC_jq6f6",
-            "Tech": "TEC_4",
-            "Desc": "Default technology",
-            "IAR": [
-                "COM_0"
-            ],
-            "OAR": [],
-            "EAR": [],
-            "TMPAL": 0,
-            "TMPAU": 999999,
-            "CAU": 0,
-            "OL": 1
+                "EMI_9yvti"
+            ]
         }
     ],
     "osy-comm": [
@@ -99,13 +65,13 @@
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_buq5x",
+            "CommId": "COM_6exqi",
             "Comm": "COM_1",
             "Desc": "Default commodity",
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_td1ps",
+            "CommId": "COM_9o3q1",
             "Comm": "COM_2",
             "Desc": "Default commodity",
             "UnitId": "PJ"
@@ -116,24 +82,12 @@
             "EmisId": "EMI_0",
             "Emis": "EMI_0",
             "Desc": "Default emission",
-            "MPEL": 999999,
-            "MPEE": 0,
             "UnitId": "Ton"
         },
         {
-            "EmisId": "EMI_9x4m5",
+            "EmisId": "EMI_9yvti",
             "Emis": "EMI_1",
             "Desc": "Default emission",
-            "MPEL": 999999,
-            "MPEE": 0,
-            "UnitId": "Ton"
-        },
-        {
-            "EmisId": "EMI_0cit9",
-            "Emis": "EMI_2",
-            "Desc": "Default emission",
-            "MPEL": 999999,
-            "MPEE": 0,
             "UnitId": "Ton"
         }
     ],
@@ -141,7 +95,14 @@
         {
             "ScenarioId": "SC_0",
             "Scenario": "SC_0",
-            "Desc": "Base scenario"
+            "Desc": "Base scenario",
+            "Active": true
+        },
+        {
+            "ScenarioId": "SC_ipry9",
+            "Scenario": "SC_1",
+            "Desc": "Base scenario",
+            "Active": true
         }
     ],
     "osy-years": [

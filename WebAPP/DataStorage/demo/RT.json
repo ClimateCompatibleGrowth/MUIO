@@ -1,0 +1,74 @@
+{
+    "CAU": {
+        "SC_0": [
+            {
+                "TEC_0": 0,
+                "TEC_40fsn": 0,
+                "TEC_mm25u": 0,
+                "TEC_l9jhe": 0
+            }
+        ],
+        "SC_ipry9": [
+            {
+                "TEC_0": null,
+                "TEC_40fsn": null,
+                "TEC_mm25u": null,
+                "TEC_l9jhe": null
+            }
+        ]
+    },
+    "OL": {
+        "SC_0": [
+            {
+                "TEC_0": 1,
+                "TEC_40fsn": 1,
+                "TEC_mm25u": 1,
+                "TEC_l9jhe": 1
+            }
+        ],
+        "SC_ipry9": [
+            {
+                "TEC_0": null,
+                "TEC_40fsn": null,
+                "TEC_mm25u": null,
+                "TEC_l9jhe": null
+            }
+        ]
+    },
+    "TMPAL": {
+        "SC_0": [
+            {
+                "TEC_0": 0,
+                "TEC_40fsn": 0,
+                "TEC_mm25u": 0,
+                "TEC_l9jhe": 0
+            }
+        ],
+        "SC_ipry9": [
+            {
+                "TEC_0": null,
+                "TEC_40fsn": null,
+                "TEC_mm25u": null,
+                "TEC_l9jhe": null
+            }
+        ]
+    },
+    "TMPAU": {
+        "SC_0": [
+            {
+                "TEC_0": 999999,
+                "TEC_40fsn": 999999,
+                "TEC_mm25u": 999999,
+                "TEC_l9jhe": 999999
+            }
+        ],
+        "SC_ipry9": [
+            {
+                "TEC_0": null,
+                "TEC_40fsn": null,
+                "TEC_mm25u": null,
+                "TEC_l9jhe": null
+            }
+        ]
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "MPEL": {
+        "SC_0": [
+            {
+                "EMI_0": 999999,
+                "EMI_9yvti": 999999
+            }
+        ],
+        "SC_ipry9": [
+            {
+                "EMI_0": null,
+                "EMI_9yvti": null
+            }
+        ]
+    },
+    "MPEE": {
+        "SC_0": [
+            {
+                "EMI_0": 0,
+                "EMI_9yvti": 0
+            }
+        ],
+        "SC_ipry9": [
+            {
+                "EMI_0": null,
+                "EMI_9yvti": null
+            }
+        ]
+    }
+}

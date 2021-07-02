@@ -49,11 +49,17 @@ export default class RY {
         //Navbar.initPage(model.casename);
         //console.log('param ',  model.PARAMNAMES[model.param])
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
-        Html.ddlRYT( model.PARAMETERS[model.group], model.param);
+        Html.ddlParams( model.PARAMETERS[model.group], model.param);
 
         let $divGrid = $('#osy-gridRY');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns)
+
+        if (model.scenariosCount>1){
+            $('#scCommand').show();
+            Html.ddlScenarios( model.scenarios, model.scenarios[1]['ScenarioId']);
+            Grid.applyRYFilter( $divGrid, model.years );
+        }
         
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
         let $divChart = $('#osy-chartRY');
@@ -87,6 +93,8 @@ export default class RY {
 
     static initEvents(model){
 
+        let $divGrid = $('#osy-gridRY');
+
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function(e) {
             e.preventDefault();
@@ -97,14 +105,23 @@ export default class RY {
             Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
         });
 
+        $("#osy-saveRYTdata").off('click');
         $("#osy-saveRYTdata").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let param = $( "#osy-ryt" ).val();
-            let ryData = $('#osy-gridRY').jqxGrid('getrows');
+            let ryData = $('#osy-gridRY').jqxGrid('getboundrows');
 
-            let daRYData = JSON.stringify(ryData,model.years);
-            Osemosys.updateData(JSON.parse(daRYData), param, "RY.json")
+            let daRYData = JSON.parse(JSON.stringify(ryData, ['ScId'].concat(model.years) ))
+
+            let saveData = {};
+            $.each(daRYData, function (id, obj) {
+                if(!saveData[obj.ScId]){ saveData[obj.ScId] = []; }
+                saveData[obj.ScId].push(obj);
+                delete obj.ScId;
+            });
+
+            Osemosys.updateData(saveData, param, "RY.json")
             .then(response =>{
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
                 //sync S3
@@ -118,14 +135,43 @@ export default class RY {
         });
 
         //change of ddl parameters
+        $("#osy-ryt").off('click');
         $('#osy-ryt').on('change', function() {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             let $divGrid = $('#osy-gridRY');
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
             var configChart = $('#osy-chartRY').jqxChart('getInstance');
+            // console.log('configChart ', configChart)
             configChart.source.records = model.chartData[this.value];
             configChart.update();
+        });
+
+        $("#osy-openScData").off('click');
+        $("#osy-openScData").on('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $( "#osy-scenarios" ).val();
+            Grid.applyRYFilter( $divGrid, model.years, sc );
+        });
+
+        $("#osy-removeScData").off('click');
+        $("#osy-removeScData").on('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $( "#osy-scenarios" ).val();
+            var param = $( "#osy-ryt" ).val();
+            var rows = $divGrid.jqxGrid('getdisplayrows');
+            $.each(rows, function (id, obj) {
+                //console.log(obj)
+                if (obj.Sc== sc && obj.Param == model.PARAMNAMES[param]){
+                    $.each(model.years, function (i, year) {
+                        $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                    });
+                    return false; // breaks
+                }
+            });
+            Grid.applyRYFilter( $divGrid, model.years );
         });
 
         let pasteEvent = false;
@@ -136,14 +182,14 @@ export default class RY {
             if (key == vKey) {
                 pasteEvent = true;
                 setTimeout(function(){ 
-                    let gridData = $('#osy-gridRY').jqxGrid('getrows');
+                    let gridData = $('#osy-gridRY').jqxGrid('getboundrows');
                     let param = $( "#osy-ryt" ).val();
                     let chartData = [];
                     $.each(model.years, function (idY, year) {
                         let chunk = {};
                         chunk['Year'] = year;
                         $.each(gridData, function (id, rytDataObj) {
-                            chunk[rytDataObj.param] = rytDataObj[year]; 
+                            chunk[rytDataObj.ScId] = rytDataObj[year]; 
                         });
                         chartData.push(chunk);
                     });
@@ -165,24 +211,22 @@ export default class RY {
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
                 var paramId = $('#osy-gridRY').jqxGrid('getcellvalue', rowBoundIndex, 'param');
+                var scId = $('#osy-gridRY').jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $( "#osy-ryt" ).val();
-
                 //update model chart
                 $.each(model.chartData[param], function (id, obj) {
                     if(obj.Year == year){
                         if(value){
-                            obj['param'] = value;
+                            obj[scId] = value;
                         }else{
-                            obj['param'] = 0;
+                            obj[scId] = 0;
                         }
                     }
                 });
-
-                console.log('model.chartData[param] ', model.chartData[param])
-
+                //console.log('model.chartData[param] ', model.chartData[param])
                 //update model grid
                 $.each(model.gridData[param], function (id, obj) {
-                    if(obj.param == paramId){
+                    if(obj.ParamId == param && obj.ScId == scId){
                         if(value){
                             obj[year] = value;
                         }else{
@@ -190,13 +234,13 @@ export default class RY {
                         }
                     }
                 });
-
                 var configChart = $('#osy-chartRY').jqxChart('getInstance');
                 configChart.source.records = model.chartData[param];
                 configChart.update();
             }
         });
 
+        $(".switchChart").off('click');
         $(".switchChart").on('click', function (e) {
             e.preventDefault();
             var configChart = $('#osy-chartRY').jqxChart('getInstance');
@@ -210,6 +254,7 @@ export default class RY {
             configChart.update();  
         });
 
+        $(".toggleLabels").off('click');
         $(".toggleLabels").on('click', function (e) {
             e.preventDefault();
             var configChart = $('#osy-chartRY').jqxChart('getInstance');
@@ -222,14 +267,17 @@ export default class RY {
             configChart.update();    
         });
     
+        $("#exportPng").off('click');
         $("#exportPng").click(function() {
             $("#osy-chartRY").jqxChart('saveAsPNG', 'RY.png',  'https://www.jqwidgets.com/export_server/export.php');
         }); 
 
         let res = true;
+        $("#resizeColumns").off('click');
         $("#resizeColumns").click(function () {
             if(res){
-                $('#osy-gridRY').jqxGrid('autoresizecolumn', 'param');
+                $('#osy-gridRY').jqxGrid('autoresizecolumn', 'Sc');
+                $('#osy-gridRY').jqxGrid('autoresizecolumn', 'Param');
             }
             else{
                 $('#osy-gridRY').jqxGrid('autoresizecolumns');
@@ -237,6 +285,7 @@ export default class RY {
             res = !res;        
         });
     
+        $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
             $("#osy-gridRY").jqxGrid('exportdata', 'xls', 'RY');

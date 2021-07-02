@@ -8,6 +8,7 @@ import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { GROUPNAMES } from "../../Classes/Const.Class.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export default class RYTTs {
     static onLoad(group, param){
@@ -43,12 +44,22 @@ export default class RYTTs {
         Message.clearMessages();
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
-        // Html.ddlRYT( PARAMETERS['RYTTs'], model.param);
+        Html.ddlParams( model.PARAMETERS['RYTTs'], model.param);
         Html.ddlTechs( model.techs, model.techs[0]['TechId']);
+        Html.ddlTimeslices( $('#osy-timeslices1'), model.timeslices);
         
         let $divGrid = $('#osy-gridRYTTs');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns, true);
+
+        if (model.scenariosCount>1){
+            $('#scCommand').show();
+            //console.log(model.scenarios, model.scenarios[1]['ScenarioId'])
+            Html.ddlScenarios( model.scenarios, model.scenarios[1]['ScenarioId']);
+            Html.ddlTechNames( model.techs, model.techs[0]['TechId']);
+            Html.ddlTimeslices( $('#osy-timeslices2'), model.timeslices);
+            Grid.applyRYTTsFilter( $divGrid, model.years );
+        }
 
         let $divChart = $('#osy-chartRYTTs');
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
@@ -81,6 +92,9 @@ export default class RYTTs {
     }
 
     static initEvents(model){
+
+        let $divGrid = $('#osy-gridRYTTs');
+
         $("#casePicker").off('click');
         //odabir novog case iz case pickera
         $("#casePicker").on('click', '.selectCS', function(e) {
@@ -92,15 +106,24 @@ export default class RYTTs {
             Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
         });
 
+        $("#osy-saveRYTTsdata").off('click');
         $("#osy-saveRYTTsdata").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            //let param = $( "#osy-ryt" ).val();
-            let rytData = $('#osy-gridRYTTs').jqxGrid('getrows');
-            let daRYTData = JSON.stringify(rytData,['TechId', 'Timeslice'].concat(model.years));
-            //let RYTmodel = JSON.stringify(rytData,['TechId', 'Tech', 'CommId', 'Comm'].concat(model.years));
-            //potrebno dodati za koji param vrsimo update
-            Osemosys.updateData(JSON.parse(daRYTData), model.param, "RYTTs.json")
+
+            let param = $( "#osy-ryt" ).val();
+            let rytData = $divGrid.jqxGrid('getboundrows');
+            let data = JSON.parse(JSON.stringify(rytData,['ScId', 'TechId', 'Timeslice'].concat(model.years)));
+
+            let saveData = {};
+            $.each(data, function (id, obj) {
+                if(!saveData[obj.ScId]){ saveData[obj.ScId] = []; }
+                saveData[obj.ScId].push(obj);
+                delete obj.ScId;
+            });
+
+
+            Osemosys.updateData(saveData, param, "RYTTs.json")
             .then(response =>{
                 //model.gridData[model.param] = JSON.parse(RYTmodel);
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
@@ -115,26 +138,69 @@ export default class RYTTs {
         });
 
         //change of ddl parameters
-        // $('#osy-ryt').on('change', function() {
-        //     let $divGrid = $('#osy-gridRYTTs');
-        //     model.srcGrid.root = this.value;
-        //     $divGrid.jqxGrid('updatebounddata');
-        //     var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
-        //     var tech = $( "#osy-techs" ).val();
-        //     configChart.source.records = model.chartData[this.value][tech];
-        //     configChart.update();
-        // });
-
-        //change of ddl techs
-        $('#osy-techs').on('change', function() {
-            //var param = $( "#osy-ryt" ).val();
+        $("#osy-ryt").off('change');
+        $('#osy-ryt').on('change', function() {
+            let $divGrid = $divGrid;
+            model.srcGrid.root = this.value;
+            $divGrid.jqxGrid('updatebounddata');
             var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
-            configChart.source.records = model.chartData[model.param][this.value];
+            var tech = $( "#osy-techs" ).val();
+            var ts = $( "#osy-timeslices1" ).val();
+            configChart.source.records = model.chartData[this.value][tech][ts];
             configChart.update();
         });
 
+        //change of ddl techs
+        $("#osy-techs").off('change');
+        $('#osy-techs').on('change', function() {
+            var param = $( "#osy-ryt" ).val();
+            var ts = $( "#osy-timeslices1" ).val();
+            var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
+            configChart.source.records = model.chartData[param][this.value][ts];
+            configChart.update();
+        });
+
+                //change of ddl techs
+        $("#osy-timeslices1").off('change');
+        $('#osy-timeslices1').on('change', function() {
+            var param = $( "#osy-ryt" ).val();
+            var tech = $( "#osy-techs" ).val();
+            var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
+            configChart.source.records = model.chartData[param][tech][this.value];
+            configChart.update();
+        });
+
+        $("#osy-openScData").off('click');
+        $("#osy-openScData").on('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $( "#osy-scenarios" ).val();
+            var ts = $( "#osy-timeslices2" ).val();
+            var tech = $( "#osy-techNames" ).val();
+            Grid.applyRYTTsFilter( $divGrid, model.years, sc, tech, ts );
+        });
+
+        $("#osy-removeScData").off('click');
+        $("#osy-removeScData").on('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $( "#osy-scenarios" ).val();
+            var ts = $( "#osy-timeslices2" ).val();
+            var tech = $( "#osy-techNames" ).val();
+            var rows = $divGrid.jqxGrid('getdisplayrows');
+            $.each(rows, function (id, obj) {
+                if (obj.Sc== sc && obj.Timeslice == ts && obj.Tech == tech){
+                    $.each(model.years, function (i, year) {
+                        $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                    });
+                    return false; // breaks
+                }
+            });
+            Grid.applyRYTTsFilter( $divGrid, model.years );
+        });
+
         let pasteEvent = false;
-        $('#osy-gridRYTTs').bind('keydown', function (event) {
+        $divGrid.bind('keydown', function (event) {
             pasteEvent = false;
             var ctrlDown = false, ctrlKey = 17, cmdKey = 91, vKey = 86, cKey = 67;
             var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
@@ -142,30 +208,35 @@ export default class RYTTs {
                 pasteEvent = true;
 
                 setTimeout(function(){ 
-                    let gridData = $('#osy-gridRYTTs').jqxGrid('getrows');
-                    //let param = $( "#osy-ryt" ).val();
+                    let gridData = $divGrid.jqxGrid('getboundrows');
+                    let param = $( "#osy-ryt" ).val();
                     let tech = $( "#osy-techs" ).val();
+                    var ts = $( "#osy-timeslices1" ).val();
+                   
+                    //update grid model
+                    model.gridData[param] = gridData;
+
                     //update chart model
                     $.each(model.techs, function (idT, tech) {
-                        let chartData = [];
-                        $.each(model.years, function (idY, year) {
-                            let chunk = {};
-                            chunk['Year'] = year;
-                            $.each(gridData, function (id, obj) {
-                                if(obj['TechId'] == tech['TechId']){
-                                    chunk[obj.Timeslice] = obj[year]; 
-                                }
+                        $.each(model.timeslices, function (idT, ts) {
+                            let chartData = [];
+                            $.each(model.years, function (idY, year) {
+                                let chunk = {};
+                                chunk['Year'] = year;
+                                $.each(gridData, function (id, obj) {
+                                    if(obj.TechId == tech.TechId && obj.Timeslice == ts){
+                                        chunk[obj.ScId] = obj[year]; 
+                                    }
+                                });
+                                chartData.push(chunk);
                             });
-                            chartData.push(chunk);
-                        });
-                        model.chartData[model.param][tech['TechId']] =  chartData;
+                            model.chartData[param][tech['TechId']][ts] =  chartData;
+                        });  
                     });
-                    //update grid model
-                    model.gridData[model.param] = gridData;
                     var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
-                    configChart.source.records = model.chartData[model.param][tech];
+                    configChart.source.records = model.chartData[model.param][tech][ts];
                     configChart.update();
-                }, 1000);
+                }, 500);
             }
         }).on('cellvaluechanged', function (event) {
             if (!pasteEvent) {
@@ -174,28 +245,33 @@ export default class RYTTs {
                 var year = event.args.datafield;
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
-                var techId = $('#osy-gridRYTTs').jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
-                var timeslice = $('#osy-gridRYTTs').jqxGrid('getcellvalue', rowBoundIndex, 'Timeslice');
-                //let param = $( "#osy-ryt" ).val();
+                var techId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
+                var timeslice = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'Timeslice');
+                var ScId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
+
+                let param = $( "#osy-ryt" ).val();
                 let tech = $( "#osy-techs" ).val();
+                var ts = $( "#osy-timeslices1" ).val();
+
 
                 //update chart model
-                $.each(model.chartData[model.param][techId], function (id, obj) {
+                $.each(model.chartData[param][techId][timeslice], function (id, obj) {
                     if(obj.Year == year){
                         if(value){
-                            obj[timeslice] = value;
+                            obj[ScId] = value;
                         }else{
-                            obj[timeslice] = 0;
+                            obj[ScId] = 0;
                         }
                     }
                 });
 
                 var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
-                configChart.source.records = model.chartData[model.param][tech];
+                configChart.source.records = model.chartData[model.param][tech][ts];
                 configChart.update();
                 //update chart model
+
                 $.each(model.gridData[model.param], function (id, obj) {
-                    if(obj.TechId == techId && obj.Timeslice == timeslice){
+                    if(obj.TechId == techId && obj.Timeslice == timeslice && obj.ScId == ScId){
                         if(value){
                             obj[year] = value;
                         }else{
@@ -206,6 +282,7 @@ export default class RYTTs {
             }
         });
 
+        $(".switchChart").off('click');
         $(".switchChart").on('click', function (e) {
             e.preventDefault();
             var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
@@ -221,6 +298,7 @@ export default class RYTTs {
             // $('#'+chartType).switchClass( "grey", "green" );
         });
 
+        $(".toggleLabels").off('click');
         $(".toggleLabels").on('click', function (e) {
             e.preventDefault();
             var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
@@ -232,23 +310,27 @@ export default class RYTTs {
             configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
             configChart.update();    
         });
-    
+
+        $("#exportPng").off('click');
         $("#exportPng").click(function() {
             $("#osy-chartRYTTs").jqxChart('saveAsPNG', 'RYTTs.png',  'https://www.jqwidgets.com/export_server/export.php');
         }); 
 
         let res = true;
+        $("#resizeColumns").off('click');
         $("#resizeColumns").click(function () {
             if(res){
-                $('#osy-gridRYTTs').jqxGrid('autoresizecolumn', 'Tech');
-                $('#osy-gridRYTTs').jqxGrid('autoresizecolumn', 'Timeslice');
+                $divGrid.jqxGrid('autoresizecolumn', 'Sc');
+                $divGrid.jqxGrid('autoresizecolumn', 'Tech');
+                $divGrid.jqxGrid('autoresizecolumn', 'Timeslice');
             }
             else{
-                $('#osy-gridRYTTs').jqxGrid('autoresizecolumns');
+                $divGrid.jqxGrid('autoresizecolumns');
             }
             res = !res;        
         });
     
+        $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
             $("#osy-gridRYTTs").jqxGrid('exportdata', 'xls', 'RYTTs');
@@ -260,7 +342,7 @@ export default class RYTTs {
             e.stopImmediatePropagation();
             model.d++;
             model.decimal = 'd' + parseInt(model.d);
-            $('#osy-gridRYTTs').jqxGrid('refresh');
+            $divGrid.jqxGrid('refresh');
         });
 
         $("#decDown").off('click');
@@ -269,7 +351,7 @@ export default class RYTTs {
             e.stopImmediatePropagation();
             model.d--;
             model.decimal = 'd' + parseInt(model.d);
-            $('#osy-gridRYTTs').jqxGrid('refresh');
+            $divGrid.jqxGrid('refresh');
         });
     
         $("#showLog").click(function (e) {

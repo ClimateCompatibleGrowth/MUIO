@@ -1,3 +1,4 @@
+#import ujson as json
 import json
 from pathlib import Path
 from Classes.Base import Config
@@ -7,7 +8,7 @@ class File:
     @staticmethod
     def readFile(path):
         try:
-            if Config.AWS_STORAGE != 1:
+            if Config.AWS_STORAGE != 1:    
                 f = open(path, mode="r")
                 data = json.loads(f.read())
                 f.close
@@ -29,8 +30,11 @@ class File:
         try:
             if Config.AWS_STORAGE != 1:
                 f = open(path, mode="w")
-                #f.write(json.dumps(data, ensure_ascii=False, separators=(',', ':')))
+                #json
+                # f.write(json.dumps(data, ensure_ascii=False, separators=(',', ':')))
                 f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
+                #usjon
+                #f.write(json.dumps(data))
                 f.close
             else:
                 s3 = S3()

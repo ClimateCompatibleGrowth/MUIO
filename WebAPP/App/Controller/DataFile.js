@@ -4,6 +4,7 @@ import { Html } from "../../Classes/Html.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { Model } from "../Model/DataFile.Model.js";
 import { MessageSelect } from "./MessageSelect.js";
+import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
 
 export default class DataFile {
     static onLoad(){
@@ -18,11 +19,9 @@ export default class DataFile {
         })
         .then(data => {
             let [casename, genData] = data;
-            let model = new Model(casename, "DataFile");
+            let model = new Model(casename, genData, "DataFile");
             if(casename){
                 this.initPage(model);
-                this.initEvents(model);
-                ;
             }else{
                 MessageSelect.init(DataFile.refreshPage.bind(DataFile));
             }
@@ -39,6 +38,11 @@ export default class DataFile {
         if (model.casename == null){
             Message.info("Please select case or create new case study!");
         }    
+        if (model.scenariosCount>1){
+            $('#scCommand').show();
+        }
+        //loadScript("References/smartadmin/js/plugin/jquery-nestable/jquery.nestable.min.js", Nestable.init.bind(null));
+        this.initEvents(model);
     }
 
     static refreshPage(casename){
@@ -53,7 +57,7 @@ export default class DataFile {
         })
         .then(data => {
             let [casename, genData] = data;
-            let model = new Model(casename, "DataFile");
+            let model = new Model(casename, genData, "DataFile");
             $("#DataFile").hide();
             $("#osy-DataFile").empty();
             $("#osy-runOutput").empty();
@@ -71,8 +75,6 @@ export default class DataFile {
 
     static initEvents(model){
 
-        
-
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function(e) {
             e.preventDefault();
@@ -84,9 +86,54 @@ export default class DataFile {
         });
 
 
+        $("#osy-btnScOrder").off('click');
+        $("#osy-btnScOrder").on('click', function (event) {
+            Html.renderScOrder(model.scenarios);
+        });
+
+        $("#btnSaveOrder").off('click');
+        $("#btnSaveOrder").on('click', function (event) {
+            //let order = $("#osy-scOrder").jqxSortable("serialize")
+            let order = $("#osy-scOrder").jqxSortable("toArray")
+            var scAcitive = new Array();
+            $.each($('input[type="checkbox"]:checked'), function (key, value) {
+                scAcitive.push($(value).attr("id"));
+            });
+            let scOrder = DefaultObj.defaultScenario(true);
+            $.each(order, function (id, sc) {
+                let tmp = {};
+                if (scAcitive.includes(sc)){
+                    tmp['ScenarioId'] = sc;
+                    tmp['Scenario'] = model.scMap[sc]['Scenario'];
+                    tmp['Desc'] = model.scMap[sc]['Desc'];
+                    tmp['Active'] = true
+                }else{
+                    tmp['ScenarioId'] = sc;
+                    tmp['Scenario'] = model.scMap[sc]['Scenario'];
+                    tmp['Desc'] = model.scMap[sc]['Desc'];
+                    tmp['Active'] = false;
+                }
+                scOrder.push(tmp);
+            });
+
+            Osemosys.saveScOrder(scOrder, model.casename)
+            .then(response => {
+                //console.log(response)
+                if(response.status_code=="success"){
+                    $('#osy-order').modal('toggle');
+                    Message.clearMessages();
+                    Message.bigBoxSuccess('Sceanario order', response.message, 3000);
+                    
+                }
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
+        });
+        
+
         $("#osy-generateDataFile").off('click');
         $("#osy-generateDataFile").on('click', function (event) {
-            console.log('initila gen')
             Pace.restart();
             //console.log('model casenam ', model.casename);
             Osemosys.generateDataFile(model.casename)
@@ -142,7 +189,7 @@ export default class DataFile {
             })
         });
 
-        $( "#osy-generateDataFile" ).trigger( "click" );
+        //$( "#osy-generateDataFile" ).trigger( "click" );
 
         $("#osy-run").off('click');
         $("#osy-run").on('click', function (event) {

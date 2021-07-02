@@ -1,5 +1,5 @@
 // import { Message } from "../../Classes/Message.Class.js";
-// import { PARAMETERS } from "../../Classes/Const.Class.js";
+import { GROUPNAMES } from "../../Classes/Const.Class.js";
 // import { Base } from "../../Classes/Base.Class.js";
 
 
@@ -15,11 +15,11 @@ export class Sidebar {
         $.each(PARAMETERS, function (param, array) {
             
             $.each(array, function (id, obj) {
-                //console.log(param, obj.id, obj.value)
+                // console.log(param, obj.id, obj.value)
                 if(obj.menu){
                     let res = `
                     <li  class="">
-                        <a href="#/${param}/${obj.id}" title="Year and technology parameters">${obj.value}</a>
+                        <a href="#/${param}/${obj.id}" title="${GROUPNAMES[param]}">${obj.value}</a>
                     </li>`;
                     $('#dynamicRoutes').append(res);
                 }

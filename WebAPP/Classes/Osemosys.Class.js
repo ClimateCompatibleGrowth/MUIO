@@ -9,8 +9,10 @@ export class Osemosys {
                 async: true,  
                 type: 'GET',
                 dataType: 'json',
+                //cache: false,
                 contentType: 'application/json; charset=utf-8',
-                success: function (result) {             
+                success: function (result) {  
+                    //console.log('result ', result)           
                     resolve(result);
                 },
                 error: function(xhr, status, error) {
@@ -29,6 +31,26 @@ export class Osemosys {
                 type: 'POST',
                 dataType: 'json',
                 data: JSON.stringify({ "data": data }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static saveScOrder(data, casename) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "saveScOrder",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "data": data, "casename": casename }),
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {             
                     resolve(result);
@@ -164,6 +186,27 @@ export class Osemosys {
                 type: 'POST',
                 dataType: 'json',
                 data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static getDataDirectly(casename, jsonFile) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                //url:Base.apiUrl() + "getData",
+                url: 'WebAPP/DataStorage/'+casename+'/'+jsonFile,
+                async: true,  
+                type: 'GET',
+                dataType: 'json',
+                //data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {             
                     resolve(result);

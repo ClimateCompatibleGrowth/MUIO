@@ -122,32 +122,9 @@ export class Html {
             }
         });
 
-        // var container =  $('#osy-unit');
-        // container.empty();
-        // $.each(UNITS, function (key, value) {
-        //     if (value == model.unit){
-        //         container.append('<option value="'+ value+'" selected>'+value+'</option>');
-        //     }else{
-        //         container.append('<option value="'+ value+'">'+value+'</option>');
-        //     }
-        // });
-
-        // var container =  $('#osy-unit');
-        // container.empty();
-        // $.each(UNITS, function (key, value) {
-        //     if (value.id == model.unit){
-        //         container.append('<option value="'+ value.id+'" selected>'+value.id+'</option>');
-        //     }else{
-        //         container.append('<option value="'+ value.id+'">'+value.id+'</option>');
-        //     }
-        // });
-
         $("#osy-date").datepicker().datepicker("setDate", model.date);
         $("#osy-casename").val(model.casename);
         $("#osy-desc").val(model.desc);
-        $("#osy-dr").val(model.dr*100);
-        // $("#osy-dm").val(model.dm);
-        // $("#osy-rmpt").val(model.rmpt);
         $("#osy-ns").val(model.ns);
         $("#osy-dt").val(model.dt);
 
@@ -158,23 +135,23 @@ export class Html {
 
     }
 
-    static ddlyears(years, year){
-        var container =  $('#hData-years');
-        container.empty();
-        $.each(years, function (key, value) {
-            if (value == year){
-                container.append('<option value="'+ value+'" selected>'+value+'</option>');
-            }else{
-                container.append('<option value="'+ value+'">'+value+'</option>');
-            }
-        });
-    }
+    // static ddlyears(years, year){
+    //     var container =  $('#hData-years');
+    //     container.empty();
+    //     $.each(years, function (key, value) {
+    //         if (value == year){
+    //             container.append('<option value="'+ value+'" selected>'+value+'</option>');
+    //         }else{
+    //             container.append('<option value="'+ value+'">'+value+'</option>');
+    //         }
+    //     });
+    // }
 
-    static ddlRYT(ryts, ryt){
+    static ddlParams(params, param){
         var container =  $('#osy-ryt');
         container.empty();
-        $.each(ryts, function (id, obj) {
-            if (obj.id == ryt ){
+        $.each(params, function (id, obj) {
+            if (obj.id == param ){
                 container.append('<option value="'+ obj.id+'" selected>'+obj.value+'</option>');
             }else{
                 container.append('<option value="'+ obj.id+'">'+obj.value+'</option>');
@@ -186,10 +163,22 @@ export class Html {
         var container =  $('#osy-techs');
         container.empty();
         $.each(techs, function (id, obj) {
-            if (obj.id == tech ){
+            if (obj.TechId == tech ){
                 container.append('<option value="'+ obj.TechId+'" selected>'+obj.Tech+'</option>');
             }else{
                 container.append('<option value="'+ obj.TechId+'" >'+obj.Tech+'</option>');
+            }
+        });   
+    }
+
+    static ddlTechNames(techs, tech){
+        var container =  $('#osy-techNames');
+        container.empty();
+        $.each(techs, function (id, obj) {
+            if (obj.TechId == tech ){
+                container.append('<option value="'+ obj.Tech+'" selected>'+obj.Tech+'</option>');
+            }else{
+                container.append('<option value="'+ obj.Tech+'" >'+obj.Tech+'</option>');
             }
         });   
     }
@@ -198,10 +187,22 @@ export class Html {
         var container =  $('#osy-comms');
         container.empty();
         $.each(comms, function (id, obj) {
-            if (obj.id == comm ){
+            if (obj.CommId == comm ){
                 container.append('<option value="'+ obj.CommId+'" selected>'+obj.Comm+'</option>');
             }else{
                 container.append('<option value="'+ obj.CommId+'" >'+obj.Comm+'</option>');
+            }
+        });   
+    }
+
+    static ddlCommNames(comms, comm){
+        var container =  $('#osy-commNames');
+        container.empty();
+        $.each(comms, function (id, obj) {
+            if (obj.CommId == comm ){
+                container.append('<option value="'+ obj.Comm+'" selected>'+obj.Comm+'</option>');
+            }else{
+                container.append('<option value="'+ obj.Comm+'" >'+obj.Comm+'</option>');
             }
         });   
     }
@@ -210,10 +211,48 @@ export class Html {
         var container =  $('#osy-emis');
         container.empty();
         $.each(emis, function (id, obj) {
-            if (obj.id == emi ){
+            if (obj.EmisId == emi ){
                 container.append('<option value="'+ obj.EmisId+'" selected>'+obj.Emis+'</option>');
             }else{
                 container.append('<option value="'+ obj.EmisId+'" >'+obj.Emis+'</option>');
+            }
+        });   
+    }
+
+    static ddlEmiNames(emis, emi){
+        var container =  $('#osy-emiNames');
+        container.empty();
+        $.each(emis, function (id, obj) {
+            if (obj.EmisId == emi ){
+                container.append('<option value="'+ obj.Emis+'" selected>'+obj.Emis+'</option>');
+            }else{
+                container.append('<option value="'+ obj.Emis+'" >'+obj.Emis+'</option>');
+            }
+        });   
+    }
+
+    static ddlTimeslices($div, timeslices){
+        var container =  $div;
+        container.empty();
+        $.each(timeslices, function (id, ts) {
+            if (ts == 'S11' ){
+                container.append('<option value="'+ ts+'" selected>'+ts+'</option>');
+            }else{
+                container.append('<option value="'+ ts+'" >'+ts+'</option>');
+            }
+        });  
+    }
+
+    static ddlScenarios(scs, sc){
+        var container =  $('#osy-scenarios');
+        container.empty();
+        $.each(scs, function (id, obj) {
+            if(obj.ScenarioId != 'SC_0'){
+                if (obj.id == sc ){
+                    container.append('<option value="'+ obj.Scenario+'" selected>'+obj.Scenario+'</option>');
+                }else{
+                    container.append('<option value="'+ obj.Scenario+'" >'+obj.Scenario+'</option>');
+                }
             }
         });   
     }
@@ -262,6 +301,31 @@ export class Html {
             `;
             container.append(spark);
         });
+    }
+
+    static renderScOrder(scs){
+        var sortableList = '';
+        $.each(scs, function (sc, flag) {
+            if (flag.ScenarioId != 'SC_0'){
+                if (flag.Active){
+                    var sortableElement = 
+                    `<div class="sortable-item" id=`+flag.ScenarioId+`>
+                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario +`
+                        <span class="pull-right"><input type="checkbox" name="enable[`+flag.ScenarioId+`]" id="`+flag.ScenarioId+`" checked/></span>
+                    </div>`;
+                    sortableList = sortableList + sortableElement;
+                }else{
+                    var sortableElement = 
+                    `<div class="sortable-item" id=`+flag.ScenarioId+`>
+                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario +`
+                        <span class="pull-right"><input type="checkbox" name="enable[`+flag.ScenarioId+`]" id="`+flag.ScenarioId+`" /></span>
+                    </div>`;
+                    sortableList = sortableList + sortableElement;
+                }
+            }
+        });
+        $("#osy-scOrder").html(sortableList);
+        $("#osy-scOrder").jqxSortable(); 
     }
 }
 

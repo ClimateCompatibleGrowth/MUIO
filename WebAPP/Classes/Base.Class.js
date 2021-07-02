@@ -173,25 +173,25 @@ export class Base {
         });
     }
 
-    static getScenarios(casename) {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url:this.apiUrl() + "getScenarios",
-                async: true,  
-                type: 'POST',
-                data: JSON.stringify({ "casename": casename }),
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                success: function (result) {                
-                    resolve(result);
-                },
-                error: function(xhr, status, error) {
-                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-                    reject(error);
-                }
-            });
-        });
-    }
+    // static getScenarios(casename) {
+    //     return new Promise((resolve, reject) => {
+    //         $.ajax({
+    //             url:this.apiUrl() + "getScenarios",
+    //             async: true,  
+    //             type: 'POST',
+    //             data: JSON.stringify({ "casename": casename }),
+    //             dataType: 'json',
+    //             contentType: 'application/json; charset=utf-8',
+    //             success: function (result) {                
+    //                 resolve(result);
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+    //                 reject(error);
+    //             }
+    //         });
+    //     });
+    // }
 
     static getCaseDesc(casename) {
         return new Promise((resolve, reject) => {

@@ -2,18 +2,17 @@ export const CURRENCY = ["AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","
 
 export const GROUPNAMES = {
     "R": "Region",
-    "T": "Technology",
-    "RT": "Region & technology",
-    "RE": "Region & emission",
-    "RY": "Region & year",
-    "RYT": "Year & technology",
-    "RYTC": "Year & technology & commodity",
-    "RYC": "Year & commodity",
-    "RYE": "Year & emission",
-    "RYTs": "Year & timeslice",
-    "RYTTs": "Year & technology & timeslice",
-    "RYCTs": "Year & commodity & timeslice",
-    "RYTE": "Year & technology & emission"
+    "RT": "Region, technology",
+    "RY": "Region, year",
+    "RE": "Region, emission",
+    "RYTs": "Region, year, timeslice",
+    "RYT": "Region, year, technology",
+    "RYC": "Region, year, commodity",
+    "RYE": "Region, year, emission",
+    "RYTC": "Region, year, technology, commodity",
+    "RYTE": "Region, year, technology, emission",
+    "RYTTs": "Region, year, technology, timeslice",
+    "RYCTs": "Region, year, commodity, timeslice"
 }
 
 

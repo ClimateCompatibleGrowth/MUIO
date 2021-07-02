@@ -10,11 +10,7 @@ export class JqxSources{
                 { name: 'Desc', type: 'string' },
                 { name: 'IAR', type: 'array' },
                 { name: 'OAR', type: 'array' },
-                { name: 'EAR', type: 'array' },
-                { name: 'TMPAL', type: 'number'},
-                { name: 'TMPAU', type: 'number'},
-                { name: 'CAU', type: 'number'},
-                { name: 'OL', type: 'number'}
+                { name: 'EAR', type: 'array' }
             ],
         }
         return srcTech;
@@ -27,7 +23,8 @@ export class JqxSources{
             datafields:
             [
                 { name: 'CommId', type: 'string' },
-                { name: 'Comm', type: 'string' }
+                { name: 'Comm', type: 'string' },
+                { name: 'Desc', type: 'string' }
             ],
         }
         return srcComm;
@@ -41,9 +38,7 @@ export class JqxSources{
             [
                 { name: 'EmisId', type: 'string' },
                 { name: 'Emis', type: 'string' },
-
-                { name: 'MPEL', type: 'number'},
-                { name: 'MPEE', type: 'number'}
+                { name: 'Desc', type: 'string' }
             ],
         }
         return srcEmi;
@@ -115,14 +110,6 @@ export class JqxSources{
             return true;
         }
   
-        var validation_2 = function(cell, value){
-            if(value < 0 ){
-                return { result: false, message: "Vlaue should be positive" };
-            }else{
-                return true;
-            }
-        }
-  
         var cellsrendererbutton = function (row, column, value) {
             var id = $("#osy-gridTech").jqxGrid('getrowid', row);
             if (id == 0) {
@@ -138,10 +125,6 @@ export class JqxSources{
           { text: 'IAR', datafield: 'IAR', width: '10%',  columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
           { text: 'OAR', datafield: 'OAR', width: '10%',  columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
           { text: 'EAR', datafield: 'EAR', width: '10%',  columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-          { text: 'TMPAL', datafield: 'TMPAL', width: '8%', align: 'center',cellsalign: 'right', cellsformat: 'n', validation:validation_2, columntype: 'numberinput'},
-          { text: 'TMPAU', datafield: 'TMPAU', width: '8%', align: 'center',cellsalign: 'right', cellsformat: 'n', validation:validation_2, columntype: 'numberinput'},
-          { text: 'CAU', datafield: 'CAU', width: '8%', align: 'center',cellsalign: 'right', cellsformat: 'n', validation:validation_2, columntype: 'numberinput'},
-          { text: 'OL', datafield: 'OL', width: '8%', align: 'center',cellsalign: 'right', cellsformat: 'n', validation:validation_2, columntype: 'numberinput'},
           { text: '', datafield: 'Delete', width: '10%',  cellsrenderer: cellsrendererbutton, editable:false  },
         ];
 

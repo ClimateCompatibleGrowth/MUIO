@@ -49,7 +49,7 @@ export default class RYTC {
         Message.clearMessages();
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
-        Html.ddlRYT( model.PARAMETERS['RYTC'], model.param);
+        Html.ddlParams( model.PARAMETERS['RYTC'], model.param);
         Html.ddlTechs( model.techs, model.techs[0]['TechId']);
         
         let $divGrid = $('#osy-gridRYTC');

@@ -46,11 +46,20 @@ export default class RYC {
         //Navbar.initPage(model.casename);
 
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
-        Html.ddlRYT( model.PARAMETERS[model.group], model.param);
+        Html.ddlParams( model.PARAMETERS[model.group], model.param);
+        Html.ddlComms( model.comms, model.comms[0]['CommId']);
 
         let $divGrid = $('#osy-gridRYC');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns)
+
+        if (model.scenariosCount>1){
+            $('#scCommand').show();
+            //console.log(model.scenarios, model.scenarios[1]['ScenarioId'])
+            Html.ddlScenarios( model.scenarios, model.scenarios[1]['ScenarioId']);
+            Html.ddlCommNames( model.comms, model.comms[0]['CommId']);
+            Grid.applyRYCFilter( $divGrid, model.years );
+        }
         
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
         let $divChart = $('#osy-chartRYC');
@@ -84,6 +93,8 @@ export default class RYC {
 
     static initEvents(model){
 
+        let $divGrid = $('#osy-gridRYC');
+
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function(e) {
             e.preventDefault();
@@ -97,10 +108,20 @@ export default class RYC {
         $("#osy-saveRYCdata").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
+
             let param = $( "#osy-ryt" ).val();
-            let rycData = $('#osy-gridRYC').jqxGrid('getrows');
-            let daRYCData = JSON.stringify(rycData,['CommId'].concat(model.years));
-            Osemosys.updateData(JSON.parse(daRYCData), param, "RYC.json")
+            let rycData = $('#osy-gridRYC').jqxGrid('getboundrows');
+            let daRYCData = JSON.parse(JSON.stringify(rycData,['ScId', 'CommId'].concat(model.years)));
+
+            let saveData = {};
+            $.each(daRYCData, function (id, obj) {
+                if(!saveData[obj.ScId]){ saveData[obj.ScId] = []; }
+                saveData[obj.ScId].push(obj);
+                delete obj.ScId;
+            });
+            
+            //console.log('saveData ',saveData)
+            Osemosys.updateData(saveData, param, "RYC.json")
             .then(response =>{
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
                 //sync S3
@@ -119,9 +140,46 @@ export default class RYC {
             let $divGrid = $('#osy-gridRYC');
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
+
+            var comm = $( "#osy-comms" ).val();
             var configChart = $('#osy-chartRYC').jqxChart('getInstance');
-            configChart.source.records = model.chartData[this.value];
+            configChart.source.records = model.chartData[this.value][comm];
             configChart.update();
+        });
+
+        //change of ddl comms
+        $('#osy-comms').on('change', function() {
+            var param = $( "#osy-ryt" ).val();
+            var configChart = $('#osy-chartRYC').jqxChart('getInstance');
+            configChart.source.records = model.chartData[param][this.value];
+            configChart.update();
+        });
+
+        $("#osy-openScData").off('click');
+        $("#osy-openScData").on('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $( "#osy-scenarios" ).val();
+            var comm = $( "#osy-commNames" ).val();
+            Grid.applyRYCFilter( $divGrid, model.years, sc, comm );
+        });
+
+        $("#osy-removeScData").off('click');
+        $("#osy-removeScData").on('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $( "#osy-scenarios" ).val();
+            var comm = $( "#osy-commNames" ).val();
+            var rows = $divGrid.jqxGrid('getdisplayrows');
+            $.each(rows, function (id, obj) {
+                if (obj.Sc== sc && obj.Comm == comm){
+                    $.each(model.years, function (i, year) {
+                        $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                    });
+                    return false; // breaks
+                }
+            });
+            Grid.applyRYCFilter( $divGrid, model.years );
         });
 
         let pasteEvent = false;
@@ -132,24 +190,30 @@ export default class RYC {
             if (key == vKey) {
                 pasteEvent = true;
                 setTimeout(function(){ 
-                    let gridData = $('#osy-gridRYC').jqxGrid('getrows');
+                    let gridData = $('#osy-gridRYC').jqxGrid('getboundrows');
                     let param = $( "#osy-ryt" ).val();
-                    let chartData = [];
-                    $.each(model.years, function (idY, year) {
-                        let chunk = {};
-                        chunk['Year'] = year;
-                        $.each(gridData, function (id, rytDataObj) {
-                            chunk[rytDataObj.CommId] = rytDataObj[year]; 
+                    var comm = $( "#osy-comms" ).val();
+
+                    $.each(model.comms, function (idT, comm) {
+                        let chartData = [];
+                        $.each(model.years, function (idY, year) {
+                            let chunk = {};
+                            chunk['Year'] = year;
+                            $.each(gridData, function (id, rytDataObj) {
+                                if(rytDataObj['CommId'] == comm['CommId']){
+                                    chunk[rytDataObj.ScId] = rytDataObj[year]; 
+                                }
+                            });
+                            chartData.push(chunk);
                         });
-                        chartData.push(chunk);
+                        model.chartData[param][comm['CommId']] =  chartData;
                     });
 
                     //update model
-                    model.chartData[param] = chartData;
                     model.gridData[param] = gridData;
 
                     var configChart = $('#osy-chartRYC').jqxChart('getInstance');
-                    configChart.source.records = model.chartData[param];
+                    configChart.source.records = model.chartData[param][comm];
                     configChart.update();
                 }, 1000);
             }
@@ -161,22 +225,24 @@ export default class RYC {
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
                 var commId = $('#osy-gridRYC').jqxGrid('getcellvalue', rowBoundIndex, 'CommId');
+                var scId = $('#osy-gridRYC').jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $( "#osy-ryt" ).val();
+                var comm = $( "#osy-comms" ).val();
 
                 //update model chart
-                $.each(model.chartData[param], function (id, obj) {
+                $.each(model.chartData[param][commId], function (id, obj) {
                     if(obj.Year == year){
                         if(value){
-                            obj[commId] = value;
+                            obj[scId] = value;
                         }else{
-                            obj[commId] = 0;
+                            obj[scId] = 0;
                         }
                     }
                 });
 
                 //update model grid
                 $.each(model.gridData[param], function (id, obj) {
-                    if(obj.CommId == commId){
+                    if(obj.CommId == commId && obj.ScId == scId){
                         if(value){
                             obj[year] = value;
                         }else{
@@ -186,7 +252,7 @@ export default class RYC {
                 });
 
                 var configChart = $('#osy-chartRYC').jqxChart('getInstance');
-                configChart.source.records = model.chartData[param];
+                configChart.source.records = model.chartData[param][comm];
                 configChart.update();
             }
         });
@@ -223,6 +289,7 @@ export default class RYC {
         let res = true;
         $("#resizeColumns").click(function () {
             if(res){
+                $('#osy-gridRYC').jqxGrid('autoresizecolumn', 'Sc');
                 $('#osy-gridRYC').jqxGrid('autoresizecolumn', 'Comm');
             }
             else{
@@ -253,9 +320,9 @@ export default class RYC {
             model.decimal = 'd' + parseInt(model.d);
             $('#osy-gridRYC').jqxGrid('refresh');
         });
+
         $("#showLog").click(function (e) {
             e.preventDefault();
-            console.log(model.group, DEF[model.group].title)
             $('#definition').html(`
                 <h5>${DEF[model.group].title}</h5>
                 ${DEF[model.group].definition}

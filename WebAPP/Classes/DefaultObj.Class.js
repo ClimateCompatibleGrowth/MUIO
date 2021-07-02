@@ -17,7 +17,8 @@ export class DefaultObj{
             {
                 "ScenarioId": id,
                 "Scenario":id,
-                "Desc": "Base scenario"
+                "Desc": "Base scenario",
+                "Active": true
             }
         ];
         return defaultObj;
@@ -38,11 +39,7 @@ export class DefaultObj{
                 "Desc": "Default technology",
                 "IAR": emptyArray,
                 "OAR": emptyArray,
-                "EAR": emptyArray,
-                "TMPAL":0,
-                "TMPAU":999999,
-                "CAU": 0,
-                "OL": 1
+                "EAR": emptyArray
             }
         ];
         return defaultObj;
@@ -78,8 +75,6 @@ export class DefaultObj{
                 "EmisId": id,
                 "Emis":id,
                 "Desc": "Default emission",
-                "MPEL":999999,
-                "MPEE":0,
                 "UnitId": "Ton"
             }
         ];

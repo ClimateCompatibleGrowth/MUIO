@@ -28,6 +28,7 @@ export default class RYE {
             }else{
                 MessageSelect.init(RYE.refreshPage.bind(RYE));
             }
+
         })
         .then(data => {
             let [casename, genData, PARAMETERS, RYEdata] = data;
@@ -45,11 +46,20 @@ export default class RYE {
         //Navbar.initPage(model.casename);
 
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
-        Html.ddlRYT( model.PARAMETERS['RYE'], model.param);
+        Html.ddlParams( model.PARAMETERS[model.group], model.param);
+        Html.ddlEmis( model.emis, model.emis[0]['EmisId']);
 
         let $divGrid = $('#osy-gridRYE');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns)
+
+        if (model.scenariosCount>1){
+            $('#scCommand').show();
+            //console.log(model.scenarios, model.scenarios[1]['ScenarioId'])
+            Html.ddlScenarios( model.scenarios, model.scenarios[1]['ScenarioId']);
+            Html.ddlEmiNames( model.emis, model.emis[0]['EmisId']);
+            Grid.applyRYEFilter( $divGrid, model.years );
+        }
         
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
         let $divChart = $('#osy-chartRYE');
@@ -83,6 +93,8 @@ export default class RYE {
 
     static initEvents(model){
 
+        let $divGrid = $('#osy-gridRYE');
+
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function(e) {
             e.preventDefault();
@@ -96,10 +108,20 @@ export default class RYE {
         $("#osy-saveRYEdata").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
+
             let param = $( "#osy-ryt" ).val();
-            let rytData = $('#osy-gridRYE').jqxGrid('getrows');
-            let daRYTData = JSON.stringify(rytData,['EmisId'].concat(model.years));
-            Osemosys.updateData(JSON.parse(daRYTData), param, "RYE.json")
+            let rycData = $('#osy-gridRYE').jqxGrid('getboundrows');
+            let daRYCData = JSON.parse(JSON.stringify(rycData,['ScId', 'EmisId'].concat(model.years)));
+
+            let saveData = {};
+            $.each(daRYCData, function (id, obj) {
+                if(!saveData[obj.ScId]){ saveData[obj.ScId] = []; }
+                saveData[obj.ScId].push(obj);
+                delete obj.ScId;
+            });
+            
+            //console.log('saveData ',saveData)
+            Osemosys.updateData(saveData, param, "RYE.json")
             .then(response =>{
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
                 //sync S3
@@ -118,9 +140,46 @@ export default class RYE {
             let $divGrid = $('#osy-gridRYE');
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
+
+            var emi = $( "#osy-emis" ).val();
             var configChart = $('#osy-chartRYE').jqxChart('getInstance');
-            configChart.source.records = model.chartData[this.value];
+            configChart.source.records = model.chartData[this.value][emi];
             configChart.update();
+        });
+
+        //change of ddl emis
+        $('#osy-emis').on('change', function() {
+            var param = $( "#osy-ryt" ).val();
+            var configChart = $('#osy-chartRYE').jqxChart('getInstance');
+            configChart.source.records = model.chartData[param][this.value];
+            configChart.update();
+        });
+
+        $("#osy-openScData").off('click');
+        $("#osy-openScData").on('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $( "#osy-scenarios" ).val();
+            var emi = $( "#osy-emiNames" ).val();
+            Grid.applyRYEFilter( $divGrid, model.years, sc, emi );
+        });
+
+        $("#osy-removeScData").off('click');
+        $("#osy-removeScData").on('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $( "#osy-scenarios" ).val();
+            var emi = $( "#osy-emiNames" ).val();
+            var rows = $divGrid.jqxGrid('getdisplayrows');
+            $.each(rows, function (id, obj) {
+                if (obj.Sc== sc && obj.Emis == emi){
+                    $.each(model.years, function (i, year) {
+                        $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                    });
+                    return false; // breaks
+                }
+            });
+            Grid.applyRYEFilter( $divGrid, model.years );
         });
 
         let pasteEvent = false;
@@ -131,24 +190,30 @@ export default class RYE {
             if (key == vKey) {
                 pasteEvent = true;
                 setTimeout(function(){ 
-                    let gridData = $('#osy-gridRYE').jqxGrid('getrows');
+                    let gridData = $('#osy-gridRYE').jqxGrid('getboundrows');
                     let param = $( "#osy-ryt" ).val();
-                    let chartData = [];
-                    $.each(model.years, function (idY, year) {
-                        let chunk = {};
-                        chunk['Year'] = year;
-                        $.each(gridData, function (id, obj) {
-                            chunk[obj.EmisId] = obj[year]; 
+                    var emi = $( "#osy-emis" ).val();
+
+                    $.each(model.emis, function (idT, emi) {
+                        let chartData = [];
+                        $.each(model.years, function (idY, year) {
+                            let chunk = {};
+                            chunk['Year'] = year;
+                            $.each(gridData, function (id, rytDataObj) {
+                                if(rytDataObj['EmisId'] == emi['EmisId']){
+                                    chunk[rytDataObj.ScId] = rytDataObj[year]; 
+                                }
+                            });
+                            chartData.push(chunk);
                         });
-                        chartData.push(chunk);
+                        model.chartData[param][emi['EmisId']] =  chartData;
                     });
 
                     //update model
-                    model.chartData[param] = chartData;
                     model.gridData[param] = gridData;
 
                     var configChart = $('#osy-chartRYE').jqxChart('getInstance');
-                    configChart.source.records = model.chartData[param];
+                    configChart.source.records = model.chartData[param][emi];
                     configChart.update();
                 }, 1000);
             }
@@ -159,23 +224,25 @@ export default class RYE {
                 var year = event.args.datafield;
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
-                var emisId = $('#osy-gridRYE').jqxGrid('getcellvalue', rowBoundIndex, 'EmisId');
+                var emiId = $('#osy-gridRYE').jqxGrid('getcellvalue', rowBoundIndex, 'EmisId');
+                var scId = $('#osy-gridRYE').jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $( "#osy-ryt" ).val();
+                var emi = $( "#osy-emis" ).val();
 
                 //update model chart
-                $.each(model.chartData[param], function (id, obj) {
+                $.each(model.chartData[param][emiId], function (id, obj) {
                     if(obj.Year == year){
                         if(value){
-                            obj[emisId] = value;
+                            obj[scId] = value;
                         }else{
-                            obj[emisId] = 0;
+                            obj[scId] = 0;
                         }
                     }
                 });
 
                 //update model grid
                 $.each(model.gridData[param], function (id, obj) {
-                    if(obj.EmisId == emisId){
+                    if(obj.EmisId == emiId && obj.ScId == scId){
                         if(value){
                             obj[year] = value;
                         }else{
@@ -185,11 +252,12 @@ export default class RYE {
                 });
 
                 var configChart = $('#osy-chartRYE').jqxChart('getInstance');
-                configChart.source.records = model.chartData[param];
+                configChart.source.records = model.chartData[param][emi];
                 configChart.update();
             }
         });
 
+        $(".switchChart").off('click');
         $(".switchChart").on('click', function (e) {
             e.preventDefault();
             var configChart = $('#osy-chartRYE').jqxChart('getInstance');
@@ -203,6 +271,7 @@ export default class RYE {
             configChart.update();  
         });
 
+        $(".toggleLabels").off('click');
         $(".toggleLabels").on('click', function (e) {
             e.preventDefault();
             var configChart = $('#osy-chartRYE').jqxChart('getInstance');
@@ -215,13 +284,16 @@ export default class RYE {
             configChart.update();    
         });
     
+        $("#exportPng").off('click');
         $("#exportPng").click(function() {
             $("#osy-chartRYE").jqxChart('saveAsPNG', 'RYE.png',  'https://www.jqwidgets.com/export_server/export.php');
         }); 
 
         let res = true;
+        $("#resizeColumns").off('click');
         $("#resizeColumns").click(function () {
             if(res){
+                $('#osy-gridRYE').jqxGrid('autoresizecolumn', 'Sc');
                 $('#osy-gridRYE').jqxGrid('autoresizecolumn', 'Emis');
             }
             else{
@@ -230,6 +302,7 @@ export default class RYE {
             res = !res;        
         });
     
+        $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
             $("#osy-gridRYE").jqxGrid('exportdata', 'xls', 'RYE');
@@ -252,6 +325,7 @@ export default class RYE {
             model.decimal = 'd' + parseInt(model.d);
             $('#osy-gridRYE').jqxGrid('refresh');
         });
+
         $("#showLog").click(function (e) {
             e.preventDefault();
             $('#definition').html(`

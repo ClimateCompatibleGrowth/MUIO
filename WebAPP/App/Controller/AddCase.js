@@ -114,14 +114,14 @@ export default class AddCase {
                          return result;
                     }
                 },
-                { input: '#osy-dr', message: "Dicount rate is required field!", action: 'keyup', rule: 'required' },
-                { input: '#osy-dr', message: "Dicount rate should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
-                         var dr = $( "#osy-dr" ).val();
-                        //  console.log(dr)
-                        //  console.log(dr < 0 ? true : false);
-                         return dr < 0 || isNaN(dr) ? false : true;
-                    }
-                },
+                // { input: '#osy-dr', message: "Dicount rate is required field!", action: 'keyup', rule: 'required' },
+                // { input: '#osy-dr', message: "Dicount rate should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
+                //          var dr = $( "#osy-dr" ).val();
+                //         //  console.log(dr)
+                //         //  console.log(dr < 0 ? true : false);
+                //          return dr < 0 || isNaN(dr) ? false : true;
+                //     }
+                // },
                 { input: '#osy-ns', message: "Number of seasons is required field!", action: 'keyup', rule: 'required' },
                 { input: '#osy-ns', message: "Number of seasons should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
                          var dr = $( "#osy-ns" ).val();
@@ -171,7 +171,7 @@ export default class AddCase {
             event.stopImmediatePropagation();
 
             let techData = $('#osy-gridTech').jqxGrid('getrows');
-            console.log('techData ', techData)
+            //console.log('techData ', techData)
             // let TECH = [];
             // $.each(techData, function (index, value) {
             //     let tmp = {};
@@ -215,22 +215,29 @@ export default class AddCase {
                 //tmp[value.EmisId] = value.Emis;
                 tmp.Emis = value.Emis;
                 tmp.Desc = value.Desc;
-                tmp.MPEL = value.MPEL;
-                tmp.MPEE = value.MPEE;
                 tmp.UnitId = value.UnitId;
                 EMIS.push(tmp);
             });
 
             let scenarioData = $('#osy-gridScenario').jqxGrid('getrows');
             let SCENARIOS = [];
+            //let SCORDER = []
             $.each(scenarioData, function (index, value) {
                 let tmp = {};
                 tmp.ScenarioId = value.ScenarioId;
                 //tmp[value.ScenarioId] = value.Scenario;
                 tmp.Scenario = value.Scenario;
                 tmp.Desc = value.Desc;
+                tmp.Active = true;
                 SCENARIOS.push(tmp);
+                // let tmp1 = {};
+                // tmp1.ScId = value.ScenarioId;
+                // tmp1.Sc = value.Scenario;
+                // tmp1.Desc = value.Desc;
+                // tmp1.Active = true;
+                // SCORDER.push(tmp1);
             });
+
 
             var casename = $( "#osy-casename" ).val();
             var desc = $( "#osy-desc" ).val();
@@ -244,6 +251,7 @@ export default class AddCase {
 
             var years = new Array();
             $.each($('input[type="checkbox"]:checked'), function (key, value) {
+                
                 years.push($(value).attr("id"));
             });
 
@@ -253,9 +261,6 @@ export default class AddCase {
                 "osy-desc":desc,
                 "osy-date": date,
                 "osy-currency":currency,
-                "osy-dr": dr,
-                // "osy-dm": dm,
-                // "osy-rmpt": rmpt,
                 "osy-ns": ns,
                 "osy-dt": dt,
                 "osy-tech": TECH,

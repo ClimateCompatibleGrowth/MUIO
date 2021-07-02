@@ -37,10 +37,10 @@ export class Model {
         datafields.push({ name: 'enable', type:'bool' });    
 
         columns.push({ text: 'groupId', datafield: 'groupId', editable: false, align: 'left',  hidden: true})
-        columns.push({ text: 'PARAMETER GROUP', datafield: 'groupName', editable: false, align: 'left', width: '35%'})
+        columns.push({ text: 'PARAMETER GROUP', datafield: 'groupName', editable: false, align: 'left', width: '20%'})
         columns.push({ text: 'id', datafield: 'id', editable: false, align: 'left',  hidden: true})
-        columns.push({ text: 'PARAMETER NAME', datafield: 'value', editable: false, align: 'left', width: '50%'})
-        columns.push({ text: 'DEFAULT VALUE', datafield: 'default', align: 'right', cellsalign: 'right', cellsformat: 'd2', width: '15%'})
+        columns.push({ text: 'PARAMETER NAME', datafield: 'value', editable: false, align: 'left', width: '70%'})
+        columns.push({ text: 'DEFAULT VALUE', datafield: 'default', align: 'right', cellsalign: 'right', cellsformat: 'd2', width: '10%'})
         columns.push({ text: 'ACTIVE', datafield: 'enable', columntype: 'checkbox', align: 'center', width: '15%',  hidden: true}),
         columns.push({ text: 'menu', datafield: 'menu', editable: false, align: 'left',  hidden: true})
 
