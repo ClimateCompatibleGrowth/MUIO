@@ -50,7 +50,7 @@ def downloadDataFile():
         #path = "/Examples.pdf"
         case = session.get('osycase', None)
         dataFile = Path(Config.DATA_STORAGE,case,'data.txt')
-        return send_file(dataFile.resolve(), as_attachment=True)
+        return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
     
     except(IOError):
         return jsonify('No existing cases!'), 404

@@ -17,7 +17,7 @@ param TradeRoute  default 0 :=
 ; 
  
 param DiscountRate default 0.05 := 
-RE1 0.05 
+RE1 0.09 
 ; 
 
 param TotalTechnologyModelPeriodActivityLowerLimit default 0 : 
