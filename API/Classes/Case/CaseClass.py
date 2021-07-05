@@ -209,19 +209,25 @@ class Case:
         try:
             years = self.genData['osy-years']
             techs = self.genData['osy-tech']
+            scenarios = self.genData['osy-scenarios']
             
             RYTCdata = {}
             for ryt in self.PARAMETERS['RYTC']:
-                RYTCdata[ryt['id']] = []
-                for tech in techs:
-                    if tech[ryt['id']]:
-                        for comm in tech[ryt['id']]:
-                            chunk = {}
-                            chunk['TechId'] = tech['TechId']
-                            chunk['CommId'] = comm
-                            for year in years:
-                                chunk[year] = ryt['default'] 
-                            RYTCdata[ryt['id']].append(chunk)
+                RYTCdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTCdata[ryt['id']][sc['ScenarioId']] = []    
+                    for tech in techs:
+                        if tech[ryt['id']]:
+                            for comm in tech[ryt['id']]:
+                                chunk = {}
+                                chunk['TechId'] = tech['TechId']
+                                chunk['CommId'] = comm
+                                for year in years:
+                                    if sc['ScenarioId'] == 'SC_0':
+                                        chunk[year] = ryt['default']
+                                    else:
+                                        chunk[year] = None 
+                                RYTCdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYTCdata, self.RYTCpath)
         except(IOError):
@@ -231,19 +237,25 @@ class Case:
         try:
             years = self.genData['osy-years']
             techs = self.genData['osy-tech']
+            scenarios = self.genData['osy-scenarios']
             
             RYTEdata = {}
             for ryt in self.PARAMETERS['RYTE']:
-                RYTEdata[ryt['id']] = []
-                for tech in techs:
-                    if tech[ryt['id']]:
-                        for comm in tech[ryt['id']]:
-                            chunk = {}
-                            chunk['TechId'] = tech['TechId']
-                            chunk['EmisId'] = comm
-                            for year in years:
-                                chunk[year] = ryt['default'] 
-                            RYTEdata[ryt['id']].append(chunk)
+                RYTEdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTEdata[ryt['id']][sc['ScenarioId']] = []  
+                    for tech in techs:
+                        if tech[ryt['id']]:
+                            for comm in tech[ryt['id']]:
+                                chunk = {}
+                                chunk['TechId'] = tech['TechId']
+                                chunk['EmisId'] = comm
+                                for year in years:
+                                    if sc['ScenarioId'] == 'SC_0':
+                                        chunk[year] = ryt['default']
+                                    else:
+                                        chunk[year] = None
+                                RYTEdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYTEdata, self.RYTEpath)
         except(IOError):
@@ -287,21 +299,27 @@ class Case:
             comms = self.genData['osy-comm']
             ns = int(self.genData['osy-ns'])
             nd = int(self.genData['osy-dt'])
+            scenarios = self.genData['osy-scenarios']
             
             RYCTsdata = {}
             for ryt in self.PARAMETERS['RYCTs']:
-                RYCTsdata[ryt['id']] = []
-                for comm in comms:
-                    for season in range(ns):
-                        for day in range(nd):
-                            chunk = {}
-                            chunk['CommId'] = comm['CommId']
-                            s = str(season + 1)
-                            d = str(day + 1)
-                            chunk['Timeslice'] = "S"+s+d
-                            for year in years:
-                                chunk[year] = ryt['default'] 
-                            RYCTsdata[ryt['id']].append(chunk)
+                RYCTsdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYCTsdata[ryt['id']][sc['ScenarioId']] = []  
+                    for comm in comms:
+                        for season in range(ns):
+                            for day in range(nd):
+                                chunk = {}
+                                chunk['CommId'] = comm['CommId']
+                                s = str(season + 1)
+                                d = str(day + 1)
+                                chunk['Timeslice'] = "S"+s+d
+                                for year in years:
+                                    if sc['ScenarioId'] == 'SC_0':
+                                        chunk[year] = ryt['default']
+                                    else:
+                                        chunk[year] = None
+                                RYCTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYCTsdata, self.RYCTspath)
         except(IOError):

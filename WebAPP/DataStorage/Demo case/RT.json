@@ -1,0 +1,74 @@
+{
+    "CAU": {
+        "SC_0": [
+            {
+                "TEC_0": 0,
+                "TEC_3tfh8": 0,
+                "TEC_98ow7": 0,
+                "TEC_0ypl7": 0
+            }
+        ],
+        "SC_jr4ch": [
+            {
+                "TEC_0": null,
+                "TEC_3tfh8": null,
+                "TEC_98ow7": null,
+                "TEC_0ypl7": null
+            }
+        ]
+    },
+    "OL": {
+        "SC_0": [
+            {
+                "TEC_0": 1,
+                "TEC_3tfh8": 1,
+                "TEC_98ow7": 1,
+                "TEC_0ypl7": 1
+            }
+        ],
+        "SC_jr4ch": [
+            {
+                "TEC_0": null,
+                "TEC_3tfh8": null,
+                "TEC_98ow7": null,
+                "TEC_0ypl7": null
+            }
+        ]
+    },
+    "TMPAL": {
+        "SC_0": [
+            {
+                "TEC_0": 0,
+                "TEC_3tfh8": 0,
+                "TEC_98ow7": 0,
+                "TEC_0ypl7": 0
+            }
+        ],
+        "SC_jr4ch": [
+            {
+                "TEC_0": null,
+                "TEC_3tfh8": null,
+                "TEC_98ow7": null,
+                "TEC_0ypl7": null
+            }
+        ]
+    },
+    "TMPAU": {
+        "SC_0": [
+            {
+                "TEC_0": 999999,
+                "TEC_3tfh8": 999999,
+                "TEC_98ow7": 999999,
+                "TEC_0ypl7": 999999
+            }
+        ],
+        "SC_jr4ch": [
+            {
+                "TEC_0": null,
+                "TEC_3tfh8": null,
+                "TEC_98ow7": null,
+                "TEC_0ypl7": null
+            }
+        ]
+    }
+}

@@ -166,36 +166,6 @@ class Osemosys():
                     commIds[param['id']][tech['TechId']] = tech[param['id']]
         return commIds
 
-    # def R(self):
-    #     R = {}
-    #     for id in self.PARAM['R']:
-    #         R[id] = {}
-    #         R[id] = self.genData["osy-"+id.lower()]
-    #     return R
-
-    # def T(self):
-    #     T = {}
-    #     for id in self.PARAM['T']:
-    #         T[id] = {}
-    #         for tech in self.genData["osy-tech"]:
-    #             T[id][tech['TechId']] = tech[id]
-    #     return T
-
-    # def RT(self):
-    #     RT = {}
-    #     for id in self.PARAM['RT']:
-    #         RT[id] = {}
-    #         for tech in self.genData["osy-tech"]:
-    #             RT[id][tech['TechId']] = tech[id]
-    #     return RT
-
-    # def RE(self):
-    #     RE = {}
-    #     for id in self.PARAM['RE']:
-    #         RE[id] = {}
-    #         for emi in self.genData["osy-emis"]:
-    #             RE[id][emi['EmisId']] = emi[id]
-    #     return RE
 
     def R(self, Rdata):
         R = {}
@@ -249,9 +219,9 @@ class Osemosys():
                 RYT[param][sc] = {}
                 for o in array:
                     for year, val in o.items():
-                        if year not in RYT[param][sc]:
-                            RYT[param][sc][year] = {}
                         if (year != 'TechId'):
+                            if year not in RYT[param][sc]:
+                                RYT[param][sc][year] = {}   
                             RYT[param][sc][year][o['TechId']] = val
         return RYT
 
@@ -263,9 +233,9 @@ class Osemosys():
                 RYC[param][sc] = {}
                 for o in array:
                     for year, val in o.items():
-                        if year not in RYC[param][sc]:
-                            RYC[param][sc][year] = {}
                         if (year != 'CommId'):
+                            if year not in RYC[param][sc]:
+                                RYC[param][sc][year] = {}
                             RYC[param][sc][year][o['CommId']] = val
         return RYC
 
@@ -291,38 +261,42 @@ class Osemosys():
                 RYTs[param][sc] = {}
                 for obj in array:
                     for year, val in obj.items():
-                        if year not in RYTs[param][sc]:
-                            RYTs[param][sc][year] = {}
                         if (year != 'YearSplit'):
+                            if year not in RYTs[param][sc]:
+                                RYTs[param][sc][year] = {}
                             RYTs[param][sc][year][obj['YearSplit']] = val
         return RYTs
 
     def RYTC(self, RYTCdata):
         RYTC = {}
-        for param, array in RYTCdata.items():
+        for param, obj1 in RYTCdata.items():
             RYTC[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYTC[param]:
-                        RYTC[param][year] = {}
-                    if (year != 'TechId' and year != 'CommId'):
-                        if obj['TechId'] not in RYTC[param][year]:
-                            RYTC[param][year][obj['TechId']] = {}
-                        RYTC[param][year][obj['TechId']][obj['CommId']] = val
+            for sc, array in obj1.items():
+                RYTC[param][sc] = {}
+                for obj in array:
+                    for year, val in obj.items():
+                        if (year != 'TechId' and year != 'CommId'):
+                            if year not in RYTC[param][sc]:
+                                RYTC[param][sc][year] = {}
+                            if obj['TechId'] not in RYTC[param][sc][year]:
+                                RYTC[param][sc][year][obj['TechId']] = {}
+                            RYTC[param][sc][year][obj['TechId']][obj['CommId']] = val
         return RYTC
 
     def RYTE(self, RYTEdata):
         RYTE = {}
-        for param, array in RYTEdata.items():
+        for param, obj1 in RYTEdata.items():
             RYTE[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYTE[param]:
-                        RYTE[param][year] = {}
-                    if (year != 'TechId' and year != 'EmisId'):
-                        if obj['TechId'] not in RYTE[param][year]:
-                            RYTE[param][year][obj['TechId']] = {}
-                        RYTE[param][year][obj['TechId']][obj['EmisId']] = val
+            for sc, array in obj1.items():
+                RYTE[param][sc] = {}
+                for obj in array:
+                    for year, val in obj.items():
+                        if (year != 'TechId' and year != 'EmisId'):
+                            if year not in RYTE[param][sc]:
+                                RYTE[param][sc][year] = {}
+                            if obj['TechId'] not in RYTE[param][sc][year]:
+                                RYTE[param][sc][year][obj['TechId']] = {}
+                            RYTE[param][sc][year][obj['TechId']][obj['EmisId']] = val
         return RYTE
 
     def RYTTs(self, RYTTsdata):
@@ -333,9 +307,9 @@ class Osemosys():
                 RYTTs[param][sc] = {}
                 for obj in array:
                     for year, val in obj.items():
-                        if year not in RYTTs[param][sc]:
-                            RYTTs[param][sc][year] = {}
                         if (year != 'TechId' and year != 'Timeslice'):
+                            if year not in RYTTs[param][sc]:
+                                RYTTs[param][sc][year] = {}
                             if obj['TechId'] not in RYTTs[param][sc][year]:
                                 RYTTs[param][sc][year][obj['TechId']] = {}
                             RYTTs[param][sc][year][obj['TechId']][obj['Timeslice']] = val
@@ -343,16 +317,18 @@ class Osemosys():
 
     def RYCTs(self, RYCTsdata):
         RYCTs = {}
-        for param, array in RYCTsdata.items():
+        for param, obj1 in RYCTsdata.items():
             RYCTs[param] = {}
-            for obj in array:
-                for year, val in obj.items():
-                    if year not in RYCTs[param]:
-                        RYCTs[param][year] = {}
-                    if (year != 'CommId' and year != 'Timeslice'):
-                        if obj['CommId'] not in RYCTs[param][year]:
-                            RYCTs[param][year][obj['CommId']] = {}
-                        RYCTs[param][year][obj['CommId']][obj['Timeslice']] = val
+            for sc, array in obj1.items():
+                RYCTs[param][sc] = {}
+                for obj in array:
+                    for year, val in obj.items():
+                        if (year != 'CommId' and year != 'Timeslice'):
+                            if year not in RYCTs[param][sc]:
+                                RYCTs[param][sc][year] = {} 
+                            if obj['CommId'] not in RYCTs[param][sc][year]:
+                                RYCTs[param][sc][year][obj['CommId']] = {}
+                            RYCTs[param][sc][year][obj['CommId']][obj['Timeslice']] = val
         return RYCTs
 
     def viewDataByTech(self):
@@ -368,19 +344,21 @@ class Osemosys():
                         byTech['groupId'] = group
                         byTech['param'] = obj['id']
                         byTech['paramName'] = obj['value']
-                        for obj2 in jsonData[group][obj['id']]:
-                            if obj2['TechId'] == tech['TechId']:
-                                byTech['TechId'] = tech['TechId']
-                                if 'CommId' not in obj:
-                                    byTech['CommId'] = None
-                                if 'EmisId' not in obj:
-                                    byTech['EmisId'] = None
-                                if 'Timeslice' not in obj:
-                                    byTech['Timeslice'] = None
-                                for k,v in obj2.items():
-                                    if k != 'TechId':
-                                        byTech[k] = v
-                                data[tech['TechId']].append(byTech.copy())
+                        for sc, array in jsonData[group][obj['id']].items():
+                            byTech['ScId'] = sc
+                            for obj2 in array:
+                                if obj2['TechId'] == tech['TechId']:
+                                    byTech['TechId'] = tech['TechId']
+                                    if 'CommId' not in obj:
+                                        byTech['CommId'] = None
+                                    if 'EmisId' not in obj:
+                                        byTech['EmisId'] = None
+                                    if 'Timeslice' not in obj:
+                                        byTech['Timeslice'] = None
+                                    for k,v in obj2.items():
+                                        if k != 'TechId':
+                                            byTech[k] = v
+                                    data[tech['TechId']].append(byTech.copy())
         return data
 
     def viewDataByComm(self):
@@ -396,19 +374,21 @@ class Osemosys():
                         byComm['groupId'] = group
                         byComm['param'] = obj['id']
                         byComm['paramName'] = obj['value']
-                        for obj2 in jsonData[group][obj['id']]:
-                            if obj2['CommId'] == tech['CommId']:
-                                byComm['CommId'] = tech['CommId']
-                                if 'TechId' not in obj:
-                                    byComm['TechId'] = None
-                                if 'EmisId' not in obj:
-                                    byComm['EmisId'] = None
-                                if 'Timeslice' not in obj:
-                                    byComm['Timeslice'] = None
-                                for k,v in obj2.items():
-                                    if k != 'CommId':
-                                        byComm[k] = v
-                                data[tech['CommId']].append(byComm.copy())
+                        for sc, array in jsonData[group][obj['id']].items():
+                            byComm['ScId'] = sc
+                            for obj2 in array:
+                                if obj2['CommId'] == tech['CommId']:
+                                    byComm['CommId'] = tech['CommId']
+                                    if 'TechId' not in obj:
+                                        byComm['TechId'] = None
+                                    if 'EmisId' not in obj:
+                                        byComm['EmisId'] = None
+                                    if 'Timeslice' not in obj:
+                                        byComm['Timeslice'] = None
+                                    for k,v in obj2.items():
+                                        if k != 'CommId':
+                                            byComm[k] = v
+                                    data[tech['CommId']].append(byComm.copy())
         return data
 
     def viewDataByEmi(self):
@@ -424,29 +404,34 @@ class Osemosys():
                         byEmi['groupId'] = group
                         byEmi['param'] = obj['id']
                         byEmi['paramName'] = obj['value']
-                        for obj2 in jsonData[group][obj['id']]:
-                            if obj2['EmisId'] == tech['EmisId']:
-                                byEmi['EmisId'] = tech['EmisId']
-                                if 'TechId' not in obj:
-                                    byEmi['TechId'] = None
-                                if 'CommId' not in obj:
-                                    byEmi['CommId'] = None
-                                if 'Timeslice' not in obj:
-                                    byEmi['Timeslice'] = None
-                                for k,v in obj2.items():
-                                    if k != 'EmisId':
-                                        byEmi[k] = v
-                                data[tech['EmisId']].append(byEmi.copy())
+                        for sc, array in jsonData[group][obj['id']].items():
+                            byEmi['ScId'] = sc
+                            for obj2 in array:
+                                if obj2['EmisId'] == tech['EmisId']:
+                                    byEmi['EmisId'] = tech['EmisId']
+                                    if 'TechId' not in obj:
+                                        byEmi['TechId'] = None
+                                    if 'CommId' not in obj:
+                                        byEmi['CommId'] = None
+                                    if 'Timeslice' not in obj:
+                                        byEmi['Timeslice'] = None
+                                    for k,v in obj2.items():
+                                        if k != 'EmisId':
+                                            byEmi[k] = v
+                                    data[tech['EmisId']].append(byEmi.copy())
         return data
 
-    def updateViewData(self, casename, updateType, year, groupId, paramId, TechId, CommId, EmisId, Timeslice, value):
+    def updateViewData(self, casename, year, ScId, GroupId, ParamId, TechId, CommId, EmisId, Timeslice, value):
         try:
-            jsonPath = Path(Config.DATA_STORAGE,casename, groupId+'.json')
+            jsonPath = Path(Config.DATA_STORAGE,casename, GroupId+'.json')
             jsonData = File.readFile(jsonPath)
-            if updateType == 'TECH':
-                for obj in jsonData[paramId]:
-                    if (obj['TechId'] == TechId if TechId is not None else True) and (obj['CommId'] == CommId if CommId is not None else True) and (obj['EmisId'] == EmisId if EmisId is not None else True):
-                        obj[year] = value
+
+            for obj in jsonData[ParamId][ScId]:
+                if ((obj['TechId'] == TechId if TechId is not None else True) and 
+                    (obj['CommId'] == CommId if CommId is not None else True) and 
+                    (obj['EmisId'] == EmisId if EmisId is not None else True) and
+                    (obj['Timeslice'] == Timeslice if Timeslice is not None else True)):
+                    obj[year] = value
             File.writeFile( jsonData, jsonPath)
         except(IOError):
             raise IOError

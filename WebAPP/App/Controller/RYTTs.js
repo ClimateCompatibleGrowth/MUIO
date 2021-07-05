@@ -8,7 +8,6 @@ import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { GROUPNAMES } from "../../Classes/Const.Class.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
-import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export default class RYTTs {
     static onLoad(group, param){
@@ -245,6 +244,7 @@ export default class RYTTs {
                 var year = event.args.datafield;
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
+                
                 var techId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
                 var timeslice = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'Timeslice');
                 var ScId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');

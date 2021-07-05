@@ -335,3 +335,29 @@ top: 10px;
         border-radius: 0px!important;
         margin-bottom: 5px!important;
     }
+
+    nav ul ul li{
+        padding-bottom: 4px!important;
+        padding-top: 4px!important;
+    }
+
+    .badge-sm{
+        min-width: 28px!important;
+        padding: 2px 4px!important;
+        line-height: 0.8!important;
+        border-radius: 5px!important;
+        font-size: 9px!important;
+        z-index: 1!important;
+    }
+
+    .minified nav>ul>li>ul{
+        width:350px!important;
+    }
+
+    .SmallBox .textoFull {
+        width: 89%!important;
+    }
+
+    /* .jarviswidget {
+        border-top: 1px solid var(--second-color)!important ;
+    } */

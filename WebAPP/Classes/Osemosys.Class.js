@@ -9,10 +9,9 @@ export class Osemosys {
                 async: true,  
                 type: 'GET',
                 dataType: 'json',
-                //cache: false,
+                cache: false,
                 contentType: 'application/json; charset=utf-8',
-                success: function (result) {  
-                    //console.log('result ', result)           
+                success: function (result) {            
                     resolve(result);
                 },
                 error: function(xhr, status, error) {

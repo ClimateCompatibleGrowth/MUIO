@@ -62,15 +62,12 @@ export class Model {
                     console.log('SC0 ', scId)
                     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   });
                     $('#' + editor[0].id + ' input').keydown(function (event) {
-                        console.log(event.keyCode)
                         if (event.keyCode === 46 || event.keyCode === 8 ) {
 
                             $('#' + editor[0].id).val(null);
                         }
                     })
-                }else{
-                    console.log('othe sc ', scId);
-                    
+                }else{                    
                     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false   });
                 }
 

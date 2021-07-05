@@ -19,9 +19,10 @@ export class Model {
 
             let scClass = {};
 
-            // datafieldsChart.push({ name: 'TechId', type:'string' });
-            // datafieldsChart.push({ name: 'Tech', type:'string' });
+            //datafieldsChart.push({ name: 'TechId', type:'string' });
+            datafieldsChart.push({ name: 'Tech', type:'string' });
 
+            
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_'+id;
                 datafieldsChart.push({ name: obj.ScenarioId, type:'number' });
@@ -97,11 +98,11 @@ export class Model {
             let RTgrid = DataModel.RTgrid(genData, RTdata, PARAMETERS[group]);
             let RTchart = DataModel.RTchart(genData, RTdata);
 
-            // console.log('RTdata ', RTdata)
-            // console.log('RTgrid ', RTgrid)
-            // console.log('columns ', columns)
-            // console.log('RTchart ', RTchart)
-            // console.log('series ', series)
+            console.log('RTdata ', RTdata)
+            console.log('RTgrid ', RTgrid)
+            console.log('columns ', columns)
+            console.log('RTchart ', RTchart)
+            console.log('series ', series)
 
             let srcGrid = {
                 datatype: "json",

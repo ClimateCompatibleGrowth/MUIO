@@ -135,18 +135,6 @@ export class Html {
 
     }
 
-    // static ddlyears(years, year){
-    //     var container =  $('#hData-years');
-    //     container.empty();
-    //     $.each(years, function (key, value) {
-    //         if (value == year){
-    //             container.append('<option value="'+ value+'" selected>'+value+'</option>');
-    //         }else{
-    //             container.append('<option value="'+ value+'">'+value+'</option>');
-    //         }
-    //     });
-    // }
-
     static ddlParams(params, param){
         var container =  $('#osy-ryt');
         container.empty();

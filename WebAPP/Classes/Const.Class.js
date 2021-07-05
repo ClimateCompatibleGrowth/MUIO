@@ -15,6 +15,36 @@ export const GROUPNAMES = {
     "RYCTs": "Region, year, commodity, timeslice"
 }
 
+export const PARAMORDER = [
+    "R"    ,     
+    "RT"   ,     
+    "RY"   ,     
+    "RE"   ,     
+    "RYTs" ,     
+    "RYT"  ,     
+    "RYC"  ,     
+    "RYE"  ,     
+    "RYTC" ,     
+    "RYTE" ,     
+    "RYTTs",     
+    "RYCTs"  
+];
+
+export const PARAMCOLORS = {
+    "R": "orange",
+    "RT": "blue",
+    "RY": "blueLight",
+    "RE": "yellow",
+    "RYTs": "red",
+    "RYT": "greenLight",
+    "RYC": "grey",
+    "RYE": "pink",
+    "RYTC": "teal",
+    "RYTE": "greenDark",
+    "RYTTs": "purple",
+    "RYCTs": "magenta"
+}
+
 
 
 //////////////////////////////ne koristi se

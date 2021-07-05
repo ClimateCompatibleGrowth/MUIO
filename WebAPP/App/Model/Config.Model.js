@@ -1,5 +1,5 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
-import { GROUPNAMES } from "../../Classes/Const.Class.js";
+import { GROUPNAMES, PARAMORDER } from "../../Classes/Const.Class.js";
 
 export class Model {
     
@@ -11,8 +11,10 @@ export class Model {
         let columns = [];
 
         let gridData = []
-        $.each(PARAMETERS, function (group, array) {
-            $.each(array, function (id, obj) {
+        // $.each(PARAMETERS, function (group, array) {
+        //     $.each(array, function (id, obj) {
+        $.each(PARAMORDER, function (id, group) {   
+            $.each(PARAMETERS[group], function (id, obj) {
                 //console.log(group)
                 let tmp = {};
                 tmp['groupId'] = group;

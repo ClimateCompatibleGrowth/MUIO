@@ -108,9 +108,7 @@ export default class RT {
             event.stopImmediatePropagation();
             let param = $( "#osy-ryt" ).val();
             let rtData = $('#osy-gridRT').jqxGrid('getboundrows');
-            //console.log('rytData save ', rtData)
             let data = JSON.parse(JSON.stringify(rtData,['ScId'].concat(model.techIds)));
-            console.log('data save ', data)
 
             let saveData = {};
             $.each(data, function (id, obj) {
@@ -118,7 +116,6 @@ export default class RT {
                 saveData[obj.ScId].push(obj);
                 delete obj.ScId;
             });
-            console.log('data save ', saveData)
 
             Osemosys.updateData(saveData, param, "RT.json")
             .then(response =>{

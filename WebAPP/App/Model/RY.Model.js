@@ -73,6 +73,7 @@ export class Model {
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type:'number' });
                 columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
+                groupable:false,
                 initeditor: initeditor,
                 validation: validation,
                 cellsrenderer: cellsrenderer,

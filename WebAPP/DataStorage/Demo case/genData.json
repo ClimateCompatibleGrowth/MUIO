@@ -1,60 +1,62 @@
 {
     "osy-version": "1.0",
-    "osy-casename": "demo",
-    "osy-desc": "",
-    "osy-date": "06/29/2021",
-    "osy-currency": "EEK",
+    "osy-casename": "Demo case ",
+    "osy-desc": "scenario implementation",
+    "osy-date": "07/04/2021",
+    "osy-currency": "EUR",
     "osy-ns": "3",
     "osy-dt": "2",
     "osy-tech": [
         {
-            "TechId": "TEC_0",
-            "Tech": "TEC_0",
             "Desc": "Default technology",
+            "EAR": [],
             "IAR": [],
             "OAR": [],
-            "EAR": []
+            "Tech": "TEC_0",
+            "TechId": "TEC_0"
         },
         {
-            "TechId": "TEC_40fsn",
-            "Tech": "TEC_1",
             "Desc": "Default technology",
-            "IAR": [
-                "COM_0"
-            ],
-            "OAR": [
-                "COM_0"
-            ],
             "EAR": [
                 "EMI_0"
-            ]
-        },
-        {
-            "TechId": "TEC_mm25u",
-            "Tech": "TEC_2",
-            "Desc": "Default technology",
-            "IAR": [],
-            "OAR": [],
-            "EAR": [
-                "EMI_0",
-                "EMI_9yvti"
-            ]
-        },
-        {
-            "TechId": "TEC_l9jhe",
-            "Tech": "TEC_3",
-            "Desc": "Default technology",
+            ],
             "IAR": [
-                "COM_6exqi",
-                "COM_9o3q1"
+                "COM_0"
             ],
             "OAR": [
-                "COM_6exqi",
-                "COM_9o3q1"
+                "COM_0"
             ],
+            "Tech": "TEC_1",
+            "TechId": "TEC_3tfh8"
+        },
+        {
+            "Desc": "Default technology",
             "EAR": [
-                "EMI_9yvti"
-            ]
+                "EMI_7sic4",
+                "EMI_5v4pq"
+            ],
+            "IAR": [
+                "COM_e9b72",
+                "COM_3i9x6"
+            ],
+            "OAR": [
+                "COM_e9b72",
+                "COM_3i9x6"
+            ],
+            "Tech": "TEC_2",
+            "TechId": "TEC_98ow7"
+        },
+        {
+            "Desc": "Default technology",
+            "EAR": [
+                "EMI_0",
+                "EMI_7sic4",
+                "EMI_5v4pq"
+            ],
+            "IAR": [],
+            "OAR": [],
+            "Tech": "TEC_3",
+            "TechId": "TEC_0ypl7"
         }
     ],
     "osy-comm": [
@@ -65,13 +67,13 @@
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_6exqi",
+            "CommId": "COM_e9b72",
             "Comm": "COM_1",
             "Desc": "Default commodity",
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_9o3q1",
+            "CommId": "COM_3i9x6",
             "Comm": "COM_2",
             "Desc": "Default commodity",
             "UnitId": "PJ"
@@ -85,8 +87,14 @@
             "UnitId": "Ton"
         },
         {
-            "EmisId": "EMI_9yvti",
+            "EmisId": "EMI_7sic4",
             "Emis": "EMI_1",
+            "Desc": "Default emission",
+            "UnitId": "Ton"
+        },
+        {
+            "EmisId": "EMI_5v4pq",
+            "Emis": "EMI_2",
             "Desc": "Default emission",
             "UnitId": "Ton"
         }
@@ -99,7 +107,7 @@
             "Active": true
         },
         {
-            "ScenarioId": "SC_ipry9",
+            "ScenarioId": "SC_jr4ch",
             "Scenario": "SC_1",
             "Desc": "Base scenario",
             "Active": true

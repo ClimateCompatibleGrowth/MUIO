@@ -12,19 +12,38 @@ export class Model {
             let columns = [];
             let series = [];
         
-            let RYTEgrid = DataModel.RYTEgrid(genData, RYTEdata);
-            let RYTEchart = DataModel.RYTEchart(genData, RYTEdata);
             let years = genData['osy-years'];
             let emis = genData['osy-emis'];
             let techs = genData['osy-tech'];
+            let scenarios = genData['osy-scenarios'];
+
+            let RYTEgrid = DataModel.RYTEgrid(genData, RYTEdata);
+            let RYTEchart = DataModel.RYTEchart(genData, RYTEdata);
+            let techIds = DataModel.TechId(genData);
+            let ActivityTechsEmis = DataModel.activityTechsEmis(techs);
+            let ActivityEmis = DataModel.activityEmis(genData);
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
+
+            let scClass = {};
+
+            datafieldsChart.push({ name: 'Year', type:'string' });
+            $.each(scenarios, function (id, obj) {
+                scClass[obj.ScenarioId] = 'SC_'+id;
+                datafieldsChart.push({ name: obj.ScenarioId, type:'number' });
+                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario});
+            });
+
+            datafields.push({ name: 'ScId', type:'string' });
+            datafields.push({ name: 'Sc', type:'string' }); 
 
             datafields.push({ name: 'TechId', type:'string' });
             datafields.push({ name: 'Tech', type:'string' });
             datafields.push({ name: 'EmisId', type:'string' });
             datafields.push({ name: 'Emis', type:'string' });            
 
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center',  minWidth: 90, maxWidth: 200 })
-            columns.push({ text: 'Emission', datafield: 'Emis', pinned:true, editable: false, align: 'center',  minWidth: 90, maxWidth: 200 })
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
+            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' })
+            columns.push({ text: 'Emission', datafield: 'Emis', pinned:true, editable: false, align: 'center' })
             
 
             let validation = function(cell, value) {
@@ -35,41 +54,52 @@ export class Model {
                 }
             }
 
+            var cellclass = function (row, columnfield, value, data) {
+                return scClass[data.ScId];
+            }
+
             let cellsrenderer = function(row, columnfield, value, defaulthtml, columnproperties) {
-                var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
-                return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
+                if (value === null || value === ''){
+                    return '<span style="margin: 4px; float:right; ">n/a</span>';
+                }else{
+                    var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
+                    return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
+                }
+
             }.bind(this);
         
-            let initeditor = function(row, cellvalue, editor) {
-                editor.jqxNumberInput({ decimalDigits: 4 });
-            }
+
+            let initeditor = function(row, cellvalue, editor, data) {
+                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
+
+                var scId = $('#osy-gridRYTE').jqxGrid('getcellvalue', row, 'ScId');
+                if (scId !== 'SC_0'){
+                    $('#' + editor[0].id + ' input').keydown(function (event) {
+                        if (event.keyCode === 46 || event.keyCode === 8 ) {
+                            $('#' + editor[0].id).val(null);
+                        }
+                    })
+                }
+            }.bind(this);
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type:'number' });
                 columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
-                    //initeditor: initeditor,
+                    groupable:false,
+                    initeditor: initeditor,
                     validation: validation,
-                    cellsrenderer: cellsrenderer
+                    cellsrenderer: cellsrenderer,
+                    cellclassname: cellclass
                 });
             });
 
-            datafieldsChart.push({ name: 'Year', type:'string' });
-            $.each(emis, function (id, obj) {
-                datafieldsChart.push({ name: obj.EmisId, type:'number' });
-                series.push({ dataField: obj.EmisId, displayText: obj.Emis });
-            });
 
-            let EmissionTechs = []
-            $.each(techs, function (id, obj) {
-                if (obj.EAR.length != 0 ) {
-                    EmissionTechs.push(obj);
-                }
-            });
-
-            let PARAMNAMES = {};
-            $.each(PARAMETERS[group], function (id, obj) {
-                PARAMNAMES[obj.id] = obj.value;
-            });
+            // console.log('ActivityTechsEmis ', ActivityTechsEmis)
+            // console.log('ActivityEmis ', ActivityEmis)
+            // console.log('RYTEdata ', RYTEdata)
+            // console.log('RYTEgrid ', RYTEgrid)
+            // console.log('RYTEchart ', RYTEchart)
+            // console.log('param ', param)
 
             var srcGrid = {
                 datatype: "json",
@@ -81,13 +111,17 @@ export class Model {
             var srcChart = {
                 datatype: "json",
                 localdata: RYTEchart,
-                root: param + '>' + techs[0]['TechId'],
+                root: param + '>' + ActivityTechsEmis[0]['TechId']+ '>' + ActivityEmis[ActivityTechsEmis[0]['TechId']][0]['EmisId'],
                 datafields: datafieldsChart,
             };
             
             this.casename = casename; 
             this.years = years;
-            this.techs = EmissionTechs;
+            this.techs = ActivityTechsEmis;
+            this.techIds = techIds;
+            this.emis = ActivityEmis;
+            this.scenarios = scenarios;
+            this.scenariosCount = scenarios.length;
             this.datafields = datafields; 
             this.datafieldsChart = datafieldsChart; 
             this.columns = columns;

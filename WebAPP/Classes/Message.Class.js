@@ -1,3 +1,4 @@
+import { Html } from "./Html.Class.js";
 export class Message {
 
     static clearMessages(){
@@ -97,9 +98,9 @@ export class Message {
         $.smallBox({
             title : title,
             timeout : timeout,
-            content : `<i class='fa fa-clock-o'></i> <i>${content}</i>`,
+            content : `<i class='fa fa-exclamation-triangle warning'></i> <i>${content}</i>`,
             color : "#C79121",
-            iconSmall : "fa fa-shield fa-2x fadeInLeft animated",
+            iconSmall : "fa fa-exclamation-triangle fa-2x fadeInLeft animated shake",
         });
     }
 
@@ -137,8 +138,8 @@ export class Message {
         var casesArr = '"[' + cases.join('][') + ']"';
         //console.log(casesArr)
         $.SmartMessageBox({
-            title : "No active case studt: Select",
-            content : "Please select on of existing cases to proceed.",
+            title : "No active case study: Select",
+            content : "Please select one of existing cases to proceed.",
             buttons : "[Continue]",
             input : "select",
             //options : "[Costa Rica][United States][Autralia][Spain]"
@@ -146,6 +147,28 @@ export class Message {
             //options : "[Costa Rica][United States][Autralia][Spain]"
         }, function(ButtonPress, Value) {
             //console.log(Value);
+            // html.updateCasePicker(Value);
+            Html.updateCasePicker(Value);
+            init_f(Value);
+            //alert(ButtonPress + " " + Value);
+        });
+    }
+
+    static ddlActivity(cases, init_f){
+
+        //console.log('ddlacitvity ')
+        var casesArr = '"[' + cases.join('][') + ']"';
+        //console.log(casesArr)
+        $.SmartMessageBox({
+            title : "<i class='fa fa-exclamation-triangle danger'></i>Selected case has no activity defines: Select",
+            content : "Please select cases to proceed.",
+            buttons : "[Continue]",
+            input : "select",
+            //options : "[Costa Rica][United States][Autralia][Spain]"
+            options: casesArr,
+        }, function(ButtonPress, Value) {
+            Html.updateCasePicker(Value);
+            //console.log('Refresh ')
             init_f(Value);
             //alert(ButtonPress + " " + Value);
         });

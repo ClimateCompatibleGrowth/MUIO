@@ -235,30 +235,32 @@ class UpdateCase(Osemosys):
 
     def updateRYTCmodel(self):
         try:
-            #OsemosysModel = Osemosys(case)
-            #rytcJson = OsemosysModel.getJsonData('RYTC.json')
             rytcJson = File.readFile(self.rytcPath) 
             RYTCsource = self.RYTC(rytcJson)
 
             years = self.genDataUpdate['osy-years']
             techs = self.genDataUpdate['osy-tech']
+            scenarios = self.genDataUpdate['osy-scenarios']
             
             RYTCdata = {}
             for ryt in self.PARAMETERS['RYTC']:
-                RYTCdata[ryt['id']] = []
-                for tech in techs:
-                    if tech[ryt['id']]:
-                        for comm in tech[ryt['id']]:
-                            chunk = {}
-                            chunk['TechId'] = tech['TechId']
-                            chunk['CommId'] = comm
-                            for year in years:
-                                # if RYTCsource[ryt['id']][year][tech['TechId']][comm]:
-                                if self.keys_exists(RYTCsource, ryt['id'], year, tech['TechId'], comm):
-                                    chunk[year] = RYTCsource[ryt['id']][year][tech['TechId']][comm]
-                                else:
-                                    chunk[year] = ryt['default']
-                            RYTCdata[ryt['id']].append(chunk)
+                RYTCdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTCdata[ryt['id']][sc['ScenarioId']] = [] 
+                    for tech in techs:
+                        if tech[ryt['id']]:
+                            for comm in tech[ryt['id']]:
+                                chunk = {}
+                                chunk['TechId'] = tech['TechId']
+                                chunk['CommId'] = comm
+                                for year in years:
+                                    if self.keys_exists(RYTCsource, ryt['id'], sc['ScenarioId'], year, tech['TechId'], comm):
+                                        chunk[year] = RYTCsource[ryt['id']][sc['ScenarioId']][year][tech['TechId']][comm]
+                                    elif sc['ScenarioId'] == 'SC_0':
+                                        chunk[year] = ryt['default']
+                                    else:
+                                        chunk[year] = None
+                                RYTCdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYTCdata, self.rytcPath)
 
@@ -267,30 +269,33 @@ class UpdateCase(Osemosys):
 
     def updateRYTEmodel(self):
         try:
-            #OsemosysModel = Osemosys(case)
-            #ryteJson = OsemosysModel.getJsonData('RYTE.json')
             ryteJson = File.readFile(self.rytePath) 
             RYTEsource = self.RYTE(ryteJson)
 
             years = self.genDataUpdate['osy-years']
             techs = self.genDataUpdate['osy-tech']
+            scenarios = self.genDataUpdate['osy-scenarios']
             
             RYTEdata = {}
             for ryt in self.PARAMETERS['RYTE']:
-                RYTEdata[ryt['id']] = []
-                for tech in techs:
-                    if tech[ryt['id']]:
-                        for comm in tech[ryt['id']]:
-                            chunk = {}
-                            chunk['TechId'] = tech['TechId']
-                            chunk['EmisId'] = comm
-                            for year in years:
-                                # if RYTCsource[ryt['id']][year][tech['TechId']][comm]:
-                                if self.keys_exists(RYTEsource, ryt['id'], year, tech['TechId'], comm):
-                                    chunk[year] = RYTEsource[ryt['id']][year][tech['TechId']][comm]
-                                else:
-                                    chunk[year] = ryt['default'] 
-                            RYTEdata[ryt['id']].append(chunk)
+                RYTEdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTEdata[ryt['id']][sc['ScenarioId']] = [] 
+                    for tech in techs:
+                        if tech[ryt['id']]:
+                            for comm in tech[ryt['id']]:
+                                chunk = {}
+                                chunk['TechId'] = tech['TechId']
+                                chunk['EmisId'] = comm
+                                for year in years:
+                                    # if RYTCsource[ryt['id']][year][tech['TechId']][comm]:
+                                    if self.keys_exists(RYTEsource, ryt['id'], sc['ScenarioId'], year, tech['TechId'], comm):
+                                        chunk[year] = RYTEsource[ryt['id']][sc['ScenarioId']][year][tech['TechId']][comm]
+                                    elif sc['ScenarioId'] == 'SC_0':
+                                        chunk[year] = ryt['default']
+                                    else:
+                                        chunk[year] = None
+                                RYTEdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYTEdata, self.rytePath)
 
@@ -313,7 +318,6 @@ class UpdateCase(Osemosys):
                 RYTTsdata[ryt['id']] = {}
                 for sc in scenarios:
                     RYTTsdata[ryt['id']][sc['ScenarioId']] = []  
-
                     for tech in techs:
                         for season in range(ns):
                             for day in range(nd):
@@ -337,33 +341,36 @@ class UpdateCase(Osemosys):
 
     def updateRYCTsmodel(self):
         try:
-            #OsemosysModel = Osemosys(case)
-            #ryctsJson = OsemosysModel.getJsonData('RYCTs.json')
             ryctsJson = File.readFile(self.ryctsPath) 
             RYCTssource = self.RYCTs(ryctsJson)
 
             years = self.genDataUpdate['osy-years']
             comms = self.genDataUpdate['osy-comm']
+            scenarios = self.genDataUpdate['osy-scenarios']
             ns = int(self.genDataUpdate['osy-ns'])
             nd = int(self.genDataUpdate['osy-dt'])
 
             RYCTsdata = {}
             for ryt in self.PARAMETERS['RYCTs']:
-                RYCTsdata[ryt['id']] = []
-                for comm in comms:
-                    for season in range(ns):
-                        for day in range(nd):
-                            chunk = {}
-                            chunk['CommId'] = comm['CommId']
-                            s = str(season + 1)
-                            d = str(day + 1)
-                            chunk['Timeslice'] = "S"+s+d
-                            for year in years:
-                                if self.keys_exists(RYCTssource, ryt['id'], year, comm['CommId'], "S"+s+d):
-                                    chunk[year] = RYCTssource[ryt['id']][year][comm['CommId']]["S"+s+d]
-                                else:
-                                    chunk[year] = ryt['default']
-                            RYCTsdata[ryt['id']].append(chunk)
+                RYCTsdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYCTsdata[ryt['id']][sc['ScenarioId']] = []  
+                    for comm in comms:
+                        for season in range(ns):
+                            for day in range(nd):
+                                chunk = {}
+                                chunk['CommId'] = comm['CommId']
+                                s = str(season + 1)
+                                d = str(day + 1)
+                                chunk['Timeslice'] = "S"+s+d
+                                for year in years:
+                                    if self.keys_exists(RYCTssource, ryt['id'], sc['ScenarioId'], year, comm['CommId'], "S"+s+d):
+                                        chunk[year] = RYCTssource[ryt['id']][sc['ScenarioId']][year][comm['CommId']]["S"+s+d]
+                                    elif sc['ScenarioId'] == 'SC_0':
+                                        chunk[year] = ryt['default']
+                                    else:
+                                        chunk[year] = None
+                                RYCTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYCTsdata, self.ryctsPath)
         except(IOError):

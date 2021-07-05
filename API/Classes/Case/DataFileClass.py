@@ -108,18 +108,6 @@ class DataFile(Osemosys):
             #next(iter(word_freq.items()))[1]
             #next(iter(commId))
 
-            #T
-            # t = self.T()
-            # for id, param in self.PARAM['T'].items():
-            #     f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
-            #     f.write('{}{}{}'.format( techs, ':=', '\n'))
-            #     rtString = ''
-            #     for techId in techIDs:
-            #         rtString += '{} '.format(t[id][techId])
-            #     f.write('{} {}{}'.format('RE1 ', rtString, '\n'))
-            #     f.write('{}{}'.format(';', '\n'))
-            # f.write('{}{}'.format('', '\n'))
-
             #RY
             ry = self.RY(File.readFile(self.ryPath))
             for id, param in self.PARAM['RY'].items():
@@ -248,8 +236,6 @@ class DataFile(Osemosys):
                 f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
 
-
-            ##############scenario nije implemeniran
             #RYTC
             rytc = self.RYTC(File.readFile(self.rytcPath))
             for id, param in self.PARAM['RYTC'].items():
@@ -260,7 +246,10 @@ class DataFile(Osemosys):
                         f.write('{}{}{}'.format( years, ':=', '\n'))
                         rytcString = ''
                         for yearId in yearIDs:
-                            rytcString += '{} '.format(rytc[id][yearId][activityTechId][activityCommId])
+                            for sc in scOrder:
+                                if rytc[id][sc['ScId']][yearId][activityTechId][activityCommId] is not None and sc['Active'] == True:
+                                    tmp = rytc[id][sc['ScId']][yearId][activityTechId][activityCommId]
+                            rytcString += '{} '.format(tmp)
                         f.write('{} {}{}'.format(1, rytcString, '\n'))
                 f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
@@ -275,7 +264,10 @@ class DataFile(Osemosys):
                         f.write('{}{}{}'.format( years, ':=', '\n'))
                         ryteString = ''
                         for yearId in yearIDs:
-                            ryteString += '{} '.format(ryte[id][yearId][emissionTechId][activityEmissionId])
+                            for sc in scOrder:
+                                if ryte[id][sc['ScId']][yearId][emissionTechId][activityEmissionId] is not None and sc['Active'] == True:
+                                    tmp = ryte[id][sc['ScId']][yearId][emissionTechId][activityEmissionId]
+                            ryteString += '{} '.format(tmp)
                         f.write('{} {}{}'.format(1, ryteString, '\n'))
                 f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
@@ -294,8 +286,8 @@ class DataFile(Osemosys):
                             for sc in scOrder:
                                 if rytts[id][sc['ScId']][yearId][techId][timesliceId] is not None and sc['Active'] == True:
                                     tmp = rytts[id][sc['ScId']][yearId][techId][timesliceId]
-                                #ryttsString += '{} '.format(rytts[id][yearId][techId][timesliceId])
-                        f.write('{} {}{}'.format(timesliceId, tmp, '\n'))
+                            ryttsString += '{} '.format(tmp)
+                        f.write('{} {}{}'.format(timesliceId, ryttsString, '\n'))
             f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))
 
@@ -310,7 +302,10 @@ class DataFile(Osemosys):
                     for timesliceId in timesliceIDs:
                         ryctsString = ''
                         for yearId in yearIDs:
-                            ryctsString += '{} '.format(rycts[id][yearId][commId][timesliceId])
+                            for sc in scOrder:
+                                if rycts[id][sc['ScId']][yearId][commId][timesliceId] is not None and sc['Active'] == True:
+                                    tmp = rycts[id][sc['ScId']][yearId][commId][timesliceId]
+                            ryctsString += '{} '.format(tmp)
                         f.write('{} {}{}'.format(timesliceId, ryctsString, '\n'))
             f.write('{}{}'.format(';', '\n'))
             f.write('{}{}'.format('', '\n'))

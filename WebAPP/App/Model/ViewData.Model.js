@@ -8,8 +8,6 @@ export class Model {
         this.d = 2;
         this.decimal = 'd' + this.d;
 
-        console.log('viewData ', viewData)
-
         if(casename){
 
             let datafields = [];
@@ -18,8 +16,15 @@ export class Model {
             let years = genData['osy-years'];
             let techs = genData['osy-tech'];  
             let comms = genData['osy-comm'];  
-            let emis = genData['osy-emis'];        
+            let emis = genData['osy-emis']; 
+            let scenarios = genData['osy-scenarios'];         
             
+            let scClass = {};
+
+            $.each(scenarios, function (id, obj) {
+                scClass[obj.ScenarioId] = 'SC_'+id;
+            });
+
             let validation = function(cell, value) {
                 if (value < 0) {
                     return { result: false, message: 'Value must be positive!' };
@@ -28,10 +33,20 @@ export class Model {
                 }
             }
 
+            
+            var cellclass = function (row, columnfield, value, data) {
+                return scClass[data.ScId];
+            }
+
+
             let cellsrenderer = function(row, columnfield, value, defaulthtml, columnproperties) {
-                //console.log(value)
-                var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
-                return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
+                if (value === null || value === ''){
+                    return '<span style="margin: 4px; float:right; ">n/a</span>';
+                }else{
+                    var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
+                    return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
+                }
+
             }.bind(this);
 
             let cellsrendererPinned = function(row, columnfield, value, defaulthtml, columnproperties) {
@@ -41,11 +56,26 @@ export class Model {
                }
             }.bind(this);
         
-            let initeditor = function(row, cellvalue, editor) {
-                editor.jqxNumberInput({ decimalDigits: 4 });
-            }
+            // let initeditor = function(row, cellvalue, editor) {
+            //     editor.jqxNumberInput({ decimalDigits: 4 });
+            // }
+
+            let initeditor = function(row, cellvalue, editor, data) {
+                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
+
+                var scId = $('#osy-gridViewData').jqxGrid('getcellvalue', row, 'ScId');
+                if (scId !== 'SC_0'){
+                    $('#' + editor[0].id + ' input').keydown(function (event) {
+                        if (event.keyCode === 46 || event.keyCode === 8 ) {
+                            $('#' + editor[0].id).val(null);
+                        }
+                    })
+                }
+            }.bind(this);
 
             //grid datafields
+            datafields.push({ name: 'ScId', type:'string' });
+            datafields.push({ name: 'Sc', type:'string' });
             datafields.push({ name: 'groupId', type:'string' });
             datafields.push({ name: 'groupName', type:'string' });
             datafields.push({ name: 'param', type:'string' });   
@@ -58,36 +88,45 @@ export class Model {
             datafields.push({ name: 'EmisName', type:'string' });   
             datafields.push({ name: 'Timeslice', type:'string' }); 
 
-            columns.push({ text: 'groupId', datafield: 'groupId', pinned:true, editable: false, align: 'left',  minWidth: 200, maxWidth: 220, hidden: true });
-            columns.push({ text: 'GROUP NAME', datafield: 'groupName',editable: false, align: 'left',  minWidth: 200, maxWidth: 220 });
-            columns.push({ text: 'param', datafield: 'param',  editable: false, align: 'left',  minWidth: 120, maxWidth: 200, hidden: true });
-            columns.push({ text: 'PARAMETER NAME', datafield: 'paramName', editable: false, align: 'left',  minWidth: 250, maxWidth: 300 });
-            columns.push({ text: 'TECHNOLOGY', datafield: 'TechId', editable: false, align: 'left',  minWidth: 120, maxWidth: 200, hidden: true  });
-            columns.push({ text: 'TECHNOLOGY', datafield: 'TechName', editable: false, align: 'left',  minWidth: 120, maxWidth: 200,  cellsrenderer: cellsrendererPinned });
-            columns.push({ text: 'COMMODITY', datafield: 'CommId', editable: false, align: 'left',  minWidth: 120, maxWidth: 200, hidden: true  });
-            columns.push({ text: 'COMMODITY', datafield: 'CommName', editable: false, align: 'left',  minWidth: 120, maxWidth: 200,  cellsrenderer: cellsrendererPinned });
-            columns.push({ text: 'EMISSION', datafield: 'EmisId', editable: false, align: 'left',  minWidth: 120, maxWidth: 200, hidden: true  });    
-            columns.push({ text: 'EMISSION', datafield: 'EmisName', editable: false, align: 'left',  minWidth: 120, maxWidth: 200,  cellsrenderer: cellsrendererPinned });
-            columns.push({ text: 'TIMESLICE', datafield: 'Timeslice', editable: false, align: 'left',  minWidth: 120, maxWidth: 200,  cellsrenderer: cellsrendererPinned });
+            columns.push({ text: 'ScId', datafield: 'ScId',editable: false, align: 'left', hidden: true});
+            columns.push({ text: 'SCENARIO', datafield: 'Sc',editable: false, align: 'left', minWidth: 75});
+            columns.push({ text: 'GROUP', datafield: 'groupId', editable: false, align: 'left' , hidden: true});
+            columns.push({ text: 'GROUP NAME', datafield: 'groupName',editable: false, align: 'left' , hidden: true});
+            columns.push({ text: 'param', datafield: 'param',  editable: false, align: 'left', hidden: true });
+            columns.push({ text: 'PARAMETER NAME', datafield: 'paramName', editable: false, align: 'left' , minWidth: 75});
+            columns.push({ text: 'TECHNOLOGY', datafield: 'TechId', editable: false, align: 'left', hidden: true  });
+            columns.push({ text: 'TECHNOLOGY', datafield: 'TechName', editable: false, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 75 });
+            columns.push({ text: 'COMMODITY', datafield: 'CommId', editable: false, align: 'left', hidden: true  });
+            columns.push({ text: 'COMMODITY', datafield: 'CommName', editable: false, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 75 });
+            columns.push({ text: 'EMISSION', datafield: 'EmisId', editable: false, align: 'left', hidden: true  });    
+            columns.push({ text: 'EMISSION', datafield: 'EmisName', editable: false, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 75 });
+            columns.push({ text: 'TIMESLICE', datafield: 'Timeslice', editable: false, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 75 });
 
             //datafields and columns
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type:'number' });
-                columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
+                columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', minWidth: 75,
+                   // filterable:false, 
+                    groupable:false,
                     initeditor: initeditor,
                     validation: validation,
-                    cellsrenderer: cellsrenderer
+                    cellsrenderer: cellsrenderer,
+                    cellclassname: cellclass
                 });
             });
 
             let TechName = DataModel.TechName(genData);
             let CommName = DataModel.CommName(genData);
             let EmiName = DataModel.EmiName(genData);
+            let ScName = DataModel.ScName(genData);
             
+            //console.log('viewData1 ', viewData)
+
             $.each(viewData, function (byType, obj1) {
                 $.each(obj1, function (tech, array) {
                     $.each(array, function (id, obj) {
                         obj['groupName'] = GROUPNAMES[obj['groupId']];
+                        obj['Sc'] = ScName[obj['ScId']];
                         if(obj['TechId'] != null){
                             obj['TechName'] = TechName[obj['TechId']];
                         }
@@ -126,6 +165,8 @@ export class Model {
             this.techs = techs;
             this.comms = comms;
             this.emis = emis;
+            this.years = years;
+            this.scenarios = scenarios;
             this.columns = columns;
             this.gridData = gridData;
             this.srcGrid = srcGrid
