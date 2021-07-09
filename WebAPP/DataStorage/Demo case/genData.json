@@ -1,11 +1,12 @@
 {
     "osy-version": "1.0",
-    "osy-casename": "Demo case ",
-    "osy-desc": "scenario implementation",
-    "osy-date": "07/04/2021",
+    "osy-casename": "Demo case",
+    "osy-desc": "",
+    "osy-date": "07/08/2021",
     "osy-currency": "EUR",
     "osy-ns": "3",
     "osy-dt": "2",
+    "osy-mo": "2",
     "osy-tech": [
         {
             "Desc": "Default technology",
@@ -27,36 +28,31 @@
                 "COM_0"
             ],
             "Tech": "TEC_1",
-            "TechId": "TEC_3tfh8"
+            "TechId": "TEC_q404n"
         },
         {
             "Desc": "Default technology",
-            "EAR": [
-                "EMI_7sic4",
-                "EMI_5v4pq"
-            ],
-            "IAR": [
-                "COM_e9b72",
-                "COM_3i9x6"
-            ],
-            "OAR": [
-                "COM_e9b72",
-                "COM_3i9x6"
-            ],
-            "Tech": "TEC_2",
-            "TechId": "TEC_98ow7"
-        },
-        {
-            "Desc": "Default technology",
-            "EAR": [
-                "EMI_0",
-                "EMI_7sic4",
-                "EMI_5v4pq"
-            ],
+            "EAR": [],
             "IAR": [],
             "OAR": [],
+            "Tech": "TEC_2",
+            "TechId": "TEC_6bn4q"
+        },
+        {
+            "Desc": "Default technology",
+            "EAR": [
+                "EMI_uk77b"
+            ],
+            "IAR": [
+                "COM_3nu7y",
+                "COM_qwlja"
+            ],
+            "OAR": [
+                "COM_3nu7y",
+                "COM_qwlja"
+            ],
             "Tech": "TEC_3",
-            "TechId": "TEC_0ypl7"
+            "TechId": "TEC_cicpn"
         }
     ],
     "osy-comm": [
@@ -67,13 +63,13 @@
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_e9b72",
+            "CommId": "COM_3nu7y",
             "Comm": "COM_1",
             "Desc": "Default commodity",
             "UnitId": "PJ"
         },
         {
-            "CommId": "COM_3i9x6",
+            "CommId": "COM_qwlja",
             "Comm": "COM_2",
             "Desc": "Default commodity",
             "UnitId": "PJ"
@@ -87,14 +83,8 @@
             "UnitId": "Ton"
         },
         {
-            "EmisId": "EMI_7sic4",
+            "EmisId": "EMI_uk77b",
             "Emis": "EMI_1",
-            "Desc": "Default emission",
-            "UnitId": "Ton"
-        },
-        {
-            "EmisId": "EMI_5v4pq",
-            "Emis": "EMI_2",
             "Desc": "Default emission",
             "UnitId": "Ton"
         }
@@ -107,7 +97,7 @@
             "Active": true
         },
         {
-            "ScenarioId": "SC_jr4ch",
+            "ScenarioId": "SC_931vq",
             "Scenario": "SC_1",
             "Desc": "Base scenario",
             "Active": true

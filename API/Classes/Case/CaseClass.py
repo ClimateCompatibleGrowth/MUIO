@@ -8,18 +8,27 @@ class Case:
         self.case = case
         self.PARAMETERS = File.readParamFile(Path(Config.DATA_STORAGE, 'Parameters.json'))
         self.genData =  genData
-        self.Rpath = Path(Config.DATA_STORAGE, case, "R.json")
-        self.RYpath = Path(Config.DATA_STORAGE, case, "RY.json")
-        self.RTpath = Path(Config.DATA_STORAGE, case, "RT.json")
-        self.REpath = Path(Config.DATA_STORAGE, case, "RE.json")
-        self.RYTpath = Path(Config.DATA_STORAGE, case, "RYT.json")
-        self.RYTCpath = Path(Config.DATA_STORAGE, case, "RYTC.json")
-        self.RYTspath = Path(Config.DATA_STORAGE, case, "RYTs.json")
-        self.RYCpath = Path(Config.DATA_STORAGE, case, "RYC.json")
-        self.RYEpath = Path(Config.DATA_STORAGE, case, "RYE.json")
-        self.RYTTspath = Path(Config.DATA_STORAGE, case, "RYTTs.json")
-        self.RYCTspath = Path(Config.DATA_STORAGE, case, "RYCTs.json")
-        self.RYTEpath = Path(Config.DATA_STORAGE, case, "RYTE.json")
+        self.jsonPath = {}
+        for group, array in self.PARAMETERS.items():
+            if array:
+                self.jsonPath[group] = Path(Config.DATA_STORAGE, case, group+".json")
+
+
+        # self.Rpath = Path(Config.DATA_STORAGE, case, "R.json")
+        # self.RYpath = Path(Config.DATA_STORAGE, case, "RY.json")
+        # self.RTpath = Path(Config.DATA_STORAGE, case, "RT.json")
+        # self.REpath = Path(Config.DATA_STORAGE, case, "RE.json")
+        # self.RYTpath = Path(Config.DATA_STORAGE, case, "RYT.json")
+        # self.RYTMpath = Path(Config.DATA_STORAGE, case, "RYTM.json")
+        # self.RYTCpath = Path(Config.DATA_STORAGE, case, "RYTC.json")
+        # self.RYTCMpath = Path(Config.DATA_STORAGE, case, "RYTCM.json")
+        # self.RYTspath = Path(Config.DATA_STORAGE, case, "RYTs.json")
+        # self.RYCpath = Path(Config.DATA_STORAGE, case, "RYC.json")
+        # self.RYEpath = Path(Config.DATA_STORAGE, case, "RYE.json")
+        # self.RYTTspath = Path(Config.DATA_STORAGE, case, "RYTTs.json")
+        # self.RYCTspath = Path(Config.DATA_STORAGE, case, "RYCTs.json")
+        # self.RYTEpath = Path(Config.DATA_STORAGE, case, "RYTE.json")
+        # self.RYTEMpath = Path(Config.DATA_STORAGE, case, "RYTEM.json")
 
     def default_R(self):
         try:
@@ -36,7 +45,8 @@ class Case:
                         chunk['value'] = None
                     Rdata[rt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( Rdata, self.Rpath)
+            # File.writeFile( Rdata, self.Rpath)
+            File.writeFile( Rdata, self.jsonPath['R'])
         except(IOError):
             raise IOError
 
@@ -56,7 +66,7 @@ class Case:
                         else:
                             chunk[year] = None
                     RYdata[ry['id']][sc['ScenarioId']].append(chunk)
-            File.writeFile( RYdata, self.RYpath)
+            File.writeFile( RYdata, self.jsonPath['RY'])
         except(IOError):
             raise IOError
 
@@ -77,7 +87,7 @@ class Case:
                             chunk[tech['TechId']] = None
                     RTdata[rt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( RTdata, self.RTpath)
+            File.writeFile( RTdata, self.jsonPath['RT'])
         except(IOError):
             raise IOError
 
@@ -98,7 +108,7 @@ class Case:
                             chunk[emi['EmisId']] = None
                     REdata[rt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( REdata, self.REpath)
+            File.writeFile( REdata, self.jsonPath['RE'])
         except(IOError):
             raise IOError
 
@@ -126,7 +136,7 @@ class Case:
                                     chunk[year] = None
                             RYTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( RYTsdata, self.RYTspath)
+            File.writeFile( RYTsdata, self.jsonPath['RYTs'])
         except(IOError):
             raise IOError
 
@@ -151,7 +161,35 @@ class Case:
                                 chunk[year] = None
                         RYTdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( RYTdata, self.RYTpath)
+            File.writeFile( RYTdata, self.jsonPath['RYT'])
+        except(IOError):
+            raise IOError
+
+    def default_RYTM(self):
+        try:
+            mo = int(self.genData['osy-mo'])+1
+            years = self.genData['osy-years']
+            techs = self.genData['osy-tech']
+            scenarios = self.genData['osy-scenarios']
+            
+            RYTMdata = {}
+            for rytm in self.PARAMETERS['RYTM']:
+                RYTMdata[rytm['id']] = {}
+                for sc in scenarios:
+                    RYTMdata[rytm['id']][sc['ScenarioId']] = []
+                    for tech in techs:
+                        for m in range(1, mo):
+                            chunk = {}
+                            chunk['TechId'] = tech['TechId']
+                            chunk['MoId'] = m
+                            for year in years:
+                                if sc['ScenarioId'] == 'SC_0':
+                                    chunk[year] = rytm['default']
+                                else:
+                                    chunk[year] = None
+                            RYTMdata[rytm['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYTMdata, self.jsonPath['RYTM'])
         except(IOError):
             raise IOError
 
@@ -176,7 +214,7 @@ class Case:
                                 chunk[year] = None
                         RYCdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( RYCdata, self.RYCpath)
+            File.writeFile( RYCdata, self.jsonPath['RYC'])
         except(IOError):
             raise IOError
 
@@ -201,7 +239,7 @@ class Case:
                                 chunk[year] = None
                         RYEdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( RYEdata, self.RYEpath)
+            File.writeFile( RYEdata, self.jsonPath['RYE'])
         except(IOError):
             raise IOError
 
@@ -229,7 +267,38 @@ class Case:
                                         chunk[year] = None 
                                 RYTCdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( RYTCdata, self.RYTCpath)
+            File.writeFile( RYTCdata, self.jsonPath['RYTC'])
+        except(IOError):
+            raise IOError
+
+    def default_RYTCM(self):
+        try:
+            years = self.genData['osy-years']
+            techs = self.genData['osy-tech']
+            scenarios = self.genData['osy-scenarios']
+            mo = int(self.genData['osy-mo'])+1
+            
+            RYTCMdata = {}
+            for ryt in self.PARAMETERS['RYTCM']:
+                RYTCMdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTCMdata[ryt['id']][sc['ScenarioId']] = []  
+                    for tech in techs:
+                        if tech[ryt['id']]:
+                            for comm in tech[ryt['id']]:
+                                for m in range(1, mo):
+                                    chunk = {}
+                                    chunk['TechId'] = tech['TechId']
+                                    chunk['CommId'] = comm
+                                    chunk['MoId'] = m
+                                    for year in years:
+                                        if sc['ScenarioId'] == 'SC_0':
+                                            chunk[year] = ryt['default']
+                                        else:
+                                            chunk[year] = None
+                                    RYTCMdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYTCMdata, self.jsonPath['RYTCM'])
         except(IOError):
             raise IOError
 
@@ -257,7 +326,38 @@ class Case:
                                         chunk[year] = None
                                 RYTEdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( RYTEdata, self.RYTEpath)
+            File.writeFile( RYTEdata, self.jsonPath['RYTE'])
+        except(IOError):
+            raise IOError
+
+    def default_RYTEM(self):
+        try:
+            years = self.genData['osy-years']
+            techs = self.genData['osy-tech']
+            scenarios = self.genData['osy-scenarios']
+            mo = int(self.genData['osy-mo'])+1
+            
+            RYTEMdata = {}
+            for ryt in self.PARAMETERS['RYTEM']:
+                RYTEMdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTEMdata[ryt['id']][sc['ScenarioId']] = []  
+                    for tech in techs:
+                        if tech[ryt['id']]:
+                            for emi in tech[ryt['id']]:
+                                for m in range(1, mo):
+                                    chunk = {}
+                                    chunk['TechId'] = tech['TechId']
+                                    chunk['EmisId'] = emi
+                                    chunk['MoId'] = m
+                                    for year in years:
+                                        if sc['ScenarioId'] == 'SC_0':
+                                            chunk[year] = ryt['default']
+                                        else:
+                                            chunk[year] = None
+                                    RYTEMdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYTEMdata, self.jsonPath['RYTEM'])
         except(IOError):
             raise IOError
 
@@ -289,7 +389,7 @@ class Case:
                                         chunk[year] = None
                                 RYTTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( RYTTsdata, self.RYTTspath)
+            File.writeFile( RYTTsdata, self.jsonPath['RYTTs'])
         except(IOError):
             raise IOError
 
@@ -321,24 +421,33 @@ class Case:
                                         chunk[year] = None
                                 RYCTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
-            File.writeFile( RYCTsdata, self.RYCTspath)
+            File.writeFile( RYCTsdata, self.jsonPath['RYCTs'])
         except(IOError):
             raise IOError
 
     def createCase(self):
         try:
-            self.default_R()
-            self.default_RY()
-            self.default_RT()
-            self.default_RE()
-            self.default_RYTs()
-            self.default_RYT()
-            self.default_RYC()
-            self.default_RYE()
-            self.default_RYTC()
-            self.default_RYTE()
-            self.default_RYCTs()
-            self.default_RYTTs()
+            for group, array in self.PARAMETERS.items():
+                if array:
+                    func_name = Config.DEFAULT_F[group]
+                    func = getattr(self,func_name) 
+                    func() 
+
+            # self.default_R()
+            # self.default_RY()
+            # self.default_RT()
+            # self.default_RE()
+            # self.default_RYTs()
+            # self.default_RYT()
+            # self.default_RYTM()
+            # self.default_RYC()
+            # self.default_RYE()
+            # self.default_RYTC()
+            # self.default_RYTCM()
+            # self.default_RYTE()
+            # self.default_RYTEM()
+            # self.default_RYCTs()
+            # self.default_RYTTs()
             
         except(IOError):
             raise IOError

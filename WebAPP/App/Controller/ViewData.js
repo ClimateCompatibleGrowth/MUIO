@@ -3,12 +3,9 @@ import { Base } from "../../Classes/Base.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
 import { Model } from "../Model/ViewData.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
-import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { GROUPNAMES } from "../../Classes/Const.Class.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
-// import { Sidebar } from "./Sidebar.js";
 
 export default class ViewData {
     static onLoad(){
@@ -22,6 +19,12 @@ export default class ViewData {
                 promise.push(genData);
                 const viewData =  Osemosys.viewData(casename);
                 promise.push(viewData);
+                const viewTEData =  Osemosys.viewTEData(casename);
+                promise.push(viewTEData);
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS); 
+                const RTdata = Osemosys.getData(casename, 'RT.json');
+                promise.push(RTdata); 
                 return Promise.all(promise);
                 ;
             }else{
@@ -29,8 +32,8 @@ export default class ViewData {
             }
         })
         .then(data => {
-            let [casename, genData, viewData] = data;
-            let model = new Model(casename, genData, viewData);
+            let [casename, genData, viewData, viewTEData, PARAMETERS] = data;
+            let model = new Model(casename, genData, viewData, viewTEData, PARAMETERS);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -45,6 +48,12 @@ export default class ViewData {
         Html.ddlTechs( model.techs, model.techs[0]['TechId']);
 
         let $divGrid = $('#osy-gridViewData');
+        let $divTEGrid = $('#osy-gridRT');
+
+        var daRTGrid = new $.jqx.dataAdapter(model.srcRTGrid);
+        Grid.Grid($divTEGrid, daRTGrid, model.columnsRT, false, false, false);
+        Grid.applyTEviewDataFilter( $divTEGrid );
+
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns, true, false, false);
         $divGrid.jqxGrid('hidecolumn', 'TechName');
@@ -76,6 +85,7 @@ export default class ViewData {
     static initEvents(model){
 
         let $divGrid = $('#osy-gridViewData');
+        let $divTEGrid = $('#osy-gridRT');
 
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function(e) {
@@ -93,6 +103,12 @@ export default class ViewData {
             model.srcGrid.root = tech;
             $divGrid.jqxGrid('updatebounddata');
             Grid.applyViewDataFilter( $divGrid, model.years );
+
+            model.srcRTGrid.root = tech;
+            $divTEGrid.jqxGrid('updatebounddata');
+            Grid.applyTEviewDataFilter( $divTEGrid );
+
+            Message.smallBoxConfirmation("Confirmation!", "Technology <b>" + model.TechName[tech] + "</b> selected!", 3500);
         });
 
         $("#osy-emis").off('change');
@@ -101,6 +117,12 @@ export default class ViewData {
             model.srcGrid.root = emi;
             $divGrid.jqxGrid('updatebounddata');
             Grid.applyViewDataFilter( $divGrid, model.years );
+
+            model.srcRTGrid.root = emi;
+            $divTEGrid.jqxGrid('updatebounddata');
+            Grid.applyTEviewDataFilter( $divTEGrid );
+
+            Message.smallBoxConfirmation("Confirmation!", "Emission <b>" + model.EmiName[emi] + "</b> selected!", 3500);
         });
 
         $("#osy-comms").off('change');
@@ -109,6 +131,8 @@ export default class ViewData {
             model.srcGrid.root = comm;
             $divGrid.jqxGrid('updatebounddata');
             Grid.applyViewDataFilter( $divGrid, model.years );
+
+            Message.smallBoxConfirmation("Confirmation!", "Emission <b>" + model.CommName[comm] + "</b> selected!", 3500);
         });
 
         $('input[type=radio][name=bytype]').change(function() {
@@ -124,6 +148,11 @@ export default class ViewData {
                 $divGrid.jqxGrid('showcolumn', 'CommName');
                 $divGrid.jqxGrid('showcolumn', 'EmisName');
                 Grid.applyViewDataFilter( $divGrid, model.years );
+
+                model.srcRTGrid.root = firstTech;
+                $divTEGrid.jqxGrid('updatebounddata');
+                Grid.applyTEviewDataFilter( $divTEGrid );
+                $('#gridRT').show();
             }
             else if (this.value == 'Comm') {
                 console.log(this.value)
@@ -138,6 +167,8 @@ export default class ViewData {
                 $divGrid.jqxGrid('showcolumn', 'TechName');
                 $divGrid.jqxGrid('showcolumn', 'EmisName');
                 Grid.applyViewDataFilter( $divGrid, model.years );
+
+                $('#gridRT').hide();
             }
             else if (this.value == 'Emi') {
                 console.log(this.value)
@@ -152,6 +183,11 @@ export default class ViewData {
                 $divGrid.jqxGrid('showcolumn', 'CommName');
                 $divGrid.jqxGrid('showcolumn', 'TechName');
                 Grid.applyViewDataFilter( $divGrid, model.years );
+
+                model.srcRTGrid.root = firstEmi;
+                $divTEGrid.jqxGrid('updatebounddata');
+                Grid.applyTEviewDataFilter( $divTEGrid );
+                $('#gridRT').show();
             }
         });
 
@@ -189,12 +225,11 @@ export default class ViewData {
                 else if(dataType == 'Comm'){
                     object = model.gridData[dataType][CommId];
                 }
-                if(dataType == 'Emis'){
+                if(dataType == 'Emi'){
                     object = model.gridData[dataType][EmisId];
                 }
                 //update model grid
                 $.each(object, function (id, obj) {
-                    //console.log(' obj.groupId ', obj.groupId , ' obj.paramId ', obj.param, ' obj com ', obj.CommId, ' obj.EmisId ', obj.EmisId, ' obj.timeslice ', obj.Timeslice)
                     if(obj.ScId === ScId && 
                         obj.groupId === GroupId && 
                         obj.param === ParamId && 
@@ -223,20 +258,98 @@ export default class ViewData {
             }
         });
 
+        let pasteRTEvent = false;
+        $divTEGrid.bind('keydown', function (event) {
+            pasteRTEvent = false;
+            var ctrlDown = false, ctrlKey = 17, cmdKey = 91, vKey = 86, cKey = 67;
+            var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
+            if (key == vKey) {
+                pasteRTEvent = true;
+                Message.smallBoxInfo('View data form', 'Copy/paste option is not allowed on this form', 3000);
+            }
+        }).on('cellvaluechanged', function (event) {
+            if (!pasteRTEvent) {
+                Pace.restart();
+
+                var args = event.args;
+                var rowBoundIndex = args.rowindex;
+                var value = args.newvalue;
+
+                var ScId = $divTEGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
+                var GroupId = $divTEGrid.jqxGrid('getcellvalue', rowBoundIndex, 'groupId');
+                var ParamId = $divTEGrid.jqxGrid('getcellvalue', rowBoundIndex, 'param');               
+                
+                let dataType = $('input[type=radio][name=bytype]:checked').val();
+
+                var TechId;
+                var CommId;
+                var EmisId;
+                let object;
+                if(dataType == 'Tech'){
+                    TechId = $( "#osy-techs" ).val();
+                    object = model.gridRTData[dataType][TechId];
+                    CommId = null;
+                    EmisId = null;
+                }
+                else if(dataType == 'Comm'){
+                    CommId = $( "#osy-comms" ).val();
+                    object = model.gridRTData[dataType][CommId];
+                    TechId = null;
+                    EmisId = null;
+                }
+                else if(dataType == 'Emi'){
+                    EmisId = $( "#osy-emis" ).val();
+                    object = model.gridRTData[dataType][EmisId];
+                    CommId = null;
+                    TechId = null;
+                }
+                //update model grid
+                $.each(object, function (id, obj) {
+                    if(obj.ScId === ScId && 
+                        obj.groupId === GroupId && 
+                        obj.param === ParamId){
+                        if(value){
+                            obj['value'] = value;
+                        }else{
+                            obj['value'] = 0;
+                        }
+                    }
+                });
+
+                Osemosys.updateTEViewData(model.casename, ScId, GroupId, ParamId, TechId, EmisId, value)
+                .then(response =>{
+                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    //sync S3
+                    if (Base.AWS_SYNC == 1){
+                        Base.updateSync(model.casename, GroupId+".json");
+                    }
+                })
+                .catch(error=>{
+                    Message.bigBoxDanger('Error message', error, null);
+                })
+            }
+        });
+
         let res = true;
         $("#resizeColumns").off('click');
         $("#resizeColumns").click(function () {
             if(res){
-                $divGrid.jqxGrid('autoresizecolumn', 'Sc');
+                $divGrid.jqxGrid('autoresizecolumn', 'Sc',"cells" );
                 //$divGrid.jqxGrid('autoresizecolumn', 'groupName');
                 $divGrid.jqxGrid('autoresizecolumn', 'paramName');
-                $divGrid.jqxGrid('autoresizecolumn', 'TechName');
-                $divGrid.jqxGrid('autoresizecolumn', 'CommName');
-                $divGrid.jqxGrid('autoresizecolumn', 'EmisName');
-                $divGrid.jqxGrid('autoresizecolumn', 'Timeslice');
+                $divGrid.jqxGrid('autoresizecolumn', 'TechName',"cells" );
+                $divGrid.jqxGrid('autoresizecolumn', 'CommName',"cells" );
+                $divGrid.jqxGrid('autoresizecolumn', 'EmisName',"cells" );
+                $divGrid.jqxGrid('autoresizecolumn', 'Timeslice',"cells" );
+                $divGrid.jqxGrid('autoresizecolumn', 'MoId' );
+
+                $divTEGrid.jqxGrid('autoresizecolumn', 'Sc',"cells" );
+                $divTEGrid.jqxGrid('autoresizecolumn', 'paramName',"cells" );
+                $divTEGrid.jqxGrid('autoresizecolumn', 'value',"cells" );
             }
             else{
-                $divGrid.jqxGrid('autoresizecolumns');
+                $divGrid.jqxGrid('autoresizecolumns', 'cells');
+                $divTEGrid.jqxGrid('autoresizecolumns');
             }
             res = !res;
         });
@@ -245,6 +358,7 @@ export default class ViewData {
         $("#xlsAll").click(function (e) {
             e.preventDefault();
             $divGrid.jqxGrid('exportdata', 'xls', 'View data by sets');
+            $divTEGrid.jqxGrid('exportdata', 'xls', 'View data by sets');
         });
 
         $("#decUp").off('click');
@@ -254,6 +368,7 @@ export default class ViewData {
             model.d++;
             model.decimal = 'd' + parseInt(model.d);
             $divGrid.jqxGrid('refresh');
+            $divTEGrid.jqxGrid('refresh');
         });
 
         $("#decDown").off('click');
@@ -263,6 +378,7 @@ export default class ViewData {
             model.d--;
             model.decimal = 'd' + parseInt(model.d);
             $divGrid.jqxGrid('refresh');
+            $divTEGrid.jqxGrid('refresh');
         });
 
         $("#showLog").click(function (e) {

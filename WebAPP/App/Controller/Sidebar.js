@@ -12,16 +12,18 @@ export class Sidebar {
 
         $.each(PARAMORDER, function (id, group) {   
             $.each(PARAMETERS[group], function (id, obj) {
-                if(obj.menu){
-                    let res = `
-                    <li  class="">
-                        <a href="#/${group}/${obj.id}" title="${GROUPNAMES[group]}">
-    
-                        ${obj.value}
-                        <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
-                        </a>
-                    </li>`;
-                    $('#dynamicRoutes').append(res);
+                if (PARAMETERS[group] !== undefined || PARAMETERS[group].length != 0) {
+                    if(obj.menu){
+                        let res = `
+                        <li  class="">
+                            <a href="#/${group}/${obj.id}" title="${GROUPNAMES[group]}">
+        
+                            ${obj.value}
+                            <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
+                            </a>
+                        </li>`;
+                        $('#dynamicRoutes').append(res);
+                    }
                 }
             });
         });

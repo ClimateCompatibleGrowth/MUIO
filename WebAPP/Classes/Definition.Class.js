@@ -32,6 +32,19 @@ export const DEF = {
 
         `
     },
+    ViewData: {
+        title: `View all parameters data by SETS.`,
+        definition: 
+        `
+        <blockquote>
+            <p>
+                user can select one of the sets, technolgy, commodity and emisssion and see all paramteter values in the model. Scenario data is dsplayed only id there are values entered and it is coloured in different..
+            </p>
+            <small>Source <cite title="Osemsys CLEW interface</cite></small>
+        </blockquote>
+
+        `
+    },
     AddCase: {
         title: `Structure of OSeMOSYS`,
         definition: 

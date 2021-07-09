@@ -12,6 +12,7 @@ export class Model {
         this.date = genData['osy-date'];
         this.ns = genData['osy-ns'];
         this.dt = genData['osy-dt'];
+        this.mo = genData['osy-mo'];
         this.currency = genData['osy-currency'];
         this.years = genData['osy-years'];
         this.scenarios = genData['osy-scenarios'];
@@ -41,6 +42,7 @@ export class Model {
         this.date = null;
         this.ns = null;
         this.dt = null;
+        this.mo = null;
         this.currency = null;
         this.years = years;
         this.scenarios = DefaultObj.defaultScenario(true);

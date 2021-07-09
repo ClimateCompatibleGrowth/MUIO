@@ -81,13 +81,6 @@
     ],
     "RYT": [
         {
-            "id": "VC",
-            "value": "Variable Cost",
-            "default": 0.0001,
-            "enable": true,
-            "menu": 1
-        },
-        {
             "id": "AF",
             "value": "Availability Factor",
             "default": 1,
@@ -177,34 +170,6 @@
             "default": 0,
             "enable": true,
             "menu": 1
-        },
-        {
-            "id": "TAMLL",
-            "value": "Technology Activity By Mode Lower Limit",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "TAMUL",
-            "value": "Technology Activity By Mode Upper Limit",
-            "default": 999999,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "TADML",
-            "value": "Technology Activity Decrease By Mode Limit",
-            "default": 0,
-            "enable": true,
-            "menu": 1
-        },
-        {
-            "id": "TAIML",
-            "value": "Technology Activity Increase By Mode Limit",
-            "default": 0,
-            "enable": true,
-            "menu": 1
         }
     ],
     "RYC": [
@@ -260,7 +225,44 @@
             "menu": 1
         }
     ],
-    "RYTC": [
+    "RYTM":[
+        {
+            "id": "VC",
+            "value": "Variable Cost",
+            "default": 0.0001,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TAMLL",
+            "value": "Technology Activity By Mode Lower Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TAMUL",
+            "value": "Technology Activity By Mode Upper Limit",
+            "default": 999999,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TADML",
+            "value": "Technology Activity Decrease By Mode Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        },
+        {
+            "id": "TAIML",
+            "value": "Technology Activity Increase By Mode Limit",
+            "default": 0,
+            "enable": true,
+            "menu": 1
+        }
+    ],
+    "RYTCM": [
         {
             "id": "IAR",
             "value": "Input Activity Ratio",
@@ -276,7 +278,7 @@
             "menu": 1
         }
     ],
-    "RYTE": [
+    "RYTEM": [
         {
             "id": "EAR",
             "value": "Emission Activity Ratio",

@@ -26,7 +26,6 @@ export default class AddCase {
             this.initPage(model);
         })
         .catch(error =>{
-            console.log('error ', error)
             Message.danger(error);
         });
     }
@@ -35,10 +34,10 @@ export default class AddCase {
         Message.clearMessages();
         $('a[href="#tabComms"]').click();
         //Navbar.initPage(model.casename, model.pageId);
+
         Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);
 
-        console.log('model ', model)
         Grid.commGrid(model.commodities);
         //Grid.techsGrid(model.srcTech, model.srcComm);
         Grid.emisGrid(model.emissions);
@@ -54,9 +53,13 @@ export default class AddCase {
         // Grid.Grid($divGrid, daGrid, model.columnsTech)
 
         if (model.casename == null){
+            $('#osy-newCase').show();
+            $('#osy-updateCase').hide();
             Message.info("Please select case or create new case study!");
         }else{
             $("#osy-new").show();
+            $('#osy-updateCase').show();
+            $('#osy-newCase').hide();
         }    
         loadScript("References/smartadmin/js/plugin/ion-slider/ion.rangeSlider.min.js", SmartAdmin.rangeSlider.bind(null, model.years));
         this.initEvents(model);
@@ -114,14 +117,14 @@ export default class AddCase {
                          return result;
                     }
                 },
-                // { input: '#osy-dr', message: "Dicount rate is required field!", action: 'keyup', rule: 'required' },
-                // { input: '#osy-dr', message: "Dicount rate should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
-                //          var dr = $( "#osy-dr" ).val();
-                //         //  console.log(dr)
-                //         //  console.log(dr < 0 ? true : false);
-                //          return dr < 0 || isNaN(dr) ? false : true;
-                //     }
-                // },
+                { input: '#osy-mo', message: "Mode of operation is required field!", action: 'keyup', rule: 'required' },
+                { input: '#osy-mo', message: "Mode of operation should positive value!", action: 'keyup', rule: function (input, commit) {
+                         var dr = $( "#osy-mo" ).val();
+                        //  console.log(dr)
+                        //  console.log(dr < 0 ? true : false);
+                         return dr < 1 || isNaN(dr) ? false : true;
+                    }
+                },
                 { input: '#osy-ns', message: "Number of seasons is required field!", action: 'keyup', rule: 'required' },
                 { input: '#osy-ns', message: "Number of seasons should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
                          var dr = $( "#osy-ns" ).val();
@@ -155,11 +158,21 @@ export default class AddCase {
             //$("#wid-id-8").tabs("option", "active", 0);
             AddCase.refreshPage(null);
             $("#osy-new").hide();
+            $('#osy-updateCase').hide();
+            $('#osy-newCase').show();
             Message.smallBoxConfirmation("Confirmation!", "Configure new case study!", 3500);
         });
 
         $("#osy-save").off('click');
         $("#osy-save").on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            $("#osy-caseForm").jqxValidator('validate')
+        });
+
+        
+        $("#osy-update").off('click');
+        $("#osy-update").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             $("#osy-caseForm").jqxValidator('validate')
@@ -244,7 +257,7 @@ export default class AddCase {
             var date = $( "#osy-date" ).val();
             var currency = $( "#osy-currency" ).val();
             var dr = $( "#osy-dr" ).val()/100;
-            // var dm = $( "#osy-dm" ).val();
+            var mo = $( "#osy-mo" ).val();
             // var rmpt = $( "#osy-rmpt" ).val();
             var ns = $( "#osy-ns" ).val();
             var dt = $( "#osy-dt" ).val();
@@ -263,6 +276,7 @@ export default class AddCase {
                 "osy-currency":currency,
                 "osy-ns": ns,
                 "osy-dt": dt,
+                "osy-mo": mo,
                 "osy-tech": TECH,
                 "osy-comm": COMM,
                 "osy-emis": EMIS,
@@ -274,6 +288,8 @@ export default class AddCase {
             .then(response =>{
                 if(response.status_code=="created"){
                     $("#osy-new").show();
+                    $('#osy-updateCase').show();
+                    $('#osy-newCase').hide();
                     Message.clearMessages();
                     Message.bigBoxSuccess('Case study message', response.message, 3000);
                     Html.appendCasePicker(casename, casename);

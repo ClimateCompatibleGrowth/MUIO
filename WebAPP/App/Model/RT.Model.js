@@ -90,19 +90,20 @@ export class Model {
                 });
             });
 
-            let PARAMNAMES = {};
-            $.each(PARAMETERS[group], function (id, obj) {
-                PARAMNAMES[obj.id] = obj.value;
-            });
+            // let PARAMNAMES = {};
+            // $.each(PARAMETERS[group], function (id, obj) {
+            //     PARAMNAMES[obj.id] = obj.value;
+            // });
 
             let RTgrid = DataModel.RTgrid(genData, RTdata, PARAMETERS[group]);
             let RTchart = DataModel.RTchart(genData, RTdata);
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
-            console.log('RTdata ', RTdata)
-            console.log('RTgrid ', RTgrid)
-            console.log('columns ', columns)
-            console.log('RTchart ', RTchart)
-            console.log('series ', series)
+            // console.log('RTdata ', RTdata)
+            // console.log('RTgrid ', RTgrid)
+            // console.log('columns ', columns)
+            // console.log('RTchart ', RTchart)
+            // console.log('series ', series)
 
             let srcGrid = {
                 datatype: "json",

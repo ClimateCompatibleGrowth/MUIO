@@ -11,23 +11,30 @@ class Osemosys():
         #Case.__init__(self, case)
         self.casePath = Path(Config.DATA_STORAGE,case)
         self.zipPath = Path(Config.DATA_STORAGE,case+'.zip')
+
         #self.genData = Path(Config.DATA_STORAGE,case,'genData.json')
+
         self.rPath = Path(Config.DATA_STORAGE,case,'R.json')
         self.ryPath = Path(Config.DATA_STORAGE,case,'RY.json')
         self.rtPath = Path(Config.DATA_STORAGE,case,'RT.json')
         self.rePath = Path(Config.DATA_STORAGE,case,'RE.json')
         self.rytPath = Path(Config.DATA_STORAGE,case,'RYT.json')
+        self.rytmPath = Path(Config.DATA_STORAGE,case,'RYTM.json')
         self.rytcPath = Path(Config.DATA_STORAGE,case,'RYTC.json')
+        self.rytcmPath = Path(Config.DATA_STORAGE,case,'RYTCM.json')
         self.rytsPath = Path(Config.DATA_STORAGE,case,'RYTs.json')
         self.rycPath = Path(Config.DATA_STORAGE,case,'RYC.json')
         self.ryePath = Path(Config.DATA_STORAGE,case,'RYE.json')
         self.ryttsPath = Path(Config.DATA_STORAGE,case,'RYTTs.json')
         self.ryctsPath = Path(Config.DATA_STORAGE,case,'RYCTs.json')
         self.rytePath = Path(Config.DATA_STORAGE,case,'RYTE.json')
+        self.rytemPath = Path(Config.DATA_STORAGE,case,'RYTEM.json')
+
         self.dataFile = Path(Config.DATA_STORAGE,case,'data.txt')
         self.dataFileS3 = Path(Config.S3_BUCKET_LOCAL,case,'data.txt')
         self.resFile = Path(Config.DATA_STORAGE,case,'results.txt')
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
+
         self.glpkFolder = Path(Config.SOLVERs_FOLDER,'glpk-4.65', 'w64')
         self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
         self.resPath = Path(Config.DATA_STORAGE,case,'res', 'csv')
@@ -79,6 +86,13 @@ class Osemosys():
                 timeslice.append("S"+s+d)
         return timeslice 
 
+    def getMods(self):
+        mo = int(self.genData['osy-mo'])+1
+        mods = []
+        for m in range(1, mo):
+            mods.append(m)
+        return mods 
+
     def getTechIds(self):
         techIds = [ tech['TechId'] for tech in self.genData["osy-tech"]]
         return techIds
@@ -123,15 +137,10 @@ class Osemosys():
         scIds = [ {'ScId': sc['ScenarioId'], 'Sc': sc['Scenario'], 'Active': sc['Active']} for sc in self.genData["osy-scenarios"]]
         return scIds
 
-    # def getActivityTechIds(self):
-    #     genData = File.readFile(self.genData)
-    #     techIds = [ tech['TechId'] for tech in genData["osy-tech"] if tech['IAR'] or tech['OAR'] ]
-    #     return techIds
-
     #output actTech['IAR'] = ['Tech_1', 'Tech_2'...]
     def getActivityTechIds(self):
         techIds = {}
-        for param in self.PARAMETERS['RYTC']:
+        for param in self.PARAMETERS['RYTCM']:
             techIds[param['id']] = []
             for tech in self.genData["osy-tech"]:
                 if tech[param['id']]: 
@@ -141,7 +150,7 @@ class Osemosys():
     #output actTech['IAR']['Tech_1'] = ['Comm_1', 'Comm_2'...]
     def getActivityCommIds(self):
         commIds = {}
-        for param in self.PARAMETERS['RYTC']:
+        for param in self.PARAMETERS['RYTCM']:
             commIds[param['id']] = {}
             for tech in self.genData["osy-tech"]:
                 if tech[param['id']]: 
@@ -150,7 +159,7 @@ class Osemosys():
 
     def getActivityEmissionTechIds(self):
         techIds = {}
-        for param in self.PARAMETERS['RYTE']:
+        for param in self.PARAMETERS['RYTEM']:
             techIds[param['id']] = []
             for tech in self.genData["osy-tech"]:
                 if tech[param['id']]: 
@@ -159,13 +168,12 @@ class Osemosys():
 
     def getActivityEmisionIds(self):
         commIds = {}
-        for param in self.PARAMETERS['RYTE']:
+        for param in self.PARAMETERS['RYTEM']:
             commIds[param['id']] = {}
             for tech in self.genData["osy-tech"]:
                 if tech[param['id']]: 
                     commIds[param['id']][tech['TechId']] = tech[param['id']]
         return commIds
-
 
     def R(self, Rdata):
         R = {}
@@ -225,6 +233,22 @@ class Osemosys():
                             RYT[param][sc][year][o['TechId']] = val
         return RYT
 
+    def RYTM(self, RYTMdata):
+        RYTM = {}
+        for param, obj1 in RYTMdata.items():
+            RYTM[param] = {}
+            for sc, array in obj1.items():
+                RYTM[param][sc] = {}
+                for obj in array:
+                    for year, val in obj.items():
+                        if (year != 'TechId' and year != 'MoId'):
+                            if year not in RYTM[param][sc]:
+                                RYTM[param][sc][year] = {}
+                            if obj['TechId'] not in RYTM[param][sc][year]:
+                                RYTM[param][sc][year][obj['TechId']] = {}
+                            RYTM[param][sc][year][obj['TechId']][obj['MoId']] = val
+        return RYTM
+
     def RYC(self, RYCdata):
         RYC = {}
         for param, obj1 in RYCdata.items():
@@ -283,6 +307,24 @@ class Osemosys():
                             RYTC[param][sc][year][obj['TechId']][obj['CommId']] = val
         return RYTC
 
+    def RYTCM(self, RYTCMdata):
+        RYTCM = {}
+        for param, obj1 in RYTCMdata.items():
+            RYTCM[param] = {}
+            for sc, array in obj1.items():
+                RYTCM[param][sc] = {}
+                for obj in array:
+                    for year, val in obj.items():
+                        if (year != 'TechId' and year != 'CommId' and year != 'MoId'):
+                            if year not in RYTCM[param][sc]:
+                                RYTCM[param][sc][year] = {}
+                            if obj['TechId'] not in RYTCM[param][sc][year]:
+                                RYTCM[param][sc][year][obj['TechId']] = {}
+                            if obj['CommId'] not in RYTCM[param][sc][year][obj['TechId']]:
+                                RYTCM[param][sc][year][obj['TechId']][obj['CommId']] = {}
+                            RYTCM[param][sc][year][obj['TechId']][obj['CommId']][obj['MoId']] = val
+        return RYTCM
+
     def RYTE(self, RYTEdata):
         RYTE = {}
         for param, obj1 in RYTEdata.items():
@@ -298,6 +340,24 @@ class Osemosys():
                                 RYTE[param][sc][year][obj['TechId']] = {}
                             RYTE[param][sc][year][obj['TechId']][obj['EmisId']] = val
         return RYTE
+
+    def RYTEM(self, RYTEMdata):
+        RYTEM = {}
+        for param, obj1 in RYTEMdata.items():
+            RYTEM[param] = {}
+            for sc, array in obj1.items():
+                RYTEM[param][sc] = {}
+                for obj in array:
+                    for year, val in obj.items():
+                        if (year != 'TechId' and year != 'EmisId' and year != 'MoId'):
+                            if year not in RYTEM[param][sc]:
+                                RYTEM[param][sc][year] = {}
+                            if obj['TechId'] not in RYTEM[param][sc][year]:
+                                RYTEM[param][sc][year][obj['TechId']] = {}
+                            if obj['EmisId'] not in RYTEM[param][sc][year][obj['TechId']]:
+                                RYTEM[param][sc][year][obj['TechId']][obj['EmisId']] = {}
+                            RYTEM[param][sc][year][obj['TechId']][obj['EmisId']][obj['MoId']] = val
+        return RYTEM
 
     def RYTTs(self, RYTTsdata):
         RYTTs = {}
@@ -355,10 +415,56 @@ class Osemosys():
                                         byTech['EmisId'] = None
                                     if 'Timeslice' not in obj:
                                         byTech['Timeslice'] = None
+                                    if 'MoId' not in obj:
+                                        byTech['MoId'] = None
                                     for k,v in obj2.items():
                                         if k != 'TechId':
                                             byTech[k] = v
                                     data[tech['TechId']].append(byTech.copy())
+        return data
+
+    def viewRTByTech(self):
+        jsonData = {}
+        data = {}
+        for tech in self.genData["osy-tech"]:
+            data[tech['TechId']] = []
+            for group, array in self.PARAMETERS.items():
+                if group in Config.SINGLE_TECH_GROUPS:
+                    jsonData[group] =  File.readFile(Path(Config.DATA_STORAGE,self.case, group+'.json'))
+                    for obj in array:
+                        byTech = {}
+                        byTech['groupId'] = group
+                        byTech['param'] = obj['id']
+                        byTech['paramName'] = obj['value']
+                        for sc, array in jsonData[group][obj['id']].items():
+                            byTech['ScId'] = sc
+                            for obj2 in array:
+                                for k,v in obj2.items():
+                                    if k == tech['TechId']:
+                                        byTech['value'] = v
+                                data[tech['TechId']].append(byTech.copy())
+        return data
+
+    def viewREByEmi(self):
+        jsonData = {}
+        data = {}
+        for tech in self.genData["osy-emis"]:
+            data[tech['EmisId']] = []
+            for group, array in self.PARAMETERS.items():
+                if group in Config.SINGLE_EMIS_GROUPS:
+                    jsonData[group] =  File.readFile(Path(Config.DATA_STORAGE,self.case, group+'.json'))
+                    for obj in array:
+                        byEmi = {}
+                        byEmi['groupId'] = group
+                        byEmi['param'] = obj['id']
+                        byEmi['paramName'] = obj['value']
+                        for sc, array in jsonData[group][obj['id']].items():
+                            byEmi['ScId'] = sc
+                            for obj2 in array:
+                                for k,v in obj2.items():
+                                    if k == tech['EmisId']:
+                                        byEmi['value'] = v
+                                data[tech['EmisId']].append(byEmi.copy())
         return data
 
     def viewDataByComm(self):
@@ -385,6 +491,8 @@ class Osemosys():
                                         byComm['EmisId'] = None
                                     if 'Timeslice' not in obj:
                                         byComm['Timeslice'] = None
+                                    if 'MoId' not in obj:
+                                        byComm['MoId'] = None
                                     for k,v in obj2.items():
                                         if k != 'CommId':
                                             byComm[k] = v
@@ -415,6 +523,8 @@ class Osemosys():
                                         byEmi['CommId'] = None
                                     if 'Timeslice' not in obj:
                                         byEmi['Timeslice'] = None
+                                    if 'MoId' not in obj:
+                                        byEmi['MoId'] = None
                                     for k,v in obj2.items():
                                         if k != 'EmisId':
                                             byEmi[k] = v
@@ -436,4 +546,17 @@ class Osemosys():
         except(IOError):
             raise IOError
 
-            
+
+    def updateTEViewData(self, casename, ScId, GroupId, ParamId, TechId, EmisId, value):
+        try:
+            jsonPath = Path(Config.DATA_STORAGE,casename, GroupId+'.json')
+            jsonData = File.readFile(jsonPath)
+
+            for obj in jsonData[ParamId][ScId]:
+                for k,v in obj.items():
+                    if ((k == TechId if TechId is not None else True) and 
+                        (k == EmisId if EmisId is not None else True)):
+                        obj[k] = value
+            File.writeFile( jsonData, jsonPath)
+        except(IOError):
+            raise IOError           

@@ -570,6 +570,66 @@ export class Grid {
         $divGrid.jqxGrid('applyfilters');
     }
 
+    static applyRYTMFilter( $divGrid, years, sc=null, tech=null, mo=null ) {
+        //$('#jqxLoader').jqxLoader('open');
+        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
+        $divGrid.jqxGrid('clearfilters');
+        
+        //filter column 2
+        if (sc !== null && mo != null && tech != null){
+
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+            
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);    
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+
+            var filtergroup3 = new $.jqx.filter();
+            filtergroup3.operator = 'and';
+            var filtertype3 = 'stringfilter';
+            var filter_or_operator3 = 0;
+            var filtervalue3 = mo;
+            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
+            
+            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
+            filtergroup3.addfilter(filter_or_operator3, filter3);    
+            $divGrid.jqxGrid('addfilter', 'MoId', filtergroup3);
+
+            var filtergroup4 = new $.jqx.filter();
+            filtergroup4.operator = 'and';
+            var filtertype4 = 'stringfilter';
+            var filter_or_operator4 = 0;
+            var filtervalue4 = tech;
+            var filtercondition4 = 'EQUAL_CASE_SENSITIVE';
+            
+            var filter4 = filtergroup4.createfilter(filtertype4, filtervalue4, filtercondition4);
+            filtergroup4.addfilter(filter_or_operator4, filter4);    
+            $divGrid.jqxGrid('addfilter', 'Tech', filtergroup4);
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+        
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);   
+        $.each(years, function (id, year) {
+            $divGrid.jqxGrid('addfilter', year, filtergroup1);
+        }); 
+
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
+
     static applyRYTsFilter( $divGrid, years, sc=null, ts=null ) {
         //$('#jqxLoader').jqxLoader('open');
         //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
@@ -767,7 +827,7 @@ export class Grid {
             
             var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
             filtergroup3.addfilter(filter_or_operator3, filter3);    
-            $divGrid.jqxGrid('addfilter', 'Emi', filtergroup3);
+            $divGrid.jqxGrid('addfilter', 'Emis', filtergroup3);
 
             var filtergroup4 = new $.jqx.filter();
             filtergroup4.operator = 'and';
@@ -797,6 +857,8 @@ export class Grid {
         // // apply the filters.
         $divGrid.jqxGrid('applyfilters');
     }
+
+    
 
     static applyRYCTsFilter( $divGrid, years, sc=null, comm=null, ts=null ) {
         //$('#jqxLoader').jqxLoader('open');
@@ -1010,6 +1072,25 @@ export class Grid {
         $.each(years, function (id, year) {
             $divGrid.jqxGrid('addfilter', year, filtergroup1);
         }); 
+
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
+
+    static applyTEviewDataFilter( $divGrid) {
+        $divGrid.jqxGrid('clearfilters');
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+        
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);   
+        $divGrid.jqxGrid('addfilter', 'value', filtergroup1);
 
         // // apply the filters.
         $divGrid.jqxGrid('applyfilters');

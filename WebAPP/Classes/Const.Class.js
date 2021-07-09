@@ -7,10 +7,13 @@ export const GROUPNAMES = {
     "RE": "Region, emission",
     "RYTs": "Region, year, timeslice",
     "RYT": "Region, year, technology",
+    "RYTM": "Region, year, technology, mode of operation",
     "RYC": "Region, year, commodity",
     "RYE": "Region, year, emission",
     "RYTC": "Region, year, technology, commodity",
+    "RYTCM": "Region, year, technology, commodity, emission, mode of operation",
     "RYTE": "Region, year, technology, emission",
+    "RYTEM": "Region, year, technology, emission, mode of operation",
     "RYTTs": "Region, year, technology, timeslice",
     "RYCTs": "Region, year, commodity, timeslice"
 }
@@ -22,10 +25,14 @@ export const PARAMORDER = [
     "RE"   ,     
     "RYTs" ,     
     "RYT"  ,     
+    "RYTM"  ,     
     "RYC"  ,     
     "RYE"  ,     
-    "RYTC" ,     
-    "RYTE" ,     
+    "RYTC" ,  
+    "RYTCM" ,   
+    "RYTE" ,  
+    "RYTEM" , 
+    "RYTM" ,     
     "RYTTs",     
     "RYCTs"  
 ];
@@ -37,10 +44,13 @@ export const PARAMCOLORS = {
     "RE": "yellow",
     "RYTs": "red",
     "RYT": "greenLight",
+    "RYTM": "purple",
     "RYC": "grey",
     "RYE": "pink",
     "RYTC": "teal",
+    "RYTCM": "black",
     "RYTE": "greenDark",
+    "RYTEM": "blue",
     "RYTTs": "purple",
     "RYCTs": "magenta"
 }

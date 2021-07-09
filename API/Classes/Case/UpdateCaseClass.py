@@ -1,5 +1,5 @@
 from pathlib import Path
-#from Classes.Base import Config
+from Classes.Base import Config
 from Classes.Base.FileClass import File
 from Classes.Case.OsemosysClass import Osemosys
 
@@ -8,7 +8,7 @@ class UpdateCase(Osemosys):
         Osemosys.__init__(self, case)
         self.genDataUpdate =  genData
 
-    def updateRmodel(self):
+    def update_R(self):
         try:
             rJson = File.readFile(self.rPath) 
             Rsource = self.R(rJson)
@@ -32,7 +32,7 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRYmodel(self):
+    def update_RY(self):
         try:
             ryJson = File.readFile(self.ryPath) 
             RYsource = self.RY(ryJson)
@@ -59,7 +59,7 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRTmodel(self):
+    def update_RT(self):
         try:
             rtJson = File.readFile(self.rtPath) 
             RTsource = self.RT(rtJson)
@@ -83,7 +83,7 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateREmodel(self):
+    def update_RE(self):
         try:
             reJson = File.readFile(self.rePath) 
             REsource = self.RE(reJson)
@@ -110,7 +110,7 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRYTmodel(self):
+    def update_RYT(self):
         try:
             rytJson = File.readFile(self.rytPath) 
             RYTsource = self.RYT(rytJson)
@@ -140,7 +140,41 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRYCmodel(self):
+    def update_RYTM(self):
+        try:
+            rytmJson = File.readFile(self.rytmPath) 
+            RYTMsource = self.RYTM(rytmJson)
+
+            mo = int(self.genData['osy-mo'])+1
+            years = self.genDataUpdate['osy-years']
+            techs = self.genDataUpdate['osy-tech']
+            scenarios = self.genDataUpdate['osy-scenarios']
+            
+            RYTMdata = {}
+            for ryt in self.PARAMETERS['RYTM']:
+                RYTMdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTMdata[ryt['id']][sc['ScenarioId']] = [] 
+                    for tech in techs:
+                        for m in range(1, mo):
+                            chunk = {}
+                            chunk['TechId'] = tech['TechId']
+                            chunk['MoId'] = m
+                            for year in years:
+                                if self.keys_exists(RYTMsource, ryt['id'], sc['ScenarioId'], year, tech['TechId'], m):
+                                    chunk[year] = RYTMsource[ryt['id']][sc['ScenarioId']][year][tech['TechId']][m]
+                                elif sc['ScenarioId'] == 'SC_0':
+                                    chunk[year] = ryt['default']
+                                else:
+                                    chunk[year] = None
+                            RYTMdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYTMdata, self.rytmPath)
+
+        except(IOError):
+            raise IOError
+
+    def update_RYC(self):
         try:
             rycJson = File.readFile(self.rycPath) 
             RYCsource = self.RYC(rycJson)
@@ -169,7 +203,7 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRYEmodel(self):
+    def update_RYE(self):
         try:
             ryeJson = File.readFile(self.ryePath) 
             RYEsource = self.RYE(ryeJson)
@@ -198,7 +232,7 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRYTsmodel(self):
+    def update_RYTs(self):
         try:
             rytsJson = File.readFile(self.rytsPath) 
             RYTssource = self.RYTs(rytsJson)
@@ -233,7 +267,7 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRYTCmodel(self):
+    def update_RYTC(self):
         try:
             rytcJson = File.readFile(self.rytcPath) 
             RYTCsource = self.RYTC(rytcJson)
@@ -267,7 +301,45 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRYTEmodel(self):
+    def update_RYTCM(self):
+        try:
+            rytcmJson = File.readFile(self.rytcmPath) 
+            RYTCMsource = self.RYTCM(rytcmJson)
+
+            years = self.genDataUpdate['osy-years']
+            techs = self.genDataUpdate['osy-tech']
+            scenarios = self.genDataUpdate['osy-scenarios']
+            mo = int(self.genData['osy-mo'])+1
+            
+            RYTEMdata = {}
+            for ryt in self.PARAMETERS['RYTCM']:
+                RYTEMdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTEMdata[ryt['id']][sc['ScenarioId']] = [] 
+                    for tech in techs:
+                        if tech[ryt['id']]:
+                            for com in tech[ryt['id']]:
+                                for m in range(1, mo):
+                                    chunk = {}
+                                    chunk['TechId'] = tech['TechId']
+                                    chunk['CommId'] = com
+                                    chunk['MoId'] = m
+                                    for year in years:
+                                        # if RYTCsource[ryt['id']][year][tech['TechId']][emi]:
+                                        if self.keys_exists(RYTCMsource, ryt['id'], sc['ScenarioId'], year, tech['TechId'], com, m):
+                                            chunk[year] = RYTCMsource[ryt['id']][sc['ScenarioId']][year][tech['TechId']][com][m]
+                                        elif sc['ScenarioId'] == 'SC_0':
+                                            chunk[year] = ryt['default']
+                                        else:
+                                            chunk[year] = None
+                                    RYTEMdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYTEMdata, self.rytcmPath)
+
+        except(IOError):
+            raise IOError
+
+    def update_RYTE(self):
         try:
             ryteJson = File.readFile(self.rytePath) 
             RYTEsource = self.RYTE(ryteJson)
@@ -302,7 +374,45 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRYTTsmodel(self):
+    def update_RYTEM(self):
+        try:
+            rytemJson = File.readFile(self.rytemPath) 
+            RYTEMsource = self.RYTEM(rytemJson)
+
+            years = self.genDataUpdate['osy-years']
+            techs = self.genDataUpdate['osy-tech']
+            scenarios = self.genDataUpdate['osy-scenarios']
+            mo = int(self.genData['osy-mo'])+1
+            
+            RYTEMdata = {}
+            for ryt in self.PARAMETERS['RYTEM']:
+                RYTEMdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTEMdata[ryt['id']][sc['ScenarioId']] = [] 
+                    for tech in techs:
+                        if tech[ryt['id']]:
+                            for emi in tech[ryt['id']]:
+                                for m in range(1, mo):
+                                    chunk = {}
+                                    chunk['TechId'] = tech['TechId']
+                                    chunk['EmisId'] = emi
+                                    chunk['MoId'] = m
+                                    for year in years:
+                                        # if RYTCsource[ryt['id']][year][tech['TechId']][emi]:
+                                        if self.keys_exists(RYTEMsource, ryt['id'], sc['ScenarioId'], year, tech['TechId'], emi, m):
+                                            chunk[year] = RYTEMsource[ryt['id']][sc['ScenarioId']][year][tech['TechId']][emi][m]
+                                        elif sc['ScenarioId'] == 'SC_0':
+                                            chunk[year] = ryt['default']
+                                        else:
+                                            chunk[year] = None
+                                    RYTEMdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYTEMdata, self.rytemPath)
+
+        except(IOError):
+            raise IOError
+
+    def update_RYTTs(self):
         try:
             ryttsJson = File.readFile(self.ryttsPath) 
             RYTTssource = self.RYTTs(ryttsJson)
@@ -339,7 +449,7 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
-    def updateRYCTsmodel(self):
+    def update_RYCTs(self):
         try:
             ryctsJson = File.readFile(self.ryctsPath) 
             RYCTssource = self.RYCTs(ryctsJson)
@@ -378,17 +488,26 @@ class UpdateCase(Osemosys):
 
     def updateCase(self):
         try:
-            self.updateRmodel()
-            self.updateRYmodel()
-            self.updateRTmodel()
-            self.updateREmodel()
-            self.updateRYTsmodel()
-            self.updateRYTmodel()
-            self.updateRYCmodel()
-            self.updateRYEmodel()
-            self.updateRYCTsmodel()
-            self.updateRYTEmodel()
-            self.updateRYTCmodel()
-            self.updateRYTTsmodel()
+            for group, array in self.PARAMETERS.items():
+                if array:
+                    func_name = Config.UPDATE_F[group]
+                    func = getattr(self,func_name) 
+                    func() 
+
+            # self.update_R()
+            # self.update_RY()
+            # self.update_RT()
+            # self.update_RE()
+            # self.update_RYTs()
+            # self.update_RYT()
+            # self.update_RYTM()
+            # self.update_RYC()
+            # self.update_RYE()
+            # self.update_RYTC()
+            # self.update_RYTCM()
+            # self.update_RYTE()
+            # self.update_RYTEM()
+            # self.update_RYCTs()
+            # self.update_RYTTs()
         except(IOError):
             raise IOError

@@ -258,15 +258,57 @@ export class Osemosys {
         });
     }
 
-    static updateViewData(casename, updateType, year, groupId, paramId, TechId, CommId, EmisId, Timeslice, value) {
+    static viewTEData(casename) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "viewTEData",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static updateViewData(casename, year, ScId, groupId, paramId, TechId, CommId, EmisId, Timeslice, value) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "updateViewData",
                 async: true,  
                 type: 'POST',
                 dataType: 'json',
-                data: JSON.stringify({ "casename": casename, updateType: updateType, year: year,
+                data: JSON.stringify({ "casename": casename, year: year, ScId: ScId,
                  groupId: groupId, paramId: paramId, TechId: TechId, CommId: CommId, EmisId:EmisId, Timeslice: Timeslice, value: value}),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    
+    static updateTEViewData(casename, ScId, GroupId, ParamId, TechId, EmisId, value) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "updateTEViewData",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, scId:ScId,
+                 groupId: GroupId, paramId: ParamId, techId: TechId, emisId: EmisId, value: value}),
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {             
                     resolve(result);

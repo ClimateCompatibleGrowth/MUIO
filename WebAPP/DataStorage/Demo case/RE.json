@@ -3,31 +3,27 @@
         "SC_0": [
             {
                 "EMI_0": 999999,
-                "EMI_7sic4": 999999,
-                "EMI_5v4pq": 999999
+                "EMI_uk77b": 999999
             }
         ],
-        "SC_jr4ch": [
+        "SC_931vq": [
             {
                 "EMI_0": null,
-                "EMI_7sic4": null,
-                "EMI_5v4pq": null
+                "EMI_uk77b": null
             }
         ]
     },
     "MPEE": {
         "SC_0": [
             {
-                "EMI_0": 0,
-                "EMI_7sic4": 0,
-                "EMI_5v4pq": 0
+                "EMI_0": 3,
+                "EMI_uk77b": 0
             }
         ],
-        "SC_jr4ch": [
+        "SC_931vq": [
             {
                 "EMI_0": null,
-                "EMI_7sic4": null,
-                "EMI_5v4pq": null
+                "EMI_uk77b": null
             }
         ]
     }

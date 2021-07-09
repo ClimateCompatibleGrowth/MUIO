@@ -63,6 +63,16 @@ export class DataModel{
         return ts;
     }
 
+    static Mods(genData){
+        let mods = [];
+        let mo = parseInt(genData['osy-mo'])
+
+        for (let j = 1; j <= mo; j++) {
+            mods.push(j)
+        }
+        return mods;
+    }
+
     static activityTechsComms(techs){
         let ActivityTechs = {};
         ActivityTechs['IAR'] = [];
@@ -418,6 +428,70 @@ export class DataModel{
         return RYTchart;
     }
 
+    static RYTM(RYTMdata){
+        let RYTM = {};
+        const cloneData = JSON.parse(JSON.stringify(RYTMdata));
+        $.each(cloneData, function (param, obj1) {
+            RYTM[param] = {};
+            $.each(obj1, function (sc, array) {
+                RYTM[param][sc] = {};
+                $.each(array, function (id, obj) {
+                    if(!RYTM[param][sc][obj.TechId]){ RYTM[param][sc][obj.TechId] = {}; }
+                    RYTM[param][sc][obj.TechId][obj.MoId] = obj;
+                    delete obj.TechId;
+                    delete obj.MoId;                    
+                });
+            });
+        });
+        return RYTM;
+    }
+
+    static RYTMgrid(genData, RYTMdata){
+        let techName = this.TechName(genData);
+        let scName = this.ScName(genData);
+        let cloneData = JSON.parse(JSON.stringify(RYTMdata));
+        let RYTMgrid = {};
+
+        $.each(cloneData, function (param, obj) {
+            RYTMgrid[param] = [];
+            $.each(obj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scName[sc];
+                    obj['Tech'] = techName[obj['TechId']];
+                    RYTMgrid[param].push(obj);
+                });
+            });
+        });
+        return RYTMgrid;
+    }
+
+    static RYTMchart(genData, RYTMdata){
+        let RYTM = this.RYTM(RYTMdata);
+        let mods = this.Mods(genData);
+        let RYTMchart = {};
+
+        $.each(RYTMdata, function (param, obj1) {
+            let chartData = {}
+            $.each(genData['osy-tech'], function (idT, tech) {     
+                chartData[tech.TechId] = {};
+                $.each(mods, function (idS, mo) {   
+                    chartData[tech.TechId][mo] = []; 
+                    $.each(genData['osy-years'], function (idY, year) {                  
+                        let chunk = {};
+                        chunk['Year'] = year;
+                        $.each(genData['osy-scenarios'], function (idS, sc) {
+                            chunk[sc.ScenarioId] = RYTM[param][sc.ScenarioId][tech.TechId][mo][year];
+                        });
+                        chartData[tech.TechId][mo].push(chunk);
+                    });              
+                });
+            }); 
+            RYTMchart[param] = chartData;    
+        });       
+        return RYTMchart;
+    }
+
     static RYC(RYCdata){
         let RYC = {};
         const cloneData = JSON.parse(JSON.stringify(RYCdata));
@@ -662,6 +736,73 @@ export class DataModel{
         return RYTCchart;
     }
 
+    static RYTCM(RYTCMdata){
+        let RYTCM = {};
+        const cloneData = JSON.parse(JSON.stringify(RYTCMdata));
+        $.each(cloneData, function (param, obj1) {
+            RYTCM[param] = {};
+            $.each(obj1, function (sc, array) {
+                RYTCM[param][sc] = {};
+                $.each(array, function (id, obj) {
+                    if(!RYTCM[param][sc][obj.TechId]){ RYTCM[param][sc][obj.TechId] = {}; }
+                    if(!RYTCM[param][sc][obj.TechId][obj.CommId]){ RYTCM[param][sc][obj.TechId][obj.CommId] = {}; }
+                        RYTCM[param][sc][obj.TechId][obj.CommId][obj.MoId] = obj;
+                        delete obj.TechId;
+                        delete obj.CommId; 
+                        delete obj.MoId;   
+                });
+            });
+        });
+        return RYTCM;
+    }
+
+    static RYTCMgrid(genData, RYTCMdata){
+        let techName = this.TechName(genData);
+        let commName = this.CommName(genData);
+        let scName = this.ScName(genData);
+        let cloneData = JSON.parse(JSON.stringify(RYTCMdata));
+        let RYTCMgrid = {};
+        $.each(cloneData, function (param, obj) {
+            RYTCMgrid[param] = [];
+            $.each(obj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scName[sc];
+                    obj['Tech'] = techName[obj['TechId']];
+                    obj['Comm'] = commName[obj['CommId']];
+                    RYTCMgrid[param].push(obj);
+                });
+            });
+        });
+        return RYTCMgrid;
+    }
+
+    static RYTCMchart(genData, RYTCMdata){
+        let RYTCMchart = {};
+        let RYTCM = this.RYTCM(RYTCMdata);
+        $.each(RYTCMdata, function (param, obj1) {
+            RYTCMchart[param] = {};
+            $.each(obj1, function (sc, array) {
+                if (array.length !== 0){
+                    $.each(array, function (id, obj) {
+                        if(!RYTCMchart[param][obj.TechId]){ RYTCMchart[param][obj.TechId] = {}; }
+                        if(!RYTCMchart[param][obj.TechId][obj.CommId]){ RYTCMchart[param][obj.TechId][obj.CommId] = {}; }
+                        RYTCMchart[param][obj.TechId][obj.CommId][obj.MoId] =[]
+                        $.each(genData['osy-years'], function (idY, year) {
+                            let chunk = {};
+                            chunk['Year'] = year;
+                            $.each(genData['osy-scenarios'], function (idS, sc) {
+                                chunk[sc.ScenarioId] = RYTCM[param][sc.ScenarioId][obj.TechId][obj.CommId][obj.MoId][year];
+                            });
+                            RYTCMchart[param][obj.TechId][obj.CommId][obj.MoId].push(chunk);
+                        });
+                    });
+                }
+            });
+        });
+        return RYTCMchart;
+    }
+
     static RYTE(RYTEdata){
         let RYTE = {};
         const cloneData = JSON.parse(JSON.stringify(RYTEdata));
@@ -724,6 +865,73 @@ export class DataModel{
             });
         });
         return RYTEchart;
+    }
+
+    static RYTEM(RYTEMdata){
+        let RYTEM = {};
+        const cloneData = JSON.parse(JSON.stringify(RYTEMdata));
+        $.each(cloneData, function (param, obj1) {
+            RYTEM[param] = {};
+            $.each(obj1, function (sc, array) {
+                RYTEM[param][sc] = {};
+                $.each(array, function (id, obj) {
+                    if(!RYTEM[param][sc][obj.TechId]){ RYTEM[param][sc][obj.TechId] = {}; }
+                    if(!RYTEM[param][sc][obj.TechId][obj.EmisId]){ RYTEM[param][sc][obj.TechId][obj.EmisId] = {}; }
+                        RYTEM[param][sc][obj.TechId][obj.EmisId][obj.MoId] = obj;
+                        delete obj.TechId;
+                        delete obj.EmisId; 
+                        delete obj.MoId;   
+                });
+            });
+        });
+        return RYTEM;
+    }
+
+    static RYTEMgrid(genData, RYTEMdata){
+        let techName = this.TechName(genData);
+        let emiName = this.EmiName(genData);
+        let scName = this.ScName(genData);
+        let cloneData = JSON.parse(JSON.stringify(RYTEMdata));
+        let RYTEMgrid = {};
+        $.each(cloneData, function (param, obj) {
+            RYTEMgrid[param] = [];
+            $.each(obj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scName[sc];
+                    obj['Tech'] = techName[obj['TechId']];
+                    obj['Emis'] = emiName[obj['EmisId']];
+                    RYTEMgrid[param].push(obj);
+                });
+            });
+        });
+        return RYTEMgrid;
+    }
+
+    static RYTEMchart(genData, RYTEMdata){
+        let RYTEMchart = {};
+        let RYTEM = this.RYTEM(RYTEMdata);
+        $.each(RYTEMdata, function (param, obj1) {
+            RYTEMchart[param] = {};
+            $.each(obj1, function (sc, array) {
+                if (array.length !== 0){
+                    $.each(array, function (id, obj) {
+                        if(!RYTEMchart[param][obj.TechId]){ RYTEMchart[param][obj.TechId] = {}; }
+                        if(!RYTEMchart[param][obj.TechId][obj.EmisId]){ RYTEMchart[param][obj.TechId][obj.EmisId] = {}; }
+                        RYTEMchart[param][obj.TechId][obj.EmisId][obj.MoId] =[]
+                        $.each(genData['osy-years'], function (idY, year) {
+                            let chunk = {};
+                            chunk['Year'] = year;
+                            $.each(genData['osy-scenarios'], function (idS, sc) {
+                                chunk[sc.ScenarioId] = RYTEM[param][sc.ScenarioId][obj.TechId][obj.EmisId][obj.MoId][year];
+                            });
+                            RYTEMchart[param][obj.TechId][obj.EmisId][obj.MoId].push(chunk);
+                        });
+                    });
+                }
+            });
+        });
+        return RYTEMchart;
     }
 
     static RYTTs(RYTTsdata){

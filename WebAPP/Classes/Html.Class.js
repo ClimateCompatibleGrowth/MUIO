@@ -127,6 +127,7 @@ export class Html {
         $("#osy-desc").val(model.desc);
         $("#osy-ns").val(model.ns);
         $("#osy-dt").val(model.dt);
+        $("#osy-mo").val(model.mo);
 
         $("#commCount").text(model.commCount);
         $("#techCount").text(model.techCount);
@@ -227,6 +228,18 @@ export class Html {
                 container.append('<option value="'+ ts+'" selected>'+ts+'</option>');
             }else{
                 container.append('<option value="'+ ts+'" >'+ts+'</option>');
+            }
+        });  
+    }
+
+    static ddlMods($div, mo){
+        var container =  $div;
+        container.empty();
+        $.each(mo, function (id, m) {
+            if (m == 1 ){
+                container.append('<option value="'+ m+'" selected>'+m+'</option>');
+            }else{
+                container.append('<option value="'+ m+'" >'+m+'</option>');
             }
         });  
     }
