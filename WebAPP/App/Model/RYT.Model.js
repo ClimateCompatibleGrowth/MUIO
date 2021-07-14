@@ -1,5 +1,4 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
-import { GROUPNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
     
@@ -17,6 +16,12 @@ export class Model {
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
 
+            
+            //let paramById = DataModel.getParamById(PARAMETERS);
+            let RYTgrid = DataModel.RYTgrid(genData, RYTdata, PARAMETERS);
+            let RYTchart = DataModel.RYTchart(genData, RYTdata, PARAMETERS);
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);            
+
             let scClass = {};
 
             datafieldsChart.push({ name: 'Year', type:'string' });
@@ -29,7 +34,8 @@ export class Model {
             datafields.push({ name: 'ScId', type:'string' });
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'TechId', type:'string' });
-            datafields.push({ name: 'Tech', type:'string' });           
+            datafields.push({ name: 'Tech', type:'string' });    
+            datafields.push({ name: 'UnitId', type:'string' });           
 
             let validation = function(cell, value) {
                 if (value < 0) {
@@ -51,8 +57,7 @@ export class Model {
                     return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
                 }
 
-            }.bind(this);
-        
+            }.bind(this); 
 
             let initeditor = function(row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
@@ -70,6 +75,7 @@ export class Model {
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type:'number' });
@@ -82,18 +88,13 @@ export class Model {
                 });
             });
 
-            let PARAMNAMES = {};
-            $.each(PARAMETERS[group], function (id, obj) {
-                PARAMNAMES[obj.id] = obj.value;
-            });
-
-            let RYTgrid = DataModel.RYTgrid(genData, RYTdata);
-            let RYTchart = DataModel.RYTchart(genData, RYTdata);
-
             // console.log('RYTdata ', RYTdata)
             // console.log('RYTgrid ', RYTgrid)
             // console.log('RYTchart ', RYTchart)
             // console.log('series ', series)
+            // console.log('techUnits ', techUnits)
+            // console.log('paramById ', paramById)
+            // console.log('unitData ', unitData)
 
             let srcGrid = {
                 datatype: "json",
@@ -106,7 +107,6 @@ export class Model {
                 datatype: "json",
                 localdata: RYTchart,
                 root: param+ '>' + techs[0]['TechId'],
-                //root: param,
                datafields: datafieldsChart,
             };
 
@@ -116,8 +116,6 @@ export class Model {
             this.techsCount = techs.length
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
-            // this.datafields = datafields; 
-            // this.datafieldsChart = datafieldsChart; 
             this.columns = columns;
             this.series = series;
             this.gridData = RYTgrid;
@@ -133,8 +131,6 @@ export class Model {
             this.casename = null; 
             this.years = null;
             this.techs = null;
-            // this.datafields = null; 
-            // this.datafieldsChart = null; 
             this.columns = null;
             this.series = null;
             this.gridData = null;

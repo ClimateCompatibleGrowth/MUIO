@@ -13,7 +13,8 @@ export class Model {
             let columns = [];
             let series = [];
 
-            let RYCTsgrid = DataModel.RYCTsgrid(genData, RYCTsdata);
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);   
+            let RYCTsgrid = DataModel.RYCTsgrid(genData, RYCTsdata, PARAMETERS);
             let RYCTschart = DataModel.RYCTschart(genData, RYCTsdata);
             let timeslices = DataModel.Timeslices(genData);  
 
@@ -34,11 +35,13 @@ export class Model {
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'CommId', type:'string' });
             datafields.push({ name: 'Comm', type:'string' });
-            datafields.push({ name: 'Timeslice', type:'string' });           
+            datafields.push({ name: 'Timeslice', type:'string' });      
+            datafields.push({ name: 'UnitId', type:'string' });     
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
-            columns.push({ text: 'Commodity', datafield: 'Comm', pinned:true, editable: false, align: 'center'})
-            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned:true, editable: false, align: 'center' })
+            columns.push({ text: 'Commodity', datafield: 'Comm', pinned:true, editable: false, align: 'center'});
+            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned:true, editable: false, align: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
             
             let validation = function(cell, value) {
                 if (value < 0) {
@@ -85,11 +88,6 @@ export class Model {
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass
                 });
-            });
-
-            let PARAMNAMES = {};
-            $.each(PARAMETERS[group], function (id, obj) {
-                PARAMNAMES[obj.id] = obj.value;
             });
             
             // console.log('RYCTsdata ', RYCTsdata)

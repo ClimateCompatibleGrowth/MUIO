@@ -1,4 +1,4 @@
-import { CURRENCY } from './Const.Class.js';
+import { CURRENCY, UNITDEFINITION } from './Const.Class.js';
 import { Message } from "./Message.Class.js";
 
 export class Html {
@@ -114,11 +114,13 @@ export class Html {
     static genData(model){
         var container =  $('#osy-currency');
         container.empty();
+
         $.each(CURRENCY, function (key, value) {
             if (value == model.currency){
-                container.append('<option value="'+ value+'" selected>'+value+'</option>');
+               
+                container.append(`<option value="${value}" selected> ${value}</option>`);
             }else{
-                container.append('<option value="'+ value+'">'+value+'</option>');
+                container.append(`<option value="${value}"> ${value} </option>`);
             }
         });
 
@@ -327,6 +329,59 @@ export class Html {
         });
         $("#osy-scOrder").html(sortableList);
         $("#osy-scOrder").jqxSortable(); 
+    }
+
+    static renderUnitRules(rules, unitsDef){
+        $("#osy-unitRuleSort1").empty();
+        $("#osy-unitRuleSort2").empty();
+        var sortableList1 = '';
+        var sortableList2 = '';
+        if(typeof rules !== "undefined"){
+            $.each(UNITDEFINITION, function (id, rule) {
+                if (!rules['cat'].some(e => e.var === id)) {
+                    let res = jsonLogic.apply( rule.val, unitsDef)
+                    var sortableElement = 
+                    `<div class="sortable-item" id="${id}">${res}</div>`;
+                    sortableList1 = sortableList1 + sortableElement;
+                }
+            });
+    
+            $.each(rules['cat'], function (id, rule) {
+                let res = jsonLogic.apply( rule, unitsDef)
+                var sortableElement = 
+                `<div class="sortable-item" id="${rule.var}">${res}</div>`;
+                sortableList2 = sortableList2 + sortableElement;
+            });
+    
+            $("#osy-unitRuleSort1").html(sortableList1);
+            $("#osy-unitRuleSort1").jqxSortable(); 
+            
+            $("#osy-unitRuleSort2").html(sortableList2);
+            $("#osy-unitRuleSort2").jqxSortable(); 
+            $("#osy-unitRuleSort1, #osy-unitRuleSort2").jqxSortable({
+                connectWith: ".osy-unitRuleSort",
+                opacity: 0.5,
+            });
+        }else{
+            $.each(UNITDEFINITION, function (id, rule) {
+                let res = jsonLogic.apply( rule.val, unitsDef)
+                var sortableElement = 
+                `<div class="sortable-item" id="${id}">${res}</div>`;
+                sortableList1 = sortableList1 + sortableElement;
+            });
+    
+    
+            $("#osy-unitRuleSort1").html(sortableList1);
+            $("#osy-unitRuleSort1").jqxSortable(); 
+            
+            // $("#osy-unitRuleSort2").html(sortableList2);
+            // $("#osy-unitRuleSort2").jqxSortable(); 
+            $("#osy-unitRuleSort1, #osy-unitRuleSort2").jqxSortable({
+                connectWith: ".osy-unitRuleSort",
+                opacity: 0.5,
+            });        
+        }
+
     }
 }
 

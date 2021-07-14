@@ -10,7 +10,6 @@ export class Model {
 
         if(casename){
 
-            
             let datafields = [];
             let columns = [];
 
@@ -25,6 +24,8 @@ export class Model {
             let EmiName = DataModel.EmiName(genData);
             let ScName = DataModel.ScName(genData);
             //let mods = DataModel.Mods(genData); 
+            let unitData = DataModel.getUnitData(genData, PARAMETERS);
+            let paramById = DataModel.getParamById(PARAMETERS);
 
             let scClass = {};
 
@@ -60,10 +61,6 @@ export class Model {
                     return '<span style="margin: 4px; float:left; color: #a6a6a6; " >n/a</span>';
                }
             }.bind(this);
-        
-            // let initeditor = function(row, cellvalue, editor) {
-            //     editor.jqxNumberInput({ decimalDigits: 4 });
-            // }
 
             let initeditor = function(row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
@@ -106,6 +103,7 @@ export class Model {
             datafields.push({ name: 'EmisName', type:'string' });   
             datafields.push({ name: 'Timeslice', type:'string' }); 
             datafields.push({ name: 'MoId', type:'string' });
+            datafields.push({ name: 'UnitId', type:'string' }); 
 
             columns.push({ text: 'ScId', datafield: 'ScId',editable: false, align: 'left', hidden: true});
             columns.push({ text: 'SCENARIO', datafield: 'Sc',editable: false, align: 'left', minWidth: 55, cellclassname: cellclass});
@@ -113,6 +111,7 @@ export class Model {
             columns.push({ text: 'GROUP NAME', datafield: 'groupName',editable: false, align: 'left' , hidden: true, cellclassname: cellclass});
             columns.push({ text: 'param', datafield: 'param',  editable: false, align: 'left', hidden: true });
             columns.push({ text: 'PARAMETER NAME', datafield: 'paramName', editable: false, align: 'left' , minWidth: 75, cellclassname: cellclass});
+            columns.push({ text: 'UNIT', datafield: 'UnitId', editable: false, align: 'center',cellsalign: 'center',  minWidth: 55, cellclassname: cellclass});
             columns.push({ text: 'TECHNOLOGY', datafield: 'TechId', editable: false, align: 'left', hidden: true  });
             columns.push({ text: 'TECHNOLOGY', datafield: 'TechName', editable: false, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55 , cellclassname: cellclass});
             columns.push({ text: 'COMMODITY', datafield: 'CommId', editable: false, align: 'left', hidden: true  });
@@ -135,33 +134,71 @@ export class Model {
                 });
             });
 
-
-            
             //console.log('viewData1 ', viewData)
-
             $.each(viewData, function (byType, obj1) {
                 $.each(obj1, function (tech, array) {
                     $.each(array, function (id, obj) {
-                        obj['groupName'] = GROUPNAMES[obj['groupId']];
+                        obj['groupName'] = GROUPNAMES[obj.groupId];
                         obj['Sc'] = ScName[obj['ScId']];
-                        if(obj['TechId'] != null){
+
+
+                        if(obj.CommId == null && obj.EmisId == null){
+                            obj['TechName'] = TechName[obj.TechId];
+                            let rule = paramById[obj.groupId][obj.param]['unitRule'];
+                            let data = unitData[obj.groupId][obj.param][obj.TechId];
+                            obj['UnitId'] = jsonLogic.apply(rule, data);
+                        }
+                        // else
+                        // {
+                        //     obj['TechName'] = null; 
+                        // }
+                        else if(obj.TechId == null && obj.EmisId == null){
+                            obj['CommName'] = CommName[obj.CommId];
+                            let rule = paramById[obj.groupId][obj.param]['unitRule'];
+                            let data = unitData[obj.groupId][obj.param][obj.CommId];
+                            obj['UnitId'] = jsonLogic.apply(rule, data);
+                        }
+                        // else
+                        // {
+                        //     obj['CommName'] = null;
+                        // }
+                        else if(obj.TechId == null && obj.CommId == null){
+                            obj['EmisName'] = EmiName[obj.EmisId];
+                            let rule = paramById[obj.groupId][obj.param]['unitRule'];
+                            let data = unitData[obj.groupId][obj.param][obj.EmisId];
+                            obj['UnitId'] = jsonLogic.apply(rule, data);
+                        }
+                        // else
+                        // {
+                        //     obj['EmisName'] = null;
+                        // }
+                        //RYTCM
+                        else if(obj.EmisId == null){
                             obj['TechName'] = TechName[obj['TechId']];
+                            let rule = paramById[obj.groupId][obj.param]['unitRule'];
+                            let data1 = unitData[obj.groupId][obj.param][obj.CommId];
+                            let data2 = unitData[obj.groupId][obj.param][obj.TechId];
+                            const data = {...data1, ...data2};
+                            obj['UnitId'] = jsonLogic.apply(rule, data);
+
                         }
-                        else{
-                            obj['TechName'] = null;
+                        //RYTEM
+                        else if(obj.CommId == null){
+                            obj['TechName'] = TechName[obj['TechId']];
+                            let rule = paramById[obj.groupId][obj.param]['unitRule'];
+                            let data1 = unitData[obj.groupId][obj.param][obj.EmisId];
+                            let data2 = unitData[obj.groupId][obj.param][obj.TechId];
+                            const data = {...data1, ...data2};
+                            obj['UnitId'] = jsonLogic.apply(rule, data);
+                            // console.log('obj.groupId ', obj.groupId)
+                            // console.log('obj.param ', obj.param)
+                            // console.log('obj.TechId ', obj.TechId)
+                            // console.log('obj.CommId ', obj.CommId)
+                            // console.log('data ', data)
+                            // console.log('rule ', rule)
+                            // console.log('result ', jsonLogic.apply(rule, data))
                         }
-                        if(obj['CommId'] != null){
-                            obj['CommName'] = CommName[obj['CommId']];
-                        }
-                        else{
-                            obj['CommName'] = null;
-                        }
-                        if(obj['EmisId'] != null){
-                            obj['EmisName'] = EmiName[obj['EmisId']];
-                        }
-                        else{
-                            obj['EmisName'] = null;
-                        }
+                        
                     });
                 });
             });
@@ -175,15 +212,22 @@ export class Model {
                 datafields: datafields,
             };
 
-            //RT
-
-            console.log('viewTEData ', viewTEData)
-
+            //RT RE
             $.each(viewTEData, function (byType, obj1) {
                 $.each(obj1, function (tech, array) {
                     $.each(array, function (id, obj) {
                         obj['groupName'] = GROUPNAMES[obj['groupId']];
                         obj['Sc'] = ScName[obj['ScId']];
+                        if (byType == 'Tech'){
+                            let rule = paramById[obj.groupId][obj.param]['unitRule'];
+                            let data = unitData[obj.groupId][obj.param][tech];
+                            obj['UnitId'] = jsonLogic.apply(rule, data);
+                        }
+                        else if(byType == 'Emi'){
+                            let rule = paramById[obj.groupId][obj.param]['unitRule'];
+                            let data = unitData[obj.groupId][obj.param][tech];
+                            obj['UnitId'] = jsonLogic.apply(rule, data);
+                        }
                     });
                 });
             });
@@ -199,6 +243,7 @@ export class Model {
             datafieldsRT.push({ name: 'param', type:'string' });   
             datafieldsRT.push({ name: 'paramName', type:'string' }); 
             datafieldsRT.push({ name: 'value', type:'number' });  
+            datafieldsRT.push({ name: 'UnitId', type:'string' });
 
             columnsRT.push({ text: 'ScId', datafield: 'ScId',editable: false, align: 'left', hidden: true});
             columnsRT.push({ text: 'SCENARIO', datafield: 'Sc', editable: false, align: 'left', cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
@@ -207,6 +252,7 @@ export class Model {
             columnsRT.push({ text: 'GROUP NAME', datafield: 'groupName',editable: false, align: 'left' , hidden: true});
             columnsRT.push({ text: 'param', datafield: 'param',  editable: false, align: 'left', hidden: true });
             columnsRT.push({ text: 'PARAMETER NAME', datafield: 'paramName', editable: false, align: 'left' , minWidth: 75, cellclassname: cellclass});
+            columnsRT.push({ text: 'UNIT', datafield: 'UnitId', editable: false, align: 'center',cellsalign: 'center',  minWidth: 55, cellclassname: cellclass});
             columnsRT.push({ text: 'Value', datafield: 'value', editable: true, cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', minWidth: 75,
                 initeditor: initeditorRT,
                 validation: validation,
@@ -219,8 +265,6 @@ export class Model {
                 root: genData["osy-tech"][0]['TechId'],
                 datafields: datafieldsRT,
             };
-
-
 
             this.group = 'ViewData'; 
             this.casename = casename; 

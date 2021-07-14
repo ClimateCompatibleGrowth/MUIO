@@ -28,6 +28,7 @@ export class Osemosys {
                 url:Base.apiUrl() + "saveParamFile",
                 async: true,  
                 type: 'POST',
+                cache:false,
                 dataType: 'json',
                 data: JSON.stringify({ "data": data }),
                 contentType: 'application/json; charset=utf-8',

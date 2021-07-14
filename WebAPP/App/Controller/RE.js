@@ -134,7 +134,10 @@ export default class RE {
             let $divGrid = $('#osy-gridRE');
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
-
+            let newParam = this.value;
+            $.each(model.emis, function (idE, emi) {
+                $divGrid.jqxGrid('setcolumnproperty', emi.EmisId, 'text', emi.Emis + ' <small style="color:darkgrey">[ ' +model.emiUnit[newParam][emi.EmisId]+' ]</small>');
+            });
             Grid.applyREFilter( $divGrid, model.emis );
             var configChart = $('#osy-chartRE').jqxChart('getInstance');
             configChart.source.records = model.chartData[this.value];
@@ -266,8 +269,8 @@ export default class RE {
         let res = true;
         $("#resizeColumns").click(function () {
             if(res){
-                $('#osy-gridRE').jqxGrid('autoresizecolumn', 'Param');
                 $('#osy-gridRE').jqxGrid('autoresizecolumn', 'Sc');
+                $('#osy-gridRE').jqxGrid('autoresizecolumn', 'Param');
             }
             else{
                 $('#osy-gridRE').jqxGrid('autoresizecolumns');

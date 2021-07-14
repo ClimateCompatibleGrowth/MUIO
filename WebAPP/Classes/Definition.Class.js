@@ -207,7 +207,43 @@ export const DEF = {
                     </div>
                 </div>            
             </div>
-        </article>       
+        </article>      
+        <article class="col-xs-12 col-sm-12">
+            
+        <div class="jarviswidget" id="wid-id-5" 
+            data-widget-colorbutton="false"	
+            data-widget-editbutton="false" 
+            data-widget-togglebutton="false" 
+            data-widget-deletebutton="false" 
+            data-widget-fullscreenbutton="false" 
+            data-widget-custombutton="false" 
+            data-widget-collapsed="false" 
+            data-widget-sortable="false">
+            <header>
+                <h2>RE Generation target</h2>				
+            </header>
+            <div>
+                <div class="widget-body no-padding">
+                    <div class="table-responsive no-margin custom-scroll" >             
+                        <table class="table highlight table-border-0 table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th class="hidden-xs" colspan="2">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="v-align-m">REMinProductionTarget[r,y]	</td>
+                                    <td class="hidden-xs">Minimum ratio of all renewable commodities tagged in the RETagCommodity parameter, to be produced by the technologies tagged with the RETechnology parameter.</td>
+                                </tr>													
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </article> 
         `
     },
     RT: {

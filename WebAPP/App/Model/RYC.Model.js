@@ -15,6 +15,10 @@ export class Model {
             let comms = genData['osy-comm'];
             let scenarios = genData['osy-scenarios'];
 
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
+            let RYCgrid = DataModel.RYCgrid(genData, RYCdata, PARAMETERS);
+            let RYCchart = DataModel.RYCchart(genData, RYCdata);  
+
             let scClass = {};
 
             datafieldsChart.push({ name: 'Year', type:'string' });
@@ -27,7 +31,8 @@ export class Model {
             datafields.push({ name: 'ScId', type:'string' });
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'CommId', type:'string' });
-            datafields.push({ name: 'Comm', type:'string' });           
+            datafields.push({ name: 'Comm', type:'string' }); 
+            datafields.push({ name: 'UnitId', type:'string' });            
 
             let validation = function(cell, value) {
                 if (value < 0) {
@@ -51,10 +56,6 @@ export class Model {
 
             }.bind(this);
         
-            let initeditor1 = function(row, cellvalue, editor) {
-                editor.jqxNumberInput({ decimalDigits: this.d });
-            }.bind(this);
-
             let initeditor = function(row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
 
@@ -71,7 +72,8 @@ export class Model {
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
-
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass });
+            
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type:'number' });
                 columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
@@ -83,22 +85,8 @@ export class Model {
                 });
             });
 
-            // datafieldsChart.push({ name: 'Year', type:'string' });
-            // $.each(comms, function (id, obj) {
-            //     datafieldsChart.push({ name: obj.CommId, type:'number' });
-            //     series.push({ dataField: obj.CommId, displayText: obj.Comm });
-            // });
-
-            let PARAMNAMES = {};
-            $.each(PARAMETERS[group], function (id, obj) {
-                PARAMNAMES[obj.id] = obj.value;
-            });
-
-            let RYCgrid = DataModel.RYCgrid(genData, RYCdata);
-            let RYCchart = DataModel.RYCchart(genData, RYCdata);
-
             // console.log('RYCdata ', RYCdata)
-            // console.log('RYCgrid ', RYCgrid)
+            console.log('RYCgrid ', RYCgrid)
             // console.log('RYCchart ', RYCchart)
             // console.log('series ', series)
 

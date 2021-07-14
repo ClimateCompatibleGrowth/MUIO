@@ -18,7 +18,7 @@ export class Model {
             let scenarios = genData['osy-scenarios'];
             let mo = genData['osy-mo'];
 
-            let RYTMgrid = DataModel.RYTMgrid(genData, RYTMdata);
+            let RYTMgrid = DataModel.RYTMgrid(genData, RYTMdata, PARAMETERS);
             let RYTMchart = DataModel.RYTMchart(genData, RYTMdata);            
             let mods = DataModel.Mods(genData);  
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
@@ -36,11 +36,13 @@ export class Model {
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'TechId', type:'string' });
             datafields.push({ name: 'Tech', type:'string' });
-            datafields.push({ name: 'MoId', type:'string' });           
+            datafields.push({ name: 'MoId', type:'string' });   
+            datafields.push({ name: 'UnitId', type:'string' });         
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' })
-            columns.push({ text: 'MoO', datafield: 'MoId', pinned:true, editable: false, align: 'center', cellsalign: 'center' })
+            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' });
+            columns.push({ text: 'MoO', datafield: 'MoId', pinned:true, editable: false, align: 'center', cellsalign: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
             
             let validation = function(cell, value) {
                 if (value < 0) {

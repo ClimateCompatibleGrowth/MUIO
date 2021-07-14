@@ -37,6 +37,8 @@ export class DefaultObj{
                 "TechId": id,
                 "Tech":id,
                 "Desc": "Default technology",
+                "CapUnitId": "MW",
+                "ActUnitId": "PJ",
                 "IAR": emptyArray,
                 "OAR": emptyArray,
                 "EAR": emptyArray

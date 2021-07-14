@@ -17,12 +17,25 @@ export class Model {
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
 
+            let RTgrid = DataModel.RTgrid(genData, RTdata, PARAMETERS);
+            let RTchart = DataModel.RTchart(genData, RTdata);
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
+
+            let techUnit = {};;
+            $.each(RTgrid, function (paramId, array) {
+                techUnit[paramId] = {};
+                $.each(array, function (id, obj) {
+                    $.each(techs, function (idT, tech) {
+                        techUnit[paramId][tech.TechId] = obj[tech.TechId+'_UnitId'];
+                    });
+                });
+            });
+
             let scClass = {};
 
             //datafieldsChart.push({ name: 'TechId', type:'string' });
             datafieldsChart.push({ name: 'Tech', type:'string' });
-
-            
+ 
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_'+id;
                 datafieldsChart.push({ name: obj.ScenarioId, type:'number' });
@@ -32,7 +45,7 @@ export class Model {
             datafields.push({ name: 'ScId', type:'string' });
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'ParamId', type:'string' });
-            datafields.push({ name: 'Param', type:'string' });           
+            datafields.push({ name: 'Param', type:'string' });        
 
             let validation = function(cell, value) {
                 if (value < 0) {
@@ -55,10 +68,6 @@ export class Model {
                 }
 
             }.bind(this);
-        
-            let initeditor1 = function(row, cellvalue, editor) {
-                editor.jqxNumberInput({ decimalDigits: this.d });
-            }.bind(this);
 
             let initeditor = function(row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
@@ -73,15 +82,14 @@ export class Model {
 
             }.bind(this);
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Parameter', datafield: 'Param', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
-            //columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass, minWidth: 75 }); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Parameter', datafield: 'Param', pinned:true, editable: false, align: 'left',   cellclassname: cellclass, minWidth: 200 });
 
             let techIds = [];
             $.each(techs, function (id, tech) {
                 techIds.push(tech.TechId);
                 datafields.push({ name: tech['TechId'], type:'number' });
-                columns.push({ text: tech['Tech'], datafield: tech['TechId'],  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
+                columns.push({ text: tech.Tech + ' <small  style="color:darkgrey">[ ' +techUnit[param][tech.TechId]+' ]</small>', datafield: tech.TechId,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
                     groupable:false,
                     initeditor: initeditor,
                     validation: validation,
@@ -90,17 +98,8 @@ export class Model {
                 });
             });
 
-            // let PARAMNAMES = {};
-            // $.each(PARAMETERS[group], function (id, obj) {
-            //     PARAMNAMES[obj.id] = obj.value;
-            // });
-
-            let RTgrid = DataModel.RTgrid(genData, RTdata, PARAMETERS[group]);
-            let RTchart = DataModel.RTchart(genData, RTdata);
-            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
-
             // console.log('RTdata ', RTdata)
-            // console.log('RTgrid ', RTgrid)
+            //console.log('RTgrid ', RTgrid)
             // console.log('columns ', columns)
             // console.log('RTchart ', RTchart)
             // console.log('series ', series)
@@ -115,16 +114,17 @@ export class Model {
             var srcChart = {
                 datatype: "json",
                 localdata: RTchart,
-                //root: param+ '>' + techs[0]['TechId'],
                 root: param,
                datafields: datafieldsChart,
             };
 
             this.casename = casename; 
+            this.param = param;
             //this.years = years;
             this.techs = techs;
             this.techIds = techIds;
             this.techsCount = techs.length
+            this.techUnit = techUnit;
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.columns = columns;

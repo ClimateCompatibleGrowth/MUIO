@@ -270,7 +270,8 @@ export default class R {
                 //$divGrid.jqxGrid('refresh');
                 $divGrid.jqxGrid('autoresizecolumn', 'Sc');
                 $divGrid.jqxGrid('autoresizecolumn', 'Param');
-                //$divGrid.jqxGrid('autoresizecolumn', 'value');
+                $divGrid.jqxGrid('autoresizecolumn', 'UnitId');
+                $divGrid.jqxGrid('autoresizecolumn', 'value');
             }
             else{
                 $divGrid.jqxGrid('autoresizecolumns');

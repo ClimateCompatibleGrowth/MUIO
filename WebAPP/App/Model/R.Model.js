@@ -16,6 +16,10 @@ export class Model {
 
             let scenarios = genData['osy-scenarios'];
 
+            let RTgrid = DataModel.Rgrid(genData, Rdata, PARAMETERS);
+            let RTchart = DataModel.Rchart(genData, Rdata);
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
+
             let scClass = {};
 
             datafieldsChart.push({ name: 'value', type:'string' });
@@ -30,6 +34,7 @@ export class Model {
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'ParamId', type:'string' });
             datafields.push({ name: 'Param', type:'string' });  
+            datafields.push({ name: 'UnitId', type:'string' }); 
             datafields.push({ name: 'value', type:'number' });         
 
             let validation = function(cell, value) {
@@ -54,9 +59,7 @@ export class Model {
 
             }.bind(this);
         
-
             let initeditor = function(row, cellvalue, editor, data) {
-                console.log('start editior ')
                 var scId = $('#osy-gridR').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0'){
                     console.log('SC0 ', scId)
@@ -76,6 +79,7 @@ export class Model {
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Parameter', datafield: 'Param', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
             //columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass });
             columns.push({ text: 'value', datafield: 'value',  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
                 groupable:false,
                 initeditor: initeditor,
@@ -84,19 +88,12 @@ export class Model {
                 cellclassname: cellclass
             });
 
-            let PARAMNAMES = {};
-            $.each(PARAMETERS[group], function (id, obj) {
-                PARAMNAMES[obj.id] = obj.value;
-            });
 
-            let RTgrid = DataModel.Rgrid(genData, Rdata, PARAMETERS[group]);
-            let RTchart = DataModel.Rchart(genData, Rdata);
-
-            console.log('Rdata ', Rdata)
-            console.log('RTgrid ', RTgrid)
-            console.log('columns ', columns)
-            console.log('RTchart ', RTchart)
-            console.log('series ', series)
+            // console.log('Rdata ', Rdata)
+            //console.log('RTgrid ', RTgrid)
+            // console.log('columns ', columns)
+            // console.log('RTchart ', RTchart)
+            // console.log('series ', series)
 
             let srcGrid = {
                 datatype: "json",

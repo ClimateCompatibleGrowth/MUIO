@@ -17,7 +17,7 @@ export class Model {
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
 
-            let RYTEMgrid = DataModel.RYTEMgrid(genData, RYTEMdata);
+            let RYTEMgrid = DataModel.RYTEMgrid(genData, RYTEMdata, PARAMETERS);
             let RYTEMchart = DataModel.RYTEMchart(genData, RYTEMdata);
             let techIds = DataModel.TechId(genData);
             let ActivityTechsEmis = DataModel.activityTechsEmis(techs);
@@ -41,14 +41,15 @@ export class Model {
             datafields.push({ name: 'Tech', type:'string' });
             datafields.push({ name: 'EmisId', type:'string' });
             datafields.push({ name: 'Emis', type:'string' }); 
-            datafields.push({ name: 'MoId', type:'string' });            
+            datafields.push({ name: 'MoId', type:'string' });     
+            datafields.push({ name: 'UnitId', type:'string' });          
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' })
-            columns.push({ text: 'Emission', datafield: 'Emis', pinned:true, editable: false, align: 'center' })
-            columns.push({ text: 'MoO', datafield: 'MoId', pinned:true, editable: false, align: 'center', cellsalign: 'center' })
+            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' });
+            columns.push({ text: 'Emission', datafield: 'Emis', pinned:true, editable: false, align: 'center' });
+            columns.push({ text: 'MoO', datafield: 'MoId', pinned:true, editable: false, align: 'center', cellsalign: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
             
-
             let validation = function(cell, value) {
                 if (value < 0) {
                     return { result: false, message: 'Value must be positive!' };
@@ -71,7 +72,6 @@ export class Model {
 
             }.bind(this);
         
-
             let initeditor = function(row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
 

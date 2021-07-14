@@ -23,6 +23,33 @@ export class Grid {
         //     //console.log('editor ', editor)
         //     editor.jqxDropDownList({ source: daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true });
         // }
+        var ddlSource = {
+            localdata: JSON.stringify(UNITS),
+            datatype: "json",
+            datafields:
+            [
+                { name: 'id', type: 'string' },
+                { name: 'name', type: 'string' },
+                { name: 'group', type: 'string' }
+            ],
+        };
+        var daUnits = new $.jqx.dataAdapter(ddlSource);
+
+        var ddlEditor = function(row, value, editor) {
+            editor.jqxDropDownList({ 
+                source: daUnits, 
+                displayMember: 'name', 
+                valueMember: 'id', 
+                groupMember: 'group',
+                animationType: 'slide',
+                enableHover: true,
+                filterable:true,
+                enableSelection:true,
+                //autoItemsHeight: true,
+                //dropDownWidth: 250,
+                autoDropDownHeight: false
+            });
+        }
 
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
             // set the editor's current value. The callback is called each time the editor is displayed.
@@ -116,11 +143,13 @@ export class Grid {
             enablehover: false,
             columns: [
               { text: 'techId', datafield: 'TechId', hidden: true },
-              { text: 'Technology', datafield: 'Tech', width: '20%',align: 'center',cellsalign: 'left', validation:validation_1 },
+              { text: 'Technology', datafield: 'Tech', width: '15%',align: 'center',cellsalign: 'left', validation:validation_1 },
               { text: 'Description', datafield: 'Desc', width: '25%', align: 'center',cellsalign: 'left' },
-              { text: 'IAR', datafield: 'IAR', width: '15%', rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-              { text: 'OAR', datafield: 'OAR', width: '15%', rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-              { text: 'EAR', datafield: 'EAR', width: '15%', rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlEmis, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+              { text: 'Unit of capacity', datafield: 'CapUnitId', width: '10%',  columntype: 'dropdownlist',  createeditor: ddlEditor, align: 'center',cellsalign: 'center'},
+              { text: 'Unit of activity', datafield: 'ActUnitId', width: '10%',  columntype: 'dropdownlist',  createeditor: ddlEditor, align: 'center',cellsalign: 'center'},
+              { text: 'IAR', datafield: 'IAR', width: '10%', rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+              { text: 'OAR', datafield: 'OAR', width: '10%', rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+              { text: 'EAR', datafield: 'EAR', width: '10%', rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlEmis, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
               { text: '', datafield: 'Delete', width: '10%',  cellsrenderer: cellsrendererbutton, editable:false  },
             ]
         }); 
@@ -383,7 +412,6 @@ export class Grid {
         });
     }
 
-    
     static applyRYFilter( $divGrid, years, sc=null ) {
         //$('#jqxLoader').jqxLoader('open');
         //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
@@ -858,8 +886,6 @@ export class Grid {
         $divGrid.jqxGrid('applyfilters');
     }
 
-    
-
     static applyRYCTsFilter( $divGrid, years, sc=null, comm=null, ts=null ) {
         //$('#jqxLoader').jqxLoader('open');
         //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
@@ -1094,5 +1120,6 @@ export class Grid {
 
         // // apply the filters.
         $divGrid.jqxGrid('applyfilters');
+        //$('#loadermain').hide(); 
     }
 }

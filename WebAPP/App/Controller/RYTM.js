@@ -141,7 +141,6 @@ export default class RYTM {
         //change of ddl parameters
         $("#osy-ryt").off('change');
         $('#osy-ryt').on('change', function() {
-            let $divGrid = $divGrid;
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
             var configChart = $divChart.jqxChart('getInstance');

@@ -120,7 +120,6 @@ export default class RYC {
                 delete obj.ScId;
             });
             
-            //console.log('saveData ',saveData)
             Osemosys.updateData(saveData, param, "RYC.json")
             .then(response =>{
                 Message.bigBoxSuccess('Case study message', response.message, 3000);

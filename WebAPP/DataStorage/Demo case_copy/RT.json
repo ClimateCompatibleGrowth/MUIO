@@ -1,0 +1,74 @@
+{
+    "CAU": {
+        "SC_0": [
+            {
+                "TEC_0": 2,
+                "TEC_q404n": 0,
+                "TEC_6bn4q": 2,
+                "TEC_cicpn": 0
+            }
+        ],
+        "SC_931vq": [
+            {
+                "TEC_0": 4,
+                "TEC_q404n": null,
+                "TEC_6bn4q": null,
+                "TEC_cicpn": null
+            }
+        ]
+    },
+    "OL": {
+        "SC_0": [
+            {
+                "TEC_0": 1,
+                "TEC_q404n": 1,
+                "TEC_6bn4q": 1,
+                "TEC_cicpn": 1
+            }
+        ],
+        "SC_931vq": [
+            {
+                "TEC_0": null,
+                "TEC_q404n": null,
+                "TEC_6bn4q": null,
+                "TEC_cicpn": null
+            }
+        ]
+    },
+    "TMPAL": {
+        "SC_0": [
+            {
+                "TEC_0": 2,
+                "TEC_q404n": 0,
+                "TEC_6bn4q": 0,
+                "TEC_cicpn": 0
+            }
+        ],
+        "SC_931vq": [
+            {
+                "TEC_0": null,
+                "TEC_q404n": null,
+                "TEC_6bn4q": null,
+                "TEC_cicpn": null
+            }
+        ]
+    },
+    "TMPAU": {
+        "SC_0": [
+            {
+                "TEC_0": 999999,
+                "TEC_q404n": 999999,
+                "TEC_6bn4q": 999999,
+                "TEC_cicpn": 999999
+            }
+        ],
+        "SC_931vq": [
+            {
+                "TEC_0": null,
+                "TEC_q404n": null,
+                "TEC_6bn4q": null,
+                "TEC_cicpn": null
+            }
+        ]
+    }
+}

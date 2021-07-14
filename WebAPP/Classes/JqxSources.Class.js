@@ -8,6 +8,8 @@ export class JqxSources{
                 { name: 'TechId', type: 'string' },
                 { name: 'Tech', type: 'string' },
                 { name: 'Desc', type: 'string' },
+                { name: 'CapUnitId', type: 'string' },
+                { name: 'ActUnitId', type: 'string' },
                 { name: 'IAR', type: 'array' },
                 { name: 'OAR', type: 'array' },
                 { name: 'EAR', type: 'array' }

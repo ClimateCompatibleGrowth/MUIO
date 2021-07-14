@@ -278,6 +278,7 @@ export default class RY {
             if(res){
                 $('#osy-gridRY').jqxGrid('autoresizecolumn', 'Sc');
                 $('#osy-gridRY').jqxGrid('autoresizecolumn', 'Param');
+                $('#osy-gridRY').jqxGrid('autoresizecolumn', 'UnitId');
             }
             else{
                 $('#osy-gridRY').jqxGrid('autoresizecolumns');

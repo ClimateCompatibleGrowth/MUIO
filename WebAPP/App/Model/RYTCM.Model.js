@@ -17,7 +17,7 @@ export class Model {
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
 
-            let RYTCMgrid = DataModel.RYTCMgrid(genData, RYTCMdata);
+            let RYTCMgrid = DataModel.RYTCMgrid(genData, RYTCMdata, PARAMETERS);
             let RYTCMchart = DataModel.RYTCMchart(genData, RYTCMdata);
             let techIds = DataModel.TechId(genData);
             let ActivityTechs = DataModel.activityTechsComms(techs);
@@ -40,12 +40,14 @@ export class Model {
             datafields.push({ name: 'Tech', type:'string' });
             datafields.push({ name: 'CommId', type:'string' });
             datafields.push({ name: 'Comm', type:'string' });    
-            datafields.push({ name: 'MoId', type:'string' });          
+            datafields.push({ name: 'MoId', type:'string' });    
+            datafields.push({ name: 'UnitId', type:'string' });       
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' });
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned:true, editable: false, align: 'center'});
             columns.push({ text: 'MoO', datafield: 'MoId', pinned:true, editable: false, align: 'center', cellsalign: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
             
 
             let validation = function(cell, value) {
@@ -73,7 +75,6 @@ export class Model {
 
             let initeditor = function(row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
-
                 var scId = $('#osy-gridRYTCM').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0'){
                     $('#' + editor[0].id + ' input').keydown(function (event) {
@@ -94,11 +95,6 @@ export class Model {
                     cellclassname: cellclass
                 });
             });         
-
-            // let PARAMNAMES = {};
-            // $.each(PARAMETERS[group], function (id, obj) {
-            //     PARAMNAMES[obj.id] = obj.value;
-            // });
 
             //  console.log('ActivityTechs ', ActivityTechs)
             //  console.log('ActivityComms ', ActivityComms)

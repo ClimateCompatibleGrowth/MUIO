@@ -170,7 +170,6 @@ export default class AddCase {
             $("#osy-caseForm").jqxValidator('validate')
         });
 
-        
         $("#osy-update").off('click');
         $("#osy-update").on('click', function (event) {
             event.preventDefault();
@@ -183,7 +182,7 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
 
-            let techData = $('#osy-gridTech').jqxGrid('getrows');
+            //let techData = $('#osy-gridTech').jqxGrid('getrows');
             //console.log('techData ', techData)
             // let TECH = [];
             // $.each(techData, function (index, value) {
@@ -205,15 +204,12 @@ export default class AddCase {
 
             // console.log('tech ', model.techs)
             let TECH = model.techs;
-            
-            //console.log('TECH ', TECH)
 
             let commData = $('#osy-gridComm').jqxGrid('getrows');
             let COMM = [];
             $.each(commData, function (index, value) {
                 let tmp = {};
                 tmp.CommId = value.CommId;
-                //tmp[value.CommId] = value.Comm;
                 tmp.Comm = value.Comm;
                 tmp.Desc = value.Desc;
                 tmp.UnitId = value.UnitId;
@@ -225,7 +221,6 @@ export default class AddCase {
             $.each(emisData, function (index, value) {
                 let tmp = {};
                 tmp.EmisId = value.EmisId;
-                //tmp[value.EmisId] = value.Emis;
                 tmp.Emis = value.Emis;
                 tmp.Desc = value.Desc;
                 tmp.UnitId = value.UnitId;
@@ -234,21 +229,13 @@ export default class AddCase {
 
             let scenarioData = $('#osy-gridScenario').jqxGrid('getrows');
             let SCENARIOS = [];
-            //let SCORDER = []
             $.each(scenarioData, function (index, value) {
                 let tmp = {};
                 tmp.ScenarioId = value.ScenarioId;
-                //tmp[value.ScenarioId] = value.Scenario;
                 tmp.Scenario = value.Scenario;
                 tmp.Desc = value.Desc;
                 tmp.Active = true;
                 SCENARIOS.push(tmp);
-                // let tmp1 = {};
-                // tmp1.ScId = value.ScenarioId;
-                // tmp1.Sc = value.Scenario;
-                // tmp1.Desc = value.Desc;
-                // tmp1.Active = true;
-                // SCORDER.push(tmp1);
             });
 
 
@@ -256,9 +243,7 @@ export default class AddCase {
             var desc = $( "#osy-desc" ).val();
             var date = $( "#osy-date" ).val();
             var currency = $( "#osy-currency" ).val();
-            var dr = $( "#osy-dr" ).val()/100;
             var mo = $( "#osy-mo" ).val();
-            // var rmpt = $( "#osy-rmpt" ).val();
             var ns = $( "#osy-ns" ).val();
             var dt = $( "#osy-dt" ).val();
 
@@ -324,7 +309,7 @@ export default class AddCase {
             let defaultTech = DefaultObj.defaultTech();
             //tech grid se pravi dinalicki potrebno je updatovati model
             //JSON parse strungify potrebno da iz nekog razloga izbacino elemente uid boundindex...
-            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'IAR', 'OAR', 'EAR', 'TMPAL', 'TMPAU', 'CAU', 'OL'] )));
+            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'IAR', 'OAR', 'EAR'] )));
             //model.techs.push(defaultTech[0]);
             $("#osy-gridTech").jqxGrid('addrow', null, defaultTech);
             //upat eza broj techs u tabu
@@ -500,6 +485,10 @@ export default class AddCase {
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
             var value = args.newvalue;
+            console.log(args);
+            if (column == 'CapUnitId' || column == 'ActUnitId'){
+                Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', null);
+            }
             var techId = $('#osy-gridTech').jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
             $.each(model.techs, function (id, obj) {
                 if(obj.TechId == techId){
@@ -520,6 +509,38 @@ export default class AddCase {
                     }
                 }
             });
+        });
+
+        $("#osy-gridEmis").on('cellvaluechanged', function (event) {
+            // event arguments.
+            var args = event.args;
+            // column data field.
+            var datafield = event.args.datafield;
+            // row's bound index.
+            var rowBoundIndex = args.rowindex;
+            // new cell value.
+            var value = args.newvalue;
+            // old cell value.
+            var oldvalue = args.oldvalue;
+            if (datafield == 'UnitId'){
+                Message.bigBoxWarning('Unit change warninig!', 'Changing emission unit will not recalculate entered nor default values in the model.', null);
+            }
+        });
+
+        $("#osy-gridComm").on('cellvaluechanged', function (event) {
+            // event arguments.
+            var args = event.args;
+            // column data field.
+            var datafield = event.args.datafield;
+            // row's bound index.
+            var rowBoundIndex = args.rowindex;
+            // new cell value.
+            var value = args.newvalue;
+            // old cell value.
+            var oldvalue = args.oldvalue;
+            if (datafield == 'UnitId'){
+                Message.bigBoxWarning('Unit change warninig!', 'Changing commodity unit will not recalculate entered nor default values in the model.', null);
+            }
         });
 
         $("#osy-checkAll").on("click", function(event) {

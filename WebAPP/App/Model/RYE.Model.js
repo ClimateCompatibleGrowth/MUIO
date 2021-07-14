@@ -17,6 +17,10 @@ export class Model {
 
             let scClass = {};
 
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
+            let RYEgrid = DataModel.RYEgrid(genData, RYEdata, PARAMETERS);
+            let RYEchart = DataModel.RYEchart(genData, RYEdata);
+
             datafieldsChart.push({ name: 'Year', type:'string' });
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_'+id;
@@ -27,7 +31,8 @@ export class Model {
             datafields.push({ name: 'ScId', type:'string' });
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'EmisId', type:'string' });
-            datafields.push({ name: 'Emis', type:'string' });           
+            datafields.push({ name: 'Emis', type:'string' });    
+            datafields.push({ name: 'UnitId', type:'string' });        
 
             let validation = function(cell, value) {
                 if (value < 0) {
@@ -50,10 +55,6 @@ export class Model {
                 }
 
             }.bind(this);
-        
-            let initeditor1 = function(row, cellvalue, editor) {
-                editor.jqxNumberInput({ decimalDigits: this.d });
-            }.bind(this);
 
             let initeditor = function(row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
@@ -71,6 +72,7 @@ export class Model {
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Emission', datafield: 'Emis', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type:'number' });
@@ -83,30 +85,11 @@ export class Model {
              });
             });
 
-            // datafieldsChart.push({ name: 'Year', type:'string' });
-            // $.each(emis, function (id, obj) {
-            //     datafieldsChart.push({ name: obj.EmiId, type:'number' });
-            //     series.push({ dataField: obj.EmiId, displayText: obj.Emi });
-            // });
-
-            let PARAMNAMES = {};
-            $.each(PARAMETERS[group], function (id, obj) {
-                PARAMNAMES[obj.id] = obj.value;
-            });
-
-            let RYEgrid = DataModel.RYEgrid(genData, RYEdata);
-            console.log('RYEdata prije ', RYEdata)
-            console.log('RYEgrid ', RYEgrid)
-            console.log('RYEdata poslije ', RYEdata)
-
-            let RYE = DataModel.RYE( RYEdata);
-            console.log('RYE ', RYE)
-
-            let RYEchart = DataModel.RYEchart(genData, RYEdata);
-
-
-            console.log('RYEchart ', RYEchart)
-            console.log('series ', series)
+            // console.log('RYEdata prije ', RYEdata)
+            // console.log('RYEgrid ', RYEgrid)
+            // console.log('RYEdata poslije ', RYEdata)
+            // console.log('RYEchart ', RYEchart)
+            // console.log('series ', series)
 
             let srcGrid = {
                 datatype: "json",

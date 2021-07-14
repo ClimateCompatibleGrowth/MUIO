@@ -17,6 +17,20 @@ export class Model {
             let emis = genData['osy-emis'];
             let scenarios = genData['osy-scenarios'];
 
+            let REgrid = DataModel.REgrid(genData, REdata, PARAMETERS);
+            let REchart = DataModel.REchart(genData, REdata);
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
+
+            let emiUnit = {};;
+            $.each(REgrid, function (paramId, array) {
+                emiUnit[paramId] = {};
+                $.each(array, function (id, obj) {
+                    $.each(emis, function (idE, emi) {
+                        emiUnit[paramId][emi.EmisId] = obj[emi.EmisId+'_UnitId'];
+                    });
+                });
+            });
+
             let scClass = {};
 
             //datafieldsChart.push({ name: 'TechId', type:'string' });
@@ -55,10 +69,6 @@ export class Model {
                 }
 
             }.bind(this);
-        
-            let initeditor1 = function(row, cellvalue, editor) {
-                editor.jqxNumberInput({ decimalDigits: this.d });
-            }.bind(this);
 
             let initeditor = function(row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
@@ -81,7 +91,7 @@ export class Model {
             $.each(emis, function (id, emi) {
                 emiIds.push(emi.EmisId);
                 datafields.push({ name: emi.EmisId, type:'number' });
-                columns.push({ text: emi.Emis, datafield: emi.EmisId,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
+                columns.push({  text: emi.Emis + ' <small  style="color:darkgrey">[ ' +emiUnit[param][emi.EmisId]+' ]</small>', datafield: emi.EmisId,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
                     groupable:false,
                     initeditor: initeditor,
                     validation: validation,
@@ -90,19 +100,11 @@ export class Model {
                 });
             });
 
-            let PARAMNAMES = {};
-            $.each(PARAMETERS[group], function (id, obj) {
-                PARAMNAMES[obj.id] = obj.value;
-            });
-
-            let REgrid = DataModel.REgrid(genData, REdata, PARAMETERS[group]);
-            let REchart = DataModel.REchart(genData, REdata);
-
-            console.log('REdata ', REdata)
-            console.log('REgrid ', REgrid)
-            console.log('columns ', columns)
-            console.log('REchart ', REchart)
-            console.log('series ', series)
+            // console.log('REdata ', REdata)
+            // console.log('REgrid ', REgrid)
+            // console.log('columns ', columns)
+            // console.log('REchart ', REchart)
+            // console.log('series ', series)
 
             let srcGrid = {
                 datatype: "json",
@@ -123,6 +125,7 @@ export class Model {
             //this.years = years;
             this.emis = emis;
             this.emiIds = emiIds;
+            this.emiUnit = emiUnit;
             this.emiCount = emis.length
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;

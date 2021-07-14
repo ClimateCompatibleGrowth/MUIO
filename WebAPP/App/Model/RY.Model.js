@@ -21,13 +21,19 @@ export class Model {
 
             let scClass = {};
 
+            let RYgrid = DataModel.RYgrid(genData, RYdata, PARAMETERS);
+            let RYchart = DataModel.RYchart(genData, RYdata);
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);  
+
             datafields.push({ name: 'Param', type:'string' }); 
             datafields.push({ name: 'ParamId', type:'string' });  
             datafields.push({ name: 'ScId', type:'string' });
             datafields.push({ name: 'Sc', type:'string' });       
+            datafields.push({ name: 'UnitId', type:'string' }); 
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',  minWidth: 120, maxWidth: 200 })
             columns.push({ text: 'Parameter', datafield: 'Param', pinned:true, editable: false, align: 'left',  minWidth: 120, maxWidth: 200 })
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
             
         
             $.each(scenarios, function (id, obj) {
@@ -81,18 +87,9 @@ export class Model {
              });
             });
 
-            let PARAMNAMES = {};
-            $.each(PARAMETERS[group], function (id, obj) {
-                PARAMNAMES[obj.id] = obj.value;
-            });
-
             datafieldsChart.push({ name: 'Year', type:'string' });
             datafieldsChart.push({ name: 'Param', type:'number' });
             //series.push({ dataField: 'Param', displayText: PARAMNAMES[param] });
-
-            let RYgrid = DataModel.RYgrid(genData, RYdata, PARAMETERS[group]);
-            let RYchart = DataModel.RYchart(genData, RYdata);
-
             // console.log('model ',  series, columns)
             // console.log('RYdata ', RYdata)
             // console.log('RYgrid ', RYgrid)

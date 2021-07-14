@@ -133,10 +133,18 @@ export default class RT {
         //change of ddl parameters
         $('#osy-ryt').on('change', function() {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
-            let $divGrid = $('#osy-gridRT');
             model.srcGrid.root = this.value;
+            let newParam = this.value;
             $divGrid.jqxGrid('updatebounddata');
 
+            console.log('model.techUnit ',model.techUnit)
+            $.each(model.techs, function (idT, tech) {
+                //console.log(tech.TechId, model.param, newParam,  model.techUnit[model.param], model.techUnit[newParam] )
+                console.log('old name ', model.techUnit[model.param][tech.TechId])
+                console.log('new name ', model.techUnit[newParam][tech.TechId])
+                $divGrid.jqxGrid('setcolumnproperty', tech.TechId, 'text', tech.Tech + ' <small style="color:darkgrey">[ ' +model.techUnit[newParam][tech.TechId]+' ]</small>');
+            });
+            model.param = this.value;
             Grid.applyRTFilter( $divGrid, model.techs );
             var configChart = $('#osy-chartRT').jqxChart('getInstance');
             configChart.source.records = model.chartData[this.value];
@@ -273,8 +281,8 @@ export default class RT {
         let res = true;
         $("#resizeColumns").click(function () {
             if(res){
-                $('#osy-gridRT').jqxGrid('autoresizecolumn', 'Param');
-                $('#osy-gridRT').jqxGrid('autoresizecolumn', 'Sc');
+                $('#osy-gridRT').jqxGrid('autoresizecolumn', 'Sc',"cells");
+                $('#osy-gridRT').jqxGrid('autoresizecolumn', 'Param',"all");
             }
             else{
                 $('#osy-gridRT').jqxGrid('autoresizecolumns');

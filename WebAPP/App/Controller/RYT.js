@@ -61,10 +61,7 @@ export default class RYT {
 
     static initPage(model){
         Message.clearMessages();
-        // console.log('param ',  model.PARAMETERS)
-        // Sidebar.Load(model.PARAMETERS);
         //Navbar.initPage(model.casename);
-        //console.log('param ',  model.PARAMNAMES[model.param])
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlParams( model.PARAMETERS[model.group], model.param);
         Html.ddlTechs( model.techs, model.techs[0]['TechId']);
@@ -75,7 +72,6 @@ export default class RYT {
 
         if (model.scenariosCount>1){
             $('#scCommand').show();
-            //console.log(model.scenarios, model.scenarios[1]['ScenarioId'])
             Html.ddlScenarios( model.scenarios, model.scenarios[1]['ScenarioId']);
             Html.ddlTechNames( model.techs, model.techs[0]['TechId']);
             Grid.applyRYTFilter( $divGrid, model.years );
@@ -182,7 +178,6 @@ export default class RYT {
             var sc = $( "#osy-scenarios" ).val();
             var tech = $( "#osy-techNames" ).val();
             // let group = $divGrid.jqxGrid('getgroup', 0);
-            // console.log('group ', group)
             Grid.applyRYTFilter( $divGrid, model.years, sc, tech );
         });
 

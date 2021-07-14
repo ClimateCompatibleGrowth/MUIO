@@ -23,8 +23,8 @@ export default class ViewData {
                 promise.push(viewTEData);
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS); 
-                const RTdata = Osemosys.getData(casename, 'RT.json');
-                promise.push(RTdata); 
+                // const RTdata = Osemosys.getData(casename, 'RT.json');
+                // promise.push(RTdata); 
                 return Promise.all(promise);
                 ;
             }else{
@@ -61,23 +61,32 @@ export default class ViewData {
     }
 
     static refreshPage(casename){
+        //$('#loadermain').show(); 
+        Pace.restart();
         Base.setSession(casename)
         .then(response =>{
             const promise = [];
             promise.push(casename);
+
             const genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData);
             const viewData =  Osemosys.viewData(casename);
             promise.push(viewData);
+            const viewTEData =  Osemosys.viewTEData(casename);
+            promise.push(viewTEData);
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, genData, viewData] = data;
-            let model = new Model(casename, genData, viewData);
+            let [casename, genData, viewData, viewTEData, PARAMETERS] = data;
+            let model = new Model(casename, genData, viewData, viewTEData, PARAMETERS);
             this.initPage(model);
             this.initEvents(model);
+            
         })
         .catch(error =>{
+            //$('#loadermain').hide(); 
             Message.warning(error);
         });
     }
@@ -99,6 +108,9 @@ export default class ViewData {
 
         $("#osy-techs").off('change');
         $('#osy-techs').on('change', function() {
+            Pace.restart();
+            //$('#loadermain h4').text("Changing dispatch order" )
+            //$('#loadermain').show(); 
             let tech = this.value;
             model.srcGrid.root = tech;
             $divGrid.jqxGrid('updatebounddata');
@@ -109,6 +121,7 @@ export default class ViewData {
             Grid.applyTEviewDataFilter( $divTEGrid );
 
             Message.smallBoxConfirmation("Confirmation!", "Technology <b>" + model.TechName[tech] + "</b> selected!", 3500);
+            //$('#loadermain').hide(); 
         });
 
         $("#osy-emis").off('change');
@@ -155,7 +168,6 @@ export default class ViewData {
                 $('#gridRT').show();
             }
             else if (this.value == 'Comm') {
-                console.log(this.value)
                 let firstComm = model.comms[0]['CommId'];
                 $('#osy-techs').hide();
                 $('#osy-emis').hide();
@@ -171,7 +183,6 @@ export default class ViewData {
                 $('#gridRT').hide();
             }
             else if (this.value == 'Emi') {
-                console.log(this.value)
                 let firstEmi = model.emis[0]['EmisId'];
                 $('#osy-techs').hide();
                 $('#osy-emis').show();
@@ -336,7 +347,8 @@ export default class ViewData {
             if(res){
                 $divGrid.jqxGrid('autoresizecolumn', 'Sc',"cells" );
                 //$divGrid.jqxGrid('autoresizecolumn', 'groupName');
-                $divGrid.jqxGrid('autoresizecolumn', 'paramName');
+                $divGrid.jqxGrid('autoresizecolumn', 'paramName',"cells");
+                $divGrid.jqxGrid('autoresizecolumn', 'UnitId',"cells" );
                 $divGrid.jqxGrid('autoresizecolumn', 'TechName',"cells" );
                 $divGrid.jqxGrid('autoresizecolumn', 'CommName',"cells" );
                 $divGrid.jqxGrid('autoresizecolumn', 'EmisName',"cells" );
@@ -345,6 +357,7 @@ export default class ViewData {
 
                 $divTEGrid.jqxGrid('autoresizecolumn', 'Sc',"cells" );
                 $divTEGrid.jqxGrid('autoresizecolumn', 'paramName',"cells" );
+                $divTEGrid.jqxGrid('autoresizecolumn', 'UnitId',"cells" );
                 $divTEGrid.jqxGrid('autoresizecolumn', 'value',"cells" );
             }
             else{
@@ -389,5 +402,6 @@ export default class ViewData {
             `);
             $('#definition').toggle('slow');
         });
+        //$('#loadermain').hide(); 
     }
 }
