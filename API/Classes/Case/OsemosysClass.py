@@ -18,7 +18,9 @@ class Osemosys():
         self.ryPath = Path(Config.DATA_STORAGE,case,'RY.json')
         self.rtPath = Path(Config.DATA_STORAGE,case,'RT.json')
         self.rePath = Path(Config.DATA_STORAGE,case,'RE.json')
+        self.rycnPath = Path(Config.DATA_STORAGE,case,'RYCn.json')
         self.rytPath = Path(Config.DATA_STORAGE,case,'RYT.json')
+        self.rytcnPath = Path(Config.DATA_STORAGE,case,'RYTCn.json')
         self.rytmPath = Path(Config.DATA_STORAGE,case,'RYTM.json')
         self.rytcPath = Path(Config.DATA_STORAGE,case,'RYTC.json')
         self.rytcmPath = Path(Config.DATA_STORAGE,case,'RYTCM.json')
@@ -129,6 +131,14 @@ class Osemosys():
         comms = {tech['CommId']: tech['Comm'] for tech in self.genData["osy-comm"] }
         return comms
     
+    def getConIds(self):
+        conIds = [ tech['ConId'] for tech in self.genData["osy-constraints"]]
+        return conIds
+
+    def getConsMap(self):
+        cons = {con['ConId']: con['Con'] for con in self.genData["osy-constraints"] }
+        return cons
+
     def getScIds(self):
         scIds = [ sc['ScenarioId'] for sc in self.genData["osy-scenarios"]]
         return scIds
@@ -145,6 +155,17 @@ class Osemosys():
             for tech in self.genData["osy-tech"]:
                 if tech[param['id']]: 
                     techIds[param['id']].append(tech['TechId'])
+        return techIds
+
+    def getConstraintTechIds(self):
+        techIds = {}
+        for param in self.PARAMETERS['RYTCn']:
+            techIds[param['id']] = {}
+            for con in self.genData["osy-constraints"]:
+                if con[param['id']]: 
+                    techIds[param['id']][con['ConId']] = []
+                    for tech in con[param['id']]:
+                        techIds[param['id']][con['ConId']].append(tech)
         return techIds
 
     #output actTech['IAR']['Tech_1'] = ['Comm_1', 'Comm_2'...]
@@ -186,6 +207,12 @@ class Osemosys():
                         
         return R
 
+    def RCn(self):
+        RCn = {}
+        for con in self.genData["osy-constraints"]:
+            RCn[con['ConId']] = con['Tag']
+        return RCn
+
     def RY(self, RYdata):
         RY = {}
         for param, obj1 in RYdata.items():
@@ -218,6 +245,20 @@ class Osemosys():
                     for emi, val in o.items():
                         RE[param][sc][emi] = val
         return RE
+   
+    def RYCn(self, RYCndata):
+        RYCn = {}
+        for param, obj1 in RYCndata.items():
+            RYCn[param] = {}
+            for sc, array in obj1.items():
+                RYCn[param][sc] = {}
+                for o in array:
+                    for year, val in o.items():
+                        if (year != 'ConId'):
+                            if year not in RYCn[param][sc]:
+                                RYCn[param][sc][year] = {}   
+                            RYCn[param][sc][year][o['ConId']] = val
+        return RYCn
 
     def RYT(self, RYTdata):
         RYT = {}
@@ -232,6 +273,22 @@ class Osemosys():
                                 RYT[param][sc][year] = {}   
                             RYT[param][sc][year][o['TechId']] = val
         return RYT
+
+    def RYTCn(self, RYTCndata):
+        RYTCn = {}
+        for param, obj1 in RYTCndata.items():
+            RYTCn[param] = {}
+            for sc, array in obj1.items():
+                RYTCn[param][sc] = {}
+                for obj in array:
+                    for year, val in obj.items():
+                        if (year != 'TechId' and year != 'ConId'):
+                            if year not in RYTCn[param][sc]:
+                                RYTCn[param][sc][year] = {}
+                            if obj['TechId'] not in RYTCn[param][sc][year]:
+                                RYTCn[param][sc][year][obj['TechId']] = {}
+                            RYTCn[param][sc][year][obj['TechId']][obj['ConId']] = val
+        return RYTCn
 
     def RYTM(self, RYTMdata):
         RYTM = {}
@@ -413,6 +470,8 @@ class Osemosys():
                                         byTech['CommId'] = None
                                     if 'EmisId' not in obj:
                                         byTech['EmisId'] = None
+                                    if 'ConId' not in obj:
+                                        byTech['ConId'] = None
                                     if 'Timeslice' not in obj:
                                         byTech['Timeslice'] = None
                                     if 'MoId' not in obj:
@@ -421,6 +480,75 @@ class Osemosys():
                                         if k != 'TechId':
                                             byTech[k] = v
                                     data[tech['TechId']].append(byTech.copy())
+        return data
+
+
+    def viewDataByComm(self):
+        jsonData = {}
+        data = {}
+        for tech in self.genData["osy-comm"]:
+            data[tech['CommId']] = []
+            for group, array in self.PARAMETERS.items():
+                if group in Config.COMM_GROUPS:
+                    jsonData[group] =  File.readFile(Path(Config.DATA_STORAGE,self.case, group+'.json'))
+                    for obj in array:
+                        byComm = {}
+                        byComm['groupId'] = group
+                        byComm['param'] = obj['id']
+                        byComm['paramName'] = obj['value']
+                        for sc, array in jsonData[group][obj['id']].items():
+                            byComm['ScId'] = sc
+                            for obj2 in array:
+                                if obj2['CommId'] == tech['CommId']:
+                                    byComm['CommId'] = tech['CommId']
+                                    if 'TechId' not in obj:
+                                        byComm['TechId'] = None
+                                    if 'EmisId' not in obj:
+                                        byComm['EmisId'] = None
+                                    if 'ConId' not in obj:
+                                        byComm['ConId'] = None
+                                    if 'Timeslice' not in obj:
+                                        byComm['Timeslice'] = None
+                                    if 'MoId' not in obj:
+                                        byComm['MoId'] = None
+                                    for k,v in obj2.items():
+                                        if k != 'CommId':
+                                            byComm[k] = v
+                                    data[tech['CommId']].append(byComm.copy())
+        return data
+
+    def viewDataByEmi(self):
+        jsonData = {}
+        data = {}
+        for tech in self.genData["osy-emis"]:
+            data[tech['EmisId']] = []
+            for group, array in self.PARAMETERS.items():
+                if group in Config.EMIS_GROUPS:
+                    jsonData[group] =  File.readFile(Path(Config.DATA_STORAGE,self.case, group+'.json'))
+                    for obj in array:
+                        byEmi = {}
+                        byEmi['groupId'] = group
+                        byEmi['param'] = obj['id']
+                        byEmi['paramName'] = obj['value']
+                        for sc, array in jsonData[group][obj['id']].items():
+                            byEmi['ScId'] = sc
+                            for obj2 in array:
+                                if obj2['EmisId'] == tech['EmisId']:
+                                    byEmi['EmisId'] = tech['EmisId']
+                                    if 'TechId' not in obj:
+                                        byEmi['TechId'] = None
+                                    if 'CommId' not in obj:
+                                        byEmi['CommId'] = None
+                                    if 'ConId' not in obj:
+                                        byEmi['ConId'] = None
+                                    if 'Timeslice' not in obj:
+                                        byEmi['Timeslice'] = None
+                                    if 'MoId' not in obj:
+                                        byEmi['MoId'] = None
+                                    for k,v in obj2.items():
+                                        if k != 'EmisId':
+                                            byEmi[k] = v
+                                    data[tech['EmisId']].append(byEmi.copy())
         return data
 
     def viewRTByTech(self):
@@ -467,69 +595,6 @@ class Osemosys():
                                 data[tech['EmisId']].append(byEmi.copy())
         return data
 
-    def viewDataByComm(self):
-        jsonData = {}
-        data = {}
-        for tech in self.genData["osy-comm"]:
-            data[tech['CommId']] = []
-            for group, array in self.PARAMETERS.items():
-                if group in Config.COMM_GROUPS:
-                    jsonData[group] =  File.readFile(Path(Config.DATA_STORAGE,self.case, group+'.json'))
-                    for obj in array:
-                        byComm = {}
-                        byComm['groupId'] = group
-                        byComm['param'] = obj['id']
-                        byComm['paramName'] = obj['value']
-                        for sc, array in jsonData[group][obj['id']].items():
-                            byComm['ScId'] = sc
-                            for obj2 in array:
-                                if obj2['CommId'] == tech['CommId']:
-                                    byComm['CommId'] = tech['CommId']
-                                    if 'TechId' not in obj:
-                                        byComm['TechId'] = None
-                                    if 'EmisId' not in obj:
-                                        byComm['EmisId'] = None
-                                    if 'Timeslice' not in obj:
-                                        byComm['Timeslice'] = None
-                                    if 'MoId' not in obj:
-                                        byComm['MoId'] = None
-                                    for k,v in obj2.items():
-                                        if k != 'CommId':
-                                            byComm[k] = v
-                                    data[tech['CommId']].append(byComm.copy())
-        return data
-
-    def viewDataByEmi(self):
-        jsonData = {}
-        data = {}
-        for tech in self.genData["osy-emis"]:
-            data[tech['EmisId']] = []
-            for group, array in self.PARAMETERS.items():
-                if group in Config.EMIS_GROUPS:
-                    jsonData[group] =  File.readFile(Path(Config.DATA_STORAGE,self.case, group+'.json'))
-                    for obj in array:
-                        byEmi = {}
-                        byEmi['groupId'] = group
-                        byEmi['param'] = obj['id']
-                        byEmi['paramName'] = obj['value']
-                        for sc, array in jsonData[group][obj['id']].items():
-                            byEmi['ScId'] = sc
-                            for obj2 in array:
-                                if obj2['EmisId'] == tech['EmisId']:
-                                    byEmi['EmisId'] = tech['EmisId']
-                                    if 'TechId' not in obj:
-                                        byEmi['TechId'] = None
-                                    if 'CommId' not in obj:
-                                        byEmi['CommId'] = None
-                                    if 'Timeslice' not in obj:
-                                        byEmi['Timeslice'] = None
-                                    if 'MoId' not in obj:
-                                        byEmi['MoId'] = None
-                                    for k,v in obj2.items():
-                                        if k != 'EmisId':
-                                            byEmi[k] = v
-                                    data[tech['EmisId']].append(byEmi.copy())
-        return data
 
     def updateViewData(self, casename, year, ScId, GroupId, ParamId, TechId, CommId, EmisId, Timeslice, value):
         try:
@@ -545,7 +610,6 @@ class Osemosys():
             File.writeFile( jsonData, jsonPath)
         except(IOError):
             raise IOError
-
 
     def updateTEViewData(self, casename, ScId, GroupId, ParamId, TechId, EmisId, value):
         try:

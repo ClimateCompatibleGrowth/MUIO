@@ -1,3 +1,3 @@
-jqxwidgets ver 12.0.4
+jqxwidgets ver 12.1.2
 
 

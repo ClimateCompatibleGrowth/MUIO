@@ -24,6 +24,18 @@ class DataFile(Osemosys):
             self.f.write('{} {}'.format(';', '\n'))
         self.f.write('{}{}'.format('', '\n'))
 
+    def gen_RCn(self):
+        rcn = self.RCn()
+        self.f.write('{} {} {} {} {} {}'.format('param', 'UDCTag','default', -1, ':','\n'))
+        self.f.write('{}{}{}'.format(self.cons, ':=', '\n'))
+        rcnString = ''
+        for conId in self.conIDs:
+            if rcn[conId] is not None:
+                tmp = rcn[conId]
+                rcnString += '{} '.format(tmp)
+        self.f.write('{}{}{}'.format('RE1 ', rcnString, '\n'))
+        self.f.write('{}{}'.format(';', '\n'))
+        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RY(self):
         ry = self.RY(File.readFile(self.ryPath))
@@ -70,6 +82,23 @@ class DataFile(Osemosys):
             self.f.write('{}{}'.format(';', '\n'))
         self.f.write('{}{}'.format('', '\n'))
 
+    def gen_RYCn(self):
+        rycn = self.RYCn(File.readFile(self.rycnPath))
+        for id, param in self.PARAM['RYCn'].items():
+            self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':','\n'))
+            self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+            for conId in self.conIDs:
+                rycnString = ''
+                for yearId in self.yearIDs:
+                    for sc in self.scOrder:
+                        if rycn[id][sc['ScId']][yearId][conId] is not None and sc['Active'] == True:
+                            tmp = rycn[id][sc['ScId']][yearId][conId]
+                    rycnString += '{} '.format(tmp)
+                self.f.write('{} {}{}'.format(conId, rycnString, '\n'))
+        self.f.write('{}{}'.format(';', '\n'))
+        self.f.write('{}{}'.format('', '\n'))
+
     def gen_RYTs(self):
         ryts = self.RYTs(File.readFile(self.rytsPath))
         for id, param in self.PARAM['RYTs'].items():
@@ -100,6 +129,25 @@ class DataFile(Osemosys):
                             tmp = ryt[id][sc['ScId']][yearId][techId]
                     rytString += '{} '.format(tmp)
                 self.f.write('{} {}{}'.format(self.techMap[techId], rytString, '\n'))
+            self.f.write('{}{}'.format(';', '\n'))
+        self.f.write('{}{}'.format('', '\n'))
+
+    def gen_RYTCn(self):
+        rytcn = self.RYTCn(File.readFile(self.rytcnPath))
+        for id, param in self.PARAM['RYTCn'].items():
+            self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
+            for conId in self.conIDs:
+                if self.keys_exists(self.constraintTechIDs, id, conId):
+                    for constraintTechId in self.constraintTechIDs[id][conId]:
+                        self.f.write('{}{}'.format('[RE1,'+ self.techMap[constraintTechId] +',*,*]:', '\n'))
+                        self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                        rytcnString = ''
+                        for yearId in self.yearIDs:
+                            for sc in self.scOrder:
+                                if rytcn[id][sc['ScId']][yearId][constraintTechId][conId] is not None and sc['Active'] == True:
+                                    tmp = rytcn[id][sc['ScId']][yearId][constraintTechId][conId]
+                            rytcnString += '{} '.format(tmp)
+                        self.f.write('{} {}{}'.format(self.conMap[conId], rytcnString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
         self.f.write('{}{}'.format('', '\n'))
 
@@ -265,17 +313,20 @@ class DataFile(Osemosys):
         self.f.write('{}{}'.format(';', '\n'))
         self.f.write('{}{}'.format('', '\n'))
 
+
     def generateDatafile( self ):
         try:
             self.defaultValue = self.getParamDefaultValues()
             self.emiIDs = self.getEmiIds()
             self.techIDs = self.getTechIds()
             self.commIDs = self.getCommIds()
+            self.conIDs = self.getConIds()
             self.scOrder = self.getScOrder()
 
             self.emiMap = self.getEmisMap()
             self.techMap = self.getTechsMap()
             self.commMap = self.getCommsMap()
+            self.conMap = self.getConsMap()
             
             self.yearIDs = self.getYears()
             self.timesliceIDs = self.getTimeslices()
@@ -287,9 +338,7 @@ class DataFile(Osemosys):
             self.emissionTechIDs = self.getActivityEmissionTechIds()
             self.activityEmissionIDs = self.getActivityEmisionIds()
 
-            self.emis = ''
-            for emiId in self.emiIDs:
-                self.emis += '{} '.format(self.emiMap[emiId])
+            self.constraintTechIDs = self.getConstraintTechIds()
 
             self.techs = ''
             for techId in self.techIDs:
@@ -298,6 +347,10 @@ class DataFile(Osemosys):
             self.comms = ''
             for commId in self.commIDs:
                 self.comms += '{} '.format(self.commMap[commId]) 
+
+            self.emis = ''
+            for emiId in self.emiIDs:
+                self.emis += '{} '.format(self.emiMap[emiId])
 
             self.years = ''
             for yearId in self.yearIDs:
@@ -310,6 +363,10 @@ class DataFile(Osemosys):
             self.mods = ''
             for modId in self.modIds:
                 self.mods += '{} '.format(modId)
+
+            self.cons = ''
+            for conId in self.conIDs:
+                self.cons += '{} '.format(self.conMap[conId])
 
             #path = '"{}"'.format(self.resPath.resolve())
 
@@ -332,6 +389,7 @@ class DataFile(Osemosys):
             self.f.write('{} {} {} {}{}{}'.format('set', 'TECHNOLOGY',':=', self.techs, ';', '\n'))
             self.f.write('{} {} {} {}{}{}'.format('set', 'YEAR',':=', self.years, ';', '\n'))
             self.f.write('{} {} {} {}{}{}'.format('set', 'TIMESLICE',':=', self.timeslices, ';', '\n'))
+            self.f.write('{} {} {} {}{}{}'.format('set', 'UDC',':=', self.cons, ';', '\n'))
 
             self.f.write('####################\n#Parameters#\n####################\n')
 
@@ -340,6 +398,7 @@ class DataFile(Osemosys):
             self.f.write('{} {}'.format(';', '\n'))
             self.f.write('{} {}'.format('', '\n'))
 
+            self.gen_RCn()
             #dznamicaly call function depending on defined params
             for group, array in self.PARAM.items():
                 if array:

@@ -20,7 +20,7 @@ HEROKU_DEPLOY = 0
 AWS_STORAGE = 0
 AWS_SYNC = 0
 
-TECH_GROUPS = ('RYT', 'RYTM', 'RYTC', 'RYTCM', 'RYTE', 'RYTEM', 'RYTTs')
+TECH_GROUPS = ('RYT', 'RYTM', 'RYTC', 'RYTCn', 'RYTCM', 'RYTE', 'RYTEM', 'RYTTs')
 COMM_GROUPS = ('RYC', 'RYTC', 'RYTCM','RYCTs')
 EMIS_GROUPS = ('RYE', 'RYTE', 'RYTEM')
 
@@ -31,9 +31,11 @@ DEFAULT_F ={
     "R"    : 'default_R',     
     "RT"   : 'default_RT',     
     "RY"   : 'default_RY',     
-    "RE"   : 'default_RE',     
+    "RE"   : 'default_RE',  
+    "RYCn" : 'default_RYCn', 
     "RYTs" : 'default_RYTs',     
-    "RYT"  : 'default_RYT',     
+    "RYT"  : 'default_RYT',
+    "RYTCn": 'default_RYTCn',    
     "RYTM" : 'default_RYTM',     
     "RYC"  : 'default_RYC',     
     "RYE"  : 'default_RYE',     
@@ -50,9 +52,11 @@ UPDATE_F ={
     "R"    : 'update_R',     
     "RT"   : 'update_RT',     
     "RY"   : 'update_RY',     
-    "RE"   : 'update_RE',     
+    "RE"   : 'update_RE', 
+    "RYCn" : 'update_RYCn',
     "RYTs" : 'update_RYTs',     
-    "RYT"  : 'update_RYT',     
+    "RYT"  : 'update_RYT',  
+    "RYTCn": 'update_RYTCn',
     "RYTM" : 'update_RYTM',     
     "RYC"  : 'update_RYC',     
     "RYE"  : 'update_RYE',     
@@ -66,12 +70,14 @@ UPDATE_F ={
 }
 
 GEN_F ={
-    "R"    : 'gen_R',     
+    "R"    : 'gen_R',   
     "RT"   : 'gen_RT',     
     "RY"   : 'gen_RY',     
-    "RE"   : 'gen_RE',     
+    "RE"   : 'gen_RE', 
+    "RYCn" : 'gen_RYCn',    
     "RYTs" : 'gen_RYTs',     
-    "RYT"  : 'gen_RYT',     
+    "RYT"  : 'gen_RYT',  
+    "RYTCn": 'gen_RYTCn',    
     "RYTM" : 'gen_RYTM',     
     "RYC"  : 'gen_RYC',     
     "RYE"  : 'gen_RYE',     

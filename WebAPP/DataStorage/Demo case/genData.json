@@ -2,25 +2,15 @@
     "osy-version": "1.0",
     "osy-casename": "Demo case",
     "osy-desc": "",
-    "osy-date": "07/08/2021",
+    "osy-date": "07/18/2021",
     "osy-currency": "EUR",
     "osy-ns": "3",
     "osy-dt": "2",
     "osy-mo": "2",
     "osy-tech": [
         {
-            "ActUnitId": "m<sup>3</sup>",
-            "CapUnitId": "PJ",
-            "Desc": "Default technology",
-            "EAR": [],
-            "IAR": [],
-            "OAR": [],
-            "Tech": "TEC_0",
-            "TechId": "TEC_0"
-        },
-        {
-            "ActUnitId": "PJ",
-            "CapUnitId": "ktoe",
+            "ActUnitId": "ktoe",
+            "CapUnitId": "MW",
             "Desc": "Default technology",
             "EAR": [
                 "EMI_0"
@@ -31,102 +21,242 @@
             "OAR": [
                 "COM_0"
             ],
-            "Tech": "TEC_1",
-            "TechId": "TEC_q404n"
+            "Tech": "TEC_0",
+            "TechId": "TEC_0"
         },
         {
-            "ActUnitId": "PJ",
+            "ActUnitId": "Mtoe",
             "CapUnitId": "m<sup>3</sup>",
             "Desc": "Default technology",
+            "EAR": [
+                "EMI_svhsk"
+            ],
+            "IAR": [
+                "COM_1ygq2"
+            ],
+            "OAR": [
+                "COM_1ygq2"
+            ],
+            "Tech": "TEC_1",
+            "TechId": "TEC_lyn0w"
+        },
+        {
+            "ActUnitId": "GWh",
+            "CapUnitId": "MW",
+            "Desc": "Default technology",
             "EAR": [],
+            "IAR": [
+                "COM_ogrgn",
+                "COM_ncvx3",
+                "COM_1ygq2"
+            ],
+            "OAR": [
+                "COM_ogrgn",
+                "COM_ncvx3",
+                "COM_1ygq2"
+            ],
+            "Tech": "TEC_2",
+            "TechId": "TEC_axrko"
+        },
+        {
+            "ActUnitId": "GWh",
+            "CapUnitId": "MW",
+            "Desc": "Default technology",
+            "EAR": [
+                "EMI_xdbru",
+                "EMI_ke4fa",
+                "EMI_svhsk"
+            ],
             "IAR": [],
             "OAR": [],
-            "Tech": "TEC_2",
-            "TechId": "TEC_6bn4q"
+            "Tech": "TEC_3",
+            "TechId": "TEC_7mbw5"
         },
         {
             "ActUnitId": "PJ",
             "CapUnitId": "MW",
             "Desc": "Default technology",
             "EAR": [
-                "EMI_uk77b"
+                "EMI_ke4fa",
+                "EMI_svhsk"
             ],
             "IAR": [
-                "COM_3nu7y",
-                "COM_qwlja"
+                "COM_ncvx3",
+                "COM_1ygq2"
             ],
             "OAR": [
-                "COM_3nu7y",
-                "COM_qwlja"
+                "COM_ncvx3",
+                "COM_1ygq2"
             ],
-            "Tech": "TEC_3",
-            "TechId": "TEC_cicpn"
+            "Tech": "TEC_4",
+            "TechId": "TEC_2wkvq"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "MW",
+            "Desc": "Default technology",
+            "EAR": [],
+            "IAR": [],
+            "OAR": [],
+            "Tech": "TEC_5",
+            "TechId": "TEC_kf149"
         }
     ],
     "osy-comm": [
         {
-            "CommId": "COM_0",
             "Comm": "COM_0",
-            "Desc": "Default commodity",
-            "UnitId": "PJ"
-        },
-        {
-            "CommId": "COM_3nu7y",
-            "Comm": "COM_1",
+            "CommId": "COM_0",
             "Desc": "Default commodity",
             "UnitId": "GWh"
         },
         {
-            "CommId": "COM_qwlja",
+            "Comm": "COM_1",
+            "CommId": "COM_ogrgn",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
+        },
+        {
             "Comm": "COM_2",
+            "CommId": "COM_ncvx3",
             "Desc": "Default commodity",
             "UnitId": "Mtoe"
+        },
+        {
+            "Comm": "COM_3",
+            "CommId": "COM_1ygq2",
+            "Desc": "Default commodity",
+            "UnitId": "m<sup>3</sup>"
+        },
+        {
+            "Comm": "COM_4",
+            "CommId": "COM_77o3g",
+            "Desc": "Default commodity",
+            "UnitId": "PJ"
         }
     ],
     "osy-emis": [
         {
-            "EmisId": "EMI_0",
-            "Emis": "EMI_0",
             "Desc": "Default emission",
+            "Emis": "EMI_0",
+            "EmisId": "EMI_0",
+            "UnitId": "Kg"
+        },
+        {
+            "Desc": "Default emission",
+            "Emis": "EMI_1",
+            "EmisId": "EMI_xdbru",
             "UnitId": "Ton"
         },
         {
-            "EmisId": "EMI_uk77b",
-            "Emis": "EMI_1",
             "Desc": "Default emission",
+            "Emis": "EMI_2",
+            "EmisId": "EMI_ke4fa",
+            "UnitId": "Kg"
+        },
+        {
+            "Desc": "Default emission",
+            "Emis": "EMI_3",
+            "EmisId": "EMI_svhsk",
             "UnitId": "Ton"
         }
     ],
     "osy-scenarios": [
         {
-            "ScenarioId": "SC_0",
-            "Scenario": "SC_0",
+            "Active": true,
             "Desc": "Base scenario",
-            "Active": true
+            "Scenario": "SC_0",
+            "ScenarioId": "SC_0"
         },
         {
-            "ScenarioId": "SC_931vq",
-            "Scenario": "SC_1",
+            "Active": true,
             "Desc": "Base scenario",
-            "Active": true
+            "Scenario": "SC_1",
+            "ScenarioId": "SC_sbj5i"
+        },
+        {
+            "Active": true,
+            "Desc": "Base scenario",
+            "Scenario": "SC_2",
+            "ScenarioId": "SC_70qh9"
+        },
+        {
+            "Active": true,
+            "Desc": "Base scenario",
+            "Scenario": "SC_3",
+            "ScenarioId": "SC_awvzp"
+        },
+        {
+            "Active": true,
+            "Desc": "Base scenario",
+            "Scenario": "SC_4",
+            "ScenarioId": "SC_a0gf0"
+        }
+    ],
+    "osy-constraints": [
+        {
+            "CM": [
+                "TEC_0"
+            ],
+            "Con": "CO_1",
+            "ConId": "CO_uzy8z",
+            "Desc": "Default constraint ",
+            "Tag": 1
+        },
+        {
+            "CM": [
+                "TEC_lyn0w"
+            ],
+            "Con": "CO_2",
+            "ConId": "CO_6bn25",
+            "Desc": "Default constraint ",
+            "Tag": 0
+        },
+        {
+            "CM": [
+                "TEC_axrko"
+            ],
+            "Con": "CO_3",
+            "ConId": "CO_68vzq",
+            "Desc": "Default constraint ",
+            "Tag": 1
+        },
+        {
+            "CM": [
+                "TEC_7mbw5"
+            ],
+            "Con": "CO_4",
+            "ConId": "CO_7q4ng",
+            "Desc": "Default constraint ",
+            "Tag": 1
+        },
+        {
+            "CM": [
+                "TEC_0",
+                "TEC_lyn0w",
+                "TEC_axrko",
+                "TEC_7mbw5",
+                "TEC_2wkvq"
+            ],
+            "Con": "CO_5",
+            "ConId": "CO_wfmxl",
+            "Desc": "Default constraint ",
+            "Tag": 1
+        },
+        {
+            "CM": [],
+            "Con": "CO_6",
+            "ConId": "CO_1ab87",
+            "Desc": "Default constraint ",
+            "Tag": 1
         }
     ],
     "osy-years": [
         "2020",
-        "2022",
-        "2024",
-        "2026",
-        "2028",
+        "2025",
         "2030",
-        "2032",
-        "2034",
-        "2036",
-        "2038",
+        "2035",
         "2040",
-        "2042",
-        "2044",
-        "2046",
-        "2048",
+        "2045",
         "2050"
     ]
 }

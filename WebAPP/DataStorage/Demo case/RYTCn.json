@@ -1,220 +1,42 @@
 {
-    "AEL": {
+    "CM": {
         "SC_0": [
             {
-                "EmisId": "EMI_0",
-                "2020": 999999,
-                "2025": 999999,
-                "2030": 999999,
-                "2035": 999999,
-                "2040": 999999,
-                "2045": 999999,
-                "2050": 999999
+                "TechId": "TEC_0",
+                "ConId": "CO_uzy8z",
+                "2020": 1,
+                "2025": 1,
+                "2030": 2,
+                "2035": 3,
+                "2040": 0,
+                "2045": 0,
+                "2050": 0
             },
             {
-                "EmisId": "EMI_xdbru",
-                "2020": 999999,
-                "2025": 999999,
-                "2030": 999999,
-                "2035": 999999,
-                "2040": 999999,
-                "2045": 999999,
-                "2050": 999999
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_6bn25",
+                "2020": 2,
+                "2025": 3,
+                "2030": 0,
+                "2035": 0,
+                "2040": 0,
+                "2045": 0,
+                "2050": 0
             },
             {
-                "EmisId": "EMI_ke4fa",
-                "2020": 999999,
-                "2025": 999999,
-                "2030": 999999,
-                "2035": 999999,
-                "2040": 999999,
-                "2045": 999999,
-                "2050": 999999
+                "TechId": "TEC_axrko",
+                "ConId": "CO_68vzq",
+                "2020": 0,
+                "2025": 0,
+                "2030": 2,
+                "2035": 3,
+                "2040": 0,
+                "2045": 0,
+                "2050": 0
             },
             {
-                "EmisId": "EMI_svhsk",
-                "2020": 999999,
-                "2025": 999999,
-                "2030": 999999,
-                "2035": 999999,
-                "2040": 999999,
-                "2045": 999999,
-                "2050": 999999
-            }
-        ],
-        "SC_sbj5i": [
-            {
-                "EmisId": "EMI_0",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_xdbru",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_ke4fa",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_svhsk",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            }
-        ],
-        "SC_70qh9": [
-            {
-                "EmisId": "EMI_0",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_xdbru",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_ke4fa",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_svhsk",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            }
-        ],
-        "SC_awvzp": [
-            {
-                "EmisId": "EMI_0",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_xdbru",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_ke4fa",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_svhsk",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            }
-        ],
-        "SC_a0gf0": [
-            {
-                "EmisId": "EMI_0",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_xdbru",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_ke4fa",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_svhsk",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            }
-        ]
-    },
-    "EP": {
-        "SC_0": [
-            {
-                "EmisId": "EMI_0",
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_7q4ng",
                 "2020": 0,
                 "2025": 0,
                 "2030": 0,
@@ -224,7 +46,8 @@
                 "2050": 0
             },
             {
-                "EmisId": "EMI_xdbru",
+                "TechId": "TEC_0",
+                "ConId": "CO_wfmxl",
                 "2020": 0,
                 "2025": 0,
                 "2030": 0,
@@ -234,7 +57,19 @@
                 "2050": 0
             },
             {
-                "EmisId": "EMI_ke4fa",
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_wfmxl",
+                "2020": 1,
+                "2025": 1,
+                "2030": 2,
+                "2035": 3,
+                "2040": 0,
+                "2045": 0,
+                "2050": 0
+            },
+            {
+                "TechId": "TEC_axrko",
+                "ConId": "CO_wfmxl",
                 "2020": 0,
                 "2025": 0,
                 "2030": 0,
@@ -244,7 +79,19 @@
                 "2050": 0
             },
             {
-                "EmisId": "EMI_svhsk",
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_wfmxl",
+                "2020": 0,
+                "2025": 0,
+                "2030": 0,
+                "2035": 0,
+                "2040": 0,
+                "2045": 0,
+                "2050": 0
+            },
+            {
+                "TechId": "TEC_2wkvq",
+                "ConId": "CO_wfmxl",
                 "2020": 0,
                 "2025": 0,
                 "2030": 0,
@@ -256,7 +103,19 @@
         ],
         "SC_sbj5i": [
             {
-                "EmisId": "EMI_0",
+                "TechId": "TEC_0",
+                "ConId": "CO_uzy8z",
+                "2020": 1,
+                "2025": 2,
+                "2030": 3,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_6bn25",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -266,7 +125,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_xdbru",
+                "TechId": "TEC_axrko",
+                "ConId": "CO_68vzq",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -276,7 +136,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_ke4fa",
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_7q4ng",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -286,7 +147,52 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_svhsk",
+                "TechId": "TEC_0",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_axrko",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_2wkvq",
+                "ConId": "CO_wfmxl",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -298,7 +204,8 @@
         ],
         "SC_70qh9": [
             {
-                "EmisId": "EMI_0",
+                "TechId": "TEC_0",
+                "ConId": "CO_uzy8z",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -308,7 +215,19 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_xdbru",
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_6bn25",
+                "2020": 2,
+                "2025": 2,
+                "2030": 2,
+                "2035": 2,
+                "2040": 2,
+                "2045": 2,
+                "2050": 2
+            },
+            {
+                "TechId": "TEC_axrko",
+                "ConId": "CO_68vzq",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -318,7 +237,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_ke4fa",
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_7q4ng",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -328,7 +248,52 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_svhsk",
+                "TechId": "TEC_0",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_axrko",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_2wkvq",
+                "ConId": "CO_wfmxl",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -340,7 +305,8 @@
         ],
         "SC_awvzp": [
             {
-                "EmisId": "EMI_0",
+                "TechId": "TEC_0",
+                "ConId": "CO_uzy8z",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -350,7 +316,19 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_xdbru",
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_6bn25",
+                "2020": 2,
+                "2025": 2,
+                "2030": 2,
+                "2035": 2,
+                "2040": 2,
+                "2045": 2,
+                "2050": 2
+            },
+            {
+                "TechId": "TEC_axrko",
+                "ConId": "CO_68vzq",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -360,7 +338,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_ke4fa",
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_7q4ng",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -370,7 +349,52 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_svhsk",
+                "TechId": "TEC_0",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_axrko",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_wfmxl",
+                "2020": null,
+                "2025": null,
+                "2030": null,
+                "2035": null,
+                "2040": null,
+                "2045": null,
+                "2050": null
+            },
+            {
+                "TechId": "TEC_2wkvq",
+                "ConId": "CO_wfmxl",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -382,7 +406,8 @@
         ],
         "SC_a0gf0": [
             {
-                "EmisId": "EMI_0",
+                "TechId": "TEC_0",
+                "ConId": "CO_uzy8z",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -392,7 +417,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_xdbru",
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_6bn25",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -402,7 +428,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_ke4fa",
+                "TechId": "TEC_axrko",
+                "ConId": "CO_68vzq",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -412,63 +439,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_svhsk",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            }
-        ]
-    },
-    "AEE": {
-        "SC_0": [
-            {
-                "EmisId": "EMI_0",
-                "2020": 0,
-                "2025": 0,
-                "2030": 0,
-                "2035": 0,
-                "2040": 0,
-                "2045": 0,
-                "2050": 0
-            },
-            {
-                "EmisId": "EMI_xdbru",
-                "2020": 0,
-                "2025": 0,
-                "2030": 0,
-                "2035": 0,
-                "2040": 0,
-                "2045": 0,
-                "2050": 0
-            },
-            {
-                "EmisId": "EMI_ke4fa",
-                "2020": 0,
-                "2025": 0,
-                "2030": 0,
-                "2035": 0,
-                "2040": 0,
-                "2045": 0,
-                "2050": 0
-            },
-            {
-                "EmisId": "EMI_svhsk",
-                "2020": 0,
-                "2025": 0,
-                "2030": 0,
-                "2035": 0,
-                "2040": 0,
-                "2045": 0,
-                "2050": 0
-            }
-        ],
-        "SC_sbj5i": [
-            {
-                "EmisId": "EMI_0",
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_7q4ng",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -478,7 +450,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_xdbru",
+                "TechId": "TEC_0",
+                "ConId": "CO_wfmxl",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -488,7 +461,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_ke4fa",
+                "TechId": "TEC_lyn0w",
+                "ConId": "CO_wfmxl",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -498,19 +472,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_svhsk",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            }
-        ],
-        "SC_70qh9": [
-            {
-                "EmisId": "EMI_0",
+                "TechId": "TEC_axrko",
+                "ConId": "CO_wfmxl",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -520,7 +483,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_xdbru",
+                "TechId": "TEC_7mbw5",
+                "ConId": "CO_wfmxl",
                 "2020": null,
                 "2025": null,
                 "2030": null,
@@ -530,101 +494,8 @@
                 "2050": null
             },
             {
-                "EmisId": "EMI_ke4fa",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_svhsk",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            }
-        ],
-        "SC_awvzp": [
-            {
-                "EmisId": "EMI_0",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_xdbru",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_ke4fa",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_svhsk",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            }
-        ],
-        "SC_a0gf0": [
-            {
-                "EmisId": "EMI_0",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_xdbru",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_ke4fa",
-                "2020": null,
-                "2025": null,
-                "2030": null,
-                "2035": null,
-                "2040": null,
-                "2045": null,
-                "2050": null
-            },
-            {
-                "EmisId": "EMI_svhsk",
+                "TechId": "TEC_2wkvq",
+                "ConId": "CO_wfmxl",
                 "2020": null,
                 "2025": null,
                 "2030": null,

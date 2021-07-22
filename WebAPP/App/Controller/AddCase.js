@@ -7,8 +7,8 @@ import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { SmartAdmin } from "../../Classes/SmartAdmin.Class.js";
 import { Model } from "../Model/AddCase.Model.js";
 import { Navbar } from "./Navbar.js";
-import { JqxSources } from "../../Classes/JqxSources.Class.js";
 import { DEF } from "../../Classes/Definition.Class.js";
+import { Sidebar } from "./Sidebar.js";
 
 export default class AddCase {
     static onLoad(){
@@ -18,11 +18,13 @@ export default class AddCase {
             const promise = [];
             let genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData);
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
             return Promise.all(promise);
         })
         .then(data => {
-            let [genData] = data;
-            let model = new Model(genData, "AddCase");
+            let [ genData, PARAMETERS] = data;
+            let model = new Model(genData, PARAMETERS,  "AddCase");
             this.initPage(model);
         })
         .catch(error =>{
@@ -38,19 +40,12 @@ export default class AddCase {
         Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);
 
+        console.log('model.emissions ', model.emissions)
         Grid.commGrid(model.commodities);
-        //Grid.techsGrid(model.srcTech, model.srcComm);
+        Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
         Grid.emisGrid(model.emissions);
         Grid.scenarioGrid(model.scenarios);
-
-        // model.srcTech = JqxSources.srcTech(model.techs);
-        // model.srcComm = JqxSources.srcComm(model.commodities);
-        // model.srcEmi = JqxSources.srcEmi(model.emissions);
-        // Grid.techsGrid(model.srcTech, model.srcComm, model.srcEmi);
-
-        // var daGrid = new $.jqx.dataAdapter(model.srcTech);
-        // let $divGrid = $("#osy-gridTech");
-        // Grid.Grid($divGrid, daGrid, model.columnsTech)
+        Grid.constraintGrid(model.techs, model.constraints, model.techNames);
 
         if (model.casename == null){
             $('#osy-newCase').show();
@@ -72,11 +67,14 @@ export default class AddCase {
             const promise = [];
             let genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData);
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
             return Promise.all(promise);
         })
         .then(data => {
-            let [genData] = data;
-            let model = new Model(genData, "AddCase");
+            let [genData, PARAMETERS] = data;
+            let model = new Model(genData, PARAMETERS, "AddCase");
+            console.log('refresh model ', model);
             AddCase.initPage(model);
         })
         .catch(error=>{
@@ -86,12 +84,19 @@ export default class AddCase {
 
     static initEvents(model){
 
+        let $divTech = $("#osy-gridTech");
+        let $divComm = $("#osy-gridComm");
+        let $divEmi = $("#osy-gridEmis");
+        let $divScenario = $("#osy-gridScenario");
+        let $divConstraint = $("#osy-gridConstraint");
+
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
+            Sidebar.Reload(casename)
             AddCase.refreshPage(casename);
             Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
         });
@@ -157,6 +162,7 @@ export default class AddCase {
             //$( "#wid-id-8" ).tabs({ active: 'tabComms' });
             //$("#wid-id-8").tabs("option", "active", 0);
             AddCase.refreshPage(null);
+            Sidebar.Load(null, null)
             $("#osy-new").hide();
             $('#osy-updateCase').hide();
             $('#osy-newCase').show();
@@ -182,63 +188,6 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
 
-            //let techData = $('#osy-gridTech').jqxGrid('getrows');
-            //console.log('techData ', techData)
-            // let TECH = [];
-            // $.each(techData, function (index, value) {
-            //     let tmp = {};
-            //     tmp.TechId = value.TechId;
-            //     //tmp[value.TechId] = value.Tech;
-            //     tmp.Tech = value.Tech;
-            //     tmp.Desc = value.Desc;
-            //     tmp.IAR = value.IAR;
-            //     tmp.OAR = value.OAR;
-            //     tmp.EAR = value.EAR;
-            //     tmp.TMPAL = value.TMPAL;
-            //     tmp.TMPAU = value.TMPAU;
-            //     tmp.CAU = value.CAU;
-            //     tmp.OL = value.OL;
-
-            //     TECH.push(tmp);
-            // });
-
-            // console.log('tech ', model.techs)
-            let TECH = model.techs;
-
-            let commData = $('#osy-gridComm').jqxGrid('getrows');
-            let COMM = [];
-            $.each(commData, function (index, value) {
-                let tmp = {};
-                tmp.CommId = value.CommId;
-                tmp.Comm = value.Comm;
-                tmp.Desc = value.Desc;
-                tmp.UnitId = value.UnitId;
-                COMM.push(tmp);
-            });
-
-            let emisData = $('#osy-gridEmis').jqxGrid('getrows');
-            let EMIS = [];
-            $.each(emisData, function (index, value) {
-                let tmp = {};
-                tmp.EmisId = value.EmisId;
-                tmp.Emis = value.Emis;
-                tmp.Desc = value.Desc;
-                tmp.UnitId = value.UnitId;
-                EMIS.push(tmp);
-            });
-
-            let scenarioData = $('#osy-gridScenario').jqxGrid('getrows');
-            let SCENARIOS = [];
-            $.each(scenarioData, function (index, value) {
-                let tmp = {};
-                tmp.ScenarioId = value.ScenarioId;
-                tmp.Scenario = value.Scenario;
-                tmp.Desc = value.Desc;
-                tmp.Active = true;
-                SCENARIOS.push(tmp);
-            });
-
-
             var casename = $( "#osy-casename" ).val();
             var desc = $( "#osy-desc" ).val();
             var date = $( "#osy-date" ).val();
@@ -249,7 +198,6 @@ export default class AddCase {
 
             var years = new Array();
             $.each($('input[type="checkbox"]:checked'), function (key, value) {
-                
                 years.push($(value).attr("id"));
             });
 
@@ -262,13 +210,15 @@ export default class AddCase {
                 "osy-ns": ns,
                 "osy-dt": dt,
                 "osy-mo": mo,
-                "osy-tech": TECH,
-                "osy-comm": COMM,
-                "osy-emis": EMIS,
-                "osy-scenarios": SCENARIOS,
+                "osy-tech": model.techs,
+                "osy-comm": model.commodities,
+                "osy-emis": model.emissions,
+                "osy-scenarios": model.scenarios,
+                "osy-constraints": model.constraints,
                 "osy-years": years
             }
 
+            console.log('POSTDATA ', POSTDATA)
             Osemosys.saveCase(POSTDATA)
             .then(response =>{
                 if(response.status_code=="created"){
@@ -278,6 +228,7 @@ export default class AddCase {
                     Message.clearMessages();
                     Message.bigBoxSuccess('Case study message', response.message, 3000);
                     Html.appendCasePicker(casename, casename);
+                    Sidebar.Reload(casename);
                     $("#osy-case").html(casename);
                     if (Base.AWS_SYNC == 1){
                         Base.uploadSync(casename);
@@ -287,6 +238,7 @@ export default class AddCase {
                     Html.title(casename, 'Case study', 'create & edit');
                     $("#osy-new").show();
                     Navbar.initPage(casename);
+                    Sidebar.Reload(casename);
                     Message.bigBoxInfo('Case study message', response.message, 3000);
                     if (Base.AWS_SYNC == 1){
                         Base.uploadSync(casename);
@@ -302,6 +254,7 @@ export default class AddCase {
             })
         });
 
+        //TECHNOLOGIES GRID AND EVENTS
         $("#osy-addTech").off('click');
         $("#osy-addTech").on("click", function(event) {
             event.preventDefault();
@@ -311,7 +264,10 @@ export default class AddCase {
             //JSON parse strungify potrebno da iz nekog razloga izbacino elemente uid boundindex...
             model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'IAR', 'OAR', 'EAR'] )));
             //model.techs.push(defaultTech[0]);
-            $("#osy-gridTech").jqxGrid('addrow', null, defaultTech);
+            //update technames
+            model.techNames[defaultTech[0]['TechId']] = defaultTech[0]['Tech'];
+            //add row in grid
+            $divTech.jqxGrid('addrow', null, defaultTech);
             //upat eza broj techs u tabu
             model.techCount++;
             $("#techCount").text(model.techCount);
@@ -323,33 +279,84 @@ export default class AddCase {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
-            console.log('id ', id)
-            console.log('model.techs ', model.techs)
             if(id!=0){
-                // var TechId = $('#osy-gridTech').jqxGrid('getcellvalue', id, "TechId");
-                // console.log('TechId ', TechId)
-                // $.each(model.techs, function (id, techObj) {
-                //     if(techObj.TechId == TechId){
-                       
-                //     }
-                //     techObj['IAR'] =  techObj['IAR'].filter(item => item !== commId);
-                //     techObj['OAR'] =  techObj['OAR'].filter(item => item !== commId);
-                // });
+                var techId = $divTech.jqxGrid('getcellvalue', id, 'TechId');
+                var rowid = $divTech.jqxGrid('getrowid', id);
                 model.techs.splice(id, 1);
-                //console.log('model.techs ', model.techs)
-                $("#osy-gridTech").jqxGrid('deleterow', id);
+                $divTech.jqxGrid('deleterow', rowid);
+                //update techNames
+                delete model.techNames[techId];
+                //update count
                 model.techCount--;
                 $("#techCount").text(model.techCount);
+                //izbrisati iz model constraints eventualne tehnologijel koje smo izbrisali
+                $.each(model.constraints, function (id, conObj) {
+                    conObj['CM'] =  conObj['CM'].filter(item => item !== techId);
+                });
             }
         });
 
+        $divTech.on('cellvaluechanged', function (event) {
+            Pace.restart();
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue;
+            if (column == 'CapUnitId' || column == 'ActUnitId'){
+                Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', null);
+            }
+            if(column != 'IAR' && column != 'OAR' && column != 'EAR'){
+                model.techs[rowBoundIndex][column] = value;
+            }else{
+                if(value.includes(',') && value){
+                    var array = value.split(',');
+                }else if (value){
+                    var array=[];
+                    array.push(value);
+                }else{
+                    var array=[];
+                }
+                model.techs[rowBoundIndex][column] = array;
+            }
+            if(column == 'Tech'){
+                var techId = $divTech.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
+                model.techNames[techId] = value;
+            }
+
+
+            // $.each(model.techs, function (id, obj) {
+            //     if(obj.TechId == techId){
+            //         if(column != 'IAR' && column != 'OAR' && column != 'EAR'){
+            //             obj[column] = value;
+            //         }else{
+            //             //console.log('save value ', value)
+            //             if(value.includes(',') && value){
+            //                 var array = value.split(',');
+            //             }else if (value){
+            //                 var array=[];
+            //                 array.push(value);
+            //             }else{
+            //                 var array=[];
+            //             }
+            //             //console.log('array value ', array)
+            //             obj[column] = array;
+            //         }
+            //     }
+            // });
+        });
+
+        //COMMODITIES GRID AND EVENTS
         $("#osy-addComm").off('click');
         $("#osy-addComm").on("click", function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultComm = DefaultObj.defaultComm();
-            //model.commodities.push(JSON.parse(JSON.stringify(defaultComm[0])));
-            $("#osy-gridComm").jqxGrid('addrow', null, defaultComm);
+            model.commodities.push(JSON.parse(JSON.stringify(defaultComm[0], ['CommId', 'Comm', 'Desc', 'UnitId'])));
+
+            //update commnames
+            model.commNames[defaultComm[0]['CommId']] = defaultComm[0]['Comm'];
+            //add row
+            $divComm.jqxGrid('addrow', null, defaultComm);
             model.commCount++;
             $("#commCount").text(model.commCount);
         });
@@ -360,13 +367,15 @@ export default class AddCase {
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
             if(id!=0){
-                var commId = $('#osy-gridComm').jqxGrid('getcellvalue', id, 'CommId');
-
-                var rowid = $('#osy-gridComm').jqxGrid('getrowid', id);
-                $("#osy-gridComm").jqxGrid('deleterow', rowid);
+                var commId = $divComm.jqxGrid('getcellvalue', id, 'CommId');
+                var rowid = $divComm.jqxGrid('getrowid', id);
+                $divComm.jqxGrid('deleterow', rowid);
+                model.commodities.splice(id, 1);
+                //update techNames
+                delete model.commNames[commId];
+                //update count
                 model.commCount--;
                 $("#commCount").text(model.commCount);
-
                 //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
                 $.each(model.techs, function (id, techObj) {
                     techObj['IAR'] =  techObj['IAR'].filter(item => item !== commId);
@@ -375,16 +384,35 @@ export default class AddCase {
             }
         });
 
+        $divComm.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue;
+            model.commodities[rowBoundIndex][column] = value;
+            if (column == 'UnitId'){
+                Message.bigBoxWarning('Unit change warninig!', 'Changing commodity unit will not recalculate entered nor default values in the model.', null);
+            }
+            if(column == 'Comm'){
+                var commId = $divComm.jqxGrid('getcellvalue', rowBoundIndex, 'CommId');
+                model.commNames[commId] = value;
+            }
+        });
+
+        //EMISSIONS GRID AND EVENTS
         $("#osy-addEmis").off('click');
         $("#osy-addEmis").on("click", function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultEmi = DefaultObj.defaultEmi();
-            //model.emissions.push(JSON.parse(JSON.stringify(defaultEmi[0])));
-            $("#osy-gridEmis").jqxGrid('addrow', null, defaultEmi);
+            model.emissions.push(JSON.parse(JSON.stringify(defaultEmi[0], ['EmisId', 'Emis', 'Desc', 'UnitId'])));
+            //update commnames
+            model.emiNames[defaultEmi[0]['EmisId']] = defaultEmi[0]['Emis'];
+            //add row
+            $divEmi.jqxGrid('addrow', null, defaultEmi);
             model.emisCount++;
             $("#emisCount").text(model.emisCount);
-            $('#osy-gridEmis').jqxGrid('refresh');
+            $divEmi.jqxGrid('refresh');
         });
 
         $(document).undelegate(".deleteEmis","click");
@@ -393,11 +421,13 @@ export default class AddCase {
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
             if(id!=0){
-                var emisId = $('#osy-gridEmis').jqxGrid('getcellvalue', id, 'EmisId');
-                //izbrisi red u aabeli
-                var rowid = $('#osy-gridEmis').jqxGrid('getrowid', id);
-                $("#osy-gridEmis").jqxGrid('deleterow', rowid);
-                //smanji counter za broj emisjia i update html
+                var emisId = $divEmi.jqxGrid('getcellvalue', id, 'EmisId');
+                var rowid = $divEmi.jqxGrid('getrowid', id);
+                $divEmi.jqxGrid('deleterow', rowid);
+                model.emissions.splice(id, 1);
+                //update emisnames
+                delete model.emiNames[emisId];
+                //update count
                 model.emisCount--;
                 $("#emisCount").text(model.emisCount);
 
@@ -409,16 +439,32 @@ export default class AddCase {
             }
         });
 
+        $divEmi.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue;
+            model.emissions[rowBoundIndex][column] = value;
+            if (column == 'UnitId'){
+                Message.bigBoxWarning('Unit change warninig!', 'Changing emission unit will not recalculate entered nor default values in the model.', null);
+            }
+            if(column == 'Emis'){
+                var emisId = $divEmi.jqxGrid('getcellvalue', rowBoundIndex, 'EmisId');
+                model.emiNames[emisId] = value;
+            }
+        });
+
+        //SCENARIOS GRID AND EVENTS
         $("#osy-addScenario").off('click');
         $("#osy-addScenario").on("click", function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultSc = DefaultObj.defaultScenario();
-            //model.scenarios.push(JSON.parse(JSON.stringify(defaultSc[0])));
-            $("#osy-gridScenario").jqxGrid('addrow', null, defaultSc);
+            model.scenarios.push(JSON.parse(JSON.stringify(defaultSc[0], ['ScenarioId', 'Scenario', 'Desc', 'Active'])));
+            $divScenario.jqxGrid('addrow', null, defaultSc);
             model.scenariosCount++;
             $("#scenariosCount").text(model.scenariosCount);
-            $('#osy-gridScenario').jqxGrid('refresh');
+            $divScenario.jqxGrid('refresh');
         });
 
         $(document).undelegate(".deleteScenario","click");
@@ -427,122 +473,113 @@ export default class AddCase {
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
             if(id!=0){
-                var emisId = $('#osy-gridScenario').jqxGrid('getcellvalue', id, 'ScenarioId');
-                //izbrisi red u aabeli
-                var rowid = $('#osy-gridScenario').jqxGrid('getrowid', id);
-                //console.log('rowid ', rowid)
-
-                $("#osy-gridScenario").jqxGrid('deleterow', rowid);
+                //var emisId = $divScenario.jqxGrid('getcellvalue', id, 'ScenarioId');
+                var rowid = $divScenario.jqxGrid('getrowid', id);
+                $divScenario.jqxGrid('deleterow', rowid);
+                model.scenarios.splice(id, 1);
                 //smanji counter za broj emisjia i update html
                 model.scenariosCount--;
                 $("#scenariosCount").text(model.scenariosCount);
-
             }
         });
 
-        $(".nav-tabs li a").off('click');
-        $('.nav-tabs li a').on("click", function(event, ui) { 
-            var id = $(this).attr('id');
-            if (id == 'Techs'){
-                let commData = $('#osy-gridComm').jqxGrid('getrows');
-                model.commodities = commData;
-                let emiData = $('#osy-gridEmis').jqxGrid('getrows');
-                model.emissions = emiData;
-
-                model.srcTech = JqxSources.srcTech(model.techs);
-                model.srcComm = JqxSources.srcComm(model.commodities);
-                model.srcEmi = JqxSources.srcEmi(model.emissions);
-
-                let daTechs = new $.jqx.dataAdapter(model.srcTech);
-                let daComms = new $.jqx.dataAdapter(model.srcComm);
-                let daEmi = new $.jqx.dataAdapter(model.srcEmi);
-        
-                var ddlComms = function(row, value, editor) {
-                    //console.log('editor ', editor)
-                    editor.jqxDropDownList({ source: daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true });
-                }
-        
-                var ddlEmis = function(row, value, editor) {
-                    //console.log('editor ', editor)
-                    editor.jqxDropDownList({ source: daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true });
-                }
-
-                // console.log('daTechs ',daTechs)
-                // console.log('ddlComms ',  model.srcComm)
-                // console.log('ddlEmis ',  model.srcEmi )
-                
-                Grid.techsGrid(daTechs,ddlComms, ddlEmis);
-                // Grid.techsGrid(model.srcTech, model.srcComm, model.srcEmi);
-                //console.log(model.srcEmi);
-                //$('#osy-gridTech').jqxGrid('updatebounddata');
-                //$('#osy-gridTech').jqxGrid('refresh');
-            }
+        $divScenario.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var datafield = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue;
+            //console.log('modelemission ', model.scenarios)
+            model.scenarios[rowBoundIndex][datafield] = value;
+            //console.log('modelemission ', model.scenarios)
         });
 
-        $("#osy-gridTech").on('cellvaluechanged', function (event) {
-            Pace.restart();
+        //CONSTRAINTS GRID AND EVENTS
+        $("#osy-addConstraint").off('click');
+        $("#osy-addConstraint").on("click", function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultConstraint = DefaultObj.defaultConstraint();
+            model.constraints.push(JSON.parse(JSON.stringify(defaultConstraint[0], ['ConId', 'Con', 'Desc', 'Tag', 'CM'])));
+
+            // console.log('defaultConstraint[0] add ', defaultConstraint[0]);
+            // console.log('model.constraints add ', model.constraints);
+
+            $divConstraint.jqxGrid('addrow', null, defaultConstraint);
+            $divConstraint.jqxGrid('updatebounddata', 'data');
+            model.constraintsCount++;
+            $("#constraintsCount").text(model.constraintsCount);
+            //$divConstraint.jqxGrid('refresh');
+        });
+
+        $(document).undelegate(".deleteConstraint","click");
+        $(document).delegate(".deleteConstraint","click",function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            //no condition needed, we can delete all constraints
+            //if(id!=0){
+                var conId = $divConstraint.jqxGrid('getcellvalue', id, 'ConId');
+                var rowid = $divConstraint.jqxGrid('getrowid', id);
+                $divConstraint.jqxGrid('deleterow', rowid);
+                model.constraints.splice(id, 1);
+                //console.log(' model.constraints 2 ',  model.constraints)
+                //smanji counter za broj emisjia i update html
+                model.constraintsCount--;
+                $("#constraintsCount").text(model.constraintsCount);
+
+                //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
+                // $.each(model.techs, function (id, techObj) {
+                //     techObj['EAR'] =  techObj['EAR'].filter(item => item !== emisId);
+                //     model.techs[id]['EAR'] = techObj['EAR'];
+                // });
+            //}
+        });
+
+        $divConstraint.on('cellvaluechanged', function (event) {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
             var value = args.newvalue;
-            console.log(args);
-            if (column == 'CapUnitId' || column == 'ActUnitId'){
-                Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', null);
-            }
-            var techId = $('#osy-gridTech').jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
-            $.each(model.techs, function (id, obj) {
-                if(obj.TechId == techId){
-                    if(column != 'IAR' && column != 'OAR'&& column != 'EAR'){
-                        obj[column] = value;
-                    }else{
-                        //console.log('save value ', value)
-                        if(value.includes(',') && value){
-                            var array = value.split(',');
-                        }else if (value){
-                            var array=[];
-                            array.push(value);
-                        }else{
-                            var array=[];
-                        }
-                        //console.log('array value ', array)
-                        obj[column] = array;
-                    }
+            
+            //console.log('con value ', value)
+
+            if(column != 'CM' && column != 'Tag'){
+                model.constraints[rowBoundIndex][column] = value;
+            }else if (column == 'CM'){
+                if(value.includes(',') && value){
+                    var array = value.split(',');
+                }else if (value){
+                    var array=[];
+                    array.push(value);
+                }else{
+                    var array=[];
                 }
-            });
-        });
-
-        $("#osy-gridEmis").on('cellvaluechanged', function (event) {
-            // event arguments.
-            var args = event.args;
-            // column data field.
-            var datafield = event.args.datafield;
-            // row's bound index.
-            var rowBoundIndex = args.rowindex;
-            // new cell value.
-            var value = args.newvalue;
-            // old cell value.
-            var oldvalue = args.oldvalue;
-            if (datafield == 'UnitId'){
-                Message.bigBoxWarning('Unit change warninig!', 'Changing emission unit will not recalculate entered nor default values in the model.', null);
+                model.constraints[rowBoundIndex][column] = array;
+            }else if (column == 'Tag'){
+                model.constraints[rowBoundIndex][column] = value.value;
             }
         });
 
-        $("#osy-gridComm").on('cellvaluechanged', function (event) {
-            // event arguments.
-            var args = event.args;
-            // column data field.
-            var datafield = event.args.datafield;
-            // row's bound index.
-            var rowBoundIndex = args.rowindex;
-            // new cell value.
-            var value = args.newvalue;
-            // old cell value.
-            var oldvalue = args.oldvalue;
-            if (datafield == 'UnitId'){
-                Message.bigBoxWarning('Unit change warninig!', 'Changing commodity unit will not recalculate entered nor default values in the model.', null);
+        //TABS CHANGE EVENT
+        $(".nav-tabs li a").off('click');
+        $('.nav-tabs li a').on("click", function(event, ui) { 
+            var id = $(this).attr('id');
+            //update tech grid to update IAR OAR EAR with new added or removed comms and emis
+            if (id == 'Techs'){
+                //Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
+                $divTech.jqxGrid('clear');
+                $divTech.jqxGrid('updatebounddata');
             }
+            else if (id == 'Constraints'){
+                //Grid.constraintGrid(model.techs, model.constraints, model.techNames);
+                $divConstraint.jqxGrid('updatebounddata');
+            }
+            // else if (id == 'Techs'){
+            //     $divTech.jqxGrid('updatebounddata');
+            // }
         });
 
+        //YEARS EVENTS
         $("#osy-checkAll").on("click", function(event) {
             event.preventDefault();
             var elements = $('#osy-years').find('input[type=checkbox]');
@@ -583,7 +620,6 @@ export default class AddCase {
 
         $("#showLog").click(function (e) {
             e.preventDefault();
-            console.log(model.pageId)
             $('#definition').html(`
                 <h5>${DEF[model.pageId].title}</h5>
                 ${DEF[model.pageId].definition}

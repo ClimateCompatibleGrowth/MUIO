@@ -1,12 +1,17 @@
 import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
-import { JqxSources } from "../../Classes/JqxSources.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export class Model {
-    constructor (genData, pageId) {
+    constructor (genData, PARAMETERS, pageId) {
 
+      //console.log('add case model ', genData)
 
       if(genData){
         this.casename = genData['osy-casename'];
+        this.PARAMETERS = PARAMETERS;
+        this.techNames = DataModel.TechName(genData);
+        this.commNames = DataModel.CommName(genData);
+        this.emiNames = DataModel.EmiName(genData);
         this.title = "Case study";
         this.desc = genData['osy-desc'];
         this.date = genData['osy-date'];
@@ -19,24 +24,23 @@ export class Model {
         this.techs = genData['osy-tech'];
         this.commodities = genData['osy-comm'];
         this.emissions = genData['osy-emis'];
-
-        this.srcTech = JqxSources.srcTech(this.techs);
-        this.srcComm = JqxSources.srcComm(this.commodities);
-        this.srcEmi = JqxSources.srcEmi(this.emissions);
-        this.srcScenario = JqxSources.srcScenario(this.scenarios);
-
-        //this.columnsTech = JqxSources.techGridColumns(new $.jqx.dataAdapter(this.commodities));
+        this.constraints = genData['osy-constraints']
 
         this.techCount = genData['osy-tech'].length;
         this.commCount = genData['osy-comm'].length;
         this.emisCount = genData['osy-emis'].length;
         this.scenariosCount = genData['osy-scenarios'].length;
+        this.constraintsCount = genData['osy-constraints'].length;
         this.pageId = pageId;
       }else{
         let years=[];
         for(var i = 2020; i <= 2050; i++) { years.push(String(i)); }
 
         this.casename = null;
+        this.PARAMETERS = PARAMETERS;
+        this.techNames = {'TEC_0' : 'TEC_0'};
+        this.commNames = {'COM_0' : 'COM_0'};
+        this.emiNames = {'EMI_0' : 'EMI_0'};
         this.title = "Case study";
         this.desc = null;
         this.date = null;
@@ -49,16 +53,12 @@ export class Model {
         this.techs = DefaultObj.defaultTech(true);
         this.commodities = DefaultObj.defaultComm(true);
         this.emissions = DefaultObj.defaultEmi(true);
-
-        this.srcTech = JqxSources.srcTech(this.techs);
-        this.srcComm = JqxSources.srcComm(this.commodities);
-        this.srcEmi = JqxSources.srcEmi(this.emissions);
-        //this.columnsTech = JqxSources.techGridColumns(new $.jqx.dataAdapter(this.commodities));
-        
+        this.constraints = [];        
         this.techCount = 1;
         this.commCount = 1;
         this.emisCount = 1;
         this.scenariosCount = 1;
+        this.constraintsCount = 0,
         this.pageId = pageId;
       }
     }

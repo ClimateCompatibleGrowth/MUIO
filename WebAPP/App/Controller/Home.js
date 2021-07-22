@@ -4,20 +4,29 @@ import { Base } from "../../Classes/Base.Class.js";
 import { Model } from "../Model/Home.Model.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { Navbar } from "./Navbar.js";
+import { Sidebar } from "./Sidebar.js";
+import { Osemosys } from "../../Classes/Osemosys.Class.js";
+import { Routes } from "../../Routes/Routes.Class.js";
 
 export default class Home {
     static onLoad(){
         Base.getSession()
         .then(response =>{
-            let selectedCS = response['session']
-            Base.getCaseStudies()
-            .then(cases => {
-                let model = new Model(cases, selectedCS);
-                this.initPage(model);
-            })
-            .catch(error =>{ 
-                Message.danger(error);
-            });
+            let casename = response.session;
+            const promise = [];
+            promise.push(casename);
+            let cases = Base.getCaseStudies();
+            promise.push(cases);
+            let genData = Osemosys.getData(casename, 'genData.json');
+            promise.push(genData);
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
+            return Promise.all(promise);
+        })
+        .then(data => {
+            let [ casename, cases, genData, PARAMETERS] = data;
+            let model = new Model(casename, cases, genData, PARAMETERS);
+            this.initPage(model);
         })
         .catch(error =>{ 
             Message.danger(error);
@@ -27,6 +36,7 @@ export default class Home {
     static initPage(model){
         Message.clearMessages();
         Navbar.initPage(model.casename);
+        Sidebar.Load(model.genData, model.PARAMETERS);
         Html.renderCases(model.cases, model.casename);
         Home.initEvents(model);
         loadScript("References/smartadmin/js/plugin/dropzone/dropzone.min.js", Base.uploadFunction);
@@ -34,21 +44,25 @@ export default class Home {
 
     static refreshPage(casename){
         Base.setSession(casename)
-        .then(response=>{
-            let selectedCS = casename
-            Base.getCaseStudies()
-            .then(cases => {
-                Message.clearMessages();
-                let model = new Model(cases, selectedCS);
-                this.initPage(model);
-            })
-            .catch(error =>{ 
-                Message.danger(error);
-            });
+        .then(response =>{
+            const promise = [];
+            promise.push(casename);
+            let cases = Base.getCaseStudies();
+            promise.push(cases);
+            let genData = Osemosys.getData(casename, 'genData.json');
+            promise.push(genData);
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
+            return Promise.all(promise);
         })
-        .catch(error=>{
+        .then(data => {
+            let [ casename, cases, genData, PARAMETERS] = data;
+            let model = new Model(casename, cases, genData, PARAMETERS);
+            this.initPage(model);
+        })
+        .catch(error =>{ 
             Message.danger(error);
-        })
+        });
     }
 
     static initEvents(model){
@@ -61,7 +75,8 @@ export default class Home {
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
-            Html.updateCasePicker(casename);
+            //Html.updateCasePicker(casename);
+            //Sidebar.Load(casename, model.genData, model.PARAMETERS);
             Home.refreshPage(casename);
             Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
         });
@@ -71,6 +86,7 @@ export default class Home {
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
+
             Base.setSession(casename)
             .then(response=>{
                 $('#Navi>li').removeClass('active');
@@ -110,28 +126,6 @@ export default class Home {
             });
         });
 
-        //backup case
-        // $(document).delegate(".backupCS","click",function(e){
-        //     e.stopImmediatePropagation();
-        //     var titleps = $(this).attr('data-ps');
-        //     Base.backupCaseStudy(titleps)
-        //     .then(response => {
-        //         Message.clearMessages();
-        //         if(response.status_code=="success"){
-        //             Message.bigBoxInfo('Backup info', response.message, 5000)
-        //         }
-        //         if(response.status_code=="info"){
-        //             Message.info(response.message);
-        //         }
-        //         if(response.status_code=="warning"){
-        //             Message.bigBoxWarning('Backup warning', response.message, 5000)
-        //         }
-        //     })
-        //     .catch(error =>{ 
-        //         Message.danger(error);
-        //     });
-        // });
-
         //get descrition
         $(document).delegate(".descriptionPS","click",function(e){
             //e.stopImmediatePropagation();
@@ -157,6 +151,7 @@ export default class Home {
                     .then(response => {
                         Message.clearMessages();
                         if(response.status_code=="success"){
+
                             Message.bigBoxSuccess('Delete message', response.message, 3000);
                             //REFRESH
                             Html.removeCase(casename);
@@ -168,6 +163,10 @@ export default class Home {
                         if(response.status_code=="success_session"){
                             Message.bigBoxSuccess('Delete message', response.message, 3000);
                             Message.info( "Please select existing or create new case to proceed!");
+                            if (model.casename = casename){
+                                Sidebar.Load(null, null);
+                                //Routes.removeRoutes(model.PARAMETERS);
+                            }
                             //REFRESH
                             Html.removeCase(casename);
                             if (Base.AWS_SYNC == 1){

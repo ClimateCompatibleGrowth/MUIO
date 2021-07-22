@@ -112,6 +112,31 @@ class Case:
         except(IOError):
             raise IOError
 
+    def default_RYCn(self):
+        try:
+            years = self.genData['osy-years']
+            scenarios = self.genData['osy-scenarios']
+            constraints = self.genData['osy-constraints']
+            
+            RYCndata = {}
+            for ryt in self.PARAMETERS['RYCn']:
+                RYCndata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYCndata[ryt['id']][sc['ScenarioId']] = []  
+                    for con in constraints:
+                        chunk = {}
+                        chunk['ConId'] = con['ConId']
+                        for year in years:
+                            if sc['ScenarioId'] == 'SC_0':
+                                chunk[year] = ryt['default']
+                            else:
+                                chunk[year] = None
+                        RYCndata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYCndata, self.jsonPath['RYCn'])
+        except(IOError):
+            raise IOError
+
     def default_RYTs(self):
         try:
             years = self.genData['osy-years']
@@ -162,6 +187,34 @@ class Case:
                         RYTdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYTdata, self.jsonPath['RYT'])
+        except(IOError):
+            raise IOError
+
+    def default_RYTCn(self):
+        try:
+            years = self.genData['osy-years']
+            scenarios = self.genData['osy-scenarios']
+            constraints = self.genData['osy-constraints']
+            
+            RYTCndata = {}
+            for ryt in self.PARAMETERS['RYTCn']:
+                RYTCndata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTCndata[ryt['id']][sc['ScenarioId']] = []  
+                    for con in constraints:
+                        if con[ryt['id']]:
+                            for tech in con[ryt['id']]:
+                                chunk = {}
+                                chunk['TechId'] = tech
+                                chunk['ConId'] = con['ConId']
+                                for year in years:
+                                    if sc['ScenarioId'] == 'SC_0':
+                                        chunk[year] = ryt['default']
+                                    else:
+                                        chunk[year] = None
+                                RYTCndata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYTCndata, self.jsonPath['RYTCn'])
         except(IOError):
             raise IOError
 

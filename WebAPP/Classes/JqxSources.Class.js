@@ -1,10 +1,20 @@
 export class JqxSources{
+    
     static srcTech(techs){
         var srcTech =  {
             localdata: techs,
             datatype: "json",
             datafields:
             [
+                             // name - determines the field's name.
+                    // value - the field's value in the data source.
+                    // values - specifies the field's values.
+                    // values.source - specifies the foreign source. The expected value is an array.
+                    // values.value - specifies the field's value in the foreign source. 
+                    // values.name - specifies the field's name in the foreign source. 
+                    // When the adapter is loaded, each record will have a field call
+                    //The "Country" for each record comes from the countriesAdapter where the record's "countryCode" from gridAdapter 
+                    //matches to the "value" from countriesAdapter. 
                 { name: 'TechId', type: 'string' },
                 { name: 'Tech', type: 'string' },
                 { name: 'Desc', type: 'string' },
@@ -26,7 +36,8 @@ export class JqxSources{
             [
                 { name: 'CommId', type: 'string' },
                 { name: 'Comm', type: 'string' },
-                { name: 'Desc', type: 'string' }
+                { name: 'Desc', type: 'string' },
+                { name: 'UnitId', type: 'string' }
             ],
         }
         return srcComm;
@@ -40,10 +51,38 @@ export class JqxSources{
             [
                 { name: 'EmisId', type: 'string' },
                 { name: 'Emis', type: 'string' },
-                { name: 'Desc', type: 'string' }
+                { name: 'Desc', type: 'string' },
+                { name: 'UnitId', type: 'string' }
             ],
         }
         return srcEmi;
+    }
+
+    static srcUnit(units){
+        var srcUnits = {
+            localdata: units,
+            datatype: "json",
+            datafields:
+            [
+                { name: 'id', type: 'string' },
+                { name: 'name', type: 'string' },
+                { name: 'group', type: 'string' }
+            ],
+        };
+        return srcUnits;
+    }
+
+    static srcTag(tags){
+        var srcTags = {
+            localdata: tags,
+            datatype: "json",
+            datafields:
+            [
+                { name: 'id', type: 'number' },
+                { name: 'name', type: 'string' },
+            ],
+        };
+        return srcTags;
     }
 
     static srcScenario(scenarios){
@@ -58,6 +97,24 @@ export class JqxSources{
             ],
         }
         return srcScenario;
+    }
+
+    static srcConstraint(cons, daTags){
+
+        var srcConstraint = {
+            localdata: cons,
+            datatype: "json",
+            datafields:
+            [
+                { name: 'ConId', type: 'string' },
+                { name: 'Con', type: 'string' },
+                { name: 'Desc', type: 'string' },
+                { name: 'TagName', value: 'Tag', values: { source: daTags, value: 'id', name: 'name' } },
+                { name: 'Tag', type: 'number' },
+                { name: 'CM', type: 'array' }
+            ],
+        }
+        return srcConstraint;
     }
 
     static techGridColumns(daComms){

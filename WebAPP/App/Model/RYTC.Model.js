@@ -24,6 +24,8 @@ export class Model {
             let ActivityComms = DataModel.activityComms(genData);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
+            console.log('ActivityTechs ', ActivityTechs)
+
             let scClass = {};
 
             datafieldsChart.push({ name: 'Year', type:'string' });

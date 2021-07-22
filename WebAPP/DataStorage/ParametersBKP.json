@@ -21,6 +21,22 @@
             }
         }
     ],
+    "RCn": [
+        {
+            "id": "CT",
+            "value": "User Constraint Tag",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "ActUnitId"
+                    }
+                ]
+            }
+        }
+    ],
     "RT": [
         {
             "id": "CAU",
@@ -165,7 +181,17 @@
             "enable": true,
             "menu": 1,
             "unitRule": {
-                "cat": []
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "Currency"
+                    }
+                ]
             }
         }
     ],
@@ -410,9 +436,6 @@
                         "var": "divide"
                     },
                     {
-                        "var": "milion"
-                    },
-                    {
                         "var": "Currency"
                     }
                 ]
@@ -467,7 +490,11 @@
             "enable": true,
             "menu": 1,
             "unitRule": {
-                "cat": []
+                "cat": [
+                    {
+                        "var": "percent"
+                    }
+                ]
             }
         }
     ],

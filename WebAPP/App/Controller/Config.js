@@ -6,6 +6,7 @@ import { Grid } from "../../Classes/Grid.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { UNITDEFINITION } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
+import { Sidebar } from "./Sidebar.js";
 
 export default class Config {
     static onLoad(){
@@ -48,10 +49,12 @@ export default class Config {
             promise.push(casename);
             const PARAMETERS = Osemosys.getParamFile();
             promise.push(PARAMETERS); 
+            return Promise.all(promise);
         })
         .then(data => {
+            console.log('data ', data)
             let [casename, PARAMETERS] = data;
-            let model = new Model(casename, PARAMETERS);
+            let model = new Model(PARAMETERS);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -67,7 +70,9 @@ export default class Config {
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
+            console.log('casename ', casename)
             Html.updateCasePicker(casename);
+            Sidebar.Reload(casename);
             Config.refreshPage(casename);
             Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
         });

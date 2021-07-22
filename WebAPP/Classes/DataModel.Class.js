@@ -109,6 +109,14 @@ export class DataModel{
         return techIds;
     }
 
+    static ConId(genData){
+        let conID = {};
+        $.each(genData['osy-constraints'], function (id, obj) {
+            conID[obj['Con']] = obj['ConId'];
+        });
+        return conID;
+    }
+
     static getTechUnits(genData){
         let TechUnits = {};
         $.each(genData['osy-tech'], function (id, obj) {
@@ -157,6 +165,14 @@ export class DataModel{
             ScNames[obj['ScenarioId']] = obj['Scenario'];
         });
         return ScNames;
+    }
+
+    static ConName(genData){
+        let conNames = {};
+        $.each(genData['osy-constraints'], function (id, obj) {
+            conNames[obj.ConId] = obj.Con;
+        });
+        return conNames;
     }
 
     static ParamName(parameters){
@@ -272,6 +288,34 @@ export class DataModel{
             }
         });
         return ActivityEmis;
+    }
+
+    static constraintsMC(constraints){
+        let constraintsMC = []
+        $.each(constraints, function (id, obj) {
+            if (obj.CM.length != 0 ) {
+                constraintsMC.push(obj);
+            }
+        });
+        return constraintsMC;
+    }
+
+    static constraintTechs(genData){
+        let ConstraintTechs = {};
+        let cons = genData['osy-constraints'];
+        let techs = genData['osy-tech'];
+
+        $.each(cons, function (id, con) {
+            if (con.CM.length != 0 ) {
+                ConstraintTechs[con.ConId] = [];
+                $.each(techs, function (idT, obj) {
+                    if(con.CM.includes(obj.TechId)){
+                        ConstraintTechs[con.ConId].push(obj);
+                    }
+                });
+            }
+        });
+        return ConstraintTechs;
     }
     ////////////////////////////////////////////////////////JSON data structures
     static R(Rdata){
@@ -720,6 +764,68 @@ export class DataModel{
         return RYCchart;
     }
 
+    static RYCn(RYCndata){
+        let RYCn = {};
+        const cloneData = JSON.parse(JSON.stringify(RYCndata));
+        $.each(cloneData, function (param, obj1) {
+            RYCn[param] = {};
+            $.each(obj1, function (sc, array) {
+                RYCn[param][sc] = {};
+                $.each(array, function (id, obj) {
+                    RYCn[param][sc][obj.ConId] = obj
+                    delete obj.ConId;
+                });
+            });
+        });
+        return RYCn;
+    }
+
+    static RYCngrid(genData, RYCndata, PARAMETERS){
+        let conName = this.ConName(genData);
+        let scName = this.ScName(genData);
+        let unitData = this.getUnitData(genData, PARAMETERS);
+        let paramById = this.getParamById(PARAMETERS);
+        let cloneData = JSON.parse(JSON.stringify(RYCndata));
+        let RYCngrid = {};
+        $.each(cloneData, function (param, paramObj) {
+            RYCngrid[param] = [];
+            $.each(paramObj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['Con'] = conName[obj.ConId];
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scName[sc];
+                    let rule = paramById['RYCn'][param]['unitRule'];
+                    let data = unitData['RYCn'][param][obj.ConId];
+                    obj['UnitId'] = jsonLogic.apply(rule, data);
+                    RYCngrid[param].push(obj);
+                }); 
+            });
+        });
+        return RYCngrid;
+    }
+
+    static RYCnchart(genData, RYCndata){
+        let RYCnchart = {};
+        let data = this.RYCn(RYCndata);
+        $.each(RYCndata, function (param, array) {
+            let chartData = {};
+            $.each(genData['osy-years'], function (idY, year) { 
+                $.each(genData['osy-constraints'], function (idC, con) {
+                    let chunk = {};
+                    chunk['Year'] = year;
+                    if(!chartData[con.ConId]){ chartData[con.ConId] = []; }
+                    $.each(genData['osy-scenarios'], function (idS, sc) {
+                         chunk[sc.ScenarioId] = data[param][sc.ScenarioId][con.ConId][year];
+                    });
+                    chartData[con.ConId].push(chunk);
+                });
+            });
+            RYCnchart[param] = chartData; 
+            
+        });
+        return RYCnchart;
+    }
+
     static RYE(RYEdata){
         let RYE = {};
         const cloneData = JSON.parse(JSON.stringify(RYEdata));
@@ -1045,6 +1151,71 @@ export class DataModel{
             });
         });
         return RYTEchart;
+    }
+
+    static RYTCn(RYTCndata){
+        let RYTCn = {};
+        const cloneData = JSON.parse(JSON.stringify(RYTCndata));
+        $.each(cloneData, function (param, obj1) {
+            RYTCn[param] = {};
+            $.each(obj1, function (sc, array) {
+                RYTCn[param][sc] = {};
+                $.each(array, function (id, obj) {
+                    if(!RYTCn[param][sc][obj.TechId]){ RYTCn[param][sc][obj.TechId] = {}; }
+                        RYTCn[param][sc][obj.TechId][obj.ConId] = obj;
+                        delete obj.TechId;
+                        delete obj.ConId;   
+                });
+            });
+        });
+        return RYTCn;
+    }
+
+    static RYTCngrid(genData, RYTCndata){
+        let techName = this.TechName(genData);
+        let conName = this.ConName(genData);
+        let scName = this.ScName(genData);
+        let cloneData = JSON.parse(JSON.stringify(RYTCndata));
+        let RYTCngrid = {};
+
+        $.each(cloneData, function (param, obj) {
+            RYTCngrid[param] = [];
+            $.each(obj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scName[sc];
+                    obj['Tech'] = techName[obj['TechId']];
+                    obj['Con'] = conName[obj['ConId']];
+                    RYTCngrid[param].push(obj);
+                });
+            });
+        });
+        return RYTCngrid;
+    }
+
+    static RYTCnchart(genData, RYTCndata){
+        let RYTCnchart = {};
+        let RYCTn = this.RYTCn(RYTCndata);
+        $.each(RYTCndata, function (param, obj1) {
+            RYTCnchart[param] = {};
+            $.each(obj1, function (sc, array) {
+                if (array.length !== 0){
+                    $.each(array, function (id, obj) {
+                        if(!RYTCnchart[param][obj.TechId]){ RYTCnchart[param][obj.TechId] = {}; }
+                        RYTCnchart[param][obj.TechId][obj.ConId] =[]
+                        $.each(genData['osy-years'], function (idY, year) {
+                            let chunk = {};
+                            chunk['Year'] = year;
+                            $.each(genData['osy-scenarios'], function (idS, sc) {
+                                chunk[sc.ScenarioId] = RYCTn[param][sc.ScenarioId][obj.TechId][obj.ConId][year];
+                            });
+                            RYTCnchart[param][obj.TechId][obj.ConId].push(chunk);
+                        });
+                    });
+                }
+            });
+        });
+        return RYTCnchart;
     }
 
     static RYTEM(RYTEMdata){

@@ -195,24 +195,29 @@
                         <ul class="nav nav-tabs pull-right in">
 
                             <li class="active">
-                                <a data-toggle="tab" href="#tabComms" id='Comms'> <i class="fa fa-lg fa-cog orange"></i>
+                                <a data-toggle="tab" href="#tabComms" id='Comms'> <i class="fa fa-lg fa-cog "></i>
                                     <span class="hidden-mobile hidden-tablet"> Commodities 
                                         <span class="label bg-color-orange txt-color-white" id="commCount"> 23 </span> </span> </a>
                             </li>
                             <li >
-                                <a data-toggle="tab" href="#tabTechs" id='Techs'> <i class="fa fa-lg fa-cog info"></i>
+                                <a data-toggle="tab" href="#tabTechs" id='Techs'> <i class="fa fa-lg fa-cog "></i>
                                     <span class="hidden-mobile hidden-tablet"> Technologies 
                                         <span class="label  bg-color-blue txt-color-white" id="techCount"> 23 </span> </span> </a>               
                             </li>
                             <li>
-                                <a data-toggle="tab" href="#tabEmiss" id='Emiss'> <i class="fa fa-lg fa-industry success"></i>
+                                <a data-toggle="tab" href="#tabEmis" id='Emiss'> <i class="fa fa-lg fa-industry "></i>
                                     <span class="hidden-mobile hidden-tablet"> Emissions 
                                         <span class="label  bg-color-green txt-color-white" id="emisCount"> 23 </span> </span> </a>  
                             </li>
                             <li>
-                                <a data-toggle="tab" href="#tabScenarios" id='Scenarios'> <i class="fa fa-lg fa-line-chart danger"></i>
+                                <a data-toggle="tab" href="#tabScenarios" id='Scenarios'> <i class="fa fa-lg fa-line-chart red"></i>
                                     <span class="hidden-mobile hidden-tablet"> Scenarios 
                                         <span class="label  bg-color-red txt-color-white" id="scenariosCount"> 23 </span> </span> </a>               
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tabConstraints" id='Constraints'> <i class="fa fa-lg fa-share-alt "></i>
+                                    <span class="hidden-mobile hidden-tablet"> Constraints 
+                                        <span class="label  bg-color-purple txt-color-white" id="constraintsCount"> 23 </span> </span> </a>               
                             </li>
                         </ul>
                     </header>
@@ -301,7 +306,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tabEmiss">
+                            <div class="tab-pane" id="tabEmis">
                                 <div class="jarviswidget">
                                     <div>
                                         <div class="widget-body no-padding">
@@ -319,6 +324,31 @@
                                                 <fieldset>
                                                     <section>
                                                         <div id="osy-gridEmis"></div>
+                                                    </section>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabConstraints">
+                                <div class="jarviswidget">
+                                    <div>
+                                        <div class="widget-body no-padding">
+                                            <div class="smart-form">
+                                                <header>
+                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                                    Define constraints
+                                                    <div class="pull-right">
+                                                        <small class="pointer btn" id="osy-addConstraint">
+                                                            <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                                                            Add constraint
+                                                        </small>
+                                                    </div>
+                                                </header>
+                                                <fieldset>
+                                                    <section>
+                                                        <div id="osy-gridConstraint"></div>
                                                     </section>
                                                 </fieldset>
                                             </div>
@@ -488,7 +518,7 @@
                                         <span class="label  bg-color-blue txt-color-white" id="techCount"> 23 </span> </span> </a>               
                             </li>
                             <li>
-                                <a data-toggle="tab" href="#tabEmiss" id='Emiss'> <i class="fa fa-lg fa-industry success"></i>
+                                <a data-toggle="tab" href="#tabEmis" id='Emiss'> <i class="fa fa-lg fa-industry success"></i>
                                     <span class="hidden-mobile hidden-tablet"> Emissions 
                                         <span class="label  bg-color-green txt-color-white" id="emisCount"> 23 </span> </span> </a>  
                             </li>
@@ -581,7 +611,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tabEmiss">
+                            <div class="tab-pane" id="tabEmis">
                                 <div class="jarviswidget">
                                     <div>
                                         <div class="widget-body no-padding">

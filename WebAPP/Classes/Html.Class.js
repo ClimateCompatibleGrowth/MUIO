@@ -135,6 +135,7 @@ export class Html {
         $("#techCount").text(model.techCount);
         $("#emisCount").text(model.emisCount);
         $("#scenariosCount").text(model.scenariosCount);
+        $("#constraintsCount").text(model.constraintsCount);
 
     }
 
@@ -194,6 +195,30 @@ export class Html {
                 container.append('<option value="'+ obj.Comm+'" selected>'+obj.Comm+'</option>');
             }else{
                 container.append('<option value="'+ obj.Comm+'" >'+obj.Comm+'</option>');
+            }
+        });   
+    }
+
+    static ddlCons(cons, con){
+        var container =  $('#osy-cons');
+        container.empty();
+        $.each(cons, function (id, obj) {
+            if (obj.ConId == con ){
+                container.append('<option value="'+ obj.ConId+'" selected>'+obj.Con+'</option>');
+            }else{
+                container.append('<option value="'+ obj.ConId+'" >'+obj.Con+'</option>');
+            }
+        });   
+    }
+
+    static ddlConNames(cons, con){
+        var container =  $('#osy-conNames');
+        container.empty();
+        $.each(cons, function (id, obj) {
+            if (obj.ConId == con ){
+                container.append('<option value="'+ obj.Con+'" selected>'+obj.Con+'</option>');
+            }else{
+                container.append('<option value="'+ obj.Con+'" >'+obj.Con+'</option>');
             }
         });   
     }

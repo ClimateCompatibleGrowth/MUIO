@@ -26,6 +26,7 @@
 
 		<link rel="stylesheet" href="References/jqwidgets/styles/jqx.base.css" type="text/css" />
 		<link rel="stylesheet" href="References/jqwidgets/styles/jqx.bootstrap.css" type="text/css" />
+		<link rel="stylesheet" href="References/jqwidgets/styles/jqx.material.css" type="text/css" />
 
 		<!-- We recommend you use "your_style.css" to override SmartAdmin-->
 		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/osy.css"> 
@@ -90,13 +91,22 @@
 		</div>
 
 		<!-- #PAGE FOOTER -->
-		<footer></footer>
+		<footer>
+			<div class="page-footer">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<span class="txt-color-white">OS<small class="white">E</small>MOSYS ver.1.0<span class="hidden-xs"> - Open SourcE Modelling SYStem</span> © 2020</span>
+					</div>
+				</div>
+				<!-- end row -->
+			</div>
+		</footer>
 
 		<div id="modals"></div>
-		<script> $("aside").load("Includes/sidebar.html"); </script>
+		<script> $("aside").load("App/View/Sidebar.html"); </script>
         <script> $("header").load("App/View/Navbar.html"); </script>
-		<script> $("footer").load("Includes/footer.html"); </script>
-		<script type="module" src="{{ url_for('static', filename='Routes/routes.js') }}"></script>
+		<!-- <script> $("footer").load("Includes/footer.html"); </script> -->
+		<script type="module" src="{{ url_for('static', filename='Routes/Routes.Class.js') }}"></script>
 		
 		<script data-pace-options='{ "restartOnRequestAfter": true }' src="References/smartadmin/js/plugin/pace/pace.js"></script>
 

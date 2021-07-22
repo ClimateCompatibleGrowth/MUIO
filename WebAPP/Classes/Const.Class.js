@@ -49,11 +49,14 @@ export const UNITDEFINITION = {
 
 export const GROUPNAMES = {
     "R": "Region",
+    "RCn": "Region, constraint",
     "RT": "Region, technology",
     "RY": "Region, year",
     "RE": "Region, emission",
+    "RYCn": "Region, year, constraint",
     "RYTs": "Region, year, timeslice",
     "RYT": "Region, year, technology",
+    "RYTCn": "Region, year, technology, constraint",
     "RYTM": "Region, year, technology, mode of operation",
     "RYC": "Region, year, commodity",
     "RYE": "Region, year, emission",
@@ -66,19 +69,21 @@ export const GROUPNAMES = {
 }
 
 export const PARAMORDER = [
-    "R"    ,     
-    "RT"   ,     
-    "RY"   ,     
-    "RE"   ,     
-    "RYTs" ,     
-    "RYT"  ,    
+    "R"     ,  
+    "RT"    ,     
+    "RY"    ,     
+    "RE"    , 
+    "RYCn"  ,    
+    "RYTs"  ,     
+    "RYT"   , 
+    "RYTCn" ,   
     "RYTM"  ,  
-    "RYTTs",    
-    "RYC"  ,  
-    "RYCTs",      
-    "RYTC" ,  
+    "RYTTs" ,    
+    "RYC"   ,  
+    "RYCTs" ,      
+    "RYTC"  ,  
     "RYTCM" , 
-    "RYE"  ,    
+    "RYE"   ,    
     "RYTEM"   
 ];
 
@@ -87,17 +92,19 @@ export const PARAMCOLORS = {
     "RT": "blue",
     "RY": "blueLight",
     "RE": "yellow",
+    "RYCn": "pink",
     "RYTs": "red",
     "RYT": "greenLight",
+    "RYTCn": "pink",
     "RYTM": "purple",
     "RYC": "grey",
     "RYE": "pink",
     "RYTC": "teal",
-    "RYTCM": "black",
+    "RYTCM": "blue",
     "RYTE": "greenDark",
-    "RYTEM": "blue",
-    "RYTTs": "purple",
-    "RYCTs": "magenta"
+    "RYTEM": "orange",
+    "RYTTs": "blue",
+    "RYCTs": "greenLight"
 }
 
 export const UNITS = 
@@ -117,6 +124,12 @@ export const UNITS =
 
     {id:"m3",name:"m<sup>3</sup>", group: "Volume"}
 
+];
+
+export const TAGS = 
+[
+    {id:1, name:"Equality"},
+    {id:0, name:"Inequality"},
 ];
 
 

@@ -55,7 +55,7 @@ export default class ViewData {
         Grid.applyTEviewDataFilter( $divTEGrid );
 
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, true, false, false);
+        Grid.Grid($divGrid, daGrid, model.columns, true, true, false);
         $divGrid.jqxGrid('hidecolumn', 'TechName');
         Grid.applyViewDataFilter( $divGrid, model.years );
     }
@@ -122,6 +122,12 @@ export default class ViewData {
 
             Message.smallBoxConfirmation("Confirmation!", "Technology <b>" + model.TechName[tech] + "</b> selected!", 3500);
             //$('#loadermain').hide(); 
+        
+            res = !res;
+            if(!res){
+                $( "#resizeColumns" ).trigger( "click" );
+            }
+            $( "#resizeColumns" ).trigger( "click" );
         });
 
         $("#osy-emis").off('change');
@@ -344,26 +350,28 @@ export default class ViewData {
         let res = true;
         $("#resizeColumns").off('click');
         $("#resizeColumns").click(function () {
-            if(res){
-                $divGrid.jqxGrid('autoresizecolumn', 'Sc',"cells" );
-                //$divGrid.jqxGrid('autoresizecolumn', 'groupName');
-                $divGrid.jqxGrid('autoresizecolumn', 'paramName',"cells");
-                $divGrid.jqxGrid('autoresizecolumn', 'UnitId',"cells" );
-                $divGrid.jqxGrid('autoresizecolumn', 'TechName',"cells" );
-                $divGrid.jqxGrid('autoresizecolumn', 'CommName',"cells" );
-                $divGrid.jqxGrid('autoresizecolumn', 'EmisName',"cells" );
-                $divGrid.jqxGrid('autoresizecolumn', 'Timeslice',"cells" );
-                $divGrid.jqxGrid('autoresizecolumn', 'MoId' );
+            console.log('res ', res)
+            // if(res){
+            //     $divGrid.jqxGrid('autoresizecolumn', 'Sc',"cells" );
+            //     //$divGrid.jqxGrid('autoresizecolumn', 'groupName');
+            //     $divGrid.jqxGrid('autoresizecolumn', 'paramName',"cells");
+            //     $divGrid.jqxGrid('autoresizecolumn', 'UnitId',"cells" );
+            //     $divGrid.jqxGrid('autoresizecolumn', 'TechName',"cells" );
+            //     $divGrid.jqxGrid('autoresizecolumn', 'CommName',"cells" );
+            //     $divGrid.jqxGrid('autoresizecolumn', 'EmisName',"cells" );
+            //     $divGrid.jqxGrid('autoresizecolumn', 'ConName',"cells" );
+            //     $divGrid.jqxGrid('autoresizecolumn', 'Timeslice',"cells" );
+            //     $divGrid.jqxGrid('autoresizecolumn', 'MoId' );
 
-                $divTEGrid.jqxGrid('autoresizecolumn', 'Sc',"cells" );
-                $divTEGrid.jqxGrid('autoresizecolumn', 'paramName',"cells" );
-                $divTEGrid.jqxGrid('autoresizecolumn', 'UnitId',"cells" );
-                $divTEGrid.jqxGrid('autoresizecolumn', 'value',"cells" );
-            }
-            else{
-                $divGrid.jqxGrid('autoresizecolumns', 'cells');
+            //     $divTEGrid.jqxGrid('autoresizecolumn', 'Sc',"cells" );
+            //     $divTEGrid.jqxGrid('autoresizecolumn', 'paramName',"cells" );
+            //     $divTEGrid.jqxGrid('autoresizecolumn', 'UnitId',"cells" );
+            //     $divTEGrid.jqxGrid('autoresizecolumn', 'value',"cells" );
+            // }
+            // else{
+                $divGrid.jqxGrid('autoresizecolumns');
                 $divTEGrid.jqxGrid('autoresizecolumns');
-            }
+            //}
             res = !res;
         });
 

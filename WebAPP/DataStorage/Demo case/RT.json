@@ -2,18 +2,52 @@
     "CAU": {
         "SC_0": [
             {
-                "TEC_0": 2,
-                "TEC_q404n": 0,
-                "TEC_6bn4q": 2,
-                "TEC_cicpn": 0
+                "TEC_0": 0,
+                "TEC_lyn0w": 0,
+                "TEC_axrko": 0,
+                "TEC_7mbw5": 0,
+                "TEC_2wkvq": 0,
+                "TEC_kf149": 0
             }
         ],
-        "SC_931vq": [
+        "SC_sbj5i": [
             {
-                "TEC_0": 4,
-                "TEC_q404n": null,
-                "TEC_6bn4q": null,
-                "TEC_cicpn": null
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_70qh9": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_awvzp": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_a0gf0": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
             }
         ]
     },
@@ -21,35 +55,103 @@
         "SC_0": [
             {
                 "TEC_0": 1,
-                "TEC_q404n": 1,
-                "TEC_6bn4q": 1,
-                "TEC_cicpn": 1
+                "TEC_lyn0w": 1,
+                "TEC_axrko": 1,
+                "TEC_7mbw5": 1,
+                "TEC_2wkvq": 1,
+                "TEC_kf149": 1
             }
         ],
-        "SC_931vq": [
+        "SC_sbj5i": [
             {
                 "TEC_0": null,
-                "TEC_q404n": null,
-                "TEC_6bn4q": null,
-                "TEC_cicpn": null
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_70qh9": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_awvzp": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_a0gf0": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
             }
         ]
     },
     "TMPAL": {
         "SC_0": [
             {
-                "TEC_0": 2,
-                "TEC_q404n": 0,
-                "TEC_6bn4q": 0,
-                "TEC_cicpn": 0
+                "TEC_0": 0,
+                "TEC_lyn0w": 0,
+                "TEC_axrko": 0,
+                "TEC_7mbw5": 0,
+                "TEC_2wkvq": 0,
+                "TEC_kf149": 0
             }
         ],
-        "SC_931vq": [
+        "SC_sbj5i": [
             {
                 "TEC_0": null,
-                "TEC_q404n": null,
-                "TEC_6bn4q": null,
-                "TEC_cicpn": null
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_70qh9": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_awvzp": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_a0gf0": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
             }
         ]
     },
@@ -57,17 +159,51 @@
         "SC_0": [
             {
                 "TEC_0": 999999,
-                "TEC_q404n": 999999,
-                "TEC_6bn4q": 999999,
-                "TEC_cicpn": 999999
+                "TEC_lyn0w": 999999,
+                "TEC_axrko": 999999,
+                "TEC_7mbw5": 999999,
+                "TEC_2wkvq": 999999,
+                "TEC_kf149": 999999
             }
         ],
-        "SC_931vq": [
+        "SC_sbj5i": [
             {
                 "TEC_0": null,
-                "TEC_q404n": null,
-                "TEC_6bn4q": null,
-                "TEC_cicpn": null
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_70qh9": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_awvzp": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
+            }
+        ],
+        "SC_a0gf0": [
+            {
+                "TEC_0": null,
+                "TEC_lyn0w": null,
+                "TEC_axrko": null,
+                "TEC_7mbw5": null,
+                "TEC_2wkvq": null,
+                "TEC_kf149": null
             }
         ]
     }

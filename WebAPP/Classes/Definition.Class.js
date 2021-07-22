@@ -375,6 +375,48 @@ export const DEF = {
         </article>       
         `
     },
+    RYCn: {
+        title: `Constraint parameter`,
+        definition: 
+        `
+        <article class="col-xs-12 col-sm-12">
+            
+            <div class="jarviswidget" id="wid-id-5" 
+                data-widget-colorbutton="false"	
+                data-widget-editbutton="false" 
+                data-widget-togglebutton="false" 
+                data-widget-deletebutton="false" 
+                data-widget-fullscreenbutton="false" 
+                data-widget-custombutton="false" 
+                data-widget-collapsed="false" 
+                data-widget-sortable="false">
+                <header>
+                    <h2>Constant constraints</h2>				
+                </header>
+                <div>
+                    <div class="widget-body no-padding">
+                        <div class="table-responsive no-margin custom-scroll" >             
+                            <table class="table highlight table-border-0 table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th class="hidden-xs" colspan="2">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="v-align-m">UDCConstant [r,y,u]</td>
+                                        <td class="hidden-xs">...</td>
+                                    </tr>												
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </article>       
+        `
+    },
     RYT: {
         title: `Year & technology parameters`,
         definition: 
@@ -568,6 +610,55 @@ export const DEF = {
                                             <td class="v-align-m">RETagTechnology[r,t,y]	</td>
                                             <td class="hidden-xs">Binary parameter tagging the renewable technologies that must contribute to reaching the indicated minimum renewable production target. It has value 1 for thetechnologies contributing, 0 otherwise.</td>
                                         </tr>													
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>            
+                </div>
+            </article>
+        `
+    },
+    RYTCn: {
+        title: `Year & technology, constraint parameters`,
+        definition: 
+        `
+            <article class="col-xs-12 col-sm-12">
+                <div class="jarviswidget" id="wid-id-5" 
+                        data-widget-colorbutton="false"	
+                        data-widget-editbutton="false" 
+                        data-widget-togglebutton="false" 
+                        data-widget-deletebutton="false" 
+                        data-widget-fullscreenbutton="false" 
+                        data-widget-custombutton="false" 
+                        data-widget-collapsed="false" 
+                        data-widget-sortable="false">
+                    <header>
+                        <h2>constraint</h2>				
+                    </header>
+                    <div>
+                        <div class="widget-body no-padding">
+                            <div class="table-responsive no-margin custom-scroll" >             
+                                <table class="table highlight table-border-0 table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th class="hidden-xs" colspan="2">Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="v-align-m">CapacityConstraint[r,t,y,u]</td>
+                                            <td class="hidden-xs">...</td>
+                                        </tr>	
+                                        <tr>
+                                            <td class="v-align-m">NewCapacityConstraint[r,t,y,u]</td>
+                                            <td class="hidden-xs"> ... </td>
+                                        </tr>	
+                                        <tr>
+                                            <td class="v-align-m">ActivityConstraint[r,t,y,u]</td>
+                                            <td class="hidden-xs"> ... </td>
+                                        </tr>																
                                     </tbody>
                                 </table>
                             </div>

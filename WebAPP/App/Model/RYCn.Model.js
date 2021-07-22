@@ -2,7 +2,7 @@ import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export class Model {
     
-    constructor (casename, genData, RYTCMdata, group, PARAMETERS, param, cases) {
+    constructor (casename, genData, RYCndata, group, PARAMETERS, param) {
         this.d = 2;
         this.decimal = 'd' + this.d;
         if(casename){
@@ -11,22 +11,19 @@ export class Model {
             let datafieldsChart = [];
             let columns = [];
             let series = [];
-
             let years = genData['osy-years'];
-            //let comms = genData['osy-comm'];
-            let techs = genData['osy-tech'];
+            let cons = genData['osy-constraints'];
             let scenarios = genData['osy-scenarios'];
 
-            let RYTCMgrid = DataModel.RYTCMgrid(genData, RYTCMdata, PARAMETERS);
-            let RYTCMchart = DataModel.RYTCMchart(genData, RYTCMdata);
-            let techIds = DataModel.TechId(genData);
-            let ActivityTechs = DataModel.activityTechsComms(techs);
-            let ActivityComms = DataModel.activityComms(genData);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
-            let mods = DataModel.Mods(genData); 
+            let RYCngrid = DataModel.RYCngrid(genData, RYCndata, PARAMETERS);
+            let RYCnchart = DataModel.RYCnchart(genData, RYCndata);  
 
-            console.log('ActivityTechs ', ActivityTechs)
-            console.log('ActivityComms ', ActivityComms)
+            // console.log('cons ', cons)
+            // console.log('RYCndata ', RYCndata)
+            // console.log('RYCngrid ', RYCngrid)
+            // console.log('RYCnchart ', RYCnchart)
+            // console.log('series ', series)
 
             let scClass = {};
 
@@ -39,19 +36,9 @@ export class Model {
 
             datafields.push({ name: 'ScId', type:'string' });
             datafields.push({ name: 'Sc', type:'string' }); 
-            datafields.push({ name: 'TechId', type:'string' });
-            datafields.push({ name: 'Tech', type:'string' });
-            datafields.push({ name: 'CommId', type:'string' });
-            datafields.push({ name: 'Comm', type:'string' });    
-            datafields.push({ name: 'MoId', type:'string' });    
-            datafields.push({ name: 'UnitId', type:'string' });       
-
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' });
-            columns.push({ text: 'Commodity', datafield: 'Comm', pinned:true, editable: false, align: 'center'});
-            columns.push({ text: 'MoO', datafield: 'MoId', pinned:true, editable: false, align: 'center', cellsalign: 'center' });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
-            
+            datafields.push({ name: 'ConId', type:'string' });
+            datafields.push({ name: 'Con', type:'string' }); 
+            datafields.push({ name: 'UnitId', type:'string' });            
 
             let validation = function(cell, value) {
                 if (value < 0) {
@@ -75,10 +62,10 @@ export class Model {
 
             }.bind(this);
         
-
             let initeditor = function(row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
-                var scId = $('#osy-gridRYTCM').jqxGrid('getcellvalue', row, 'ScId');
+
+                var scId = $('#osy-gridRYCn').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0'){
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8 ) {
@@ -86,8 +73,13 @@ export class Model {
                         }
                     })
                 }
+
             }.bind(this);
 
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Contraint', datafield: 'Con', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
+            //columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass });
+            
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type:'number' });
                 columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
@@ -97,46 +89,33 @@ export class Model {
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass
                 });
-            });         
+            });
 
-            //  console.log('ActivityTechs ', ActivityTechs)
-            //  console.log('ActivityComms ', ActivityComms)
-            // console.log('RYTCMdata ', RYTCMdata)
-            // console.log('RYTCMgrid ', RYTCMgrid)
-            // console.log('RYTCMchart ', RYTCMchart)
-            // console.log('param ', param)
-            // console.log('src chart ', ActivityTechs[param][0]['TechId'], ActivityComms[param][ActivityTechs[param][0]['TechId']][0]['CommId'])
 
-            var srcGrid = {
+
+            let srcGrid = {
                 datatype: "json",
-                localdata: RYTCMgrid,
+                localdata: RYCngrid,
                 root: param,
                 datafields: datafields,
             };
 
             var srcChart = {
                 datatype: "json",
-                localdata: RYTCMchart,
-                root: param + '>' + ActivityTechs[param][0]['TechId']+ '>' + ActivityComms[param][ActivityTechs[param][0]['TechId']][0]['CommId']+ '>' + mods[0],
+                localdata: RYCnchart,
+                root: param+ '>' + cons[0]['ConId'],
                 datafields: datafieldsChart,
             };
-            
+
             this.casename = casename; 
-            this.cases = cases;
             this.years = years;
-            this.mods = mods;
+            this.cons = cons;
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
-            this.techs = ActivityTechs;
-            this.comms = ActivityComms;
-            this.techIds = techIds;
-            this.datafields = datafields; 
-            this.datafieldsChart = datafieldsChart; 
             this.columns = columns;
             this.series = series;
-            this.RYTCMdata = RYTCMdata;
-            this.gridData = RYTCMgrid;
-            this.chartData = RYTCMchart;
+            this.gridData = RYCngrid;
+            this.chartData = RYCnchart;
             this.genData = genData;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
@@ -147,25 +126,17 @@ export class Model {
         }else{
             this.casename = null; 
             this.years = null;
-            this.scenarios = null;
-            this.scenariosCount = null;
-            this.techs = null;
-            this.comms = null;
-            this.techIds = null;
-            this.datafields = null; 
-            this.datafieldsChart = null; 
             this.columns = null;
             this.series = null;
-            this.RYTCMdata = null;
             this.gridData = null;
             this.chartData = null;
             this.genData = null; 
-            this.param = null;
             this.PARAMNAMES = null;
+            this.param = param;
             this.group = group;
-            this.srcGrid = null;
-            this.srcChart = null;
-            this.PARAMETERS = null;
+            this.srcGrid = srcGrid;
+            this.srcChart = srcChart;
+            this.PARAMETERS = PARAMETERS;
         }
 
     }

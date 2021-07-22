@@ -110,6 +110,34 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
+    def update_RYCn(self):
+        try:
+            rycnJson = File.readFile(self.rycnPath) 
+            RYCnsource = self.RYCn(rycnJson)
+            years = self.genDataUpdate['osy-years']
+            scenarios = self.genDataUpdate['osy-scenarios']
+            constraints = self.genDataUpdate['osy-constraints']
+            RYCndata = {}
+            for ryt in self.PARAMETERS['RYCn']:
+                RYCndata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYCndata[ryt['id']][sc['ScenarioId']] = []  
+                    for con in constraints:
+                        chunk = {}
+                        chunk['ConId'] = con['ConId']
+                        for year in years:
+                            if self.keys_exists(RYCnsource, ryt['id'], sc['ScenarioId'], year, con['ConId']):
+                                chunk[year] = RYCnsource[ryt['id']][sc['ScenarioId']][year][con['ConId']]
+                            elif  sc['ScenarioId'] == 'SC_0':
+                                chunk[year] = ryt['default']
+                            else:
+                                chunk[year] = None
+                        RYCndata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYCndata, self.rycnPath)
+        except(IOError):
+            raise IOError
+
     def update_RYT(self):
         try:
             rytJson = File.readFile(self.rytPath) 
@@ -140,12 +168,44 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
+    def update_RYTCn(self):
+        try:
+            rytcnJson = File.readFile(self.rytcnPath) 
+            RYTCnsource = self.RYTCn(rytcnJson)
+            years = self.genDataUpdate['osy-years']
+            scenarios = self.genDataUpdate['osy-scenarios']
+            constraints = self.genDataUpdate['osy-constraints']
+            
+            RYTCndata = {}
+            for ryt in self.PARAMETERS['RYTCn']:
+                RYTCndata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTCndata[ryt['id']][sc['ScenarioId']] = []  
+                    for con in constraints:
+                        if con[ryt['id']]:
+                            for tech in con[ryt['id']]:
+                                chunk = {}
+                                chunk['TechId'] = tech
+                                chunk['ConId'] = con['ConId']
+                                for year in years:
+                                    if self.keys_exists(RYTCnsource, ryt['id'], sc['ScenarioId'], year, tech, con['ConId']):
+                                        chunk[year] = RYTCnsource[ryt['id']][sc['ScenarioId']][year][tech][con['ConId']]
+                                    elif sc['ScenarioId'] == 'SC_0':
+                                        chunk[year] = ryt['default']
+                                    else:
+                                        chunk[year] = None
+                                RYTCndata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYTCndata, self.rytcnPath)
+        except(IOError):
+            raise IOError
+
     def update_RYTM(self):
         try:
             rytmJson = File.readFile(self.rytmPath) 
             RYTMsource = self.RYTM(rytmJson)
 
-            mo = int(self.genData['osy-mo'])+1
+            mo = int(self.genDataUpdate['osy-mo'])+1
             years = self.genDataUpdate['osy-years']
             techs = self.genDataUpdate['osy-tech']
             scenarios = self.genDataUpdate['osy-scenarios']
@@ -309,7 +369,7 @@ class UpdateCase(Osemosys):
             years = self.genDataUpdate['osy-years']
             techs = self.genDataUpdate['osy-tech']
             scenarios = self.genDataUpdate['osy-scenarios']
-            mo = int(self.genData['osy-mo'])+1
+            mo = int(self.genDataUpdate['osy-mo'])+1
             
             RYTEMdata = {}
             for ryt in self.PARAMETERS['RYTCM']:
@@ -382,7 +442,7 @@ class UpdateCase(Osemosys):
             years = self.genDataUpdate['osy-years']
             techs = self.genDataUpdate['osy-tech']
             scenarios = self.genDataUpdate['osy-scenarios']
-            mo = int(self.genData['osy-mo'])+1
+            mo = int(self.genDataUpdate['osy-mo'])+1
             
             RYTEMdata = {}
             for ryt in self.PARAMETERS['RYTEM']:
