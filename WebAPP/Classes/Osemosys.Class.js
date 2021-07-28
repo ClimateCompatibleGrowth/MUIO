@@ -187,7 +187,7 @@ export class Osemosys {
                 dataType: 'json',
                 data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
                 contentType: 'application/json; charset=utf-8',
-                success: function (result) {             
+                success: function (result) {                  
                     resolve(result);
                 },
                 error: function(xhr, status, error) {
