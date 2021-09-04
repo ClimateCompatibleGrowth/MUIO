@@ -27,7 +27,7 @@ export class Model {
             // console.log('RYTCndata model ', RYTCndata)
             // console.log('constraintsMC ', constraintsMC)
             // console.log('ConstraintTechs ', ConstraintTechs)
-            // console.log('RYTCngrid ', RYTCngrid)
+            console.log('RYTCngrid ', RYTCngrid)
             // console.log('RYTCnchart ', RYTCnchart)
             // console.log('param ', param)
 
@@ -47,7 +47,10 @@ export class Model {
             datafields.push({ name: 'TechId', type:'string' });
             datafields.push({ name: 'Tech', type:'string' });
             datafields.push({ name: 'ConId', type:'string' });
-            datafields.push({ name: 'Con', type:'string' });            
+            datafields.push({ name: 'Con', type:'string' });     
+            datafields.push({ name: 'ScDesc', type:'string' });  
+            datafields.push({ name: 'TechDesc', type:'string' });    
+            datafields.push({ name: 'ConDesc', type:'string' });          
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' })

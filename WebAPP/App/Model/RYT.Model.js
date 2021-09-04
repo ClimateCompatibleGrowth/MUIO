@@ -35,6 +35,8 @@ export class Model {
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'TechId', type:'string' });
             datafields.push({ name: 'Tech', type:'string' });    
+            datafields.push({ name: 'ScDesc', type:'string' }); 
+            datafields.push({ name: 'TechDesc', type:'string' });
             datafields.push({ name: 'UnitId', type:'string' });           
 
             let validation = function(cell, value) {
@@ -56,7 +58,6 @@ export class Model {
                     var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
                     return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
                 }
-
             }.bind(this); 
 
             let initeditor = function(row, cellvalue, editor, data) {
@@ -73,8 +74,10 @@ export class Model {
 
             }.bind(this);
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
+
+
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass, enabletooltips:true,}); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Technology', datafield: 'Tech',pinned:true, editable: false, align: 'left',   cellclassname: cellclass, enabletooltips:true,});
             columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
 
             $.each(years, function (id, year) {
@@ -89,7 +92,7 @@ export class Model {
             });
 
             // console.log('RYTdata ', RYTdata)
-            // console.log('RYTgrid ', RYTgrid)
+            //console.log('RYTgrid ', RYTgrid)
             // console.log('RYTchart ', RYTchart)
             // console.log('series ', series)
             // console.log('techUnits ', techUnits)

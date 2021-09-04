@@ -29,7 +29,9 @@ export class Model {
 
             datafields.push({ name: 'ScId', type:'string' });
             datafields.push({ name: 'Sc', type:'string' });       
-            datafields.push({ name: 'YearSplit', type:'string' });        
+            datafields.push({ name: 'YearSplit', type:'string' });
+            datafields.push({ name: 'ScDesc', type:'string' });  
+                   
             
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
             columns.push({ text: 'Timeslice', datafield: 'YearSplit', pinned:true, editable: false, align: 'center' })

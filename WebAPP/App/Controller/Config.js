@@ -174,13 +174,13 @@ export default class Config {
                 console.log( UNITDEFINITION[rule]['name'])
                 arrayRule += UNITDEFINITION[rule]['name'];
             });
-            $('#ruleFormula').html(
-                `
-                <p>${arrayRule}</p>
-                <small>Result fomrula for ${model.paramNames[groupId][paramId]} [${model.GROUPNAMES[groupId]}]</small>
-                `
-            );
-            $('#ruleFormula').show();
+            // $('#ruleFormula').html(
+            //     `
+            //     <p>${arrayRule}</p>
+            //     <small>Result fomrula for ${model.paramNames[groupId][paramId]} [${model.GROUPNAMES[groupId]}]</small>
+            //     `
+            // );
+            // $('#ruleFormula').show();
          }); 
 
          $('#osy-unitRuleSort2').on('receive', function () { 
@@ -196,13 +196,13 @@ export default class Config {
                 console.log( UNITDEFINITION[rule]['name'])
                 arrayRule += UNITDEFINITION[rule]['name'];
             });
-            $('#ruleFormula').html(
-                `
-                <p>${arrayRule}</p>
-                <small>Result fomrula for ${model.paramById[paramId]} [${model.GROUPNAMES[groupId]}]</small>
-                `
-            );
-            $('#ruleFormula').show();
+            // $('#ruleFormula').html(
+            //     `
+            //     <p>${arrayRule}</p>
+            //     <small>Result fomrula for ${model.paramById[paramId]} [${model.GROUPNAMES[groupId]}]</small>
+            //     `
+            // );
+            // $('#ruleFormula').show();
          }); 
 
          $('#osy-unitRuleSort2').on('remove', function () { 

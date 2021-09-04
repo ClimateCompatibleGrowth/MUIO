@@ -100,6 +100,51 @@ export class DataModel{
         });
         return techNames;
     }
+
+    /////////////////////////////////////////////////
+    //tech data by id
+    static getTechData(genData){
+        let techNames = {};
+        $.each(genData['osy-tech'], function (id, obj) {
+            techNames[obj['TechId']] = obj;
+        });
+        return techNames;
+    }
+
+    static getScData(genData){
+        let ScNames = {};
+        $.each(genData['osy-scenarios'], function (id, obj) {
+            ScNames[obj['ScenarioId']] = obj;
+        });
+        return ScNames;
+    }
+
+    static getCommData(genData){
+        let commData = {};
+        $.each(genData['osy-comm'], function (id, obj) {
+            commData[obj['CommId']] = obj;
+        });
+        return commData;
+    }
+
+    static getEmiData(genData){
+        let emiData = {};
+        $.each(genData['osy-emis'], function (id, obj) {
+            emiData[obj['EmisId']] = obj;
+        });
+        return emiData;
+    }
+
+    static getConData(genData){
+        let conData = {};
+        $.each(genData['osy-constraints'], function (id, obj) {
+            conData[obj['ConId']] = obj;
+        });
+        return conData;
+    }
+
+    ///////////////////////////////////
+
     //get id from name
     static TechId(genData){
         let techIds = {};
@@ -582,8 +627,10 @@ export class DataModel{
     }
 
     static RYTgrid(genData, RYTdata, PARAMETERS){
-        let techName = this.TechName(genData);
-        let scName = this.ScName(genData);
+        // let techName = this.TechName(genData);
+        let techData = this.getTechData(genData);
+        // let scName = this.ScName(genData);
+        let scData = this.getScData(genData);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
 
@@ -593,9 +640,11 @@ export class DataModel{
             RYTgrid[param] = [];
             $.each(paramObj, function (sc, array) {
                 $.each(array, function (id, obj) {
-                    obj['Tech'] = techName[obj.TechId];
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RYT'][param]['unitRule'];
                     let data = unitData['RYT'][param][obj.TechId];
                     obj['UnitId'] = jsonLogic.apply(rule, data);
@@ -719,8 +768,10 @@ export class DataModel{
     }
 
     static RYCgrid(genData, RYCdata, PARAMETERS){
-        let commName = this.CommName(genData);
-        let scName = this.ScName(genData);
+        // let commName = this.CommName(genData);
+        // let scName = this.ScName(genData);
+        let commData = this.getCommData(genData);
+        let scData = this.getScData(genData);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
         let cloneData = JSON.parse(JSON.stringify(RYCdata));
@@ -729,9 +780,16 @@ export class DataModel{
             RYCgrid[param] = [];
             $.each(paramObj, function (sc, array) {
                 $.each(array, function (id, obj) {
-                    obj['Comm'] = commName[obj['CommId']];
+                    // obj['Comm'] = commName[obj['CommId']];
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
+                    obj['Comm'] = commData[obj.CommId]['Comm'];
+                    obj['CommDesc'] = commData[obj.CommId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RYC'][param]['unitRule'];
                     let data = unitData['RYC'][param][obj.CommId];
                     obj['UnitId'] = jsonLogic.apply(rule, data);
@@ -846,8 +904,10 @@ export class DataModel{
     }
 
     static RYEgrid(genData, RYEdata, PARAMETERS){
-        let emiName = this.EmiName(genData);
-        let scName = this.ScName(genData);
+        // let emiName = this.EmiName(genData);
+        // let scName = this.ScName(genData);
+        let emiData = this.getEmiData(genData);
+        let scData = this.getScData(genData);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
         let cloneData = JSON.parse(JSON.stringify(RYEdata));
@@ -856,9 +916,11 @@ export class DataModel{
             RYEgrid[param] = [];
             $.each(paramObj, function (sc, array) {
                 $.each(array, function (id, obj) {
-                    obj['Emis'] = emiName[obj.EmisId];
+                    obj['Emis'] = emiData[obj.EmisId]['Emis'];
+                    obj['EmiDesc'] = emiData[obj.EmisId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RYE'][param]['unitRule'];
                     let data = unitData['RYE'][param][obj.EmisId];
                     obj['UnitId'] = jsonLogic.apply(rule, data);
@@ -909,7 +971,8 @@ export class DataModel{
 
     static RYTsgrid(genData, RYTsdata){
 
-        let scName = this.ScName(genData);
+        //let scName = this.ScName(genData);
+        let scData = this.getScData(genData);
         let cloneData = JSON.parse(JSON.stringify(RYTsdata));
         let RYTsgrid = {};
 
@@ -918,7 +981,9 @@ export class DataModel{
             $.each(paramObj, function (sc, array) {
                 $.each(array, function (id, obj) {
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
+                    // obj['Sc'] = scName[sc];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     RYTsgrid[param].push(obj);
                 }); 
             });
@@ -969,9 +1034,13 @@ export class DataModel{
     }
 
     static RYTCgrid(genData, RYTCdata){
-        let techName = this.TechName(genData);
-        let commName = this.CommName(genData);
-        let scName = this.ScName(genData);
+        // let techName = this.TechName(genData);
+        // let commName = this.CommName(genData);
+        // let scName = this.ScName(genData);
+        let techData = this.getTechData(genData);
+        let commData = this.getCommData(genData);
+        let scData = this.getScData(genData);
+
         let cloneData = JSON.parse(JSON.stringify(RYTCdata));
         let RYTCgrid = {};
 
@@ -980,9 +1049,15 @@ export class DataModel{
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
-                    obj['Tech'] = techName[obj['TechId']];
-                    obj['Comm'] = commName[obj['CommId']];
+                    // obj['Sc'] = scName[sc];
+                    // obj['Tech'] = techName[obj['TechId']];
+                    // obj['Comm'] = commName[obj['CommId']];
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
+                    obj['Comm'] = commData[obj.CommId]['Comm'];
+                    obj['CommDesc'] = commData[obj.CommId]['Desc'];
                     RYTCgrid[param].push(obj);
                 });
             });
@@ -1036,9 +1111,12 @@ export class DataModel{
     }
 
     static RYTCMgrid(genData, RYTCMdata, PARAMETERS){
-        let techName = this.TechName(genData);
-        let commName = this.CommName(genData);
-        let scName = this.ScName(genData);
+        // let techName = this.TechName(genData);
+        // let commName = this.CommName(genData);
+        // let scName = this.ScName(genData);
+        let techData = this.getTechData(genData);
+        let commData = this.getCommData(genData);
+        let scData = this.getScData(genData);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
         let cloneData = JSON.parse(JSON.stringify(RYTCMdata));
@@ -1047,10 +1125,17 @@ export class DataModel{
             RYTCMgrid[param] = [];
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+                    // obj['Tech'] = techName[obj['TechId']];
+                    // obj['Comm'] = commName[obj['CommId']];
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
+                    obj['Comm'] = commData[obj.CommId]['Comm'];
+                    obj['CommDesc'] = commData[obj.CommId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
-                    obj['Tech'] = techName[obj['TechId']];
-                    obj['Comm'] = commName[obj['CommId']];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RYTCM'][param]['unitRule'];
                     let data1 = unitData['RYTCM'][param][obj.CommId];
                     let data2 = unitData['RYTCM'][param][obj.TechId];
@@ -1108,19 +1193,29 @@ export class DataModel{
     }
 
     static RYTEgrid(genData, RYTEdata){
-        let techName = this.TechName(genData);
-        let emiName = this.EmiName(genData);
-        let scName = this.ScName(genData);
+        // let techName = this.TechName(genData);
+        // let emiName = this.EmiName(genData);
+        // let scName = this.ScName(genData);
+        let techData = this.getTechData(genData);
+        let emiData = this.getEmiData(genData);
+        let scData = this.getScData(genData);
         let cloneData = JSON.parse(JSON.stringify(RYTEdata));
         let RYTEgrid = {};
         $.each(cloneData, function (param, obj) {
             RYTEgrid[param] = [];
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+                    // obj['Tech'] = techName[obj['TechId']];
+                    // obj['Emis'] = emiName[obj['EmisId']];
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
+                    obj['Emis'] = emiData[obj.EmisId]['Emis'];
+                    obj['EmiDesc'] = emiData[obj.EmisId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
-                    obj['Tech'] = techName[obj['TechId']];
-                    obj['Emis'] = emiName[obj['EmisId']];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     RYTEgrid[param].push(obj);
                 });
             });
@@ -1172,9 +1267,12 @@ export class DataModel{
     }
 
     static RYTCngrid(genData, RYTCndata){
-        let techName = this.TechName(genData);
-        let conName = this.ConName(genData);
-        let scName = this.ScName(genData);
+        // let techName = this.TechName(genData);
+        // let conName = this.ConName(genData);
+        // let scName = this.ScName(genData);
+        let techData = this.getTechData(genData);
+        let conData = this.getConData(genData);
+        let scData = this.getScData(genData);
         let cloneData = JSON.parse(JSON.stringify(RYTCndata));
         let RYTCngrid = {};
 
@@ -1182,10 +1280,17 @@ export class DataModel{
             RYTCngrid[param] = [];
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+                    // obj['Tech'] = techName[obj['TechId']];
+                    // obj['Con'] = conName[obj['ConId']];
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
+                    obj['Con'] = conData[obj.ConId]['Con'];
+                    obj['ConDesc'] = conData[obj.ConId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
-                    obj['Tech'] = techName[obj['TechId']];
-                    obj['Con'] = conName[obj['ConId']];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     RYTCngrid[param].push(obj);
                 });
             });
@@ -1239,9 +1344,12 @@ export class DataModel{
     }
 
     static RYTEMgrid(genData, RYTEMdata, PARAMETERS){
-        let techName = this.TechName(genData);
-        let emiName = this.EmiName(genData);
-        let scName = this.ScName(genData);
+        // let techName = this.TechName(genData);
+        // let emiName = this.EmiName(genData);
+        // let scName = this.ScName(genData);
+        let techData = this.getTechData(genData);
+        let emiData = this.getEmiData(genData);
+        let scData = this.getScData(genData);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
         let cloneData = JSON.parse(JSON.stringify(RYTEMdata));
@@ -1250,10 +1358,17 @@ export class DataModel{
             RYTEMgrid[param] = [];
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+                    // obj['Tech'] = techName[obj['TechId']];
+                    // obj['Emis'] = emiName[obj['EmisId']];
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
+                    obj['Emis'] = emiData[obj.EmisId]['Emis'];
+                    obj['EmiDesc'] = emiData[obj.EmisId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
-                    obj['Tech'] = techName[obj['TechId']];
-                    obj['Emis'] = emiName[obj['EmisId']];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RYTEM'][param]['unitRule'];
                     let data1 = unitData['RYTEM'][param][obj.EmisId];
                     let data2 = unitData['RYTEM'][param][obj.TechId];

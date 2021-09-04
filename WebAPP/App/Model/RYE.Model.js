@@ -32,7 +32,9 @@ export class Model {
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'EmisId', type:'string' });
             datafields.push({ name: 'Emis', type:'string' });    
-            datafields.push({ name: 'UnitId', type:'string' });        
+            datafields.push({ name: 'UnitId', type:'string' });  
+            datafields.push({ name: 'ScDesc', type:'string' }); 
+            datafields.push({ name: 'EmiDesc', type:'string' });      
 
             let validation = function(cell, value) {
                 if (value < 0) {
@@ -86,7 +88,7 @@ export class Model {
             });
 
             // console.log('RYEdata prije ', RYEdata)
-            // console.log('RYEgrid ', RYEgrid)
+            console.log('RYEgrid ', RYEgrid)
             // console.log('RYEdata poslije ', RYEdata)
             // console.log('RYEchart ', RYEchart)
             // console.log('series ', series)

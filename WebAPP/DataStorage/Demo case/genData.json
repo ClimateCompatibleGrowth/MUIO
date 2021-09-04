@@ -27,7 +27,7 @@
         {
             "ActUnitId": "Mtoe",
             "CapUnitId": "m<sup>3</sup>",
-            "Desc": "Default technology",
+            "Desc": "Lignite PP",
             "EAR": [
                 "EMI_svhsk"
             ],
@@ -43,7 +43,7 @@
         {
             "ActUnitId": "GWh",
             "CapUnitId": "MW",
-            "Desc": "Default technology",
+            "Desc": "Hydro dam",
             "EAR": [],
             "IAR": [
                 "COM_ogrgn",
@@ -61,7 +61,7 @@
         {
             "ActUnitId": "GWh",
             "CapUnitId": "MW",
-            "Desc": "Default technology",
+            "Desc": "Nuclear PWR",
             "EAR": [
                 "EMI_xdbru",
                 "EMI_ke4fa",
@@ -75,7 +75,7 @@
         {
             "ActUnitId": "PJ",
             "CapUnitId": "MW",
-            "Desc": "Default technology",
+            "Desc": "Gas",
             "EAR": [
                 "EMI_ke4fa",
                 "EMI_svhsk"
@@ -94,7 +94,7 @@
         {
             "ActUnitId": "PJ",
             "CapUnitId": "MW",
-            "Desc": "Default technology",
+            "Desc": "Solar PP",
             "EAR": [],
             "IAR": [],
             "OAR": [],
@@ -112,49 +112,49 @@
         {
             "Comm": "COM_1",
             "CommId": "COM_ogrgn",
-            "Desc": "Default commodity",
+            "Desc": "Renewable",
             "UnitId": "PJ"
         },
         {
             "Comm": "COM_2",
             "CommId": "COM_ncvx3",
-            "Desc": "Default commodity",
+            "Desc": "Lignite",
             "UnitId": "Mtoe"
         },
         {
             "Comm": "COM_3",
             "CommId": "COM_1ygq2",
-            "Desc": "Default commodity",
+            "Desc": "Gas",
             "UnitId": "m<sup>3</sup>"
         },
         {
             "Comm": "COM_4",
             "CommId": "COM_77o3g",
-            "Desc": "Default commodity",
+            "Desc": "Nuclear fuel",
             "UnitId": "PJ"
         }
     ],
     "osy-emis": [
         {
-            "Desc": "Default emission",
+            "Desc": "CO2",
             "Emis": "EMI_0",
             "EmisId": "EMI_0",
             "UnitId": "Kg"
         },
         {
-            "Desc": "Default emission",
+            "Desc": "NOX",
             "Emis": "EMI_1",
             "EmisId": "EMI_xdbru",
             "UnitId": "Ton"
         },
         {
-            "Desc": "Default emission",
+            "Desc": "SO2",
             "Emis": "EMI_2",
             "EmisId": "EMI_ke4fa",
             "UnitId": "Kg"
         },
         {
-            "Desc": "Default emission",
+            "Desc": "PM",
             "Emis": "EMI_3",
             "EmisId": "EMI_svhsk",
             "UnitId": "Ton"
@@ -169,25 +169,25 @@
         },
         {
             "Active": true,
-            "Desc": "Base scenario",
+            "Desc": "low carbon",
             "Scenario": "SC_1",
             "ScenarioId": "SC_sbj5i"
         },
         {
             "Active": true,
-            "Desc": "Base scenario",
+            "Desc": "high efficiency",
             "Scenario": "SC_2",
             "ScenarioId": "SC_70qh9"
         },
         {
             "Active": true,
-            "Desc": "Base scenario",
+            "Desc": "Advanced",
             "Scenario": "SC_3",
             "ScenarioId": "SC_awvzp"
         },
         {
             "Active": true,
-            "Desc": "Base scenario",
+            "Desc": "ussual",
             "Scenario": "SC_4",
             "ScenarioId": "SC_a0gf0"
         }
@@ -199,7 +199,7 @@
             ],
             "Con": "CO_1",
             "ConId": "CO_uzy8z",
-            "Desc": "Default constraint ",
+            "Desc": "Constraint eq",
             "Tag": 1
         },
         {
@@ -208,7 +208,7 @@
             ],
             "Con": "CO_2",
             "ConId": "CO_6bn25",
-            "Desc": "Default constraint ",
+            "Desc": "Inecuality Tec_1",
             "Tag": 0
         },
         {

@@ -28,31 +28,31 @@ export class Sidebar {
         .catch(error =>{
             Message.danger(error);
         });
-
-
-
     }
 
-
-    static initPage(model){
-
-        
+    static initPage(model){        
         $('#dynamicRoutes').empty();
         if (model.menu){
-
-            console.log('adding routes')
+            //console.log('adding routes')
             //Routes.addRoutes(model.PARAMETERS);
             $('.dynamicRoutesLink').show();
-
+            let res = `
+            <label class="input" style="display:block; margin-left:11px">
+                <i class="ace-icon white fa fa-search nav-search-icon"></i>
+                <input type="text" placeholder="Search ..." class="nav-search-input" id="MenuSearch" />
+                
+            </label>`;
+            $('#dynamicRoutes').append(res);
             $.each(PARAMORDER, function (id, group) {   
                 $.each(model.PARAMETERS[group], function (id, obj) {
                     //da li ima parametara definisanih za grupu
+
                     if (model.PARAMETERS[group] !== undefined || model.PARAMETERS[group].length != 0) {
                         if(obj.menu){
                             if ( obj.id == 'IAR' && model.menuCondition.IAR ) {
                                 let res = `
                                 <li  class="">
-                                    <a href="#/${group}/${obj.id}" title="${GROUPNAMES[group]}">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
                 
                                     ${obj.value}
                                     <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
@@ -63,7 +63,7 @@ export class Sidebar {
                             if ( obj.id == 'OAR' && model.menuCondition.OAR ) {
                                 let res = `
                                 <li  class="">
-                                    <a href="#/${group}/${obj.id}" title="${GROUPNAMES[group]}">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
                 
                                     ${obj.value}
                                     <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
@@ -74,7 +74,7 @@ export class Sidebar {
                             if ( obj.id == 'EAR' && model.menuCondition.EAR ) {
                                 let res = `
                                 <li  class="">
-                                    <a href="#/${group}/${obj.id}" title="${GROUPNAMES[group]}">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
                 
                                     ${obj.value}
                                     <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
@@ -85,7 +85,7 @@ export class Sidebar {
                             if ( obj.id == 'CM' && model.menuCondition.CM ) {
                                 let res = `
                                 <li  class="">
-                                    <a href="#/${group}/${obj.id}" title="${GROUPNAMES[group]}">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
                 
                                     ${obj.value}
                                     <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
@@ -96,7 +96,7 @@ export class Sidebar {
                             else if (!model.menuGroup.includes(obj.id)){
                                 let res = `
                                 <li  class="">
-                                    <a href="#/${group}/${obj.id}" title="${GROUPNAMES[group]}">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
                 
                                     ${obj.value}
                                     <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
@@ -129,5 +129,19 @@ export class Sidebar {
             //$(selector).removeClass('open');
             $(this).addClass('active');
         });
+
+        //Search menu
+        $('#MenuSearch').keyup(function () {
+            var query = $.trim($('#MenuSearch').val()).toLowerCase();
+            console.log(query)
+            $('.menu-items').each(function () {
+
+                var $this = $(this);
+                //console.log(' $this ',  $this)
+                if ($this.text().toLowerCase().indexOf(query) === -1)
+                    $this.closest('li').fadeOut();
+                else $this.closest('li').fadeIn();
+            });
+        })
     }
 }

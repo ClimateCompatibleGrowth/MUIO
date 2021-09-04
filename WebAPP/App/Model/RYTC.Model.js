@@ -40,7 +40,10 @@ export class Model {
             datafields.push({ name: 'TechId', type:'string' });
             datafields.push({ name: 'Tech', type:'string' });
             datafields.push({ name: 'CommId', type:'string' });
-            datafields.push({ name: 'Comm', type:'string' });            
+            datafields.push({ name: 'Comm', type:'string' });   
+            datafields.push({ name: 'ScDesc', type:'string' }); 
+            datafields.push({ name: 'TechDesc', type:'string' });    
+            datafields.push({ name: 'CommDesc', type:'string' });         
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' })

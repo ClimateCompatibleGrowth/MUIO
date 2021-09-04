@@ -32,7 +32,9 @@ export class Model {
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'CommId', type:'string' });
             datafields.push({ name: 'Comm', type:'string' }); 
-            datafields.push({ name: 'UnitId', type:'string' });            
+            datafields.push({ name: 'UnitId', type:'string' });     
+            datafields.push({ name: 'ScDesc', type:'string' }); 
+            datafields.push({ name: 'CommDesc', type:'string' });       
 
             let validation = function(cell, value) {
                 if (value < 0) {
@@ -70,7 +72,7 @@ export class Model {
 
             }.bind(this);
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass, enabletooltips:true }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
             columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass });
             

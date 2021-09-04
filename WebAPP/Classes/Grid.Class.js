@@ -32,13 +32,29 @@ export class Grid {
         }.bind(this);
 
         var ddlComms = function(row, value, editor) {
-            console.log('daComms ddlComms ', this.daComms)
-            editor.jqxDropDownList({ source: this.daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true });
+            let data = this.daComms.records;
+            editor.jqxDropDownList({ source: this.daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true,
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    // $(`#${tootltipValue}`).jqxTooltip({ content: tooltipContent });
+                    // $(`#${tootltipValue}`).jqxTooltip('open', 15, 15);
+                    return tooltipContent
+                }
+            });
         }.bind(this);
 
         var ddlEmis = function(row, value, editor) {
-            console.log('daEmi ddlComms ', this.daEmi)
-            editor.jqxDropDownList({ source: this.daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true });
+            let data = this.daEmi.records;
+            editor.jqxDropDownList({ source: this.daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true,
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    // $(`#${tootltipValue}`).jqxTooltip({ content: tooltipContent });
+                    // $(`#${tootltipValue}`).jqxTooltip('open', 15, 15);
+                    return tooltipContent
+                }
+            });
         }.bind(this);
 
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
@@ -486,6 +502,7 @@ export class Grid {
 
     static constraintGrid(techs, constraints, techNames){
 
+        console.log('techs ', techs)
         this.srcTechs = JqxSources.srcTech(techs);
         this.srcTags = JqxSources.srcTag(JSON.stringify(TAGS));
 
@@ -499,12 +516,20 @@ export class Grid {
         this.srcConstraint = JqxSources.srcConstraint(constraints, this.daTags.records);
         this.daConstraint = new $.jqx.dataAdapter(this.srcConstraint);
         
-
-        console.log('techs ', techs)
-        console.log('daTechs ', this.daTech)
         var ddlTechs = function(row, value, editor) {
             //console.log('editor ', editor)
-            editor.jqxDropDownList({ source: this.daTech, displayMember: 'Tech', valueMember: 'TechId', checkboxes: true });
+            let data = this.daTech.records;
+            editor.jqxDropDownList({ source: this.daTech, displayMember: 'Tech', valueMember: 'TechId', checkboxes: true,
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    // $(`#${tootltipValue}`).jqxTooltip({ content: tooltipContent });
+                    // $(`#${tootltipValue}`).jqxTooltip('open', 15, 15);
+                    return tooltipContent
+                }
+            }).bind(this);
+
+
         }.bind(this);
 
         var ddlTags = function(row, value, editor) {
@@ -529,13 +554,19 @@ export class Grid {
         }
 
         var getEditorValue = function (row, cellvalue, editor) {
+            //             console.log('cellvalue ', cellvalue)
+
+            // let tootltipValue =cellvalue;
+            // let tooltipContent = "<div>" + tootltipValue + "</div>";
+            // editor.jqxTooltip({ content: tooltipContent });
+            // editor.jqxTooltip('open', 15, 15);
             return editor.val();
         }
 
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
             // set the editor's current value. The callback is called each time the editor is displayed.
             var items = editor.jqxDropDownList('getItems');
-            console.log('items ', items)
+            //console.log('items ', items)
             editor.jqxDropDownList('uncheckAll');
 
             if(Array.isArray(cellvalue)){
@@ -571,7 +602,7 @@ export class Grid {
                 valueNames.push(techNames[techId])
             });
 
-            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+            return `<div class='jqx-grid-cell-middle-align'  style="margin-top: 8.5px;">${valueNames} </div>`;
 
         }.bind(this);
 
@@ -596,6 +627,7 @@ export class Grid {
     }
 
     static Grid($div, daGrid, columns, groupable=false, filterable=false, clipboard=true){
+
         $div.jqxGrid({
             theme: this.theme(),
             width: '100%',
@@ -622,8 +654,56 @@ export class Grid {
             selectionmode: 'multiplecellsadvanced',
             enablehover: true,
             editmode: 'selectedcell',
+            cellhover: function (element, pageX, pageY, record) {
+                
+                //var cellValue = $(element.innerHTML).find('span').html(); // you can remove if any element not required in tooltip here
+                var cellValue = $(element.innerHTML).text();
+               
+                // console.log(daGrid.records)
+                // console.log($(element.innerHTML).text())
+
+                let tootltipValue;
+                var tooltipContent
+                $.each(daGrid.records, function (id, obj) {
+                    if (obj.Sc == cellValue){
+                        tootltipValue = obj.ScDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                        
+                    }
+                    else if (obj.Tech == cellValue){
+                        tootltipValue = obj.TechDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                    else if (obj.Comm == cellValue){
+                        tootltipValue = obj.CommDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                    else if (obj.Emis == cellValue){
+                        tootltipValue = obj.EmiDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                    else if (obj.Con == cellValue){
+                        tootltipValue = obj.ConDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                });
+
+                if (tootltipValue && tootltipValue.trim().length > 0) {
+                  $(element).jqxTooltip({ content: tooltipContent });
+                  $(element).jqxTooltip('open', pageX + 15, pageY + 15);
+                } else {
+                    $div.jqxTooltip('close');
+                }           
+            },
+
             columns:columns
         });
+
     }
 
     static applyRYFilter( $divGrid, years, sc=null ) {
