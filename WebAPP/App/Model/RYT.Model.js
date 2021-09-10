@@ -1,9 +1,14 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
+import { Functions } from "../../Classes/Functions.Class.js";
 
 export class Model {
     
     constructor (casename, genData, RYTdata, group, PARAMETERS, param) {
-        this.d = 2;
+
+        let paramData = DataModel.getParamData(PARAMETERS);
+        //console.log('dec ', paramData[group][param]['default']);
+        let decimal = Functions.getDecimalPlaces(paramData[group][param]['default']);
+        this.d = decimal;
         this.decimal = 'd' + this.d;
 
         if(casename){
@@ -61,7 +66,8 @@ export class Model {
             }.bind(this); 
 
             let initeditor = function(row, cellvalue, editor, data) {
-                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
+                console.log('cellvalue ', cellvalue)
+                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
 
                 var scId = $('#osy-gridRYT').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0'){
@@ -73,8 +79,6 @@ export class Model {
                 }
 
             }.bind(this);
-
-
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass, enabletooltips:true,}); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Technology', datafield: 'Tech',pinned:true, editable: false, align: 'left',   cellclassname: cellclass, enabletooltips:true,});
@@ -125,6 +129,7 @@ export class Model {
             this.chartData = RYTchart;
             this.genData = genData;
             this.param = param;
+            this.paramData = paramData;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid,

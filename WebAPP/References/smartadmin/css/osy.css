@@ -240,10 +240,10 @@ top: 10px;
 }
 .jqx-grid-cell-pinned-bootstrap{
     background: repeat-x #f7f7f7;
-    background-image: -webkit-linear-gradient(top,#FFF 0,#EEE 100%);
+    /* background-image: -webkit-linear-gradient(top,#FFF 0,#EEE 100%);
     background-image: -o-linear-gradient(top,#FFF 0,#EEE 100%);
     background-image: linear-gradient(to bottom,#FFF 0,#EEE 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffeeeeee', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffeeeeee', GradientType=0); */
     font-weight: bold;
     color:var(--main-color)!important;
 }

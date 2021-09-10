@@ -239,6 +239,17 @@ export class DataModel{
         return ParamName;
     }
 
+    static getParamData(parameters){
+        let ParamName = {};
+        $.each(parameters, function (group, array) {
+            ParamName[group] = {};
+            $.each(array, function (id, obj) {
+                ParamName[group][obj.id] = obj;
+            });
+        });
+        return ParamName;
+    }
+
     static Timeslices(genData){
         let ts = [];
         let ns = parseInt(genData['osy-ns'])
@@ -379,7 +390,8 @@ export class DataModel{
     }
 
     static Rgrid(genData, Rdata, PARAMETERS){
-        let scName = this.ScName(genData);
+        // let scName = this.ScName(genData);
+        let scData = this.getScData(genData);
         let paramName = this.ParamName(PARAMETERS['R']);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
@@ -391,8 +403,11 @@ export class DataModel{
                 $.each(array, function (id, obj) {
                     obj['ParamId'] = param;
                     obj['Param'] = paramName[param];
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['R'][param]['unitRule'];
                     let data = unitData['R'][param];
                     obj['UnitId'] = jsonLogic.apply(rule, data);
@@ -436,7 +451,8 @@ export class DataModel{
     }
 
     static RYgrid(genData, RYdata, PARAMETERS){
-        let scName = this.ScName(genData);
+        // let scName = this.ScName(genData);
+        let scData = this.getScData(genData);
         let paramName = this.ParamName(PARAMETERS['RY']);
         const cloneData = JSON.parse(JSON.stringify(RYdata));
         let unitData = this.getUnitData(genData, PARAMETERS);
@@ -448,8 +464,11 @@ export class DataModel{
                 $.each(array, function (id, obj) {
                     obj['ParamId'] = param;
                     obj['Param'] = paramName[param];
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RY'][param]['unitRule'];
                     let data = unitData['RY'][param];
                     obj['UnitId'] = jsonLogic.apply(rule, data);
@@ -495,7 +514,8 @@ export class DataModel{
     }
 
     static RTgrid(genData, RTdata, PARAMETERS){
-        let scName = this.ScName(genData);
+        // let scName = this.ScName(genData);
+        let scData = this.getScData(genData);
         let paramName = this.ParamName(PARAMETERS['RT']);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
@@ -507,8 +527,11 @@ export class DataModel{
                 $.each(array, function (id, obj) {
                     obj['ParamId'] = param;
                     obj['Param'] = paramName[param];
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     $.each(genData['osy-tech'], function (id, tech) {
                         let rule = paramById['RT'][param]['unitRule'];
                         let data = unitData['RT'][param][tech.TechId];
@@ -559,7 +582,8 @@ export class DataModel{
     }
 
     static REgrid(genData, REdata, PARAMETERS){
-        let scName = this.ScName(genData);
+        //let scName = this.ScName(genData);
+        let scData = this.getScData(genData);
         let paramName = this.ParamName(PARAMETERS['RE']);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
@@ -571,8 +595,11 @@ export class DataModel{
                 $.each(array, function (id, obj) {
                     obj['ParamId'] = param;
                     obj['Param'] = paramName[param];
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     $.each(genData['osy-emis'], function (id, emi) {
                         let rule = paramById['RE'][param]['unitRule'];
                         let data = unitData['RE'][param][emi.EmisId];
@@ -698,8 +725,11 @@ export class DataModel{
     }
 
     static RYTMgrid(genData, RYTMdata, PARAMETERS){
-        let techName = this.TechName(genData);
-        let scName = this.ScName(genData);
+        // let techName = this.TechName(genData);
+        // let scName = this.ScName(genData);
+        let techData = this.getTechData(genData);
+        let scData = this.getScData(genData);
+
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
         let cloneData = JSON.parse(JSON.stringify(RYTMdata));
@@ -709,9 +739,14 @@ export class DataModel{
             RYTMgrid[param] = [];
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+                    // obj['Tech'] = techName[obj['TechId']];
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
-                    obj['Tech'] = techName[obj['TechId']];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RYTM'][param]['unitRule'];
                     let data = unitData['RYTM'][param][obj.TechId];
                     obj['UnitId'] = jsonLogic.apply(rule, data);
@@ -783,8 +818,6 @@ export class DataModel{
                     // obj['Comm'] = commName[obj['CommId']];
                     // obj['ScId'] = sc;
                     // obj['Sc'] = scName[sc];
-                    obj['Tech'] = techData[obj.TechId]['Tech'];
-                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
                     obj['Comm'] = commData[obj.CommId]['Comm'];
                     obj['CommDesc'] = commData[obj.CommId]['Desc'];
                     obj['ScId'] = sc;
@@ -839,8 +872,12 @@ export class DataModel{
     }
 
     static RYCngrid(genData, RYCndata, PARAMETERS){
-        let conName = this.ConName(genData);
-        let scName = this.ScName(genData);
+        // let conName = this.ConName(genData);
+        // let scName = this.ScName(genData);
+
+        let conData = this.getConData(genData);
+        let scData = this.getScData(genData);
+
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
         let cloneData = JSON.parse(JSON.stringify(RYCndata));
@@ -849,9 +886,15 @@ export class DataModel{
             RYCngrid[param] = [];
             $.each(paramObj, function (sc, array) {
                 $.each(array, function (id, obj) {
-                    obj['Con'] = conName[obj.ConId];
+                    // obj['Con'] = conName[obj.ConId];
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+
+                    obj['Con'] = conData[obj.ConId]['Con'];
+                    obj['ConDesc'] = conData[obj.ConId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RYCn'][param]['unitRule'];
                     let data = unitData['RYCn'][param][obj.ConId];
                     obj['UnitId'] = jsonLogic.apply(rule, data);
@@ -1426,8 +1469,10 @@ export class DataModel{
     }
 
     static RYTTsgrid(genData, RYTTsdata){
-        let techName = this.TechName(genData);
-        let scName = this.ScName(genData);
+        // let techName = this.TechName(genData);
+        // let scName = this.ScName(genData);
+        let techData = this.getTechData(genData);
+        let scData = this.getScData(genData);
         let cloneData = JSON.parse(JSON.stringify(RYTTsdata));
         let RYTTsgrid = {};
 
@@ -1435,9 +1480,13 @@ export class DataModel{
             RYTTsgrid[param] = [];
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
-                    obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
-                    obj['Tech'] = techName[obj['TechId']];
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+                    // obj['Tech'] = techName[obj['TechId']];
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     RYTTsgrid[param].push(obj);
                 });
             });
@@ -1490,8 +1539,10 @@ export class DataModel{
     }
 
     static RYCTsgrid(genData, RYCTsdata, PARAMETERS){
-        let commName = this.CommName(genData);
-        let scName = this.ScName(genData);
+        // let commName = this.CommName(genData);
+        // let scName = this.ScName(genData);
+        let commData = this.getCommData(genData);
+        let scData = this.getScData(genData);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
         let cloneData = JSON.parse(JSON.stringify(RYCTsdata));
@@ -1501,9 +1552,14 @@ export class DataModel{
             RYCTsgrid[param] = [];
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+                    // obj['Comm'] = commName[obj.CommId];
+                    obj['Comm'] = commData[obj.CommId]['Comm'];
+                    obj['CommDesc'] = commData[obj.CommId]['Desc'];
                     obj['ScId'] = sc;
-                    obj['Sc'] = scName[sc];
-                    obj['Comm'] = commName[obj.CommId];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RYCTs'][param]['unitRule'];
                     let data = unitData['RYCTs'][param][obj.CommId];
                     obj['UnitId'] = jsonLogic.apply(rule, data);

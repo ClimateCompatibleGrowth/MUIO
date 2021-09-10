@@ -35,7 +35,8 @@ export class Model {
             datafields.push({ name: 'ParamId', type:'string' });
             datafields.push({ name: 'Param', type:'string' });  
             datafields.push({ name: 'UnitId', type:'string' }); 
-            datafields.push({ name: 'value', type:'number' });         
+            datafields.push({ name: 'value', type:'number' }); 
+            datafields.push({ name: 'ScDesc', type:'string' });        
 
             let validation = function(cell, value) {
                 if (value < 0) {

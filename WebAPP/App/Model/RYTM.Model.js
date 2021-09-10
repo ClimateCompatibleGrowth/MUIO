@@ -37,12 +37,11 @@ export class Model {
             datafields.push({ name: 'TechId', type:'string' });
             datafields.push({ name: 'Tech', type:'string' });
             datafields.push({ name: 'MoId', type:'string' });   
-            datafields.push({ name: 'UnitId', type:'string' });         
+            datafields.push({ name: 'UnitId', type:'string' });     
+            datafields.push({ name: 'ScDesc', type:'string' }); 
+            datafields.push({ name: 'TechDesc', type:'string' });      
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center' });
-            columns.push({ text: 'MoO', datafield: 'MoId', pinned:true, editable: false, align: 'center', cellsalign: 'center' });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
+
             
             let validation = function(cell, value) {
                 if (value < 0) {
@@ -80,6 +79,11 @@ export class Model {
                 }
             }.bind(this);
 
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left', cellclassname: cellclass });
+            columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'center', cellclassname: cellclass });
+            columns.push({ text: 'MoO', datafield: 'MoId', pinned:true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
+
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type:'number' });
                 columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
@@ -94,6 +98,7 @@ export class Model {
             // console.log('RYTMchart ', RYTMchart)
             // console.log('series ', series);
             // console.log('techs[0] mo[0] ', techs[0]['TechId'], + mods[0])
+            console.log('columns ', columns);
             
             var srcGrid = {
                 datatype: "json",

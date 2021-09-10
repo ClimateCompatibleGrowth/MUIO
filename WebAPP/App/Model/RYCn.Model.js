@@ -38,7 +38,9 @@ export class Model {
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'ConId', type:'string' });
             datafields.push({ name: 'Con', type:'string' }); 
-            datafields.push({ name: 'UnitId', type:'string' });            
+            datafields.push({ name: 'UnitId', type:'string' });    
+            datafields.push({ name: 'ScDesc', type:'string' });      
+            datafields.push({ name: 'ConDesc', type:'string' });         
 
             let validation = function(cell, value) {
                 if (value < 0) {

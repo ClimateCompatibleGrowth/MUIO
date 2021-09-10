@@ -634,7 +634,7 @@ export class Grid {
             //height:71+count*26,
             autoheight: true,
             autoshowloadelement: true,
-            rowsheight: 25,
+            rowsheight: 30,
             source: daGrid,
             columnsautoresize: true,
             columnsresize:true,

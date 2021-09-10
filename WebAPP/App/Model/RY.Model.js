@@ -29,7 +29,8 @@ export class Model {
             datafields.push({ name: 'ParamId', type:'string' });  
             datafields.push({ name: 'ScId', type:'string' });
             datafields.push({ name: 'Sc', type:'string' });       
-            datafields.push({ name: 'UnitId', type:'string' }); 
+            datafields.push({ name: 'UnitId', type:'string' });
+            datafields.push({ name: 'ScDesc', type:'string' }); 
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',  minWidth: 120, maxWidth: 200 })
             columns.push({ text: 'Parameter', datafield: 'Param', pinned:true, editable: false, align: 'left',  minWidth: 120, maxWidth: 200 })

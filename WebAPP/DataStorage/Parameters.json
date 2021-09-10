@@ -358,7 +358,7 @@
         {
             "id": "TAL",
             "value": "Total Technology Annual Activity Lower Limit",
-            "default": 0,
+            "default": 0.001,
             "enable": true,
             "menu": 1,
             "unitRule": {

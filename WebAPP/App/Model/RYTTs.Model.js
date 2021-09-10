@@ -34,6 +34,8 @@ export class Model {
             datafields.push({ name: 'Sc', type:'string' }); 
             datafields.push({ name: 'TechId', type:'string' });
             datafields.push({ name: 'Tech', type:'string' });
+            datafields.push({ name: 'ScDesc', type:'string' }); 
+            datafields.push({ name: 'TechDesc', type:'string' }); 
             datafields.push({ name: 'Timeslice', type:'string' });           
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left' });
