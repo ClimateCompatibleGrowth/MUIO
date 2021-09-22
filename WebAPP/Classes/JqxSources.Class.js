@@ -22,6 +22,8 @@ export class JqxSources{
                 { name: 'ActUnitId', type: 'string' },
                 { name: 'IAR', type: 'array' },
                 { name: 'OAR', type: 'array' },
+                { name: 'INCR', type: 'array' },
+                { name: 'ITCR', type: 'array' },
                 { name: 'EAR', type: 'array' }
             ],
         }

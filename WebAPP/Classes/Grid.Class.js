@@ -17,6 +17,8 @@ export class Grid {
         this.srcEmi = JqxSources.srcEmi(emissions);
         this.srcUnits = JqxSources.srcUnit(JSON.stringify(UNITS));
 
+        console.log('commodities ', commodities)
+
         this.daTechs = new $.jqx.dataAdapter(this.srcTechs);
         this.daComms = new $.jqx.dataAdapter(this.srcComms, {
             autoBind: true
@@ -33,8 +35,10 @@ export class Grid {
 
         var ddlComms = function(row, value, editor) {
             let data = this.daComms.records;
+            console.log('data ', data)
             editor.jqxDropDownList({ source: this.daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true,
                 renderer: function (index, label, value) {
+                    console.log('data[index][Desc] ', data[index]['Desc'])
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
                     // $(`#${tootltipValue}`).jqxTooltip({ content: tooltipContent });
@@ -60,6 +64,7 @@ export class Grid {
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
             // set the editor's current value. The callback is called each time the editor is displayed.
             console.log('editor ', editor)
+            console.log('cellvalue ', cellvalue)
             var items = editor.jqxDropDownList('getItems');
             editor.jqxDropDownList('uncheckAll');
             if(Array.isArray(cellvalue)){
@@ -168,12 +173,14 @@ export class Grid {
             enablehover: false,
             columns: [
               { text: 'techId', datafield: 'TechId', hidden: true },
-              { text: 'Technology', datafield: 'Tech', width: '15%',align: 'center',cellsalign: 'left', validation:validation_1 },
-              { text: 'Description', datafield: 'Desc', width: '25%', align: 'center',cellsalign: 'left' },
-              { text: 'Unit of capacity', datafield: 'CapUnitId', width: '10%',  columntype: 'dropdownlist',  createeditor: ddlUnits, align: 'center',cellsalign: 'center'},
-              { text: 'Unit of activity', datafield: 'ActUnitId', width: '10%',  columntype: 'dropdownlist',  createeditor: ddlUnits, align: 'center',cellsalign: 'center'},
+              { text: 'Technology', datafield: 'Tech', width: '10%',align: 'center',cellsalign: 'left', validation:validation_1 },
+              { text: 'Description', datafield: 'Desc', width: '16%', align: 'center',cellsalign: 'left' },
+              { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%',  columntype: 'dropdownlist',  createeditor: ddlUnits, align: 'center',cellsalign: 'center'},
+              { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%',  columntype: 'dropdownlist',  createeditor: ddlUnits, align: 'center',cellsalign: 'center'},
               { text: 'IAR', datafield: 'IAR', width: '10%', cellsrenderer:cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
               { text: 'OAR', datafield: 'OAR', width: '10%', cellsrenderer:cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+              { text: 'INCR', datafield: 'INCR', width: '10%', cellsrenderer:cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+              { text: 'ITCR', datafield: 'ITCR', width: '10%', cellsrenderer:cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlComms, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
               { text: 'EAR', datafield: 'EAR', width: '10%', cellsrenderer:cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist',  createeditor: ddlEmis, align: 'center',cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
               { text: '', datafield: 'Delete', width: '10%',  cellsrenderer: cellsrendererbutton, editable:false  },
             ]

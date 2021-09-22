@@ -482,7 +482,6 @@ class Osemosys():
                                     data[tech['TechId']].append(byTech.copy())
         return data
 
-
     def viewDataByComm(self):
         jsonData = {}
         data = {}

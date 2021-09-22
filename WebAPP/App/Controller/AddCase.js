@@ -34,13 +34,13 @@ export default class AddCase {
 
     static initPage(model){
         Message.clearMessages();
-        $('a[href="#tabComms"]').click();
+        //$('a[href="#tabComms"]').click();
         //Navbar.initPage(model.casename, model.pageId);
 
         Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);
 
-        console.log('model.emissions ', model.emissions)
+        //console.log('model.emissions ', model.emissions)
         Grid.commGrid(model.commodities);
         Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
         Grid.emisGrid(model.emissions);
@@ -262,7 +262,7 @@ export default class AddCase {
             let defaultTech = DefaultObj.defaultTech();
             //tech grid se pravi dinalicki potrebno je updatovati model
             //JSON parse strungify potrebno da iz nekog razloga izbacino elemente uid boundindex...
-            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'IAR', 'OAR', 'EAR'] )));
+            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'IAR', 'OAR', "INCR", "ITCR", 'EAR'] )));
             //model.techs.push(defaultTech[0]);
             //update technames
             model.techNames[defaultTech[0]['TechId']] = defaultTech[0]['Tech'];
@@ -305,7 +305,7 @@ export default class AddCase {
             if (column == 'CapUnitId' || column == 'ActUnitId'){
                 Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', null);
             }
-            if(column != 'IAR' && column != 'OAR' && column != 'EAR'){
+            if(column != 'IAR' && column != 'OAR' && column != 'EAR' && column != 'INCR' && column != 'ITCR'){
                 model.techs[rowBoundIndex][column] = value;
             }else{
                 if(value.includes(',') && value){
@@ -565,9 +565,10 @@ export default class AddCase {
         $('.nav-tabs li a').on("click", function(event, ui) { 
             var id = $(this).attr('id');
             //update tech grid to update IAR OAR EAR with new added or removed comms and emis
+            console.log('id ', id)
             if (id == 'Techs'){
                 //Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
-                $divTech.jqxGrid('clear');
+                //$divTech.jqxGrid('clear');
                 $divTech.jqxGrid('updatebounddata');
             }
             else if (id == 'Constraints'){

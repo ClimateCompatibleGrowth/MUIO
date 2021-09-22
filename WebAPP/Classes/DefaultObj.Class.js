@@ -23,7 +23,9 @@ export class DefaultObj{
                 "ActUnitId": "PJ",
                 "IAR": emptyArray,
                 "OAR": emptyArray,
-                "EAR": emptyArray
+                "EAR": emptyArray,
+                "INCR": emptyArray,
+                "ITCR": emptyArray,
             }
         ];
         return defaultObj;

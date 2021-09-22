@@ -29,6 +29,7 @@ export class DataModel{
                 //tech parameters
                 $.each(genData['osy-tech'], function (id, tObj) {
                     unitData[group][obj.id][tObj.TechId] = {};
+                    unitData[group][obj.id][tObj.TechId]['years'] = 'years';
                     unitData[group][obj.id][tObj.TechId]['percent'] = '%';
                     unitData[group][obj.id][tObj.TechId]['divide'] = '/';
                     unitData[group][obj.id][tObj.TechId]['multiply'] = '*';
@@ -42,6 +43,7 @@ export class DataModel{
                 //comm parameters
                 $.each(genData['osy-comm'], function (id, cObj) {
                     unitData[group][obj.id][cObj.CommId] = {};
+                    unitData[group][obj.id][cObj.CommId]['years'] = 'years';
                     unitData[group][obj.id][cObj.CommId]['percent'] = '%';
                     unitData[group][obj.id][cObj.CommId]['divide'] = '/';
                     unitData[group][obj.id][cObj.CommId]['multiply'] = '*';
@@ -54,6 +56,7 @@ export class DataModel{
                 //emi parameters
                 $.each(genData['osy-emis'], function (id, eObj) {
                     unitData[group][obj.id][eObj.EmisId] = {};
+                    unitData[group][obj.id][eObj.EmisId]['years'] = 'years';
                     unitData[group][obj.id][eObj.EmisId]['percent'] = '%';
                     unitData[group][obj.id][eObj.EmisId]['divide'] = '/';
                     unitData[group][obj.id][eObj.EmisId]['multiply'] = '*';
@@ -63,6 +66,7 @@ export class DataModel{
                     unitData[group][obj.id][eObj.EmisId]['EmiUnit'] = emiUnits[eObj.EmisId];
                     unitData[group][obj.id][eObj.EmisId]['Currency'] = genData['osy-currency'];
                 });
+                unitData[group][obj.id]['years'] = 'years';
                 unitData[group][obj.id]['percent'] = '%';
                 unitData[group][obj.id]['divide'] = '/';
                 unitData[group][obj.id]['multiply'] = '*';

@@ -32,6 +32,12 @@
                 "cat": [
                     {
                         "var": "ActUnitId"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "CapUnitId"
                     }
                 ]
             }
@@ -45,7 +51,7 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "hundert"
+                        "var": "years"
                     }
                 ]
             }
@@ -59,7 +65,7 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "thousand"
+                        "var": "ActUnitId"
                     }
                 ]
             }
@@ -73,10 +79,7 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "thousand"
-                    },
-                    {
-                        "var": "Currency"
+                        "var": "ActUnitId"
                     }
                 ]
             }
@@ -93,6 +96,12 @@
                 "cat": [
                     {
                         "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
                     }
                 ]
             }
@@ -104,17 +113,7 @@
             "enable": true,
             "menu": 1,
             "unitRule": {
-                "cat": [
-                    {
-                        "var": "percent"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "hundert"
-                    }
-                ]
+                "cat": []
             }
         }
     ],
@@ -129,12 +128,6 @@
                 "cat": [
                     {
                         "var": "EmiUnit"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
                     }
                 ]
             }
@@ -148,10 +141,7 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "milion"
-                    },
-                    {
-                        "var": "Currency"
+                        "var": "EmiUnit"
                     }
                 ]
             }
@@ -179,13 +169,13 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "EmiUnit"
+                        "var": "percent"
                     },
                     {
                         "var": "divide"
                     },
                     {
-                        "var": "Currency"
+                        "var": "hundert"
                     }
                 ]
             }
@@ -202,6 +192,12 @@
                 "cat": [
                     {
                         "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
                     }
                 ]
             }
@@ -215,19 +211,16 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "CapUnitId"
+                        "var": "milion"
+                    },
+                    {
+                        "var": "Currency"
                     },
                     {
                         "var": "divide"
                     },
                     {
-                        "var": "milion"
-                    },
-                    {
-                        "var": "multiply"
-                    },
-                    {
-                        "var": "Currency"
+                        "var": "CapUnitId"
                     }
                 ]
             }
@@ -241,16 +234,16 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "CapUnitId"
+                        "var": "milion"
+                    },
+                    {
+                        "var": "Currency"
                     },
                     {
                         "var": "divide"
                     },
                     {
-                        "var": "hundert"
-                    },
-                    {
-                        "var": "Currency"
+                        "var": "CapUnitId"
                     }
                 ]
             }
@@ -265,12 +258,6 @@
                 "cat": [
                     {
                         "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
                     }
                 ]
             }
@@ -285,12 +272,6 @@
                 "cat": [
                     {
                         "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
                     }
                 ]
             }
@@ -305,12 +286,6 @@
                 "cat": [
                     {
                         "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
                     }
                 ]
             }
@@ -325,12 +300,6 @@
                 "cat": [
                     {
                         "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
                     }
                 ]
             }
@@ -345,12 +314,6 @@
                 "cat": [
                     {
                         "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
                     }
                 ]
             }
@@ -358,19 +321,13 @@
         {
             "id": "TAL",
             "value": "Total Technology Annual Activity Lower Limit",
-            "default": 0.001,
+            "default": 0,
             "enable": true,
             "menu": 1,
             "unitRule": {
                 "cat": [
                     {
-                        "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
+                        "var": "ActUnitId"
                     }
                 ]
             }
@@ -384,13 +341,7 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
+                        "var": "ActUnitId"
                     }
                 ]
             }
@@ -402,20 +353,7 @@
             "enable": true,
             "menu": 1,
             "unitRule": {
-                "cat": [
-                    {
-                        "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "milion"
-                    },
-                    {
-                        "var": "Currency"
-                    }
-                ]
+                "cat": []
             }
         },
         {
@@ -425,17 +363,7 @@
             "enable": true,
             "menu": 1,
             "unitRule": {
-                "cat": [
-                    {
-                        "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
-                    }
-                ]
+                "cat": []
             }
         },
         {
@@ -448,12 +376,6 @@
                 "cat": [
                     {
                         "var": "CapUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
                     }
                 ]
             }
@@ -484,10 +406,13 @@
                         "var": "milion"
                     },
                     {
-                        "var": "multiply"
+                        "var": "Currency"
                     },
                     {
-                        "var": "Currency"
+                        "var": "divide"
+                    },
+                    {
+                        "var": "ActUnitId"
                     }
                 ]
             }
@@ -502,12 +427,6 @@
                 "cat": [
                     {
                         "var": "ActUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
                     }
                 ]
             }
@@ -522,12 +441,6 @@
                 "cat": [
                     {
                         "var": "ActUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "Currency"
                     }
                 ]
             }
@@ -542,6 +455,12 @@
                 "cat": [
                     {
                         "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
                     }
                 ]
             }
@@ -556,6 +475,12 @@
                 "cat": [
                     {
                         "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
                     }
                 ]
             }
@@ -572,6 +497,12 @@
                 "cat": [
                     {
                         "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
                     }
                 ]
             }
@@ -613,11 +544,7 @@
             "enable": true,
             "menu": 1,
             "unitRule": {
-                "cat": [
-                    {
-                        "var": "CommUnit"
-                    }
-                ]
+                "cat": []
             }
         },
         {
@@ -627,11 +554,7 @@
             "enable": true,
             "menu": 1,
             "unitRule": {
-                "cat": [
-                    {
-                        "var": "percent"
-                    }
-                ]
+                "cat": []
             }
         }
     ],
@@ -645,7 +568,55 @@
             "unitRule": {
                 "cat": [
                     {
+                        "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
+                    }
+                ]
+            }
+        }
+    ],
+    "RYTC": [
+        {
+            "id": "INCR",
+            "value": "Input To New Capacity Ratio",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
                         "var": "CommUnit"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "ActUnitId"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "ITCR",
+            "value": "Input To Total Capacity Ratio",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "CommUnit"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "ActUnitId"
                     }
                 ]
             }
@@ -661,22 +632,13 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "ActUnitId"
+                        "var": "CommUnit"
                     },
                     {
                         "var": "divide"
                     },
                     {
-                        "var": "CommUnit"
-                    },
-                    {
-                        "var": "multiply"
-                    },
-                    {
-                        "var": "milion"
-                    },
-                    {
-                        "var": "Currency"
+                        "var": "ActUnitId"
                     }
                 ]
             }
@@ -690,16 +652,13 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "ActUnitId"
+                        "var": "CommUnit"
                     },
                     {
                         "var": "divide"
                     },
                     {
-                        "var": "milion"
-                    },
-                    {
-                        "var": "Currency"
+                        "var": "ActUnitId"
                     }
                 ]
             }
@@ -715,9 +674,6 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "milion"
-                    },
-                    {
                         "var": "EmiUnit"
                     }
                 ]
@@ -732,13 +688,16 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "EmiUnit"
-                    },
-                    {
-                        "var": "thousand"
+                        "var": "milion"
                     },
                     {
                         "var": "Currency"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "EmiUnit"
                     }
                 ]
             }
@@ -751,9 +710,6 @@
             "menu": 1,
             "unitRule": {
                 "cat": [
-                    {
-                        "var": "milion"
-                    },
                     {
                         "var": "EmiUnit"
                     }
@@ -771,19 +727,13 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "ActUnitId"
-                    },
-                    {
                         "var": "EmiUnit"
                     },
                     {
                         "var": "divide"
                     },
                     {
-                        "var": "milion"
-                    },
-                    {
-                        "var": "Currency"
+                        "var": "ActUnitId"
                     }
                 ]
             }

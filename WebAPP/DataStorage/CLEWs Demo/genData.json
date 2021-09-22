@@ -1,0 +1,304 @@
+{
+    "osy-version": "1.0",
+    "osy-casename": "CLEWs Demo",
+    "osy-desc": "CLEW demo case",
+    "osy-date": "07/18/2021",
+    "osy-currency": "USD",
+    "osy-ns": "2",
+    "osy-dt": "2",
+    "osy-mo": "1",
+    "osy-tech": [
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Coal mine",
+            "EAR": [
+                "EMI_0"
+            ],
+            "IAR": [],
+            "OAR": [
+                "COM_0"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "MINCOA",
+            "TechId": "TEC_0"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "GAs field",
+            "EAR": [
+                "EMI_0"
+            ],
+            "IAR": [],
+            "OAR": [
+                "COM_ogrgn"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "MINGAS",
+            "TechId": "TEC_lyn0w"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Coal powerplant",
+            "EAR": [],
+            "IAR": [
+                "COM_0"
+            ],
+            "OAR": [
+                "COM_ncvx3"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "PWRCOA",
+            "TechId": "TEC_axrko"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Gas power plant",
+            "EAR": [],
+            "IAR": [
+                "COM_ogrgn"
+            ],
+            "OAR": [
+                "COM_ncvx3"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "PWRGAS",
+            "TechId": "TEC_7mbw5"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Power transmission",
+            "EAR": [],
+            "IAR": [
+                "COM_ncvx3"
+            ],
+            "OAR": [
+                "COM_1ygq2"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "PWRTRN",
+            "TechId": "TEC_2wkvq"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Solar energy resourse",
+            "EAR": [],
+            "IAR": [],
+            "OAR": [
+                "COM_77o3g"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "MINSOL",
+            "TechId": "TEC_nxyx4"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Wind energy resource",
+            "EAR": [],
+            "IAR": [],
+            "OAR": [
+                "COM_9voks"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "MINWND",
+            "TechId": "TEC_n5x9j"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Solar power plant",
+            "EAR": [],
+            "IAR": [
+                "COM_77o3g"
+            ],
+            "OAR": [
+                "COM_1ygq2"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "PWRSOL",
+            "TechId": "TEC_idpj2"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Wind power plant",
+            "EAR": [],
+            "IAR": [
+                "COM_9voks"
+            ],
+            "OAR": [
+                "COM_ncvx3"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "PWRWND",
+            "TechId": "TEC_7ffry"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Hydropower resource",
+            "EAR": [],
+            "IAR": [],
+            "OAR": [
+                "COM_yr5og"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "MINHYD",
+            "TechId": "TEC_k9e67"
+        },
+        {
+            "ActUnitId": "PJ",
+            "CapUnitId": "GW",
+            "Desc": "Hydro power plant",
+            "EAR": [],
+            "IAR": [
+                "COM_yr5og"
+            ],
+            "OAR": [
+                "COM_ncvx3"
+            ],
+            "INCR": [],
+            "ITCR": [
+                "COM_0"
+            ],
+            "Tech": "PWRHYD",
+            "TechId": "TEC_jtz6a"
+        }
+    ],
+    "osy-comm": [
+        {
+            "Comm": "COA",
+            "CommId": "COM_0",
+            "Desc": "Coal",
+            "UnitId": "PJ"
+        },
+        {
+            "Comm": "GAS",
+            "CommId": "COM_ogrgn",
+            "Desc": "Natural gas",
+            "UnitId": "PJ"
+        },
+        {
+            "Comm": "ELC001",
+            "CommId": "COM_ncvx3",
+            "Desc": "Electricity before transmission ",
+            "UnitId": "PJ"
+        },
+        {
+            "Comm": "ELC002",
+            "CommId": "COM_1ygq2",
+            "Desc": "Electricity after transmission",
+            "UnitId": "PJ"
+        },
+        {
+            "Comm": "SOL",
+            "CommId": "COM_77o3g",
+            "Desc": "Solar energy",
+            "UnitId": "PJ"
+        },
+        {
+            "Comm": "WND",
+            "CommId": "COM_9voks",
+            "Desc": "Wind energy",
+            "UnitId": "PJ"
+        },
+        {
+            "Comm": "HYD",
+            "CommId": "COM_yr5og",
+            "Desc": "Hydro energy",
+            "UnitId": "PJ"
+        }
+    ],
+    "osy-emis": [
+        {
+            "Desc": "Carbon dioxide",
+            "Emis": "CO2",
+            "EmisId": "EMI_0",
+            "UnitId": "Ton"
+        },
+        {
+            "Desc": "Methane",
+            "Emis": "CH4",
+            "EmisId": "EMI_xdbru",
+            "UnitId": "Ton"
+        }
+    ],
+    "osy-scenarios": [
+        {
+            "Active": true,
+            "Desc": "Reference case",
+            "Scenario": "REF",
+            "ScenarioId": "SC_0"
+        }
+    ],
+    "osy-constraints": [
+        {
+            "CM": [
+                "TEC_axrko"
+            ],
+            "Con": "MAXCOAL",
+            "ConId": "CO_uzy8z",
+            "Desc": "Coal capped at 2 GW",
+            "Tag": 0
+        }
+    ],
+    "osy-years": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026",
+        "2027",
+        "2028",
+        "2029",
+        "2030",
+        "2031",
+        "2032",
+        "2033",
+        "2034",
+        "2035",
+        "2036",
+        "2037",
+        "2038",
+        "2039",
+        "2040"
+    ]
+}
