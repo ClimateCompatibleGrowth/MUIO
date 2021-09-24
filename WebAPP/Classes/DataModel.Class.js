@@ -277,7 +277,8 @@ export class DataModel{
         return mods;
     }
 
-    static activityTechsComms(techs){
+    /////////////////////////////////////////////////IAR OAR EAR INCR ITCR
+    static activityTechs(techs){
         let ActivityTechs = {};
         ActivityTechs['IAR'] = [];
         ActivityTechs['OAR'] = [];
@@ -321,7 +322,51 @@ export class DataModel{
         return ActivityComms;
     }
 
-    static activityTechsEmis(techs){
+    static inputCapTechs(techs){
+        let ActivityTechs = {};
+        ActivityTechs['INCR'] = [];
+        ActivityTechs['ITCR'] = [];
+        $.each(techs, function (id, obj) {
+            if (obj.INCR.length != 0 ) {
+                ActivityTechs['INCR'].push(obj)
+            }
+            if ( obj.ITCR.length != 0) {
+                ActivityTechs['ITCR'].push(obj)
+            }
+        });
+        return ActivityTechs;
+    }
+
+    static inputCapComms(genData){
+        let ActivityComms = {};
+        ActivityComms['INCR'] = {};
+        ActivityComms['ITCR'] = {};
+        let techs = genData['osy-tech'];
+        let comms = genData['osy-comm'];
+
+        $.each(techs, function (idT, objT) {
+            if (objT.INCR.length != 0 ) {
+                ActivityComms['INCR'][objT.TechId] = [];
+                $.each(comms, function (idC, objC) {
+                    if(objT.INCR.includes(objC.CommId)){
+                        ActivityComms['INCR'][objT.TechId].push(objC);
+                    }
+                });
+            }
+            if ( objT.ITCR.length != 0) {
+                ActivityComms['ITCR'][objT.TechId] = [];
+                $.each(comms, function (idC, objC) {
+                    if(objT.ITCR.includes(objC.CommId)){
+                      
+                        ActivityComms['ITCR'][objT.TechId].push(objC);
+                    }
+                });
+            }
+        });
+        return ActivityComms;
+    }
+
+    static emissionTechs(techs){
         let ActivityEmis = []
         $.each(techs, function (id, obj) {
             if (obj.EAR.length != 0 ) {
@@ -350,14 +395,14 @@ export class DataModel{
         return ActivityEmis;
     }
 
-    static constraintsMC(constraints){
-        let constraintsMC = []
+    static constraintsCM(constraints){
+        let constraintsCM = []
         $.each(constraints, function (id, obj) {
             if (obj.CM.length != 0 ) {
-                constraintsMC.push(obj);
+                constraintsCM.push(obj);
             }
         });
-        return constraintsMC;
+        return constraintsCM;
     }
 
     static constraintTechs(genData){
@@ -377,6 +422,106 @@ export class DataModel{
         });
         return ConstraintTechs;
     }
+    // static activityTechsComms(techs){
+    //     let ActivityTechs = {};
+    //     ActivityTechs['IAR'] = [];
+    //     ActivityTechs['OAR'] = [];
+    //     $.each(techs, function (id, obj) {
+    //         if (obj.IAR.length != 0 ) {
+    //             ActivityTechs['IAR'].push(obj)
+    //         }
+    //         if ( obj.OAR.length != 0) {
+    //             ActivityTechs['OAR'].push(obj)
+    //         }
+    //     });
+    //     return ActivityTechs;
+    // }
+
+    // static activityComms(genData){
+    //     let ActivityComms = {};
+    //     ActivityComms['IAR'] = {};
+    //     ActivityComms['OAR'] = {};
+    //     let techs = genData['osy-tech'];
+    //     let comms = genData['osy-comm'];
+
+    //     $.each(techs, function (idT, objT) {
+    //         if (objT.IAR.length != 0 ) {
+    //             ActivityComms['IAR'][objT.TechId] = [];
+    //             $.each(comms, function (idC, objC) {
+    //                 if(objT.IAR.includes(objC.CommId)){
+    //                     ActivityComms['IAR'][objT.TechId].push(objC);
+    //                 }
+    //             });
+    //         }
+    //         if ( objT.OAR.length != 0) {
+    //             ActivityComms['OAR'][objT.TechId] = [];
+    //             $.each(comms, function (idC, objC) {
+    //                 if(objT.OAR.includes(objC.CommId)){
+                      
+    //                     ActivityComms['OAR'][objT.TechId].push(objC);
+    //                 }
+    //             });
+    //         }
+    //     });
+    //     return ActivityComms;
+    // }
+
+    // static activityTechsEmis(techs){
+    //     let ActivityEmis = []
+    //     $.each(techs, function (id, obj) {
+    //         if (obj.EAR.length != 0 ) {
+    //             ActivityEmis.push(obj);
+    //         }
+    //     });
+    //     return ActivityEmis;
+    // }
+
+    // static activityEmis(genData){
+    //     let ActivityEmis = {};
+    //     ActivityEmis = {};
+    //     let techs = genData['osy-tech'];
+    //     let emis = genData['osy-emis'];
+
+    //     $.each(techs, function (idT, objT) {
+    //         if (objT.EAR.length != 0 ) {
+    //             ActivityEmis[objT.TechId] = [];
+    //             $.each(emis, function (idC, objE) {
+    //                 if(objT.EAR.includes(objE.EmisId)){
+    //                     ActivityEmis[objT.TechId].push(objE);
+    //                 }
+    //             });
+    //         }
+    //     });
+    //     return ActivityEmis;
+    // }
+
+    // static constraintsMC(constraints){
+    //     let constraintsMC = []
+    //     $.each(constraints, function (id, obj) {
+    //         if (obj.CM.length != 0 ) {
+    //             constraintsMC.push(obj);
+    //         }
+    //     });
+    //     return constraintsMC;
+    // }
+
+    // static constraintTechs(genData){
+    //     let ConstraintTechs = {};
+    //     let cons = genData['osy-constraints'];
+    //     let techs = genData['osy-tech'];
+
+    //     $.each(cons, function (id, con) {
+    //         if (con.CM.length != 0 ) {
+    //             ConstraintTechs[con.ConId] = [];
+    //             $.each(techs, function (idT, obj) {
+    //                 if(con.CM.includes(obj.TechId)){
+    //                     ConstraintTechs[con.ConId].push(obj);
+    //                 }
+    //             });
+    //         }
+    //     });
+    //     return ConstraintTechs;
+    // }
     ////////////////////////////////////////////////////////JSON data structures
     static R(Rdata){
         let R = {};

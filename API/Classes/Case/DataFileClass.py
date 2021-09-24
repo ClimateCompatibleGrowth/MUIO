@@ -85,7 +85,7 @@ class DataFile(Osemosys):
     def gen_RYCn(self):
         rycn = self.RYCn(File.readFile(self.rycnPath))
         for id, param in self.PARAM['RYCn'].items():
-            self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':','\n'))
+            self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
             self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
             self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
             for conId in self.conIDs:
@@ -207,15 +207,15 @@ class DataFile(Osemosys):
         rytc = self.RYTC(File.readFile(self.rytcPath))
         for id, param in self.PARAM['RYTC'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
-            for activityTechId in self.activityTechIDs[id]:
-                for activityCommId in self.activityCommIDs[id][activityTechId]:
-                    self.f.write('{}{}'.format('[RE1,'+ self.techMap[activityTechId] + ','+ self.commMap[activityCommId] +',*,*]:', '\n'))
+            for inputCapTechId in self.inputCapTechIds[id]:
+                for inputCapCommId in self.inputCapCommIds[id][inputCapTechId]:
+                    self.f.write('{}{}'.format('[RE1,'+ self.techMap[inputCapTechId] + ','+ self.commMap[inputCapCommId] +',*,*]:', '\n'))
                     self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                     rytcString = ''
                     for yearId in self.yearIDs:
                         for sc in self.scOrder:
-                            if rytc[id][sc['ScId']][yearId][activityTechId][activityCommId] is not None and sc['Active'] == True:
-                                tmp = rytc[id][sc['ScId']][yearId][activityTechId][activityCommId]
+                            if rytc[id][sc['ScId']][yearId][inputCapTechId][inputCapCommId] is not None and sc['Active'] == True:
+                                tmp = rytc[id][sc['ScId']][yearId][inputCapTechId][inputCapCommId]
                         rytcString += '{} '.format(tmp)
                     self.f.write('{} {}{}'.format(1, rytcString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
@@ -334,6 +334,9 @@ class DataFile(Osemosys):
 
             self.activityTechIDs = self.getActivityTechIds()
             self.activityCommIDs = self.getActivityCommIds()
+
+            self.inputCapTechIds = self.getInputCapTechIds()
+            self.inputCapCommIds = self.getInputCapCommIds()
 
             self.emissionTechIDs = self.getActivityEmissionTechIds()
             self.activityEmissionIDs = self.getActivityEmisionIds()

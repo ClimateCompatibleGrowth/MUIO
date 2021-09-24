@@ -20,8 +20,8 @@ export class Model {
             let RYTCgrid = DataModel.RYTCgrid(genData, RYTCdata);
             let RYTCchart = DataModel.RYTCchart(genData, RYTCdata);
             let techIds = DataModel.TechId(genData);
-            let ActivityTechs = DataModel.activityTechsComms(techs);
-            let ActivityComms = DataModel.activityComms(genData);
+            let ActivityTechs = DataModel.inputCapTechs(techs);
+            let ActivityComms = DataModel.inputCapComms(genData);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
             console.log('ActivityTechs ', ActivityTechs)

@@ -20,7 +20,7 @@ export class Model {
             let RYTCnchart = DataModel.RYTCnchart(genData, RYTCndata);
             let techIds = DataModel.TechId(genData);
             let conId = DataModel.ConId(genData);
-            let constraintsMC = DataModel.constraintsMC(constraints);
+            let constraintsMC = DataModel.constraintsCM(constraints);
             let ConstraintTechs = DataModel.constraintTechs(genData)
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 

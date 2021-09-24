@@ -12,7 +12,8 @@
                 "TEC_idpj2": 31.54,
                 "TEC_7ffry": 31.54,
                 "TEC_k9e67": 31.54,
-                "TEC_jtz6a": 31.54
+                "TEC_jtz6a": 31.54,
+                "TEC_bftaa": 0
             }
         ]
     },
@@ -29,7 +30,8 @@
                 "TEC_idpj2": 20,
                 "TEC_7ffry": 20,
                 "TEC_k9e67": 100,
-                "TEC_jtz6a": 80
+                "TEC_jtz6a": 80,
+                "TEC_bftaa": 1
             }
         ]
     },
@@ -46,7 +48,8 @@
                 "TEC_idpj2": 0,
                 "TEC_7ffry": 0,
                 "TEC_k9e67": 0,
-                "TEC_jtz6a": 0
+                "TEC_jtz6a": 0,
+                "TEC_bftaa": 0
             }
         ]
     },
@@ -63,7 +66,8 @@
                 "TEC_idpj2": 999999,
                 "TEC_7ffry": 999999,
                 "TEC_k9e67": 999999,
-                "TEC_jtz6a": 999999
+                "TEC_jtz6a": 999999,
+                "TEC_bftaa": 999999
             }
         ]
     }

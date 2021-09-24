@@ -71,6 +71,28 @@ export class Sidebar {
                                 </li>`;
                                 $('#dynamicRoutes').append(res);
                             }
+                            if ( obj.id == 'INCR' && model.menuCondition.INCR ) {
+                                let res = `
+                                <li  class="">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
+                
+                                    ${obj.value}
+                                    <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
+                                    </a>
+                                </li>`;
+                                $('#dynamicRoutes').append(res);
+                            }
+                            if ( obj.id == 'ITCR' && model.menuCondition.ITCR ) {
+                                let res = `
+                                <li  class="">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
+                
+                                    ${obj.value}
+                                    <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
+                                    </a>
+                                </li>`;
+                                $('#dynamicRoutes').append(res);
+                            }
                             if ( obj.id == 'EAR' && model.menuCondition.EAR ) {
                                 let res = `
                                 <li  class="">

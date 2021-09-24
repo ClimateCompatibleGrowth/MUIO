@@ -20,7 +20,7 @@ export class Model {
             let RYTEMgrid = DataModel.RYTEMgrid(genData, RYTEMdata, PARAMETERS);
             let RYTEMchart = DataModel.RYTEMchart(genData, RYTEMdata);
             let techIds = DataModel.TechId(genData);
-            let ActivityTechsEmis = DataModel.activityTechsEmis(techs);
+            let ActivityTechsEmis = DataModel.emissionTechs(techs);
             let ActivityEmis = DataModel.activityEmis(genData);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let mods = DataModel.Mods(genData);  

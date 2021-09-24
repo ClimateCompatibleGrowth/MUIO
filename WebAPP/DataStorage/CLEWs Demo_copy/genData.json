@@ -199,6 +199,27 @@
             ],
             "Tech": "PWRHYD",
             "TechId": "TEC_jtz6a"
+        },
+        {
+            "TechId": "TEC_bftaa",
+            "Tech": "TEC_bftaa",
+            "Desc": "Default technology",
+            "CapUnitId": "MW",
+            "ActUnitId": "PJ",
+            "IAR": [
+                "COM_9voks",
+                "COM_yr5og"
+            ],
+            "OAR": [
+                "COM_1ygq2"
+            ],
+            "INCR": [
+                "COM_9voks"
+            ],
+            "ITCR": [
+                "COM_9voks"
+            ],
+            "EAR": []
         }
     ],
     "osy-comm": [

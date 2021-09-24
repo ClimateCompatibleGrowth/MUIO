@@ -8,17 +8,21 @@ export class Model {
         let constraints = genData['osy-constraints'];
 
         let menuCondition = {}
-        let menuGroup = ['IAR', 'OAR', 'EAR', 'CM'];
+        let menuGroup = ['IAR', 'OAR', 'EAR', 'INCR', 'ITCR', 'CM'];
         menuCondition.IAR = false;
         menuCondition.OAR = false;
+        menuCondition.INCR = false;
+        menuCondition.ITCR = false;
         menuCondition.EAR = false;
         menuCondition.CM = false;
 
 
         $.each(techs, function (id, obj) {
-          if(obj.IAR.length != 0 && obj.OAR.length != 0 && obj.EAR.length != 0){
+          if(obj.IAR.length != 0 && obj.OAR.length != 0 && obj.EAR.length != 0 && obj.INCR.length != 0 && obj.ITCR.length != 0){
             menuCondition.IAR = true;
             menuCondition.OAR = true;
+            menuCondition.INCR = true;
+            menuCondition.ITCR = true;
             menuCondition.EAR = true;
             return false;
           }
@@ -27,6 +31,12 @@ export class Model {
           }
           if(obj.OAR.length != 0 && obj.OAR != undefined){
             menuCondition.OAR = true;
+          }
+          if(obj.INCR.length != 0 && obj.INCR != undefined){
+            menuCondition.INCR = true;
+          }
+          if(obj.ITCR.length != 0 && obj.ITCR != undefined){
+            menuCondition.ITCR = true;
           }
           if(obj.EAR.length != 0 && obj.EAR != undefined){
             menuCondition.EAR = true;

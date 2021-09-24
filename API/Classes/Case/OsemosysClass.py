@@ -157,6 +157,37 @@ class Osemosys():
                     techIds[param['id']].append(tech['TechId'])
         return techIds
 
+    #output actTech['IAR']['Tech_1'] = ['Comm_1', 'Comm_2'...]
+    def getActivityCommIds(self):
+        commIds = {}
+        for param in self.PARAMETERS['RYTCM']:
+            commIds[param['id']] = {}
+            for tech in self.genData["osy-tech"]:
+                if tech[param['id']]: 
+                    commIds[param['id']][tech['TechId']] = tech[param['id']]
+        return commIds
+
+
+    #output actTech['INCR'] = ['Tech_1', 'Tech_2'...]
+    def getInputCapTechIds(self):
+        techIds = {}
+        for param in self.PARAMETERS['RYTC']:
+            techIds[param['id']] = []
+            for tech in self.genData["osy-tech"]:
+                if tech[param['id']]: 
+                    techIds[param['id']].append(tech['TechId'])
+        return techIds
+
+    #output actTech['INCR']['Tech_1'] = ['Comm_1', 'Comm_2'...]
+    def getInputCapCommIds(self):
+        commIds = {}
+        for param in self.PARAMETERS['RYTC']:
+            commIds[param['id']] = {}
+            for tech in self.genData["osy-tech"]:
+                if tech[param['id']]: 
+                    commIds[param['id']][tech['TechId']] = tech[param['id']]
+        return commIds
+
     def getConstraintTechIds(self):
         techIds = {}
         for param in self.PARAMETERS['RYTCn']:
@@ -167,16 +198,6 @@ class Osemosys():
                     for tech in con[param['id']]:
                         techIds[param['id']][con['ConId']].append(tech)
         return techIds
-
-    #output actTech['IAR']['Tech_1'] = ['Comm_1', 'Comm_2'...]
-    def getActivityCommIds(self):
-        commIds = {}
-        for param in self.PARAMETERS['RYTCM']:
-            commIds[param['id']] = {}
-            for tech in self.genData["osy-tech"]:
-                if tech[param['id']]: 
-                    commIds[param['id']][tech['TechId']] = tech[param['id']]
-        return commIds
 
     def getActivityEmissionTechIds(self):
         techIds = {}

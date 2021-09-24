@@ -34,7 +34,11 @@ export class Grid {
         }.bind(this);
 
         var ddlComms = function(row, value, editor) {
-            let data = this.daComms.records;
+            // let data = this.daComms.records;
+            let data = commodities;
+            // console.log('commodities ',commodities)
+            // console.log('daComms ddlComms ', this.daComms)
+            // console.log('daComms ddlComms.records ', this.daComms.records)
             console.log('data ', data)
             editor.jqxDropDownList({ source: this.daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true,
                 renderer: function (index, label, value) {
@@ -48,8 +52,15 @@ export class Grid {
             });
         }.bind(this);
 
+
+        // var ddlComms = function(row, value, editor) {
+        //     console.log('daComms ddlComms ', this.daComms)
+        //     editor.jqxDropDownList({ source: this.daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true });
+        // }.bind(this);
+
         var ddlEmis = function(row, value, editor) {
-            let data = this.daEmi.records;
+            // let data = this.daEmi.records;
+            let data = emissions;
             editor.jqxDropDownList({ source: this.daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true,
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
@@ -57,14 +68,14 @@ export class Grid {
                     // $(`#${tootltipValue}`).jqxTooltip({ content: tooltipContent });
                     // $(`#${tootltipValue}`).jqxTooltip('open', 15, 15);
                     return tooltipContent
-                }
+                }.bind(this)
             });
         }.bind(this);
 
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
             // set the editor's current value. The callback is called each time the editor is displayed.
-            console.log('editor ', editor)
-            console.log('cellvalue ', cellvalue)
+            // console.log('editor ', editor)
+            // console.log('cellvalue ', cellvalue)
             var items = editor.jqxDropDownList('getItems');
             editor.jqxDropDownList('uncheckAll');
             if(Array.isArray(cellvalue)){
@@ -152,6 +163,8 @@ export class Grid {
                 'IAR': 'Input  <br />Activity Ratio',
                 'OAR': 'Output  <br />Activity Ratio',
                 'EAR': 'Emission  <br />Activity Ratio',
+                'INCR': 'Input To New <br />Capacity Ratio',
+                'ITCR': 'Input To Total <br />Capacity Ratio',
                 'TMPAL': 'Total Technology Model <br />Period Activity Lower Limit',
                 'TMPAU': 'Total Technology Model <br />Period Activity Upper Limit',
                 'CAU': 'Capacity To Activity <br />Unit',
@@ -525,7 +538,8 @@ export class Grid {
         
         var ddlTechs = function(row, value, editor) {
             //console.log('editor ', editor)
-            let data = this.daTech.records;
+            // let data = this.daTech.records;
+            let data = techs;
             editor.jqxDropDownList({ source: this.daTech, displayMember: 'Tech', valueMember: 'TechId', checkboxes: true,
                 renderer: function (index, label, value) {
                     let tootltipValue = label;

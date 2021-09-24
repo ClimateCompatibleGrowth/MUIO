@@ -38,6 +38,7 @@ export default class RYTC {
         })
         .then(data => {
             let [casename, genData, PARAMETERS, RYTCdata, cases] = data;
+            console.log(RYTCdata, param)
             if (RYTCdata[param]['SC_0'].length == 0){
                 let er = {
                     "message": 'There is no activity defined!',
