@@ -214,6 +214,9 @@
                         "var": "milion"
                     },
                     {
+                        "var": "multiply"
+                    },
+                    {
                         "var": "Currency"
                     },
                     {

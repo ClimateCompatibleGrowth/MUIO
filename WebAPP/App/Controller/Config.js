@@ -109,7 +109,7 @@ export default class Config {
             })
         });
 
-
+        //update rule button
         $(document).undelegate(".updateRule","click");
         $(document).delegate(".updateRule","click",function(e){
             e.preventDefault();
@@ -125,11 +125,33 @@ export default class Config {
                 </h6>
                 `
             );
-            let unitRule = model.paramById[groupId][paramId]['unitRule'];
+            $('#ruleResult').html(
+                `<h6 id="paramId" data-paramId ="${paramId}" style="display: inline-block;">
+                    <i class="fa-fw fa fa-tags"></i><strong>Result fomrula for</strong>
+                    ${model.paramNames[groupId][paramId]}
+                    <small id="groupId" data-groupId="${groupId}"> [${model.GROUPNAMES[groupId]}]</small>
+                </h6>
+                `
+            );
+            console.log('id ', id)
+            console.log('model.gridData init ', model.gridData)
+            let unitRule = model.gridData[id]['unitRule'];
+            // let unitRule = model.paramById[groupId][paramId]['unitRule'];
             Html.renderUnitRules(unitRule, model.unitsDef);    
+
+            let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
+
+            let arrayRule ='';
+            $.each(rule, function (id, rule) {
+                console.log( UNITDEFINITION[rule]['name'])
+                arrayRule += UNITDEFINITION[rule]['name'];
+            });
+            $('#ruleFormula').html(`<p>${arrayRule}</p>`);
+            $('#ruleFormula').show();
                    
         });
 
+        //modal save rule
         $("#btnSaveRule").off('click');
         $("#btnSaveRule").on('click', function (event) {
             let rule = $("#osy-unitRuleSort2").jqxSortable("toArray")
@@ -156,6 +178,7 @@ export default class Config {
 
             let $divGrid = $('#osy-gridParam');
             model.srcGrid.localdata = model.gridData;
+            console.log('model.gridData ', model.gridData)
             $divGrid.jqxGrid('updatebounddata');
             $('#osy-unitRule').modal('toggle');
             Message.smallBoxInfo('Rule updated for ', model.paramNames[groupId][paramId], 3000); 
@@ -164,45 +187,35 @@ export default class Config {
         $('#osy-unitRuleSort2').on('stop', function () { 
             console.log('stop')
             let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
-            let paramId = $('#paramId').attr("data-paramId");
-            let groupId = $('#groupId').attr("data-groupId") 
+            // let paramId = $('#paramId').attr("data-paramId");
+            // let groupId = $('#groupId').attr("data-groupId") 
 
-            console.log(paramId, groupId)
+            //console.log(paramId, groupId)
 
             let arrayRule ='';
             $.each(rule, function (id, rule) {
                 console.log( UNITDEFINITION[rule]['name'])
                 arrayRule += UNITDEFINITION[rule]['name'];
             });
-            // $('#ruleFormula').html(
-            //     `
-            //     <p>${arrayRule}</p>
-            //     <small>Result fomrula for ${model.paramNames[groupId][paramId]} [${model.GROUPNAMES[groupId]}]</small>
-            //     `
-            // );
-            // $('#ruleFormula').show();
+            $('#ruleFormula').html(`<p>${arrayRule}</p>`);
+            $('#ruleFormula').show();
          }); 
 
          $('#osy-unitRuleSort2').on('receive', function () { 
             console.log('stop')
             let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
-            let paramId = $('#paramId').attr("data-paramId");
-            let groupId = $('#groupId').attr("data-groupId") 
+            // let paramId = $('#paramId').attr("data-paramId");
+            // let groupId = $('#groupId').attr("data-groupId") 
 
-            console.log(paramId, groupId)
+            // console.log(paramId, groupId)
 
             let arrayRule ='';
             $.each(rule, function (id, rule) {
                 console.log( UNITDEFINITION[rule]['name'])
                 arrayRule += UNITDEFINITION[rule]['name'];
             });
-            // $('#ruleFormula').html(
-            //     `
-            //     <p>${arrayRule}</p>
-            //     <small>Result fomrula for ${model.paramById[paramId]} [${model.GROUPNAMES[groupId]}]</small>
-            //     `
-            // );
-            // $('#ruleFormula').show();
+            $('#ruleFormula').html(`<p>${arrayRule}</p>`);
+            $('#ruleFormula').show();
          }); 
 
          $('#osy-unitRuleSort2').on('remove', function () { 

@@ -16,11 +16,13 @@
                 "EMI_0"
             ],
             "IAR": [],
-            "OAR": [
+            "INCR": [
                 "COM_0"
             ],
-            "INCR": [],
             "ITCR": [
+                "COM_0"
+            ],
+            "OAR": [
                 "COM_0"
             ],
             "Tech": "MINCOA",
@@ -34,12 +36,14 @@
                 "EMI_0"
             ],
             "IAR": [],
-            "OAR": [
-                "COM_ogrgn"
+            "INCR": [
+                "COM_0"
             ],
-            "INCR": [],
             "ITCR": [
                 "COM_0"
+            ],
+            "OAR": [
+                "COM_ogrgn"
             ],
             "Tech": "MINGAS",
             "TechId": "TEC_lyn0w"
@@ -52,12 +56,10 @@
             "IAR": [
                 "COM_0"
             ],
+            "INCR": [],
+            "ITCR": [],
             "OAR": [
                 "COM_ncvx3"
-            ],
-            "INCR": [],
-            "ITCR": [
-                "COM_0"
             ],
             "Tech": "PWRCOA",
             "TechId": "TEC_axrko"
@@ -70,12 +72,16 @@
             "IAR": [
                 "COM_ogrgn"
             ],
-            "OAR": [
+            "INCR": [
+                "COM_0",
+                "COM_ogrgn"
+            ],
+            "ITCR": [
+                "COM_0",
                 "COM_ncvx3"
             ],
-            "INCR": [],
-            "ITCR": [
-                "COM_0"
+            "OAR": [
+                "COM_ncvx3"
             ],
             "Tech": "PWRGAS",
             "TechId": "TEC_7mbw5"
@@ -88,12 +94,10 @@
             "IAR": [
                 "COM_ncvx3"
             ],
+            "INCR": [],
+            "ITCR": [],
             "OAR": [
                 "COM_1ygq2"
-            ],
-            "INCR": [],
-            "ITCR": [
-                "COM_0"
             ],
             "Tech": "PWRTRN",
             "TechId": "TEC_2wkvq"
@@ -104,12 +108,17 @@
             "Desc": "Solar energy resourse",
             "EAR": [],
             "IAR": [],
+            "INCR": [
+                "COM_77o3g",
+                "COM_9voks",
+                "COM_yr5og"
+            ],
+            "ITCR": [
+                "COM_0",
+                "COM_1ygq2"
+            ],
             "OAR": [
                 "COM_77o3g"
-            ],
-            "INCR": [],
-            "ITCR": [
-                "COM_0"
             ],
             "Tech": "MINSOL",
             "TechId": "TEC_nxyx4"
@@ -120,12 +129,10 @@
             "Desc": "Wind energy resource",
             "EAR": [],
             "IAR": [],
+            "INCR": [],
+            "ITCR": [],
             "OAR": [
                 "COM_9voks"
-            ],
-            "INCR": [],
-            "ITCR": [
-                "COM_0"
             ],
             "Tech": "MINWND",
             "TechId": "TEC_n5x9j"
@@ -138,12 +145,10 @@
             "IAR": [
                 "COM_77o3g"
             ],
+            "INCR": [],
+            "ITCR": [],
             "OAR": [
                 "COM_1ygq2"
-            ],
-            "INCR": [],
-            "ITCR": [
-                "COM_0"
             ],
             "Tech": "PWRSOL",
             "TechId": "TEC_idpj2"
@@ -156,12 +161,10 @@
             "IAR": [
                 "COM_9voks"
             ],
+            "INCR": [],
+            "ITCR": [],
             "OAR": [
                 "COM_ncvx3"
-            ],
-            "INCR": [],
-            "ITCR": [
-                "COM_0"
             ],
             "Tech": "PWRWND",
             "TechId": "TEC_7ffry"
@@ -172,12 +175,10 @@
             "Desc": "Hydropower resource",
             "EAR": [],
             "IAR": [],
+            "INCR": [],
+            "ITCR": [],
             "OAR": [
                 "COM_yr5og"
-            ],
-            "INCR": [],
-            "ITCR": [
-                "COM_0"
             ],
             "Tech": "MINHYD",
             "TechId": "TEC_k9e67"
@@ -190,12 +191,10 @@
             "IAR": [
                 "COM_yr5og"
             ],
+            "INCR": [],
+            "ITCR": [],
             "OAR": [
                 "COM_ncvx3"
-            ],
-            "INCR": [],
-            "ITCR": [
-                "COM_0"
             ],
             "Tech": "PWRHYD",
             "TechId": "TEC_jtz6a"

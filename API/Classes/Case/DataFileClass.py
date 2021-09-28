@@ -95,7 +95,7 @@ class DataFile(Osemosys):
                         if rycn[id][sc['ScId']][yearId][conId] is not None and sc['Active'] == True:
                             tmp = rycn[id][sc['ScId']][yearId][conId]
                     rycnString += '{} '.format(tmp)
-                self.f.write('{} {}{}'.format(conId, rycnString, '\n'))
+                self.f.write('{} {}{}'.format(self.conMap[conId], rycnString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
         self.f.write('{}{}'.format('', '\n'))
 
@@ -209,7 +209,7 @@ class DataFile(Osemosys):
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
             for inputCapTechId in self.inputCapTechIds[id]:
                 for inputCapCommId in self.inputCapCommIds[id][inputCapTechId]:
-                    self.f.write('{}{}'.format('[RE1,'+ self.techMap[inputCapTechId] + ','+ self.commMap[inputCapCommId] +',*,*]:', '\n'))
+                    self.f.write('{}{}'.format('[RE1,'+ self.techMap[inputCapTechId] + ',*,*]:', '\n'))
                     self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                     rytcString = ''
                     for yearId in self.yearIDs:
@@ -217,7 +217,7 @@ class DataFile(Osemosys):
                             if rytc[id][sc['ScId']][yearId][inputCapTechId][inputCapCommId] is not None and sc['Active'] == True:
                                 tmp = rytc[id][sc['ScId']][yearId][inputCapTechId][inputCapCommId]
                         rytcString += '{} '.format(tmp)
-                    self.f.write('{} {}{}'.format(1, rytcString, '\n'))
+                    self.f.write('{} {}{}'.format(self.commMap[inputCapCommId], rytcString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
         self.f.write('{}{}'.format('', '\n'))
 
