@@ -39,7 +39,8 @@ class Osemosys():
 
         self.glpkFolder = Path(Config.SOLVERs_FOLDER,'glpk-4.65', 'w64')
         self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
-        self.resPath = Path(Config.DATA_STORAGE,case,'res', 'csv')
+        # self.resPath = Path(Config.DATA_STORAGE,case,'res', 'csv')
+        self.resPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', case, 'res', 'csv')
 
         d = {}
         for k, l in self.PARAMETERS.items():
@@ -193,9 +194,11 @@ class Osemosys():
         for param in self.PARAMETERS['RYTCn']:
             techIds[param['id']] = {}
             for con in self.genData["osy-constraints"]:
-                if con[param['id']]: 
+                # if con[param['id']]: 
+                if con['CM']: 
                     techIds[param['id']][con['ConId']] = []
-                    for tech in con[param['id']]:
+                    # for tech in con[param['id']]:
+                    for tech in con['CM']:
                         techIds[param['id']][con['ConId']].append(tech)
         return techIds
 

@@ -80,14 +80,15 @@ export class Model {
 
             }.bind(this);
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass, enabletooltips:true,}); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Technology', datafield: 'Tech',pinned:true, editable: false, align: 'left',   cellclassname: cellclass, enabletooltips:true,});
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',  cellclassname: cellclass, enabletooltips:true,}); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Technology', datafield: 'Tech',pinned:true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips:true,});
             columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type:'number' });
                 columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
                     groupable:false,
+                    sortable: false,
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,

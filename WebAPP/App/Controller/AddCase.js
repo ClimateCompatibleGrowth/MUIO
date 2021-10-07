@@ -57,6 +57,7 @@ export default class AddCase {
             $('#osy-newCase').hide();
         }    
         loadScript("References/smartadmin/js/plugin/ion-slider/ion.rangeSlider.min.js", SmartAdmin.rangeSlider.bind(null, model.years));
+        pageSetUp();
         this.initEvents(model);
     }
 

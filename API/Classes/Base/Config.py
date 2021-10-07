@@ -16,7 +16,7 @@ S3_BUCKET_LOCAL = Path("WebAPP", 'S3BucketLocal')
 CLASS_FOLDER = Path("WebAPP", 'Classes')
 EXTRACT_FOLDER = Path("")
 SOLVERs_FOLDER = Path('API', 'SOLVERs')
-HEROKU_DEPLOY = 1
+HEROKU_DEPLOY = 0
 AWS_STORAGE = 0
 AWS_SYNC = 0
 
@@ -74,10 +74,10 @@ GEN_F ={
     "RT"   : 'gen_RT',     
     "RY"   : 'gen_RY',     
     "RE"   : 'gen_RE', 
-    "RYCn" : 'gen_RYCn',    
+    "RYCn" : 'gen_RYCn', 
+    "RYTCn": 'gen_RYTCn',   
     "RYTs" : 'gen_RYTs',     
     "RYT"  : 'gen_RYT',  
-    "RYTCn": 'gen_RYTCn',    
     "RYTM" : 'gen_RYTM',     
     "RYC"  : 'gen_RYC',     
     "RYE"  : 'gen_RYE',     

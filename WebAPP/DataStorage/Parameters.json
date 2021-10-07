@@ -150,7 +150,40 @@
     "RYCn": [
         {
             "id": "CC",
-            "value": "User Contraint Constant",
+            "value": "UDC Constant",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": []
+            }
+        }
+    ],
+    "RYTCn": [
+
+        {
+            "id": "CCM",
+            "value": "UDC Multiplier Total Capacity",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": []
+            }
+        },
+        {
+            "id": "CNCM",
+            "value": "UDC Multiplier New Capacity",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": []
+            }
+        },
+        {
+            "id": "CAM",
+            "value": "UDC Multiplier Activity",
             "default": 0,
             "enable": true,
             "menu": 1,
@@ -185,7 +218,7 @@
         {
             "id": "AF",
             "value": "Availability Factor",
-            "default": 1,
+            "default": 1.01,
             "enable": true,
             "menu": 1,
             "unitRule": {
@@ -384,18 +417,6 @@
             }
         }
     ],
-    "RYTCn": [
-        {
-            "id": "CM",
-            "value": "User Constraint Multiplier",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": []
-            }
-        }
-    ],
     "RYTM": [
         {
             "id": "VC",
@@ -471,100 +492,6 @@
         {
             "id": "TAIML",
             "value": "Technology Activity Increase By Mode Limit",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "percent"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "hundert"
-                    }
-                ]
-            }
-        }
-    ],
-    "RYTTs": [
-        {
-            "id": "CF",
-            "value": "Capacity Factor",
-            "default": 1,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "percent"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "hundert"
-                    }
-                ]
-            }
-        }
-    ],
-    "RYC": [
-        {
-            "id": "AAD",
-            "value": "Accumulated Annual Demand",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "CommUnit"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "SAD",
-            "value": "Specified Annual Demand",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "CommUnit"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "RTF",
-            "value": "RE Tag Fuel",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": []
-            }
-        },
-        {
-            "id": "RMTF",
-            "value": "Reserve Margin Tag Fuel",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": []
-            }
-        }
-    ],
-    "RYCTs": [
-        {
-            "id": "SDP",
-            "value": "Specified Demand Profile",
             "default": 0,
             "enable": true,
             "menu": 1,
@@ -662,6 +589,100 @@
                     },
                     {
                         "var": "ActUnitId"
+                    }
+                ]
+            }
+        }
+    ],
+    "RYTTs": [
+        {
+            "id": "CF",
+            "value": "Capacity Factor",
+            "default": 1,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
+                    }
+                ]
+            }
+        }
+    ],
+    "RYC": [
+        {
+            "id": "AAD",
+            "value": "Accumulated Annual Demand",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "CommUnit"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "SAD",
+            "value": "Specified Annual Demand",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "CommUnit"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "RTF",
+            "value": "RE Tag Fuel",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": []
+            }
+        },
+        {
+            "id": "RMTF",
+            "value": "Reserve Margin Tag Fuel",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": []
+            }
+        }
+    ],
+    "RYCTs": [
+        {
+            "id": "SDP",
+            "value": "Specified Demand Profile",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
                     }
                 ]
             }

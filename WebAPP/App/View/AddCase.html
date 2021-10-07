@@ -59,7 +59,342 @@
     </div>
 </div>
 
-<form id="osy-caseForm">
+<div id="osy-caseForm">
+    <section id="widget-grid" class="">
+        <div class="row">
+			
+			<article class="col-sm-12 col-md-12 col-lg-12">
+				<div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+					<header>
+						<span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+						<h2> General case data </h2>
+					</header>
+					<div>
+						<div class="jarviswidget-editbox"></div>
+						<div class="widget-body no-padding">
+                                    <div class="smart-form">
+                        
+                                        <fieldset>
+                                            <div class="row">
+                                                <section class="col col-2">
+                                                    <label class="label">Case study name</label>
+                                                    <label class="input">
+                                                        <input type="text" placeholder="casename" name="osy-casename"
+                                                            id="osy-casename">
+                                                    </label>
+                                                    <div class="note">
+                                                        <strong>!@#$%^&*()</strong> are not allowed in case name!
+                                                    </div>
+                                                </section>
+                                                <section class="col col-2">
+                                                    <label style="margin-top:7px">Select a date</label>
+                                                    <div class="input-group">
+                                                        <input type="text" name="osy-date" id="osy-date"
+                                                            placeholder="Select a date" class="form-control datepicker"
+                                                            data-dateformat="dd/mm/yy">
+                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                </section>
+                                                <section class="col col-4">
+                                                    <label class="label">Case study description</label>
+                                                    <label class="textarea">
+                                                        <textarea rows="2" class="custom-scroll" name="osy-desc"
+                                                            id="osy-desc"></textarea>
+                                                    </label>
+                                                    <div class="note">
+                                                        <strong>Note:</strong> description is not required field.
+                                                    </div>
+                                                </section>
+                                                <section class="col col-1">
+                                                    <label class="label">Currency</label>
+                                                    <label class="select">
+                                                        <select id="osy-currency" class="input-sm" name="osy-currency"></select>
+                                                    </label>
+                                                </section>
+                                                <section class="col col-1">
+                                                    <label class="label">Number of seasons</label>
+                                                    <label class="input">
+                                                        <input type="text" placeholder="number of seasons" class="input-sm"
+                                                            name="osy-ns" id="osy-ns">
+                                                    </label>
+                                                </section>
+                                                <section class="col col-1">
+                                                    <label class="label">Day types</label>
+                                                    <label class="input">
+                                                        <input type="text" placeholder="Day types" class="input-sm"
+                                                            name="osy-dt" id="osy-dt">
+                                                    </label>
+                                                </section>
+                                                <section class="col col-1">
+                                                    <label class="label">Mode of operation</label>
+                                                    <label class="input">
+                                                        <input type="text" placeholder="Mode of operation" class="input-sm"
+                                                            name="osy-mo" id="osy-mo" value=1>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                <div>				
+							</div>
+                    </div>
+                </div>
+			</article>
+	
+            <article class="col-sm-12 col-md-4 col-lg-4">
+				<div class="jarviswidget" id="wid-id-2" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" >
+					<header>
+						<span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
+						<h2> Define simulation years </h2>
+					</header>
+					<div>
+						<div class="jarviswidget-editbox"></div>
+						<div class="widget-body no-padding">
+                            <div class="smart-form">
+                                <header>
+
+                                    <span class="widget-icon"> <i class="fa fa-check-square-o"></i> </span>
+                                    
+                                    <div class="pull-right">
+                                        <small class="pointer btn" id="osy-checkAll">
+                                            <span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
+                                            Check all
+                                        </small>
+                                        <small class="pointer btn" id="osy-uncheckAll">
+                                            <span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
+                                            Uncheck all
+                                        </small>
+                                        <small class="pointer btn" id="osy-x2">
+                                            <span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
+                                            X2
+                                        </small>
+                                        <small class="pointer btn" id="osy-x5">
+                                            <span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
+                                            X5
+                                        </small>
+                                    </div>
+                                </header>
+                                <div  class="col-md-12 col-lg-12">
+                                    <fieldset>
+                                        <section>
+                                            <input id="range-slider-1" type="text" name="osy-range" value="">
+                                        </section>
+                                        <section >
+                                            <label class="label"></label>
+                                            <div class="inline-group" id="osy-years"></div>
+                                            <div class="col-md-12 col-lg-12">
+                                                <div id="yearsselectmsg"></div>
+                                            </div>
+                                        </section>
+                                    </fieldset>
+                                </div>
+   
+                            </div>        
+                        <div>				
+                    </div>
+                </div>
+			</article>
+
+	
+            <article class="col-sm-12 col-md-8 col-lg-8">
+				<div class="jarviswidget" id="wid-id-3" 
+                    data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false"  >
+					<header>
+						<span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
+						<h2> Define model sets </h2>
+					</header>
+                  
+              
+
+                 
+
+                    <!-- widget content -->
+                    <div class="widget-body">
+                       <!-- widget div-->
+                       <div class="jarviswidget" style="margin-bottom:0px">
+                        <ul class="nav nav-tabs pull-right in">
+
+                            <li class="active">
+                                <a data-toggle="tab" href="#tabComms" id='Comms'> <i class="fa fa-lg fa-cog "></i>
+                                    <span class="hidden-mobile hidden-tablet"> Commodities 
+                                        <span class="label bg-color-orange txt-color-white" id="commCount"> 23 </span> </span> </a>
+                            </li>
+
+                            <li>
+                                <a data-toggle="tab" href="#tabEmis" id='Emiss'> <i class="fa fa-lg fa-industry "></i>
+                                    <span class="hidden-mobile hidden-tablet"> Emissions 
+                                        <span class="label  bg-color-green txt-color-white" id="emisCount"> 23 </span> </span> </a>  
+                            </li>
+                            <li >
+                                <a data-toggle="tab" href="#tabTechs" id='Techs'> <i class="fa fa-lg fa-cog "></i>
+                                    <span class="hidden-mobile hidden-tablet"> Technologies 
+                                        <span class="label  bg-color-blue txt-color-white" id="techCount"> 23 </span> </span> </a>               
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tabConstraints" id='Constraints'> <i class="fa fa-lg fa-share-alt "></i>
+                                    <span class="hidden-mobile hidden-tablet"> Constraints 
+                                        <span class="label  bg-color-purple txt-color-white" id="constraintsCount"> 23 </span> </span> </a>               
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tabScenarios" id='Scenarios'> <i class="fa fa-lg fa-line-chart red"></i>
+                                    <span class="hidden-mobile hidden-tablet"> Scenarios 
+                                        <span class="label  bg-color-red txt-color-white" id="scenariosCount"> 23 </span> </span> </a>               
+                            </li>
+
+                        </ul>
+                    </div>
+                        <div class="tab-content">
+                            <div class="tab-pane " id="tabScenarios">
+                                <div class="jarviswidget">
+                                    <div>
+                                        <div class="widget-body no-padding">
+                                            <div class="smart-form">
+                                                <header>
+                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                                    Define scenarios
+                                                    <div class="pull-right">
+                                                        <small class="pointer btn" id="osy-addScenario">
+                                                            <span class="widget-icon"> <i class="fa fa-plus"></i>
+                                                            </span>
+                                                            Add scenario
+                                                        </small>
+                                                    </div>
+                                                </header>
+                                                <fieldset>
+                                                    <section>
+                                                        <div id="osy-gridScenario"></div>
+                                                    </section>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="tabTechs">
+                                <div class="jarviswidget">
+                                    <div>
+                                        <div class="widget-body no-padding">
+                                            <div class="smart-form">
+                                                <header>
+                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                                    Define technologies
+                                                    <div class="pull-right">
+                                                        <small class="pointer btn" id="osy-addTech">
+                                                            <span class="widget-icon"> <i class="fa fa-plus"></i>
+                                                            </span>
+                                                            Add technology
+                                                        </small>
+                                                    </div>
+                                                    
+                                                </header>
+                                                <fieldset >
+                                                    <section>
+                                                        <div id="osy-gridTech"></div>
+                                                    </section>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane active" id="tabComms">
+                                <div class="jarviswidget">
+                                    <div>
+                                        <div class="widget-body no-padding">
+                                            <div class="smart-form">
+                                                <header>
+                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                                    Define commodities
+                                                    <div class="pull-right">
+                                                        <small class="pointer btn" id="osy-addComm">
+                                                            <span class="widget-icon"> <i class="fa fa-plus"></i>
+                                                            </span>
+                                                            Add commodity
+                                                        </small>
+                                                    </div>
+                                                </header>
+                                                <fieldset>
+                                                    <section>
+                                                        <div id="osy-gridComm"></div>
+                                                    </section>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabEmis">
+                                <div class="jarviswidget">
+                                    <div>
+                                        <div class="widget-body no-padding">
+                                            <div class="smart-form">
+                                                <header>
+                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                                    Define emissions
+                                                    <div class="pull-right">
+                                                        <small class="pointer btn" id="osy-addEmis">
+                                                            <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                                                            Add emission
+                                                        </small>
+                                                    </div>
+                                                </header>
+                                                <fieldset>
+                                                    <section>
+                                                        <div id="osy-gridEmis"></div>
+                                                    </section>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabConstraints">
+                                <div class="jarviswidget">
+                                    <div>
+                                        <div class="widget-body no-padding">
+                                            <div class="smart-form">
+                                                <header>
+                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                                    Define constraints
+                                                    <div class="pull-right">
+                                                        <small class="pointer btn" id="osy-addConstraint">
+                                                            <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
+                                                            Add constraint
+                                                        </small>
+                                                    </div>
+                                                </header>
+                                                <fieldset>
+                                                    <section>
+                                                        <div id="osy-gridConstraint"></div>
+                                                    </section>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>			
+                    </div>
+                </div>
+			</article>
+
+            <!--techs comms emiss-->
+            <article class="col-sm-12 col-md-8 col-lg-8">
+                <div class="jarviswidget" id="wid-id-8" data-widget-colorbutton="false" data-widget-editbutton="false"
+                    data-widget-togglebutton="false" data-widget-deletebutton="false"
+                    data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                </div>
+            </article>
+   
+        </div>
+    </section>
+
+</div>
+
+<!-- <form id="osy-caseForm">
     <div class="row">
         <div class="col-md-12">
             <article>
@@ -170,7 +505,7 @@
                                         <input id="range-slider-1" type="text" name="osy-range" value="">
                                     </section>
                                     <section>
-                                        <label class="label">Inline checkboxes</label>
+                                        <label class="label"></label>
                                         <div class="inline-group" id="osy-years"></div>
                                         <div class="col-md-12">
                                             <div id="yearsselectmsg"></div>
@@ -185,7 +520,7 @@
         </div>
         <div class="col-md-8">
 
-            <!--techs comms emiss-->
+
             <article class="col-md-12">
                 <div class="jarviswidget" id="wid-id-8" data-widget-colorbutton="false" data-widget-editbutton="false"
                     data-widget-togglebutton="false" data-widget-deletebutton="false"
@@ -223,9 +558,7 @@
 
                         </ul>
                     </header>
-                    <!-- widget div-->
-
-                    <!-- widget content -->
+      
                     <div class="widget-body">
                         <div class="tab-content">
                             <div class="tab-pane " id="tabScenarios">
@@ -364,292 +697,4 @@
             </article>
         </div>
     </div>
-</form>
-
-<!-- 
-
-<form id="osy-caseForm">
-    <div class="row">
-        <div class="col-md-4">
-            <article>
-                <div class="jarviswidget">
-                    <div>
-                        <div class="widget-body no-padding">
-                            <div class="smart-form">
-                                <header>
-                                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                                    General case data
-                                </header>
-                                <fieldset>
-                                    <div class="row">
-                                        <section class="col col-6">
-                                            <label class="label">Case study name</label>
-                                            <label class="input">
-                                                <input type="text" placeholder="casename" name="osy-casename"
-                                                    id="osy-casename">
-                                            </label>
-                                            <div class="note">
-                                                <strong>!@#$%^&*()</strong> are not allowed in case name!
-                                            </div>
-                                            <label style="margin-top:7px">Select a date</label>
-                                            <div class="input-group">
-                                                <input type="text" name="osy-date" id="osy-date"
-                                                    placeholder="Select a date" class="form-control datepicker"
-                                                    data-dateformat="dd/mm/yy">
-                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                            </div>
-                                        </section>
-                                        <section class="col col-6">
-                                            <label class="label">Case study description</label>
-                                            <label class="textarea">
-                                                <textarea rows="6" class="custom-scroll" name="osy-desc"
-                                                    id="osy-desc"></textarea>
-                                            </label>
-                                            <div class="note">
-                                                <strong>Note:</strong> description is not required field.
-                                            </div>
-                                        </section>
-                                    </div>
-                                </fieldset>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-            <article>
-                <div class="jarviswidget">
-                    <div>
-                        <div class="widget-body no-padding">
-                            <div class="smart-form">
-                                <header>
-                                    <span class="widget-icon"> <i class="fa fa-check-square-o"></i> </span>
-                                    Define simulation years
-                                    <div class="pull-right">
-                                        <small class="pointer btn" id="osy-checkAll">
-                                            <span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
-                                            Check all
-                                        </small>
-                                        <small class="pointer btn" id="osy-uncheckAll">
-                                            <span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
-                                            Uncheck all
-                                        </small>
-                                        <small class="pointer btn" id="osy-x2">
-                                            <span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
-                                            X2
-                                        </small>
-                                        <small class="pointer btn" id="osy-x5">
-                                            <span class="widget-icon"> <i class="fa fa-calendar-check-o"></i> </span>
-                                            X5
-                                        </small>
-                                    </div>
-                                </header>
-                                <fieldset>
-                                    <section>
-                                        <input id="range-slider-1" type="text" name="osy-range" value="">
-                                    </section>
-                                    <section>
-                                        <label class="label">Inline checkboxes</label>
-                                        <div class="inline-group" id="osy-years"></div>
-                                        <div class="col-md-12">
-                                            <div id="yearsselectmsg"></div>
-                                        </div>
-                                    </section>
-                                </fieldset>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        </div>
-        <div class="col-md-8">
-            <article class="col-md-12">
-                <div class="jarviswidget">
-                    <div>
-                        <div class="widget-body no-padding">
-                            <div class="smart-form">
-                                <header>
-                                    <span class="widget-icon"> <i class="fa fa-tachometer"></i> </span>
-                                    Define metrics
-                                </header>
-                                <fieldset>
-                                    <div class="row">
-                                        <section class="col col-2">
-                                            <label class="label">Currency</label>
-                                            <label class="select">
-                                                <select id="osy-currency" class="input-sm" name="osy-currency"></select>
-                                                <i></i> </label>
-                                        </section>
-                                        <section class="col col-2">
-                                            <label class="label">Number of seasons</label>
-                                            <label class="input">
-                                                <input type="text" placeholder="number of seasons" class="input-sm"
-                                                    name="osy-ns" id="osy-ns">
-                                            </label>
-                                        </section>
-                                        <section class="col col-2">
-                                            <label class="label">Day types</label>
-                                            <label class="input">
-                                                <input type="text" placeholder="Depreciation method" class="input-sm"
-                                                    name="osy-dt" id="osy-dt">
-                                            </label>
-                                        </section>
-                                    </div>
-                                </fieldset>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <article class="col-md-12">
-                <div class="jarviswidget" id="wid-id-8" data-widget-colorbutton="false" data-widget-editbutton="false"
-                    data-widget-togglebutton="false" data-widget-deletebutton="false"
-                    data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
-                    <header>
-                        <h2></h2>
-                        <ul class="nav nav-tabs pull-right in">
-
-                            <li class="active">
-                                <a data-toggle="tab" href="#tabComms" id='Comms'> <i class="fa fa-lg fa-cog orange"></i>
-                                    <span class="hidden-mobile hidden-tablet"> Commodities 
-                                        <span class="label bg-color-orange txt-color-white" id="commCount"> 23 </span> </span> </a>
-                            </li>
-                            <li >
-                                <a data-toggle="tab" href="#tabTechs" id='Techs'> <i class="fa fa-lg fa-cog info"></i>
-                                    <span class="hidden-mobile hidden-tablet"> Technologies 
-                                        <span class="label  bg-color-blue txt-color-white" id="techCount"> 23 </span> </span> </a>               
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#tabEmis" id='Emiss'> <i class="fa fa-lg fa-industry success"></i>
-                                    <span class="hidden-mobile hidden-tablet"> Emissions 
-                                        <span class="label  bg-color-green txt-color-white" id="emisCount"> 23 </span> </span> </a>  
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#tabScenarios" id='Scenarios'> <i class="fa fa-lg fa-line-chart danger"></i>
-                                    <span class="hidden-mobile hidden-tablet"> Scenarios 
-                                        <span class="label  bg-color-red txt-color-white" id="scenariosCount"> 23 </span> </span> </a>               
-                            </li>
-                        </ul>
-                    </header>
-                    <div class="widget-body">
-                        <div class="tab-content">
-                            <div class="tab-pane " id="tabScenarios">
-                                <div class="jarviswidget">
-                                    <div>
-                                        <div class="widget-body no-padding">
-                                            <div class="smart-form">
-                                                <header>
-                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                                    Define scenarios
-                                                    <div class="pull-right">
-                                                        <small class="pointer btn" id="osy-addScenario">
-                                                            <span class="widget-icon"> <i class="fa fa-plus"></i>
-                                                            </span>
-                                                            Add scenario
-                                                        </small>
-                                                    </div>
-                                                </header>
-                                                <fieldset>
-                                                    <section>
-                                                        <div id="osy-gridScenario"></div>
-                                                    </section>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane " id="tabTechs">
-                                <div class="jarviswidget">
-                                    <div>
-                                        <div class="widget-body no-padding">
-                                            <div class="smart-form">
-                                                <header>
-                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                                    Define technologies
-                                                    <div class="pull-right">
-                                                        <small class="pointer btn" id="osy-addTech">
-                                                            <span class="widget-icon"> <i class="fa fa-plus"></i>
-                                                            </span>
-                                                            Add technology
-                                                        </small>
-                                                    </div>
-                                                    
-                                                </header>
-                                                <fieldset >
-                                                    <section>
-                                                        <div id="osy-gridTech"></div>
-                                                    </section>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="tab-pane active" id="tabComms">
-                                <div class="jarviswidget">
-                                    <div>
-                                        <div class="widget-body no-padding">
-                                            <div class="smart-form">
-                                                <header>
-                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                                    Define commodities
-                                                    <div class="pull-right">
-                                                        <small class="pointer btn" id="osy-addComm">
-                                                            <span class="widget-icon"> <i class="fa fa-plus"></i>
-                                                            </span>
-                                                            Add commodity
-                                                        </small>
-                                                    </div>
-                                                </header>
-                                                <fieldset>
-                                                    <section>
-                                                        <div id="osy-gridComm"></div>
-                                                    </section>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabEmis">
-                                <div class="jarviswidget">
-                                    <div>
-                                        <div class="widget-body no-padding">
-                                            <div class="smart-form">
-                                                <header>
-                                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                                    Define emissions
-                                                    <div class="pull-right">
-                                                        <small class="pointer btn" id="osy-addEmis">
-                                                            <span class="widget-icon"> <i class="fa fa-plus"></i> </span>
-                                                            Add emission
-                                                        </small>
-                                                    </div>
-                                                </header>
-                                                <fieldset>
-                                                    <section>
-                                                        <div id="osy-gridEmis"></div>
-                                                    </section>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </div>
-</form>  -->
-
-
-
-
-
-
-
-
+</div> -->

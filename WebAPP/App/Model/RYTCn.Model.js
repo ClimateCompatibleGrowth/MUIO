@@ -24,6 +24,8 @@ export class Model {
             let ConstraintTechs = DataModel.constraintTechs(genData)
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
+            console.log(RYTCndata, group, param)
+
             // console.log('RYTCndata model ', RYTCndata)
             // console.log('constraintsMC ', constraintsMC)
             // console.log('ConstraintTechs ', ConstraintTechs)

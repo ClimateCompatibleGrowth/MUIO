@@ -664,6 +664,7 @@ export class Grid {
             sortable: true,
             filtermode: 'excel',
             autoshowfiltericon: true,
+            enableellipsis: true,
             enablekeyboarddelete: false,
             // pageable: true,
             // pagerheight: 26,

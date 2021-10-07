@@ -11,6 +11,8 @@ class File:
             if Config.AWS_STORAGE != 1:    
                 f = open(path, mode="r")
                 data = json.loads(f.read())
+                #cirilica u json file
+                #data = json.load(open(path, encoding='utf-8-sig'))
                 f.close
             else:
                 s3 = S3()
@@ -31,8 +33,9 @@ class File:
             if Config.AWS_STORAGE != 1:
                 f = open(path, mode="w")
                 #json
-                # f.write(json.dumps(data, ensure_ascii=False, separators=(',', ':')))
-                f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
+                f.write(json.dumps(data, ensure_ascii=False, separators=(',', ':')))
+                #ascii false da zapisemo cirilicu u file
+                #f.write(json.dumps(data, ensure_ascii=True,  indent=4, sort_keys=False))
                 #usjon
                 #f.write(json.dumps(data))
                 f.close

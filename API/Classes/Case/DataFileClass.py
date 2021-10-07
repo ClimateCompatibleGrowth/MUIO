@@ -313,7 +313,6 @@ class DataFile(Osemosys):
         self.f.write('{}{}'.format(';', '\n'))
         self.f.write('{}{}'.format('', '\n'))
 
-
     def generateDatafile( self ):
         try:
             self.defaultValue = self.getParamDefaultValues()
@@ -371,10 +370,11 @@ class DataFile(Osemosys):
             for conId in self.conIDs:
                 self.cons += '{} '.format(self.conMap[conId])
 
-            #path = '"{}"'.format(self.resPath.resolve())
+            # path = '"{}"'.format(self.resPath.resolve())
+            path = '"{}"'.format(self.resPath)
 
             if Config.AWS_STORAGE != 1:
-                self.f = open(self.dataFile, mode="w")
+                self.f = open(self.dataFile, mode="w", encoding='utf-8')
             else:
                 '''ako se koristi aws S3 storage direktno'''
                 if not os.path.exists(Path(Config.S3_BUCKET_LOCAL,self.case)):
@@ -396,6 +396,11 @@ class DataFile(Osemosys):
 
             self.f.write('####################\n#Parameters#\n####################\n')
 
+            #path
+            self.f.write('{}{}'.format('#', '\n'))
+            self.f.write('{} {} {} {} {} {}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
+            self.f.write('{}{}'.format('', '\n'))
+            
             #trade route hard code
             self.f.write('{} {} {} {} {} {}'.format('param', 'TradeRoute ','default', '0', ':=','\n'))
             self.f.write('{} {}'.format(';', '\n'))
@@ -414,14 +419,16 @@ class DataFile(Osemosys):
             self.f.close
 
             if not os.path.exists(Path(Config.DATA_STORAGE,self.case,'res', 'csv')):
-                os.makedirs(Path(Config.DATA_STORAGE,self.case,'res', 'csv'))
+                resName = Path(Config.DATA_STORAGE,self.case,'res', 'csv')
+                os.makedirs(resName, mode=0o777, exist_ok=False)
+
+                #os.makedirs(name,0777)
 
         #ovako prosljedjujemo exception u prethodnom slucaju vracamo response u funkciju koja poziva writeFile
         except(IOError, IndexError):
             raise IndexError
         except OSError:
             raise OSError
-
 
     def generateDatafile_bkp( self ):
         try:
@@ -800,7 +807,8 @@ class DataFile(Osemosys):
     def readDataFile( self ):
         try:
             if Config.AWS_STORAGE != 1:
-                f = open(self.dataFile, mode="r")
+                #f = open(self.dataFile, mode="r")
+                f = open(self.dataFile, mode="r", encoding='utf-8-sig')
                 data =  f.read()
                 f.close
             else:
@@ -823,7 +831,11 @@ class DataFile(Osemosys):
             datafile = '"{}"'.format(self.dataFile.resolve())
             resultfile = '"{}"'.format(self.resFile.resolve())
             if solver == 'glpk':
-                out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.glpkFolder,  capture_output=True, text=True, shell=True)
+                print(modelfile)
+                print(datafile)
+                print(resultfile)
+                out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.glpkFolder,  capture_output=True, text=True, shell=False)
+                #out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.casePath,  capture_output=True, text=True, shell=False)
             else:
                 out = subprocess.run('cbc ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.cbcFolder,  capture_output=True, text=True, shell=True)
             if out.returncode != 0:

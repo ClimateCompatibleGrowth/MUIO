@@ -36,7 +36,8 @@ export default class RYTCn {
         })
         .then(data => {
             let [casename, genData, PARAMETERS, RYTCndata] = data;
-            if (RYTCndata['CM']['SC_0'].length == 0){
+            console.log(group, param, RYTCndata)
+            if (RYTCndata['CCM']['SC_0'].length == 0){
                 let er = {
                     "message": 'There is no activity defined!',
                     "status_code": "ActivityError",
@@ -100,7 +101,7 @@ export default class RYTCn {
         })
         .then(data => {
             let [casename, genData, PARAMETERS, RYTCndata] = data;
-            if (RYTCndata['EAR']['SC_0'].length == 0){
+            if (RYTCndata['CM']['SC_0'].length == 0){
                 let er = {
                     "message": 'There is no activity defined!',
                     "status_code": "ActivityError",

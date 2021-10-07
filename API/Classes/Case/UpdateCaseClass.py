@@ -182,8 +182,11 @@ class UpdateCase(Osemosys):
                 for sc in scenarios:
                     RYTCndata[ryt['id']][sc['ScenarioId']] = []  
                     for con in constraints:
-                        if con[ryt['id']]:
-                            for tech in con[ryt['id']]:
+                        # imamo samo jedan skup tech za constraints
+                        # if con[ryt['id']]:
+                        if con['CM']:
+                            # for tech in con[ryt['id']]:
+                            for tech in con['CM']:
                                 chunk = {}
                                 chunk['TechId'] = tech
                                 chunk['ConId'] = con['ConId']
