@@ -1,5 +1,4 @@
 from pathlib import Path
-import os
 from Classes.Base import Config
 from Classes.Base.FileClass import File
 
@@ -12,7 +11,6 @@ class Case:
         for group, array in self.PARAMETERS.items():
             if array:
                 self.jsonPath[group] = Path(Config.DATA_STORAGE, case, group+".json")
-
 
         # self.Rpath = Path(Config.DATA_STORAGE, case, "R.json")
         # self.RYpath = Path(Config.DATA_STORAGE, case, "RY.json")

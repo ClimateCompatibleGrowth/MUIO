@@ -6,7 +6,6 @@ import subprocess
 from Classes.Base import Config
 from Classes.Case.OsemosysClass import Osemosys
 from Classes.Base.FileClass import File
-from Classes.Base.S3 import S3
 
 class DataFile(Osemosys):
     # def __init__(self, case):
@@ -373,13 +372,7 @@ class DataFile(Osemosys):
             # path = '"{}"'.format(self.resPath.resolve())
             path = '"{}"'.format(self.resPath)
 
-            if Config.AWS_STORAGE != 1:
-                self.f = open(self.dataFile, mode="w", encoding='utf-8')
-            else:
-                '''ako se koristi aws S3 storage direktno'''
-                if not os.path.exists(Path(Config.S3_BUCKET_LOCAL,self.case)):
-                    os.makedirs(Path(Config.S3_BUCKET_LOCAL,self.case))
-                self.f = open(self.dataFileS3, mode="w")
+            self.f = open(self.dataFile, mode="w", encoding='utf-8')
 
             #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
             self.f.write('####################\n#Sets#\n####################\n')
@@ -488,13 +481,7 @@ class DataFile(Osemosys):
 
             #path = '"{}"'.format(self.resPath.resolve())
 
-            if Config.AWS_STORAGE != 1:
-                f = open(self.dataFile, mode="w")
-            else:
-                '''ako se koristi aws S3 storage direktno'''
-                if not os.path.exists(Path(Config.S3_BUCKET_LOCAL,self.case)):
-                    os.makedirs(Path(Config.S3_BUCKET_LOCAL,self.case))
-                f = open(self.dataFileS3, mode="w")
+            f = open(self.dataFile, mode="w")
 
             #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
             f.write('####################\n#Sets#\n####################\n')
@@ -806,16 +793,11 @@ class DataFile(Osemosys):
 
     def readDataFile( self ):
         try:
-            if Config.AWS_STORAGE != 1:
-                #f = open(self.dataFile, mode="r")
-                f = open(self.dataFile, mode="r", encoding='utf-8-sig')
-                data =  f.read()
-                f.close
-            else:
-                s3 = S3()
-                content_object = s3.resource.Object(Config.S3_BUCKET, self.dataFile.parent.name +'/'+ self.dataFile.name)
-                file_content = content_object.get()['Body'].read().decode('utf-8')
-                data = file_content
+            #f = open(self.dataFile, mode="r")
+            f = open(self.dataFile, mode="r", encoding='utf-8-sig')
+            data =  f.read()
+            f.close
+
             # f = open(self.dataFile, 'r')
             # file_contents = f.read()
             # f.close()
@@ -831,9 +813,9 @@ class DataFile(Osemosys):
             datafile = '"{}"'.format(self.dataFile.resolve())
             resultfile = '"{}"'.format(self.resFile.resolve())
             if solver == 'glpk':
-                print(modelfile)
-                print(datafile)
-                print(resultfile)
+                # print(modelfile)
+                # print(datafile)
+                # print(resultfile)
                 out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.glpkFolder,  capture_output=True, text=True, shell=False)
                 #out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.casePath,  capture_output=True, text=True, shell=False)
             else:

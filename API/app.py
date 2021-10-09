@@ -1,13 +1,11 @@
 #import sys
 import os
-from flask import Flask, jsonify, request, session, render_template, make_response
+from flask import Flask, jsonify, request, session, render_template
 from flask_cors import CORS
-from pathlib import Path
 from datetime import timedelta
 
 #import json
 from Classes.Base import Config
-from Classes.Base.S3 import S3
 from Classes.Base.SyncS3 import SyncS3
 
 from Routes.Upload.UploadRoute import upload_api
@@ -66,12 +64,12 @@ def add_headers(response):
 def home():
     #sync bucket with local storage
     if Config.AWS_SYNC == 1:
-        s3 = SyncS3()
-        cases = s3.getCases()
+        syncS3 = SyncS3()
+        cases = syncS3.getCases()
         for case in cases:
-            s3.downloadSync(case, Config.DATA_STORAGE, Config.S3_BUCKET)
+            syncS3.downloadSync(case, Config.DATA_STORAGE, Config.S3_BUCKET)
         #downoload param file from S3 bucket
-        s3.downloadSync('Parameters.json', Config.DATA_STORAGE, Config.S3_BUCKET)
+        syncS3.downloadSync('Parameters.json', Config.DATA_STORAGE, Config.S3_BUCKET)
     return render_template('index.html')
 
 

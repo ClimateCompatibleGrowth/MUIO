@@ -33,7 +33,7 @@ class Osemosys():
         self.rytemPath = Path(Config.DATA_STORAGE,case,'RYTEM.json')
 
         self.dataFile = Path(Config.DATA_STORAGE,case,'data.txt')
-        self.dataFileS3 = Path(Config.S3_BUCKET_LOCAL,case,'data.txt')
+
         self.resFile = Path(Config.DATA_STORAGE,case,'results.txt')
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
 
@@ -617,7 +617,6 @@ class Osemosys():
                                         byEmi['value'] = v
                                 data[tech['EmisId']].append(byEmi.copy())
         return data
-
 
     def updateViewData(self, casename, year, ScId, GroupId, ParamId, TechId, CommId, EmisId, Timeslice, value):
         try:

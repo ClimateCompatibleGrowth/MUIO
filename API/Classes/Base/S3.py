@@ -1,8 +1,5 @@
 import boto3
-import os
-import glob
 import threading
-from pathlib import Path
 from collections.abc import Iterable 
 from Classes.Base import Config
 
