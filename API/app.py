@@ -10,6 +10,7 @@ from Classes.Base.SyncS3 import SyncS3
 
 from Routes.Upload.UploadRoute import upload_api
 from Routes.Case.CaseRoute import case_api
+from Routes.Case.SyncS3Route import syncs3_api
 from Routes.Case.ViewDataRoute import viewdata_api
 from Routes.DataFile.DataFileRoute import datafile_api
 
@@ -36,6 +37,7 @@ app.register_blueprint(upload_api)
 app.register_blueprint(case_api)
 app.register_blueprint(viewdata_api)
 app.register_blueprint(datafile_api)
+app.register_blueprint(syncs3_api)
 
 CORS(app)
 
@@ -65,7 +67,7 @@ def home():
     #sync bucket with local storage
     if Config.AWS_SYNC == 1:
         syncS3 = SyncS3()
-        cases = syncS3.getCases()
+        cases = syncS3.getCasesSyncInit()
         for case in cases:
             syncS3.downloadSync(case, Config.DATA_STORAGE, Config.S3_BUCKET)
         #downoload param file from S3 bucket

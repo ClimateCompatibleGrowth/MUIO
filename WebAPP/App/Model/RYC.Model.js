@@ -1,11 +1,11 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export class Model {
-    
-    constructor (casename, genData, RYCdata, group, PARAMETERS, param) {
+
+    constructor(casename, genData, RYCdata, group, PARAMETERS, param) {
         this.d = 2;
         this.decimal = 'd' + this.d;
-        if(casename){
+        if (casename) {
 
             let datafields = [];
             let datafieldsChart = [];
@@ -17,29 +17,29 @@ export class Model {
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let RYCgrid = DataModel.RYCgrid(genData, RYCdata, PARAMETERS);
-            let RYCchart = DataModel.RYCchart(genData, RYCdata);  
+            let RYCchart = DataModel.RYCchart(genData, RYCdata);
 
             let scClass = {};
 
-            datafieldsChart.push({ name: 'Year', type:'string' });
+            datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(scenarios, function (id, obj) {
-                scClass[obj.ScenarioId] = 'SC_'+id;
-                datafieldsChart.push({ name: obj.ScenarioId, type:'number' });
-                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario});
+                scClass[obj.ScenarioId] = 'SC_' + id;
+                datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
+                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
             });
 
-            datafields.push({ name: 'ScId', type:'string' });
-            datafields.push({ name: 'Sc', type:'string' }); 
-            datafields.push({ name: 'CommId', type:'string' });
-            datafields.push({ name: 'Comm', type:'string' }); 
-            datafields.push({ name: 'UnitId', type:'string' });     
-            datafields.push({ name: 'ScDesc', type:'string' }); 
-            datafields.push({ name: 'CommDesc', type:'string' });       
+            datafields.push({ name: 'ScId', type: 'string' });
+            datafields.push({ name: 'Sc', type: 'string' });
+            datafields.push({ name: 'CommId', type: 'string' });
+            datafields.push({ name: 'Comm', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
+            datafields.push({ name: 'ScDesc', type: 'string' });
+            datafields.push({ name: 'CommDesc', type: 'string' });
 
-            let validation = function(cell, value) {
+            let validation = function (cell, value) {
                 if (value < 0) {
                     return { result: false, message: 'Value must be positive!' };
-                }else{
+                } else {
                     return true;
                 }
             }
@@ -48,23 +48,23 @@ export class Model {
                 return scClass[data.ScId];
             }
 
-            let cellsrenderer = function(row, columnfield, value, defaulthtml, columnproperties) {
-                if (value === null || value === ''){
+            let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
+                if (value === null || value === '') {
                     return '<span style="margin: 4px; float:right; ">n/a</span>';
-                }else{
+                } else {
                     var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
                     return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
                 }
 
             }.bind(this);
-        
-            let initeditor = function(row, cellvalue, editor, data) {
-                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
+
+            let initeditor = function (row, cellvalue, editor, data) {
+                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
 
                 var scId = $('#osy-gridRYC').jqxGrid('getcellvalue', row, 'ScId');
-                if (scId !== 'SC_0'){
+                if (scId !== 'SC_0') {
                     $('#' + editor[0].id + ' input').keydown(function (event) {
-                        if (event.keyCode === 46 || event.keyCode === 8 ) {
+                        if (event.keyCode === 46 || event.keyCode === 8) {
                             $('#' + editor[0].id).val(null);
                         }
                     })
@@ -72,25 +72,21 @@ export class Model {
 
             }.bind(this);
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',   cellclassname: cellclass, enabletooltips:true }); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Commodity', datafield: 'Comm', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass });
-            
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true }); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'left', cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+
             $.each(years, function (id, year) {
-                datafields.push({ name: year, type:'number' });
-                columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
-                    groupable:false,
+                datafields.push({ name: year, type: 'number' });
+                columns.push({
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
+                    groupable: false,
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass
                 });
             });
-
-            // console.log('RYCdata ', RYCdata)
-            console.log('RYCgrid ', RYCgrid)
-            // console.log('RYCchart ', RYCchart)
-            // console.log('series ', series)
 
             let srcGrid = {
                 datatype: "json",
@@ -102,11 +98,11 @@ export class Model {
             var srcChart = {
                 datatype: "json",
                 localdata: RYCchart,
-                root: param+ '>' + comms[0]['CommId'],
+                root: param + '>' + comms[0]['CommId'],
                 datafields: datafieldsChart,
             };
 
-            this.casename = casename; 
+            this.casename = casename;
             this.years = years;
             this.comms = comms;
             this.scenarios = scenarios;
@@ -122,14 +118,14 @@ export class Model {
             this.srcGrid = srcGrid;
             this.srcChart = srcChart;
             this.PARAMETERS = PARAMETERS;
-        }else{
-            this.casename = null; 
+        } else {
+            this.casename = null;
             this.years = null;
             this.columns = null;
             this.series = null;
             this.gridData = null;
             this.chartData = null;
-            this.genData = null; 
+            this.genData = null;
             this.PARAMNAMES = null;
             this.param = param;
             this.group = group;

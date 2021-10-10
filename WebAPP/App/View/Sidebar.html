@@ -1,63 +1,32 @@
-<!-- <script type="text/javascript">
-$(document).ready(function(){
-    $('#Navi > li').click(function(e) {
-    //e.stopPropagation();
-        $('li').removeClass('active');
-        //$(selector).removeClass('open');
-        $(this).addClass('active');
-    });
-    $('#Navi > li > li').click(function(e) {
-    //e.stopPropagation();
-    console.log()
-        $('li').removeClass('active');
-        //$(selector).removeClass('open');
-        $(this).addClass('active');
-    });
-});	
-</script> -->
 <nav>
     <ul id="Navi">
         <li class="active">
-            <a href="#/" title="Home page"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
+            <a href="#/" title="Home page"><i class="fa fa-lg fa-fw fa-home"></i> <span
+                    class="menu-item-parent">Home</span></a>
         </li>
         <li class="">
-            <a href="#/Config" title="Configure parameters"><i class="fa fa-lg fa-fw fa-file-text-o"></i> <span class="menu-item-parent">Parameters</span></a>
+            <a href="#/Config" title="Configure parameters"><i class="fa fa-lg fa-fw fa-file-text-o"></i> <span
+                    class="menu-item-parent">Parameters</span></a>
         </li>
         <li class="">
-            <a href="#/AddCase" title="Add case"><i class="fa fa-lg fa-fw fa-plus-circle"></i> <span class="menu-item-parent">Add case</span></a>
+            <a href="#/AddCase" title="Add case"><i class="fa fa-lg fa-fw fa-plus-circle"></i> <span
+                    class="menu-item-parent">Add case</span></a>
         </li>
 
         <li class='dynamicRoutesLink' style="display: none;">
-            <a href="#" title="Data entry" ><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Data entry</span></a>
+            <a href="#" title="Data entry"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Data
+                    entry</span></a>
             <ul id='dynamicRoutes'></ul>
         </li>
         <li class='dynamicRoutesLink' style="display: none;">
-            <a href="#/ViewData" title="Add case"><i class="fa fa-lg fa-fw  fa-search-plus"></i> <span class="menu-item-parent">View data</span></a>
+            <a href="#/ViewData" title="Add case"><i class="fa fa-lg fa-fw  fa-search-plus"></i> <span
+                    class="menu-item-parent">View data</span></a>
         </li>
         <li class='dynamicRoutesLink' style="display: none;">
-            <a href="#/DataFile" title="Run"><i class="fa fa-lg fa-fw fa-play danger"></i> <span class="menu-item-parent">Run</span></a>
-        </li>       
+            <a href="#/DataFile" title="Run"><i class="fa fa-lg fa-fw fa-play danger"></i> <span
+                    class="menu-item-parent">Run</span></a>
+        </li>
 
     </ul>
-</nav> 
+</nav>
 <span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span>
-
-<!-- 
-<nav>
-  <ul id="Navi">
-      <li class="active">
-          <a href="#/" title="Home page"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Home</span></a>
-      </li>
-      <li class="">
-          <a href="#/AddCase" title="Add/edit case"><i class="fa fa-lg fa-fw fa-plus-circle"></i> <span class="menu-item-parent">Add case</span></a>
-      </li>
-
-      <li>
-          <a href="#" title="Data entry"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Data entry</span></a>
-          <ul  id='dynamicRoutes'>
-
-          </ul>
-      </li>
-</nav> 
-
-<span class="minifyme" data-action="minifyMenu"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->

@@ -1,6 +1,7 @@
 import { Message } from "../../Classes/Message.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
+import { SyncS3 } from "../../Classes/SyncS3.Class.js";
 import { Model } from "../Model/Home.Model.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { Navbar } from "./Navbar.js";
@@ -112,8 +113,14 @@ export default class Home {
                     Html.apendCase(casename+'_copy');
                     Html.appendCasePicker(casename+'_copy', null)
                     //sync S3
+                    // if (Base.AWS_SYNC == 1){
+                    //     Base.uploadSync(casename+'_copy');
+                    // }
                     if (Base.AWS_SYNC == 1){
-                        Base.uploadSync(casename+'_copy');
+                        SyncS3.deleteResultsPreSync(casename)
+                        .then(response =>{
+                            SyncS3.uploadSync(casename+'_copy');
+                        });  
                     }
                 }
                 if(response.status_code=="warning"){
@@ -157,7 +164,7 @@ export default class Home {
                             Html.removeCase(casename);
                             //sync with s3
                             if (Base.AWS_SYNC == 1){
-                                Base.deleteSync(casename);
+                                SyncS3.deleteSync(casename);
                             }
                         }
                         if(response.status_code=="success_session"){

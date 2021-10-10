@@ -118,11 +118,14 @@ export default class DataFile {
 
             Osemosys.saveScOrder(scOrder, model.casename)
             .then(response => {
-                //console.log(response)
                 if(response.status_code=="success"){
                     $('#osy-order').modal('toggle');
                     Message.clearMessages();
                     Message.bigBoxSuccess('Sceanario order', response.message, 3000);
+                    //sync S3
+                    if (Base.AWS_SYNC == 1){
+                        Base.updateSync(model.casename, "genData.json");
+                    }
                     
                 }
             })
@@ -135,7 +138,6 @@ export default class DataFile {
         $("#osy-generateDataFile").off('click');
         $("#osy-generateDataFile").on('click', function (event) {
             Pace.restart();
-            //console.log('model casenam ', model.casename);
             Osemosys.generateDataFile(model.casename)
             .then(response =>{
                 if(response.status_code=="success"){
@@ -174,9 +176,10 @@ export default class DataFile {
                 $("#osy-DataFile").html('');
                 $("#osy-DataFile").append(table);
                 $("#osy-downloadDataFile").show();
-                if (Base.AWS_SYNC == 1){
-                    Base.updateSync(model.casename, "data.txt");
-                }
+                //ne moramo updateovati S3 sa data file
+                // if (Base.AWS_SYNC == 1){
+                //     Base.updateSync(model.casename, "data.txt");
+                // }
                 if(Base.HEROKU == 0){
                     $("#osy-run").show();
                     $("#osy-solver").show();
@@ -197,7 +200,6 @@ export default class DataFile {
             let solver = $('input[name="solver"]:checked').val();
             Osemosys.run(model.casename, solver)
             .then(response => {
-                //console.log(response)
                 if(response.status_code=="success"){
                     $("#runOutput").show();
                     $("#osy-runOutput").empty();

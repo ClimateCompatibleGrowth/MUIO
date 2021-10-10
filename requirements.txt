@@ -32,6 +32,7 @@ requests==2.24.0
 s3transfer==0.3.6
 six==1.15.0
 toml==0.10.2
+ujson==4.0.2
 urllib3==1.25.11
 Werkzeug==1.0.1
 wrapt==1.12.1

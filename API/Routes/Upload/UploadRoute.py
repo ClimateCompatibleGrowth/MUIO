@@ -90,7 +90,6 @@ def upload_dir(s3, localDir, awsInitDir, bucketName, tag, prefix='\\'):
 @upload_api.route("/backupCase", methods=['GET'])
 def backupCase():
     try:    
-        '''prvo ispitamo da li u Downloads folderu vec imamo backup case sa istim imenom''' 
         #case = request.form['case']
         #case = request.json['casename']
         case = request.args.get('case')

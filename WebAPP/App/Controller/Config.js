@@ -1,5 +1,6 @@
 import { Message } from "../../Classes/Message.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
+import { SyncS3 } from "../../Classes/SyncS3.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
 import { Model } from "../Model/Config.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
@@ -52,7 +53,6 @@ export default class Config {
             return Promise.all(promise);
         })
         .then(data => {
-            console.log('data ', data)
             let [casename, PARAMETERS] = data;
             let model = new Model(PARAMETERS);
             this.initPage(model);
@@ -70,7 +70,6 @@ export default class Config {
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
-            console.log('casename ', casename)
             Html.updateCasePicker(casename);
             Sidebar.Reload(casename);
             Config.refreshPage(casename);
@@ -101,7 +100,7 @@ export default class Config {
                 Message.bigBoxSuccess('Case study message', response.message, 3000);
                 //sync S3
                 if (Base.AWS_SYNC == 1){
-                    Base.updateSyncParamFile(model.casename, "RYT.json");
+                    SyncS3.updateSyncParamFile();
                 }
             })
             .catch(error=>{
@@ -133,8 +132,7 @@ export default class Config {
                 </h6>
                 `
             );
-            console.log('id ', id)
-            console.log('model.gridData init ', model.gridData)
+
             let unitRule = model.gridData[id]['unitRule'];
             // let unitRule = model.paramById[groupId][paramId]['unitRule'];
             Html.renderUnitRules(unitRule, model.unitsDef);    
@@ -143,7 +141,6 @@ export default class Config {
 
             let arrayRule ='';
             $.each(rule, function (id, rule) {
-                console.log( UNITDEFINITION[rule]['name'])
                 arrayRule += UNITDEFINITION[rule]['name'];
             });
             $('#ruleFormula').html(`<p>${arrayRule}</p>`);
@@ -178,23 +175,18 @@ export default class Config {
 
             let $divGrid = $('#osy-gridParam');
             model.srcGrid.localdata = model.gridData;
-            console.log('model.gridData ', model.gridData)
             $divGrid.jqxGrid('updatebounddata');
             $('#osy-unitRule').modal('toggle');
             Message.smallBoxInfo('Rule updated for ', model.paramNames[groupId][paramId], 3000); 
         });
 
         $('#osy-unitRuleSort2').on('stop', function () { 
-            console.log('stop')
             let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
             // let paramId = $('#paramId').attr("data-paramId");
             // let groupId = $('#groupId').attr("data-groupId") 
 
-            //console.log(paramId, groupId)
-
             let arrayRule ='';
             $.each(rule, function (id, rule) {
-                console.log( UNITDEFINITION[rule]['name'])
                 arrayRule += UNITDEFINITION[rule]['name'];
             });
             $('#ruleFormula').html(`<p>${arrayRule}</p>`);
@@ -202,16 +194,12 @@ export default class Config {
          }); 
 
          $('#osy-unitRuleSort2').on('receive', function () { 
-            console.log('stop')
             let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
             // let paramId = $('#paramId').attr("data-paramId");
             // let groupId = $('#groupId').attr("data-groupId") 
 
-            // console.log(paramId, groupId)
-
             let arrayRule ='';
             $.each(rule, function (id, rule) {
-                console.log( UNITDEFINITION[rule]['name'])
                 arrayRule += UNITDEFINITION[rule]['name'];
             });
             $('#ruleFormula').html(`<p>${arrayRule}</p>`);
@@ -219,7 +207,6 @@ export default class Config {
          }); 
 
          $('#osy-unitRuleSort2').on('remove', function () { 
-             console.log('remove')
           })
 
         // let res = true;

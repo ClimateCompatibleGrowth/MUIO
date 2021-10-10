@@ -1,6 +1,7 @@
 import { Message } from "../../Classes/Message.Class.js";
 import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
+import { SyncS3 } from "../../Classes/SyncS3.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
@@ -11,28 +12,28 @@ import { DEF } from "../../Classes/Definition.Class.js";
 import { Sidebar } from "./Sidebar.js";
 
 export default class AddCase {
-    static onLoad(){
+    static onLoad() {
         Base.getSession()
-        .then(response => {
-            let casename = response.session;
-            const promise = [];
-            let genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData);
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
-            return Promise.all(promise);
-        })
-        .then(data => {
-            let [ genData, PARAMETERS] = data;
-            let model = new Model(genData, PARAMETERS,  "AddCase");
-            this.initPage(model);
-        })
-        .catch(error =>{
-            Message.danger(error);
-        });
+            .then(response => {
+                let casename = response.session;
+                const promise = [];
+                let genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData);
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS);
+                return Promise.all(promise);
+            })
+            .then(data => {
+                let [genData, PARAMETERS] = data;
+                let model = new Model(genData, PARAMETERS, "AddCase");
+                this.initPage(model);
+            })
+            .catch(error => {
+                Message.danger(error);
+            });
     }
 
-    static initPage(model){
+    static initPage(model) {
         Message.clearMessages();
         //$('a[href="#tabComms"]').click();
         //Navbar.initPage(model.casename, model.pageId);
@@ -40,50 +41,48 @@ export default class AddCase {
         Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);
 
-        //console.log('model.emissions ', model.emissions)
         Grid.commGrid(model.commodities);
         Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
         Grid.emisGrid(model.emissions);
         Grid.scenarioGrid(model.scenarios);
         Grid.constraintGrid(model.techs, model.constraints, model.techNames);
 
-        if (model.casename == null){
+        if (model.casename == null) {
             $('#osy-newCase').show();
             $('#osy-updateCase').hide();
             Message.info("Please select case or create new case study!");
-        }else{
+        } else {
             $("#osy-new").show();
             $('#osy-updateCase').show();
             $('#osy-newCase').hide();
-        }    
+        }
         loadScript("References/smartadmin/js/plugin/ion-slider/ion.rangeSlider.min.js", SmartAdmin.rangeSlider.bind(null, model.years));
         pageSetUp();
         this.initEvents(model);
     }
 
-    static refreshPage(casename){
+    static refreshPage(casename) {
         Base.setSession(casename)
-        .then(response=>{
-            Message.clearMessages();
-            const promise = [];
-            let genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData);
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
-            return Promise.all(promise);
-        })
-        .then(data => {
-            let [genData, PARAMETERS] = data;
-            let model = new Model(genData, PARAMETERS, "AddCase");
-            console.log('refresh model ', model);
-            AddCase.initPage(model);
-        })
-        .catch(error=>{
-            Message.bigBoxInfo(error);
-        })
+            .then(response => {
+                Message.clearMessages();
+                const promise = [];
+                let genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData);
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS);
+                return Promise.all(promise);
+            })
+            .then(data => {
+                let [genData, PARAMETERS] = data;
+                let model = new Model(genData, PARAMETERS, "AddCase");
+                AddCase.initPage(model);
+            })
+            .catch(error => {
+                Message.bigBoxInfo(error);
+            })
     }
 
-    static initEvents(model){
+    static initEvents(model) {
 
         let $divTech = $("#osy-gridTech");
         let $divComm = $("#osy-gridComm");
@@ -92,7 +91,7 @@ export default class AddCase {
         let $divConstraint = $("#osy-gridConstraint");
 
         $("#casePicker").off('click');
-        $("#casePicker").on('click', '.selectCS', function(e) {
+        $("#casePicker").on('click', '.selectCS', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
@@ -115,49 +114,52 @@ export default class AddCase {
         $("#osy-caseForm").jqxValidator({
             hintType: 'label',
             animationDuration: 500,
-            rules : [
+            rules: [
                 { input: '#osy-casename', message: "Case name is required field!", action: 'keyup', rule: 'required' },
-                { input: '#osy-casename', message: "Entered case name is not allowed!", action: 'keyup', rule: function (input, commit) {
-                         var casename = $( "#osy-casename" ).val();
-                         var result = (/^[a-zA-Z0-9-_ ]*$/.test(casename));
-                         return result;
+                {
+                    input: '#osy-casename', message: "Entered case name is not allowed!", action: 'keyup', rule: function (input, commit) {
+                        var casename = $("#osy-casename").val();
+                        var result = (/^[a-zA-Z0-9-_ ]*$/.test(casename));
+                        return result;
                     }
                 },
                 { input: '#osy-mo', message: "Mode of operation is required field!", action: 'keyup', rule: 'required' },
-                { input: '#osy-mo', message: "Mode of operation should positive value!", action: 'keyup', rule: function (input, commit) {
-                         var dr = $( "#osy-mo" ).val();
-                        //  console.log(dr)
-                        //  console.log(dr < 0 ? true : false);
-                         return dr < 1 || isNaN(dr) ? false : true;
+                {
+                    input: '#osy-mo', message: "Mode of operation should positive value!", action: 'keyup', rule: function (input, commit) {
+                        var dr = $("#osy-mo").val();
+                        return dr < 1 || isNaN(dr) ? false : true;
                     }
                 },
                 { input: '#osy-ns', message: "Number of seasons is required field!", action: 'keyup', rule: 'required' },
-                { input: '#osy-ns', message: "Number of seasons should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
-                         var dr = $( "#osy-ns" ).val();
-                         return dr < 0 || isNaN(dr) ? false : true;
+                {
+                    input: '#osy-ns', message: "Number of seasons should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
+                        var dr = $("#osy-ns").val();
+                        return dr < 0 || isNaN(dr) ? false : true;
                     }
                 },
                 { input: '#osy-dt', message: "Day type is required field!", action: 'keyup', rule: 'required' },
-                { input: '#osy-dt', message: "Day type should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
-                         var dr = $( "#osy-dt" ).val();
-                         return dr < 0 || isNaN(dr) ? false : true;
+                {
+                    input: '#osy-dt', message: "Day type should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
+                        var dr = $("#osy-dt").val();
+                        return dr < 0 || isNaN(dr) ? false : true;
                     }
                 },
-                { input: '#osy-date', message: "Date is required field!", action: 'change', rule: 'required'},
-                { input: '#osy-years', message: 'Select at least one year', action: 'change', hintRender: render, rule: function () {
-                    var elements = $('#osy-years').find('input[type=checkbox]');
-                    var check = false;
-                    var result = $.grep(elements, function(element, index) {
-                        if(element.checked==true)
-                            check=true;
+                { input: '#osy-date', message: "Date is required field!", action: 'change', rule: 'required' },
+                {
+                    input: '#osy-years', message: 'Select at least one year', action: 'change', hintRender: render, rule: function () {
+                        var elements = $('#osy-years').find('input[type=checkbox]');
+                        var check = false;
+                        var result = $.grep(elements, function (element, index) {
+                            if (element.checked == true)
+                                check = true;
                         });
-                    return (check);
+                        return (check);
                     }
                 }
             ]
         });
 
-        $("#osy-new").on('click', function(event){
+        $("#osy-new").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             //$( "#wid-id-8" ).tabs({ active: 'tabComms' });
@@ -189,13 +191,13 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
 
-            var casename = $( "#osy-casename" ).val();
-            var desc = $( "#osy-desc" ).val();
-            var date = $( "#osy-date" ).val();
-            var currency = $( "#osy-currency" ).val();
-            var mo = $( "#osy-mo" ).val();
-            var ns = $( "#osy-ns" ).val();
-            var dt = $( "#osy-dt" ).val();
+            var casename = $("#osy-casename").val();
+            var desc = $("#osy-desc").val();
+            var date = $("#osy-date").val();
+            var currency = $("#osy-currency").val();
+            var mo = $("#osy-mo").val();
+            var ns = $("#osy-ns").val();
+            var dt = $("#osy-dt").val();
 
             var years = new Array();
             $.each($('input[type="checkbox"]:checked'), function (key, value) {
@@ -204,10 +206,10 @@ export default class AddCase {
 
             let POSTDATA = {
                 "osy-version": "1.0",
-                "osy-casename":casename,
-                "osy-desc":desc,
+                "osy-casename": casename,
+                "osy-desc": desc,
                 "osy-date": date,
-                "osy-currency":currency,
+                "osy-currency": currency,
                 "osy-ns": ns,
                 "osy-dt": dt,
                 "osy-mo": mo,
@@ -219,51 +221,56 @@ export default class AddCase {
                 "osy-years": years
             }
 
-            console.log('POSTDATA ', POSTDATA)
             Osemosys.saveCase(POSTDATA)
-            .then(response =>{
-                if(response.status_code=="created"){
-                    $("#osy-new").show();
-                    $('#osy-updateCase').show();
-                    $('#osy-newCase').hide();
-                    Message.clearMessages();
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
-                    Html.appendCasePicker(casename, casename);
-                    Sidebar.Reload(casename);
-                    $("#osy-case").html(casename);
-                    if (Base.AWS_SYNC == 1){
-                        Base.uploadSync(casename);
+                .then(response => {
+                    if (response.status_code == "created") {
+                        $("#osy-new").show();
+                        $('#osy-updateCase').show();
+                        $('#osy-newCase').hide();
+                        Message.clearMessages();
+                        Message.bigBoxSuccess('Case study message', response.message, 3000);
+                        Html.appendCasePicker(casename, casename);
+                        Sidebar.Reload(casename);
+                        $("#osy-case").html(casename);
+                        if (Base.AWS_SYNC == 1) {
+                            SyncS3.deleteResultsPreSync(casename)
+                                .then(response => {
+                                    SyncS3.uploadSync(casename);
+                                });
+                        }
                     }
-                }
-                if(response.status_code=="edited"){
-                    Html.title(casename, 'Case study', 'create & edit');
-                    $("#osy-new").show();
-                    Navbar.initPage(casename);
-                    Sidebar.Reload(casename);
-                    Message.bigBoxInfo('Case study message', response.message, 3000);
-                    if (Base.AWS_SYNC == 1){
-                        Base.uploadSync(casename);
+                    if (response.status_code == "edited") {
+                        Html.title(casename, 'Case study', 'create & edit');
+                        $("#osy-new").show();
+                        Navbar.initPage(casename);
+                        Sidebar.Reload(casename);
+                        Message.bigBoxInfo('Case study message', response.message, 3000);
+                        if (Base.AWS_SYNC == 1) {
+                            SyncS3.deleteResultsPreSync(casename)
+                                .then(response => {
+                                    SyncS3.uploadSync(casename);
+                                });
+                        }
                     }
-                }
-                if(response.status_code=="exist"){
-                    $("#osy-new").show();
-                    Message.bigBoxWarning('Case study message', response.message, 3000);
-                }
-            })
-            .catch(error=>{
-                Message.bigBoxDanger('Error message', error, null);
-            })
+                    if (response.status_code == "exist") {
+                        $("#osy-new").show();
+                        Message.bigBoxWarning('Case study message', response.message, 3000);
+                    }
+                })
+                .catch(error => {
+                    Message.bigBoxDanger('Error message', error, null);
+                })
         });
 
         //TECHNOLOGIES GRID AND EVENTS
         $("#osy-addTech").off('click');
-        $("#osy-addTech").on("click", function(event) {
+        $("#osy-addTech").on("click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultTech = DefaultObj.defaultTech();
             //tech grid se pravi dinalicki potrebno je updatovati model
             //JSON parse strungify potrebno da iz nekog razloga izbacino elemente uid boundindex...
-            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'IAR', 'OAR', "INCR", "ITCR", 'EAR'] )));
+            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'IAR', 'OAR', "INCR", "ITCR", 'EAR'])));
             //model.techs.push(defaultTech[0]);
             //update technames
             model.techNames[defaultTech[0]['TechId']] = defaultTech[0]['Tech'];
@@ -274,13 +281,13 @@ export default class AddCase {
             $("#techCount").text(model.techCount);
         });
 
-        $(document).undelegate(".deleteTech","click");
-        $(document).delegate(".deleteTech","click",function(e){
-        //$(".deleteTech").on("click", function(e) {
+        $(document).undelegate(".deleteTech", "click");
+        $(document).delegate(".deleteTech", "click", function (e) {
+            //$(".deleteTech").on("click", function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
-            if(id!=0){
+            if (id != 0) {
                 var techId = $divTech.jqxGrid('getcellvalue', id, 'TechId');
                 var rowid = $divTech.jqxGrid('getrowid', id);
                 model.techs.splice(id, 1);
@@ -292,7 +299,7 @@ export default class AddCase {
                 $("#techCount").text(model.techCount);
                 //izbrisati iz model constraints eventualne tehnologijel koje smo izbrisali
                 $.each(model.constraints, function (id, conObj) {
-                    conObj['CM'] =  conObj['CM'].filter(item => item !== techId);
+                    conObj['CM'] = conObj['CM'].filter(item => item !== techId);
                 });
             }
         });
@@ -303,52 +310,31 @@ export default class AddCase {
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
             var value = args.newvalue;
-            if (column == 'CapUnitId' || column == 'ActUnitId'){
+            if (column == 'CapUnitId' || column == 'ActUnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', null);
             }
-            if(column != 'IAR' && column != 'OAR' && column != 'EAR' && column != 'INCR' && column != 'ITCR'){
+            if (column != 'IAR' && column != 'OAR' && column != 'EAR' && column != 'INCR' && column != 'ITCR') {
                 model.techs[rowBoundIndex][column] = value;
-            }else{
-                if(value.includes(',') && value){
+            } else {
+                if (value.includes(',') && value) {
                     var array = value.split(',');
-                }else if (value){
-                    var array=[];
+                } else if (value) {
+                    var array = [];
                     array.push(value);
-                }else{
-                    var array=[];
+                } else {
+                    var array = [];
                 }
                 model.techs[rowBoundIndex][column] = array;
             }
-            if(column == 'Tech'){
+            if (column == 'Tech') {
                 var techId = $divTech.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
                 model.techNames[techId] = value;
             }
-
-
-            // $.each(model.techs, function (id, obj) {
-            //     if(obj.TechId == techId){
-            //         if(column != 'IAR' && column != 'OAR' && column != 'EAR'){
-            //             obj[column] = value;
-            //         }else{
-            //             //console.log('save value ', value)
-            //             if(value.includes(',') && value){
-            //                 var array = value.split(',');
-            //             }else if (value){
-            //                 var array=[];
-            //                 array.push(value);
-            //             }else{
-            //                 var array=[];
-            //             }
-            //             //console.log('array value ', array)
-            //             obj[column] = array;
-            //         }
-            //     }
-            // });
         });
 
         //COMMODITIES GRID AND EVENTS
         $("#osy-addComm").off('click');
-        $("#osy-addComm").on("click", function(event) {
+        $("#osy-addComm").on("click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultComm = DefaultObj.defaultComm();
@@ -362,12 +348,12 @@ export default class AddCase {
             $("#commCount").text(model.commCount);
         });
 
-        $(document).undelegate(".deleteComm","click");
-        $(document).delegate(".deleteComm","click",function(e){
+        $(document).undelegate(".deleteComm", "click");
+        $(document).delegate(".deleteComm", "click", function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
-            if(id!=0){
+            if (id != 0) {
                 var commId = $divComm.jqxGrid('getcellvalue', id, 'CommId');
                 var rowid = $divComm.jqxGrid('getrowid', id);
                 $divComm.jqxGrid('deleterow', rowid);
@@ -379,8 +365,8 @@ export default class AddCase {
                 $("#commCount").text(model.commCount);
                 //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
                 $.each(model.techs, function (id, techObj) {
-                    techObj['IAR'] =  techObj['IAR'].filter(item => item !== commId);
-                    techObj['OAR'] =  techObj['OAR'].filter(item => item !== commId);
+                    techObj['IAR'] = techObj['IAR'].filter(item => item !== commId);
+                    techObj['OAR'] = techObj['OAR'].filter(item => item !== commId);
                 });
             }
         });
@@ -391,10 +377,10 @@ export default class AddCase {
             var rowBoundIndex = args.rowindex;
             var value = args.newvalue;
             model.commodities[rowBoundIndex][column] = value;
-            if (column == 'UnitId'){
+            if (column == 'UnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing commodity unit will not recalculate entered nor default values in the model.', null);
             }
-            if(column == 'Comm'){
+            if (column == 'Comm') {
                 var commId = $divComm.jqxGrid('getcellvalue', rowBoundIndex, 'CommId');
                 model.commNames[commId] = value;
             }
@@ -402,7 +388,7 @@ export default class AddCase {
 
         //EMISSIONS GRID AND EVENTS
         $("#osy-addEmis").off('click');
-        $("#osy-addEmis").on("click", function(event) {
+        $("#osy-addEmis").on("click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultEmi = DefaultObj.defaultEmi();
@@ -416,12 +402,12 @@ export default class AddCase {
             $divEmi.jqxGrid('refresh');
         });
 
-        $(document).undelegate(".deleteEmis","click");
-        $(document).delegate(".deleteEmis","click",function(e){
+        $(document).undelegate(".deleteEmis", "click");
+        $(document).delegate(".deleteEmis", "click", function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
-            if(id!=0){
+            if (id != 0) {
                 var emisId = $divEmi.jqxGrid('getcellvalue', id, 'EmisId');
                 var rowid = $divEmi.jqxGrid('getrowid', id);
                 $divEmi.jqxGrid('deleterow', rowid);
@@ -434,7 +420,7 @@ export default class AddCase {
 
                 //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
                 $.each(model.techs, function (id, techObj) {
-                    techObj['EAR'] =  techObj['EAR'].filter(item => item !== emisId);
+                    techObj['EAR'] = techObj['EAR'].filter(item => item !== emisId);
                     model.techs[id]['EAR'] = techObj['EAR'];
                 });
             }
@@ -446,10 +432,10 @@ export default class AddCase {
             var rowBoundIndex = args.rowindex;
             var value = args.newvalue;
             model.emissions[rowBoundIndex][column] = value;
-            if (column == 'UnitId'){
+            if (column == 'UnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing emission unit will not recalculate entered nor default values in the model.', null);
             }
-            if(column == 'Emis'){
+            if (column == 'Emis') {
                 var emisId = $divEmi.jqxGrid('getcellvalue', rowBoundIndex, 'EmisId');
                 model.emiNames[emisId] = value;
             }
@@ -457,7 +443,7 @@ export default class AddCase {
 
         //SCENARIOS GRID AND EVENTS
         $("#osy-addScenario").off('click');
-        $("#osy-addScenario").on("click", function(event) {
+        $("#osy-addScenario").on("click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultSc = DefaultObj.defaultScenario();
@@ -468,12 +454,12 @@ export default class AddCase {
             $divScenario.jqxGrid('refresh');
         });
 
-        $(document).undelegate(".deleteScenario","click");
-        $(document).delegate(".deleteScenario","click",function(e){
+        $(document).undelegate(".deleteScenario", "click");
+        $(document).delegate(".deleteScenario", "click", function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
-            if(id!=0){
+            if (id != 0) {
                 //var emisId = $divScenario.jqxGrid('getcellvalue', id, 'ScenarioId');
                 var rowid = $divScenario.jqxGrid('getrowid', id);
                 $divScenario.jqxGrid('deleterow', rowid);
@@ -489,21 +475,16 @@ export default class AddCase {
             var datafield = event.args.datafield;
             var rowBoundIndex = args.rowindex;
             var value = args.newvalue;
-            //console.log('modelemission ', model.scenarios)
             model.scenarios[rowBoundIndex][datafield] = value;
-            //console.log('modelemission ', model.scenarios)
         });
 
         //CONSTRAINTS GRID AND EVENTS
         $("#osy-addConstraint").off('click');
-        $("#osy-addConstraint").on("click", function(event) {
+        $("#osy-addConstraint").on("click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultConstraint = DefaultObj.defaultConstraint();
             model.constraints.push(JSON.parse(JSON.stringify(defaultConstraint[0], ['ConId', 'Con', 'Desc', 'Tag', 'CM'])));
-
-            // console.log('defaultConstraint[0] add ', defaultConstraint[0]);
-            // console.log('model.constraints add ', model.constraints);
 
             $divConstraint.jqxGrid('addrow', null, defaultConstraint);
             $divConstraint.jqxGrid('updatebounddata', 'data');
@@ -512,27 +493,26 @@ export default class AddCase {
             //$divConstraint.jqxGrid('refresh');
         });
 
-        $(document).undelegate(".deleteConstraint","click");
-        $(document).delegate(".deleteConstraint","click",function(e){
+        $(document).undelegate(".deleteConstraint", "click");
+        $(document).delegate(".deleteConstraint", "click", function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
             //no condition needed, we can delete all constraints
             //if(id!=0){
-                var conId = $divConstraint.jqxGrid('getcellvalue', id, 'ConId');
-                var rowid = $divConstraint.jqxGrid('getrowid', id);
-                $divConstraint.jqxGrid('deleterow', rowid);
-                model.constraints.splice(id, 1);
-                //console.log(' model.constraints 2 ',  model.constraints)
-                //smanji counter za broj emisjia i update html
-                model.constraintsCount--;
-                $("#constraintsCount").text(model.constraintsCount);
+            var conId = $divConstraint.jqxGrid('getcellvalue', id, 'ConId');
+            var rowid = $divConstraint.jqxGrid('getrowid', id);
+            $divConstraint.jqxGrid('deleterow', rowid);
+            model.constraints.splice(id, 1);
+            //smanji counter za broj emisjia i update html
+            model.constraintsCount--;
+            $("#constraintsCount").text(model.constraintsCount);
 
-                //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
-                // $.each(model.techs, function (id, techObj) {
-                //     techObj['EAR'] =  techObj['EAR'].filter(item => item !== emisId);
-                //     model.techs[id]['EAR'] = techObj['EAR'];
-                // });
+            //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
+            // $.each(model.techs, function (id, techObj) {
+            //     techObj['EAR'] =  techObj['EAR'].filter(item => item !== emisId);
+            //     model.techs[id]['EAR'] = techObj['EAR'];
+            // });
             //}
         });
 
@@ -541,38 +521,35 @@ export default class AddCase {
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
             var value = args.newvalue;
-            
-            //console.log('con value ', value)
 
-            if(column != 'CM' && column != 'Tag'){
+            if (column != 'CM' && column != 'Tag') {
                 model.constraints[rowBoundIndex][column] = value;
-            }else if (column == 'CM'){
-                if(value.includes(',') && value){
+            } else if (column == 'CM') {
+                if (value.includes(',') && value) {
                     var array = value.split(',');
-                }else if (value){
-                    var array=[];
+                } else if (value) {
+                    var array = [];
                     array.push(value);
-                }else{
-                    var array=[];
+                } else {
+                    var array = [];
                 }
                 model.constraints[rowBoundIndex][column] = array;
-            }else if (column == 'Tag'){
+            } else if (column == 'Tag') {
                 model.constraints[rowBoundIndex][column] = value.value;
             }
         });
 
         //TABS CHANGE EVENT
         $(".nav-tabs li a").off('click');
-        $('.nav-tabs li a').on("click", function(event, ui) { 
+        $('.nav-tabs li a').on("click", function (event, ui) {
             var id = $(this).attr('id');
             //update tech grid to update IAR OAR EAR with new added or removed comms and emis
-            console.log('id ', id)
-            if (id == 'Techs'){
+            if (id == 'Techs') {
                 //Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
                 //$divTech.jqxGrid('clear');
                 $divTech.jqxGrid('updatebounddata');
             }
-            else if (id == 'Constraints'){
+            else if (id == 'Constraints') {
                 //Grid.constraintGrid(model.techs, model.constraints, model.techNames);
                 $divConstraint.jqxGrid('updatebounddata');
             }
@@ -582,40 +559,40 @@ export default class AddCase {
         });
 
         //YEARS EVENTS
-        $("#osy-checkAll").on("click", function(event) {
+        $("#osy-checkAll").on("click", function (event) {
             event.preventDefault();
             var elements = $('#osy-years').find('input[type=checkbox]');
-            $.grep(elements, function(element, index) {
-                element.checked=true;
+            $.grep(elements, function (element, index) {
+                element.checked = true;
             });
             $("#osy-caseForm").jqxValidator('validateInput', '#osy-years');
         });
 
-        $("#osy-uncheckAll").on("click", function(event) {
+        $("#osy-uncheckAll").on("click", function (event) {
             event.preventDefault();
             var elements = $('#osy-years').find('input[type=checkbox]');
-            $.grep(elements, function(element, index) {
-                    element.checked=false;
+            $.grep(elements, function (element, index) {
+                element.checked = false;
             });
             $("#osy-caseForm").jqxValidator('validateInput', '#osy-years');
         });
 
-        $("#osy-x2").on("click", function(event) {
+        $("#osy-x2").on("click", function (event) {
             event.preventDefault();
             var elements = $('#osy-years').find('input[type=checkbox]');
-            $.grep(elements, function(element, index) {
-                if((index) % 2 == 0)
-                element.checked=true;
+            $.grep(elements, function (element, index) {
+                if ((index) % 2 == 0)
+                    element.checked = true;
             });
             $("#osy-caseForm").jqxValidator('validateInput', '#osy-years');
         });
 
-        $("#osy-x5").on("click", function(event) {
+        $("#osy-x5").on("click", function (event) {
             event.preventDefault();
             var elements = $('#osy-years').find('input[type=checkbox]');
-            $.grep(elements, function(element, index) {
-                if((index) % 5 == 0)
-                element.checked=true;
+            $.grep(elements, function (element, index) {
+                if ((index) % 5 == 0)
+                    element.checked = true;
             });
             $("#osy-caseForm").jqxValidator('validateInput', '#osy-years');
         });

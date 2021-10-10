@@ -1,17 +1,15 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
-import { GROUPNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
-    
-    constructor (casename, genData, RYdata, group, PARAMETERS, param) {
 
-        
+    constructor(casename, genData, RYdata, group, PARAMETERS, param) {
+
+
         this.d = 2;
         this.decimal = 'd' + this.d;
 
-        if(casename){
+        if (casename) {
 
-            // console.log('model param ', param)
             let datafields = [];
             let datafieldsChart = [];
             let columns = [];
@@ -23,49 +21,49 @@ export class Model {
 
             let RYgrid = DataModel.RYgrid(genData, RYdata, PARAMETERS);
             let RYchart = DataModel.RYchart(genData, RYdata);
-            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);  
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
-            datafields.push({ name: 'Param', type:'string' }); 
-            datafields.push({ name: 'ParamId', type:'string' });  
-            datafields.push({ name: 'ScId', type:'string' });
-            datafields.push({ name: 'Sc', type:'string' });       
-            datafields.push({ name: 'UnitId', type:'string' });
-            datafields.push({ name: 'ScDesc', type:'string' }); 
+            datafields.push({ name: 'Param', type: 'string' });
+            datafields.push({ name: 'ParamId', type: 'string' });
+            datafields.push({ name: 'ScId', type: 'string' });
+            datafields.push({ name: 'Sc', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
+            datafields.push({ name: 'ScDesc', type: 'string' });
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned:true, editable: false, align: 'left',  minWidth: 120, maxWidth: 200 })
-            columns.push({ text: 'Parameter', datafield: 'Param', pinned:true, editable: false, align: 'left',  minWidth: 120, maxWidth: 200 })
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass});
-            
-        
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 120, maxWidth: 200 })
+            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', minWidth: 120, maxWidth: 200 })
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+
+
             $.each(scenarios, function (id, obj) {
-                scClass[obj.ScenarioId] = 'SC_'+id;
-                datafieldsChart.push({ name: obj.ScenarioId, type:'number' });
-                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario});
+                scClass[obj.ScenarioId] = 'SC_' + id;
+                datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
+                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
             });
 
-            let validation = function(cell, value) {
+            let validation = function (cell, value) {
                 if (value < 0) {
                     return { result: false, message: 'Value must be positive!' };
-                }else{
+                } else {
                     return true;
                 }
             }
 
-            let cellsrenderer = function(row, columnfield, value, defaulthtml, columnproperties) {
-                if (value === null || value === ''){
+            let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
+                if (value === null || value === '') {
                     return '<span style="margin: 4px; float:right; ">n/a</span>';
-                }else{
+                } else {
                     var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
                     return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
                 }
             }.bind(this);
-        
-            let initeditor = function(row, cellvalue, editor, data) {
-                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true   }); //symbol: ' GWh', symbolPosition: 'right'
+
+            let initeditor = function (row, cellvalue, editor, data) {
+                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
                 var scId = $('#osy-gridRY').jqxGrid('getcellvalue', row, 'ScId');
-                if (scId !== 'SC_0'){
+                if (scId !== 'SC_0') {
                     $('#' + editor[0].id + ' input').keydown(function (event) {
-                        if (event.keyCode === 46 || event.keyCode === 8 ) {
+                        if (event.keyCode === 46 || event.keyCode === 8) {
                             $('#' + editor[0].id).val(null);
                         }
                     })
@@ -78,23 +76,20 @@ export class Model {
             }
 
             $.each(years, function (id, year) {
-                datafields.push({ name: year, type:'number' });
-                columns.push({ text: year, datafield: year,  cellsalign: 'right',  align: 'center', columntype: 'numberinput', cellsformat: 'd2', 
-                groupable:false,
-                initeditor: initeditor,
-                validation: validation,
-                cellsrenderer: cellsrenderer,
-                cellclassname: cellclass
-             });
+                datafields.push({ name: year, type: 'number' });
+                columns.push({
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
+                    groupable: false,
+                    initeditor: initeditor,
+                    validation: validation,
+                    cellsrenderer: cellsrenderer,
+                    cellclassname: cellclass
+                });
             });
 
-            datafieldsChart.push({ name: 'Year', type:'string' });
-            datafieldsChart.push({ name: 'Param', type:'number' });
+            datafieldsChart.push({ name: 'Year', type: 'string' });
+            datafieldsChart.push({ name: 'Param', type: 'number' });
             //series.push({ dataField: 'Param', displayText: PARAMNAMES[param] });
-            // console.log('model ',  series, columns)
-            // console.log('RYdata ', RYdata)
-            // console.log('RYgrid ', RYgrid)
-            // console.log('RYchart ', RYchart)
 
             let srcGrid = {
                 datatype: "json",
@@ -110,7 +105,7 @@ export class Model {
                 datafields: datafieldsChart,
             };
 
-            this.casename = casename; 
+            this.casename = casename;
             this.years = years;
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
@@ -123,17 +118,17 @@ export class Model {
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid,
-            this.srcChart = srcChart,
-            this.PARAMETERS = PARAMETERS
-        }else{
-            this.casename = null; 
+                this.srcChart = srcChart,
+                this.PARAMETERS = PARAMETERS
+        } else {
+            this.casename = null;
             this.years = null;
             this.scenarios = null;
             this.columns = null;
             this.series = null;
             this.gridData = null;
             this.chartData = null;
-            this.genData = null; 
+            this.genData = null;
             this.PARAMNAMES = null;
             this.param = param;
             this.group = group;

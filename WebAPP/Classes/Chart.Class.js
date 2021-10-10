@@ -3,7 +3,7 @@ export class Chart {
         let theme = "bootstrap";
         return theme
     }
-    static Chart($div, dataAdapter, unit, series, dataField='Year' ) {
+    static Chart($div, dataAdapter, unit, series, dataField = 'Year') {
 
         var settings = {
             title: "",
@@ -28,7 +28,7 @@ export class Chart {
                 visible: true,
                 valuesOnTicks: true,
                 labels: 'Years',
-                                // {
+                // {
                 //     formatFunction: function (value) {
                 //         return value.getDate();
                 //     }
@@ -58,33 +58,33 @@ export class Chart {
                 // unitInterval: 500,
                 minValue: 0,
                 maxValue: 'auto',
-                title: {text: 'Installed power [MW]'},
+                title: { text: 'Installed power [MW]' },
                 displayValueAxis: true,
-                description:  "",
+                description: "",
                 axisSize: 'auto',
             },
             colorScheme: 'scheme09',
             seriesGroups:
                 [
-            
+
                     {
                         type: 'column',
                         valuesOnTicks: false,
-                        columnsGapPercent:10,
+                        columnsGapPercent: 10,
                         seriesGapPercent: 5,
-                        columnsMaxWidth:100,
-                        columnsMinWidth:5,
+                        columnsMaxWidth: 100,
+                        columnsMinWidth: 5,
                         toolTipFormatFunction: function (value, index, data, d) {
-                            return  data.displayText + ' ' + parseFloat(value).toFixed(2);
+                            return data.displayText + ' ' + parseFloat(value).toFixed(2);
                         },
-    
+
                         formatSettings:
                         {
                             thousandsSeparator: ',',
                             decimalPlaces: 2,
-                            sufix: ' ' ,
+                            sufix: ' ',
                         },
-    
+
                         labels: {
                             visible: false,
                             verticalAlignment: 'center',
@@ -94,17 +94,16 @@ export class Chart {
                             {
                                 thousandsSeparator: ',',
                                 decimalPlaces: 2,
-                                sufix: ' ' ,
+                                sufix: ' ',
                             },
                         },
-                        formatFunction: 
-                            function (value, index, data) { 
-                                //console.log(data, index)
+                        formatFunction:
+                            function (value, index, data) {
                                 if (value > 0) {
-                                    return  parseFloat(value).toFixed(2) + ' ' + data.displayText;
-                                }else{
+                                    return parseFloat(value).toFixed(2) + ' ' + data.displayText;
+                                } else {
                                     return '';
-                                }   
+                                }
                             },
                         series: series
                         // [

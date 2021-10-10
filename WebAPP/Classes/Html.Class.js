@@ -3,21 +3,21 @@ import { Message } from "./Message.Class.js";
 
 export class Html {
 
-    static renderCases(cases, selectedCS){
-        $('#cases').empty();       
+    static renderCases(cases, selectedCS) {
+        $('#cases').empty();
         $.each(cases, function (index, value) {
             Html.apendCase(value, selectedCS)
         });
 
-        if(!selectedCS) Message.info( "Please select existing or create new case to proceed!");
+        if (!selectedCS) Message.info("Please select existing or create new case to proceed!");
     }
 
-    static removeCase(value){
+    static removeCase(value) {
         $(`#p_${value.replace(/[^A-Z0-9]/ig, "")}`).remove();
         $(`#l_${value.replace(/[^A-Z0-9]/ig, "")}`).remove();
     }
 
-    static apendCase(value, selectedCS){
+    static apendCase(value, selectedCS) {
         //Base.appendCasePickerHTML(value, selectedCS);
         let htmlstring = `
             <div class="panel panel-default" id=l_${value.replace(/[^A-Z0-9]/ig, "")}>
@@ -28,7 +28,7 @@ export class Html {
                                 <b>
                                     <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select case study">
                                         <span class="glyphicon 
-                                        ${ selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
+                                        ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
                                         fa-1.5x icon-btn"></span><span class="pointer">${value}</span>
                                     </span>
                                 </b>
@@ -75,18 +75,18 @@ export class Html {
         $('#cases').append(htmlstring);
     }
 
-    static renderCasePicker(cases, selectedCS){
+    static renderCasePicker(cases, selectedCS) {
         $('#casePicker').empty();
         $.each(cases, function (index, value) {
             Html.appendCasePicker(value, selectedCS);
         });
     }
 
-    static appendCasePicker(value, selectedCS, pageId){
+    static appendCasePicker(value, selectedCS, pageId) {
         let res = `
         <li id=p_${value.replace(/[^A-Z0-9]/ig, "")}>
             <a href="javascript:void(0);"  class="selectCS" data-ps="${value}"> <span class="glyphicon 
-                ${ selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
+                ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
             "></span><b> ${value}</b></a>
             <p class="divider"></p>
         </li>
@@ -94,7 +94,7 @@ export class Html {
         $('#casePicker').append(res);
     }
 
-    static updateCasePicker(titleps){
+    static updateCasePicker(titleps) {
         $('#casePicker').find(".glyphicon-check").removeClass('glyphicon-check danger').addClass('glyphicon-bookmark green');
         $(`#casePicker #p_${titleps.replace(/[^A-Z0-9]/ig, "")} span`).removeClass('glyphicon-bookmark green').addClass('glyphicon-check danger');
 
@@ -103,23 +103,23 @@ export class Html {
             .parent()
             .find(".glyphicon-bookmark")
             .removeClass("glyphicon-bookmark green")
-            .addClass("glyphicon-check danger"); 
+            .addClass("glyphicon-check danger");
     }
 
-    static title(casename, title, group, ){
+    static title(casename, title, group,) {
         $("#osy-case").html(casename);
-        $("#osy-title").html('<i class="fa-fw fa fa-home"></i>' +title+ ' <small>[' + group +']</small>'  );
+        $("#osy-title").html('<i class="fa-fw fa fa-home"></i>' + title + ' <small>[' + group + ']</small>');
     }
 
-    static genData(model){
-        var container =  $('#osy-currency');
+    static genData(model) {
+        var container = $('#osy-currency');
         container.empty();
 
         $.each(CURRENCY, function (key, value) {
-            if (value == model.currency){
-               
+            if (value == model.currency) {
+
                 container.append(`<option value="${value}" selected> ${value}</option>`);
-            }else{
+            } else {
                 container.append(`<option value="${value}"> ${value} </option>`);
             }
         });
@@ -139,171 +139,166 @@ export class Html {
 
     }
 
-    static ddlParams(params, param){
-        var container =  $('#osy-ryt');
+    static ddlParams(params, param) {
+        var container = $('#osy-ryt');
         container.empty();
         $.each(params, function (id, obj) {
-            if (obj.id == param ){
-                container.append('<option value="'+ obj.id+'" selected>'+obj.value+'</option>');
-            }else{
-                container.append('<option value="'+ obj.id+'">'+obj.value+'</option>');
+            if (obj.id == param) {
+                container.append('<option value="' + obj.id + '" selected>' + obj.value + '</option>');
+            } else {
+                container.append('<option value="' + obj.id + '">' + obj.value + '</option>');
             }
         });
     }
 
-    static ddlTechs(techs, tech){
-        var container =  $('#osy-techs');
+    static ddlTechs(techs, tech) {
+        var container = $('#osy-techs');
         container.empty();
         $.each(techs, function (id, obj) {
-            if (obj.TechId == tech ){
-                container.append('<option value="'+ obj.TechId+'" selected>'+obj.Tech+'</option>');
-            }else{
-                container.append('<option value="'+ obj.TechId+'" >'+obj.Tech+'</option>');
+            if (obj.TechId == tech) {
+                container.append('<option value="' + obj.TechId + '" selected>' + obj.Tech + '</option>');
+            } else {
+                container.append('<option value="' + obj.TechId + '" >' + obj.Tech + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlTechNames(techs, tech){
-        var container =  $('#osy-techNames');
+    static ddlTechNames(techs, tech) {
+        var container = $('#osy-techNames');
         container.empty();
         $.each(techs, function (id, obj) {
-            if (obj.TechId == tech ){
-                container.append('<option value="'+ obj.Tech+'" selected>'+obj.Tech+'</option>');
-            }else{
-                container.append('<option value="'+ obj.Tech+'" >'+obj.Tech+'</option>');
+            if (obj.TechId == tech) {
+                container.append('<option value="' + obj.Tech + '" selected>' + obj.Tech + '</option>');
+            } else {
+                container.append('<option value="' + obj.Tech + '" >' + obj.Tech + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlComms(comms, comm){
-        var container =  $('#osy-comms');
+    static ddlComms(comms, comm) {
+        var container = $('#osy-comms');
         container.empty();
         $.each(comms, function (id, obj) {
-            if (obj.CommId == comm ){
-                container.append('<option value="'+ obj.CommId+'" selected>'+obj.Comm+'</option>');
-            }else{
-                container.append('<option value="'+ obj.CommId+'" >'+obj.Comm+'</option>');
+            if (obj.CommId == comm) {
+                container.append('<option value="' + obj.CommId + '" selected>' + obj.Comm + '</option>');
+            } else {
+                container.append('<option value="' + obj.CommId + '" >' + obj.Comm + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlCommNames(comms, comm){
-        var container =  $('#osy-commNames');
+    static ddlCommNames(comms, comm) {
+        var container = $('#osy-commNames');
         container.empty();
         $.each(comms, function (id, obj) {
-            if (obj.CommId == comm ){
-                container.append('<option value="'+ obj.Comm+'" selected>'+obj.Comm+'</option>');
-            }else{
-                container.append('<option value="'+ obj.Comm+'" >'+obj.Comm+'</option>');
+            if (obj.CommId == comm) {
+                container.append('<option value="' + obj.Comm + '" selected>' + obj.Comm + '</option>');
+            } else {
+                container.append('<option value="' + obj.Comm + '" >' + obj.Comm + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlCons(cons, con){
-        var container =  $('#osy-cons');
+    static ddlCons(cons, con) {
+        var container = $('#osy-cons');
         container.empty();
         $.each(cons, function (id, obj) {
-            if (obj.ConId == con ){
-                container.append('<option value="'+ obj.ConId+'" selected>'+obj.Con+'</option>');
-            }else{
-                container.append('<option value="'+ obj.ConId+'" >'+obj.Con+'</option>');
+            if (obj.ConId == con) {
+                container.append('<option value="' + obj.ConId + '" selected>' + obj.Con + '</option>');
+            } else {
+                container.append('<option value="' + obj.ConId + '" >' + obj.Con + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlConNames(cons, con){
-        var container =  $('#osy-conNames');
+    static ddlConNames(cons, con) {
+        var container = $('#osy-conNames');
         container.empty();
         $.each(cons, function (id, obj) {
-            if (obj.ConId == con ){
-                container.append('<option value="'+ obj.Con+'" selected>'+obj.Con+'</option>');
-            }else{
-                container.append('<option value="'+ obj.Con+'" >'+obj.Con+'</option>');
+            if (obj.ConId == con) {
+                container.append('<option value="' + obj.Con + '" selected>' + obj.Con + '</option>');
+            } else {
+                container.append('<option value="' + obj.Con + '" >' + obj.Con + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlEmis(emis, emi){
-        var container =  $('#osy-emis');
+    static ddlEmis(emis, emi) {
+        var container = $('#osy-emis');
         container.empty();
         $.each(emis, function (id, obj) {
-            if (obj.EmisId == emi ){
-                container.append('<option value="'+ obj.EmisId+'" selected>'+obj.Emis+'</option>');
-            }else{
-                container.append('<option value="'+ obj.EmisId+'" >'+obj.Emis+'</option>');
+            if (obj.EmisId == emi) {
+                container.append('<option value="' + obj.EmisId + '" selected>' + obj.Emis + '</option>');
+            } else {
+                container.append('<option value="' + obj.EmisId + '" >' + obj.Emis + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlEmiNames(emis, emi){
-        var container =  $('#osy-emiNames');
+    static ddlEmiNames(emis, emi) {
+        var container = $('#osy-emiNames');
         container.empty();
         $.each(emis, function (id, obj) {
-            if (obj.EmisId == emi ){
-                container.append('<option value="'+ obj.Emis+'" selected>'+obj.Emis+'</option>');
-            }else{
-                container.append('<option value="'+ obj.Emis+'" >'+obj.Emis+'</option>');
+            if (obj.EmisId == emi) {
+                container.append('<option value="' + obj.Emis + '" selected>' + obj.Emis + '</option>');
+            } else {
+                container.append('<option value="' + obj.Emis + '" >' + obj.Emis + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlTimeslices($div, timeslices){
-        var container =  $div;
+    static ddlTimeslices($div, timeslices) {
+        var container = $div;
         container.empty();
         $.each(timeslices, function (id, ts) {
-            if (ts == 'S11' ){
-                container.append('<option value="'+ ts+'" selected>'+ts+'</option>');
-            }else{
-                container.append('<option value="'+ ts+'" >'+ts+'</option>');
+            if (ts == 'S11') {
+                container.append('<option value="' + ts + '" selected>' + ts + '</option>');
+            } else {
+                container.append('<option value="' + ts + '" >' + ts + '</option>');
             }
-        });  
+        });
     }
 
-    static ddlMods($div, mo){
-        var container =  $div;
+    static ddlMods($div, mo) {
+        var container = $div;
         container.empty();
         $.each(mo, function (id, m) {
-            if (m == 1 ){
-                container.append('<option value="'+ m+'" selected>'+m+'</option>');
-            }else{
-                container.append('<option value="'+ m+'" >'+m+'</option>');
+            if (m == 1) {
+                container.append('<option value="' + m + '" selected>' + m + '</option>');
+            } else {
+                container.append('<option value="' + m + '" >' + m + '</option>');
             }
-        });  
+        });
     }
 
-    static ddlScenarios(scs, sc){
-        var container =  $('#osy-scenarios');
+    static ddlScenarios(scs, sc) {
+        var container = $('#osy-scenarios');
         container.empty();
         $.each(scs, function (id, obj) {
-            if(obj.ScenarioId != 'SC_0'){
-                if (obj.id == sc ){
-                    container.append('<option value="'+ obj.Scenario+'" selected>'+obj.Scenario+'</option>');
-                }else{
-                    container.append('<option value="'+ obj.Scenario+'" >'+obj.Scenario+'</option>');
+            if (obj.ScenarioId != 'SC_0') {
+                if (obj.id == sc) {
+                    container.append('<option value="' + obj.Scenario + '" selected>' + obj.Scenario + '</option>');
+                } else {
+                    container.append('<option value="' + obj.Scenario + '" >' + obj.Scenario + '</option>');
                 }
             }
-        });   
+        });
     }
 
-    static years(from, to, range){
-        var container =  $('#osy-years');
+    static years(from, to, range) {
+        var container = $('#osy-years');
         container.empty();
-        for(var i = from; i <= to; i++) {
+        for (var i = from; i <= to; i++) {
             if (range.indexOf(String(i)) != -1) {
-                container.append(' <label class="checkbox"><input type="checkbox" name="Year['+i+']" id="'+i+'" checked/><i></i>'+i+'</label>');
-            }else{
-                container.append(' <label class="checkbox"><input type="checkbox" name="Year['+i+']" id="'+i+'"/><i></i>'+i+'</label>');
+                container.append(' <label class="checkbox"><input type="checkbox" name="Year[' + i + ']" id="' + i + '" checked/><i></i>' + i + '</label>');
+            } else {
+                container.append(' <label class="checkbox"><input type="checkbox" name="Year[' + i + ']" id="' + i + '"/><i></i>' + i + '</label>');
             }
         }
     }
 
-    static renderSparkline(fuels, perByFuel, capByFuel, totCapByFuel ){
-    
-        // console.log(fuels);
-        // console.log(totCapByFuel)
-        // console.log(capByFuel)
-        // console.log(perByFuel)
-        var container =  $('.show-stat-microcharts');
+    static renderSparkline(fuels, perByFuel, capByFuel, totCapByFuel) {
+        var container = $('.show-stat-microcharts');
         container.empty();
         $.each(fuels, function (key, fuel) {
             let arrString = capByFuel[fuel].toString();
@@ -331,80 +326,80 @@ export class Html {
         });
     }
 
-    static renderScOrder(scs){
+    static renderScOrder(scs) {
         var sortableList = '';
         $.each(scs, function (sc, flag) {
-            if (flag.ScenarioId != 'SC_0'){
-                if (flag.Active){
-                    var sortableElement = 
-                    `<div class="sortable-item" id=`+flag.ScenarioId+`>
-                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario +`
-                        <span class="pull-right"><input type="checkbox" name="enable[`+flag.ScenarioId+`]" id="`+flag.ScenarioId+`" checked/></span>
+            if (flag.ScenarioId != 'SC_0') {
+                if (flag.Active) {
+                    var sortableElement =
+                        `<div class="sortable-item" id=` + flag.ScenarioId + `>
+                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario + `
+                        <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked/></span>
                     </div>`;
                     sortableList = sortableList + sortableElement;
-                }else{
-                    var sortableElement = 
-                    `<div class="sortable-item" id=`+flag.ScenarioId+`>
-                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario +`
-                        <span class="pull-right"><input type="checkbox" name="enable[`+flag.ScenarioId+`]" id="`+flag.ScenarioId+`" /></span>
+                } else {
+                    var sortableElement =
+                        `<div class="sortable-item" id=` + flag.ScenarioId + `>
+                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario + `
+                        <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" /></span>
                     </div>`;
                     sortableList = sortableList + sortableElement;
                 }
             }
         });
         $("#osy-scOrder").html(sortableList);
-        $("#osy-scOrder").jqxSortable(); 
+        $("#osy-scOrder").jqxSortable();
     }
 
-    static renderUnitRules(rules, unitsDef){
+    static renderUnitRules(rules, unitsDef) {
         $("#osy-unitRuleSort1").empty();
         $("#osy-unitRuleSort2").empty();
         var sortableList1 = '';
         var sortableList2 = '';
-        if(typeof rules !== "undefined"){
+        if (typeof rules !== "undefined") {
             $.each(UNITDEFINITION, function (id, rule) {
                 if (!rules['cat'].some(e => e.var === id)) {
-                    let res = jsonLogic.apply( rule.val, unitsDef)
-                    var sortableElement = 
-                    `<div class="sortable-item" id="${id}">${res}</div>`;
+                    let res = jsonLogic.apply(rule.val, unitsDef)
+                    var sortableElement =
+                        `<div class="sortable-item" id="${id}">${res}</div>`;
                     sortableList1 = sortableList1 + sortableElement;
                 }
             });
-    
+
             $.each(rules['cat'], function (id, rule) {
-                let res = jsonLogic.apply( rule, unitsDef)
-                var sortableElement = 
-                `<div class="sortable-item" id="${rule.var}">${res}</div>`;
+                let res = jsonLogic.apply(rule, unitsDef)
+                var sortableElement =
+                    `<div class="sortable-item" id="${rule.var}">${res}</div>`;
                 sortableList2 = sortableList2 + sortableElement;
             });
-    
+
             $("#osy-unitRuleSort1").html(sortableList1);
-            $("#osy-unitRuleSort1").jqxSortable(); 
-            
+            $("#osy-unitRuleSort1").jqxSortable();
+
             $("#osy-unitRuleSort2").html(sortableList2);
-            $("#osy-unitRuleSort2").jqxSortable(); 
+            $("#osy-unitRuleSort2").jqxSortable();
             $("#osy-unitRuleSort1, #osy-unitRuleSort2").jqxSortable({
                 connectWith: ".osy-unitRuleSort",
                 opacity: 0.5,
             });
-        }else{
+        } else {
             $.each(UNITDEFINITION, function (id, rule) {
-                let res = jsonLogic.apply( rule.val, unitsDef)
-                var sortableElement = 
-                `<div class="sortable-item" id="${id}">${res}</div>`;
+                let res = jsonLogic.apply(rule.val, unitsDef)
+                var sortableElement =
+                    `<div class="sortable-item" id="${id}">${res}</div>`;
                 sortableList1 = sortableList1 + sortableElement;
             });
-    
-    
+
+
             $("#osy-unitRuleSort1").html(sortableList1);
-            $("#osy-unitRuleSort1").jqxSortable(); 
-            
+            $("#osy-unitRuleSort1").jqxSortable();
+
             // $("#osy-unitRuleSort2").html(sortableList2);
             // $("#osy-unitRuleSort2").jqxSortable(); 
             $("#osy-unitRuleSort1, #osy-unitRuleSort2").jqxSortable({
                 connectWith: ".osy-unitRuleSort",
                 opacity: 0.5,
-            });        
+            });
         }
 
     }

@@ -34,7 +34,7 @@ class Osemosys():
 
         self.dataFile = Path(Config.DATA_STORAGE,case,'data.txt')
 
-        self.resFile = Path(Config.DATA_STORAGE,case,'results.txt')
+        self.resFile = Path(Config.DATA_STORAGE,case, 'res','results.txt')
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
 
         self.glpkFolder = Path(Config.SOLVERs_FOLDER,'glpk-4.65', 'w64')
