@@ -4,6 +4,7 @@ import { Html } from "../../Classes/Html.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { Model } from "../Model/DataFile.Model.js";
 import { MessageSelect } from "./MessageSelect.js";
+import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
 
 export default class DataFile {
     static onLoad(){
@@ -18,11 +19,9 @@ export default class DataFile {
         })
         .then(data => {
             let [casename, genData] = data;
-            let model = new Model(casename, "DataFile");
+            let model = new Model(casename, genData, "DataFile");
             if(casename){
                 this.initPage(model);
-                this.initEvents(model);
-                ;
             }else{
                 MessageSelect.init(DataFile.refreshPage.bind(DataFile));
             }
@@ -37,8 +36,13 @@ export default class DataFile {
         //Navbar.initPage(model.casename, model.pageId);
         Html.title(model.casename, model.title, "data.txt");
         if (model.casename == null){
-            Message.info("Please select case or create new case study!");
+            Message.info("Please select model or create new Model!");
         }    
+        if (model.scenariosCount>1){
+            $('#scCommand').show();
+        }
+        //loadScript("References/smartadmin/js/plugin/jquery-nestable/jquery.nestable.min.js", Nestable.init.bind(null));
+        this.initEvents(model);
     }
 
     static refreshPage(casename){
@@ -53,14 +57,16 @@ export default class DataFile {
         })
         .then(data => {
             let [casename, genData] = data;
-            let model = new Model(casename, "DataFile");
-            $("#DataFile").hide();
+            let model = new Model(casename, genData, "DataFile");
+            $(".DataFile").hide();
             $("#osy-DataFile").empty();
             $("#osy-runOutput").empty();
-            $("#osy-downloadDataFile").hide();
+            // $("#osy-downloadDataFile").hide();
+            // $("#osy-downloadResultsFile").hide();
             $("#osy-solver").hide();
             $("#osy-run").hide();
-            $("#runOutput").hide();
+            $(".runOutput").hide();
+            $(".Results").hide();
             DataFile.initPage(model);
             DataFile.initEvents(model);
         })
@@ -70,8 +76,6 @@ export default class DataFile {
     }
 
     static initEvents(model){
-
-        
 
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function(e) {
@@ -83,12 +87,57 @@ export default class DataFile {
             Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
         });
 
+        $("#osy-btnScOrder").off('click');
+        $("#osy-btnScOrder").on('click', function (event) {
+            Html.renderScOrder(model.scenarios);
+        });
 
+        $("#btnSaveOrder").off('click');
+        $("#btnSaveOrder").on('click', function (event) {
+            //let order = $("#osy-scOrder").jqxSortable("serialize")
+            let order = $("#osy-scOrder").jqxSortable("toArray")
+            var scAcitive = new Array();
+            $.each($('input[type="checkbox"]:checked'), function (key, value) {
+                scAcitive.push($(value).attr("id"));
+            });
+            let scOrder = DefaultObj.defaultScenario(true);
+            $.each(order, function (id, sc) {
+                let tmp = {};
+                if (scAcitive.includes(sc)){
+                    tmp['ScenarioId'] = sc;
+                    tmp['Scenario'] = model.scMap[sc]['Scenario'];
+                    tmp['Desc'] = model.scMap[sc]['Desc'];
+                    tmp['Active'] = true
+                }else{
+                    tmp['ScenarioId'] = sc;
+                    tmp['Scenario'] = model.scMap[sc]['Scenario'];
+                    tmp['Desc'] = model.scMap[sc]['Desc'];
+                    tmp['Active'] = false;
+                }
+                scOrder.push(tmp);
+            });
+
+            Osemosys.saveScOrder(scOrder, model.casename)
+            .then(response => {
+                if(response.status_code=="success"){
+                    $('#osy-order').modal('toggle');
+                    Message.clearMessages();
+                    Message.bigBoxSuccess('Sceanario order', response.message, 3000);
+                    //sync S3
+                    if (Base.AWS_SYNC == 1){
+                        Base.updateSync(model.casename, "genData.json");
+                    }
+                    
+                }
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
+        });
+        
         $("#osy-generateDataFile").off('click');
         $("#osy-generateDataFile").on('click', function (event) {
-            console.log('initila gen')
             Pace.restart();
-            //console.log('model casenam ', model.casename);
             Osemosys.generateDataFile(model.casename)
             .then(response =>{
                 if(response.status_code=="success"){
@@ -103,7 +152,8 @@ export default class DataFile {
             .then(response => {
                 let [DataFile, message] = response;
                 $("#osy-runOutput").empty();
-                $("#runOutput").hide();
+                $(".runOutput").hide();
+                $(".Results").hide();
                 var table = $("<table />");
                 var rows = DataFile.split("\n"); 
 
@@ -122,27 +172,29 @@ export default class DataFile {
                     }
                 }
 
-                $("#DataFile").show();
+                $(".DataFile").show();
                 $("#osy-DataFile").empty();
                 $("#osy-DataFile").html('');
                 $("#osy-DataFile").append(table);
-                $("#osy-downloadDataFile").show();
-                if (Base.AWS_SYNC == 1){
-                    Base.updateSync(model.casename, "data.txt");
-                }
+                //$("#osy-downloadDataFile").show();
+                //ne moramo updateovati S3 sa data file
+                // if (Base.AWS_SYNC == 1){
+                //     Base.updateSync(model.casename, "data.txt");
+                // }
                 if(Base.HEROKU == 0){
                     $("#osy-run").show();
                     $("#osy-solver").show();
                 }
                 //Message.clearMessages();
                 //Message.bigBoxSuccess('Generate message', message, 3000);
+                Message.smallBoxInfo('Generate message', message, 3000);
             })
             .catch(error=>{
                 Message.bigBoxDanger('Error message', error, null);
             })
         });
 
-        $( "#osy-generateDataFile" ).trigger( "click" );
+        //$( "#osy-generateDataFile" ).trigger( "click" );
 
         $("#osy-run").off('click');
         $("#osy-run").on('click', function (event) {
@@ -150,16 +202,26 @@ export default class DataFile {
             let solver = $('input[name="solver"]:checked').val();
             Osemosys.run(model.casename, solver)
             .then(response => {
-                //console.log(response)
                 if(response.status_code=="success"){
-                    $("#runOutput").show();
+
+                    $(".runOutput").show();
+                    $(".Results").show();
+                    // $("#osy-downloadResultsFile").show();
                     $("#osy-runOutput").empty();
                     $("#osy-runOutput").html('<samp>'+ response.message +'</samp>');
+                    $('#tabs a[href="#tabRunOutput"]').tab('show');
+
+                    Base.getResultCSV(model.casename)
+                    .then(csvs => {
+                        console.log('csv ', csvs)
+                        Html.renderCSV(csvs)
+                    });
                     Message.clearMessages();
                     Message.bigBoxSuccess('RUN message', response.message, 3000);
                 }
                 if(response.status_code=="error"){
-                    $("#runOutput").show();
+                    $(".runOutput").show();
+                    $(".Results").show();
                     $("#osy-runOutput").empty();
                     $("#osy-runOutput").html('<samp>'+ response.message +'</samp>');
                     Message.clearMessages();

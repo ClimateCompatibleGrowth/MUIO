@@ -24,52 +24,6 @@
 							<button id="osy-saveData" class="btn btn-success">
 								Save data <i class="fa fa-save"></i>
 							 </button>
-
-							<!-- <select id="osy-ryt" name="osy-ryt" class="form-control inline"></select>	
-
-							<div  class="btn-group pull-right">
-								<button type="button" class="btn btn-default" id="showLog" data-toggle="tooltip" data-placement="top" title="Parameters definitions">
-									<i class="ace-icon fa fa-question-circle warning "></i>
-								</button>
-							</div>
-
-							<div  class="btn-group pull-right">
-								<button type="button" class="btn btn-default" id="resizeColumns" data-toggle="tooltip" data-placement="top" title="Resize columns">
-									<i class="ace-icon fa fa-arrows-h "></i>
-								</button>
-							</div>
-							<div  class="btn-group pull-right">
-								<button type="button" class="btn btn-default toggleLabels" data-toggle="tooltip" data-placement="top" title="Labels on/off">
-									<i class="ace-icon fa fa-tags danger "></i>
-								</button>
-							</div>
-							<div  class="btn-group pull-right">
-								<button type="button" class="btn btn-default" id="xlsAll" data-toggle="tooltip" data-placement="top" title="Exportgrid to excel">
-									<i class="ace-icon fa fa-file-excel-o green "></i>
-								</button>
-								<button type="button" class="btn btn-default" id="exportPng" data-toggle="tooltip" data-placement="top" title="Export Chart as png">
-									<i class="ace-icon fa fa-file-image-o primary "></i>
-								</button>
-							</div>
-							<div class="btn-group pull-right">
-								<button type="button" class="btn btn-default switchChart" id="stackedcolumn" data-chartType="stackedcolumn" id-chart="6"  data-toggle="tooltip" data-placement="top" title="Stacked Column Chart">
-									<i class="ace-icon fa fa-bars "></i>
-								</button>							
-								<button type="button" class="btn btn-default switchChart" id="coulmn" data-chartType="column" id-chart="6"  data-toggle="tooltip" data-placement="top" title="Stacked Area Chart">
-									<i class="ace-icon fa fa-bar-chart "></i>
-								</button>
-								<button type="button" class="btn btn-default switchChart"  id="line" data-chartType="line" id-chart="6"  data-toggle="tooltip" data-placement="top" title="Line Chart">
-									<i class="ace-icon fa fa-line-chart "></i>
-								</button>
-							</div>
-							<div  class="btn-group pull-right">
-								<button type="button" class="btn btn-default" id="decDown" data-toggle="tooltip" data-placement="top" title="Decrease decimal places">
-									<sub>0.0  &nbsp; &nbsp; </sub> <i class="ace-icon fa fa-chevron-left"></i>
-								</button>
-								<button type="button" class="btn btn-default"  id="decUp" data-toggle="tooltip" data-placement="top" title="Increase decimal places">
-									<sub>0.000</sub> <i class="ace-icon fa fa-chevron-right"></i>
-								</button>
-							</div> -->
 						</div>
 					</div>
 				</fieldset>
@@ -97,6 +51,68 @@
 		</div>
 	</div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="osy-unitRule" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" style="display: inline-block;">
+					Unit rule
+				</h4>
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+                        <i class="fa fa-times" aria-hidden="true"></i> Cancel
+                    </button>
+                </div>
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-info btn-sm" id='btnSaveRule'>
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
+
+			</div>
+			<div class="modal-body" style="padding-top: 5px;">
+
+				<div class="row" style="margin-bottom: 10px;">
+					<div class="col-md-12 col-lg-12">
+						<div id='unitTitle' style="border-bottom: 2px solid red;"></div>
+					</div>
+				</div>
+				<blockquote>
+					<small>Drag variables from variables container to formula container in order to create rule for selected parameter unit.</small>
+				  </blockquote>
+				<div class="row">
+					<div class="col-md-6 col-lg-6">
+
+						<div class="osy-unitRuleSort-container">
+							<span>Variables</span>
+							<div id="osy-unitRuleSort1" class="osy-unitRuleSort" ></div>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-6">
+						<div class="osy-unitRuleSort-container">
+							<span>Formula</span>
+							<div id="osy-unitRuleSort2" class="osy-unitRuleSort"></div>
+						</div>
+
+                    </div>
+                </div>
+				<div class="row" style="margin-bottom: 10px;">
+					<div class="col-md-12 col-lg-12">
+						<div id='ruleResult' style="border-bottom: 2px solid red;"></div>
+					</div>
+				</div>
+				<div id='ruleFormula' style="display: none; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: larger;"> </div>
+				<!-- <blockquote id='ruleFormula' style="display: none;"> </blockquote> -->
+                <footer>
+
+                </footer>
+            </div>
+        </div>
+	</div>
+</div>
+
 
 
 

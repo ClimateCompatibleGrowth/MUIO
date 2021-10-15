@@ -1,23 +1,23 @@
-import { CURRENCY } from './Const.Class.js';
+import { CURRENCY, UNITDEFINITION } from './Const.Class.js';
 import { Message } from "./Message.Class.js";
 
 export class Html {
 
-    static renderCases(cases, selectedCS){
-        $('#cases').empty();       
+    static renderCases(cases, selectedCS) {
+        $('#cases').empty();
         $.each(cases, function (index, value) {
             Html.apendCase(value, selectedCS)
         });
 
-        if(!selectedCS) Message.info( "Please select existing or create new case to proceed!");
+        if (!selectedCS) Message.info("Please select existing or create new case to proceed!");
     }
 
-    static removeCase(value){
+    static removeCase(value) {
         $(`#p_${value.replace(/[^A-Z0-9]/ig, "")}`).remove();
         $(`#l_${value.replace(/[^A-Z0-9]/ig, "")}`).remove();
     }
 
-    static apendCase(value, selectedCS){
+    static apendCase(value, selectedCS) {
         //Base.appendCasePickerHTML(value, selectedCS);
         let htmlstring = `
             <div class="panel panel-default" id=l_${value.replace(/[^A-Z0-9]/ig, "")}>
@@ -26,42 +26,42 @@ export class Html {
                         <tr>
                             <td>
                                 <b>
-                                    <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select case study">
+                                    <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select Model">
                                         <span class="glyphicon 
-                                        ${ selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
+                                        ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
                                         fa-1.5x icon-btn"></span><span class="pointer">${value}</span>
                                     </span>
                                 </b>
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span data-toggle="modal" data-target="#modaldescriptionps">
-                                <span class="descriptionPS" data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Case study description">
+                                <span class="descriptionPS" data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Model description">
                                 <span class="glyphicon glyphicon-info-sign text-info icon-btn"></span>
                                 </span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
-                                <span class="editPS " data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Edit case study">
+                                <span class="editPS " data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Edit Model">
                                     <span class="glyphicon glyphicon-edit text-info icon-btn"></span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span class="backupCS" data-ps="${value}" 
-                                data-toggle="tooltip" data-placement="top" title="Backup case study" >
+                                data-toggle="tooltip" data-placement="top" title="Backup Model" >
                                 <a href="backupCase?case=${value}"> <span class="glyphicon glyphicon-download-alt text-info icon-btn"></span></a>
                                
                                 </span>
                                 </td>
                             <td style="width:40px; text-align:center">
                                 <span data-toggle="modal" data-target="#modalcopy">
-                                <span class="copyCS" data-ps="${value}"' + 'id="copy_${value}"  data-toggle="tooltip" data-placement="top" title="Copy case study" >
+                                <span class="copyCS" data-ps="${value}"' + 'id="copy_${value}"  data-toggle="tooltip" data-placement="top" title="Copy Model" >
                                 <span class="glyphicon glyphicon-duplicate text-info icon-btn"></span>
                                 </span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span>
-                                    <span class="DeletePS" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete case study">
+                                    <span class="DeletePS" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
                                         <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
                                     </span>
                                 </span>
@@ -75,18 +75,37 @@ export class Html {
         $('#cases').append(htmlstring);
     }
 
-    static renderCasePicker(cases, selectedCS){
+    static renderCasePicker(cases, selectedCS) {
         $('#casePicker').empty();
         $.each(cases, function (index, value) {
             Html.appendCasePicker(value, selectedCS);
         });
     }
 
-    static appendCasePicker(value, selectedCS, pageId){
+    static renderCSV(csvs){
+        $('#csvFiles').empty();
+
+        $.each(csvs, function (index, value) {
+            let res = `
+            <tr>
+                <td>
+                    <a class=" " 
+                        href="downloadFile?file=${value}"><i class="fa fa-download"></i> ${value}
+                    </a>
+                </td>
+            </tr>
+            `;
+            $('#csvFiles').append(res);
+        });
+
+
+    }
+
+    static appendCasePicker(value, selectedCS, pageId) {
         let res = `
         <li id=p_${value.replace(/[^A-Z0-9]/ig, "")}>
             <a href="javascript:void(0);"  class="selectCS" data-ps="${value}"> <span class="glyphicon 
-                ${ selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
+                ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
             "></span><b> ${value}</b></a>
             <p class="divider"></p>
         </li>
@@ -94,7 +113,7 @@ export class Html {
         $('#casePicker').append(res);
     }
 
-    static updateCasePicker(titleps){
+    static updateCasePicker(titleps) {
         $('#casePicker').find(".glyphicon-check").removeClass('glyphicon-check danger').addClass('glyphicon-bookmark green');
         $(`#casePicker #p_${titleps.replace(/[^A-Z0-9]/ig, "")} span`).removeClass('glyphicon-bookmark green').addClass('glyphicon-check danger');
 
@@ -103,140 +122,202 @@ export class Html {
             .parent()
             .find(".glyphicon-bookmark")
             .removeClass("glyphicon-bookmark green")
-            .addClass("glyphicon-check danger"); 
+            .addClass("glyphicon-check danger");
     }
 
-    static title(casename, title, group, ){
+    static title(casename, title, group,) {
         $("#osy-case").html(casename);
-        $("#osy-title").html('<i class="fa-fw fa fa-home"></i>' +title+ ' <small>[' + group +']</small>'  );
+        $("#osy-title").html('<i class="fa-fw fa fa-home"></i>' + title + ' <small>[' + group + ']</small>');
     }
 
-    static genData(model){
-        var container =  $('#osy-currency');
+    static genData(model) {
+        var container = $('#osy-currency');
         container.empty();
+
         $.each(CURRENCY, function (key, value) {
-            if (value == model.currency){
-                container.append('<option value="'+ value+'" selected>'+value+'</option>');
-            }else{
-                container.append('<option value="'+ value+'">'+value+'</option>');
+            if (value == model.currency) {
+
+                container.append(`<option value="${value}" selected> ${value}</option>`);
+            } else {
+                container.append(`<option value="${value}"> ${value} </option>`);
             }
         });
-
-        // var container =  $('#osy-unit');
-        // container.empty();
-        // $.each(UNITS, function (key, value) {
-        //     if (value == model.unit){
-        //         container.append('<option value="'+ value+'" selected>'+value+'</option>');
-        //     }else{
-        //         container.append('<option value="'+ value+'">'+value+'</option>');
-        //     }
-        // });
-
-        // var container =  $('#osy-unit');
-        // container.empty();
-        // $.each(UNITS, function (key, value) {
-        //     if (value.id == model.unit){
-        //         container.append('<option value="'+ value.id+'" selected>'+value.id+'</option>');
-        //     }else{
-        //         container.append('<option value="'+ value.id+'">'+value.id+'</option>');
-        //     }
-        // });
 
         $("#osy-date").datepicker().datepicker("setDate", model.date);
         $("#osy-casename").val(model.casename);
         $("#osy-desc").val(model.desc);
-        $("#osy-dr").val(model.dr*100);
-        // $("#osy-dm").val(model.dm);
-        // $("#osy-rmpt").val(model.rmpt);
         $("#osy-ns").val(model.ns);
         $("#osy-dt").val(model.dt);
+        $("#osy-mo").val(model.mo);
 
         $("#commCount").text(model.commCount);
         $("#techCount").text(model.techCount);
         $("#emisCount").text(model.emisCount);
         $("#scenariosCount").text(model.scenariosCount);
+        $("#constraintsCount").text(model.constraintsCount);
 
     }
 
-    static ddlyears(years, year){
-        var container =  $('#hData-years');
+    static ddlParams(params, param) {
+        var container = $('#osy-ryt');
         container.empty();
-        $.each(years, function (key, value) {
-            if (value == year){
-                container.append('<option value="'+ value+'" selected>'+value+'</option>');
-            }else{
-                container.append('<option value="'+ value+'">'+value+'</option>');
+        $.each(params, function (id, obj) {
+            if (obj.id == param) {
+                container.append('<option value="' + obj.id + '" selected>' + obj.value + '</option>');
+            } else {
+                container.append('<option value="' + obj.id + '">' + obj.value + '</option>');
             }
         });
     }
 
-    static ddlRYT(ryts, ryt){
-        var container =  $('#osy-ryt');
-        container.empty();
-        $.each(ryts, function (id, obj) {
-            if (obj.id == ryt ){
-                container.append('<option value="'+ obj.id+'" selected>'+obj.value+'</option>');
-            }else{
-                container.append('<option value="'+ obj.id+'">'+obj.value+'</option>');
-            }
-        });
-    }
-
-    static ddlTechs(techs, tech){
-        var container =  $('#osy-techs');
+    static ddlTechs(techs, tech) {
+        var container = $('#osy-techs');
         container.empty();
         $.each(techs, function (id, obj) {
-            if (obj.id == tech ){
-                container.append('<option value="'+ obj.TechId+'" selected>'+obj.Tech+'</option>');
-            }else{
-                container.append('<option value="'+ obj.TechId+'" >'+obj.Tech+'</option>');
+            if (obj.TechId == tech) {
+                container.append('<option value="' + obj.TechId + '" selected>' + obj.Tech + '</option>');
+            } else {
+                container.append('<option value="' + obj.TechId + '" >' + obj.Tech + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlComms(comms, comm){
-        var container =  $('#osy-comms');
+    static ddlTechNames(techs, tech) {
+        var container = $('#osy-techNames');
+        container.empty();
+        $.each(techs, function (id, obj) {
+            if (obj.TechId == tech) {
+                container.append('<option value="' + obj.Tech + '" selected>' + obj.Tech + '</option>');
+            } else {
+                container.append('<option value="' + obj.Tech + '" >' + obj.Tech + '</option>');
+            }
+        });
+    }
+
+    static ddlComms(comms, comm) {
+        var container = $('#osy-comms');
         container.empty();
         $.each(comms, function (id, obj) {
-            if (obj.id == comm ){
-                container.append('<option value="'+ obj.CommId+'" selected>'+obj.Comm+'</option>');
-            }else{
-                container.append('<option value="'+ obj.CommId+'" >'+obj.Comm+'</option>');
+            if (obj.CommId == comm) {
+                container.append('<option value="' + obj.CommId + '" selected>' + obj.Comm + '</option>');
+            } else {
+                container.append('<option value="' + obj.CommId + '" >' + obj.Comm + '</option>');
             }
-        });   
+        });
     }
 
-    static ddlEmis(emis, emi){
-        var container =  $('#osy-emis');
+    static ddlCommNames(comms, comm) {
+        var container = $('#osy-commNames');
+        container.empty();
+        $.each(comms, function (id, obj) {
+            if (obj.CommId == comm) {
+                container.append('<option value="' + obj.Comm + '" selected>' + obj.Comm + '</option>');
+            } else {
+                container.append('<option value="' + obj.Comm + '" >' + obj.Comm + '</option>');
+            }
+        });
+    }
+
+    static ddlCons(cons, con) {
+        var container = $('#osy-cons');
+        container.empty();
+        $.each(cons, function (id, obj) {
+            if (obj.ConId == con) {
+                container.append('<option value="' + obj.ConId + '" selected>' + obj.Con + '</option>');
+            } else {
+                container.append('<option value="' + obj.ConId + '" >' + obj.Con + '</option>');
+            }
+        });
+    }
+
+    static ddlConNames(cons, con) {
+        var container = $('#osy-conNames');
+        container.empty();
+        $.each(cons, function (id, obj) {
+            if (obj.ConId == con) {
+                container.append('<option value="' + obj.Con + '" selected>' + obj.Con + '</option>');
+            } else {
+                container.append('<option value="' + obj.Con + '" >' + obj.Con + '</option>');
+            }
+        });
+    }
+
+    static ddlEmis(emis, emi) {
+        var container = $('#osy-emis');
         container.empty();
         $.each(emis, function (id, obj) {
-            if (obj.id == emi ){
-                container.append('<option value="'+ obj.EmisId+'" selected>'+obj.Emis+'</option>');
-            }else{
-                container.append('<option value="'+ obj.EmisId+'" >'+obj.Emis+'</option>');
+            if (obj.EmisId == emi) {
+                container.append('<option value="' + obj.EmisId + '" selected>' + obj.Emis + '</option>');
+            } else {
+                container.append('<option value="' + obj.EmisId + '" >' + obj.Emis + '</option>');
             }
-        });   
+        });
     }
 
-    static years(from, to, range){
-        var container =  $('#osy-years');
+    static ddlEmiNames(emis, emi) {
+        var container = $('#osy-emiNames');
         container.empty();
-        for(var i = from; i <= to; i++) {
+        $.each(emis, function (id, obj) {
+            if (obj.EmisId == emi) {
+                container.append('<option value="' + obj.Emis + '" selected>' + obj.Emis + '</option>');
+            } else {
+                container.append('<option value="' + obj.Emis + '" >' + obj.Emis + '</option>');
+            }
+        });
+    }
+
+    static ddlTimeslices($div, timeslices) {
+        var container = $div;
+        container.empty();
+        $.each(timeslices, function (id, ts) {
+            if (ts == 'S11') {
+                container.append('<option value="' + ts + '" selected>' + ts + '</option>');
+            } else {
+                container.append('<option value="' + ts + '" >' + ts + '</option>');
+            }
+        });
+    }
+
+    static ddlMods($div, mo) {
+        var container = $div;
+        container.empty();
+        $.each(mo, function (id, m) {
+            if (m == 1) {
+                container.append('<option value="' + m + '" selected>' + m + '</option>');
+            } else {
+                container.append('<option value="' + m + '" >' + m + '</option>');
+            }
+        });
+    }
+
+    static ddlScenarios(scs, sc) {
+        var container = $('#osy-scenarios');
+        container.empty();
+        $.each(scs, function (id, obj) {
+            if (obj.ScenarioId != 'SC_0') {
+                if (obj.id == sc) {
+                    container.append('<option value="' + obj.Scenario + '" selected>' + obj.Scenario + '</option>');
+                } else {
+                    container.append('<option value="' + obj.Scenario + '" >' + obj.Scenario + '</option>');
+                }
+            }
+        });
+    }
+
+    static years(from, to, range) {
+        var container = $('#osy-years');
+        container.empty();
+        for (var i = from; i <= to; i++) {
             if (range.indexOf(String(i)) != -1) {
-                container.append(' <label class="checkbox"><input type="checkbox" name="Year['+i+']" id="'+i+'" checked/><i></i>'+i+'</label>');
-            }else{
-                container.append(' <label class="checkbox"><input type="checkbox" name="Year['+i+']" id="'+i+'"/><i></i>'+i+'</label>');
+                container.append(' <label class="checkbox"><input type="checkbox" name="Year[' + i + ']" id="' + i + '" checked/><i></i>' + i + '</label>');
+            } else {
+                container.append(' <label class="checkbox"><input type="checkbox" name="Year[' + i + ']" id="' + i + '"/><i></i>' + i + '</label>');
             }
         }
     }
 
-    static renderSparkline(fuels, perByFuel, capByFuel, totCapByFuel ){
-    
-        // console.log(fuels);
-        // console.log(totCapByFuel)
-        // console.log(capByFuel)
-        // console.log(perByFuel)
-        var container =  $('.show-stat-microcharts');
+    static renderSparkline(fuels, perByFuel, capByFuel, totCapByFuel) {
+        var container = $('.show-stat-microcharts');
         container.empty();
         $.each(fuels, function (key, fuel) {
             let arrString = capByFuel[fuel].toString();
@@ -262,6 +343,84 @@ export class Html {
             `;
             container.append(spark);
         });
+    }
+
+    static renderScOrder(scs) {
+        var sortableList = '';
+        $.each(scs, function (sc, flag) {
+            if (flag.ScenarioId != 'SC_0') {
+                if (flag.Active) {
+                    var sortableElement =
+                        `<div class="sortable-item" id=` + flag.ScenarioId + `>
+                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario + `
+                        <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked/></span>
+                    </div>`;
+                    sortableList = sortableList + sortableElement;
+                } else {
+                    var sortableElement =
+                        `<div class="sortable-item" id=` + flag.ScenarioId + `>
+                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario + `
+                        <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" /></span>
+                    </div>`;
+                    sortableList = sortableList + sortableElement;
+                }
+            }
+        });
+        $("#osy-scOrder").html(sortableList);
+        $("#osy-scOrder").jqxSortable();
+    }
+
+    static renderUnitRules(rules, unitsDef) {
+        $("#osy-unitRuleSort1").empty();
+        $("#osy-unitRuleSort2").empty();
+        var sortableList1 = '';
+        var sortableList2 = '';
+        if (typeof rules !== "undefined") {
+            $.each(UNITDEFINITION, function (id, rule) {
+                if (!rules['cat'].some(e => e.var === id)) {
+                    let res = jsonLogic.apply(rule.val, unitsDef)
+                    var sortableElement =
+                        `<div class="sortable-item" id="${id}">${res}</div>`;
+                    sortableList1 = sortableList1 + sortableElement;
+                }
+            });
+
+            $.each(rules['cat'], function (id, rule) {
+                let res = jsonLogic.apply(rule, unitsDef)
+                var sortableElement =
+                    `<div class="sortable-item" id="${rule.var}">${res}</div>`;
+                sortableList2 = sortableList2 + sortableElement;
+            });
+
+            $("#osy-unitRuleSort1").html(sortableList1);
+            $("#osy-unitRuleSort1").jqxSortable();
+
+            $("#osy-unitRuleSort2").html(sortableList2);
+            $("#osy-unitRuleSort2").jqxSortable();
+            $("#osy-unitRuleSort1, #osy-unitRuleSort2").jqxSortable({
+                connectWith: ".osy-unitRuleSort",
+                opacity: 0.5,
+            });
+        } else {
+            $.each(UNITDEFINITION, function (id, rule) {
+                let res = jsonLogic.apply(rule.val, unitsDef)
+                var sortableElement =
+                    `<div class="sortable-item" id="${id}">${res}</div>`;
+                sortableList1 = sortableList1 + sortableElement;
+            });
+
+
+            $("#osy-unitRuleSort1").html(sortableList1);
+            $("#osy-unitRuleSort1").jqxSortable();
+
+            // $("#osy-unitRuleSort2").html(sortableList2);
+            // $("#osy-unitRuleSort2").jqxSortable(); 
+            $("#osy-unitRuleSort1, #osy-unitRuleSort2").jqxSortable({
+                connectWith: ".osy-unitRuleSort",
+                opacity: 0.5,
+            });
+        }
+
     }
 }
 

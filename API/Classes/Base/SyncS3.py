@@ -1,26 +1,37 @@
 import boto3
 import os
 import glob
-import threading
 from pathlib import Path
-from collections.abc import Iterable 
+# from Classes.Base.S3 import S3
 from Classes.Base import Config
-from Classes.Base.S3 import S3
+from collections.abc import Iterable 
 
-class SyncS3(S3):
+class SyncS3():
     def __init__(self):
-        S3.__init__(self)
-        # self.resource = boto3.resource(
-        # "s3",
-        # aws_access_key_id=Config.S3_KEY,
-        # aws_secret_access_key=Config.S3_SECRET
-        # )
+        #S3.__init__(self)
+        self.resource = boto3.resource(
+        "s3",
+        aws_access_key_id=Config.S3_KEY,
+        aws_secret_access_key=Config.S3_SECRET
+        )
 
-        # self.client = boto3.client(
-        #     's3',
-        #     aws_access_key_id=Config.S3_KEY,
-        #     aws_secret_access_key=Config.S3_SECRET
-        # )
+        self.client = boto3.client(
+            's3',
+            aws_access_key_id=Config.S3_KEY,
+            aws_secret_access_key=Config.S3_SECRET
+        )
+
+    def getCasesSyncInit(self):
+        try:
+            my_bucket = self.resource.Bucket(Config.S3_BUCKET)
+            result = my_bucket.meta.client.list_objects(Bucket=my_bucket.name, Delimiter='/')
+            if isinstance(result.get('CommonPrefixes'), Iterable):
+                cases = [ f.get('Prefix')[:-1] for f in result.get('CommonPrefixes')]
+            else:
+                cases = []
+            return cases
+        except(IOError):
+            raise IOError
 
     def downloadSync(self, prefix, local, bucket):
         """
@@ -95,6 +106,13 @@ class SyncS3(S3):
 
                 awsPath = str(awsInitDir) + '/' + str(fileName)
                 resource.meta.client.upload_file(FullfileName, bucketName, awsPath)
+
+    def deleteSync(self, case):
+        try:
+            my_bucket = self.resource.Bucket(Config.S3_BUCKET)
+            my_bucket.objects.filter(Prefix=case+"/").delete()
+        except(IOError):
+            raise IOError
 
     def updateSync(self, localFile, awsInitDir, bucketName):
         """

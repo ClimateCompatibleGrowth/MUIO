@@ -1,23 +1,44 @@
 import { Message } from "../../Classes/Message.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
+import { SyncS3 } from "../../Classes/SyncS3.Class.js";
 import { Model } from "../Model/Home.Model.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { Navbar } from "./Navbar.js";
+import { Sidebar } from "./Sidebar.js";
+import { Osemosys } from "../../Classes/Osemosys.Class.js";
+import { Routes } from "../../Routes/Routes.Class.js";
 
 export default class Home {
-    static onLoad(){
+    static async onLoad(){
+        if (Base.AWS_SYNC == 1 && Base.INIT_SYNC){
+            $('#loadermain h4').text('Syncronizing with S3 Bucket!'); 
+            $('#loadermain').show();
+            await Base.initSyncS3()
+            .then(response => {
+                Message.smallBoxInfo('Sync message', response.message, 3000);
+                Base.INIT_SYNC = 0;
+            })
+        }
         Base.getSession()
         .then(response =>{
-            let selectedCS = response['session']
-            Base.getCaseStudies()
-            .then(cases => {
-                let model = new Model(cases, selectedCS);
-                this.initPage(model);
-            })
-            .catch(error =>{ 
-                Message.danger(error);
-            });
+            let casename = response.session;
+            const promise = [];
+            promise.push(casename);
+
+            let cases = Base.getCaseStudies();
+            promise.push(cases);
+            let genData = Osemosys.getData(casename, 'genData.json');
+            promise.push(genData);
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
+            $('#loadermain').hide();
+            return Promise.all(promise);
+        })
+        .then(data => {
+            let [ casename, cases, genData, PARAMETERS] = data;
+            let model = new Model(casename, cases, genData, PARAMETERS);
+            this.initPage(model);
         })
         .catch(error =>{ 
             Message.danger(error);
@@ -27,6 +48,7 @@ export default class Home {
     static initPage(model){
         Message.clearMessages();
         Navbar.initPage(model.casename);
+        Sidebar.Load(model.genData, model.PARAMETERS);
         Html.renderCases(model.cases, model.casename);
         Home.initEvents(model);
         loadScript("References/smartadmin/js/plugin/dropzone/dropzone.min.js", Base.uploadFunction);
@@ -34,21 +56,25 @@ export default class Home {
 
     static refreshPage(casename){
         Base.setSession(casename)
-        .then(response=>{
-            let selectedCS = casename
-            Base.getCaseStudies()
-            .then(cases => {
-                Message.clearMessages();
-                let model = new Model(cases, selectedCS);
-                this.initPage(model);
-            })
-            .catch(error =>{ 
-                Message.danger(error);
-            });
+        .then(response =>{
+            const promise = [];
+            promise.push(casename);
+            let cases = Base.getCaseStudies();
+            promise.push(cases);
+            let genData = Osemosys.getData(casename, 'genData.json');
+            promise.push(genData);
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS); 
+            return Promise.all(promise);
         })
-        .catch(error=>{
+        .then(data => {
+            let [ casename, cases, genData, PARAMETERS] = data;
+            let model = new Model(casename, cases, genData, PARAMETERS);
+            this.initPage(model);
+        })
+        .catch(error =>{ 
             Message.danger(error);
-        })
+        });
     }
 
     static initEvents(model){
@@ -61,7 +87,8 @@ export default class Home {
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
-            Html.updateCasePicker(casename);
+            //Html.updateCasePicker(casename);
+            //Sidebar.Load(casename, model.genData, model.PARAMETERS);
             Home.refreshPage(casename);
             Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
         });
@@ -71,10 +98,11 @@ export default class Home {
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
+
             Base.setSession(casename)
             .then(response=>{
                 $('#Navi>li').removeClass('active');
-                $('#Navi').children('li').eq(1).addClass('active');
+                $('#Navi').children('li').eq(2).addClass('active');
                 hasher.setHash("#");
                 hasher.setHash("#AddCase");
             })
@@ -95,9 +123,11 @@ export default class Home {
                     //REFRESH
                     Html.apendCase(casename+'_copy');
                     Html.appendCasePicker(casename+'_copy', null)
-                    //sync S3
                     if (Base.AWS_SYNC == 1){
-                        Base.uploadSync(casename+'_copy');
+                        SyncS3.deleteResultsPreSync(casename)
+                        .then(response =>{
+                            SyncS3.uploadSync(casename+'_copy');
+                        });  
                     }
                 }
                 if(response.status_code=="warning"){
@@ -109,28 +139,6 @@ export default class Home {
                 Message.danger(error);
             });
         });
-
-        //backup case
-        // $(document).delegate(".backupCS","click",function(e){
-        //     e.stopImmediatePropagation();
-        //     var titleps = $(this).attr('data-ps');
-        //     Base.backupCaseStudy(titleps)
-        //     .then(response => {
-        //         Message.clearMessages();
-        //         if(response.status_code=="success"){
-        //             Message.bigBoxInfo('Backup info', response.message, 5000)
-        //         }
-        //         if(response.status_code=="info"){
-        //             Message.info(response.message);
-        //         }
-        //         if(response.status_code=="warning"){
-        //             Message.bigBoxWarning('Backup warning', response.message, 5000)
-        //         }
-        //     })
-        //     .catch(error =>{ 
-        //         Message.danger(error);
-        //     });
-        // });
 
         //get descrition
         $(document).delegate(".descriptionPS","click",function(e){
@@ -149,7 +157,7 @@ export default class Home {
             var casename = $(this).attr('data-ps');
             $.SmartMessageBox({
                 title : "Confirmation Box!",
-                content : "You are about to delete <b class='danger'>" + casename + "</b> case study! Are you sure?",
+                content : "You are about to delete <b class='danger'>" + casename + "</b> Model! Are you sure?",
                 buttons : '[No][Yes]'
             }, function(ButtonPressed) {
                 if (ButtonPressed === "Yes") {
@@ -162,12 +170,16 @@ export default class Home {
                             Html.removeCase(casename);
                             //sync with s3
                             if (Base.AWS_SYNC == 1){
-                                Base.deleteSync(casename);
+                                SyncS3.deleteSync(casename);
                             }
                         }
                         if(response.status_code=="success_session"){
                             Message.bigBoxSuccess('Delete message', response.message, 3000);
                             Message.info( "Please select existing or create new case to proceed!");
+                            if (model.casename = casename){
+                                Sidebar.Load(null, null);
+                                //Routes.removeRoutes(model.PARAMETERS);
+                            }
                             //REFRESH
                             Html.removeCase(casename);
                             if (Base.AWS_SYNC == 1){

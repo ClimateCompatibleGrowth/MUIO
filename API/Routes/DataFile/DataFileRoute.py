@@ -14,7 +14,7 @@ def generateDataFile():
             txtFile = DataFile(casename)
             txtFile.generateDatafile()
             response = {
-                "message": "You have updated data!",
+                "message": "You have created data file!",
                 "status_code": "success"
             }      
         return jsonify(response), 200
@@ -50,6 +50,27 @@ def downloadDataFile():
         #path = "/Examples.pdf"
         case = session.get('osycase', None)
         dataFile = Path(Config.DATA_STORAGE,case,'data.txt')
+        return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
+    
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@datafile_api.route("/downloadFile", methods=['GET'])
+def downloadFile():
+    try:
+        case = session.get('osycase', None)
+        file = request.args.get('file')
+        dataFile = Path(Config.DATA_STORAGE,case,'res','csv',file)
+        return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
+    
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@datafile_api.route("/downloadResultsFile", methods=['GET'])
+def downloadResultsFile():
+    try:
+        case = session.get('osycase', None)
+        dataFile = Path(Config.DATA_STORAGE,case, 'res', 'results.txt')
         return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
     
     except(IOError):

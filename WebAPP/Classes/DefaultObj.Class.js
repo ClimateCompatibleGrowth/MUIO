@@ -5,23 +5,6 @@ export class DefaultObj{
         // after the decimal.
         return type+'_' + Math.random().toString(36).substr(2, 5);
     }
-    
-    static defaultScenario(first=false){
-        let id;
-        if(first){
-            id = 'SC_0';
-        }else{
-            id = this.getId('SC');
-        }
-        let defaultObj = [
-            {
-                "ScenarioId": id,
-                "Scenario":id,
-                "Desc": "Base scenario"
-            }
-        ];
-        return defaultObj;
-    }
 
     static defaultTech(first=false){
         let id;
@@ -36,13 +19,13 @@ export class DefaultObj{
                 "TechId": id,
                 "Tech":id,
                 "Desc": "Default technology",
+                "CapUnitId": "MW",
+                "ActUnitId": "PJ",
                 "IAR": emptyArray,
                 "OAR": emptyArray,
                 "EAR": emptyArray,
-                "TMPAL":0,
-                "TMPAU":999999,
-                "CAU": 0,
-                "OL": 1
+                "INCR": emptyArray,
+                "ITCR": emptyArray,
             }
         ];
         return defaultObj;
@@ -78,8 +61,6 @@ export class DefaultObj{
                 "EmisId": id,
                 "Emis":id,
                 "Desc": "Default emission",
-                "MPEL":999999,
-                "MPEE":0,
                 "UnitId": "Ton"
             }
         ];
@@ -100,5 +81,43 @@ export class DefaultObj{
             }
         ];
         return defaultUnit;
+    }
+
+    static defaultScenario(first=false){
+        let id;
+        if(first){
+            id = 'SC_0';
+        }else{
+            id = this.getId('SC');
+        }
+        let defaultObj = [
+            {
+                "ScenarioId": id,
+                "Scenario":id,
+                "Desc": "Base scenario",
+                "Active": true
+            }
+        ];
+        return defaultObj;
+    }
+
+    static defaultConstraint(first=false){
+        let id;
+        if(first){
+            id = 'CO_0';
+        }else{
+            id = this.getId('CO');
+        }
+        let emptyArray = ['TEC_0'];
+        let defaultObj = [
+            {
+                "ConId": id,
+                "Con":id,
+                "Desc": "Default constraint ",
+                "Tag": 1,
+                "CM": emptyArray
+            }
+        ];
+        return defaultObj;
     }
 }

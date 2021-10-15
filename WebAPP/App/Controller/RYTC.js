@@ -10,177 +10,291 @@ import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTC {
-    static onLoad(group, param){
+    static onLoad(group, param) {
         Base.getSession()
-        .then(response =>{
-            let casename = response['session'];
-            if(casename){
-                const promise = [];
-                promise.push(casename);
-                const genData = Osemosys.getData(casename, 'genData.json');
-                promise.push(genData); 
-                const PARAMETERS = Osemosys.getParamFile();
-                promise.push(PARAMETERS); 
-                const RYTCdata = Osemosys.getData(casename, "RYTC.json");
-                promise.push(RYTCdata); 
-                return Promise.all(promise);
-            }else{
-                MessageSelect.init(RYTC.refreshPage.bind(RYTC));
-            }
-        })
-        .then(data => {
-            let [casename, genData, PARAMETERS, RYTCdata] = data;
-            if (RYTCdata['IAR'].length == 0 &&  RYTCdata['OAR'].length == 0){
-                Message.warning('Selected model does not have Input nor Output activity ratio defined for any technology.');
-                Message.smallBoxWarning('WARNING', 'Selected model does not have Input nor Output activity ratio defined for any technology.', null);
-
-            }else{
-                let model = new Model(casename, genData, RYTCdata, group, PARAMETERS, param);
-                this.initPage(model);
-                this.initEvents(model);
-            }
-        })
-        .catch(error =>{ 
-            Message.warning(error);
-        });
+            .then(response => {
+                let casename = response['session'];
+                if (casename) {
+                    const promise = [];
+                    promise.push(casename);
+                    const genData = Osemosys.getData(casename, 'genData.json');
+                    promise.push(genData);
+                    const PARAMETERS = Osemosys.getParamFile();
+                    promise.push(PARAMETERS);
+                    const RYTCdata = Osemosys.getData(casename, "RYTC.json");
+                    promise.push(RYTCdata);
+                    const cases = Base.getCaseStudies();
+                    promise.push(cases);
+                    return Promise.all(promise);
+                } else {
+                    let er = {
+                        "message": 'There is no model selected!',
+                        "status_code": "CaseError"
+                    }
+                    return Promise.reject(er);
+                    // MessageSelect.init(RYTC.refreshPage.bind(RYTC));
+                    // throw new Error('No model selected');
+                }
+            })
+            .then(data => {
+                let [casename, genData, PARAMETERS, RYTCdata, cases] = data;
+                if (RYTCdata[param]['SC_0'].length == 0) {
+                    let er = {
+                        "message": 'There is no activity defined!',
+                        "status_code": "ActivityError",
+                        "casename": casename
+                    }
+                    return Promise.reject(er);
+                } else {
+                    let model = new Model(casename, genData, RYTCdata, group, PARAMETERS, param, cases);
+                    this.initPage(model);
+                    this.initEvents(model);
+                }
+            })
+            .catch(error => {
+                if (error.status_code == 'CaseError') {
+                    MessageSelect.init(RYTC.refreshPage.bind(RYTC));
+                }
+                else if (error.status_code == 'ActivityError') {
+                    MessageSelect.activity(RYTC.refreshPage.bind(RYTC), error.casename);
+                }
+                Message.warning(error);
+            });
     }
 
-    static initPage(model){
+    static initPage(model) {
         Message.clearMessages();
+
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
-        Html.ddlRYT( model.PARAMETERS['RYTC'], model.param);
-        Html.ddlTechs( model.techs, model.techs[0]['TechId']);
-        
+        Html.ddlParams(model.PARAMETERS['RYTC'], model.param);
+        Html.ddlTechs(model.techs[model.param], model.techs[model.param][0]['TechId']);
+        Html.ddlComms(model.comms[model.param][model.techs[model.param][0]['TechId']], model.comms[model.param][model.techs[model.param][0]['TechId']][0]['CommId']);
         let $divGrid = $('#osy-gridRYTC');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns, true);
 
+        if (model.scenariosCount > 1) {
+            $('#scCommand').show();
+            Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);
+            Html.ddlTechNames(model.techs[model.param], model.techs[model.param][0]['TechId']);
+            Html.ddlCommNames(model.comms[model.param][model.techs[model.param][0]['TechId']], model.comms[model.param][model.techs[model.param][0]['TechId']][0]['CommId']);
+            Grid.applyRYTCFilter($divGrid, model.years);
+        }
+
         let $divChart = $('#osy-chartRYTC');
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        Chart.Chart($divChart, daChart, "RYTC", model.series);  
-        if (model.RYTCdata[model.param].length === 0 ){
-            Message.warning('Selected model does not have '+ model.param +' defined for any technology.');
-            Message.smallBoxWarning('WARNING', 'Selected model does not have '+ model.param +' defined for any technology.', 3000);
-        }
+        Chart.Chart($divChart, daChart, "RYTC", model.series);
     }
 
-    static refreshPage(casename){
+    static refreshPage(casename) {
         Base.setSession(casename)
-        .then(response =>{
-            const promise = [];
-            promise.push(casename);
-            const genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData); 
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
-            const RYTCdata = Osemosys.getData(casename, 'RYTC.json');
-            promise.push(RYTCdata); 
-            return Promise.all(promise);
-        })
-        .then(data => {
-            let [casename, genData, PARAMETERS, RYTCdata] = data;
-            let model = new Model(casename, genData, RYTCdata, PARAMETERS, PARAMETERS['RYTC'][0]['id']);
-            this.initPage(model);
-            this.initEvents(model);
-        })
-        .catch(error =>{ 
-            Message.warning(error);
-        });
+            .then(response => {
+                const promise = [];
+                promise.push(casename);
+                const genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData);
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS);
+                const RYTCdata = Osemosys.getData(casename, 'RYTC.json');
+                promise.push(RYTCdata);
+                const cases = Base.getCaseStudies();
+                promise.push(cases);
+                return Promise.all(promise);
+            })
+            .then(data => {
+                let [casename, genData, PARAMETERS, RYTCdata, cases] = data;
+                if (RYTCdata[PARAMETERS['RYTC'][0]['id']]['SC_0'].length == 0) {
+                    let er = {
+                        "message": 'There is no activity defined!',
+                        "status_code": "ActivityError",
+                        "casename": casename
+                    }
+                    return Promise.reject(er);
+                } else {
+                    let model = new Model(casename, genData, RYTCdata, 'RYTC', PARAMETERS, PARAMETERS['RYTC'][0]['id'], cases);
+                    this.initPage(model);
+                    this.initEvents(model);
+                }
+            })
+            .catch(error => {
+                setTimeout(function () {
+                    if (error.status_code == 'CaseError') {
+                        MessageSelect.init(RYTC.refreshPage.bind(RYTC));
+                    }
+                    else if (error.status_code == 'ActivityError') {
+                        MessageSelect.activity(RYTC.refreshPage.bind(RYTC), error.casename);
+                    }
+                    Message.warning(error.message);
+                }, 500);
+            });
     }
 
-    static initEvents(model){
+    static initEvents(model) {
+
+        let $divGrid = $('#osy-gridRYTC');
+        let $divChart = $('#osy-chartRYTC');
+
         $("#casePicker").off('click');
-        //odabir novog case iz case pickera
-        $("#casePicker").on('click', '.selectCS', function(e) {
+        $("#casePicker").on('click', '.selectCS', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
-            Html.updateCasePicker(casename);
             RYTC.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Html.updateCasePicker(casename);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
-        $("#osy-saveRYTdata").on('click', function (event) {
+        $("#osy-saveRYTCdata").off('click');
+        $("#osy-saveRYTCdata").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            let param = $( "#osy-ryt" ).val();
-            let rytData = $('#osy-gridRYTC').jqxGrid('getrows');
-            let daRYTData = JSON.stringify(rytData,['TechId', 'CommId'].concat(model.years));
-            //let RYTmodel = JSON.stringify(rytData,['TechId', 'Tech', 'CommId', 'Comm'].concat(model.years));
-            //potrebno dodati za koji param vrsimo update
-            Osemosys.updateData(JSON.parse(daRYTData), param, "RYTC.json")
-            .then(response =>{
-                //model.gridData[param] = JSON.parse(RYTmodel);
-                Message.bigBoxSuccess('Case study message', response.message, 3000);
-                //sync S3
-                if (Base.AWS_SYNC == 1){
-                    Base.updateSync(model.casename, "RYTC.json");
-                }
-            })
-            .catch(error=>{
-                Message.bigBoxDanger('Error message', error, null);
-            })
+            let param = $("#osy-ryt").val();
+            let rytData = $divGrid.jqxGrid('getboundrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'TechId', 'CommId'].concat(model.years)));
+
+            let saveData = {};
+            $.each(data, function (id, obj) {
+                if (!saveData[obj.ScId]) { saveData[obj.ScId] = []; }
+                saveData[obj.ScId].push(obj);
+                delete obj.ScId;
+            });
+
+            Osemosys.updateData(saveData, param, "RYTC.json")
+                .then(response => {
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
+                    //sync S3
+                    if (Base.AWS_SYNC == 1) {
+                        Base.updateSync(model.casename, "RYTC.json");
+                    }
+                })
+                .catch(error => {
+                    Message.bigBoxDanger('Error message', error, null);
+                })
         });
 
-        //change of ddl parameters
-        $('#osy-ryt').on('change', function() {
+        $("#osy-ryt").off('change');
+        $('#osy-ryt').on('change', function () {
             Message.clearMessages();
-            if (model.RYTCdata[this.value].length === 0 ){
-                Message.warning('Selected model does not have '+ model.param +' defined for any technology.');
-                Message.smallBoxWarning('WARNING', 'Selected model does not have '+ model.param +' defined for any technology.', 3000);
+            if (model.RYTCdata[this.value]['SC_0'].length === 0) {
+                MessageSelect.activity(RYTC.refreshPage.bind(RYTC), model.casename);
+                Message.warning(`There is no data definded for ${model.PARAMNAMES[this.value]} for model ${model.casename}!`);
+            } else {
+                Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
+                model.srcGrid.root = this.value;
+                $divGrid.jqxGrid('updatebounddata');
+                model.param = this.value;
+
+                //update za ddl coms i techs za IAR ili OAR
+                Html.ddlTechs(model.techs[this.value], model.techs[this.value][0]['TechId']);
+                Html.ddlComms(model.comms[this.value][model.techs[this.value][0]['TechId']], model.comms[this.value][model.techs[this.value][0]['TechId']][0]['CommId']);
+
+                Html.ddlTechNames(model.techs[this.value], model.techs[this.value][0]['TechId']);
+                Html.ddlCommNames(model.comms[this.value][model.techs[this.value][0]['TechId']], model.comms[this.value][model.techs[this.value][0]['TechId']][0]['CommId']);
+
+                var configChart = $divChart.jqxChart('getInstance');
+                var tech = $("#osy-techs").val();
+                var comm = $("#osy-comms").val();
+                configChart.source.records = model.chartData[this.value][tech][comm];
+                configChart.update();
+                $('#definition').html(`${DEF[model.group][model.param].definition}`);
             }
-            Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
-            let $divGrid = $('#osy-gridRYTC');
-            model.srcGrid.root = this.value;
-            $divGrid.jqxGrid('updatebounddata');
-            var configChart = $('#osy-chartRYTC').jqxChart('getInstance');
-            var tech = $( "#osy-techs" ).val();
-            configChart.source.records = model.chartData[this.value][tech];
+        });
+
+        $("#osy-techs").off('change');
+        $('#osy-techs').on('change', function () {
+            var param = $("#osy-ryt").val();
+            Html.ddlComms(model.comms[param][this.value], model.comms[param][this.value][0]['CommId']);
+            var comm = $("#osy-comms").val();
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[param][this.value][comm];
             configChart.update();
         });
 
-        //change of ddl techs
-        $('#osy-techs').on('change', function() {
-            var param = $( "#osy-ryt" ).val();
-            var configChart = $('#osy-chartRYTC').jqxChart('getInstance');
-            configChart.source.records = model.chartData[param][this.value];
+        $("#osy-comms").off('change');
+        $('#osy-comms').on('change', function () {
+            var param = $("#osy-ryt").val();
+            var tech = $("#osy-techs").val();
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[param][tech][this.value];
             configChart.update();
+        });
+
+        $("#osy-techNames").off('change');
+        $('#osy-techNames').on('change', function () {
+            var param = $("#osy-ryt").val();
+            let tech = model.techIds[this.value];
+            Html.ddlCommNames(model.comms[param][tech], model.comms[param][tech][0]['CommId']);
+        });
+
+        $("#osy-openScData").off('click');
+        $("#osy-openScData").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $("#osy-scenarios").val();
+            var comm = $("#osy-commNames").val();
+            var tech = $("#osy-techNames").val();
+            Grid.applyRYTCFilter($divGrid, model.years, sc, tech, comm);
+        });
+
+        $("#osy-removeScData").off('click');
+        $("#osy-removeScData").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var sc = $("#osy-scenarios").val();
+            var comm = $("#osy-commNames").val();
+            var tech = $("#osy-techNames").val();
+            var rows = $divGrid.jqxGrid('getdisplayrows');
+            $.each(rows, function (id, obj) {
+                if (obj.Sc == sc && obj.Comm == comm && obj.Tech == tech) {
+                    $.each(model.years, function (i, year) {
+                        $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                    });
+                    return false; // breaks
+                }
+            });
+            Grid.applyRYTCFilter($divGrid, model.years);
         });
 
         let pasteEvent = false;
-        $('#osy-gridRYTC').bind('keydown', function (event) {
+        $divGrid.bind('keydown', function (event) {
             pasteEvent = false;
             var ctrlDown = false, ctrlKey = 17, cmdKey = 91, vKey = 86, cKey = 67;
             var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
             if (key == vKey) {
                 pasteEvent = true;
 
-                setTimeout(function(){ 
-                    let gridData = $('#osy-gridRYTC').jqxGrid('getrows');
-                    let param = $( "#osy-ryt" ).val();
-                    let tech = $( "#osy-techs" ).val();
-                    //update chart model
-                    $.each(model.techs, function (idT, tech) {
-                        let chartData = [];
-                        $.each(model.years, function (idY, year) {
-                            let chunk = {};
-                            chunk['Year'] = year;
-                            $.each(gridData, function (id, rytDataObj) {
-                                if(rytDataObj['TechId'] == tech['TechId']){
-                                    chunk[rytDataObj.CommId] = rytDataObj[year]; 
-                                }
-                            });
-                            chartData.push(chunk);
-                        });
-                        model.chartData[param][tech['TechId']] =  chartData;
-                    });
+                setTimeout(function () {
+                    let gridData = $divGrid.jqxGrid('getboundrows');
+                    let param = $("#osy-ryt").val();
+                    let tech = $("#osy-techs").val();
+                    let comm = $("#osy-comms").val();
+
                     //update grid model
                     model.gridData[param] = gridData;
-                    var configChart = $('#osy-chartRYTC').jqxChart('getInstance');
-                    configChart.source.records = model.chartData[param][tech];
+
+                    //update chart model
+                    $.each(model.techs[param], function (idT, tech) {
+                        $.each(model.comms[param][tech.TechId], function (idT, comm) {
+                            let chartData = [];
+                            $.each(model.years, function (idY, year) {
+                                let chunk = {};
+                                chunk['Year'] = year;
+                                $.each(gridData, function (id, obj) {
+                                    if (obj.TechId == tech.TechId && obj.CommId == comm.CommId) {
+                                        chunk[obj.ScId] = obj[year];
+                                    }
+                                });
+                                chartData.push(chunk);
+                            });
+                            model.chartData[param][tech.TechId][comm.CommId] = chartData;
+                        });
+                    });
+
+                    var configChart = $divChart.jqxChart('getInstance');
+                    configChart.source.records = model.chartData[param][tech][comm];
                     configChart.update();
-                }, 1000);
+                }, 500);
             }
         }).on('cellvaluechanged', function (event) {
             if (!pasteEvent) {
@@ -189,30 +303,36 @@ export default class RYTC {
                 var year = event.args.datafield;
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
-                var techId = $('#osy-gridRYTC').jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
-                var commId = $('#osy-gridRYTC').jqxGrid('getcellvalue', rowBoundIndex, 'CommId');
-                let param = $( "#osy-ryt" ).val();
-                let tech = $( "#osy-techs" ).val();
+
+                var techId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
+                var commId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'CommId');
+                var ScId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
+
+                let param = $("#osy-ryt").val();
+                let tech = $("#osy-techs").val();
+                let comm = $("#osy-comms").val();
 
                 //update chart model
-                $.each(model.chartData[param][techId], function (id, obj) {
-                    if(obj.Year == year){
-                        if(value){
-                            obj[commId] = value;
-                        }else{
-                            obj[commId] = 0;
+                $.each(model.chartData[param][techId][commId], function (id, obj) {
+                    if (obj.Year == year) {
+                        if (value) {
+                            obj[ScId] = value;
+                        } else {
+                            obj[ScId] = 0;
                         }
                     }
                 });
-                var configChart = $('#osy-chartRYTC').jqxChart('getInstance');
-                configChart.source.records = model.chartData[param][tech];
+
+                var configChart = $divChart.jqxChart('getInstance');
+                configChart.source.records = model.chartData[param][tech][comm];
                 configChart.update();
-                //update chart model
-                $.each(model.gridData[param], function (id, obj) {
-                    if(obj.TechId == techId && obj.CommId == commId){
-                        if(value){
+
+                //update grid model
+                $.each(model.gridData[model.param], function (id, obj) {
+                    if (obj.TechId == techId && obj.CommId == commId && obj.ScId == ScId) {
+                        if (value) {
                             obj[year] = value;
-                        }else{
+                        } else {
                             obj[year] = 0;
                         }
                     }
@@ -220,79 +340,82 @@ export default class RYTC {
             }
         });
 
+        $(".switchChart").off('click');
         $(".switchChart").on('click', function (e) {
             e.preventDefault();
-            var configChart = $('#osy-chartRYTC').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             var chartType = $(this).attr('data-chartType');
             configChart.seriesGroups[0].type = chartType;
-            if(chartType == 'column'){
+            if (chartType == 'column') {
                 configChart.seriesGroups[0].labels.angle = 90;
-            }else{
+            } else {
                 configChart.seriesGroups[0].labels.angle = 0;
             }
-            configChart.update();  
+            configChart.update();
             // $('button a').switchClass( "green", "grey" );
             // $('#'+chartType).switchClass( "grey", "green" );
         });
 
+        $(".toggleLabels").off('click');
         $(".toggleLabels").on('click', function (e) {
             e.preventDefault();
-            var configChart = $('#osy-chartRYTC').jqxChart('getInstance');
-            if(configChart.seriesGroups[0].type == 'column'){
+            var configChart = $divChart.jqxChart('getInstance');
+            if (configChart.seriesGroups[0].type == 'column') {
                 configChart.seriesGroups[0].labels.angle = 90;
-            }else{
+            } else {
                 configChart.seriesGroups[0].labels.angle = 0;
             }
             configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
-            configChart.update();    
+            configChart.update();
         });
-    
-        $("#exportPng").click(function() {
-            $("#osy-chartRYTC").jqxChart('saveAsPNG', 'RYTC.png',  'https://www.jqwidgets.com/export_server/export.php');
-        }); 
+
+        $("#exportPng").off('click');
+        $("#exportPng").on('click', function () {
+            $("#osy-chartRYTC").jqxChart('saveAsPNG', 'RYTC.png', 'https://www.jqwidgets.com/export_server/export.php');
+        });
 
         let res = true;
-        $("#resizeColumns").click(function () {
-            if(res){
-                $('#osy-gridRYTC').jqxGrid('autoresizecolumn', 'Tech');
-                $('#osy-gridRYTC').jqxGrid('autoresizecolumn', 'Comm');
+        $("#resizeColumns").off('click');
+        $("#resizeColumns").on('click', function () {
+            if (res) {
+                $divGrid.jqxGrid('autoresizecolumn', 'Sc');
+                $divGrid.jqxGrid('autoresizecolumn', 'Tech');
+                $divGrid.jqxGrid('autoresizecolumn', 'Comm');
             }
-            else{
-                $('#osy-gridRYTC').jqxGrid('autoresizecolumns');
+            else {
+                $divGrid.jqxGrid('autoresizecolumns');
             }
-            res = !res;        
+            res = !res;
         });
-    
-        $("#xlsAll").click(function (e) {
+
+        $("#xlsAll").off('click');
+        $("#xlsAll").on('click', function (e) {
             e.preventDefault();
             $("#osy-gridRYTC").jqxGrid('exportdata', 'xls', 'RYTC');
         });
 
         $("#decUp").off('click');
-        $("#decUp").on('click', function(e){
+        $("#decUp").on('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             model.d++;
             model.decimal = 'd' + parseInt(model.d);
-            //console.log('model.d ', model.d)
-            $('#osy-gridRYTC').jqxGrid('refresh');
+            $divGrid.jqxGrid('refresh');
         });
 
         $("#decDown").off('click');
-        $("#decDown").on('click', function(e){
+        $("#decDown").on('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             model.d--;
             model.decimal = 'd' + parseInt(model.d);
-            $('#osy-gridRYTC').jqxGrid('refresh');
+            $divGrid.jqxGrid('refresh');
         });
+
+        $("#showLog").off('click');
         $("#showLog").click(function (e) {
             e.preventDefault();
-            console.log(model.group, DEF[model.group].title)
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

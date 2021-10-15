@@ -240,10 +240,10 @@ top: 10px;
 }
 .jqx-grid-cell-pinned-bootstrap{
     background: repeat-x #f7f7f7;
-    background-image: -webkit-linear-gradient(top,#FFF 0,#EEE 100%);
+    /* background-image: -webkit-linear-gradient(top,#FFF 0,#EEE 100%);
     background-image: -o-linear-gradient(top,#FFF 0,#EEE 100%);
     background-image: linear-gradient(to bottom,#FFF 0,#EEE 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffeeeeee', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffeeeeee', GradientType=0); */
     font-weight: bold;
     color:var(--main-color)!important;
 }
@@ -267,3 +267,257 @@ top: 10px;
     padding-right:  -16px!important;
     padding-left:  -16px!important;
   }
+
+  /*scenario cells*/
+    .SC_1 {
+        background-color: #ffe6e6;
+    }
+    .SC_2 {
+        background-color: #e6ffe6;
+    }
+    .SC_3 {
+        background-color: #e6eeff;
+    }
+    .SC_4 {
+        background-color: #ffffe6;
+    }
+    .SC_5 {
+        background-color: #f2e6ff;
+    }
+
+    .SC_6 {
+        background-color: #e6faff;
+    }
+    .SC_7 {
+        background-color: #f7ffe6;
+    }
+    .SC_8 {
+        background-color: #faebf5;
+    }
+    .SC_9 {
+        background-color: #e6ffff;
+    }
+    .SC_10 {
+        background-color: #f0f0f5;
+    }
+
+
+
+    .jarviswidget {
+        margin: 0 0 10px!important;
+        /* border: 1px solid var(--main-color); */
+    }
+
+    /*sortable za dispatch order*/
+    #osy-scOrder {
+        margin: 2px;
+        padding: 4px;
+        float: left;
+        width: 400px;
+        /*border: var(--main-color) !important; solid 1px;*/
+        
+    }
+    #osy-scOrder div {
+        border-radius: 5px;
+        padding: 4px;
+        cursor: pointer;
+        background-color: white;
+        color: black;
+        border: 1px solid transparent;
+    }
+    #osy-scOrder div:hover {
+        border: 1px solid var(--second-color) !important;
+        background-color: var(--second-color)!important;
+        color: #fff!important;
+    }
+    .sortable-item{
+        color:var(--main-color)!important;
+        border: 1px solid #d9d9d9!important;
+        border-radius: 0px!important;
+        margin-bottom: 5px!important;
+    }
+
+    nav ul ul li{
+        padding-bottom: 4px!important;
+        padding-top: 4px!important;
+    }
+
+    .badge-sm{
+        min-width: 28px!important;
+        padding: 2px 4px!important;
+        line-height: 0.8!important;
+        border-radius: 5px!important;
+        font-size: 9px!important;
+        z-index: 1!important;
+    }
+
+    .minified nav>ul>li>ul{
+        width:350px!important;
+    }
+
+    .SmallBox .textoFull {
+        width: 89%!important;
+    }
+
+    /* .jarviswidget {
+        border-top: 1px solid var(--second-color)!important ;
+    } */
+
+    /* #osy-unitRuleSort {
+        list-style-type: none;
+        margin: 2px;
+        padding: 5px;
+        float: left;
+        width: 312px;
+        border: lightblue solid 2px;
+    }
+    #osy-unitRuleSort div {
+            margin: 1px;
+            background-color: lightblue;
+            border: DodgerBlue solid 1px;
+            padding: 0;
+            float: left;
+            padding-left: 0;
+            text-align: center;
+            cursor: pointer;
+            font-size: 5.8em;
+            width: 100px;
+            height: 100px;
+        } */
+
+        .osy-unitRuleSort {
+            list-style-type: 'horizontal';
+            margin: 2px;
+            padding: 5px;
+            width: 200px;
+            border: lightblue solid 1px;
+        }
+        .osy-unitRuleSort-container{
+            float: left;
+            width: 220px;
+        }
+        .osy-unitRuleSort-container span {
+            font-weight: bold;
+        }
+        .osy-unitRuleSort div {
+            border-radius: 5px;
+            padding: 5px;
+            background-color: white;
+            color: black;
+            cursor: pointer;
+            border: 1px solid transparent;
+         }
+         .osy-unitRuleSort div:hover {
+            border: 1px solid #356AA0;
+          }
+
+/*loader*/
+.loader {
+    border: 16px solid #ccc; /* Light grey */
+    border-top: 16px solid var(--main-color) !important; /* Blue */
+    border-radius: 50% !important;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    position:fixed;
+    top:30%;
+    left:45%;
+    z-index: 999999!important;
+}
+
+#loadermain h4 {
+    width: 220px;
+    height: 120px;
+    position:fixed;
+    top:45%;
+    left:42.5%;
+    text-align: center;
+    z-index: 999999!important;
+}
+
+#loadermain{
+    background-color:#fff;
+    width:100%;
+    height:100%;
+    opacity:0.7;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999!important;
+}
+
+/*loaderLink*/
+.loaderLink {
+    border: 16px solid #ccc; /* Light grey */
+    border-top: 16px solid var(--main-color) !important;/* Blue */
+    border-radius: 50% !important;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    position:absolute;
+    top:20%;
+    left:45%;
+    z-index: 5001;
+}
+
+.loadermainLink{
+    background-color:#fff;
+    width:100%;
+    height:100%;
+    opacity:0.7;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5000;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.gridTooltip{
+    width: 100%; 
+    height: 100%;
+  }
+
+/*left menu*/
+/* #header>:first-child, aside {
+    width: 320px;
+}
+
+#main {
+    margin-left: 320px;
+}
+.hidden-menu #main{
+    margin-left: 0px;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 479px){
+    #left-panel {
+        left: -320px!important;
+    }
+}
+
+@media only screen and (min-width: 0) and (max-width: 679px){
+    #left-panel {
+        left: -320px;
+    }
+}
+
+@media (max-width: 767px){
+    #left-panel {
+        left: -320px;
+    }
+} */
+
+.smart-style-4:not(.minified) nav ul ul li>a {
+    padding-left: 28px;
+}
+nav ul li ul li>a {
+    font-size: 12px!important;
+}

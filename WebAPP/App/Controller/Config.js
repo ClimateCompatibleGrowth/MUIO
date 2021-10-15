@@ -1,11 +1,13 @@
 import { Message } from "../../Classes/Message.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
+import { SyncS3 } from "../../Classes/SyncS3.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
 import { Model } from "../Model/Config.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { DEF } from "../../Classes/Definition.Class.js";
+import { UNITDEFINITION } from "../../Classes/Const.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
+import { Sidebar } from "./Sidebar.js";
 
 export default class Config {
     static onLoad(){
@@ -35,16 +37,9 @@ export default class Config {
 
     static initPage(model){
         Message.clearMessages();
-
         Html.title(model.casename, "Parameters", "Year, technology, commodity, emission...");
-
         let $divGrid = $('#osy-gridParam');
-        var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-
-        // console.log('srcGrid ', model.srcGrid)
-        // console.log('daGrid ', daGrid)
-        // console.log('columns ', model.columns)
-        
+        var daGrid = new $.jqx.dataAdapter(model.srcGrid);        
         Grid.Grid($divGrid, daGrid, model.columns, true)
     }
 
@@ -55,10 +50,11 @@ export default class Config {
             promise.push(casename);
             const PARAMETERS = Osemosys.getParamFile();
             promise.push(PARAMETERS); 
+            return Promise.all(promise);
         })
         .then(data => {
             let [casename, PARAMETERS] = data;
-            let model = new Model(casename, PARAMETERS);
+            let model = new Model(PARAMETERS);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -75,8 +71,9 @@ export default class Config {
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
+            Sidebar.Reload(casename);
             Config.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveData").on('click', function (event) {
@@ -94,18 +91,16 @@ export default class Config {
                 tmp['default'] = obj.default;
                 tmp['enable'] = obj.enable;
                 tmp['menu'] = obj.menu;
-                
-                //tmparray.push(tmp);
+                tmp['unitRule'] = obj.unitRule;
                 Data[obj.groupId].push(tmp);
             });
 
-            //console.log(Data);
             Osemosys.saveParamFile(Data)
             .then(response =>{
-                Message.bigBoxSuccess('Case study message', response.message, 3000);
+                Message.bigBoxSuccess('Model message', response.message, 3000);
                 //sync S3
                 if (Base.AWS_SYNC == 1){
-                    Base.updateSyncParamFile(model.casename, "RYT.json");
+                    SyncS3.updateSyncParamFile();
                 }
             })
             .catch(error=>{
@@ -113,6 +108,106 @@ export default class Config {
             })
         });
 
+        //update rule button
+        $(document).undelegate(".updateRule","click");
+        $(document).delegate(".updateRule","click",function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            var groupId = $('#osy-gridParam').jqxGrid('getcellvalue', id, 'groupId');
+            var paramId = $('#osy-gridParam').jqxGrid('getcellvalue', id, 'id');
+            $('#unitTitle').html(
+                `<h6 id="paramId" data-paramId ="${paramId}" style="display: inline-block;">
+                    <i class="fa-fw fa fa-tags"></i><strong>RULE</strong>
+                    ${model.paramNames[groupId][paramId]}
+                    <small id="groupId" data-groupId="${groupId}"> [${model.GROUPNAMES[groupId]}]</small>
+                </h6>
+                `
+            );
+            $('#ruleResult').html(
+                `<h6 id="paramId" data-paramId ="${paramId}" style="display: inline-block;">
+                    <i class="fa-fw fa fa-tags"></i><strong>Result formula for</strong>
+                    ${model.paramNames[groupId][paramId]}
+                    <small id="groupId" data-groupId="${groupId}"> [${model.GROUPNAMES[groupId]}]</small>
+                </h6>
+                `
+            );
+
+            let unitRule = model.gridData[id]['unitRule'];
+            // let unitRule = model.paramById[groupId][paramId]['unitRule'];
+            Html.renderUnitRules(unitRule, model.unitsDef);    
+
+            let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
+
+            let arrayRule ='';
+            $.each(rule, function (id, rule) {
+                arrayRule += UNITDEFINITION[rule]['name'];
+            });
+            $('#ruleFormula').html(`<p>${arrayRule}</p>`);
+            $('#ruleFormula').show();
+                   
+        });
+
+        //modal save rule
+        $("#btnSaveRule").off('click');
+        $("#btnSaveRule").on('click', function (event) {
+            let rule = $("#osy-unitRuleSort2").jqxSortable("toArray")
+
+            let paramId = $('#paramId').attr("data-paramId");
+            let groupId = $('#groupId').attr("data-groupId") 
+
+            let arrayRule = [];
+            $.each(rule, function (id, rule) {
+                arrayRule.push(UNITDEFINITION[rule]['val'])
+            });
+
+            let unitRule = {
+                "cat": arrayRule
+            };
+
+            $.each(model.gridData, function (id, obj) {
+                if (obj.id == paramId && obj.groupId == groupId){
+                    obj.unit =jsonLogic.apply(unitRule, model.unitsDef);
+                    obj.unitRule = unitRule;
+                }
+
+            });
+
+            let $divGrid = $('#osy-gridParam');
+            model.srcGrid.localdata = model.gridData;
+            $divGrid.jqxGrid('updatebounddata');
+            $('#osy-unitRule').modal('toggle');
+            Message.smallBoxInfo('Rule updated for ', model.paramNames[groupId][paramId], 3000); 
+        });
+
+        $('#osy-unitRuleSort2').on('stop', function () { 
+            let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
+            // let paramId = $('#paramId').attr("data-paramId");
+            // let groupId = $('#groupId').attr("data-groupId") 
+
+            let arrayRule ='';
+            $.each(rule, function (id, rule) {
+                arrayRule += UNITDEFINITION[rule]['name'];
+            });
+            $('#ruleFormula').html(`<p>${arrayRule}</p>`);
+            $('#ruleFormula').show();
+         }); 
+
+         $('#osy-unitRuleSort2').on('receive', function () { 
+            let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
+            // let paramId = $('#paramId').attr("data-paramId");
+            // let groupId = $('#groupId').attr("data-groupId") 
+
+            let arrayRule ='';
+            $.each(rule, function (id, rule) {
+                arrayRule += UNITDEFINITION[rule]['name'];
+            });
+            $('#ruleFormula').html(`<p>${arrayRule}</p>`);
+            $('#ruleFormula').show();
+         }); 
+
+         $('#osy-unitRuleSort2').on('remove', function () { 
+          })
 
         // let res = true;
         // $("#resizeColumns").click(function () {
