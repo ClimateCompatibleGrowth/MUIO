@@ -7,6 +7,7 @@ export class Routes {
 
         crossroads.addRoute('/', function() {
             $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+            
             import('../App/Controller/Home.js')
             .then(Home => {
                 $(".osy-content").load('App/View/Home.html');
@@ -63,7 +64,6 @@ export class Routes {
         Osemosys.getParamFile()
         .then(PARAMETERS =>{
             //Sidebar.Load(PARAMETERS);
-            
             crossroads.addRoute('/', function() {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/Home.js')

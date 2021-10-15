@@ -137,7 +137,7 @@ export class Message {
     static SmartMessageBoxDDL(cases, init_f) {
         var casesArr = '"[' + cases.join('][') + ']"';
         $.SmartMessageBox({
-            title: "No active case study: Select",
+            title: "No active Model: Select",
             content: "Please select one of existing cases to proceed.",
             buttons: "[Continue]",
             input: "select",
@@ -155,7 +155,7 @@ export class Message {
     static ddlActivity(cases, init_f) {
         var casesArr = '"[' + cases.join('][') + ']"';
         $.SmartMessageBox({
-            title: "<i class='fa fa-exclamation-triangle danger'></i>Selected case has no activity defines: Select",
+            title: "<i class='fa fa-exclamation-triangle danger'></i>Selected model has no activity defines: Select",
             content: "Please select cases to proceed.",
             buttons: "[Continue]",
             input: "select",

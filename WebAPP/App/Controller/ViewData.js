@@ -103,7 +103,66 @@ export default class ViewData {
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             ViewData.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
+        });
+
+        $('input[type=radio][name=bytype]').change(function (e) {
+
+            if (this.value == 'Tech') {
+                let firstTech = model.techs[0]['TechId'];
+                $('#osy-techs').show();
+                $('#osy-emis').hide();
+                $('#osy-comms').hide();
+                Html.ddlTechs(model.techs, firstTech);
+                model.srcGrid.root = firstTech;
+                $divGrid.jqxGrid('updatebounddata');
+                $divGrid.jqxGrid('hidecolumn', 'TechName');
+                $divGrid.jqxGrid('showcolumn', 'CommName');
+                $divGrid.jqxGrid('showcolumn', 'EmisName');
+                Grid.applyViewDataFilter($divGrid, model.years);
+
+                model.srcRTGrid.root = firstTech;
+                $divTEGrid.jqxGrid('updatebounddata');
+                Grid.applyTEviewDataFilter($divTEGrid);
+                $('#gridRT').show();
+                console.log('tech end')
+            }
+            else if (this.value == 'Comm') {
+                let firstComm = model.comms[0]['CommId'];
+                $('#osy-techs').hide();
+                $('#osy-emis').hide();
+                $('#osy-comms').show();
+                Html.ddlComms(model.comms, firstComm);
+                model.srcGrid.root = firstComm;
+                $divGrid.jqxGrid('updatebounddata');
+                $divGrid.jqxGrid('hidecolumn', 'CommName');
+                $divGrid.jqxGrid('showcolumn', 'TechName');
+                $divGrid.jqxGrid('showcolumn', 'EmisName');
+                Grid.applyViewDataFilter($divGrid, model.years);
+
+                $('#gridRT').hide();
+                console.log('comm end')
+            }
+            else if (this.value == 'Emi') {
+                let firstEmi = model.emis[0]['EmisId'];
+                $('#osy-techs').hide();
+                $('#osy-emis').show();
+                $('#osy-comms').hide();
+                Html.ddlEmis(model.emis, firstEmi);
+                model.srcGrid.root = firstEmi;
+                $divGrid.jqxGrid('updatebounddata');
+                $divGrid.jqxGrid('hidecolumn', 'EmisName');
+                $divGrid.jqxGrid('showcolumn', 'CommName');
+                $divGrid.jqxGrid('showcolumn', 'TechName');
+                Grid.applyViewDataFilter($divGrid, model.years);
+
+                model.srcRTGrid.root = firstEmi;
+                $divTEGrid.jqxGrid('updatebounddata');
+                Grid.applyTEviewDataFilter($divTEGrid);
+                $('#gridRT').show();
+                console.log('emi end')
+            }
+
         });
 
         $("#osy-techs").off('change');
@@ -152,60 +211,6 @@ export default class ViewData {
             Grid.applyViewDataFilter($divGrid, model.years);
 
             Message.smallBoxConfirmation("Confirmation!", "Emission <b>" + model.CommName[comm] + "</b> selected!", 3500);
-        });
-
-        $('input[type=radio][name=bytype]').change(function () {
-            if (this.value == 'Tech') {
-                let firstTech = model.techs[0]['TechId'];
-                $('#osy-techs').show();
-                $('#osy-emis').hide();
-                $('#osy-comms').hide();
-                Html.ddlTechs(model.techs, firstTech);
-                model.srcGrid.root = firstTech;
-                $divGrid.jqxGrid('updatebounddata');
-                $divGrid.jqxGrid('hidecolumn', 'TechName');
-                $divGrid.jqxGrid('showcolumn', 'CommName');
-                $divGrid.jqxGrid('showcolumn', 'EmisName');
-                Grid.applyViewDataFilter($divGrid, model.years);
-
-                model.srcRTGrid.root = firstTech;
-                $divTEGrid.jqxGrid('updatebounddata');
-                Grid.applyTEviewDataFilter($divTEGrid);
-                $('#gridRT').show();
-            }
-            else if (this.value == 'Comm') {
-                let firstComm = model.comms[0]['CommId'];
-                $('#osy-techs').hide();
-                $('#osy-emis').hide();
-                $('#osy-comms').show();
-                Html.ddlComms(model.comms, firstComm);
-                model.srcGrid.root = firstComm;
-                $divGrid.jqxGrid('updatebounddata');
-                $divGrid.jqxGrid('hidecolumn', 'CommName');
-                $divGrid.jqxGrid('showcolumn', 'TechName');
-                $divGrid.jqxGrid('showcolumn', 'EmisName');
-                Grid.applyViewDataFilter($divGrid, model.years);
-
-                $('#gridRT').hide();
-            }
-            else if (this.value == 'Emi') {
-                let firstEmi = model.emis[0]['EmisId'];
-                $('#osy-techs').hide();
-                $('#osy-emis').show();
-                $('#osy-comms').hide();
-                Html.ddlEmis(model.emis, firstEmi);
-                model.srcGrid.root = firstEmi;
-                $divGrid.jqxGrid('updatebounddata');
-                $divGrid.jqxGrid('hidecolumn', 'EmisName');
-                $divGrid.jqxGrid('showcolumn', 'CommName');
-                $divGrid.jqxGrid('showcolumn', 'TechName');
-                Grid.applyViewDataFilter($divGrid, model.years);
-
-                model.srcRTGrid.root = firstEmi;
-                $divTEGrid.jqxGrid('updatebounddata');
-                Grid.applyTEviewDataFilter($divTEGrid);
-                $('#gridRT').show();
-            }
         });
 
         let pasteEvent = false;
@@ -263,7 +268,7 @@ export default class ViewData {
 
                 Osemosys.updateViewData(model.casename, year, ScId, GroupId, ParamId, TechId, CommId, EmisId, Timeslice, value)
                     .then(response => {
-                        Message.bigBoxSuccess('Case study message', response.message, 3000);
+                        Message.bigBoxSuccess('Model message', response.message, 3000);
                         //sync S3
                         if (Base.AWS_SYNC == 1) {
                             Base.updateSync(model.casename, GroupId + ".json");
@@ -335,7 +340,7 @@ export default class ViewData {
 
                 Osemosys.updateTEViewData(model.casename, ScId, GroupId, ParamId, TechId, EmisId, value)
                     .then(response => {
-                        Message.bigBoxSuccess('Case study message', response.message, 3000);
+                        Message.bigBoxSuccess('Model message', response.message, 3000);
                         //sync S3
                         if (Base.AWS_SYNC == 1) {
                             Base.updateSync(model.casename, GroupId + ".json");
@@ -409,6 +414,5 @@ export default class ViewData {
             `);
             $('#definition').toggle('slow');
         });
-        //$('#loadermain').hide(); 
     }
 }

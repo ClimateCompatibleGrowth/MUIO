@@ -300,7 +300,6 @@ export class Osemosys {
         });
     }
 
-    
     static updateTEViewData(casename, ScId, GroupId, ParamId, TechId, EmisId, value) {
         return new Promise((resolve, reject) => {
             $.ajax({

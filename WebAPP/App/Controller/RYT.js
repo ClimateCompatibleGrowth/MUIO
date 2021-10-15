@@ -121,7 +121,7 @@ export default class RYT {
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             RYT.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYTdata").on('click', function (event) {
@@ -141,7 +141,7 @@ export default class RYT {
 
             Osemosys.updateData(saveData, param, "RYT.json")
                 .then(response => {
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RYT.json");
@@ -159,6 +159,7 @@ export default class RYT {
             model.srcGrid.root = this.value;
             let decimal = Functions.getDecimalPlaces(model.paramData[model.group][this.value]['default']);
             //console.log(this.value, decimal)
+            model.param = this.value;
             model.d = decimal;
             model.decimal = 'd' + model.d;
             $divGrid.jqxGrid('updatebounddata');
@@ -168,6 +169,7 @@ export default class RYT {
             var tech = $("#osy-techs").val();
             configChart.source.records = model.chartData[this.value][tech];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         //change of ddl techs
@@ -353,10 +355,7 @@ export default class RYT {
 
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

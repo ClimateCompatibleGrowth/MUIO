@@ -4,18 +4,46 @@ from pathlib import Path
 import shutil
 import time
 from Classes.Base import Config
-from Classes.Base.SyncS3 import SyncS3
 from Classes.Base.FileClass import File
 from Classes.Case.CaseClass import Case
 from Classes.Case.UpdateCaseClass import UpdateCase
+from Classes.Base.SyncS3 import SyncS3
 
 case_api = Blueprint('CaseRoute', __name__)
+
+@case_api.route("/initSyncS3", methods=['GET'])
+def initSyncS3():
+    try:
+        #sync bucket with local storage
+        syncS3 = SyncS3()
+        cases = syncS3.getCasesSyncInit()
+        for case in cases:
+            syncS3.downloadSync(case, Config.DATA_STORAGE, Config.S3_BUCKET)
+        #downoload param file from S3 bucket
+        syncS3.downloadSync('Parameters.json', Config.DATA_STORAGE, Config.S3_BUCKET)
+        response = {
+            "message": "Cases syncronized with S3 bucket!",
+            "status_code": "success"
+        }
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
 
 @case_api.route("/getCases", methods=['GET'])
 def getCases():
     try:
         cases = [ f.name for f in os.scandir(Config.DATA_STORAGE) if f.is_dir() ]
         return jsonify(cases), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@case_api.route("/getResultCSV", methods=['POST'])
+def getResultCSV():
+    try:
+        casename = request.json['casename']
+        csvFolder = Path(Config.DATA_STORAGE,casename,"res", "csv")
+        csvs = [ f.name for f in os.scandir(csvFolder) ]
+        return jsonify(csvs), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
 

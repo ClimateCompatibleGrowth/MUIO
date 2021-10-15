@@ -26,7 +26,7 @@ export default class RYTCn {
                     return Promise.all(promise);
                 } else {
                     let er = {
-                        "message": 'There is no case selected!',
+                        "message": 'There is no model selected!',
                         "status_code": "CaseError"
                     }
                     return Promise.reject(er);
@@ -139,7 +139,7 @@ export default class RYTCn {
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             RYTCn.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYTCndata").off('click');
@@ -160,7 +160,7 @@ export default class RYTCn {
 
             Osemosys.updateData(saveData, param, "RYTCn.json")
                 .then(response => {
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RYTCn.json");
@@ -176,12 +176,14 @@ export default class RYTCn {
             Message.clearMessages();
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             model.srcGrid.root = this.value;
+            model.param = this.value;
             $divGrid.jqxGrid('updatebounddata');
             var configChart = $divChart.jqxChart('getInstance');
             var tech = $("#osy-techs").val();
             var con = $("#osy-cons").val();
             configChart.source.records = model.chartData[this.value][tech][con];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         $("#osy-cons").off('change');
@@ -395,10 +397,7 @@ export default class RYTCn {
         $("#showLog").off('click');
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

@@ -116,11 +116,14 @@ export class Grid {
         }
 
         var cellsrendererbutton = function (row, column, value) {
-            var id = $("#osy-gridTech").jqxGrid('getrowid', row);
-            if (id == 0) {
+            // var id = $("#osy-gridTech").jqxGrid('getrowid', row);
+            // if (id == 0) {
+            //     return '';
+            // }
+            if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTech" data-id=' + id + '><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTech" data-id=' + row + '><i class="fa  fa-minus-circle danger"></i>Delete</span>';
         }
 
         var cellsrendererComms = function (row, columnfield, value, defaulthtml, columnproperties) {
@@ -136,6 +139,11 @@ export class Grid {
             return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
         }.bind(this);
 
+
+        var columnsrenderer = function (value) {
+            return '<div style="text-align: center; margin-top: 12px; word-wrap:normal;white-space:normal;">' + value + '</div>';
+        }
+
         var cellsrendererEmis = function (row, columnfield, value, defaulthtml, columnproperties) {
             let valueNames = [];
             if (Array.isArray(value)) {
@@ -150,20 +158,23 @@ export class Grid {
         }.bind(this);
 
         var tooltiprenderer = function (element) {
+            //console.log(element)
             let id = $(element).text();
-            let tooltip = {
-                'IAR': 'Input  <br />Activity Ratio',
-                'OAR': 'Output  <br />Activity Ratio',
-                'EAR': 'Emission  <br />Activity Ratio',
-                'INCR': 'Input To New <br />Capacity Ratio',
-                'ITCR': 'Input To Total <br />Capacity Ratio',
-                'TMPAL': 'Total Technology Model <br />Period Activity Lower Limit',
-                'TMPAU': 'Total Technology Model <br />Period Activity Upper Limit',
-                'CAU': 'Capacity To Activity <br />Unit',
-                'OL': 'Operational Life'
-            }
-            $(element).parent().jqxTooltip({ position: 'mouse', content: tooltip[id] });
-
+            // console.log($(element))
+            // console.log('id', id)
+            // // let tooltip = {
+            // //     'IAR': 'Input  <br />Activity Ratio',
+            // //     'OAR': 'Output  <br />Activity Ratio',
+            // //     'EAR': 'Emission  <br />Activity Ratio',
+            // //     'INCR': 'Input To New <br />Capacity Ratio',
+            // //     'ITCR': 'Input To Total <br />Capacity Ratio',
+            // //     'TMPAL': 'Total Technology Model <br />Period Activity Lower Limit',
+            // //     'TMPAU': 'Total Technology Model <br />Period Activity Upper Limit',
+            // //     'CAU': 'Capacity To Activity <br />Unit',
+            // //     'OL': 'Operational Life'
+            // // }
+            $(element).parent().jqxTooltip({ position: 'mouse', content: id });
+            //return '<div style="text-align: center; margin-top: 12px; word-wrap:wrap;white-space:normal;">' + element + '</div>';
             //$("#filmPicture1").jqxTooltip({ content: '<b>Title:</b> <i>The Amazing Spider-man</i><br /><b>Year:</b> 2012', position: 'mouse', name: 'movieTooltip'});
         }
 
@@ -176,17 +187,19 @@ export class Grid {
             editable: true,
             selectionmode: 'none',
             enablehover: false,
+            sortable:true,
+            showsortcolumnbackground: false,
             columns: [
                 { text: 'techId', datafield: 'TechId', hidden: true },
                 { text: 'Technology', datafield: 'Tech', width: '10%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '16%', align: 'center', cellsalign: 'left' },
-                { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
-                { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
-                { text: 'IAR', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: 'OAR', datafield: 'OAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: 'INCR', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: 'ITCR', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: 'EAR', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+                { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
+                { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
+                { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+                { text: 'Output Activity Ratio', datafield: 'OAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+                { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+                { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+                { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: '', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
             ]
         });
@@ -238,6 +251,8 @@ export class Grid {
             editable: true,
             selectionmode: 'none',
             enablehover: false,
+            sortable:true,
+            showsortcolumnbackground: false,
             columns: [
                 { text: 'CommId', datafield: 'CommId', hidden: true },
                 { text: 'Commodity name', datafield: 'Comm', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
@@ -305,6 +320,8 @@ export class Grid {
             editable: true,
             selectionmode: 'none',
             enablehover: false,
+            sortable:true,
+            showsortcolumnbackground: false,
             columns: [
                 { text: 'EmisId', datafield: 'EmisId', hidden: true },
                 { text: 'Emission name', datafield: 'Emis', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
@@ -354,6 +371,8 @@ export class Grid {
             editable: true,
             selectionmode: 'none',
             enablehover: false,
+            sortable:true,
+            showsortcolumnbackground: false,
             columns: [
                 { text: 'ScenarioId', datafield: 'ScenarioId', hidden: true },
                 { text: 'Scenario name', datafield: 'Scenario', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
@@ -475,6 +494,8 @@ export class Grid {
             editable: true,
             selectionmode: 'none',
             enablehover: false,
+            sortable:true,
+            showsortcolumnbackground: false,
             columns: [
                 { text: 'ConId', datafield: 'ConId', hidden: true },
                 { text: 'Constraint name', datafield: 'Con', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
@@ -515,6 +536,9 @@ export class Grid {
             selectionmode: 'multiplecellsadvanced',
             enablehover: true,
             editmode: 'selectedcell',
+            showsortcolumnbackground: false,
+            showfiltercolumnbackground: false,
+            autoshowfiltericon: true,
             cellhover: function (element, pageX, pageY, record) {
 
                 //var cellValue = $(element.innerHTML).find('span').html(); // you can remove if any element not required in tooltip here

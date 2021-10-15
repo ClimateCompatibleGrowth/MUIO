@@ -92,16 +92,17 @@ export default class RYTTs {
     static initEvents(model) {
 
         let $divGrid = $('#osy-gridRYTTs');
+        let $divChart = $('#osy-chartRYTTs');
 
         $("#casePicker").off('click');
-        //odabir novog case iz case pickera
+        //odabir novog Model iz Model pickera
         $("#casePicker").on('click', '.selectCS', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             RYTTs.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYTTsdata").off('click');
@@ -124,7 +125,7 @@ export default class RYTTs {
             Osemosys.updateData(saveData, param, "RYTTs.json")
                 .then(response => {
                     //model.gridData[model.param] = JSON.parse(RYTmodel);
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RYTTs.json");
@@ -140,12 +141,14 @@ export default class RYTTs {
         $('#osy-ryt').on('change', function () {
             let $divGrid = $divGrid;
             model.srcGrid.root = this.value;
+            model.param = this.value;
             $divGrid.jqxGrid('updatebounddata');
-            var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             var tech = $("#osy-techs").val();
             var ts = $("#osy-timeslices1").val();
             configChart.source.records = model.chartData[this.value][tech][ts];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         //change of ddl techs
@@ -153,7 +156,7 @@ export default class RYTTs {
         $('#osy-techs').on('change', function () {
             var param = $("#osy-ryt").val();
             var ts = $("#osy-timeslices1").val();
-            var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             configChart.source.records = model.chartData[param][this.value][ts];
             configChart.update();
         });
@@ -163,7 +166,7 @@ export default class RYTTs {
         $('#osy-timeslices1').on('change', function () {
             var param = $("#osy-ryt").val();
             var tech = $("#osy-techs").val();
-            var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             configChart.source.records = model.chartData[param][tech][this.value];
             configChart.update();
         });
@@ -231,7 +234,7 @@ export default class RYTTs {
                             model.chartData[param][tech['TechId']][ts] = chartData;
                         });
                     });
-                    var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
+                    var configChart = $divChart.jqxChart('getInstance');
                     configChart.source.records = model.chartData[model.param][tech][ts];
                     configChart.update();
                 }, 500);
@@ -264,7 +267,7 @@ export default class RYTTs {
                     }
                 });
 
-                var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
+                var configChart = $divChart.jqxChart('getInstance');
                 configChart.source.records = model.chartData[model.param][tech][ts];
                 configChart.update();
                 //update chart model
@@ -284,7 +287,7 @@ export default class RYTTs {
         $(".switchChart").off('click');
         $(".switchChart").on('click', function (e) {
             e.preventDefault();
-            var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             var chartType = $(this).attr('data-chartType');
             configChart.seriesGroups[0].type = chartType;
             if (chartType == 'column') {
@@ -300,7 +303,7 @@ export default class RYTTs {
         $(".toggleLabels").off('click');
         $(".toggleLabels").on('click', function (e) {
             e.preventDefault();
-            var configChart = $('#osy-chartRYTTs').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             if (configChart.seriesGroups[0].type == 'column') {
                 configChart.seriesGroups[0].labels.angle = 90;
             } else {
@@ -332,7 +335,7 @@ export default class RYTTs {
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $("#osy-gridRYTTs").jqxGrid('exportdata', 'xls', 'RYTTs');
+            $divGrid.jqxGrid('exportdata', 'xls', 'RYTTs');
         });
 
         $("#decUp").off('click');
@@ -355,10 +358,7 @@ export default class RYTTs {
 
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

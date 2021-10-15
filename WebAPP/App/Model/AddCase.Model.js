@@ -10,7 +10,7 @@ export class Model {
       this.techNames = DataModel.TechName(genData);
       this.commNames = DataModel.CommName(genData);
       this.emiNames = DataModel.EmiName(genData);
-      this.title = "Case study";
+      this.title = "Model";
       this.desc = genData['osy-desc'];
       this.date = genData['osy-date'];
       this.ns = genData['osy-ns'];
@@ -39,7 +39,7 @@ export class Model {
       this.techNames = { 'TEC_0': 'TEC_0' };
       this.commNames = { 'COM_0': 'COM_0' };
       this.emiNames = { 'EMI_0': 'EMI_0' };
-      this.title = "Case study";
+      this.title = "Model";
       this.desc = null;
       this.date = null;
       this.ns = null;

@@ -92,6 +92,7 @@ export default class RT {
     static initEvents(model) {
 
         let $divGrid = $('#osy-gridRT');
+        let $divChart = $('#osy-chartRT');
 
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function (e) {
@@ -100,14 +101,14 @@ export default class RT {
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             RT.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYTdata").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let param = $("#osy-ryt").val();
-            let rtData = $('#osy-gridRT').jqxGrid('getboundrows');
+            let rtData = $divGrid.jqxGrid('getboundrows');
             let data = JSON.parse(JSON.stringify(rtData, ['ScId'].concat(model.techIds)));
 
             let saveData = {};
@@ -119,7 +120,7 @@ export default class RT {
 
             Osemosys.updateData(saveData, param, "RT.json")
                 .then(response => {
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RT.json");
@@ -141,9 +142,10 @@ export default class RT {
             });
             model.param = this.value;
             Grid.applyRTFilter($divGrid, model.techs);
-            var configChart = $('#osy-chartRT').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             configChart.source.records = model.chartData[this.value];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         $("#osy-openScData").off('click');
@@ -175,14 +177,14 @@ export default class RT {
         });
 
         let pasteEvent = false;
-        $('#osy-gridRT').bind('keydown', function (event) {
+        $divGrid.bind('keydown', function (event) {
             pasteEvent = false;
             var ctrlDown = false, ctrlKey = 17, cmdKey = 91, vKey = 86, cKey = 67;
             var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
             if (key == vKey) {
                 pasteEvent = true;
                 setTimeout(function () {
-                    let gridData = $('#osy-gridRT').jqxGrid('getboundrows');
+                    let gridData = $divGrid.jqxGrid('getboundrows');
                     let param = $("#osy-ryt").val();
                     let chartData = [];
                     $.each(model.techs, function (id, tech) {
@@ -197,7 +199,7 @@ export default class RT {
                     });
                     model.gridData[param] = gridData;
 
-                    var configChart = $('#osy-chartRT').jqxChart('getInstance');
+                    var configChart = $divChart.jqxChart('getInstance');
                     configChart.source.records = model.chartData[param];
                     configChart.update();
                 }, 1000);
@@ -209,8 +211,8 @@ export default class RT {
                 var tech = event.args.datafield;
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
-                var techId = $('#osy-gridRT').jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
-                var scId = $('#osy-gridRT').jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
+                var techId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
+                var scId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $("#osy-ryt").val();
 
                 $.each(model.chartData[param], function (id, obj) {
@@ -234,7 +236,7 @@ export default class RT {
                     }
                 });
 
-                var configChart = $('#osy-chartRT').jqxChart('getInstance');
+                var configChart = $divChart.jqxChart('getInstance');
                 configChart.source.records = model.chartData[param];
                 configChart.update();
             }
@@ -242,7 +244,7 @@ export default class RT {
 
         $(".switchChart").on('click', function (e) {
             e.preventDefault();
-            var configChart = $('#osy-chartRT').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             var chartType = $(this).attr('data-chartType');
             configChart.seriesGroups[0].type = chartType;
             if (chartType == 'column') {
@@ -255,7 +257,7 @@ export default class RT {
 
         $(".toggleLabels").on('click', function (e) {
             e.preventDefault();
-            var configChart = $('#osy-chartRT').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             if (configChart.seriesGroups[0].type == 'column') {
                 configChart.seriesGroups[0].labels.angle = 90;
             } else {
@@ -266,24 +268,24 @@ export default class RT {
         });
 
         $("#exportPng").click(function () {
-            $("#osy-chartRT").jqxChart('saveAsPNG', 'RT.png', 'https://www.jqwidgets.com/export_server/export.php');
+            $divChart.jqxChart('saveAsPNG', 'RT.png', 'https://www.jqwidgets.com/export_server/export.php');
         });
 
         let res = true;
         $("#resizeColumns").click(function () {
             if (res) {
-                $('#osy-gridRT').jqxGrid('autoresizecolumn', 'Sc', "cells");
-                $('#osy-gridRT').jqxGrid('autoresizecolumn', 'Param', "all");
+                $divGrid.jqxGrid('autoresizecolumn', 'Sc', "cells");
+                $divGrid.jqxGrid('autoresizecolumn', 'Param', "all");
             }
             else {
-                $('#osy-gridRT').jqxGrid('autoresizecolumns');
+                $divGrid.jqxGrid('autoresizecolumns');
             }
             res = !res;
         });
 
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $("#osy-gridRT").jqxGrid('exportdata', 'xls', 'RT');
+            $divGrid.jqxGrid('exportdata', 'xls', 'RT');
         });
 
         $("#decUp").off('click');
@@ -292,7 +294,7 @@ export default class RT {
             e.stopImmediatePropagation();
             model.d++;
             model.decimal = 'd' + parseInt(model.d);
-            $('#osy-gridRT').jqxGrid('refresh');
+            $divGrid.jqxGrid('refresh');
         });
 
         $("#decDown").off('click');
@@ -301,15 +303,12 @@ export default class RT {
             e.stopImmediatePropagation();
             model.d--;
             model.decimal = 'd' + parseInt(model.d);
-            $('#osy-gridRT').jqxGrid('refresh');
+            $divGrid.jqxGrid('refresh');
         });
 
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

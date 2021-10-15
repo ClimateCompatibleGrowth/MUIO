@@ -36,7 +36,7 @@ export default class DataFile {
         //Navbar.initPage(model.casename, model.pageId);
         Html.title(model.casename, model.title, "data.txt");
         if (model.casename == null){
-            Message.info("Please select case or create new case study!");
+            Message.info("Please select model or create new Model!");
         }    
         if (model.scenariosCount>1){
             $('#scCommand').show();
@@ -58,13 +58,15 @@ export default class DataFile {
         .then(data => {
             let [casename, genData] = data;
             let model = new Model(casename, genData, "DataFile");
-            $("#DataFile").hide();
+            $(".DataFile").hide();
             $("#osy-DataFile").empty();
             $("#osy-runOutput").empty();
-            $("#osy-downloadDataFile").hide();
+            // $("#osy-downloadDataFile").hide();
+            // $("#osy-downloadResultsFile").hide();
             $("#osy-solver").hide();
             $("#osy-run").hide();
-            $("#runOutput").hide();
+            $(".runOutput").hide();
+            $(".Results").hide();
             DataFile.initPage(model);
             DataFile.initEvents(model);
         })
@@ -84,7 +86,6 @@ export default class DataFile {
             DataFile.refreshPage(casename);
             Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
         });
-
 
         $("#osy-btnScOrder").off('click');
         $("#osy-btnScOrder").on('click', function (event) {
@@ -134,7 +135,6 @@ export default class DataFile {
             })
         });
         
-
         $("#osy-generateDataFile").off('click');
         $("#osy-generateDataFile").on('click', function (event) {
             Pace.restart();
@@ -152,7 +152,8 @@ export default class DataFile {
             .then(response => {
                 let [DataFile, message] = response;
                 $("#osy-runOutput").empty();
-                $("#runOutput").hide();
+                $(".runOutput").hide();
+                $(".Results").hide();
                 var table = $("<table />");
                 var rows = DataFile.split("\n"); 
 
@@ -171,11 +172,11 @@ export default class DataFile {
                     }
                 }
 
-                $("#DataFile").show();
+                $(".DataFile").show();
                 $("#osy-DataFile").empty();
                 $("#osy-DataFile").html('');
                 $("#osy-DataFile").append(table);
-                $("#osy-downloadDataFile").show();
+                //$("#osy-downloadDataFile").show();
                 //ne moramo updateovati S3 sa data file
                 // if (Base.AWS_SYNC == 1){
                 //     Base.updateSync(model.casename, "data.txt");
@@ -186,6 +187,7 @@ export default class DataFile {
                 }
                 //Message.clearMessages();
                 //Message.bigBoxSuccess('Generate message', message, 3000);
+                Message.smallBoxInfo('Generate message', message, 3000);
             })
             .catch(error=>{
                 Message.bigBoxDanger('Error message', error, null);
@@ -201,14 +203,25 @@ export default class DataFile {
             Osemosys.run(model.casename, solver)
             .then(response => {
                 if(response.status_code=="success"){
-                    $("#runOutput").show();
+
+                    $(".runOutput").show();
+                    $(".Results").show();
+                    // $("#osy-downloadResultsFile").show();
                     $("#osy-runOutput").empty();
                     $("#osy-runOutput").html('<samp>'+ response.message +'</samp>');
+                    $('#tabs a[href="#tabRunOutput"]').tab('show');
+
+                    Base.getResultCSV(model.casename)
+                    .then(csvs => {
+                        console.log('csv ', csvs)
+                        Html.renderCSV(csvs)
+                    });
                     Message.clearMessages();
                     Message.bigBoxSuccess('RUN message', response.message, 3000);
                 }
                 if(response.status_code=="error"){
-                    $("#runOutput").show();
+                    $(".runOutput").show();
+                    $(".Results").show();
                     $("#osy-runOutput").empty();
                     $("#osy-runOutput").html('<samp>'+ response.message +'</samp>');
                     Message.clearMessages();

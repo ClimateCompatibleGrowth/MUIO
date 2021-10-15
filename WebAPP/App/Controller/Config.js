@@ -73,7 +73,7 @@ export default class Config {
             Html.updateCasePicker(casename);
             Sidebar.Reload(casename);
             Config.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveData").on('click', function (event) {
@@ -97,7 +97,7 @@ export default class Config {
 
             Osemosys.saveParamFile(Data)
             .then(response =>{
-                Message.bigBoxSuccess('Case study message', response.message, 3000);
+                Message.bigBoxSuccess('Model message', response.message, 3000);
                 //sync S3
                 if (Base.AWS_SYNC == 1){
                     SyncS3.updateSyncParamFile();
@@ -126,7 +126,7 @@ export default class Config {
             );
             $('#ruleResult').html(
                 `<h6 id="paramId" data-paramId ="${paramId}" style="display: inline-block;">
-                    <i class="fa-fw fa fa-tags"></i><strong>Result fomrula for</strong>
+                    <i class="fa-fw fa fa-tags"></i><strong>Result formula for</strong>
                     ${model.paramNames[groupId][paramId]}
                     <small id="groupId" data-groupId="${groupId}"> [${model.GROUPNAMES[groupId]}]</small>
                 </h6>

@@ -65,13 +65,13 @@ def add_headers(response):
 @app.route("/", methods=['GET'])
 def home():
     #sync bucket with local storage
-    if Config.AWS_SYNC == 1:
-        syncS3 = SyncS3()
-        cases = syncS3.getCasesSyncInit()
-        for case in cases:
-            syncS3.downloadSync(case, Config.DATA_STORAGE, Config.S3_BUCKET)
-        #downoload param file from S3 bucket
-        syncS3.downloadSync('Parameters.json', Config.DATA_STORAGE, Config.S3_BUCKET)
+    # if Config.AWS_SYNC == 1:
+    #     syncS3 = SyncS3()
+    #     cases = syncS3.getCasesSyncInit()
+    #     for case in cases:
+    #         syncS3.downloadSync(case, Config.DATA_STORAGE, Config.S3_BUCKET)
+    #     #downoload param file from S3 bucket
+    #     syncS3.downloadSync('Parameters.json', Config.DATA_STORAGE, Config.S3_BUCKET)
     return render_template('index.html')
 
 

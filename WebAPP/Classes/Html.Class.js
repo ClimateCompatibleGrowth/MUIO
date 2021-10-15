@@ -26,7 +26,7 @@ export class Html {
                         <tr>
                             <td>
                                 <b>
-                                    <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select case study">
+                                    <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select Model">
                                         <span class="glyphicon 
                                         ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
                                         fa-1.5x icon-btn"></span><span class="pointer">${value}</span>
@@ -35,33 +35,33 @@ export class Html {
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span data-toggle="modal" data-target="#modaldescriptionps">
-                                <span class="descriptionPS" data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Case study description">
+                                <span class="descriptionPS" data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Model description">
                                 <span class="glyphicon glyphicon-info-sign text-info icon-btn"></span>
                                 </span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
-                                <span class="editPS " data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Edit case study">
+                                <span class="editPS " data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Edit Model">
                                     <span class="glyphicon glyphicon-edit text-info icon-btn"></span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span class="backupCS" data-ps="${value}" 
-                                data-toggle="tooltip" data-placement="top" title="Backup case study" >
+                                data-toggle="tooltip" data-placement="top" title="Backup Model" >
                                 <a href="backupCase?case=${value}"> <span class="glyphicon glyphicon-download-alt text-info icon-btn"></span></a>
                                
                                 </span>
                                 </td>
                             <td style="width:40px; text-align:center">
                                 <span data-toggle="modal" data-target="#modalcopy">
-                                <span class="copyCS" data-ps="${value}"' + 'id="copy_${value}"  data-toggle="tooltip" data-placement="top" title="Copy case study" >
+                                <span class="copyCS" data-ps="${value}"' + 'id="copy_${value}"  data-toggle="tooltip" data-placement="top" title="Copy Model" >
                                 <span class="glyphicon glyphicon-duplicate text-info icon-btn"></span>
                                 </span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span>
-                                    <span class="DeletePS" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete case study">
+                                    <span class="DeletePS" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
                                         <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
                                     </span>
                                 </span>
@@ -80,6 +80,25 @@ export class Html {
         $.each(cases, function (index, value) {
             Html.appendCasePicker(value, selectedCS);
         });
+    }
+
+    static renderCSV(csvs){
+        $('#csvFiles').empty();
+
+        $.each(csvs, function (index, value) {
+            let res = `
+            <tr>
+                <td>
+                    <a class=" " 
+                        href="downloadFile?file=${value}"><i class="fa fa-download"></i> ${value}
+                    </a>
+                </td>
+            </tr>
+            `;
+            $('#csvFiles').append(res);
+        });
+
+
     }
 
     static appendCasePicker(value, selectedCS, pageId) {

@@ -3,8 +3,9 @@ import { Html } from "./Html.Class.js";
 import { SyncS3 } from "./SyncS3.Class.js";
 
 export class Base {
-    static HEROKU = 0
-    static AWS_SYNC = 1
+    static HEROKU = 0;
+    static AWS_SYNC = 0;
+    static INIT_SYNC = 1;
 
     static apiUrl() {
         let apiUrl
@@ -18,6 +19,26 @@ export class Base {
         return apiUrl
     }
 
+    static initSyncS3() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: this.apiUrl() + "initSyncS3",
+                async: true,
+                type: 'GET',
+                dataType: 'json',
+                credentials: 'include',
+                xhrFields: { withCredentials: true },
+                crossDomain: true,
+                success: function (result) {
+                    resolve(result);
+                },
+                error: function (xhr, status, error) {
+                    if (error == 'UNKNOWN') { error = xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
 
     static getSession() {
         return new Promise((resolve, reject) => {
@@ -78,6 +99,26 @@ export class Base {
                 error: function (xhr, status, error) {
                     if (error == 'UNKNOWN') { error = xhr.responseJSON.message }
 
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static getResultCSV(casename) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: this.apiUrl() + "getResultCSV",
+                async: true,
+                type: 'POST',
+                data: JSON.stringify({ "casename": casename }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    resolve(result);
+                },
+                error: function (xhr, status, error) {
+                    if (error == 'UNKNOWN') { error = xhr.responseJSON.message }
                     reject(error);
                 }
             });

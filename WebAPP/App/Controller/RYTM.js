@@ -96,14 +96,14 @@ export default class RYTM {
         let $divChart = $('#osy-chartRYTM');
 
         $("#casePicker").off('click');
-        //odabir novog case iz case pickera
+        //odabir novog Model iz Model pickera
         $("#casePicker").on('click', '.selectCS', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             RYTM.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYTMdata").off('click');
@@ -126,7 +126,7 @@ export default class RYTM {
             Osemosys.updateData(saveData, param, "RYTM.json")
                 .then(response => {
                     //model.gridData[model.param] = JSON.parse(RYTmodel);
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RYTM.json");
@@ -145,8 +145,10 @@ export default class RYTM {
             var configChart = $divChart.jqxChart('getInstance');
             var tech = $("#osy-techs").val();
             var mo = $("#osy-mods1").val();
+            model.param = this.value;
             configChart.source.records = model.chartData[this.value][tech][mo];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         //change of ddl techs
@@ -356,10 +358,7 @@ export default class RYTM {
 
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

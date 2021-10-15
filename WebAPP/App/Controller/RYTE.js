@@ -26,7 +26,7 @@ export default class RYTE {
                     return Promise.all(promise);
                 } else {
                     let er = {
-                        "message": 'There is no case selected!',
+                        "message": 'There is no model selected!',
                         "status_code": "CaseError"
                     }
                     return Promise.reject(er);
@@ -139,7 +139,7 @@ export default class RYTE {
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             RYTE.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYTEdata").off('click');
@@ -160,7 +160,7 @@ export default class RYTE {
 
             Osemosys.updateData(saveData, param, "RYTE.json")
                 .then(response => {
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RYTE.json");
@@ -177,11 +177,13 @@ export default class RYTE {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
+            model.param = this.value;
             var configChart = $divChart.jqxChart('getInstance');
             var tech = $("#osy-techs").val();
             var emi = $("#osy-emis").val();
             configChart.source.records = model.chartData[this.value][tech][emi];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         $("#osy-techs").off('change');
@@ -396,10 +398,7 @@ export default class RYTE {
         $("#showLog").off('click');
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

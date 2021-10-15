@@ -91,6 +91,7 @@ export default class RY {
     static initEvents(model) {
 
         let $divGrid = $('#osy-gridRY');
+        let $divChart = $('#osy-chartRY');
 
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function (e) {
@@ -99,7 +100,7 @@ export default class RY {
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             RY.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYTdata").off('click');
@@ -107,7 +108,7 @@ export default class RY {
             event.preventDefault();
             event.stopImmediatePropagation();
             let param = $("#osy-ryt").val();
-            let ryData = $('#osy-gridRY').jqxGrid('getboundrows');
+            let ryData = $divGrid.jqxGrid('getboundrows');
 
             let daRYData = JSON.parse(JSON.stringify(ryData, ['ScId'].concat(model.years)))
 
@@ -120,7 +121,7 @@ export default class RY {
 
             Osemosys.updateData(saveData, param, "RY.json")
                 .then(response => {
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RY.json");
@@ -135,12 +136,13 @@ export default class RY {
         $("#osy-ryt").off('click');
         $('#osy-ryt').on('change', function () {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
-            let $divGrid = $('#osy-gridRY');
             model.srcGrid.root = this.value;
+            model.param = this.value;
             $divGrid.jqxGrid('updatebounddata');
-            var configChart = $('#osy-chartRY').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             configChart.source.records = model.chartData[this.value];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         $("#osy-openScData").off('click');
@@ -170,14 +172,14 @@ export default class RY {
         });
 
         let pasteEvent = false;
-        $('#osy-gridRY').bind('keydown', function (event) {
+        $divGrid.bind('keydown', function (event) {
             pasteEvent = false;
             var ctrlDown = false, ctrlKey = 17, cmdKey = 91, vKey = 86, cKey = 67;
             var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
             if (key == vKey) {
                 pasteEvent = true;
                 setTimeout(function () {
-                    let gridData = $('#osy-gridRY').jqxGrid('getboundrows');
+                    let gridData = $divGrid.jqxGrid('getboundrows');
                     let param = $("#osy-ryt").val();
                     let chartData = [];
                     $.each(model.years, function (idY, year) {
@@ -193,7 +195,7 @@ export default class RY {
                     model.chartData[param] = chartData;
                     model.gridData[param] = gridData;
 
-                    var configChart = $('#osy-chartRY').jqxChart('getInstance');
+                    var configChart = $divChart.jqxChart('getInstance');
                     configChart.source.records = model.chartData[param];
                     configChart.update();
                 }, 1000);
@@ -205,8 +207,8 @@ export default class RY {
                 var year = event.args.datafield;
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
-                var paramId = $('#osy-gridRY').jqxGrid('getcellvalue', rowBoundIndex, 'param');
-                var scId = $('#osy-gridRY').jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
+                var paramId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'param');
+                var scId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $("#osy-ryt").val();
                 //update model chart
                 $.each(model.chartData[param], function (id, obj) {
@@ -228,7 +230,7 @@ export default class RY {
                         }
                     }
                 });
-                var configChart = $('#osy-chartRY').jqxChart('getInstance');
+                var configChart = $divChart.jqxChart('getInstance');
                 configChart.source.records = model.chartData[param];
                 configChart.update();
             }
@@ -237,7 +239,7 @@ export default class RY {
         $(".switchChart").off('click');
         $(".switchChart").on('click', function (e) {
             e.preventDefault();
-            var configChart = $('#osy-chartRY').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             var chartType = $(this).attr('data-chartType');
             configChart.seriesGroups[0].type = chartType;
             if (chartType == 'column') {
@@ -251,7 +253,7 @@ export default class RY {
         $(".toggleLabels").off('click');
         $(".toggleLabels").on('click', function (e) {
             e.preventDefault();
-            var configChart = $('#osy-chartRY').jqxChart('getInstance');
+            var configChart = $divChart.jqxChart('getInstance');
             if (configChart.seriesGroups[0].type == 'column') {
                 configChart.seriesGroups[0].labels.angle = 90;
             } else {
@@ -263,19 +265,19 @@ export default class RY {
 
         $("#exportPng").off('click');
         $("#exportPng").click(function () {
-            $("#osy-chartRY").jqxChart('saveAsPNG', 'RY.png', 'https://www.jqwidgets.com/export_server/export.php');
+            $divChart.jqxChart('saveAsPNG', 'RY.png', 'https://www.jqwidgets.com/export_server/export.php');
         });
 
         let res = true;
         $("#resizeColumns").off('click');
         $("#resizeColumns").click(function () {
             if (res) {
-                $('#osy-gridRY').jqxGrid('autoresizecolumn', 'Sc');
-                $('#osy-gridRY').jqxGrid('autoresizecolumn', 'Param');
-                $('#osy-gridRY').jqxGrid('autoresizecolumn', 'UnitId');
+                $divGrid.jqxGrid('autoresizecolumn', 'Sc');
+                $divGrid.jqxGrid('autoresizecolumn', 'Param');
+                $divGrid.jqxGrid('autoresizecolumn', 'UnitId');
             }
             else {
-                $('#osy-gridRY').jqxGrid('autoresizecolumns');
+                $divGrid.jqxGrid('autoresizecolumns');
             }
             res = !res;
         });
@@ -283,7 +285,7 @@ export default class RY {
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $("#osy-gridRY").jqxGrid('exportdata', 'xls', 'RY');
+            $divGrid.jqxGrid('exportdata', 'xls', 'RY');
         });
 
         $("#decUp").off('click');
@@ -292,7 +294,7 @@ export default class RY {
             e.stopImmediatePropagation();
             model.d++;
             model.decimal = 'd' + parseInt(model.d);
-            $('#osy-gridRY').jqxGrid('refresh');
+            $divGrid.jqxGrid('refresh');
         });
 
         $("#decDown").off('click');
@@ -301,14 +303,13 @@ export default class RY {
             e.stopImmediatePropagation();
             model.d--;
             model.decimal = 'd' + parseInt(model.d);
-            $('#osy-gridRY').jqxGrid('refresh');
+            $divGrid.jqxGrid('refresh');
         });
 
         $("#showLog").click(function (e) {
             e.preventDefault();
             $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
+                ${DEF[model.group][model.param].definition}
             `);
             $('#definition').toggle('slow');
         });

@@ -50,7 +50,7 @@ export default class AddCase {
         if (model.casename == null) {
             $('#osy-newCase').show();
             $('#osy-updateCase').hide();
-            Message.info("Please select case or create new case study!");
+            Message.info("Please select case or create new Model!");
         } else {
             $("#osy-new").show();
             $('#osy-updateCase').show();
@@ -169,7 +169,7 @@ export default class AddCase {
             $("#osy-new").hide();
             $('#osy-updateCase').hide();
             $('#osy-newCase').show();
-            Message.smallBoxConfirmation("Confirmation!", "Configure new case study!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Configure new Model!", 3500);
         });
 
         $("#osy-save").off('click');
@@ -228,7 +228,7 @@ export default class AddCase {
                         $('#osy-updateCase').show();
                         $('#osy-newCase').hide();
                         Message.clearMessages();
-                        Message.bigBoxSuccess('Case study message', response.message, 3000);
+                        Message.bigBoxSuccess('Model message', response.message, 3000);
                         Html.appendCasePicker(casename, casename);
                         Sidebar.Reload(casename);
                         $("#osy-case").html(casename);
@@ -240,11 +240,11 @@ export default class AddCase {
                         }
                     }
                     if (response.status_code == "edited") {
-                        Html.title(casename, 'Case study', 'create & edit');
+                        Html.title(casename, 'Model', 'create & edit');
                         $("#osy-new").show();
                         Navbar.initPage(casename);
                         Sidebar.Reload(casename);
-                        Message.bigBoxInfo('Case study message', response.message, 3000);
+                        Message.bigBoxInfo('Model message', response.message, 3000);
                         if (Base.AWS_SYNC == 1) {
                             SyncS3.deleteResultsPreSync(casename)
                                 .then(response => {
@@ -254,7 +254,7 @@ export default class AddCase {
                     }
                     if (response.status_code == "exist") {
                         $("#osy-new").show();
-                        Message.bigBoxWarning('Case study message', response.message, 3000);
+                        Message.bigBoxWarning('Model message', response.message, 3000);
                     }
                 })
                 .catch(error => {
@@ -290,8 +290,8 @@ export default class AddCase {
             if (id != 0) {
                 var techId = $divTech.jqxGrid('getcellvalue', id, 'TechId');
                 var rowid = $divTech.jqxGrid('getrowid', id);
-                model.techs.splice(id, 1);
                 $divTech.jqxGrid('deleterow', rowid);
+                model.techs.splice(id, 1);
                 //update techNames
                 delete model.techNames[techId];
                 //update count

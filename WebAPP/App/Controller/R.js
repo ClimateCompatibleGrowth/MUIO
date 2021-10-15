@@ -123,7 +123,7 @@ export default class R {
 
             Osemosys.updateData(saveData, param, "R.json")
             .then(response =>{
-                Message.bigBoxSuccess('Case study message', response.message, 3000);
+                Message.bigBoxSuccess('Model message', response.message, 3000);
                 //sync S3
                 if (Base.AWS_SYNC == 1){
                     Base.updateSync(model.casename, "R.json");
@@ -140,11 +140,12 @@ export default class R {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
-
+            model.param = this.value;
             Grid.applyRFilter( $divGrid);
             var configChart = $divChart.jqxChart('getInstance');
             configChart.source.records = model.chartData[this.value];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         $("#osy-openScData").off('click');
@@ -306,8 +307,7 @@ export default class R {
         $("#showLog").click(function (e) {
             e.preventDefault();
             $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
+                ${DEF[model.group][model.param].definition}
             `);
             $('#definition').toggle('slow');
         });

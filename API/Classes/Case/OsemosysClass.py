@@ -36,10 +36,12 @@ class Osemosys():
 
         self.resFile = Path(Config.DATA_STORAGE,case, 'res','results.txt')
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
+        self.lpFile = Path(Config.DATA_STORAGE,case, 'res','lp.lp')
 
         self.glpkFolder = Path(Config.SOLVERs_FOLDER,'glpk-4.65', 'w64')
         self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
         # self.resPath = Path(Config.DATA_STORAGE,case,'res', 'csv')
+        self.resCBCPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', case, 'res')
         self.resPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', case, 'res', 'csv')
 
         d = {}

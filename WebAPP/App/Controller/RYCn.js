@@ -103,7 +103,7 @@ export default class RYCn {
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             RYCn.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYCndata").on('click', function (event) {
@@ -123,7 +123,7 @@ export default class RYCn {
 
             Osemosys.updateData(saveData, param, "RYCn.json")
                 .then(response => {
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RYCn.json");
@@ -137,14 +137,14 @@ export default class RYCn {
         //change of ddl parameters
         $('#osy-ryt').on('change', function () {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
-            let $divGrid = $divGrid;
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
-
+            model.param = this.value;
             var con = $("#osy-cons").val();
             var configChart = $divChart.jqxChart('getInstance');
             configChart.source.records = model.chartData[this.value][con];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         //change of ddl cons
@@ -323,10 +323,7 @@ export default class RYCn {
 
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

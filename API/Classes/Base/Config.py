@@ -14,10 +14,10 @@ ALLOWED_EXTENSIONS = set(['zip', 'application/zip'])
 DATA_STORAGE = Path("WebAPP", 'DataStorage')
 CLASS_FOLDER = Path("WebAPP", 'Classes')
 EXTRACT_FOLDER = Path("")
-SOLVERs_FOLDER = Path('API', 'SOLVERs')
+SOLVERs_FOLDER = Path('WebAPP', 'SOLVERs')
 
 HEROKU_DEPLOY = 0
-AWS_SYNC = 1
+AWS_SYNC = 0
 
 TECH_GROUPS = ('RYT', 'RYTM', 'RYTC', 'RYTCn', 'RYTCM', 'RYTE', 'RYTEM', 'RYTTs')
 COMM_GROUPS = ('RYC', 'RYTC', 'RYTCM','RYCTs')

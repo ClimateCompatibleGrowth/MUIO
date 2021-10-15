@@ -1,11 +1,11 @@
-import urllib.request
 from pathlib import Path
-from flask import jsonify
 import os
 import subprocess
 from Classes.Base import Config
 from Classes.Case.OsemosysClass import Osemosys
 from Classes.Base.FileClass import File
+import pandas as pd
+
 
 class DataFile(Osemosys):
     # def __init__(self, case):
@@ -423,374 +423,6 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
-    def generateDatafile_bkp( self ):
-        try:
-            self.defaultValue1 = self.getParamDefaultValues()
-            defaultValue = self.getParamDefaultValues()
-            emiIDs = self.getEmiIds()
-            techIDs = self.getTechIds()
-            commIDs = self.getCommIds()
-            scOrder = self.getScOrder()
-
-            emiMap = self.getEmisMap()
-            techMap = self.getTechsMap()
-            commMap = self.getCommsMap()
-            
-            yearIDs = self.getYears()
-            timesliceIDs = self.getTimeslices()
-            modIds = self.getMods()
-
-            activityTechIDs = self.getActivityTechIds()
-            activityCommIDs = self.getActivityCommIds()
-
-            emissionTechIDs = self.getActivityEmissionTechIds()
-            activityEmissionIDs = self.getActivityEmisionIds()
-
-            emis = ''
-            for emiId in emiIDs:
-                #emis += '{:<50}'.format(emiId) 
-                #emis += '{} '.format(next(iter(emiId.items()))[1]) 
-                emis += '{} '.format(emiMap[emiId])
-
-            techs = ''
-            for techId in techIDs:
-                # techs += '{:<50}'.format(techId) 
-                #techs += '{} '.format(next(iter(techId.items()))[1]) 
-                techs += '{} '.format(techMap[techId]) 
-
-            comms = ''
-            for commId in commIDs:
-                # comms += '{:<50}'.format(commId) 
-                #comms += '{} '.format(next(iter(commId.items()))[1]) 
-                comms += '{} '.format(commMap[commId]) 
-
-            years = ''
-            for yearId in yearIDs:
-                # years += '{:<50}'.format(yearId)
-                years += '{} '.format(yearId)
-
-            timeslices = ''
-            for timesliceId in timesliceIDs:
-                # timeslices += '{:<50}'.format(timesliceId)
-                timeslices += '{} '.format(timesliceId)
-
-            mods = ''
-            for modId in modIds:
-                # timeslices += '{:<50}'.format(timesliceId)
-                mods += '{} '.format(modId)
-
-            #path = '"{}"'.format(self.resPath.resolve())
-
-            f = open(self.dataFile, mode="w")
-
-            #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
-            f.write('####################\n#Sets#\n####################\n')
-            f.write('{} {}'.format('#', '\n'))
-            f.write('{} {} {} {}{}{}'.format('set', 'EMISSION',':=', emis, ';', '\n'))
-            f.write('{} {} {} {}{}{}'.format('set', 'REGION',':=', 'RE1', ';', '\n'))
-            f.write('{} {} {} {}{}{}'.format('set', 'MODE_OF_OPERATION',':=', mods, ';', '\n'))
-            f.write('{} {} {} {}{}{}'.format('set', 'COMMODITY',':=', comms, ';', '\n'))
-            f.write('{} {} {} {}{}{}'.format('set', 'STORAGE',':=','', ';', '\n'))
-            f.write('{} {} {} {}{}{}'.format('set', 'TECHNOLOGY',':=', techs, ';', '\n'))
-            f.write('{} {} {} {}{}{}'.format('set', 'YEAR',':=', years, ';', '\n'))
-            f.write('{} {} {} {}{}{}'.format('set', 'TIMESLICE',':=', timeslices, ';', '\n'))
-
-            f.write('####################\n#Parameters#\n####################\n')
-            # f.write('{:<50}{}'.format('#', '\n'))
-            # f.write('{:<50}{:<50}{:<50}{}{:<50}{}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
-            # f.write('{:<50}{}'.format('', '\n'))
-
-            #trade route hard code
-            f.write('{} {} {} {} {} {}'.format('param', 'TradeRoute ','default', '0', ':=','\n'))
-            f.write('{} {}'.format(';', '\n'))
-            f.write('{} {}'.format('', '\n'))
-
-            #R
-            r = self.R(File.readFile(self.rPath))
-            for id, param in self.PARAM['R'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-                for sc in scOrder:
-                    if r[id][sc['ScId']]['value'] is not None and sc['Active'] == True:
-                        tmp = r[id][sc['ScId']]['value']
-                f.write('{} {} {}'.format('RE1', tmp, '\n'))
-                f.write('{} {}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #self.gen_R(f, scOrder)
-            #next(iter(word_freq.items()))[1]
-            #next(iter(commId))
-
-            #RY
-            ry = self.RY(File.readFile(self.ryPath))
-            for id, param in self.PARAM['RY'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
-                f.write('{}{}{}'.format(years, ':=', '\n'))
-                ryString = ''
-                for yearId in yearIDs:
-                    for sc in scOrder:
-                        if ry[id][sc['ScId']][yearId] is not None and sc['Active'] == True:
-                            tmp = ry[id][sc['ScId']][yearId]
-                    ryString += '{} '.format(tmp)
-                f.write('{}{}{}'.format('RE1 ', ryString, '\n'))
-                f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RT
-            rt = self.RT(File.readFile(self.rtPath))
-            for id, param in self.PARAM['RT'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
-                f.write('{}{}{}'.format(techs, ':=', '\n'))
-                rtString = ''
-                for techId in techIDs:
-                    for sc in scOrder:
-                        if rt[id][sc['ScId']][techId] is not None and sc['Active'] == True:
-                            tmp = rt[id][sc['ScId']][techId]
-                    rtString += '{} '.format(tmp)
-                f.write('{}{}{}'.format('RE1 ', rtString, '\n'))
-                f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RE
-            re = self.RE(File.readFile(self.rePath))
-            for id, param in self.PARAM['RE'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
-                f.write('{}{}{}'.format(emis, ':=', '\n'))
-                reString = ''
-                for emiId in emiIDs:
-                    for sc in scOrder:
-                        if re[id][sc['ScId']][emiId] is not None and sc['Active'] == True:
-                            tmp = re[id][sc['ScId']][emiId]
-                    reString += '{} '.format(tmp)
-                f.write('{}{}{}'.format('RE1 ', reString, '\n'))
-                f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RYTs
-            ryts = self.RYTs(File.readFile(self.rytsPath))
-            for id, param in self.PARAM['RYTs'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':','\n'))
-                f.write('{}{}{}'.format( years, ':=', '\n'))
-                for timesliceId in timesliceIDs:
-                    rytsString = ''
-                    for yearId in yearIDs:
-                        for sc in scOrder:
-                            if ryts[id][sc['ScId']][yearId][timesliceId] is not None and sc['Active'] == True:
-                                tmp = ryts[id][sc['ScId']][yearId][timesliceId]
-                        rytsString += '{} '.format(tmp)
-                    f.write('{} {}{}'.format(timesliceId, rytsString, '\n'))
-            f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RYT
-            ryt = self.RYT(File.readFile(self.rytPath))
-            for id, param in self.PARAM['RYT'].items():
-                if id not in ('VC', 'TAMLL', 'TAMUL', 'TADML', 'TAIML'):
-                    f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-                    f.write('{} {}'.format('[RE1,*,*]:', '\n'))
-                    f.write('{}{}{}'.format( years, ':=', '\n'))
-                    for techId in techIDs:
-                        rytString = ''
-                        for yearId in yearIDs:
-                            for sc in scOrder:
-                                if ryt[id][sc['ScId']][yearId][techId] is not None and sc['Active'] == True:
-                                    tmp = ryt[id][sc['ScId']][yearId][techId]
-                            rytString += '{} '.format(tmp)
-                        f.write('{} {}{}'.format(techMap[techId], rytString, '\n'))
-                    f.write('{}{}'.format(';', '\n'))
-
-                else:
-
-                    f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-                    for techId in techIDs:
-                        f.write('{} {}'.format('[RE1,'+ techMap[techId] +',*,*]:', '\n'))
-                        f.write('{}{}{}'.format(years, ':=', '\n'))
-                        rytString = ''
-                        for yearId in yearIDs:
-                            for sc in scOrder:
-                                if ryt[id][sc['ScId']][yearId][techId] is not None and sc['Active'] == True:
-                                    tmp = ryt[id][sc['ScId']][yearId][techId]
-                            rytString += '{} '.format(tmp)
-                        f.write('{} {}{}'.format(1, rytString, '\n'))
-                    f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RYTM
-            rytm = self.RYTM(File.readFile(self.rytmPath))
-            for id, param in self.PARAM['RYTM'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-                for techId in techIDs:
-                    f.write('{} {}'.format('[RE1,'+ techMap[techId] +',*,*]:', '\n'))
-                    f.write('{}{}{}'.format(years, ':=', '\n'))
-                    for mod in modIds:
-                        rytmString = ''
-                        for yearId in yearIDs:
-                            for sc in scOrder:
-                                if rytm[id][sc['ScId']][yearId][techId][mod] is not None and sc['Active'] == True:
-                                    tmp = rytm[id][sc['ScId']][yearId][techId][mod]
-                            rytmString += '{} '.format(tmp)
-                        f.write('{} {}{}'.format(mod, rytmString, '\n'))
-                f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RYC
-            ryc = self.RYC(File.readFile(self.rycPath))
-            for id, param in self.PARAM['RYC'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-                f.write('{} {}'.format('[RE1,*,*]:', '\n'))
-                f.write('{}{}{}'.format(years, ':=', '\n'))
-                for commId in commIDs:
-                    rycString = ''
-                    for yearId in yearIDs:
-                        for sc in scOrder:
-                            if ryc[id][sc['ScId']][yearId][commId] is not None and sc['Active'] == True:
-                                tmp = ryc[id][sc['ScId']][yearId][commId]
-                        rycString += '{} '.format(tmp)
-                    f.write('{} {}{}'.format(commMap[commId], rycString, '\n'))
-                f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RYE 
-            rye = self.RYE(File.readFile(self.ryePath))
-            for id, param in self.PARAM['RYE'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-                f.write('{} {}'.format('[RE1,*,*]:', '\n'))
-                f.write('{}{}{}'.format( years, ':=', '\n'))
-                for emiId in emiIDs:
-                    ryeString = ''
-                    for yearId in yearIDs:
-                        for sc in scOrder:
-                            if rye[id][sc['ScId']][yearId][emiId] is not None and sc['Active'] == True:
-                                tmp = rye[id][sc['ScId']][yearId][emiId]
-                        ryeString += '{} '.format(tmp)
-                    f.write('{} {}{}'.format(emiMap[emiId], ryeString, '\n'))
-                f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RYTC
-            # rytc = self.RYTC(File.readFile(self.rytcPath))
-            # for id, param in self.PARAM['RYTC'].items():
-            #     f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-            #     for activityTechId in activityTechIDs[id]:
-            #         for activityCommId in activityCommIDs[id][activityTechId]:
-            #             f.write('{}{}'.format('[RE1,'+ techMap[activityTechId] + ','+ commMap[activityCommId] +',*,*]:', '\n'))
-            #             f.write('{}{}{}'.format( years, ':=', '\n'))
-            #             rytcString = ''
-            #             for yearId in yearIDs:
-            #                 for sc in scOrder:
-            #                     if rytc[id][sc['ScId']][yearId][activityTechId][activityCommId] is not None and sc['Active'] == True:
-            #                         tmp = rytc[id][sc['ScId']][yearId][activityTechId][activityCommId]
-            #                 rytcString += '{} '.format(tmp)
-            #             f.write('{} {}{}'.format(1, rytcString, '\n'))
-            #     f.write('{}{}'.format(';', '\n'))
-            # f.write('{}{}'.format('', '\n'))
-
-            #RYTCM
-            rytcm = self.RYTCM(File.readFile(self.rytcmPath))
-            for id, param in self.PARAM['RYTCM'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-                for activityTechId in activityTechIDs[id]:
-                    for activityCommId in activityCommIDs[id][activityTechId]:
-                        f.write('{}{}'.format('[RE1,'+ techMap[activityTechId] + ','+ commMap[activityCommId] +',*,*]:', '\n'))
-                        f.write('{}{}{}'.format( years, ':=', '\n'))
-                        for mod in modIds:
-                            rytcString = ''
-                            for yearId in yearIDs:
-                                for sc in scOrder:
-                                    if rytcm[id][sc['ScId']][yearId][activityTechId][activityCommId][mod] is not None and sc['Active'] == True:
-                                        tmp = rytcm[id][sc['ScId']][yearId][activityTechId][activityCommId][mod]
-                                rytcString += '{} '.format(tmp)
-                            f.write('{} {}{}'.format(mod, rytcString, '\n'))
-                f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RYTE
-            # ryte = self.RYTE(File.readFile(self.rytePath))
-            # for id, param in self.PARAM['RYTE'].items():
-            #     f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-            #     for emissionTechId in emissionTechIDs[id]:
-            #         for activityEmissionId in activityEmissionIDs[id][emissionTechId]:
-            #             f.write('{}{}'.format('[RE1,'+ techMap[emissionTechId] +  ','+ emiMap[activityEmissionId] + ',*,*]:', '\n'))
-            #             f.write('{}{}{}'.format( years, ':=', '\n'))
-            #             ryteString = ''
-            #             for yearId in yearIDs:
-            #                 for sc in scOrder:
-            #                     if ryte[id][sc['ScId']][yearId][emissionTechId][activityEmissionId] is not None and sc['Active'] == True:
-            #                         tmp = ryte[id][sc['ScId']][yearId][emissionTechId][activityEmissionId]
-            #                 ryteString += '{} '.format(tmp)
-            #             f.write('{} {}{}'.format(1, ryteString, '\n'))
-            #     f.write('{}{}'.format(';', '\n'))
-            # f.write('{}{}'.format('', '\n'))
-
-            rytem = self.RYTEM(File.readFile(self.rytemPath))
-            for id, param in self.PARAM['RYTEM'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
-                for emissionTechId in emissionTechIDs[id]:
-                    for activityEmissionId in activityEmissionIDs[id][emissionTechId]:
-                        f.write('{}{}'.format('[RE1,'+ techMap[emissionTechId] +  ','+ emiMap[activityEmissionId] + ',*,*]:', '\n'))
-                        f.write('{}{}{}'.format( years, ':=', '\n'))
-                        for mod in modIds:
-                            ryteString = ''
-                            for yearId in yearIDs:
-                                for sc in scOrder:
-                                    if rytem[id][sc['ScId']][yearId][emissionTechId][activityEmissionId][mod] is not None and sc['Active'] == True:
-                                        tmp = rytem[id][sc['ScId']][yearId][emissionTechId][activityEmissionId][mod]
-                                ryteString += '{} '.format(tmp)
-                            f.write('{} {}{}'.format(mod, ryteString, '\n'))
-                f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RYTTs
-            rytts = self.RYTTs(File.readFile(self.ryttsPath))
-            for id, param in self.PARAM['RYTTs'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
- 
-                for techId in techIDs:
-                    f.write('{} {}'.format('[RE1,'+ techMap[techId] +',*,*]:', '\n'))
-                    f.write('{}{}{}'.format( years, ':=', '\n'))
-                    for timesliceId in timesliceIDs:
-                        ryttsString = ''
-                        for yearId in yearIDs:
-                            for sc in scOrder:
-                                if rytts[id][sc['ScId']][yearId][techId][timesliceId] is not None and sc['Active'] == True:
-                                    tmp = rytts[id][sc['ScId']][yearId][techId][timesliceId]
-                            ryttsString += '{} '.format(tmp)
-                        f.write('{} {}{}'.format(timesliceId, ryttsString, '\n'))
-            f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-            #RYCTs
-            rycts = self.RYCTs(File.readFile(self.ryctsPath))
-            for id, param in self.PARAM['RYCTs'].items():
-                f.write('{} {} {} {} {} {}'.format('param', param,'default', defaultValue[id], ':=','\n'))
- 
-                for commId in commIDs:
-                    f.write('{} {}'.format('[RE1,'+ commMap[commId] +',*,*]:', '\n'))
-                    f.write('{}{}{}'.format( years, ':=', '\n'))
-                    for timesliceId in timesliceIDs:
-                        ryctsString = ''
-                        for yearId in yearIDs:
-                            for sc in scOrder:
-                                if rycts[id][sc['ScId']][yearId][commId][timesliceId] is not None and sc['Active'] == True:
-                                    tmp = rycts[id][sc['ScId']][yearId][commId][timesliceId]
-                            ryctsString += '{} '.format(tmp)
-                        f.write('{} {}{}'.format(timesliceId, ryctsString, '\n'))
-            f.write('{}{}'.format(';', '\n'))
-            f.write('{}{}'.format('', '\n'))
-
-
-            f.write('{}{}'.format('#', '\n'))
-            f.write('{}'.format('end;'))
-            f.close
-
-            if not os.path.exists(Path(Config.DATA_STORAGE,self.case,'res', 'csv')):
-                os.makedirs(Path(Config.DATA_STORAGE,self.case,'res', 'csv'))
-
-        #ovako prosljedjujemo exception u prethodnom slucaju vracamo response u funkciju koja poziva writeFile
-        except(IOError, IndexError):
-            raise IndexError
-        except OSError:
-            raise OSError
-
     def readDataFile( self ):
         try:
             #f = open(self.dataFile, mode="r")
@@ -807,19 +439,217 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
+    def generateCSVfromCBC(self, data_file, results_file, base_folder=os.getcwd()):
+        pd.set_option('mode.chained_assignment', None)
+
+        lines = []
+
+        parsing = False
+
+        data_all = []
+        data_out = []
+        data_inp = []
+        output_table = []
+        input_table = []
+        storage_to = []
+        storage_from = []
+
+        with open(data_file, 'r') as f:
+            for line in f:
+                if line.startswith('set YEAR'):
+                    start_year = line.split(' ')[3]
+                if line.startswith('set COMMODITY'): # Extracts list of COMMODITIES from data file. Some models use FUEL instead.
+                    fuel_list = line.split(' ')[3:-1]
+                if line.startswith('set FUEL'): # Extracts list of FUELS from data file. Some models use COMMODITIES instead.
+                    fuel_list = line.split(' ')[3:-1]
+                if line.startswith('set TECHNOLOGY'):
+                    tech_list = line.split(' ')[3:-1]
+                if line.startswith('set STORAGE'):
+                    storage_list = line.split(' ')[3:-1]
+                if line.startswith('set MODE_OF_OPERATION'):
+                    mode_list = line.split(' ')[3:-1]
+
+                if line.startswith(";"):
+                        parsing = False
+
+                if parsing:
+                    if line.startswith('['):
+                        fuel = line.split(',')[2]
+                        tech = line.split(',')[1]
+                    elif line.startswith(start_year):
+                        years = line.rstrip(':= ;\n').split(' ')[0:]
+                        years = [i.strip(':=') for i in years]
+                    else:
+                        values = line.rstrip().split(' ')[1:]
+                        mode = line.split(' ')[0]
+
+                        if param_current=='OutputActivityRatio':
+                            #data_out.append(tuple([fuel,tech,mode]))
+                            #data_all.append(tuple([tech,mode]))
+                            for i in range(0,len(years)):
+                                output_table.append(tuple([tech,fuel,mode,years[i],values[i]]))
+
+                        if param_current=='InputActivityRatio':
+                            #data_inp.append(tuple([fuel,tech,mode]))
+                            #data_all.append(tuple([tech,mode]))
+                            for i in range(0,len(years)):
+                                input_table.append(tuple([tech,fuel,mode,years[i],values[i]]))
+
+                        if param_current == 'TechnologyToStorage' or param_current == 'TechnologyFromStorage':
+                            if not line.startswith(mode_list[0]):
+                                storage = line.split(' ')[0]
+                                values = line.rstrip().split(' ')[1:]
+                                for i in range(0,len(mode_list)):
+                                    if values[i] != '0':
+                                        if param_current == 'TechnologyToStorage':
+                                            storage_to.append(tuple([storage,tech,mode_list[i]]))
+                                            data_all.append(tuple([tech,mode_list[i]]))
+                                        if param_current == 'TechnologyFromStorage':
+                                            storage_from.append(tuple([storage,tech,mode_list[i]]))
+                                            data_all.append(tuple([tech,mode_list[i]]))
+
+                if line.startswith(('param OutputActivityRatio','param InputActivityRatio','param TechnologyToStorage','param TechnologyFromStorage')):
+                    param_current = line.split(' ')[1]
+                    parsing = True
+
+        # try:
+        #     os.makedirs(os.path.join(base_folder, 'csv'))
+        # except FileExistsError:
+        #     pass
+
+        #Read CBC output file
+        df = pd.read_csv(results_file, sep='\t')
+
+        df.columns = ['temp']
+        df['temp'] = df['temp'].str.lstrip(' *\n\t')
+        df[['temp','value']] = df['temp'].str.split(')', expand=True)
+        df = df.applymap(lambda x: x.strip() if isinstance(x,str) else x)
+        df['value'] = df['value'].str.split(' ', expand=True)
+        df[['parameter','id']] = df['temp'].str.split('(', expand=True)
+        df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]
+        df = df.drop('temp', axis=1)
+        df['value'] = df['value'].astype(float).round(4)
+
+        params = df.parameter.unique()
+        all_params = {}
+        cols = {'NewCapacity':['r','t','y'],
+                'AccumulatedNewCapacity':['r','t','y'],
+                'TotalCapacityAnnual':['r','t','y'],
+                'CapitalInvestment':['r','t','y'],
+                'AnnualVariableOperatingCost':['r','t','y'],
+                'AnnualFixedOperatingCost':['r','t','y'],
+                'SalvageValue':['r','t','y'],
+                'DiscountedSalvageValue':['r','t','y'],
+                'TotalTechnologyAnnualActivity':['r','t','y'],
+                'RateOfActivity':['r','l','t','m','y'],
+                'RateOfTotalActivity':['r','t','l','y'],
+                'Demand':['r','l','f','y'],
+                'TotalAnnualTechnologyActivityByMode':['r','t','m','y'],
+                'TotalTechnologyModelPeriodActivity':['r','t'],
+                'ProductionByTechnology':['r','l','t','f','y'],
+                'ProductionByTechnologyAnnual':['r','t','f','y'],
+                'AnnualTechnologyEmissionByMode':['r','t','e','m','y'],
+                'AnnualTechnologyEmission':['r','t','e','y'],
+                'AnnualEmissions':['r','e','y'],
+                'DiscountedTechnologyEmissionsPenalty':['r','t','y'],
+                'RateOfProductionByTechnology':['r','l','t','f','y'],
+                'RateOfUseByTechnology':['r','l','t','f','y'],
+                'UseByTechnology':['r','l','t','f','y'],
+                'RateOfProductionByTechnologyByMode':['r','l','t','f','m','y'],
+                'RateOfUseByTechnologyByMode':['r','l','t','f','m','y'],
+                'TechnologyActivityChangeByMode':['r','t','m','y'],
+                'TechnologyActivityChangeByModeCostTotal':['r','t','m','y'],
+                'InputToNewCapacity':['r','t','f','y'],
+                'InputToTotalCapacity':['r','t','f','y'],
+                'DiscountedCapitalInvestment':['r','t','y'],
+                'DiscountedOperatingCost':['r','t','y'],
+                'TotalDiscountedCostByTechnology':['r','t','y'],            
+                }
+
+        for each in params:
+            df_p = df[df.parameter == each]
+            df_p[cols[each]] = df_p['id'].str.split(',',expand=True)
+            cols[each].append('value')
+            df_p = df_p[cols[each]] # Reorder dataframe to include 'value' as last column
+            all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
+            df_p = df_p.rename(columns={'value':each})
+            df_p.to_csv(os.path.join(base_folder, 'WebAPP','DataStorage',self.case,'res','csv', str(each) + '.csv'), index=None) # Print data for each paramter to a CSV file
+
+        year_split = []
+        parsing = False
+
+        with open(data_file, 'r') as f:
+            for line in f:
+                if line.startswith(";"):
+                    parsing = False
+                if parsing:
+                    if line.startswith(start_year):
+                        years = line.rstrip().split(' ')[0:]
+                        years = [i.strip(':=') for i in years]
+                        years = list(filter(None, years))
+                    elif not line.startswith(start_year):
+                        time_slice = line.rstrip().split(' ')[0]
+                        values = line.rstrip().split(' ')[1:]
+                        for i in range(0,len(years)):
+                            year_split.append(tuple([time_slice,years[i],values[i]]))
+                if line.startswith('param YearSplit'):
+                    parsing = True
+
+        df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
+        df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
+
+        df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
+        df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
+        df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
+        df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
+
+        df_prod = pd.merge(df_out_ys, df_activity, on=['t','m','l','y'])
+        df_prod['ProductionByTechnologyAnnual'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
+        df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+        df_prod = df_prod.groupby(['r','t','f','y'])['ProductionByTechnologyAnnual'].sum().reset_index()
+        df_prod['ProductionByTechnologyAnnual'] = df_prod['ProductionByTechnologyAnnual'].astype(float).round(4)
+        df_prod.to_csv(os.path.join(base_folder,'WebAPP','DataStorage',self.case,'res', 'csv', 'ProductionByTechnologyAnnual.csv'), index=None)
+        all_params['ProductionByTechnologyAnnual'] = df_prod.rename(columns={'ProductionByTechnologyAnnual':'value'})
+
+
+        df_input = pd.DataFrame(input_table, columns=['t','f','m','y','InputActivityRatio'])
+        df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
+        df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
+        df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
+
+        df_use = pd.merge(df_in_ys, df_activity, on=['t','m','l','y'])
+        df_use['UseByTechnologyAnnual'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+        df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+        df_use = df_use.groupby(['r','t','f','y'])['UseByTechnologyAnnual'].sum().reset_index()
+        df_use['UseByTechnologyAnnual'] = df_use['UseByTechnologyAnnual'].astype(float).round(4)
+        df_use.to_csv(os.path.join(base_folder,'WebAPP','DataStorage',self.case,'res', 'csv', 'UseByTechnologyAnnual.csv'), index=None)
+        all_params['UseByTechnologyAnnual'] = df_use.rename(columns={'UseByTechnologyAnnual':'value'})
+
     def run( self, solver ):
         try:
             modelfile = '"{}"'.format(self.osemosysFile.resolve())
             datafile = '"{}"'.format(self.dataFile.resolve())
             resultfile = '"{}"'.format(self.resFile.resolve())
+            lpfile = '"{}"'.format(self.lpFile.resolve())
+            
+
+            glpfolder =self.glpkFolder.resolve()
+            cbcfolder =self.cbcFolder.resolve()
+            respath = self.resPath.resolve()
+            resCBCPath = self.resCBCPath.resolve()
             if solver == 'glpk':
-                # print(modelfile)
-                # print(datafile)
-                # print(resultfile)
-                out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.glpkFolder,  capture_output=True, text=True, shell=False)
+
+                # print('glpk folder ', self.glpkFolder)
+                # print('glpk folder ', glpfolder)
+                out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
                 #out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.casePath,  capture_output=True, text=True, shell=False)
             else:
-                out = subprocess.run('cbc ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.cbcFolder,  capture_output=True, text=True, shell=True)
+                #Matrix generation (creates an LP file with GLPK): glpsol --check -m [model].txt -d [data].txt --wlp [LPfile].lp
+                #Optimisation (solves LP file with CBC): cbc [LPfile].lp solve -solu [results].txt
+                subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
+                # out = subprocess.run('cbc ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.cbcFolder,  capture_output=True, text=True, shell=True)
+                out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                self.generateCSVfromCBC(self.dataFile, self.resFile)
             if out.returncode != 0:
             
                 response = {

@@ -102,7 +102,7 @@ export default class RYCTs {
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
             RYCTs.refreshPage(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYCTsdata").off('click');
@@ -122,7 +122,7 @@ export default class RYCTs {
 
             Osemosys.updateData(saveData, param, "RYCTs.json")
                 .then(response => {
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RYCTs.json");
@@ -135,14 +135,15 @@ export default class RYCTs {
 
         $("#osy-ryt").off('change');
         $('#osy-ryt').on('change', function () {
-            let $divGrid = $divGrid;
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
+            model.param = this.value;
             var configChart = $divChart.jqxChart('getInstance');
             var comm = $("#osy-comms").val();
             var ts = $("#osy-timeslices1").val();
             configChart.source.records = model.chartData[this.value][comm][ts];
             configChart.update();
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         $("#osy-comms").off('change');
@@ -306,7 +307,7 @@ export default class RYCTs {
 
         $("#exportPng").off('click');
         $("#exportPng").click(function () {
-            $("#osy-chartRYCTs").jqxChart('saveAsPNG', 'RYCTs.png', 'https://www.jqwidgets.com/export_server/export.php');
+            $divChart.jqxChart('saveAsPNG', 'RYCTs.png', 'https://www.jqwidgets.com/export_server/export.php');
         });
 
         let res = true;
@@ -350,10 +351,7 @@ export default class RYCTs {
         $("#showLog").off('click');
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

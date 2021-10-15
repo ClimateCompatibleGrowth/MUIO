@@ -10,18 +10,29 @@ import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { Routes } from "../../Routes/Routes.Class.js";
 
 export default class Home {
-    static onLoad(){
+    static async onLoad(){
+        if (Base.AWS_SYNC == 1 && Base.INIT_SYNC){
+            $('#loadermain h4').text('Syncronizing with S3 Bucket!'); 
+            $('#loadermain').show();
+            await Base.initSyncS3()
+            .then(response => {
+                Message.smallBoxInfo('Sync message', response.message, 3000);
+                Base.INIT_SYNC = 0;
+            })
+        }
         Base.getSession()
         .then(response =>{
             let casename = response.session;
             const promise = [];
             promise.push(casename);
+
             let cases = Base.getCaseStudies();
             promise.push(cases);
             let genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData);
             const PARAMETERS = Osemosys.getParamFile();
             promise.push(PARAMETERS); 
+            $('#loadermain').hide();
             return Promise.all(promise);
         })
         .then(data => {
@@ -91,7 +102,7 @@ export default class Home {
             Base.setSession(casename)
             .then(response=>{
                 $('#Navi>li').removeClass('active');
-                $('#Navi').children('li').eq(1).addClass('active');
+                $('#Navi').children('li').eq(2).addClass('active');
                 hasher.setHash("#");
                 hasher.setHash("#AddCase");
             })
@@ -112,10 +123,6 @@ export default class Home {
                     //REFRESH
                     Html.apendCase(casename+'_copy');
                     Html.appendCasePicker(casename+'_copy', null)
-                    //sync S3
-                    // if (Base.AWS_SYNC == 1){
-                    //     Base.uploadSync(casename+'_copy');
-                    // }
                     if (Base.AWS_SYNC == 1){
                         SyncS3.deleteResultsPreSync(casename)
                         .then(response =>{
@@ -150,7 +157,7 @@ export default class Home {
             var casename = $(this).attr('data-ps');
             $.SmartMessageBox({
                 title : "Confirmation Box!",
-                content : "You are about to delete <b class='danger'>" + casename + "</b> case study! Are you sure?",
+                content : "You are about to delete <b class='danger'>" + casename + "</b> Model! Are you sure?",
                 buttons : '[No][Yes]'
             }, function(ButtonPressed) {
                 if (ButtonPressed === "Yes") {
@@ -158,7 +165,6 @@ export default class Home {
                     .then(response => {
                         Message.clearMessages();
                         if(response.status_code=="success"){
-
                             Message.bigBoxSuccess('Delete message', response.message, 3000);
                             //REFRESH
                             Html.removeCase(casename);

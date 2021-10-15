@@ -28,12 +28,12 @@ export default class RYTC {
                     return Promise.all(promise);
                 } else {
                     let er = {
-                        "message": 'There is no case selected!',
+                        "message": 'There is no model selected!',
                         "status_code": "CaseError"
                     }
                     return Promise.reject(er);
                     // MessageSelect.init(RYTC.refreshPage.bind(RYTC));
-                    // throw new Error('No case selected');
+                    // throw new Error('No model selected');
                 }
             })
             .then(data => {
@@ -142,7 +142,7 @@ export default class RYTC {
             var casename = $(this).attr('data-ps');
             RYTC.refreshPage(casename);
             Html.updateCasePicker(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Case " + casename + " selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#osy-saveRYTCdata").off('click');
@@ -162,7 +162,7 @@ export default class RYTC {
 
             Osemosys.updateData(saveData, param, "RYTC.json")
                 .then(response => {
-                    Message.bigBoxSuccess('Case study message', response.message, 3000);
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3
                     if (Base.AWS_SYNC == 1) {
                         Base.updateSync(model.casename, "RYTC.json");
@@ -178,11 +178,12 @@ export default class RYTC {
             Message.clearMessages();
             if (model.RYTCdata[this.value]['SC_0'].length === 0) {
                 MessageSelect.activity(RYTC.refreshPage.bind(RYTC), model.casename);
-                Message.warning(`There is no data definded for ${model.PARAMNAMES[this.value]} for case ${model.casename}!`);
+                Message.warning(`There is no data definded for ${model.PARAMNAMES[this.value]} for model ${model.casename}!`);
             } else {
                 Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
                 model.srcGrid.root = this.value;
                 $divGrid.jqxGrid('updatebounddata');
+                model.param = this.value;
 
                 //update za ddl coms i techs za IAR ili OAR
                 Html.ddlTechs(model.techs[this.value], model.techs[this.value][0]['TechId']);
@@ -196,6 +197,7 @@ export default class RYTC {
                 var comm = $("#osy-comms").val();
                 configChart.source.records = model.chartData[this.value][tech][comm];
                 configChart.update();
+                $('#definition').html(`${DEF[model.group][model.param].definition}`);
             }
         });
 
@@ -413,10 +415,7 @@ export default class RYTC {
         $("#showLog").off('click');
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`
-                <h5>${DEF[model.group].title}</h5>
-                ${DEF[model.group].definition}
-            `);
+            $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
     }

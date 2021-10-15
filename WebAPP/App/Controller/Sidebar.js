@@ -147,6 +147,7 @@ export class Sidebar {
             e.stopPropagation();
             $('li').removeClass('active');
             //$(selector).removeClass('open');
+            $(this).parent().closest("li").addClass('active');
             $(this).addClass('active');
         });
 
