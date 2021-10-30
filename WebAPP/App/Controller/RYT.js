@@ -24,10 +24,10 @@ export default class RYT {
                     promise.push(genData);
                     const PARAMETERS = Osemosys.getParamFile();
                     promise.push(PARAMETERS);
-                    const RYTdata = Osemosys.getData(casename, 'RYT.json');
+                    //const RYTdata = Osemosys.getData(casename, 'RYT.json');
 
                     //const RYTdata = Osemosys.getDataDirectly(casename, 'RYT.json');
-                    // const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json')
+                    const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json')
                     // const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json', {cache: "no-store"})
                     // .then(response => {
                     //     return response.json();
@@ -128,7 +128,7 @@ export default class RYT {
             event.preventDefault();
             event.stopImmediatePropagation();
             let param = $("#osy-ryt").val();
-            let rytData = $('#osy-gridRYT').jqxGrid('getboundrows');
+            let rytData = $divGrid.jqxGrid('getboundrows');
 
             let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'TechId'].concat(model.years)));
 
@@ -155,7 +155,7 @@ export default class RYT {
         //change of ddl parameters
         $('#osy-ryt').on('change', function () {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
-            let $divGrid = $('#osy-gridRYT');
+            let $divGrid = $divGrid;
             model.srcGrid.root = this.value;
             let decimal = Functions.getDecimalPlaces(model.paramData[model.group][this.value]['default']);
             //console.log(this.value, decimal)
@@ -209,14 +209,14 @@ export default class RYT {
         });
 
         let pasteEvent = false;
-        $('#osy-gridRYT').bind('keydown', function (event) {
+        $divGrid.bind('keydown', function (event) {
             pasteEvent = false;
             var ctrlDown = false, ctrlKey = 17, cmdKey = 91, vKey = 86, cKey = 67;
             var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
             if (key == vKey) {
                 pasteEvent = true;
                 setTimeout(function () {
-                    let gridData = $('#osy-gridRYT').jqxGrid('getboundrows');
+                    let gridData = $divGrid.jqxGrid('getboundrows');
                     let param = $("#osy-ryt").val();
                     var tech = $("#osy-techs").val();
 
@@ -251,11 +251,22 @@ export default class RYT {
                 var year = event.args.datafield;
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
-                var techId = $('#osy-gridRYT').jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
-                var scId = $('#osy-gridRYT').jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
+                var techId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
+                var scId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $("#osy-ryt").val();
                 var tech = $("#osy-techs").val();
 
+                console.log('Grid ', model.gridData[param])
+                console.log('Chart ', model.chartData[param][techId])
+
+                //update performance model
+                // let columnIndex = $divGrid.jqxGrid('getcolumnindex', year) - 3;
+                // model.chartData[param][techId][columnIndex][scId] = value;
+                // model.gridData[param][rowBoundIndex][year] = value;
+
+
+                //console.log('columnIndex ', columnIndex)
+                
                 $.each(model.chartData[param][techId], function (id, obj) {
                     if (obj.Year == year) {
                         if (value) {
@@ -265,8 +276,7 @@ export default class RYT {
                         }
                     }
                 });
-
-                //update model grid
+                
                 $.each(model.gridData[param], function (id, obj) {
                     if (obj.TechId == techId && obj.ScId == scId) {
                         if (value) {
@@ -319,12 +329,12 @@ export default class RYT {
         let res = true;
         $("#resizeColumns").click(function () {
             if (res) {
-                $('#osy-gridRYT').jqxGrid('autoresizecolumn', 'Tech');
-                $('#osy-gridRYT').jqxGrid('autoresizecolumn', 'Sc');
+                $divGrid.jqxGrid('autoresizecolumn', 'Tech');
+                $divGrid.jqxGrid('autoresizecolumn', 'Sc');
 
             }
             else {
-                $('#osy-gridRYT').jqxGrid('autoresizecolumns');
+                $divGrid.jqxGrid('autoresizecolumns');
             }
             res = !res;
         });
@@ -332,7 +342,7 @@ export default class RYT {
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $("#osy-gridRYT").jqxGrid('exportdata', 'xls', 'RYT');
+            $divGrid.jqxGrid('exportdata', 'xls', 'RYT');
         });
 
         $("#decUp").off('click');

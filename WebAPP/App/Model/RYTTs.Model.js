@@ -21,6 +21,8 @@ export class Model {
             let RYTTschart = DataModel.RYTTschart(genData, RYTTsdata);
             let timeslices = DataModel.Timeslices(genData);
 
+            console.log('RYTTsgrid ', RYTTsgrid)
+
             let scClass = {};
 
             datafieldsChart.push({ name: 'Year', type: 'string' });

@@ -97,8 +97,6 @@ export class Html {
             `;
             $('#csvFiles').append(res);
         });
-
-
     }
 
     static appendCasePicker(value, selectedCS, pageId) {

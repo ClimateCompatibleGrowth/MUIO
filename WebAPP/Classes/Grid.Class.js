@@ -28,7 +28,7 @@ export class Grid {
 
 
         var ddlUnits = function (row, value, editor) {
-            editor.jqxDropDownList({ source: this.daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group' });
+            editor.jqxDropDownList({ source: this.daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true  });
         }.bind(this);
 
         var ddlComms = function (row, value, editor) {
@@ -43,6 +43,7 @@ export class Grid {
                     // $(`#${tootltipValue}`).jqxTooltip('open', 15, 15);
                     return tooltipContent
                 }
+                , filterable: true 
             });
         }.bind(this);
 
@@ -63,6 +64,7 @@ export class Grid {
                     // $(`#${tootltipValue}`).jqxTooltip('open', 15, 15);
                     return tooltipContent
                 }.bind(this)
+                , filterable: true 
             });
         }.bind(this);
 
@@ -214,7 +216,7 @@ export class Grid {
         var daUnits = new $.jqx.dataAdapter(srcUnits);
 
         var ddlEditor = function (row, value, editor) {
-            editor.jqxDropDownList({ source: daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group' });
+            editor.jqxDropDownList({ source: daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true });
         }
 
         var validation_1 = function (cell, value) {
@@ -272,7 +274,7 @@ export class Grid {
         var daUnit = new $.jqx.dataAdapter(srcUnit);
 
         var ddlEditor = function (row, value, editor) {
-            editor.jqxDropDownList({ source: daUnit, displayMember: 'name', valueMember: 'id', groupMember: 'group' });
+            editor.jqxDropDownList({ source: daUnit, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true  });
         }
 
         var validation_1 = function (cell, value) {
@@ -409,6 +411,7 @@ export class Grid {
                     // $(`#${tootltipValue}`).jqxTooltip('open', 15, 15);
                     return tooltipContent
                 }
+                , filterable: true 
             }).bind(this);
 
 
@@ -539,6 +542,8 @@ export class Grid {
             showsortcolumnbackground: false,
             showfiltercolumnbackground: false,
             autoshowfiltericon: true,
+            // virtualmode: true,
+            // rendergridrows: rendergridrows,
             cellhover: function (element, pageX, pageY, record) {
 
                 //var cellValue = $(element.innerHTML).find('span').html(); // you can remove if any element not required in tooltip here

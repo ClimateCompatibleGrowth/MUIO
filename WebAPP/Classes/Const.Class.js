@@ -148,7 +148,11 @@ export const UNITS =
     {id:"m3",name:"m<sup>3</sup>", group: "Volume"},
     {id:"km3",name:"10<sup>3</sup>m<sup>3</sup>", group: "Volume"},
     {id:"mm3",name:"10<sup>6</sup>m<sup>3</sup>", group: "Volume"},
-    {id:"bm3",name:"10<sup>9</sup>m<sup>3</sup>", group: "Volume"}
+    {id:"bm3",name:"10<sup>9</sup>m<sup>3</sup>", group: "Volume"},
+
+    {id:"103",name:"10<sup>3</sup>", group: "Counts"},
+    {id:"106",name:"10<sup>6</sup>", group: "Counts"},
+    {id:"109",name:"10<sup>9</sup>", group: "Counts"},
 
 ];
 

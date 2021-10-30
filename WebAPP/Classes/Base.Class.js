@@ -3,7 +3,7 @@ import { Html } from "./Html.Class.js";
 import { SyncS3 } from "./SyncS3.Class.js";
 
 export class Base {
-    static HEROKU = 1;
+    static HEROKU = 0;
     static AWS_SYNC = 0;
     static INIT_SYNC = 1;
 

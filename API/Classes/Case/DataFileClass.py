@@ -528,7 +528,8 @@ class DataFile(Osemosys):
         df[['parameter','id']] = df['temp'].str.split('(', expand=True)
         df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]
         df = df.drop('temp', axis=1)
-        df['value'] = df['value'].astype(float).round(4)
+        #dodao regex jer je jvljao gresku python astype cannot convert string to float
+        df['value'] = df['value'].replace(',','.', regex=True).astype(float).round(4)
 
         params = df.parameter.unique()
         all_params = {}

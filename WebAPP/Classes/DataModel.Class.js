@@ -1629,7 +1629,7 @@ export class DataModel{
             RYTTsgrid[param] = [];
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
-                    // obj['ScId'] = sc;
+                    obj['ScId'] = sc;
                     // obj['Sc'] = scName[sc];
                     // obj['Tech'] = techName[obj['TechId']];
                     obj['Tech'] = techData[obj.TechId]['Tech'];
