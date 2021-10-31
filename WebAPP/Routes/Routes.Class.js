@@ -7,7 +7,6 @@ export class Routes {
 
         crossroads.addRoute('/', function() {
             $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-            
             import('../App/Controller/Home.js')
             .then(Home => {
                 $(".osy-content").load('App/View/Home.html');
@@ -68,8 +67,11 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/Home.js')
                 .then(Home => {
-                    $(".osy-content").load('App/View/Home.html');
-                    Home.default.onLoad();
+                    // $(".osy-content").load('App/View/Home.html');
+                    // Home.default.onLoad();
+                    $( ".osy-content" ).load( 'App/View/Home.html', function() {
+                        Home.default.onLoad();
+                    });
                 });
             });
             
@@ -77,8 +79,11 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/Config.js')
                 .then(Config => {
-                    $(".osy-content").load('App/View/Config.html');
-                    Config.default.onLoad();
+                    // $(".osy-content").load('App/View/Config.html');
+                    // Config.default.onLoad();
+                    $( ".osy-content" ).load( 'App/View/Config.html', function() {
+                        Config.default.onLoad();
+                    });
                 });
             });
             
@@ -86,8 +91,11 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/AddCase.js')
                 .then(AddCase => {
-                    $(".osy-content").load('App/View/AddCase.html');
-                    AddCase.default.onLoad();
+                    // $(".osy-content").load('App/View/AddCase.html');
+                    // AddCase.default.onLoad();
+                    $( ".osy-content" ).load( 'App/View/AddCase.html', function() {
+                        AddCase.default.onLoad();
+                    });
                 });
             });
             
@@ -95,8 +103,11 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/ViewData.js')
                 .then(ViewData => {
-                    $(".osy-content").load('App/View/ViewData.html');
-                    ViewData.default.onLoad();
+                    // $(".osy-content").load('App/View/ViewData.html');
+                    // ViewData.default.onLoad();
+                    $( ".osy-content" ).load( 'App/View/ViewData.html', function() {
+                        ViewData.default.onLoad();
+                    });
                 });
             });
             
@@ -106,8 +117,11 @@ export class Routes {
                     //console.log(group, id);
                     import(`../App/Controller/${group}.js`)
                     .then(f => {
-                        $(".osy-content").load(`App/View/${group}.html`);
-                        f.default.onLoad(group, id);
+                        // $(".osy-content").load(`App/View/${group}.html`);
+                        // f.default.onLoad(group, id);
+                        $( ".osy-content" ).load( `App/View/${group}.html`, function() {
+                            f.default.onLoad(group, id);
+                        });
                     });
                 });
             }
@@ -123,8 +137,11 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/DataFile.js')
                 .then(DataFile => {
-                    $(".osy-content").load('App/View/DataFile.html');
-                    DataFile.default.onLoad();
+                    // $(".osy-content").load('App/View/DataFile.html');
+                    // DataFile.default.onLoad();
+                    $( ".osy-content" ).load( 'App/View/DataFile.html', function() {
+                        DataFile.default.onLoad();
+                    });
                 });
             });
             
@@ -164,8 +181,11 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import(`../App/Controller/${group}.js`)
                 .then(f => {
-                    $(".osy-content").load(`App/View/${group}.html`);
-                    f.default.onLoad(group, id);
+                    // $(".osy-content").load(`App/View/${group}.html`);
+                    // f.default.onLoad(group, id);
+                    $( ".osy-content" ).load( `App/View/${group}.html`, function() {
+                        f.default.onLoad(group, id);
+                    });
                 });
             });
         }

@@ -24,14 +24,14 @@ export default class RYT {
                     promise.push(genData);
                     const PARAMETERS = Osemosys.getParamFile();
                     promise.push(PARAMETERS);
-                    //const RYTdata = Osemosys.getData(casename, 'RYT.json');
+                    const RYTdata = Osemosys.getData(casename, 'RYT.json');
 
                     //const RYTdata = Osemosys.getDataDirectly(casename, 'RYT.json');
-                    const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json')
-                    // const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json', {cache: "no-store"})
-                    // .then(response => {
-                    //     return response.json();
-                    // })
+                    //const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json')
+                    // // const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json', {cache: "no-store"})
+                    // // .then(response => {
+                    // //     return response.json();
+                    // // })
 
                     promise.push(RYTdata);
                     promise.push(start);
