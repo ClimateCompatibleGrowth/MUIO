@@ -28,7 +28,7 @@ export class Html {
                                 <b>
                                     <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select Model">
                                         <span class="glyphicon 
-                                        ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
+                                        ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark osy-green `}
                                         fa-1.5x icon-btn"></span><span class="pointer">${value}</span>
                                     </span>
                                 </b>
@@ -180,6 +180,42 @@ export class Html {
         });
     }
 
+    static ddlTechsArray(techs) {
+        var container = $('#osy-techs');
+        container.empty();
+        $.each(techs, function (id, tech) {
+            if (tech == techs[0]) {
+                container.append('<option value="' + tech + '" selected>' + tech + '</option>');
+            } else {
+                container.append('<option value="' + tech + '" >' + tech + '</option>');
+            }
+        });
+    }
+
+    static ddlCommsArray(comms) {
+        var container = $('#osy-comms');
+        container.empty();
+        $.each(comms, function (id, comm) {
+            if (comm == comms[0]) {
+                container.append('<option value="' + comm + '" selected>' + comm + '</option>');
+            } else {
+                container.append('<option value="' + comm + '" >' + comm + '</option>');
+            }
+        });
+    }
+
+    static ddlEmisArray(emis) {
+        var container = $('#osy-emis');
+        container.empty();
+        $.each(emis, function (id, emi) {
+            if (emi == emis[0]) {
+                container.append('<option value="' + emi + '" selected>' + emi + '</option>');
+            } else {
+                container.append('<option value="' + emi + '" >' + emi + '</option>');
+            }
+        });
+    }
+
     static ddlTechNames(techs, tech) {
         var container = $('#osy-techNames');
         container.empty();
@@ -200,6 +236,17 @@ export class Html {
                 container.append('<option value="' + obj.CommId + '" selected>' + obj.Comm + '</option>');
             } else {
                 container.append('<option value="' + obj.CommId + '" >' + obj.Comm + '</option>');
+            }
+        });
+    }
+    static ddlCases(cases, cs) {
+        var container = $('#osy-cases');
+        container.empty();
+        $.each(cases, function (id, obj) {
+            if (obj.CaseId == cs) {
+                container.append('<option value="' + obj.CaseId + '" selected>' + obj.Case + '</option>');
+            } else {
+                container.append('<option value="' + obj.CaseId + '" >' + obj.Case + '</option>');
             }
         });
     }

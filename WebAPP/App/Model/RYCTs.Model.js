@@ -40,11 +40,6 @@ export class Model {
             datafields.push({ name: 'ScDesc', type: 'string' });
             datafields.push({ name: 'CommDesc', type: 'string' });
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
-            columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center' });
-            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned: true, editable: false, align: 'center' });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
-
             let validation = function (cell, value) {
                 if (value < 0) {
                     return { result: false, message: 'Value must be positive!' };
@@ -81,6 +76,11 @@ export class Model {
                 }
             }.bind(this);
 
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
+            columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center' });
+            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned: true, editable: false, align: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({

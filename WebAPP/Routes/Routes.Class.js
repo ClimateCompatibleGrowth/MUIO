@@ -1,74 +1,39 @@
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { Message } from "../../Classes/Message.Class.js";
+import { Model } from "./Routes.Model.js";
 
 export class Routes {
 
-    static getInitRoutes(){
-
-        crossroads.addRoute('/', function() {
-            $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-            import('../App/Controller/Home.js')
-            .then(Home => {
-                $(".osy-content").load('App/View/Home.html');
-                Home.default.onLoad();
-            });
+    static Load(casename) {
+        Osemosys.getParamFile()
+        .then(PARAMETERS => {
+            const promise = [];
+            promise.push(PARAMETERS);
+            const RESULTPARAMETERS = Osemosys.getParamFile('ResultParameters.json');
+            promise.push(RESULTPARAMETERS);
+            // const RESULTEXISTS = Osemosys.resultsExists(casename);
+            // promise.push(RESULTEXISTS);
+            return Promise.all(promise);
+        })
+        .then(data => {
+            
+            let [PARAMETERS, RESULTPARAMETERS] = data;
+            let model = new Model(PARAMETERS,RESULTPARAMETERS);
+            this.getRoutes(model);
+        })
+        .catch(error => {
+            Message.danger(error);
         });
-        
-        crossroads.addRoute('/Config', function() {
-            $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-            import('../App/Controller/Config.js')
-            .then(Config => {
-                $(".osy-content").load('App/View/Config.html');
-                Config.default.onLoad();
-            });
-        });
-        
-        crossroads.addRoute('/AddCase', function() {
-            $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-            import('../App/Controller/AddCase.js')
-            .then(AddCase => {
-                $(".osy-content").load('App/View/AddCase.html');
-                AddCase.default.onLoad();
-            });
-        });           
-        
-        crossroads.bypassed.add(function(request) {
-            console.error(request + ' seems to be a dead end...');
-            hasher.setHash("#");
-            hasher.setHash("#");
-            //crossroads.parse('/');
-
-        });
-        
-        //setup hasher
-        hasher.init(); //start listening for history change
-        
-        //Listen to hash changes
-        window.addEventListener("hashchange", function() {
-            var route = '/';
-            var hash = window.location.hash;
-            if (hash.length > 0) {
-                route = hash.split('#').pop();
-            }
-        // console.log(hash);
-        // console.log(route);
-            crossroads.parse(route);
-        });
-        
-        // trigger hashchange on first page load
-        window.dispatchEvent(new CustomEvent("hashchange"));
     }
 
-    static getRoutes(){
-        Osemosys.getParamFile()
-        .then(PARAMETERS =>{
+    
+    static getRoutes(model){
+ 
             //Sidebar.Load(PARAMETERS);
             crossroads.addRoute('/', function() {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/Home.js')
                 .then(Home => {
-                    // $(".osy-content").load('App/View/Home.html');
-                    // Home.default.onLoad();
                     $( ".osy-content" ).load( 'App/View/Home.html', function() {
                         Home.default.onLoad();
                     });
@@ -79,8 +44,6 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/Config.js')
                 .then(Config => {
-                    // $(".osy-content").load('App/View/Config.html');
-                    // Config.default.onLoad();
                     $( ".osy-content" ).load( 'App/View/Config.html', function() {
                         Config.default.onLoad();
                     });
@@ -91,8 +54,6 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/AddCase.js')
                 .then(AddCase => {
-                    // $(".osy-content").load('App/View/AddCase.html');
-                    // AddCase.default.onLoad();
                     $( ".osy-content" ).load( 'App/View/AddCase.html', function() {
                         AddCase.default.onLoad();
                     });
@@ -103,8 +64,122 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/ViewData.js')
                 .then(ViewData => {
-                    // $(".osy-content").load('App/View/ViewData.html');
-                    // ViewData.default.onLoad();
+                    $( ".osy-content" ).load( 'App/View/ViewData.html', function() {
+                        ViewData.default.onLoad();
+                    });
+                });
+            });
+            
+            function addAppRoute(group, id){
+                return crossroads.addRoute(`/${group}/${id}`, function() {
+                    $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                    import(`../App/Controller/${group}.js`)
+                    .then(f => {
+                        $( ".osy-content" ).load( `App/View/${group}.html`, function() {
+                            f.default.onLoad(group, id);
+                        });
+                    });
+                });
+            }
+            
+            $.each(model.PARAMETERS, function (param, array) {                    
+                $.each(array, function (id, obj) {
+                    //console.log(param, obj.id)
+                    addAppRoute(param, obj.id)
+                });
+            });
+            
+            crossroads.addRoute('/DataFile', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                import('../App/Controller/DataFile.js')
+                .then(DataFile => {
+                    $( ".osy-content" ).load( 'App/View/DataFile.html', function() {
+                        DataFile.default.onLoad();
+                    });
+                });
+            });
+
+            function addResRoute(group, id){
+                return crossroads.addRoute(`/${group}/${id}`, function() {
+                    $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                    import(`../AppResults/Controller/${group}.js`)
+                    .then(f => {
+                        $( ".osy-content" ).load( `AppResults/View/${group}.html`, function() {
+                            f.default.onLoad(group, id);
+                        });
+                    });
+                });
+            }
+            
+            $.each(model.RESULTPARAMETERS, function (param, array) {                    
+                $.each(array, function (id, obj) {
+                    //console.log(param, obj.id)
+                    addResRoute(param, obj.id)
+                });
+            });
+            
+            
+            crossroads.bypassed.add(function(request) {
+                console.error(request + ' seems to be a dead end...');
+            });
+            
+            //setup hasher
+            hasher.init(); //start listening for history change
+            
+            //Listen to hash changes
+            window.addEventListener("hashchange", function() {
+                var route = '/';
+                var hash = window.location.hash;
+                if (hash.length > 0) {
+                    route = hash.split('#').pop();
+                }
+            //console.log(hash);
+            //console.log(route);
+                crossroads.parse(route);
+            });
+            
+            // trigger hashchange on first page load
+            window.dispatchEvent(new CustomEvent("hashchange"));
+    }
+
+    static getRoutesOLD(){
+        Osemosys.getParamFile()
+        .then(PARAMETERS =>{
+            //Sidebar.Load(PARAMETERS);
+            crossroads.addRoute('/', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                import('../App/Controller/Home.js')
+                .then(Home => {
+                    $( ".osy-content" ).load( 'App/View/Home.html', function() {
+                        Home.default.onLoad();
+                    });
+                });
+            });
+            
+            crossroads.addRoute('/Config', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                import('../App/Controller/Config.js')
+                .then(Config => {
+                    $( ".osy-content" ).load( 'App/View/Config.html', function() {
+                        Config.default.onLoad();
+                    });
+                });
+            });
+            
+            crossroads.addRoute('/AddCase', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                import('../App/Controller/AddCase.js')
+                .then(AddCase => {
+                    $( ".osy-content" ).load( 'App/View/AddCase.html', function() {
+                        AddCase.default.onLoad();
+                    });
+                });
+            });
+            
+            crossroads.addRoute('/ViewData', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                import('../App/Controller/ViewData.js')
+                .then(ViewData => {
                     $( ".osy-content" ).load( 'App/View/ViewData.html', function() {
                         ViewData.default.onLoad();
                     });
@@ -114,11 +189,8 @@ export class Routes {
             function addRoute(group, id){
                 return crossroads.addRoute(`/${group}/${id}`, function() {
                     $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-                    //console.log(group, id);
                     import(`../App/Controller/${group}.js`)
                     .then(f => {
-                        // $(".osy-content").load(`App/View/${group}.html`);
-                        // f.default.onLoad(group, id);
                         $( ".osy-content" ).load( `App/View/${group}.html`, function() {
                             f.default.onLoad(group, id);
                         });
@@ -137,14 +209,21 @@ export class Routes {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../App/Controller/DataFile.js')
                 .then(DataFile => {
-                    // $(".osy-content").load('App/View/DataFile.html');
-                    // DataFile.default.onLoad();
                     $( ".osy-content" ).load( 'App/View/DataFile.html', function() {
                         DataFile.default.onLoad();
                     });
                 });
             });
-            
+
+            crossroads.addRoute('/ViewResults', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                import('../App/Controller/ViewResults.js')
+                .then(ViewResults => {
+                    $( ".osy-content" ).load( 'App/View/ViewResults.html', function() {
+                        ViewResults.default.onLoad('RYE', 'AE');
+                    });
+                });
+            });
             
             
             crossroads.bypassed.add(function(request) {
@@ -174,15 +253,13 @@ export class Routes {
         });
     }
 
-    static addRoutes(PARAMETERS){
+    static addResultsRoutes(PARAMETERS){
 
         function addRoute(group, id){
-            return crossroads.addRoute(`/${group}/${id}`, function() {
+            return crossroads.addRoute(`/r${group}/${id}`, function() {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-                import(`../App/Controller/${group}.js`)
+                import(`../AppResults/Controller/${group}.js`)
                 .then(f => {
-                    // $(".osy-content").load(`App/View/${group}.html`);
-                    // f.default.onLoad(group, id);
                     $( ".osy-content" ).load( `App/View/${group}.html`, function() {
                         f.default.onLoad(group, id);
                     });
@@ -193,25 +270,6 @@ export class Routes {
         $.each(PARAMETERS, function (param, array) {                    
             $.each(array, function (id, obj) {
                 addRoute(param, obj.id)
-            });
-        });
-
-                    
-        crossroads.addRoute('/ViewData', function() {
-            $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-            import('../App/Controller/ViewData.js')
-            .then(ViewData => {
-                $(".osy-content").load('App/View/ViewData.html');
-                ViewData.default.onLoad();
-            });
-        });
-
-        crossroads.addRoute('/DataFile', function() {
-            $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-            import('../App/Controller/DataFile.js')
-            .then(DataFile => {
-                $(".osy-content").load('App/View/DataFile.html');
-                DataFile.default.onLoad();
             });
         });
 
@@ -229,30 +287,15 @@ export class Routes {
             if (hash.length > 0) {
                 route = hash.split('#').pop();
             }
-        //console.log(hash);
-        //console.log(route);
             crossroads.parse(route);
         });
         
         // trigger hashchange on first page load
         window.dispatchEvent(new CustomEvent("hashchange"));
     }
-
-    static removeRoutes(PARAMETERS){
-        
-        function removeRoute(group, id){
-            crossroads.removeRoute(`/${group}/${id}`);
-        }
-        
-        $.each(PARAMETERS, function (param, array) {                    
-            $.each(array, function (id, obj) {
-                removeRoute(param, obj.id)
-            });
-        });
-    }
 }
 
-Routes.getRoutes();
+Routes.Load();
 
 
 

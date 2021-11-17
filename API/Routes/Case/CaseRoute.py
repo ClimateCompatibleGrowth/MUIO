@@ -135,15 +135,49 @@ def getData():
     except(IOError):
         return jsonify('No existing cases!'), 404
 
-@case_api.route("/getParamFile", methods=['GET'])
+@case_api.route("/getResultData", methods=['POST'])
+def getResultData():
+    try:
+        casename = request.json['casename']
+        dataJson = request.json['dataJson']
+        if casename != None:
+            dataPath = Path(Config.DATA_STORAGE,casename,'view',dataJson)
+            data = File.readFile(dataPath)
+            response = data   
+
+        else:  
+            response = None     
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@case_api.route("/getParamFile", methods=['POST'])
 def getParamFile():
     try:
-        configPath = Path(Config.DATA_STORAGE, 'Parameters.json')
+        dataJson = request.json['dataJson']
+        configPath = Path(Config.DATA_STORAGE, dataJson)
         ConfigFile = File.readParamFile(configPath)
         response = ConfigFile       
         return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
+
+@case_api.route("/resultsExists", methods=['POST'])
+def resultsExists():
+    try:
+        casename = request.json['casename']
+        if casename != None:
+            resPath = Path(Config.DATA_STORAGE, casename, 'view')
+            if os.path.isdir(resPath):
+                response = True      
+            else:
+                response = False 
+        else:
+            response = None
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
 
 @case_api.route("/saveParamFile", methods=['POST'])
 def saveParamFile():

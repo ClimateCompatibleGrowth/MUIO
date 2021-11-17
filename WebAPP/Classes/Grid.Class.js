@@ -510,7 +510,7 @@ export class Grid {
         });
     }
 
-    static Grid($div, daGrid, columns, groupable = false, filterable = false, clipboard = true) {
+    static Grid($div, daGrid, columns, groupable = false, filterable = false, clipboard = true, editable=true) {
 
         $div.jqxGrid({
             theme: this.theme(),
@@ -533,7 +533,7 @@ export class Grid {
             // pagerheight: 26,
             // pagesize: 20,
             // pagermode: "simple",
-            editable: true,
+            editable: editable,
             altrows: true,
             clipboard: clipboard,
             selectionmode: 'multiplecellsadvanced',

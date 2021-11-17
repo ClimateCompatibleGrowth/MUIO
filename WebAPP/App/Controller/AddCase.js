@@ -96,7 +96,7 @@ export default class AddCase {
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
-            Sidebar.Reload(casename)
+            Sidebar.Reload(casename);
             AddCase.refreshPage(casename);
             Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
         });

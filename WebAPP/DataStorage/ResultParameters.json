@@ -1,0 +1,190 @@
+
+{
+    "RT":[
+        {
+            "name": "TotalTechnologyModelPeriodActivity",
+            "value": "Total Technology Model Period Activity",
+            "id": "TTMPA"
+        }
+    ],
+    "RYE":[
+        {
+            "name": "AnnualEmissions",
+            "value": "Annual Emissions",
+            "id": "AE"
+        }
+    ],
+    "RYS":[
+        {
+            "name": "NewStorageCapacity",
+            "value": "New Storage Capacity",
+            "id": "NSC"
+        },
+        {
+            "name": "SalvageValueStorage",
+            "value": "Salvage Value Storage",
+            "id": "SVS"
+        }
+
+    ],
+    "RYT": [
+        {
+            "name": "AccumulatedNewCapacity",
+            "value": "Accumulated New Capacity",
+            "id": "ANC"
+        },
+        {
+            "name": "CapitalInvestment",
+            "value": "Capital Investment",
+            "id": "CI"
+        },
+        {
+            "name": "AnnualFixedOperatingCost",
+            "value": "Annual Fixed Operating Cost",
+            "id": "AFOC"
+        },
+        {
+            "name": "AnnualVariableOperatingCost",
+            "value": "Annual Variable Operating Cost",
+            "id": "AVOC"
+        },
+        {
+            "name": "DiscountedSalvageValue",
+            "value": "Discounted Salvage Value",
+            "id": "DSV"
+        },
+        {
+            "name": "DiscountedTechnologyEmissionsPenalty",
+            "value": "Discounted Technology Emissions Penalty",
+            "id": "DTEP"
+        },
+        {
+            "name": "NewCapacity",
+            "value": "New Capacity",
+            "id": "NC"
+        },
+        {
+            "name": "NumberOfNewTechnologyUnits",
+            "value": "Number Of New Technology Units",
+            "id": "NONTU"
+        },
+        {
+            "name": "SalvageValue",
+            "value": "Salvage Value",
+            "id": "SV"
+        },
+        {
+            "name": "TotalCapacityAnnual",
+            "value": "Total Capacity Annual",
+            "id": "TCA"
+        },
+        {
+            "name": "TotalTechnologyAnnualActivity",
+            "value": "Total Technology Annual Activity",
+            "id": "TTAA"
+        }
+    ],
+    "RYTM": [
+        {
+            "name": "TotalAnnualTechnologyActivityByMode",
+            "value": "Total Annual Technology Activity By Mode",
+            "id": "TATABM"
+        }
+    ],
+    "RYTC": [
+        {
+            "name": "InputToNewCapacity",
+            "value": "Input To New Capacity",
+            "id": "ITNC"
+        },
+        {
+            "name": "InputToTotalCapacity",
+            "value": "Input To Total Capacity",
+            "id": "ITTC"
+        },
+        {
+            "name": "ProductionByTechnologyAnnual",
+            "value": "Production By Technology Annual",
+            "id": "PBTA"
+        },
+        {
+            "name": "UseByTechnologyAnnual",
+            "value": "Use By Technology Annual",
+            "id": "UBTA"
+        }
+    ],
+    "RYTE": [
+        {
+            "name": "AnnualTechnologyEmission",
+            "value": "Annual Technology Emission",
+            "id": "ATE"
+        }
+    ],
+    "RYTTs": [
+        {
+            "name": "RateOfTotalActivity",
+            "value": "Rate Of Total Activity",
+            "id": "ROTA"
+        }
+    ],
+    "RYCTs": [
+        {
+            "vaue": "Demand",
+            "value": "Demand",
+            "id": "D"
+        },
+        {
+            "name": "Trade",
+            "value": "Trade",
+            "id": "T"
+        }
+    ],
+    "RYTEM":[
+        {
+            "name": "AnnualTechnologyEmissionByMode",
+            "value": "Annual Technology Emission By Mode",
+            "id": "ATEBM"
+        }
+    ],
+    "RYTCTs": [
+        {
+            "name": "ProductionByTechnology",
+            "value": "Production By Technology",
+            "id": "PBT"
+        },
+        {
+            "name": "RateOfProductionByTechnology",
+            "value": "Rate Of Production By Technology",
+            "id": "ROPBT"
+        },
+        {
+            "name": "RateOfUseByTechnology",
+            "value": "Rate Of Use By Technology",
+            "id": "ROUBT"
+        },
+        {
+            "name": "UseByTechnology",
+            "value": "Use By Technology",
+            "id": "UBT"
+        }
+    ],
+    "RYTMTs":[
+        {
+            "name": "RateOfActivity",
+            "value": "Rate Of Activity",
+            "id": "ROA"
+        }
+    ],
+    "RYTCMTs":[
+        {
+            "name": "RateOfProductionByTechnologyByMode",
+            "value": "Rate Of Production By Technology By Mode",
+            "id": "ROPBTBM"
+        },
+        {
+            "name": "RateOfUseByTechnologyByMode",
+            "value": "Rate Of Use By Technology By Mode",
+            "id": "ROUBTBM"
+        }
+    ]
+}

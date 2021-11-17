@@ -1,0 +1,158 @@
+
+{
+    "RT":[
+        {
+            "name": "TotalTechnologyModelPeriodActivity",
+            "id": "TTMPA"
+        }
+    ],
+    "RYE":[
+        {
+            "name": "AnnualEmissions",
+            "id": "AE"
+        }
+    ],
+    "RYS":[
+        {
+            "name": "NewStorageCapacity",
+            "id": "NSC"
+        },
+        {
+            "name": "SalvageValueStorage",
+            "id": "SVS"
+        }
+
+    ],
+    "RYT": [
+        {
+            "name": "AccumulatedNewCapacity",
+            "id": "ANC"
+        },
+        {
+            "name": "CapitalInvestment",
+            "id": "CI"
+        },
+        {
+            "name": "AnnualFixedOperatingCost",
+            "id": "AFOC"
+        },
+        {
+            "name": "AnnualVariableOperatingCost",
+            "id": "AVOC"
+        },
+        {
+            "name": "DiscountedSalvageValue",
+            "id": "DSV"
+        },
+        {
+            "name": "DiscountedTechnologyEmissionsPenalty",
+            "id": "DTEP"
+        },
+        {
+            "name": "NewCapacity",
+            "id": "NC"
+        },
+        {
+            "name": "NumberOfNewTechnologyUnits",
+            "id": "NONTU"
+        },
+        {
+            "name": "SalvageValue",
+            "id": "SV"
+        },
+        {
+            "name": "TotalCapacityAnnual",
+            "id": "TCA"
+        },
+        {
+            "name": "TotalTechnologyAnnualActivity",
+            "id": "TTAA"
+        }
+    ],
+    "RYTM": [
+        {
+            "name": "TotalAnnualTechnologyActivityByMode",
+            "id": "TATABM"
+        }
+    ],
+    "RYTC": [
+        {
+            "name": "InputToNewCapacity",
+            "id": "ITNC"
+        },
+        {
+            "name": "InputToTotalCapacity",
+            "id": "ITTC"
+        },
+        {
+            "name": "ProductionByTechnologyAnnual",
+            "id": "PBTA"
+        },
+        {
+            "name": "UseByTechnologyAnnual",
+            "id": "UBTA"
+        }
+    ],
+    "RYTE": [
+        {
+            "name": "AnnualTechnologyEmission",
+            "id": "ATE"
+        }
+    ],
+    "RYTTs": [
+        {
+            "name": "RateOfTotalActivity",
+            "id": "ROTA"
+        }
+    ],
+    "RYCTs": [
+        {
+            "name": "Demand",
+            "id": "D"
+        },
+        {
+            "name": "Trade",
+            "id": "T"
+        }
+    ],
+    "RYTEM":[
+        {
+            "name": "AnnualTechnologyEmissionByMode",
+            "id": "ATEBM"
+        }
+    ],
+    "RYTCTs": [
+        {
+            "name": "ProductionByTechnology",
+            "id": "PBT"
+        },
+        {
+            "name": "RateOfProductionByTechnology",
+            "id": "ROPBT"
+        },
+        {
+            "name": "RateOfUseByTechnology",
+            "id": "ROUBT"
+        },
+        {
+            "name": "UseByTechnology",
+            "id": "UBT"
+        }
+    ],
+    "RYTMTs":[
+        {
+            "name": "RateOfActivity",
+            "id": "ROA"
+        }
+    ],
+    "RYTCMTs":[
+        {
+            "name": "RateOfProductionByTechnologyByMode",
+            "id": "ROPBTBM"
+        },
+        {
+            "name": "RateOfUseByTechnologyByMode",
+            "id": "ROUBTBM"
+        }
+    ]
+}

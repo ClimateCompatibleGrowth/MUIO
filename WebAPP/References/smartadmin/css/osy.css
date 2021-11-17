@@ -1,6 +1,7 @@
 :root {
     --main-color: #3a3f51;
     --second-color: #71a06a;
+    --second-darker-color: #567c50;
     --main-lighter-color: #555c77;
     --main-darker-color: #20232d;
     --main-font-color: #3a3f51;
@@ -100,8 +101,8 @@ html {
 .osy{
     color: var(--main-color)!important;
 }
-.green{
-    color: var(--second-color)!important;
+.osy-green{
+    color: var(--second-darker-color)!important;
 }
 .white{
     color: whitesmoke;

@@ -1,35 +1,48 @@
-import { GROUPNAMES, PARAMORDER, PARAMCOLORS } from "../../Classes/Const.Class.js";
+import { GROUPNAMES, PARAMORDER, PARAMCOLORS, RESULTPARAMORDER, RESULTPARAMCOLORS, RESULTGROUPNAMES } from "../../Classes/Const.Class.js";
 import { Model } from "../Model/Sidebar.Model.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
+import { Message } from "../../Classes/Message.Class.js";
+import { Routes } from "../../Routes/Routes.Class.js";
 
 export class Sidebar {
-    static Load(genData, PARAMETERS) {
-        let model = new Model(PARAMETERS, genData);
-        this.initPage(model);
-        this.initEvents();
-    }
+
+    //ne koristi se
+    // static Load(genData, PARAMETERS, RESULTPARAMETERS, RESULTEXISTS) {
+    //     let model = new Model(PARAMETERS,RESULTPARAMETERS, genData, RESULTEXISTS);
+    //     console.log('PARAMETERS ', PARAMETERS)
+    //     console.log('RESULTPARAMETERS ', RESULTPARAMETERS)
+    //     this.initAppRoutes(model);
+    //     this.initResultsRoutes(model);
+    //     this.initEvents();
+    // }
 
     static Reload(casename) {
         Osemosys.getData(casename, 'genData.json')
-            .then(genData => {
-                const promise = [];
-                promise.push(genData);
-                const PARAMETERS = Osemosys.getParamFile();
-                promise.push(PARAMETERS);
-                return Promise.all(promise);
-            })
-            .then(data => {
-                let [genData, PARAMETERS] = data;
-                let model = new Model(PARAMETERS, genData);
-                this.initPage(model);
-                this.initEvents();
-            })
-            .catch(error => {
-                Message.danger(error);
-            });
+        .then(genData => {
+            const promise = [];
+            promise.push(genData);
+            const PARAMETERS = Osemosys.getParamFile();
+            promise.push(PARAMETERS);
+            const RESULTPARAMETERS = Osemosys.getParamFile('ResultParameters.json');
+            promise.push(RESULTPARAMETERS);
+            const RESULTEXISTS = Osemosys.resultsExists(casename);
+            promise.push(RESULTEXISTS);
+            return Promise.all(promise);
+        })
+        .then(data => {
+            
+            let [genData, PARAMETERS, RESULTPARAMETERS, RESULTEXISTS] = data;
+            let model = new Model(PARAMETERS,RESULTPARAMETERS, genData, RESULTEXISTS);
+            this.initAppRoutes(model);
+            this.initResultsRoutes(model);
+            this.initEvents();
+        })
+        .catch(error => {
+            Message.danger(error);
+        });
     }
 
-    static initPage(model) {
+    static initAppRoutes(model) {
         $('#dynamicRoutes').empty();
         if (model.menu) {
             //Routes.addRoutes(model.PARAMETERS);
@@ -135,6 +148,41 @@ export class Sidebar {
         }
     }
 
+    static initResultsRoutes(model) {
+        Routes.addResultsRoutes(model.RESULTPARAMETERS);
+        $('#dynamicResultsRoutes').empty();
+        if (model.ResultsMenu) {
+            //Routes.addRoutes(model.PARAMETERS);
+            $('.dynamicResults').show();
+            let res = `
+            <label class="input" style="display:block; margin-left:11px">
+                <i class="ace-icon white fa fa-search nav-search-icon"></i>
+                <input type="text" placeholder="Search ..." class="nav-search-input" id="ResultSearch" />
+                
+            </label>`;
+            $('#dynamicResultsRoutes').append(res);
+            $.each(RESULTPARAMORDER, function (id, group) {
+                $.each(model.RESULTPARAMETERS[group], function (id, obj) {
+                    //da li ima parametara definisanih za grupu
+                    if (model.RESULTPARAMETERS[group] !== undefined || model.RESULTPARAMETERS[group].length != 0) {
+                        let res = `
+                        <li  class="">
+                            <a href="#/${group}/${obj.id}" class="res-items" title="${RESULTGROUPNAMES[group]}">
+        
+                            ${obj.value}
+                            <span class="badge badge-sm inbox-badge bg-color-${RESULTPARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
+                            </a>
+                        </li>`;
+                        $('#dynamicResultsRoutes').append(res);
+                    }
+                });
+            });
+        } else {
+            $('.dynamicResults').hide();
+
+        }
+    }
+
     static initEvents() {
         $('#Navi > li').click(function (e) {
             e.stopPropagation();
@@ -155,6 +203,16 @@ export class Sidebar {
         $('#MenuSearch').keyup(function () {
             var query = $.trim($('#MenuSearch').val()).toLowerCase();
             $('.menu-items').each(function () {
+
+                var $this = $(this);
+                if ($this.text().toLowerCase().indexOf(query) === -1)
+                    $this.closest('li').fadeOut();
+                else $this.closest('li').fadeIn();
+            });
+        });
+        $('#ResultSearch').keyup(function () {
+            var query = $.trim($('#ResultSearch').val()).toLowerCase();
+            $('.res-items').each(function () {
 
                 var $this = $(this);
                 if ($this.text().toLowerCase().indexOf(query) === -1)

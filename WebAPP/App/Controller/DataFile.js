@@ -5,6 +5,8 @@ import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { Model } from "../Model/DataFile.Model.js";
 import { MessageSelect } from "./MessageSelect.js";
 import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
+import { Routes } from "../../Routes/Routes.Class.js";
+import { Sidebar } from "./Sidebar.js";
 
 export default class DataFile {
     static onLoad(){

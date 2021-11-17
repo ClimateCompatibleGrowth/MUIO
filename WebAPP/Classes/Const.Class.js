@@ -72,6 +72,20 @@ export const GROUPNAMES = {
     "RYCTs": "Region, year, commodity, timeslice"
 }
 
+export const RESULTGROUPNAMES = {
+    "RT"    :"Region, technology",
+    "RYT"    :"Region, year, technology",
+    "RYE"    :"Region, year, emission",
+    "RYTM"  :"Region, year, technology, mode of operation",
+    "RYTC" :"Region, year, technology, commodity",
+    "RYTE"  :"Region, year, technology, emission",
+    "RYTTs"  :"Region, year, technology",
+    "RYCTs"  :"Region, year, commodity, timeslice",
+    "RYTEM"  :"Region, year, technology, emission, mode of operation",
+    "RYTCTs" :"Region, year, technology, commodity, timeslice",
+    "RYTMTs" :"Region, year, technology, mode of operation, timeslice",
+    "RYTCMTs":"Region, year, technology, commodity, mode of operation, timeslice"
+}
 export const PARAMORDER = [
     "R"     ,  
     "RT"    ,     
@@ -109,6 +123,36 @@ export const PARAMCOLORS = {
     "RYTEM": "orange",
     "RYTTs": "blue",
     "RYCTs": "greenLight"
+}
+
+export const RESULTPARAMORDER = [ 
+    "RT"    ,     
+    "RYT"    ,     
+    "RYE"    , 
+    "RYTM"  ,   
+    "RYTC" , 
+    "RYTE"  ,     
+    "RYTTs"   , 
+    "RYCTs"  ,  
+    "RYTEM"  ,  
+    "RYTCTs" , 
+    "RYTMTs" ,    
+    "RYTCMTs"  
+];
+
+export const RESULTPARAMCOLORS = {
+    "RT": "blue",
+    "RYT": "blueLight",
+    "RYE": "yellow",
+    "RYTM": "pink",
+    "RYTC": "red",
+    "RYTE": "greenLight",
+    "RYTTs": "pink",
+    "RYCTs": "purple",
+    "RYTEM": "grey",
+    "RYTCTs": "pink",
+    "RYTMTs": "teal",
+    "RYTCMTs": "blue"
 }
 
 export const UNITS = 

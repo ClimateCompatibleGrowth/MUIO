@@ -1,9 +1,11 @@
 export class Model {
-    constructor (PARAMETERS, genData, pageId) { 
+    constructor (PARAMETERS, RESULTPARAMETERS, genData, RESULTEXISTS) { 
 
       if(genData){
         this.menu = true;
+        this.ResultsMenu = RESULTEXISTS;
         this.PARAMETERS = PARAMETERS;
+        this.RESULTPARAMETERS = RESULTPARAMETERS;
         let techs = genData['osy-tech'];
         let constraints = genData['osy-constraints'];
 
@@ -52,7 +54,7 @@ export class Model {
  
         this.menuCondition = menuCondition;
         this.menuGroup = menuGroup;
-        this.pageId = pageId;
+        //this.pageId = pageId;
       }else{
         this.menu = false;
         this.menuCondition = false;

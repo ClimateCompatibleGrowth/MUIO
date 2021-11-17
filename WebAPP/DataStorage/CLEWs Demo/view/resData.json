@@ -1,0 +1,8 @@
+{
+    "osy-cases":
+    [
+        {"Case":"Base case","CaseId":"CS_0","Desc":"case desc", "Runtime": "2021-10-29 12:51:05.596720", "Scenarios": ["SC_0", "SC_1"]},
+        {"Case":"Efficient case","CaseId":"CS_1","Desc":"case desc", "Runtime": "2021-10-29 12:51:05.596720", "Scenarios": ["SC_0", "SC_1"]}
+
+    ]
+}
