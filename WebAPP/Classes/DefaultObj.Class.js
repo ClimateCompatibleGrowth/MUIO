@@ -120,4 +120,22 @@ export class DefaultObj{
         ];
         return defaultObj;
     }
+
+    static defaultCase(first=false){
+        let id;
+        if(first){
+            id = 'CS_0';
+        }else{
+            id = this.getId('CS');
+        }
+        let defaultObj = [
+            {
+                "Case": id,
+                "CaseId":id,
+                "Runtime": "Base scenario",
+                "Scenarios": []
+            }
+        ];
+        return defaultObj;
+    }
 }

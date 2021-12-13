@@ -88,14 +88,14 @@ export class Osemosys {
         });
     }
 
-    static generateDataFile(casename) {
+    static generateDataFile(casename, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "generateDataFile",
                 async: true,  
                 type: 'POST',
                 dataType: 'json',
-                data: JSON.stringify({ "casename": casename }),
+                data: JSON.stringify({ "casename": casename, 'caserunname': caserunname }),
                 contentType: 'application/json; charset=utf-8',
                 // credentials: 'include',
                 // xhrFields: { withCredentials: true},
@@ -111,14 +111,37 @@ export class Osemosys {
         });
     }
 
-    static run(casename, solver) {
+    static createCaseRun(casename, caserunname, data) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "createCaseRun",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, 'caserunname': caserunname, 'data': data }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static run(casename, solver, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "run",
                 async: true,  
                 type: 'POST',
                 dataType: 'json',
-                data: JSON.stringify({ "casename": casename, "solver": solver  }),
+                data: JSON.stringify({ "casename": casename, "solver": solver, 'caserunname': caserunname  }),
                 contentType: 'application/json; charset=utf-8',
                 // credentials: 'include',
                 // xhrFields: { withCredentials: true},
@@ -134,14 +157,14 @@ export class Osemosys {
         });
     }
 
-    static readDataFile(casename) {
+    static readDataFile(casename, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "readDataFile",
                 async: true,  
                 type: 'POST',
                 dataType: 'json',
-                data: JSON.stringify({ "casename": casename }),
+                data: JSON.stringify({ "casename": casename, 'caserunname': caserunname }),
                 contentType: 'application/json; charset=utf-8',
                 // credentials: 'include',
                 // xhrFields: { withCredentials: true},

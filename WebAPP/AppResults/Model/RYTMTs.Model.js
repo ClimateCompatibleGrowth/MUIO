@@ -16,7 +16,7 @@ export class Model {
             //let comms = genData['osy-comm'];
             let techs = genData['osy-tech'];
             let cases = resData['osy-cases'];
-            let cs = cases[0].CaseId;
+            let cs = cases[0].Case;
 
             let RYTMTsgrid  = DataModel.RYTMTsgrid(RYTMTsdata);
             let RYTMTschart = DataModel.RYTMTschart(genData, RYTMTsdata);

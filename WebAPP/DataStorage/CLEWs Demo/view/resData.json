@@ -1,8 +1,1 @@
-{
-    "osy-cases":
-    [
-        {"Case":"Base case","CaseId":"CS_0","Desc":"case desc", "Runtime": "2021-10-29 12:51:05.596720", "Scenarios": ["SC_0", "SC_1"]},
-        {"Case":"Efficient case","CaseId":"CS_1","Desc":"case desc", "Runtime": "2021-10-29 12:51:05.596720", "Scenarios": ["SC_0", "SC_1"]}
-
-    ]
-}
+{"osy-cases":[{"Case":"t8","CaseId":"CS_f7c9n","Desc":"fdhd","Runtime":"Sun Dec 12 2021 16:31:44 GMT+0100 (Central European Standard Time)","Scenarios":[]},{"Case":"t1","CaseId":"CS_2w6cr","Desc":"aa","Runtime":"Mon Dec 13 2021 00:17:43 GMT+0100 (Central European Standard Time)","Scenarios":[]},{"Case":"t2","CaseId":"CS_1258g","Desc":"wdwe","Runtime":"Mon Dec 13 2021 00:27:03 GMT+0100 (Central European Standard Time)","Scenarios":[]}]}

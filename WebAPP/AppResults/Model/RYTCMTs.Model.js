@@ -14,7 +14,7 @@ export class Model {
 
             let years = genData['osy-years'];
             let cases = resData['osy-cases'];
-            let cs = cases[0].CaseId;
+            let cs = cases[0].Case;
 
             let RYTCMTsgrid = DataModel.RYTCMTsgrid(RYTCMTsdata);
             let RYTCMTschart = DataModel.RYTCMTschart(genData, RYTCMTsdata);

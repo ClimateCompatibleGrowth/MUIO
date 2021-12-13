@@ -16,7 +16,7 @@ export class Model {
 
             let techs = genData['osy-tech'];
             let cases = resData['osy-cases'];
-            let cs = cases[0].CaseId;
+            let cs = cases[0].Case;
 
             console.log('RTData ', RTdata)
 

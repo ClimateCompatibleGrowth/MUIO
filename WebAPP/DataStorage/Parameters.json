@@ -1,5 +1,5 @@
 {"R":[{"id":"DR","value":"Discount Rate","default":0.05,"enable":true,"menu":1,"unitRule":{"cat":[{"var":"percent"},{"var":"divide"},{"var":"hundert"}]}}],
-"RT":[{"id":"CAU","value":"Capacity To Activity Unit","default":0,"enable":true,"menu":1,"unitRule":{"cat":[{"var":"ActUnitId"},{"var":"divide"},
+"RT":[{"id":"CAU","value":"Capacity To Activity Unit","default":1,"enable":true,"menu":1,"unitRule":{"cat":[{"var":"ActUnitId"},{"var":"divide"},
     {"var":"CapUnitId"}]}},{"id":"OL","value":"Operational Life","default":1,"enable":true,"menu":1,"unitRule":{"cat":[{"var":"years"}]}},
     {"id":"TMPAL","value":"Total Technology Model Period Activity Lower Limit","default":0,"enable":true,"menu":1,"unitRule":{"cat":[{"var":"ActUnitId"}]}},
     {"id":"TMPAU","value":"Total Technology Model Period Activity Upper Limit","default":999999,"enable":true,"menu":1,"unitRule":{"cat":[{"var":"ActUnitId"}]}}],

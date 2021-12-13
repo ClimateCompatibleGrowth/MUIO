@@ -14,7 +14,7 @@ export class Model {
 
             let years = genData['osy-years'];
             let cases = resData['osy-cases'];
-            let cs = cases[0].CaseId;
+            let cs = cases[0].Case;
 
             console.log('RYTCTsdata ', RYTCTsdata )
             console.log('DataModel.RYTCTsgrid(RYTCTsdata) ',DataModel.RYTCTs(RYTCTsdata))

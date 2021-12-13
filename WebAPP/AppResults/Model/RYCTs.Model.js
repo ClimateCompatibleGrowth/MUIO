@@ -23,7 +23,7 @@ export class Model {
             let comms = genData['osy-comm'];
             let comm = comms[0]['Comm'];
             let cases = resData['osy-cases'];
-            let cs = cases[0].CaseId;
+            let cs = cases[0].Case;
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(timeslices, function (id, ts) {

@@ -165,7 +165,8 @@ export default class AddCase {
             //$( "#wid-id-8" ).tabs({ active: 'tabComms' });
             //$("#wid-id-8").tabs("option", "active", 0);
             AddCase.refreshPage(null);
-            Sidebar.Load(null, null)
+            //Sidebar.Load(null, null)
+            Sidebar.Reload(null);
             $("#osy-new").hide();
             $('#osy-updateCase').hide();
             $('#osy-newCase').show();

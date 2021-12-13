@@ -17,7 +17,7 @@ export class Model {
             let techs = genData['osy-tech'];
             let mo = genData['osy-mo'];
             let cases = resData['osy-cases'];
-            let cs = cases[0].CaseId;
+            let cs = cases[0].Case;
             
             let RYTMgrid = DataModel.RYTMgrid(RYTMdata);
             let RYTMchart = DataModel.RYTMchart(genData, RYTMdata);

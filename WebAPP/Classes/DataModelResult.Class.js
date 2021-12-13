@@ -802,6 +802,37 @@ export class DataModel{
         return RYTCchart;
     }
 
+    static RYTCchartAll(genData, RYTCdata){
+        let RYTCchart = {};
+        let RYTC = this.RYTC(RYTCdata);
+        $.each(RYTC, function (param, obj1) {
+            RYTCchart[param] = {};
+            $.each(genData['osy-years'], function (idY, year) {
+                let chunk = {};
+                chunk['Year'] = year;
+                $.each(obj1, function (cs, obj2) {
+                    if (obj2.length !== 0){
+                        RYTCchart[param][cs] = [];
+
+                            $.each(obj2, function (tech, obj3) {
+
+                            //if(!RYTCchart[param][cs][tech]){ RYTCchart[param][cs][tech] = []; }
+                    
+
+
+                                $.each(RYTC[param][cs][tech], function (comm, obj) {
+                                    chunk[tech+'_'+comm] = obj[year]
+                                });
+                                RYTCchart[param][cs].push(chunk);
+                            });
+                    }
+                });
+                    
+            });
+        });
+        return RYTCchart;
+    }
+
     static RYTE(RYTEdata){
         let RYTE = {};
         const cloneData = JSON.parse(JSON.stringify(RYTEdata));

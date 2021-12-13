@@ -7,6 +7,7 @@ class Osemosys():
     def __init__(self, case):
         self.case = case
         self.PARAMETERS = File.readParamFile(Path(Config.DATA_STORAGE, 'Parameters.json'))
+        self.RESULTPARAMETERS = File.readParamFile(Path(Config.DATA_STORAGE, 'ResultParameters.json'))
         self.genData =  File.readFile(Path(Config.DATA_STORAGE,case,'genData.json'))
         #Case.__init__(self, case)
         self.casePath = Path(Config.DATA_STORAGE,case)
@@ -31,18 +32,17 @@ class Osemosys():
         self.ryctsPath = Path(Config.DATA_STORAGE,case,'RYCTs.json')
         self.rytePath = Path(Config.DATA_STORAGE,case,'RYTE.json')
         self.rytemPath = Path(Config.DATA_STORAGE,case,'RYTEM.json')
-
-        self.dataFile = Path(Config.DATA_STORAGE,case,'data.txt')
-
-        self.resFile = Path(Config.DATA_STORAGE,case, 'res','results.txt')
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
-        self.lpFile = Path(Config.DATA_STORAGE,case, 'res','lp.lp')
-
         self.glpkFolder = Path(Config.SOLVERs_FOLDER,'glpk-4.65', 'w64')
         self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
+        self.resultsPath = Path(Config.DATA_STORAGE,case,'res')
         # self.resPath = Path(Config.DATA_STORAGE,case,'res', 'csv')
-        self.resCBCPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', case, 'res')
-        self.resPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', case, 'res', 'csv')
+        
+        #self.dataFile = Path(Config.DATA_STORAGE,case, 'res','data.txt')
+        # self.resFile = Path(Config.DATA_STORAGE,case, 'res','results.txt')
+        # self.lpFile = Path(Config.DATA_STORAGE,case, 'res','lp.lp')
+        # self.resCBCPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', case, 'res')
+        # self.resPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', case, 'res', 'csv')
 
         d = {}
         for k, l in self.PARAMETERS.items():

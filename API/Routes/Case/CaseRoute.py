@@ -41,7 +41,8 @@ def getCases():
 def getResultCSV():
     try:
         casename = request.json['casename']
-        csvFolder = Path(Config.DATA_STORAGE,casename,"res", "csv")
+        caserunname = request.json['caserunname']
+        csvFolder = Path(Config.DATA_STORAGE,casename,"res", caserunname, "csv")
         csvs = [ f.name for f in os.scandir(csvFolder) ]
         return jsonify(csvs), 200
     except(IOError):
@@ -244,6 +245,19 @@ def saveCase():
         if case != None and case != '':
             genDataPath = Path(Config.DATA_STORAGE, case, "genData.json")
 
+            ##update za view i res ukoliko nema
+            resPath = Path(Config.DATA_STORAGE,case,'res')
+            viewPath = Path(Config.DATA_STORAGE,case,'view')
+            resDataPath = Path(Config.DATA_STORAGE,case,'view','resData.json')
+            if not os.path.exists(resPath):
+                os.makedirs(resPath, mode=0o777, exist_ok=False)
+            if not os.path.exists(viewPath):
+                os.makedirs(viewPath, mode=0o777, exist_ok=False)
+                resData = {
+                    "osy-cases":[]
+                }
+                File.writeFile( resData, resDataPath)
+
             #edit case sa istim imenom
             if case == casename:
                 #update modela 
@@ -287,7 +301,20 @@ def saveCase():
                 genDataPath = Path(Config.DATA_STORAGE, casename, "genData.json")
                 File.writeFile( genData, genDataPath)
                 case = Case(casename, genData)
-                case.createCase()                
+                case.createCase()  
+
+                resPath = Path(Config.DATA_STORAGE,casename,'res')
+                viewPath = Path(Config.DATA_STORAGE,casename,'view')
+                resDataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json')
+                if not os.path.exists(resPath):
+                    os.makedirs(resPath, mode=0o777, exist_ok=False)
+                if not os.path.exists(viewPath):
+                    os.makedirs(viewPath, mode=0o777, exist_ok=False)
+                    resData = {
+                        "osy-cases":[]
+                    }
+                    File.writeFile( resData, resDataPath)
+
                 response = {
                     "message": "You have created new case!",
                     "status_code": "created"

@@ -18,7 +18,7 @@ export class Model {
             let tech = techs[0]['Tech'];
             // let scenarios = genData['osy-scenarios'];
             let cases = resData['osy-cases'];
-            let cs = cases[0].CaseId;
+            let cs = cases[0].Case;
 
             let RYTTsgrid = DataModel.RYTTsgrid(RYTTsdata);
             let RYTTschart = DataModel.RYTTschart(genData, RYTTsdata);

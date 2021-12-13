@@ -52,7 +52,7 @@ export default class Home {
         Navbar.initPage(model.casename);
         // Sidebar.Load(model.genData, model.PARAMETERS, model.RESULTPARAMETERS);
         Sidebar.Reload(model.casename);
-        Html.renderCases(model.cases, model.casename);
+        Html.renderModels(model.cases, model.casename);
         Home.initEvents(model);
         loadScript("References/smartadmin/js/plugin/dropzone/dropzone.min.js", Base.uploadFunction);
     }
@@ -126,7 +126,7 @@ export default class Home {
                 if(response.status_code=="success"){
                     Message.bigBoxSuccess('Copy message', response.message, 3000);
                     //REFRESH
-                    Html.apendCase(casename+'_copy');
+                    Html.apendModel(casename+'_copy');
                     Html.appendCasePicker(casename+'_copy', null)
                     if (Base.AWS_SYNC == 1){
                         SyncS3.deleteResultsPreSync(casename)

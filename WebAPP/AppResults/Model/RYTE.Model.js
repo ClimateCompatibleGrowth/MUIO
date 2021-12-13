@@ -15,7 +15,7 @@ export class Model {
             let years = genData['osy-years'];
             let emis = genData['osy-emis'];
             let cases = resData['osy-cases'];
-            let cs = cases[0].CaseId;
+            let cs = cases[0].Case;
 
             let RYTEgrid = DataModel.RYTEgrid(RYTEdata);
             let RYTEchart = DataModel.RYTEchart(genData, RYTEdata);

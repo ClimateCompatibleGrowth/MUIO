@@ -99,6 +99,11 @@ export class Routes {
                 });
             });
 
+            crossroads.addRoute('/Versions', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                $( ".osy-content" ).load( 'App/View/Versions.html');
+            });
+
             function addResRoute(group, id){
                 return crossroads.addRoute(`/${group}/${id}`, function() {
                     $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');

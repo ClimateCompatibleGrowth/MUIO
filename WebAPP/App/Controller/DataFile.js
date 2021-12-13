@@ -17,11 +17,13 @@ export default class DataFile {
             promise.push(casename);
             let genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData);
+            const resData = Osemosys.getResultData(casename, 'resData.json');
+            promise.push(resData);
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, genData] = data;
-            let model = new Model(casename, genData, "DataFile");
+            let [casename, genData, resData] = data;
+            let model = new Model(casename, genData, resData, "DataFile");
             if(casename){
                 this.initPage(model);
             }else{
@@ -37,6 +39,7 @@ export default class DataFile {
         Message.clearMessages();
         //Navbar.initPage(model.casename, model.pageId);
         Html.title(model.casename, model.title, "data.txt");
+        Html.renderCases(model.cases);
         if (model.casename == null){
             Message.info("Please select model or create new Model!");
         }    
@@ -55,11 +58,13 @@ export default class DataFile {
             promise.push(casename);
             let genData = Osemosys.getData(casename, 'genData.json');
             promise.push(genData);
+            const resData = Osemosys.getResultData(casename, 'resData.json');
+            promise.push(resData);
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, genData] = data;
-            let model = new Model(casename, genData, "DataFile");
+            let [casename, genData, resData] = data;
+            let model = new Model(casename, genData, resData, "DataFile");
             $(".DataFile").hide();
             $("#osy-DataFile").empty();
             $("#osy-runOutput").empty();
@@ -140,12 +145,11 @@ export default class DataFile {
         $("#osy-generateDataFile").off('click');
         $("#osy-generateDataFile").on('click', function (event) {
             Pace.restart();
-            Osemosys.generateDataFile(model.casename)
+            Osemosys.generateDataFile(model.casename, model.cs)
             .then(response =>{
                 if(response.status_code=="success"){
                     const promise = [];
-                    let DataFile =  Osemosys.readDataFile(model.casename);
-                    //let DataFile = Osemosys.getData(model.casename, 'data.txt');
+                    let DataFile =  Osemosys.readDataFile(model.casename, model.cs);
                     promise.push(DataFile);
                     promise.push(response.message);
                     return Promise.all(promise);
@@ -175,9 +179,14 @@ export default class DataFile {
                 }
 
                 $(".DataFile").show();
+                $('#osy-DataFileDownload').html(`<a id="osy-downloadDataFile" class="btn btn btn-default pull-right"
+                        href="downloadDataFile?caserunname=${model.cs}"><i class="fa fa-download"></i> Download Data
+                        File
+                    </a>`);
                 $("#osy-DataFile").empty();
                 $("#osy-DataFile").html('');
                 $("#osy-DataFile").append(table);
+                $('#tabs a[href="#tabDataFile"]').tab('show');
                 //$("#osy-downloadDataFile").show();
                 //ne moramo updateovati S3 sa data file
                 // if (Base.AWS_SYNC == 1){
@@ -196,13 +205,93 @@ export default class DataFile {
             })
         });
 
+        $("#osy-caseForm").jqxValidator({
+            hintType: 'label',
+            animationDuration: 500,
+            rules: [
+                { input: '#osy-casename', message: "Case name is required field!", action: 'keyup', rule: 'required' },
+                {
+                    input: '#osy-casename', message: "Entered case name is not allowed!", action: 'keyup', rule: function (input, commit) {
+                        var casename = $("#osy-casename").val();
+                        var result = (/^[a-zA-Z0-9-_ ]*$/.test(casename));
+                        return result;
+                    }
+                }
+            ]
+        });
+
+        $("#osy-createCaseRun").off('click');
+        $("#osy-createCaseRun").on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            $("#osy-caseForm").jqxValidator('validate')
+        });
+
+
+        $("#osy-caseForm").off('validationSuccess');
+        $("#osy-caseForm").on('validationSuccess', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            Pace.restart();
+
+            var caserunname = $("#osy-casename").val();
+            var desc = $("#osy-desc").val();
+
+            let order = $("#osy-scOrder").jqxSortable("toArray")
+            var scAcitive = new Array();
+            $.each($('input[type="checkbox"]:checked'), function (key, value) {
+                scAcitive.push($(value).attr("id"));
+            });
+
+            let scData = []
+            $.each(order, function (id, sc) {
+                if (scAcitive.includes(sc)){
+                    scData.push(model.scMap[sc]['Scenario'])
+                }
+            });
+
+            let caseId = DefaultObj.getId('CS');
+
+            let caseData = {
+                "Case":caserunname,
+                "CaseId":caseId,
+                "Desc":desc, 
+                "Runtime": Date().toLocaleString('en-US', { hour12: false, hour: "numeric", minute: "numeric"}), 
+                "Scenarios": scData
+            }
+
+            console.log('caseData ', caseData)
+
+    
+            Osemosys.createCaseRun(model.casename, caserunname, caseData)
+            .then(response => {
+                console.log('response ', response)
+                if(response.status_code == 'success'){
+                    $('#osy-generateDataFile').show();
+                    model.cs = caserunname;
+                    console.log('model.cases ', model.cases)
+                    model.cases.push(caseData);
+                    Html.renderCases(model.cases);
+                    console.log('model.cases ', model.cases)
+                    Message.smallBoxInfo('Generate message', response.message, 3000);
+                }
+                if(response.status_code == 'exist'){
+                    Message.smallBoxWarning('Generate message', response.message, 3000);
+                }
+
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
+        });
+
         //$( "#osy-generateDataFile" ).trigger( "click" );
 
         $("#osy-run").off('click');
         $("#osy-run").on('click', function (event) {
             Pace.restart();
             let solver = $('input[name="solver"]:checked').val();
-            Osemosys.run(model.casename, solver)
+            Osemosys.run(model.casename, solver, model.cs)
             .then(response => {
                 if(response.status_code=="success"){
 
@@ -213,7 +302,7 @@ export default class DataFile {
                     $("#osy-runOutput").html('<samp>'+ response.message +'</samp>');
                     $('#tabs a[href="#tabRunOutput"]').tab('show');
 
-                    Base.getResultCSV(model.casename)
+                    Base.getResultCSV(model.casename, model.cs)
                     .then(csvs => {
                         console.log('csv ', csvs)
                         Html.renderCSV(csvs)
@@ -241,6 +330,59 @@ export default class DataFile {
             })
         });
 
+        $(document).delegate(".DeletePS","click",function(e){
+            var caserunname = $(this).attr('data-ps');
+            $.SmartMessageBox({
+                title : "Confirmation Box!",
+                content : "You are about to delete <b class='danger'>" + caserunname + "</b> Model! Are you sure?",
+                buttons : '[No][Yes]'
+            }, function(ButtonPressed) {
+                if (ButtonPressed === "Yes") {
+                    Base.deleteCaseRun(model.casename, caserunname)
+                    .then(response => {
+                        Message.clearMessages();
+                        if(response.status_code=="success"){
+                            Message.bigBoxSuccess('Delete message', response.message, 3000);
+                            //REFRESH
+                            Html.removeCase(caserunname);
+                            //sync with s3
+                            if (Base.AWS_SYNC == 1){
+                                SyncS3.deleteSync(caserunname);
+                            }
+                        }
+                        // if(response.status_code=="success_session"){
+                        //     Message.bigBoxSuccess('Delete message', response.message, 3000);
+                        //     Message.info( "Please select existing or create new case to proceed!");
+                        //     if (model.casename = casename){
+                        //         // Sidebar.Load(null, null);
+                        //         Sidebar.Reload(null);
+                        //         //Routes.removeRoutes(model.PARAMETERS);
+                        //     }
+                        //     //REFRESH
+                        //     Html.removeCase(casename);
+                        //     if (Base.AWS_SYNC == 1){
+                        //         Base.deleteSync(casename);
+                        //     }
+                        // }
+                        if(response.status_code=="info"){
+                            Message.info(response.message);
+                        }
+                        if(response.status_code=="warning"){
+                            Message.warning(response.message);
+                        }  
+                        
+                    })
+                    .catch(error =>{ 
+                        Message.danger(error);
+                    });
+                }
+                if (ButtonPressed === "No") {
+                    Message.bigBoxInfo("Confirmation message", "You pressed No...", 3000)
+                }
+            });
+            //e.preventDefault();
+            e.stopImmediatePropagation();
+        });
     }
 }
 

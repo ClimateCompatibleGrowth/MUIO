@@ -37,8 +37,11 @@ export default class RYTC {
                 }
             })
             .then(data => {
+                
                 let [casename, genData, resData, PARAMETERS, RYTCdata] = data;
-                if (RYTCdata[param]['CS_0'].length == 0) {
+                // console.log('RYTCdata ', RYTCdata)
+                // console.log('resData ', resData)
+                if (RYTCdata[param][resData['osy-cases'][0]['Case']].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
                         "status_code": "ActivityError",
@@ -100,7 +103,7 @@ export default class RYTC {
             })
             .then(data => {
                 let [casename, genData, resData, PARAMETERS, RYTCdata] = data;
-                if (RYTCdata[PARAMETERS['RYTC'][0]['id']]['CS_0'].length == 0) {
+                if (RYTCdata[PARAMETERS['RYTC'][0]['id']][resData['osy-cases'][0]['Case']].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
                         "status_code": "ActivityError",
@@ -145,7 +148,7 @@ export default class RYTC {
         $('#osy-ryt').on('change', function () {
             Message.clearMessages();
             //console.log('model.RYTCdata ',model.RYTCdata[this.value])
-            if (model.RYTCdata[this.value]['CS_0'].length === 0) {
+            if (model.RYTCdata[this.value][model.case].length === 0) {
                 MessageSelect.activity(RYTC.refreshPage.bind(RYTC), model.casename);
                 Message.warning(`There is no data definded for ${model.PARAMNAMES[this.value]} for model ${model.casename}!`);
             } else {
@@ -174,7 +177,8 @@ export default class RYTC {
 
             var tech = $("#osy-techs").val();
             var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[model.param][this.value][tech];
+            console.log(model.param,this.value,model.tech)
+            configChart.source.records = model.chartData[model.param][this.value][model.tech];
             configChart.update();
         });
 

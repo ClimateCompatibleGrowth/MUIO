@@ -15,12 +15,16 @@ export class Model {
             let years = genData['osy-years'];
             let comms = genData['osy-comm'];
             let cases = resData['osy-cases'];
-            let cs = cases[0].CaseId;
+            let cs = cases[0].Case;
 
             let RYTCgrid = DataModel.RYTCgrid( RYTCdata);            
             let RYTCchart = DataModel.RYTCchart(genData, RYTCdata);
+            //let RYTCchartAll = DataModel.RYTCchartAll(genData, RYTCdata);
             let ActivityTechs = DataModel.RYTCTechs(RYTCdata);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
+
+            console.log('RYTCgrid ', RYTCgrid)
+            console.log('RYTCchart ', RYTCchart)
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(comms, function (id, obj) {
@@ -61,7 +65,8 @@ export class Model {
                 });
             });
 
-            console.log('RYTCchart ', RYTCchart)
+            // console.log('RYTCchart ', RYTCchart)
+            // console.log('RYTCchartAll ', RYTCchartAll)
             // console.log('ActivityTechs[param][0] ', ActivityTechs[param])
             // console.log('RYTCgrid[param][cs] ', RYTCgrid[param][cs])
             // console.log('RYTCchart[param][cs][ActivityTechs[param][0][Tech]] ', RYTCchart[param][cs][ActivityTechs[param][0]['Tech']])

@@ -3,10 +3,10 @@ import { Message } from "./Message.Class.js";
 
 export class Html {
 
-    static renderCases(cases, selectedCS) {
+    static renderModels(cases, selectedCS) {
         $('#cases').empty();
         $.each(cases, function (index, value) {
-            Html.apendCase(value, selectedCS)
+            Html.apendModel(value, selectedCS)
         });
 
         if (!selectedCS) Message.info("Please select existing or create new case to proceed!");
@@ -17,7 +17,7 @@ export class Html {
         $(`#l_${value.replace(/[^A-Z0-9]/ig, "")}`).remove();
     }
 
-    static apendCase(value, selectedCS) {
+    static apendModel(value, selectedCS) {
         //Base.appendCasePickerHTML(value, selectedCS);
         let htmlstring = `
             <div class="panel panel-default" id=l_${value.replace(/[^A-Z0-9]/ig, "")}>
@@ -73,6 +73,51 @@ export class Html {
                 </div>
         </div>`;
         $('#cases').append(htmlstring);
+    }
+
+    static renderCases(cases) {
+        $('#osy-Cases').empty();
+        $.each(cases, function (index, obj) {
+            Html.apendCase(obj)
+        });
+    }
+
+    
+    static apendCase(value) {
+        //Base.appendCasePickerHTML(value, selectedCS);
+        let htmlstring = `
+            <div class="panel panel-default" id=l_${value.Case.replace(/[^A-Z0-9]/ig, "")}>
+                <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-2">
+                        <b>
+                            <span class="selectCS"  data-ps="${value.Case}" data-toggle="tooltip" data-placement="top" title="Select Model">
+                                <span class="glyphicon glyphicon-cube osy-green fa-1.5x icon-btn"></span><span class="pointer">${value.Case}</span>
+                            </span>
+                        </b>   
+                    </div>
+                    <div class="col-md-4">
+                        <span class="editPS " data-ps="${value.Runtime}" data-toggle="tooltip" data-placement="top" title="Runtime">
+                        <small><i>${value.Runtime}</i></small>
+                        </span>  
+                    </div>
+                    <div class="col-md-5">
+                        <span class="editPS " data-ps="${value.Scenarios}" data-toggle="tooltip" data-placement="top" title="Runtime">
+                        ${value.Scenarios}
+                        </span>  
+                    </div>
+                    <div class="col-md-1">
+                        <span class="DeletePS pull-right" data-ps="${value.Case}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
+                            <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
+                        </span>
+                    </div>
+                </div>
+
+                </div>
+                <div id="collapse_${value.Case.replace(/[^A-Z0-9]/ig, "")}" class="panel-collapse collapse">
+                </div>
+        </div>`;
+        $('#osy-Cases').append(htmlstring);
     }
 
     static renderCasePicker(cases, selectedCS) {
@@ -244,9 +289,9 @@ export class Html {
         container.empty();
         $.each(cases, function (id, obj) {
             if (obj.CaseId == cs) {
-                container.append('<option value="' + obj.CaseId + '" selected>' + obj.Case + '</option>');
+                container.append('<option value="' + obj.Case + '" selected>' + obj.Case + '</option>');
             } else {
-                container.append('<option value="' + obj.CaseId + '" >' + obj.Case + '</option>');
+                container.append('<option value="' + obj.Case + '" >' + obj.Case + '</option>');
             }
         });
     }
