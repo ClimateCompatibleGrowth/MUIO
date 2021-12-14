@@ -96,7 +96,7 @@ export class Model {
                     text: emi.Emis + ' <small  style="color:darkgrey">[ ' + emiUnit[param][emi.EmisId] + ' ]</small>', datafield: emi.EmisId, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
                     groupable: false,
                     initeditor: initeditor,
-                    validation: validation,
+                    //validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass
                 });

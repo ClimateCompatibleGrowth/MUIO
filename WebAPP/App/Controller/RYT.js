@@ -155,7 +155,7 @@ export default class RYT {
         //change of ddl parameters
         $('#osy-ryt').on('change', function () {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
-            let $divGrid = $divGrid;
+            // let $divGrid = $divGrid;
             model.srcGrid.root = this.value;
             let decimal = Functions.getDecimalPlaces(model.paramData[model.group][this.value]['default']);
             //console.log(this.value, decimal)

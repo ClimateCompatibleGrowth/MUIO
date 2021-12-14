@@ -17,6 +17,8 @@ export class Model {
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
 
+            this.param = param;
+
             let RTgrid = DataModel.RTgrid(genData, RTdata, PARAMETERS);
             let RTchart = DataModel.RTchart(genData, RTdata);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
@@ -49,12 +51,17 @@ export class Model {
             datafields.push({ name: 'ScDesc', type: 'string' });
 
             let validation = function (cell, value) {
-                if (value < 0) {
-                    return { result: false, message: 'Value must be positive!' };
-                } else {
+                if (['TMPAU', 'TMPAL'].includes(this.param)){
                     return true;
+                }else{
+                    if (value < 0) {
+                        return { result: false, message: 'Value must be positive!' };
+                    } else {
+                        return true;
+                    }
                 }
-            }
+
+            }.bind(this);
 
             var cellclass = function (row, columnfield, value, data) {
                 return scClass[data.ScId];
@@ -115,7 +122,7 @@ export class Model {
             };
 
             this.casename = casename;
-            this.param = param;
+            // this.param = param;
             //this.years = years;
             this.techs = techs;
             this.techIds = techIds;
@@ -128,7 +135,6 @@ export class Model {
             this.gridData = RTgrid;
             this.chartData = RTchart;
             this.genData = genData;
-            this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid,
