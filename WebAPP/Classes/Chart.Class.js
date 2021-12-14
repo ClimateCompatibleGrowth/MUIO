@@ -56,7 +56,7 @@ export class Chart {
             valueAxis:
             {
                 // unitInterval: 500,
-                minValue: 0,
+                minValue: 'auto',
                 maxValue: 'auto',
                 title: { text: 'Installed power [MW]' },
                 displayValueAxis: true,

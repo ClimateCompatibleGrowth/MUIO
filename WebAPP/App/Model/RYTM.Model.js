@@ -18,6 +18,8 @@ export class Model {
             let scenarios = genData['osy-scenarios'];
             let mo = genData['osy-mo'];
 
+            this.param = param;
+
             let RYTMgrid = DataModel.RYTMgrid(genData, RYTMdata, PARAMETERS);
             let RYTMchart = DataModel.RYTMchart(genData, RYTMdata);
             let mods = DataModel.Mods(genData);
@@ -44,12 +46,16 @@ export class Model {
 
 
             let validation = function (cell, value) {
-                if (value < 0) {
-                    return { result: false, message: 'Value must be positive!' };
-                } else {
+                if (['VC'].includes(this.param)){
                     return true;
+                }else{
+                    if (value < 0) {
+                        return { result: false, message: 'Value must be positive!' };
+                    } else {
+                        return true;
+                    }
                 }
-            }
+            }.bind(this);
 
             var cellclass = function (row, columnfield, value, data) {
                 return scClass[data.ScId];
@@ -123,7 +129,7 @@ export class Model {
             this.gridData = RYTMgrid;
             this.chartData = RYTMchart;
             this.genData = genData;
-            this.param = param;
+            // this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid;

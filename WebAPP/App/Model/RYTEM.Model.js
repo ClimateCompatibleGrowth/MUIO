@@ -96,7 +96,7 @@ export class Model {
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
                     groupable: false,
                     initeditor: initeditor,
-                    validation: validation,
+                    //validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass
                 });

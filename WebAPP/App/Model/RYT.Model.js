@@ -20,6 +20,8 @@ export class Model {
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
 
+            this.param = param;
+
 
             //let paramById = DataModel.getParamById(PARAMETERS);
             let RYTgrid = DataModel.RYTgrid(genData, RYTdata, PARAMETERS);
@@ -44,12 +46,18 @@ export class Model {
             datafields.push({ name: 'UnitId', type: 'string' });
 
             let validation = function (cell, value) {
-                if (value < 0) {
-                    return { result: false, message: 'Value must be positive!' };
-                } else {
+                console.log('this.param ', this.param, param)
+                if (['CC', 'FC'].includes(this.param)){
                     return true;
+                }else{
+                    if (value < 0) {
+                        return { result: false, message: 'Value must be positive!' };
+                    } else {
+                        return true;
+                    }
                 }
-            }
+
+            }.bind(this);
 
             var cellclass = function (row, columnfield, value, data) {
                 return scClass[data.ScId];
@@ -120,7 +128,7 @@ export class Model {
             this.gridData = RYTgrid;
             this.chartData = RYTchart;
             this.genData = genData;
-            this.param = param;
+            // this.param = param;
             this.paramData = paramData;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
