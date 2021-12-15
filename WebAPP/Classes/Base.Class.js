@@ -239,7 +239,7 @@ export class Base {
             //url: "http://127.0.0.1:5000/upload",
             url: Base.apiUrl() + "uploadCase",
             addRemoveLinks: true,
-            maxFilesize: 20,
+            maxFilesize: 1000,
             uploadMultiple: true,
             acceptedFiles: "application/zip, .zip",
             dictDefaultMessage: `
