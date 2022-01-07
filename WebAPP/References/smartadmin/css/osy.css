@@ -322,7 +322,7 @@ top: 10px;
     }
 
     /*sortable za dispatch order*/
-    #osy-scOrder {
+    #osy-scOrder #osy-sc0{
         margin: 2px;
         padding: 4px;
         float: left;
@@ -330,7 +330,15 @@ top: 10px;
         /*border: var(--main-color) !important; solid 1px;*/
         
     }
-    #osy-scOrder div {
+    #osy-scOrder  div{
+        border-radius: 5px;
+        padding: 4px;
+        cursor: pointer;
+        background-color: white;
+        color: black;
+        border: 1px solid transparent;
+    }
+    #osy-sc0 div{
         border-radius: 5px;
         padding: 4px;
         cursor: pointer;
@@ -350,6 +358,7 @@ top: 10px;
         margin-bottom: 5px!important;
     }
 
+    
     nav ul ul li{
         padding-bottom: 4px!important;
         padding-top: 4px!important;

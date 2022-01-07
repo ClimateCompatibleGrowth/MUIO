@@ -33,10 +33,23 @@ def createCaseRun():
         if casename != None:
             caserun = DataFile(casename)
             response = caserun.createCaseRun(caserunname, data)
-            # response = {
-            #     "message": "You have created case run!",
-            #     "status_code": "success"
-            # }      
+     
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@datafile_api.route("/updateCaseRun", methods=['POST'])
+def updateCaseRun():
+    try:
+        casename = request.json['casename']
+        caserunname = request.json['caserunname']
+        oldcaserunname = request.json['oldcaserunname']
+        data = request.json['data']
+
+        if casename != None:
+            caserun = DataFile(casename)
+            response = caserun.updateCaseRun(caserunname, oldcaserunname, data)
+     
         return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
@@ -123,7 +136,8 @@ def downloadFile():
 def downloadResultsFile():
     try:
         case = session.get('osycase', None)
-        dataFile = Path(Config.DATA_STORAGE,case, 'res', 'results.txt')
+        caserunname = request.args.get('caserunname')
+        dataFile = Path(Config.DATA_STORAGE,case, 'res', caserunname,'results.txt')
         return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
     
     except(IOError):

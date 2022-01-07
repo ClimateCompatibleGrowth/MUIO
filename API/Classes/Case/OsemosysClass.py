@@ -9,6 +9,8 @@ class Osemosys():
         self.PARAMETERS = File.readParamFile(Path(Config.DATA_STORAGE, 'Parameters.json'))
         self.RESULTPARAMETERS = File.readParamFile(Path(Config.DATA_STORAGE, 'ResultParameters.json'))
         self.genData =  File.readFile(Path(Config.DATA_STORAGE,case,'genData.json'))
+        self.resData = File.readFile( Path(Config.DATA_STORAGE, case,'view', 'resData.json'))
+        
         #Case.__init__(self, case)
         self.casePath = Path(Config.DATA_STORAGE,case)
         self.zipPath = Path(Config.DATA_STORAGE,case+'.zip')
@@ -32,10 +34,13 @@ class Osemosys():
         self.ryctsPath = Path(Config.DATA_STORAGE,case,'RYCTs.json')
         self.rytePath = Path(Config.DATA_STORAGE,case,'RYTE.json')
         self.rytemPath = Path(Config.DATA_STORAGE,case,'RYTEM.json')
+
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
         self.glpkFolder = Path(Config.SOLVERs_FOLDER,'glpk-4.65', 'w64')
         self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
         self.resultsPath = Path(Config.DATA_STORAGE,case,'res')
+
+        self.resDataPath = Path(Config.DATA_STORAGE,case,'view', 'resData.json')
         # self.resPath = Path(Config.DATA_STORAGE,case,'res', 'csv')
         
         #self.dataFile = Path(Config.DATA_STORAGE,case, 'res','data.txt')
@@ -142,12 +147,27 @@ class Osemosys():
         cons = {con['ConId']: con['Con'] for con in self.genData["osy-constraints"] }
         return cons
 
-    def getScIds(self):
-        scIds = [ sc['ScenarioId'] for sc in self.genData["osy-scenarios"]]
-        return scIds
+    # def getScIds(self):
+    #     scIds = [ sc['ScenarioId'] for sc in self.genData["osy-scenarios"]]
+    #     return scIds
 
-    def getScOrder(self):
-        scIds = [ {'ScId': sc['ScenarioId'], 'Sc': sc['Scenario'], 'Active': sc['Active']} for sc in self.genData["osy-scenarios"]]
+    def getScenariosByCase(self):
+        #scIds = [ sc['ScenarioId'] for sc in self.genData["osy-scenarios"]]
+        scBycs = {}
+        for case in self.resData["osy-cases"]:
+            scBycs[case['Case']] = []
+            for sc in case['Scenarios']:
+                chunk = {}
+                chunk['ScId'] = sc['ScenarioId']
+                chunk['Sc'] = sc['Scenario']
+                chunk['Active'] = sc['Active']
+                scBycs[case['Case']].append(chunk)
+        return scBycs
+
+    def getScOrder(self, caserunname):
+        #scIds = [ {'ScId': sc['ScenarioId'], 'Sc': sc['Scenario'], 'Active': sc['Active']} for sc in self.genData["osy-scenarios"]]
+        scenarioBycase = self.getScenariosByCase()
+        scIds = scenarioBycase[caserunname]
         return scIds
 
     #output actTech['IAR'] = ['Tech_1', 'Tech_2'...]
@@ -189,7 +209,7 @@ class Osemosys():
             for tech in self.genData["osy-tech"]:
                 if tech[param['id']]: 
                     commIds[param['id']][tech['TechId']] = tech[param['id']]
-        return commIds
+        return commIds 
 
     def getConstraintTechIds(self):
         techIds = {}

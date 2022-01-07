@@ -38,7 +38,8 @@ export default class RYTE {
             })
             .then(data => {
                 let [casename, genData, resData, PARAMETERS, RYTEdata] = data;
-                if (RYTEdata[param]['CS_0'].length == 0) {
+                if (RYTEdata[param][resData['osy-cases'][0]['Case']].length == 0) {
+                //if (RYTEdata[param]['CS_0'].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
                         "status_code": "ActivityError",
@@ -99,7 +100,8 @@ export default class RYTE {
             })
             .then(data => {
                 let [casename, genData, resData, PARAMETERS, RYTEdata] = data;
-                if (RYTEdata[PARAMETERS['RYTE'][0]['id']]['CS_0'].length == 0) {
+                //if (RYTEdata[PARAMETERS['RYTE'][0]['id']]['CS_0'].length == 0) {
+                if (RYTEdata[PARAMETERS['RYTE'][0]['id']][resData['osy-cases'][0]['Case']].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
                         "status_code": "ActivityError",

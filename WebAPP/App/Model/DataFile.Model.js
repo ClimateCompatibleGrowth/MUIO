@@ -4,6 +4,7 @@ export class Model {
       if(casename){
 
         let scenarios =  genData['osy-scenarios'];
+        //let scenarios =  resData['osy-cases'][0]['Scenarios']
         let scMap = {};
         $.each(scenarios, function (id, sc) {
           scMap[sc.ScenarioId] = sc;
@@ -13,19 +14,25 @@ export class Model {
         let cs;
         if (resData['osy-cases'] !== undefined && resData['osy-cases'].length != 0) {
           // array empty or does not exist
-          console.log('not empt')
           cs = cases[0]['Case'];
-      }else{
-        cs = null;
-      }
+        }else{
+          cs = null;
+        }
+
+        let scBycs = {};
+        $.each(resData['osy-cases'], function (id, cs) {
+          console.log('cs ', cs)
+          scBycs[cs.Case] = cs.Scenarios
+        });
 
         this.casename = casename;
+        this.cs = cs;
+        this.scBycs = scBycs;
         this.title = "Run model";
         this.scenarios = scenarios;
         this.scenariosCount = scenarios.length;
         this.scMap = scMap;
         this.cases = cases;
-        this.cs = cs;
         this.pageId = pageId;
       }else{
         this.casename = null;

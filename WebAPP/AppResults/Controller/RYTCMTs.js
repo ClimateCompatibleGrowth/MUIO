@@ -38,7 +38,8 @@ export default class RYTCMTs {
             })
             .then(data => {
                 let [casename, genData, resData, PARAMETERS, RYTCMTsdata, cases] = data;
-                if (RYTCMTsdata[param]['CS_0'].length == 0) {
+                //if (RYTCMTsdata[param]['CS_0'].length == 0) {
+                if (RYTCMTsdata[param][resData['osy-cases'][0]['Case']].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
                         "status_code": "ActivityError",
@@ -102,7 +103,8 @@ export default class RYTCMTs {
             })
             .then(data => {
                 let [casename, genData, resData, PARAMETERS, RYTCMTsdata] = data;
-                if (RYTCMTsdata[PARAMETERS['RYTCMTs'][0]['id']]['CS_0'].length == 0) {
+                //if (RYTCMTsdata[PARAMETERS['RYTCMTs'][0]['id']]['CS_0'].length == 0) {
+                if (RYTCMTsdata[PARAMETERS['RYTCMTs'][0]['id']][resData['osy-cases'][0]['Case']].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
                         "status_code": "ActivityError",

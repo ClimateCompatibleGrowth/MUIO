@@ -321,7 +321,7 @@ class DataFile(Osemosys):
             self.techIDs = self.getTechIds()
             self.commIDs = self.getCommIds()
             self.conIDs = self.getConIds()
-            self.scOrder = self.getScOrder()
+            self.scOrder = self.getScOrder(caserunname)
 
             self.emiMap = self.getEmisMap()
             self.techMap = self.getTechsMap()
@@ -454,8 +454,60 @@ class DataFile(Osemosys):
                     "status_code": "exist"
                 } 
 
+            return response
+            # urllib.request.urlretrieve(self.dataFile, dataFile)
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
 
-            
+    def updateCaseRun(self, caserunname, oldcaserunname, data):
+        try:
+            caseRunPath = Path(Config.DATA_STORAGE,self.case,'res', oldcaserunname)
+            newcaseRunPath = Path(Config.DATA_STORAGE,self.case,'res', caserunname)
+            csvPath = Path(Config.DATA_STORAGE,self.case,'res', caserunname, 'csv')
+            resDataPath = Path(Config.DATA_STORAGE,self.case,'view', 'resData.json')
+
+            if not os.path.exists(newcaseRunPath):
+                os.rename(caseRunPath, newcaseRunPath)
+
+                if not os.path.exists(csvPath):
+                    os.makedirs(csvPath)
+
+                resData = File.readFile(resDataPath)
+
+                resdata = resData['osy-cases']
+                for i, case in enumerate(resdata):
+                    if case['Case'] == oldcaserunname:
+                        resData['osy-cases'][i] = data
+
+                File.writeFile( resData, resDataPath)
+                response = {
+                    "message": "You have updated a case run!",
+                    "status_code": "success"
+                } 
+            elif os.path.exists(newcaseRunPath) and caserunname==oldcaserunname:
+                if not os.path.exists(csvPath):
+                    os.makedirs(csvPath)
+
+                resData = File.readFile(resDataPath)
+
+                resdata = resData['osy-cases']
+                for i, case in enumerate(resdata):
+                    if case['Case'] == oldcaserunname:
+                        resData['osy-cases'][i] = data
+
+                File.writeFile( resData, resDataPath)
+                response = {
+                    "message": "You have updated a case run!",
+                    "status_code": "success"
+                } 
+            else:
+                response = {
+                    "message": "Case with same name already exists!",
+                    "status_code": "exist"
+                } 
+
             return response
             # urllib.request.urlretrieve(self.dataFile, dataFile)
         except(IOError, IndexError):
@@ -465,16 +517,16 @@ class DataFile(Osemosys):
 
     def deleteCaseRun(self, caserunname):
         try:
-            caseRunPath = Path(Config.DATA_STORAGE,self.case,'res', caserunname)
-            resDataPath = Path(Config.DATA_STORAGE,self.case,'view', 'resData.json')
+            #caseRunPath = Path(Config.DATA_STORAGE,self.case,'res', caserunname)
+            #resDataPath = Path(Config.DATA_STORAGE,self.case,'view', 'resData.json')
 
-            resData = File.readFile(resDataPath)
+            resData = File.readFile(self.resDataPath)
 
             for obj in resData['osy-cases']:
                 if obj['Case'] == caserunname:
                     resData['osy-cases'].remove(obj)
 
-            File.writeFile( resData, resDataPath)
+            File.writeFile( resData, self.resDataPath)
             response = {
                 "message": "You have deleted a case run!",
                 "status_code": "success"
@@ -492,11 +544,15 @@ class DataFile(Osemosys):
 
     def readDataFile( self, caserunname ):
         try:
+            
             #f = open(self.dataFile, mode="r")
             dataFilePath = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data.txt')
-            f = open(dataFilePath, mode="r", encoding='utf-8-sig')
-            data =  f.read()
-            f.close
+            if os.path.exists(dataFilePath):
+                f = open(dataFilePath, mode="r", encoding='utf-8-sig')
+                data =  f.read()
+                f.close
+            else:
+                data = None
 
             # f = open(self.dataFile, 'r')
             # file_contents = f.read()

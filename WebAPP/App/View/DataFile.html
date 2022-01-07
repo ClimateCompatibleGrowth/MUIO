@@ -28,8 +28,15 @@
                     </header>
                     <div>
                         <div class="widget-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button id="osy-newCaseRun" class="btn btn-block btn-default"
+                                        style="margin-right: 20px; display: none;">
+                                        <i class="fa fa-plus"></i> New case
+                                    </button>
+                                </div>
+                            </div>
                             <div class="smart-form">
-
                                 <fieldset>
                                     <div class="row">
                                         <section class="col-md-12">
@@ -75,6 +82,10 @@
                                         style="margin-right: 20px;">
                                         <i class="fa fa-plus"></i> Create case
                                     </button>
+                                    <button id="osy-updateCaseRun" class="btn btn-block btn-warning"
+                                        style="margin-right: 20px; display: none;">
+                                        <i class="fa fa-edit"></i> Update case
+                                    </button>
                                 </div>
                             </div>
                             <hr>
@@ -108,19 +119,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- </div> -->
                             <div class="row">
                                 <div class="col-md-12">
-
                                     <button id="osy-run" class="btn btn-block btn-danger" style="display: none;">
                                         <i class="fa fa-calculator"></i> RUN MODEL
                                     </button>
-
                                 </div>
                             </div>
                         </div>
-                        <!-- </footer> -->
-
                     </div>
                 </div>
             </article>
@@ -129,8 +135,7 @@
                 <div id="tabs">
                     <ul class="nav nav-tabs in">
                         <li class="active">
-                            <a data-toggle="tab" href="#tabCases" class='Cases'> <i
-                                    class="fa fa-lg fa-cubes green"></i>
+                            <a data-toggle="tab" href="#tabCases" class='Cases'> <i class="fa fa-lg fa-cubes green"></i>
                                 <span class="hidden-mobile hidden-tablet"> Cases </span>
                             </a>
                         </li>
@@ -170,6 +175,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="tab-pane" id="tabDataFile">
                         <!-- 002082 -->
                         <div class="jarviswidget">
@@ -210,13 +216,15 @@
                             <div>
                                 <div class="widget-body">
                                     <fieldset>
-                                        <section>
-                                            <a id="osy-downloadResultsFile" class="btn btn-default "
+                                        <section id="osy-downloadResultsFile">
+                                            <!-- <a id="osy-downloadResultsFile" class="btn btn-default "
                                                 href="downloadResultsFile"><i class="fa fa-download"></i> Download
                                                 Results
                                                 File
-                                            </a>
+                                            </a> -->
                                         </section>
+                                    </fieldset>
+                                    <fieldset>
                                         <hr>
                                         <section>
                                             <div class="well">
@@ -317,6 +325,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1">
+                        <div id='osy-sc0'></div>
                         <div id='osy-scOrder'></div>
                     </div>
                 </div>

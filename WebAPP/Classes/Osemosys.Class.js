@@ -134,6 +134,29 @@ export class Osemosys {
         });
     }
 
+    static updateCaseRun(casename, caserunname, oldcaserunname, data) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "updateCaseRun",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, 'caserunname': caserunname, 'oldcaserunname': oldcaserunname, 'data': data }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
     static run(casename, solver, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({

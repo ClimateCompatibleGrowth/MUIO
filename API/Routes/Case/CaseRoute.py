@@ -179,7 +179,6 @@ def resultsExists():
     except(IOError):
         return jsonify('No existing cases!'), 404
 
-
 @case_api.route("/saveParamFile", methods=['POST'])
 def saveParamFile():
     try:

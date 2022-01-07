@@ -17,13 +17,15 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
 
+            console.log('RYTE ', DataModel.RYTE(RYTEdata))
+            
             let RYTEgrid = DataModel.RYTEgrid(RYTEdata);
             let RYTEchart = DataModel.RYTEchart(genData, RYTEdata);
 
             let ActivityTechs = DataModel.RYTETechs(RYTEdata);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
-            console.log('RYTE ', DataModel.RYTE(RYTEdata))
+            
             console.log('RYTEgrid ', RYTEgrid)
             console.log('RYTEchart ', RYTEchart)
             console.log('ActivityTechs ', ActivityTechs)

@@ -38,7 +38,8 @@ export default class RYTEM {
             })
             .then(data => {
                 let [casename, genData, resData, PARAMETERS, RYTEMdata] = data;
-                if (RYTEMdata[param]['CS_0'].length == 0) {
+                //if (RYTEMdata[param]['CS_0'].length == 0) {
+                if (RYTEMdata[param][resData['osy-cases'][0]['Case']].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
                         "status_code": "ActivityError",
@@ -101,7 +102,8 @@ export default class RYTEM {
             })
             .then(data => {
                 let [casename, genData, resData, PARAMETERS, RYTEMdata] = data;
-                if (RYTEMdata[PARAMETERS['RYTE'][0]['id']]['CS_0'].length == 0) {
+                //if (RYTEMdata[PARAMETERS['RYTE'][0]['id']]['CS_0'].length == 0) {
+                if (RYTEMdata[PARAMETERS['RYTEM'][0]['id']][resData['osy-cases'][0]['Case']].length == 0) {
                 
                     let er = {
                         "message": 'There is no activity defined!',

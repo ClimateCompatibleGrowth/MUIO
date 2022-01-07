@@ -23,7 +23,8 @@ class File:
         try:
             f = open(path, mode="w")
             #json
-            f.write(json.dumps(data, ensure_ascii=False, separators=(',', ':')))
+            #f.write(json.dumps(data, ensure_ascii=False, separators=(',', ':')))
+            f.write(json.dumps(data, ensure_ascii=True,  indent=4, sort_keys=False))
             #ascii false da zapisemo cirilicu u file
             #f.write(json.dumps(data, ensure_ascii=True,  indent=4, sort_keys=False))
             #usjon

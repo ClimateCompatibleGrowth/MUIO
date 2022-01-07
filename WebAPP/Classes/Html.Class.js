@@ -85,6 +85,12 @@ export class Html {
     
     static apendCase(value) {
         //Base.appendCasePickerHTML(value, selectedCS);
+        let scs = []
+        $.each(value.Scenarios, function (index, obj) {
+            if(obj.Active == true){
+                scs.push(obj.Scenario)
+            }   
+        });
         let htmlstring = `
             <div class="panel panel-default" id=l_${value.Case.replace(/[^A-Z0-9]/ig, "")}>
                 <div class="panel-heading">
@@ -102,8 +108,8 @@ export class Html {
                         </span>  
                     </div>
                     <div class="col-md-5">
-                        <span class="editPS " data-ps="${value.Scenarios}" data-toggle="tooltip" data-placement="top" title="Runtime">
-                        ${value.Scenarios}
+                        <span class="editPS " data-ps="${scs}" data-toggle="tooltip" data-placement="top" title="Runtime">
+                        ${scs}
                         </span>  
                     </div>
                     <div class="col-md-1">
@@ -127,10 +133,14 @@ export class Html {
         });
     }
 
-    static renderCSV(csvs){
+    static renderCSV(csvs, cs){
         $('#csvFiles').empty();
 
         $.each(csvs, function (index, value) {
+            $('#osy-downloadResultsFile').html(`<a class="btn btn btn-default pull-right"
+                href="downloadResultsFile?caserunname=${cs}"><i class="fa fa-download"></i> Download Results File
+            </a>`);
+
             let res = `
             <tr>
                 <td>
@@ -142,6 +152,39 @@ export class Html {
             `;
             $('#csvFiles').append(res);
         });
+
+
+    }
+
+    static renderDataFile(DataFile, model){
+
+        var table = $("<table />");
+        var rows = DataFile.split("\n"); 
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = $("<tr />");
+            var cells = rows[i].split(" ");
+            //var cells = rows[i].match(/.{1,50}/g);
+            if (cells !== null){
+                for (var j = 0; j < cells.length; j++) {
+                    var cell = $(" <td style='padding-right:5px'></td>");
+                    //cells[j] = cells[j].replace(/ /g, '&nbsp;');
+                    cell.html(cells[j]);
+                    row.append(cell);
+                }
+                table.append(row);
+            }
+        }
+
+        
+        $('#osy-DataFileDownload').html(`<a id="osy-downloadDataFile" class="btn btn btn-default pull-right"
+                href="downloadDataFile?caserunname=${model.cs}"><i class="fa fa-download"></i> Download Data
+                File
+            </a>`);
+        $("#osy-DataFile").empty();
+        $("#osy-DataFile").html('');
+        $("#osy-DataFile").append(table);
+        //$('#tabs a[href="#tabDataFile"]').tab('show');
     }
 
     static appendCasePicker(value, selectedCS, pageId) {
@@ -198,6 +241,25 @@ export class Html {
         $("#emisCount").text(model.emisCount);
         $("#scenariosCount").text(model.scenariosCount);
         $("#constraintsCount").text(model.constraintsCount);
+
+    }
+
+    static resData(model) {
+
+        // var container = $('#osy-scOrder');
+        // container.empty();
+        // $.each(CURRENCY, function (key, value) {
+        //     if (value == model.currency) {
+
+        //         container.append(`<option value="${value}" selected> ${value}</option>`);
+        //     } else {
+        //         container.append(`<option value="${value}"> ${value} </option>`);
+        //     }
+        // });
+
+
+        $("#osy-casename").val(model.cs);
+        $("#osy-desc").val(model.desc);
 
     }
 
@@ -438,7 +500,15 @@ export class Html {
     static renderScOrder(scs) {
         var sortableList = '';
         $.each(scs, function (sc, flag) {
-            if (flag.ScenarioId != 'SC_0') {
+            if (flag.ScenarioId == 'SC_0') {
+                var sc0 =
+                    `<div class="sortable-item" id=` + flag.ScenarioId + `>
+                    <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario + `
+                    <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked disabled/></span>
+                </div>`;
+                $("#osy-sc0").html(sc0);
+                //$("#osy-sc0").jqxSortable();
+            }else{
                 if (flag.Active) {
                     var sortableElement =
                         `<div class="sortable-item" id=` + flag.ScenarioId + `>
@@ -454,7 +524,7 @@ export class Html {
                     </div>`;
                     sortableList = sortableList + sortableElement;
                 }
-            }
+            }        
         });
         $("#osy-scOrder").html(sortableList);
         $("#osy-scOrder").jqxSortable();
