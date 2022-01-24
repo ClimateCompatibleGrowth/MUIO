@@ -103,8 +103,6 @@ export default class DataFile {
         $("#osy-btnScOrder").on('click', function (event) {
 
             // Html.renderScOrder(model.scenarios);
-            console.log('model scBycs ', model.scBycs)
-            console.log('model scenarios ', model.scenarios)
             if(model.cs in  model.scBycs){
                 Html.renderScOrder(model.scBycs[model.cs]);
             }else{
@@ -273,22 +271,17 @@ export default class DataFile {
             console.log('update ', update)
 
             if (update) {
-                console.log('update run ')
                 Osemosys.updateCaseRun(model.casename, caserunname, oldcaserunname, caseData)
                     .then(response => {
-                        console.log('response ', response)
                         if (response.status_code == 'success') {
                             console.log('update run succes')
                             model.cs = caserunname;
-
                             $.each(model.cases, function (id, cs) {
                                 if (cs.Case == oldcaserunname) {
                                     model.cases[id] = caseData;
                                 }
                             });
                             model.scBycs[model.cs] = scOrder;
-
-                            console.log('model.cases ', model.cases)
                             Html.title(model.casename, model.title, caserunname);
                             Html.renderCases(model.cases);
                             $('#tabs a[href="#tabCases"]').tab('show');
@@ -302,7 +295,6 @@ export default class DataFile {
                         if (response.status_code == 'exist') {
                             Message.smallBoxWarning('Generate message', response.message, 3000);
                         }
-
                     })
                     .catch(error => {
                         Message.bigBoxDanger('Error message', error, null);
@@ -312,7 +304,6 @@ export default class DataFile {
                     .then(response => {
                         if (response.status_code == 'success') {
                             $('#osy-generateDataFile').show();
-
                             model.cs = caserunname;
                             model.cases.push(caseData);
                             model.scBycs[model.cs] = scOrder;
@@ -326,13 +317,11 @@ export default class DataFile {
                         if (response.status_code == 'exist') {
                             Message.smallBoxWarning('Generate message', response.message, 3000);
                         }
-
                     })
                     .catch(error => {
                         Message.bigBoxDanger('Error message', error, null);
                     })
             }
-
 
         });
 

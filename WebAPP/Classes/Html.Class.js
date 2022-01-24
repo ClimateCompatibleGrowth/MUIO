@@ -145,7 +145,7 @@ export class Html {
             <tr>
                 <td>
                     <a class=" " 
-                        href="downloadFile?file=${value}"><i class="fa fa-download"></i> ${value}
+                        href="downloadCSVFile?file=${value}&caserunname=${cs}"><i class="fa fa-download"></i> ${value}
                     </a>
                 </td>
             </tr>

@@ -132,6 +132,18 @@ def downloadFile():
     except(IOError):
         return jsonify('No existing cases!'), 404
 
+@datafile_api.route("/downloadCSVFile", methods=['GET'])
+def downloadCSVFile():
+    try:
+        case = session.get('osycase', None)
+        file = request.args.get('file')
+        caserunname = request.args.get('caserunname')
+        dataFile = Path(Config.DATA_STORAGE,case,'res',caserunname,'csv',file)
+        return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
+    
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
 @datafile_api.route("/downloadResultsFile", methods=['GET'])
 def downloadResultsFile():
     try:
