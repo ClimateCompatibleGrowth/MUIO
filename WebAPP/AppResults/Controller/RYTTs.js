@@ -43,7 +43,6 @@ export default class RYTTs {
 
     static initPage(model) {
         Message.clearMessages();
-        console.log('model', model)
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlCases(model.cases, model.case);
@@ -113,8 +112,6 @@ export default class RYTTs {
 
 
             var configChart = $divChart.jqxChart('getInstance');
-            // var tech = $("#osy-techs").val();
-            // var ts = $("#osy-timeslices1").val();
             configChart.source.records = model.chartData[this.value][[model.case]][model.tech];
             configChart.update();
             //$('#definition').html(`${DEF[model.group][model.param].definition}`);
@@ -124,10 +121,8 @@ export default class RYTTs {
             model.case = this.value;
             model.srcGrid.localdata = model.gridData[model.param][this.value];
             $divGrid.jqxGrid('updatebounddata');
-
-            var tech = $("#osy-techs").val();
             var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[model.param][this.value][tech];
+            configChart.source.records = model.chartData[model.param][this.value][model.tech];
             configChart.update();
         });
 

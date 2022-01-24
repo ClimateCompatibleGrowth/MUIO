@@ -40,6 +40,8 @@ class Osemosys():
         self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
         self.resultsPath = Path(Config.DATA_STORAGE,case,'res')
 
+        self.viewFolderPath = Path(Config.DATA_STORAGE,case,'view')
+
         self.resDataPath = Path(Config.DATA_STORAGE,case,'view', 'resData.json')
         # self.resPath = Path(Config.DATA_STORAGE,case,'res', 'csv')
         

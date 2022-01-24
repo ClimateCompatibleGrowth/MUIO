@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
 export class Model {
 
@@ -19,13 +20,13 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
             
-            let RYTMgrid = DataModel.RYTMgrid(RYTMdata);
-            let RYTMchart = DataModel.RYTMchart(genData, RYTMdata);
+            let RYTMgrid = DataModelResult.RYTMgrid(RYTMdata, genData, PARAMETERS);
+            let RYTMchart = DataModelResult.RYTMchart(genData, RYTMdata);
             let mods = DataModel.Mods(genData);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
             
-            console.log('RYT ', DataModel.RYTM( RYTMdata))
+            console.log('RYT ', DataModelResult.RYTM( RYTMdata))
             console.log('RYTMgrid ', RYTMgrid)
             console.log('RYTMchart ', RYTMchart)
             console.log('PARAMNAMES ', PARAMNAMES)
@@ -41,9 +42,9 @@ export class Model {
             // datafields.push({ name: 'TechId', type: 'string' });
             datafields.push({ name: 'Tech', type: 'string' });
             datafields.push({ name: 'MoId', type: 'string' });
-            // datafields.push({ name: 'UnitId', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
             // datafields.push({ name: 'ScDesc', type: 'string' });
-            // datafields.push({ name: 'TechDesc', type: 'string' });
+            datafields.push({ name: 'TechDesc', type: 'string' });
 
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
@@ -60,7 +61,7 @@ export class Model {
             //columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' });
             columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
-            //columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });

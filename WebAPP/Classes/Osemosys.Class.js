@@ -24,7 +24,7 @@ export class Osemosys {
         });
     }
     
-    static saveParamFile(data) {
+    static saveParamFile(ParamData, VarData) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "saveParamFile",
@@ -32,7 +32,7 @@ export class Osemosys {
                 type: 'POST',
                 cache:false,
                 dataType: 'json',
-                data: JSON.stringify({ "data": data }),
+                data: JSON.stringify({ "ParamData": ParamData, "VarData": VarData }),
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {             
                     resolve(result);

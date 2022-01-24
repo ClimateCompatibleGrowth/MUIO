@@ -70,13 +70,14 @@ export default class RYTCTs {
         Html.title(model.casename, model.PARAMNAMES[model.param], RESULTGROUPNAMES[model.group]);
         Html.ddlCases(model.cases, model.case);
         Html.ddlParams(model.PARAMETERS['RYTCTs'], model.param);
-        Html.ddlTechsArray(model.techs)
-        Html.ddlCommsArray(model.comms)
+        Html.ddlTechsArray(model.techs[model.param][model.case]);
+        Html.ddlCommsArray(model.comms[model.param][model.case][model.tech]);
 
         // Html.ddlTechs(model.techs[model.param], model.techs[model.param][0]['TechId']);
         // Html.ddlComms(model.comms[model.param][model.techs[model.param][0]['TechId']], model.comms[model.param][model.techs[model.param][0]['TechId']][0]['CommId']);
         //Html.ddlMods($('#osy-mods1'), model.mods);
 
+        console.log('model ', model)
         let $divGrid = $('#osy-gridRYTCTs');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns, true);
@@ -145,41 +146,60 @@ export default class RYTCTs {
             Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
+        
+        $("#osy-cases").off('change');
+        $('#osy-cases').on('change', function () {
+            Message.clearMessages();
+
+            //Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);
+            model.case =  this.value;
+            model.tech = model.techs[model.param][model.case][0];
+            model.comm = model.comms[model.param][model.case][model.tech][0];
+
+        
+            Html.ddlTechsArray(model.techs[model.param][model.case]);
+            Html.ddlCommsArray(model.comms[model.param][model.case][model.tech]);
+            
+            model.srcGrid.localdata = model.gridData[model.param][model.case];
+            $divGrid.jqxGrid('updatebounddata');
+            
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[model.param][model.case][model.tech][model.comm];
+            configChart.update();
+            //$('#definition').html(`${DEF[model.group][model.param].definition}`);
+        
+        });
+
         $("#osy-ryt").off('change');
         $('#osy-ryt').on('change', function () {
             Message.clearMessages();
-            if (model.RYTCTsdata[this.value]['CS_0'].length === 0) {
-                MessageSelect.activity(RYTCTs.refreshPage.bind(RYTCTs), model.casename);
-                //Message.warning(`There is no data definded for ${model.PARAMNAMES[this.value]} for Model ${model.casename}!`);
-            } else {
-                Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);
-                model.param =  this.value;
+            Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);
+            model.param =  this.value;
 
-                // model.srcGrid.root = this.value;
-                model.srcGrid.localdata = model.gridData[this.value][model.case];
-                $divGrid.jqxGrid('updatebounddata');
+
+            model.tech = model.techs[model.param][model.case][0];
+            model.comm = model.comms[model.param][model.case][model.tech][0];
+            Html.ddlTechsArray(model.techs[model.param][model.case]);
+            Html.ddlCommsArray(model.comms[model.param][model.case][model.tech]);
+
+            model.srcGrid.localdata = model.gridData[this.value][model.case];
+            $divGrid.jqxGrid('updatebounddata');
                 
 
-                //update za ddl coms i techs za IAR ili OAR
-                // Html.ddlTechs(model.techs[this.value], model.techs[this.value][0]['TechId']);
-                // Html.ddlComms(model.comms[this.value][model.techs[this.value][0]['TechId']], model.comms[this.value][model.techs[this.value][0]['TechId']][0]['CommId']);
-
-
-                var configChart = $divChart.jqxChart('getInstance');
-                // var tech = $("#osy-techs").val();
-                // var comm = $("#osy-comms").val();
-                // var mo = $("#osy-mods1").val();
-                configChart.source.records = model.chartData[this.value][model.case][model.tech][model.comm];
-                configChart.update();
-                //$('#definition').html(`${DEF[model.group][model.param].definition}`);
-            }
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[this.value][model.case][model.tech][model.comm];
+            configChart.update();
+            //$('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         $("#osy-techs").off('change');
         $('#osy-techs').on('change', function () {
             model.tech = this.value;
+            //Html.ddlTechsArray(model.techs[model.param][model.case]);
+            Html.ddlCommsArray(model.comms[model.param][model.case][model.tech]);
+            model.comm = model.comms[model.param][model.case][model.tech][0];
+
             var configChart = $divChart.jqxChart('getInstance');
-            console.log(model.param,model.case,this.value,model.comm)
             configChart.source.records = model.chartData[model.param][model.case][this.value][model.comm];
             configChart.update();
         });
@@ -192,15 +212,6 @@ export default class RYTCTs {
             configChart.update();
         });
 
-        $("#osy-mods1").off('change');
-        $('#osy-mods1').on('change', function () {
-            var param = $("#osy-ryt").val();
-            var tech = $("#osy-techs").val();
-            var comm = $("#osy-comms").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[param][tech][comm][this.value];
-            configChart.update();
-        });
 
         $(".switchChart").off('click');
         $(".switchChart").on('click', function (e) {

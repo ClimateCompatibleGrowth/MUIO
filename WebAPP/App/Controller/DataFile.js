@@ -40,7 +40,10 @@ export default class DataFile {
         //Navbar.initPage(model.casename, model.pageId);
         Html.title(model.casename, model.title, "");
         Html.renderCases(model.cases);
-        Html.renderScOrder(model.scBycs[model.cs]);
+        // console.log('model scBycs ', model.scBycs)
+        // console.log('model scenarios ', model.scenarios)
+        // Html.renderScOrder(model.scBycs[model.cs]);
+        Html.renderScOrder(model.scenarios);
         if (model.casename == null) {
             Message.info("Please select model or create new Model!");
         }
@@ -48,6 +51,7 @@ export default class DataFile {
             $('#scCommand').show();
         }
         //loadScript("References/smartadmin/js/plugin/jquery-nestable/jquery.nestable.min.js", Nestable.init.bind(null));
+        pageSetUp();
         this.initEvents(model);
     }
 
@@ -360,7 +364,7 @@ export default class DataFile {
                     // }
                     if (Base.HEROKU == 0) {
                         $("#osy-run").show();
-                        $("#osy-solver").show();
+                        //$("#osy-solver").show();
                     }
                     //Message.clearMessages();
                     //Message.bigBoxSuccess('Generate message', message, 3000);
@@ -375,11 +379,15 @@ export default class DataFile {
         $("#osy-run").off('click');
         $("#osy-run").on('click', function (event) {
             Pace.restart();
-            let solver = $('input[name="solver"]:checked').val();
+            $('#loadermain h4').text('Optimization in process!'); 
+            $('#loadermain').show();
+            //promijenjeno da radimo samo sa cBCsolverom
+            //let solver = $('input[name="solver"]:checked').val();
+            let solver = 'cbc';
             Osemosys.run(model.casename, solver, model.cs)
-                .then(response => {
+            .then(response => {
                     if (response.status_code == "success") {
-
+                        $('#loadermain').hide();
                         $(".runOutput").show();
                         $(".Results").show();
                         // $("#osy-downloadResultsFile").show();
@@ -392,10 +400,13 @@ export default class DataFile {
                                 console.log('csv ', csvs)
                                 Html.renderCSV(csvs, model.cs)
                             });
+
+                        Sidebar.Reload(model.casename);
                         Message.clearMessages();
                         Message.bigBoxSuccess('RUN message', response.message, 3000);
                     }
                     if (response.status_code == "error") {
+                        $('#loadermain').hide();
                         $(".runOutput").show();
                         $(".Results").show();
                         $("#osy-runOutput").empty();
@@ -409,10 +420,11 @@ export default class DataFile {
                         }
                         Message.bigBoxDanger('RUN message', errormsg, 3000);
                     }
-                })
-                .catch(error => {
-                    Message.bigBoxDanger('Error message', error, null);
-                })
+            })
+            .catch(error => {
+                $('#loadermain').hide();
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
         $("#osy-Cases").off('click');
@@ -490,7 +502,7 @@ export default class DataFile {
             Message.smallBoxInfo("Case selection", caserunanme + " is selected!", 3000);
         });
 
-        $(document).delegate(".DeletePS", "click", function (e) {
+        $(document).delegate(".deleteCase", "click", function (e) {
             var caserunname = $(this).attr('data-ps');
             console.log('model.scBycs 1 ',model.scBycs)
             $.SmartMessageBox({
@@ -499,7 +511,7 @@ export default class DataFile {
                 buttons: '[No][Yes]'
             }, function (ButtonPressed) {
                 if (ButtonPressed === "Yes") {
-                    //console.log(model.casename, caserunname)
+                    console.log(model.casename, caserunname)
                     Base.deleteCaseRun(model.casename, caserunname)
                         .then(response => {
                             Message.clearMessages();
@@ -511,7 +523,8 @@ export default class DataFile {
                                 model.cases = model.cases.filter(function(el) { return el.Case != caserunname; });
                                 delete model.scBycs[caserunname];
 
-                                console.log('model.scBycs 2 ',model.scBycs)
+                                //relod sidebar
+                                Sidebar.Reload(model.casename);
 
                                 if (model.cs == caserunname){
                                     Html.title(model.casename, model.title, '');
@@ -530,6 +543,7 @@ export default class DataFile {
                                     $(".DataFile").hide();
                                     $(".Results").hide(); 
                                 }
+                                //remove case from view json files
                                 //sync with s3
                                 if (Base.AWS_SYNC == 1) {
                                     SyncS3.deleteSync(caserunname);

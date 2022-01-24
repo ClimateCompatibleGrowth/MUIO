@@ -104,6 +104,26 @@ export class Routes {
                 $( ".osy-content" ).load( 'App/View/Versions.html');
             });
 
+            crossroads.addRoute('/Pivot', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                import('../AppResults/Controller/Pivot.js')
+                .then(Pivot => {
+                    $( ".osy-content" ).load( 'AppResults/View/Pivot.html', function() {
+                        Pivot.default.onLoad();
+                    });
+                });
+            });
+
+            crossroads.addRoute('/PivotCharts', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                import('../AppResults/Controller/PivotCharts.js')
+                .then(PivotCharts => {
+                    $( ".osy-content" ).load( 'AppResults/View/PivotCharts.html', function() {
+                        PivotCharts.default.onLoad();
+                    });
+                });
+            });
+
             function addResRoute(group, id){
                 return crossroads.addRoute(`/${group}/${id}`, function() {
                     $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
@@ -260,7 +280,9 @@ export class Routes {
 
     static addResultsRoutes(PARAMETERS){
 
+
         function addRoute(group, id){
+            console.log('result route route')
             return crossroads.addRoute(`/r${group}/${id}`, function() {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import(`../AppResults/Controller/${group}.js`)
@@ -277,6 +299,9 @@ export class Routes {
                 addRoute(param, obj.id)
             });
         });
+
+
+
 
         crossroads.bypassed.add(function(request) {
             console.error(request + ' add route seems to be a dead end...');

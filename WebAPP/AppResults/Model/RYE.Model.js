@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
 export class Model {
 
@@ -17,9 +18,13 @@ export class Model {
             let cs = cases[0].Case;
 
 
+            console.log('RYE ', DataModelResult.RYE(RYEdata))
+
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
-            let RYEgrid = DataModel.RYEgrid( RYEdata);
-            let RYEchart = DataModel.RYEchart(genData, RYEdata);
+            let RYEgrid = DataModelResult.RYEgrid( RYEdata, genData, PARAMETERS);
+            console.log('RYEgrid ', RYEgrid)
+            let RYEchart = DataModelResult.RYEchart(genData, RYEdata);
+            console.log('RYEchart ', RYEchart)
 
 
 
@@ -33,7 +38,7 @@ export class Model {
             // datafields.push({ name: 'Sc', type: 'string' });
             // datafields.push({ name: 'EmisId', type: 'string' });
             datafields.push({ name: 'Emi', type: 'string' });
-            // datafields.push({ name: 'UnitId', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
             // datafields.push({ name: 'ScDesc', type: 'string' });
             // datafields.push({ name: 'EmiDesc', type: 'string' });
 
@@ -49,7 +54,7 @@ export class Model {
 
             //columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left',}); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Emission', datafield: 'Emi', pinned: true, editable: false, align: 'left' });
-            //columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
@@ -60,9 +65,9 @@ export class Model {
                 });
             });
 
-            console.log('RYE ', DataModel.RYE(RYEdata))
-            console.log('RYEgrid ', RYEgrid)
-            console.log('RYEchart ', RYEchart)
+            
+           
+           
 
             let srcGrid = {
                 datatype: "json",

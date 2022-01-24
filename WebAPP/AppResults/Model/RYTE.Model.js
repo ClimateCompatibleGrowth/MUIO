@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
 export class Model {
 
@@ -17,12 +18,12 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
 
-            console.log('RYTE ', DataModel.RYTE(RYTEdata))
+            console.log('RYTE ', DataModelResult.RYTE(RYTEdata))
             
-            let RYTEgrid = DataModel.RYTEgrid(RYTEdata);
-            let RYTEchart = DataModel.RYTEchart(genData, RYTEdata);
+            let RYTEgrid = DataModelResult.RYTEgrid(RYTEdata, genData, PARAMETERS);
+            let RYTEchart = DataModelResult.RYTEchart(genData, RYTEdata);
 
-            let ActivityTechs = DataModel.RYTETechs(RYTEdata);
+            let ActivityTechs = DataModelResult.RYTETechs(RYTEdata);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
             
@@ -41,11 +42,15 @@ export class Model {
             // datafields.push({ name: 'TechId', type: 'string' });
             datafields.push({ name: 'Tech', type: 'string' });
             // datafields.push({ name: 'EmisId', type: 'string' });
-            datafields.push({ name: 'Emi', type: 'string' });
+            datafields.push({ name: 'Emis', type: 'string' });
+            datafields.push({ name: 'TechDesc', type: 'string' });
+            datafields.push({ name: 'EmiDesc', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
 
             //columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' })
-            columns.push({ text: 'Emission', datafield: 'Emi', pinned: true, editable: false, align: 'center' })
+            columns.push({ text: 'Emission', datafield: 'Emis', pinned: true, editable: false, align: 'center' })
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
                 if (value === null || value === '') {

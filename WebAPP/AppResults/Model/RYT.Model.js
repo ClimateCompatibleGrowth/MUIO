@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 import { Functions } from "../../Classes/Functions.Class.js";
 
 export class Model {
@@ -12,6 +13,8 @@ export class Model {
 
         if (casename) {
 
+        
+
             let datafields = [];
             let datafieldsChart = [];
             let columns = [];
@@ -21,13 +24,13 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
         
-            let RYTgrid = DataModel.RYTgrid(RYTdata);
-            let RYTchart = DataModel.RYTchart(genData, RYTdata);
-            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
-
-            console.log('RYT ', RYTgrid)
+            console.log('RYT ', DataModelResult.RYT(RYTdata))
+            let RYTgrid = DataModelResult.RYTgrid(RYTdata, genData, PARAMETERS);
             console.log('RYTgrid ', RYTgrid)
+            let RYTchart = DataModelResult.RYTchart(genData, RYTdata);
             console.log('RYTchart ', RYTchart)
+            let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
+            
             console.log('PARAMNAMES ', PARAMNAMES)
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
@@ -38,6 +41,8 @@ export class Model {
 
             datafields.push({ name: 'Cs', type: 'string' });
             datafields.push({ name: 'Tech', type: 'string' });
+            datafields.push({ name: 'TechDesc', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
             // datafields.push({ name: 'ScDesc', type: 'string' });
             // datafields.push({ name: 'TechDesc', type: 'string' });
             // datafields.push({ name: 'UnitId', type: 'string' });
@@ -54,7 +59,7 @@ export class Model {
 
             //columns.push({ text: 'Case', datafield: 'Cs', pinned: true, editable: false, align: 'left', enabletooltips: true, }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'left', enabletooltips: true, });
-            //columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });

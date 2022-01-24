@@ -3,31 +3,46 @@
         "t1": [
             {
                 "MINCOA": 0.0,
-                "MINGAS": 1657.9788162181,
-                "PWRCOA": 0.0,
-                "PWRGAS": 828.9894081091,
-                "PWRTRN": 2584.6535739329,
-                "MINSOL": 282.9949983671,
+                "MINGAS": 6308.8269,
+                "MINHYD": 0.0,
+                "MINSOL": 0.0,
                 "MINWND": 0.0,
-                "PWRSOL": 282.9949983671,
-                "PWRWND": 0.0,
-                "MINHYD": 2014.1295232171,
-                "PWRHYD": 2014.1295232171
+                "PWRCOA": 0.0,
+                "PWRGAS": 3154.4134,
+                "PWRHYD": 0.0,
+                "PWRSOL": 0.0,
+                "PWRTRN": 2867.6486,
+                "PWRWND": 0.0
             }
         ],
         "t2": [
             {
                 "MINCOA": 0.0,
-                "MINGAS": 1657.9788162181,
-                "PWRCOA": 0.0,
-                "PWRGAS": 828.9894081091,
-                "PWRTRN": 2584.6535739329,
-                "MINSOL": 282.9949983671,
+                "MINGAS": 1657.9788,
+                "MINHYD": 2014.1295,
+                "MINSOL": 282.995,
                 "MINWND": 0.0,
-                "PWRSOL": 282.9949983671,
-                "PWRWND": 0.0,
-                "MINHYD": 2014.1295232171,
-                "PWRHYD": 2014.1295232171
+                "PWRCOA": 0.0,
+                "PWRGAS": 828.9894,
+                "PWRHYD": 2014.1295,
+                "PWRSOL": 282.995,
+                "PWRTRN": 2584.6536,
+                "PWRWND": 0.0
+            }
+        ],
+        "t3": [
+            {
+                "MINCOA": 0.0,
+                "MINGAS": 2181.9619,
+                "MINHYD": 1407.0596,
+                "MINSOL": 596.7026,
+                "MINWND": 0.0,
+                "PWRCOA": 0.0,
+                "PWRGAS": 1090.981,
+                "PWRHYD": 1407.0596,
+                "PWRSOL": 596.7026,
+                "PWRTRN": 2270.9459,
+                "PWRWND": 0.0
             }
         ]
     }

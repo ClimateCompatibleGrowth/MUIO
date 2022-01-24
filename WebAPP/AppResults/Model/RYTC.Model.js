@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
 export class Model {
 
@@ -17,10 +18,10 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
 
-            let RYTCgrid = DataModel.RYTCgrid( RYTCdata);            
-            let RYTCchart = DataModel.RYTCchart(genData, RYTCdata);
+            let RYTCgrid = DataModelResult.RYTCgrid( RYTCdata, genData, PARAMETERS);            
+            let RYTCchart = DataModelResult.RYTCchart(genData, RYTCdata);
             //let RYTCchartAll = DataModel.RYTCchartAll(genData, RYTCdata);
-            let ActivityTechs = DataModel.RYTCTechs(RYTCdata);
+            let ActivityTechs = DataModelResult.RYTCTechs(RYTCdata);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
             console.log('RYTCgrid ', RYTCgrid)
@@ -40,8 +41,8 @@ export class Model {
             // datafields.push({ name: 'CommId', type: 'string' });
             datafields.push({ name: 'Comm', type: 'string' });
             // datafields.push({ name: 'ScDesc', type: 'string' });
-            // datafields.push({ name: 'TechDesc', type: 'string' });
-            // datafields.push({ name: 'CommDesc', type: 'string' });
+            datafields.push({ name: 'TechDesc', type: 'string' });
+            datafields.push({ name: 'CommDesc', type: 'string' });
 
             //columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' })

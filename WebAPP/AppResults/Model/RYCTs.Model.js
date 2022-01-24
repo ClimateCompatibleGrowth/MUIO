@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
 export class Model {
 
@@ -14,8 +15,9 @@ export class Model {
             let series = [];
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
-            let RYCTsgrid = DataModel.RYCTsgrid(genData, RYCTsdata, PARAMETERS);
-            let RYCTschart = DataModel.RYCTschart(genData, RYCTsdata);
+            let RYCTsgrid = DataModelResult.RYCTsgrid(RYCTsdata, genData, PARAMETERS);
+            console.log('RYCTsgrid ',RYCTsgrid)
+            let RYCTschart = DataModelResult.RYCTschart(genData, RYCTsdata);
             let timeslices = DataModel.Timeslices(genData);
             let commName = DataModel.CommName(genData);
 
@@ -37,9 +39,9 @@ export class Model {
             // datafields.push({ name: 'CommId', type: 'string' });
             datafields.push({ name: 'Comm', type: 'string' });
             datafields.push({ name: 'Ts', type: 'string' });
-            // datafields.push({ name: 'UnitId', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
             // datafields.push({ name: 'ScDesc', type: 'string' });
-            // datafields.push({ name: 'CommDesc', type: 'string' });
+            datafields.push({ name: 'CommDesc', type: 'string' });
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
                 if (value === null || value === '') {
@@ -55,7 +57,7 @@ export class Model {
             //columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center' });
             columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center' });
-            //columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
             
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });

@@ -2,6 +2,6 @@ dist/
 build/
 API/SOLVERs/
 WebAPP/SOLVERs/
-WebAPP/References/jqwidgets12.0.4/
+WebAPP/References/jqwidgets_13.1/
 WebAPP/References/jqwidgets_12.2/
 app.spec

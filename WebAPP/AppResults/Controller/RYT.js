@@ -101,6 +101,23 @@ export default class RYT {
             Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
+        $("#osy-cases").off('change');
+        $('#osy-cases').on('change', function () {
+            Message.clearMessages();
+
+            //Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);
+            model.case =  this.value;
+            
+            model.srcGrid.localdata = model.gridData[model.param][model.case];
+            $divGrid.jqxGrid('updatebounddata');
+
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[model.param][model.case];
+            configChart.update();
+            //$('#definition').html(`${DEF[model.group][model.param].definition}`);
+        
+        });
+
         //change of ddl parameters
         $('#osy-ryt').on('change', function () {
             Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);

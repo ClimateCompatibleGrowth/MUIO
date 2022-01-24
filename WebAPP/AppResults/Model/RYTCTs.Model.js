@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
 export class Model {
 
@@ -16,22 +17,24 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
 
-            console.log('RYTCTsdata ', RYTCTsdata )
-            console.log('DataModel.RYTCTsgrid(RYTCTsdata) ',DataModel.RYTCTs(RYTCTsdata))
+            
 
-            let RYTCTsgrid = DataModel.RYTCTsgrid(RYTCTsdata);
-            console.log('RYTCTsgrid ',RYTCTsgrid)
-
-            let RYTCTschart = DataModel.RYTCTschart(genData, RYTCTsdata);
-            console.log('RYTCTschart ',RYTCTschart)
-
-            let ActivityTechs = DataModel.RYTCMTsTechs(RYTCTsdata);
-            let ActivityComms = DataModel.RYTCMTsComms(RYTCTsdata);
+            let RYTCTsgrid = DataModelResult.RYTCTsgrid(RYTCTsdata,genData, PARAMETERS);
+            let RYTCTschart = DataModelResult.RYTCTschart(genData, RYTCTsdata);
+            let ActivityTechs = DataModelResult.RYTCMTsTechs(RYTCTsdata);
+            let ActivityComms = DataModelResult.RYTCMTsComms(RYTCTsdata);
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let Timeslices = DataModel.Timeslices(genData);
 
-            console.log('PARAMNAMES ', PARAMNAMES)
+            //console.log('PARAMNAMES ', PARAMNAMES)
+
+            console.log('ActivityTechs ', ActivityTechs)
+            console.log('ActivityComms ', ActivityComms)
+
+            // console.log('RYTCTsdata ', RYTCTsdata )
+            // console.log('RYTCTsgrid ',RYTCTsgrid)
+            // console.log('RYTCTschart ',RYTCTschart)
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(Timeslices, function (id, ts) {
@@ -47,17 +50,17 @@ export class Model {
             datafields.push({ name: 'Comm', type: 'string' });
             datafields.push({ name: 'Ts', type: 'string' });
             // datafields.push({ name: 'MoId', type: 'string' });
-            // datafields.push({ name: 'UnitId', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
             // datafields.push({ name: 'ScDesc', type: 'string' });
-            // datafields.push({ name: 'TechDesc', type: 'string' });
-            // datafields.push({ name: 'CommDesc', type: 'string' });
+            datafields.push({ name: 'TechDesc', type: 'string' });
+            datafields.push({ name: 'CommDesc', type: 'string' });
 
             // columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' });
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center' });
             columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center' });
             // columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
-            // columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
 
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
@@ -98,10 +101,16 @@ export class Model {
             this.case = cs;
             this.years = years;
             this.Timeslices = Timeslices;
-            this.techs = ActivityTechs[param][cs];
+            // this.techs = ActivityTechs[param][cs];
+            // this.tech = ActivityTechs[param][cs][0];
+            // this.comms = ActivityComms[param][cs][this.tech];
+            // this.comm = ActivityComms[param][cs][this.tech][0]; 
+
+            this.techs = ActivityTechs;
             this.tech = ActivityTechs[param][cs][0];
-            this.comms = ActivityComms[param][cs][this.tech];
+            this.comms = ActivityComms;
             this.comm = ActivityComms[param][cs][this.tech][0]; 
+
             this.datafields = datafields;
             this.datafieldsChart = datafieldsChart;
             this.columns = columns;

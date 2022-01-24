@@ -143,33 +143,16 @@ export default class RYTE {
             Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
-        $("#osy-saveRYTEdata").off('click');
-        $("#osy-saveRYTEdata").on('click', function (event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
+        $('#osy-cases').on('change', function () {
+            model.case = this.value;
+            Html.ddlTechsArray(model.techs[model.param][model.case])
+            model.tech = model.techs[model.param][model.case][0];
+            model.srcGrid.localdata = model.gridData[model.param][this.value];
+            $divGrid.jqxGrid('updatebounddata');
 
-            let param = $("#osy-ryt").val();
-            let rytData = $divGrid.jqxGrid('getboundrows');
-            let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'TechId', 'EmisId'].concat(model.years)));
-
-            let saveData = {};
-            $.each(data, function (id, obj) {
-                if (!saveData[obj.ScId]) { saveData[obj.ScId] = []; }
-                saveData[obj.ScId].push(obj);
-                delete obj.ScId;
-            });
-
-            Osemosys.updateData(saveData, param, "RYTE.json")
-                .then(response => {
-                    Message.bigBoxSuccess('Model message', response.message, 3000);
-                    //sync S3
-                    if (Base.AWS_SYNC == 1) {
-                        Base.updateSync(model.casename, "RYTE.json");
-                    }
-                })
-                .catch(error => {
-                    Message.bigBoxDanger('Error message', error, null);
-                })
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[model.param][this.value][model.tech];
+            configChart.update();
         });
 
         $("#osy-ryt").off('change');
@@ -200,16 +183,7 @@ export default class RYTE {
             configChart.update();
         });
 
-        $('#osy-cases').on('change', function () {
-            model.case = this.value;
-            model.srcGrid.localdata = model.gridData[model.param][this.value];
-            $divGrid.jqxGrid('updatebounddata');
 
-            var tech = $("#osy-techs").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[model.param][this.value][tech];
-            configChart.update();
-        });
 
         $(".switchChart").off('click');
         $(".switchChart").on('click', function (e) {

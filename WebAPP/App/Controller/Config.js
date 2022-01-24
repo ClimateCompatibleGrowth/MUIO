@@ -19,14 +19,16 @@ export default class Config {
                 promise.push(casename);
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS); 
+                const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+                promise.push(VARIABLES);
                 return Promise.all(promise);
             // }else{
             //     MessageSelect.init(Config.refreshPage.bind(Config));
             // }
         })
         .then(data => {
-            let [casename, PARAMETERS] = data;
-            let model = new Model(PARAMETERS);
+            let [casename, PARAMETERS, VARIABLES] = data;
+            let model = new Model(PARAMETERS, VARIABLES);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -38,9 +40,12 @@ export default class Config {
     static initPage(model){
         Message.clearMessages();
         Html.title(model.casename, "Parameters", "Year, technology, commodity, emission...");
-        let $divGrid = $('#osy-gridParam');
-        var daGrid = new $.jqx.dataAdapter(model.srcGrid);        
-        Grid.Grid($divGrid, daGrid, model.columns, true)
+        let $divParamGrid = $('#osy-gridParam');
+        let $divVarGrid = $('#osy-gridVar');
+        var daParamGrid = new $.jqx.dataAdapter(model.srcParamGrid);        
+        Grid.Grid($divParamGrid, daParamGrid, model.columnsParam, true)
+        var daVarGrid = new $.jqx.dataAdapter(model.srcVarGrid);        
+        Grid.Grid($divVarGrid, daVarGrid, model.columnsVar, true)
     }
 
     static refreshPage(casename){
@@ -50,11 +55,13 @@ export default class Config {
             promise.push(casename);
             const PARAMETERS = Osemosys.getParamFile();
             promise.push(PARAMETERS); 
+            const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+            promise.push(VARIABLES);
             return Promise.all(promise);
         })
         .then(data => {
-            let [casename, PARAMETERS] = data;
-            let model = new Model(PARAMETERS);
+            let [casename, PARAMETERS, VARIABLES] = data;
+            let model = new Model(PARAMETERS, VARIABLES);
             this.initPage(model);
             this.initEvents(model);
         })
@@ -64,6 +71,8 @@ export default class Config {
     }
 
     static initEvents(model){
+        let $divParamGrid = $('#osy-gridParam');
+        let $divVarGrid = $('#osy-gridVar');
 
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function(e) {
@@ -79,12 +88,13 @@ export default class Config {
         $("#osy-saveData").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
+
             let paramData = $('#osy-gridParam').jqxGrid('getrows');
-            let Data = {};
+            let ParamData = {};
             $.each(paramData, function (id, obj) {
                 let tmp = {};
-                if (typeof(Data[obj.groupId]) === 'undefined') {
-                    Data[obj.groupId] = new Array();
+                if (typeof(ParamData[obj.groupId]) === 'undefined') {
+                    ParamData[obj.groupId] = new Array();
                 }
                 tmp['id'] = obj.id;
                 tmp['value'] = obj.value;
@@ -92,10 +102,26 @@ export default class Config {
                 tmp['enable'] = obj.enable;
                 tmp['menu'] = obj.menu;
                 tmp['unitRule'] = obj.unitRule;
-                Data[obj.groupId].push(tmp);
+                ParamData[obj.groupId].push(tmp);
             });
 
-            Osemosys.saveParamFile(Data)
+            let varData = $('#osy-gridVar').jqxGrid('getrows');
+            let VarData = {};
+            $.each(varData, function (id, obj) {
+                let tmp = {};
+                if (typeof(VarData[obj.groupId]) === 'undefined') {
+                    VarData[obj.groupId] = new Array();
+                }
+                tmp['id'] = obj.id;
+                tmp['value'] = obj.value;
+                tmp['name'] = obj.name;
+                tmp['unitRule'] = obj.unitRule;
+                VarData[obj.groupId].push(tmp);
+            });
+
+            console.log('VarData ', VarData)
+
+            Osemosys.saveParamFile(ParamData, VarData)
             .then(response =>{
                 Message.bigBoxSuccess('Model message', response.message, 3000);
                 //sync S3
@@ -108,6 +134,14 @@ export default class Config {
             })
         });
 
+        //TABS CHANGE EVENT
+        $(".nav-tabs li a").off('click');
+        $('.nav-tabs li a').on("click", function(event, ui) { 
+            var id = $(this).attr('id'); 
+            model.tab = id;  
+            console.log('model.tab ', model.tab);             
+        });
+
         //update rule button
         $(document).undelegate(".updateRule","click");
         $(document).delegate(".updateRule","click",function(e){
@@ -116,6 +150,7 @@ export default class Config {
             var id = $(this).attr('data-id');
             var groupId = $('#osy-gridParam').jqxGrid('getcellvalue', id, 'groupId');
             var paramId = $('#osy-gridParam').jqxGrid('getcellvalue', id, 'id');
+
             $('#unitTitle').html(
                 `<h6 id="paramId" data-paramId ="${paramId}" style="display: inline-block;">
                     <i class="fa-fw fa fa-tags"></i><strong>RULE</strong>
@@ -133,8 +168,50 @@ export default class Config {
                 `
             );
 
-            let unitRule = model.gridData[id]['unitRule'];
+            let unitRule = model.gridParamData[id]['unitRule'];
             // let unitRule = model.paramById[groupId][paramId]['unitRule'];
+
+            Html.renderUnitRules(unitRule, model.unitsDef);    
+
+            let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
+
+            let arrayRule ='';
+            $.each(rule, function (id, rule) {
+                arrayRule += UNITDEFINITION[rule]['name'];
+            });
+            $('#ruleFormula').html(`<p>${arrayRule}</p>`);
+            $('#ruleFormula').show();
+                   
+        });
+
+        $(document).undelegate(".updateVarRule","click");
+        $(document).delegate(".updateVarRule","click",function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            var groupId = $('#osy-gridVar').jqxGrid('getcellvalue', id, 'groupId');
+            var paramId = $('#osy-gridVar').jqxGrid('getcellvalue', id, 'id');
+            
+            $('#unitTitle').html(
+                `<h6 id="paramId" data-paramId ="${paramId}" style="display: inline-block;">
+                    <i class="fa-fw fa fa-tags"></i><strong>RULE</strong>
+                    ${model.varNames[groupId][paramId]}
+                    <small id="groupId" data-groupId="${groupId}"> [${model.RESULTGROUPNAMES[groupId]}]</small>
+                </h6>
+                `
+            );
+            $('#ruleResult').html(
+                `<h6 id="paramId" data-paramId ="${paramId}" style="display: inline-block;">
+                    <i class="fa-fw fa fa-tags"></i><strong>Result formula for</strong>
+                    ${model.varNames[groupId][paramId]}
+                    <small id="groupId" data-groupId="${groupId}"> [${model.RESULTGROUPNAMES[groupId]}]</small>
+                </h6>
+                `
+            );
+
+            let unitRule = model.gridVarData[id]['unitRule'];
+            // let unitRule = model.paramById[groupId][paramId]['unitRule'];
+
             Html.renderUnitRules(unitRule, model.unitsDef);    
 
             let rule = $("#osy-unitRuleSort2").jqxSortable("toArray");
@@ -165,19 +242,31 @@ export default class Config {
                 "cat": arrayRule
             };
 
-            $.each(model.gridData, function (id, obj) {
-                if (obj.id == paramId && obj.groupId == groupId){
-                    obj.unit =jsonLogic.apply(unitRule, model.unitsDef);
-                    obj.unitRule = unitRule;
-                }
+            if(model.tab == 'Params'){
+                $.each(model.gridParamData, function (id, obj) {
+                    if (obj.id == paramId && obj.groupId == groupId){
+                        obj.unit =jsonLogic.apply(unitRule, model.unitsDef);
+                        obj.unitRule = unitRule;
+                    }
+                });
+                model.srcParamGrid.localdata = model.gridParamData;
+                $divParamGrid.jqxGrid('updatebounddata');
+                Message.smallBoxInfo('Rule updated for ', model.paramNames[groupId][paramId], 3000);
+            }else{
+                $.each(model.gridVarData, function (id, obj) {
+                    if (obj.id == paramId && obj.groupId == groupId){
+                        obj.unit =jsonLogic.apply(unitRule, model.unitsDef);
+                        obj.unitRule = unitRule;
+                    }
+                });
+                model.srcVarGrid.localdata = model.gridVarData;
+                $divVarGrid.jqxGrid('updatebounddata');
+                Message.smallBoxInfo('Rule updated for ', model.varNames[groupId][paramId], 3000);
+            }
 
-            });
 
-            let $divGrid = $('#osy-gridParam');
-            model.srcGrid.localdata = model.gridData;
-            $divGrid.jqxGrid('updatebounddata');
             $('#osy-unitRule').modal('toggle');
-            Message.smallBoxInfo('Rule updated for ', model.paramNames[groupId][paramId], 3000); 
+             
         });
 
         $('#osy-unitRuleSort2').on('stop', function () { 
@@ -209,47 +298,6 @@ export default class Config {
          $('#osy-unitRuleSort2').on('remove', function () { 
           })
 
-        // let res = true;
-        // $("#resizeColumns").click(function () {
-        //     if(res){
-        //         $('#osy-gridRYT').jqxGrid('autoresizecolumn', 'Tech');
-        //     }
-        //     else{
-        //         $('#osy-gridRYT').jqxGrid('autoresizecolumns');
-        //     }
-        //     res = !res;        
-        // });
-    
-        // $("#xlsAll").click(function (e) {
-        //     e.preventDefault();
-        //     $("#osy-gridRYT").jqxGrid('exportdata', 'xls', 'RYT');
-        // });
 
-        // $("#decUp").off('click');
-        // $("#decUp").on('click', function(e){
-        //     e.preventDefault();
-        //     e.stopImmediatePropagation();
-        //     model.d++;
-        //     model.decimal = 'd' + parseInt(model.d);
-        //     $('#osy-gridRYT').jqxGrid('refresh');
-        // });
-
-        // $("#decDown").off('click');
-        // $("#decDown").on('click', function(e){
-        //     e.preventDefault();
-        //     e.stopImmediatePropagation();
-        //     model.d--;
-        //     model.decimal = 'd' + parseInt(model.d);
-        //     $('#osy-gridRYT').jqxGrid('refresh');
-        // });
-
-        // $("#showLog").click(function (e) {
-        //     e.preventDefault();
-        //     $('#definition').html(`
-        //         <h5>${DEF[model.group].title}</h5>
-        //         ${DEF[model.group].definition}
-        //     `);
-        //     $('#definition').toggle('slow');
-        // });
     }
 }

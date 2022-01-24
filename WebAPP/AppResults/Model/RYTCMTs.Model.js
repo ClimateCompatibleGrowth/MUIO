@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
 export class Model {
 
@@ -16,18 +17,18 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
 
-            let RYTCMTsgrid = DataModel.RYTCMTsgrid(RYTCMTsdata);
-            let RYTCMTschart = DataModel.RYTCMTschart(genData, RYTCMTsdata);
+            let RYTCMTsgrid = DataModelResult.RYTCMTsgrid(RYTCMTsdata, genData, PARAMETERS);
+            let RYTCMTschart = DataModelResult.RYTCMTschart(genData, RYTCMTsdata);
             
-            let ActivityTechs = DataModel.RYTCMTsTechs(RYTCMTsdata);
-            let ActivityComms = DataModel.RYTCMTsComms(RYTCMTsdata);
+            let ActivityTechs = DataModelResult.RYTCMTsTechs(RYTCMTsdata);
+            let ActivityComms = DataModelResult.RYTCMTsComms(RYTCMTsdata);
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let Timeslices = DataModel.Timeslices(genData);
             let mods = DataModel.Mods(genData)
 
             console.log('RYTCMTsdata ', RYTCMTsdata )
-            console.log('DataModel.RYTCMTsgrid(RYTCMTsdata) ',DataModel.RYTCTs(RYTCMTsdata))
+            //console.log('DataModel.RYTCMTsgrid(RYTCMTsdata) ',DataModel.RYTCTs(RYTCMTsdata))
             console.log('RYTCMTsgrid ',RYTCMTsgrid)
             console.log('RYTCMTschart ',RYTCMTschart)
 
@@ -45,10 +46,10 @@ export class Model {
             datafields.push({ name: 'Comm', type: 'string' });
             datafields.push({ name: 'Ts', type: 'string' });
             datafields.push({ name: 'MoId', type: 'string' });
-            // datafields.push({ name: 'UnitId', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
             // datafields.push({ name: 'ScDesc', type: 'string' });
-            // datafields.push({ name: 'TechDesc', type: 'string' });
-            // datafields.push({ name: 'CommDesc', type: 'string' });
+            datafields.push({ name: 'TechDesc', type: 'string' });
+            datafields.push({ name: 'CommDesc', type: 'string' });
 
             // columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' });
@@ -56,7 +57,7 @@ export class Model {
             columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center', maxwidth: '75' });
             columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center', cellsalign: 'center', maxwidth: '75' });
             
-            // columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
 
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
@@ -97,9 +98,9 @@ export class Model {
             this.case = cs;
             this.years = years;
             this.Timeslices = Timeslices;
-            this.techs = ActivityTechs[param][cs];
+            this.techs = ActivityTechs;
             this.tech = ActivityTechs[param][cs][0];
-            this.comms = ActivityComms[param][cs][this.tech];
+            this.comms = ActivityComms;
             this.comm = ActivityComms[param][cs][this.tech][0]; 
             this.mods = mods;
             this.mod = mods[0];

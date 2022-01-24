@@ -137,6 +137,8 @@ export default class RYTMTs {
         let $divGrid = $('#osy-gridRYTMTs');
         let $divChart = $('#osy-chartRYTMTs');
 
+        console.log(model)
+
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function (e) {
             e.preventDefault();
@@ -147,23 +149,36 @@ export default class RYTMTs {
             Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
+        $("#osy-cases").off('change');
+        $('#osy-cases').on('change', function () {
+            Message.clearMessages();
+
+            model.case =  this.value;
+
+            model.srcGrid.localdata = model.gridData[model.param][model.case];
+            $divGrid.jqxGrid('updatebounddata');
+            
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[model.param][model.case][model.tech][model.mod];
+            configChart.update();
+            //$('#definition').html(`${DEF[model.group][model.param].definition}`);
+        
+        });
+
         $("#osy-ryt").off('change');
         $('#osy-ryt').on('change', function () {
             Message.clearMessages();
-            if (model.RYTMTsdata[this.value]['CS_0'].length === 0) {
-                MessageSelect.activity(RYTMTs.refreshPage.bind(RYTMTs), model.casename);
-                //Message.warning(`There is no data definded for ${model.PARAMNAMES[this.value]} for Model ${model.casename}!`);
-            } else {
-                Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);
-                model.param =  this.value;
-                model.srcGrid.localdata = model.gridData[this.value][model.case];
-                $divGrid.jqxGrid('updatebounddata');
+
+            Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);
+            model.param =  this.value;
+            model.srcGrid.localdata = model.gridData[this.value][model.case];
+            $divGrid.jqxGrid('updatebounddata');
                 
-                var configChart = $divChart.jqxChart('getInstance');
-                configChart.source.records = model.chartData[this.value][model.case][model.tech][model.comm];
-                configChart.update();
-                //$('#definition').html(`${DEF[model.group][model.param].definition}`);
-            }
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[this.value][model.case][model.tech][model.mod];
+            configChart.update();
+            //$('#definition').html(`${DEF[model.group][model.param].definition}`);
+        
         });
 
         $("#osy-techs").off('change');

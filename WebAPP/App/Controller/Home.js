@@ -158,7 +158,7 @@ export default class Home {
         });
 
         //delete case
-        $(document).delegate(".DeletePS","click",function(e){
+        $(document).delegate(".deleteModel","click",function(e){
             var casename = $(this).attr('data-ps');
             $.SmartMessageBox({
                 title : "Confirmation Box!",

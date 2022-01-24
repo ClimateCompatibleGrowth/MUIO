@@ -100,7 +100,7 @@ export class DataModel{
     static TechName(genData){
         let techNames = {};
         $.each(genData['osy-tech'], function (id, obj) {
-            techNames[obj['TechId']] = obj['Tech'];
+            techNames[obj.TechId] = obj['Tech'];
         });
         return techNames;
     }

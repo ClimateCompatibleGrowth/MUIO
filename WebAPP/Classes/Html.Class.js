@@ -61,7 +61,7 @@ export class Html {
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span>
-                                    <span class="DeletePS" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
+                                    <span class="deleteModel" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
                                         <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
                                     </span>
                                 </span>
@@ -113,7 +113,7 @@ export class Html {
                         </span>  
                     </div>
                     <div class="col-md-1">
-                        <span class="DeletePS pull-right" data-ps="${value.Case}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
+                        <span class="deleteCase pull-right" data-ps="${value.Case}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
                             <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
                         </span>
                     </div>
@@ -272,6 +272,24 @@ export class Html {
             } else {
                 container.append('<option value="' + obj.id + '">' + obj.value + '</option>');
             }
+        });
+    }
+
+    static ddlParamsAll(params, param) {
+        var container = $('#osy-params');
+        container.empty();
+        $.each(params, function (group, array) {
+            if (group != 'RT'){
+                $.each(array, function (id, obj) {
+                    if (obj.id == param){
+                        container.append('<option value="' + obj.id + '" selected>'+ obj.value  +'</option>');
+                    }else{
+                        container.append('<option value="' + obj.id + '">'+ obj.value  +'</option>');
+                    }
+                    
+                });
+            }
+
         });
     }
 
@@ -573,8 +591,8 @@ export class Html {
             $("#osy-unitRuleSort1").html(sortableList1);
             $("#osy-unitRuleSort1").jqxSortable();
 
-            // $("#osy-unitRuleSort2").html(sortableList2);
-            // $("#osy-unitRuleSort2").jqxSortable(); 
+            // $("#osy-unitParamRuleSort2").html(sortableList2);
+            // $("#osy-unitParamRuleSort2").jqxSortable(); 
             $("#osy-unitRuleSort1, #osy-unitRuleSort2").jqxSortable({
                 connectWith: ".osy-unitRuleSort",
                 opacity: 0.5,

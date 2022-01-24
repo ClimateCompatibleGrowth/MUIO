@@ -2,9 +2,9 @@
     "osy-cases": [
         {
             "Case": "t1",
-            "CaseId": "CS_8seru",
+            "CaseId": "CS_ypfjs",
             "Desc": "",
-            "Runtime": "Sat Jan 08 2022 00:08:24 GMT+0100 (Central European Standard Time)",
+            "Runtime": "Wed Jan 19 2022 15:07:58 GMT+0100 (Central European Standard Time)",
             "Scenarios": [
                 {
                     "ScenarioId": "SC_0",
@@ -28,9 +28,9 @@
         },
         {
             "Case": "t2",
-            "CaseId": "CS_h9hh1",
+            "CaseId": "CS_ycp8i",
             "Desc": "",
-            "Runtime": "Sat Jan 08 2022 00:08:48 GMT+0100 (Central European Standard Time)",
+            "Runtime": "Mon Jan 24 2022 00:05:46 GMT+0100 (Central European Standard Time)",
             "Scenarios": [
                 {
                     "ScenarioId": "SC_0",
@@ -39,16 +39,16 @@
                     "Active": true
                 },
                 {
-                    "ScenarioId": "SC_p6iyw",
-                    "Scenario": "SC_2",
-                    "Desc": "Base scenario",
-                    "Active": true
-                },
-                {
                     "ScenarioId": "SC_ayjl6",
                     "Scenario": "SC_1",
                     "Desc": "Base scenario",
-                    "Active": true
+                    "Active": false
+                },
+                {
+                    "ScenarioId": "SC_p6iyw",
+                    "Scenario": "SC_2",
+                    "Desc": "Base scenario",
+                    "Active": false
                 }
             ]
         }

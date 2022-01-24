@@ -70,8 +70,8 @@ export default class RYTCMTs {
         Html.title(model.casename, model.PARAMNAMES[model.param], RESULTGROUPNAMES[model.group]);
         Html.ddlCases(model.cases, model.case);
         Html.ddlParams(model.PARAMETERS['RYTCMTs'], model.param);
-        Html.ddlTechsArray(model.techs)
-        Html.ddlCommsArray(model.comms)
+        Html.ddlTechsArray(model.techs[model.param][model.case])
+        Html.ddlCommsArray(model.comms[model.param][model.case][model.tech])
 
         // Html.ddlTechs(model.techs[model.param], model.techs[model.param][0]['TechId']);
         // Html.ddlComms(model.comms[model.param][model.techs[model.param][0]['TechId']], model.comms[model.param][model.techs[model.param][0]['TechId']][0]['CommId']);
@@ -145,30 +145,57 @@ export default class RYTCMTs {
             Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
+        $("#osy-cases").off('change');
+        $('#osy-cases').on('change', function () {
+            Message.clearMessages();
+
+            //Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);
+            model.case =  this.value;
+            model.tech = model.techs[model.param][model.case][0];
+            model.comm = model.comms[model.param][model.case][model.tech][0];
+            Html.ddlTechsArray(model.techs[model.param][model.case]);
+            Html.ddlCommsArray(model.comms[model.param][model.case][model.tech]);
+            
+
+
+            model.srcGrid.localdata = model.gridData[model.param][model.case];
+            $divGrid.jqxGrid('updatebounddata');
+            
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[model.param][model.case][model.tech][model.comm][model.mod];
+            configChart.update();
+            //$('#definition').html(`${DEF[model.group][model.param].definition}`);
+        
+        });
+
         $("#osy-ryt").off('change');
         $('#osy-ryt').on('change', function () {
             Message.clearMessages();
-            if (model.RYTCMTsdata[this.value]['CS_0'].length === 0) {
-                MessageSelect.activity(RYTCMTs.refreshPage.bind(RYTCMTs), model.casename);
-                //Message.warning(`There is no data definded for ${model.PARAMNAMES[this.value]} for Model ${model.casename}!`);
-            } else {
-                Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);
-                model.param =  this.value;
 
-                model.srcGrid.localdata = model.gridData[this.value][model.case];
-                $divGrid.jqxGrid('updatebounddata');
-                
-                var configChart = $divChart.jqxChart('getInstance');
+            Html.title(model.casename, model.PARAMNAMES[this.value], RESULTGROUPNAMES[model.group]);
+            model.param =  this.value;
+            model.tech = model.techs[model.param][model.case][0];
+            model.comm = model.comms[model.param][model.case][model.tech][0];
+            Html.ddlTechsArray(model.techs[model.param][model.case]);
+            Html.ddlCommsArray(model.comms[model.param][model.case][model.tech]);
 
-                configChart.source.records = model.chartData[this.value][model.case][model.tech][model.comm][model.mod];
-                configChart.update();
-                //$('#definition').html(`${DEF[model.group][model.param].definition}`);
-            }
+            model.srcGrid.localdata = model.gridData[this.value][model.case];
+            $divGrid.jqxGrid('updatebounddata');
+            
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[this.value][model.case][model.tech][model.comm][model.mod];
+            configChart.update();
+            //$('#definition').html(`${DEF[model.group][model.param].definition}`);
+        
         });
 
         $("#osy-techs").off('change');
         $('#osy-techs').on('change', function () {
             model.tech = this.value;
+
+            Html.ddlCommsArray(model.comms[model.param][model.case][model.tech]);
+            model.comm = model.comms[model.param][model.case][model.tech][0];
+
             var configChart = $divChart.jqxChart('getInstance');
             console.log(model.param,model.case,this.value,model.comm)
             configChart.source.records = model.chartData[model.param][model.case][this.value][model.comm][model.mod];

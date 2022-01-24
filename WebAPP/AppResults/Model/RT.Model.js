@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 import { GROUPNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
@@ -20,10 +21,10 @@ export class Model {
 
             console.log('RTData ', RTdata)
 
-            let RTgrid = DataModel.RTgrid( RTdata);
+            let RTgrid = DataModelResult.RTgrid( RTdata);
 
             console.log('RTgrid ', RTgrid)
-            let RTchart = DataModel.RTchart(RTdata);
+            let RTchart = DataModelResult.RTchart(RTdata);
             console.log('RTchart ', RTchart)
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 

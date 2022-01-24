@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
 export class Model {
 
@@ -16,14 +17,17 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
 
-            let RYTEMgrid = DataModel.RYTEMgrid(RYTEMdata);
+            let RYTEMgrid = DataModelResult.RYTEMgrid(RYTEMdata, genData, PARAMETERS);
 
-            let RYTEMchart = DataModel.RYTEMchart(genData, RYTEMdata);
-            let ActivityTechs = DataModel.RYTEMTechs(RYTEMdata);            
-            let ActivityEmis = DataModel.RYTEMEmis(RYTEMdata);
+        
+            let RYTEMchart = DataModelResult.RYTEMchart(genData, RYTEMdata);
+            let ActivityTechs = DataModelResult.RYTEMTechs(RYTEMdata);            
+            let ActivityEmis = DataModelResult.RYTEMEmis(RYTEMdata);
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let mods = DataModel.Mods(genData);
+
+
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(mods, function (id, mod) {
@@ -39,11 +43,11 @@ export class Model {
             // datafields.push({ name: 'EmisId', type: 'string' });
             datafields.push({ name: 'Emi', type: 'string' });
             datafields.push({ name: 'MoId', type: 'string' });
-            // datafields.push({ name: 'UnitId', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
 
             // datafields.push({ name: 'ScDesc', type: 'string' });
-            // datafields.push({ name: 'EmiDesc', type: 'string' });
-            // datafields.push({ name: 'TechDesc', type: 'string' });
+            datafields.push({ name: 'EmiDesc', type: 'string' });
+            datafields.push({ name: 'TechDesc', type: 'string' });
 
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
@@ -61,7 +65,7 @@ export class Model {
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' });
             columns.push({ text: 'Emission', datafield: 'Emi', pinned: true, editable: false, align: 'center' });
             columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
-            //columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
             
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });

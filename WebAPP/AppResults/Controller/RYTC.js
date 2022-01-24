@@ -175,9 +175,7 @@ export default class RYTC {
             model.srcGrid.localdata = model.gridData[model.param][this.value];
             $divGrid.jqxGrid('updatebounddata');
 
-            var tech = $("#osy-techs").val();
             var configChart = $divChart.jqxChart('getInstance');
-            console.log(model.param,this.value,model.tech)
             configChart.source.records = model.chartData[model.param][this.value][model.tech];
             configChart.update();
         });

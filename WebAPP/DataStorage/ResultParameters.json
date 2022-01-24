@@ -1,190 +1,395 @@
-
 {
-    "RT":[
+    "RT": [
         {
-            "name": "TotalTechnologyModelPeriodActivity",
+            "id": "TTMPA",
             "value": "Total Technology Model Period Activity",
-            "id": "TTMPA"
+            "name": "TotalTechnologyModelPeriodActivity",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "ActUnitId"
+                    }
+                ]
+            }
         }
-    ],
-    "RYE":[
-        {
-            "name": "AnnualEmissions",
-            "value": "Annual Emissions",
-            "id": "AE"
-        }
-    ],
-    "RYS":[
-        {
-            "name": "NewStorageCapacity",
-            "value": "New Storage Capacity",
-            "id": "NSC"
-        },
-        {
-            "name": "SalvageValueStorage",
-            "value": "Salvage Value Storage",
-            "id": "SVS"
-        }
-
     ],
     "RYT": [
         {
-            "name": "AccumulatedNewCapacity",
+            "id": "ANC",
             "value": "Accumulated New Capacity",
-            "id": "ANC"
+            "name": "AccumulatedNewCapacity",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "CapUnitId"
+                    }
+                ]
+            }
         },
         {
-            "name": "CapitalInvestment",
+            "id": "CI",
             "value": "Capital Investment",
-            "id": "CI"
+            "name": "CapitalInvestment",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "milion"
+                    },
+                    {
+                        "var": "Currency"
+                    }
+                ]
+            }
         },
         {
-            "name": "AnnualFixedOperatingCost",
+            "id": "AFOC",
             "value": "Annual Fixed Operating Cost",
-            "id": "AFOC"
+            "name": "AnnualFixedOperatingCost",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "AnnualVariableOperatingCost",
+            "id": "AVOC",
             "value": "Annual Variable Operating Cost",
-            "id": "AVOC"
+            "name": "AnnualVariableOperatingCost",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "DiscountedSalvageValue",
+            "id": "DSV",
             "value": "Discounted Salvage Value",
-            "id": "DSV"
+            "name": "DiscountedSalvageValue",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "DiscountedTechnologyEmissionsPenalty",
+            "id": "DTEP",
             "value": "Discounted Technology Emissions Penalty",
-            "id": "DTEP"
+            "name": "DiscountedTechnologyEmissionsPenalty",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "NewCapacity",
+            "id": "NC",
             "value": "New Capacity",
-            "id": "NC"
+            "name": "NewCapacity",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "NumberOfNewTechnologyUnits",
+            "id": "NONTU",
             "value": "Number Of New Technology Units",
-            "id": "NONTU"
+            "name": "NumberOfNewTechnologyUnits",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "SalvageValue",
+            "id": "SV",
             "value": "Salvage Value",
-            "id": "SV"
+            "name": "SalvageValue",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "TotalCapacityAnnual",
+            "id": "TCA",
             "value": "Total Capacity Annual",
-            "id": "TCA"
+            "name": "TotalCapacityAnnual",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "TotalTechnologyAnnualActivity",
+            "id": "TTAA",
             "value": "Total Technology Annual Activity",
-            "id": "TTAA"
+            "name": "TotalTechnologyAnnualActivity",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
+        }
+    ],
+    "RYE": [
+        {
+            "id": "AE",
+            "value": "Annual Emissions",
+            "name": "AnnualEmissions",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         }
     ],
     "RYTM": [
         {
-            "name": "TotalAnnualTechnologyActivityByMode",
+            "id": "TATABM",
             "value": "Total Annual Technology Activity By Mode",
-            "id": "TATABM"
+            "name": "TotalAnnualTechnologyActivityByMode",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "ActUnitId"
+                    }
+                ]
+            }
         }
     ],
     "RYTC": [
         {
-            "name": "InputToNewCapacity",
+            "id": "ITNC",
             "value": "Input To New Capacity",
-            "id": "ITNC"
+            "name": "InputToNewCapacity",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "InputToTotalCapacity",
+            "id": "ITTC",
             "value": "Input To Total Capacity",
-            "id": "ITTC"
+            "name": "InputToTotalCapacity",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "ProductionByTechnologyAnnual",
+            "id": "PBTA",
             "value": "Production By Technology Annual",
-            "id": "PBTA"
+            "name": "ProductionByTechnologyAnnual",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "UseByTechnologyAnnual",
+            "id": "UBTA",
             "value": "Use By Technology Annual",
-            "id": "UBTA"
+            "name": "UseByTechnologyAnnual",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         }
     ],
     "RYTE": [
         {
-            "name": "AnnualTechnologyEmission",
+            "id": "ATE",
             "value": "Annual Technology Emission",
-            "id": "ATE"
+            "name": "AnnualTechnologyEmission",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         }
     ],
     "RYTTs": [
         {
-            "name": "RateOfTotalActivity",
+            "id": "ROTA",
             "value": "Rate Of Total Activity",
-            "id": "ROTA"
+            "name": "RateOfTotalActivity",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "ActUnitId"
+                    }
+                ]
+            }
         }
     ],
     "RYCTs": [
         {
-            "name": "Demand",
+            "id": "D",
             "value": "Demand",
-            "id": "D"
+            "name": "Demand",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "Trade",
+            "id": "T",
             "value": "Trade",
-            "id": "T"
+            "name": "Trade",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         }
     ],
-    "RYTEM":[
+    "RYTEM": [
         {
-            "name": "AnnualTechnologyEmissionByMode",
+            "id": "ATEBM",
             "value": "Annual Technology Emission By Mode",
-            "id": "ATEBM"
+            "name": "AnnualTechnologyEmissionByMode",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         }
     ],
     "RYTCTs": [
         {
-            "name": "ProductionByTechnology",
+            "id": "PBT",
             "value": "Production By Technology",
-            "id": "PBT"
+            "name": "ProductionByTechnology",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "CommUnit"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "CapUnitId"
+                    }
+                ]
+            }
         },
         {
-            "name": "RateOfProductionByTechnology",
+            "id": "ROPBT",
             "value": "Rate Of Production By Technology",
-            "id": "ROPBT"
+            "name": "RateOfProductionByTechnology",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "RateOfUseByTechnology",
+            "id": "ROUBT",
             "value": "Rate Of Use By Technology",
-            "id": "ROUBT"
+            "name": "RateOfUseByTechnology",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "UseByTechnology",
+            "id": "UBT",
             "value": "Use By Technology",
-            "id": "UBT"
+            "name": "UseByTechnology",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         }
     ],
-    "RYTMTs":[
+    "RYTMTs": [
         {
-            "name": "RateOfActivity",
+            "id": "ROA",
             "value": "Rate Of Activity",
-            "id": "ROA"
+            "name": "RateOfActivity",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         }
     ],
-    "RYTCMTs":[
+    "RYTCMTs": [
         {
-            "name": "RateOfProductionByTechnologyByMode",
+            "id": "ROPBTBM",
             "value": "Rate Of Production By Technology By Mode",
-            "id": "ROPBTBM"
+            "name": "RateOfProductionByTechnologyByMode",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         },
         {
-            "name": "RateOfUseByTechnologyByMode",
+            "id": "ROUBTBM",
             "value": "Rate Of Use By Technology By Mode",
-            "id": "ROUBTBM"
+            "name": "RateOfUseByTechnologyByMode",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    }
+                ]
+            }
         }
     ]
 }

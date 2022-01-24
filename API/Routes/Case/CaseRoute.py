@@ -168,8 +168,12 @@ def resultsExists():
     try:
         casename = request.json['casename']
         if casename != None:
-            resPath = Path(Config.DATA_STORAGE, casename, 'view')
-            if os.path.isdir(resPath):
+            resPath = Path(Config.DATA_STORAGE, casename, 'view', 'RYTTs.json')
+
+            dataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json ')
+            data = File.readFile(dataPath)
+
+            if os.path.isfile(resPath) and data['osy-cases']:
                 response = True      
             else:
                 response = False 
@@ -182,11 +186,15 @@ def resultsExists():
 @case_api.route("/saveParamFile", methods=['POST'])
 def saveParamFile():
     try:
-        data = request.json['data']
-        configPath = Path(Config.DATA_STORAGE, 'Parameters.json')
-        File.writeFile( data, configPath)
+        ParamData = request.json['ParamData']
+        VarData = request.json['VarData']
+
+        paramPath = Path(Config.DATA_STORAGE, 'Parameters.json')
+        varPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
+        File.writeFile( ParamData, paramPath)
+        File.writeFile( VarData, varPath)
         response = {
-            "message": "You have updated parameters data!",
+            "message": "You have updated parameters & variables data!",
             "status_code": "success"
         }
        

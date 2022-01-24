@@ -1,4 +1,5 @@
-import { DataModel } from "../../Classes/DataModelResult.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
+import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
 export class Model {
 
@@ -20,8 +21,8 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
 
-            let RYTTsgrid = DataModel.RYTTsgrid(RYTTsdata);
-            let RYTTschart = DataModel.RYTTschart(genData, RYTTsdata);
+            let RYTTsgrid = DataModelResult.RYTTsgrid(RYTTsdata, genData, PARAMETERS);
+            let RYTTschart = DataModelResult.RYTTschart(genData, RYTTsdata);
             let timeslices = DataModel.Timeslices(genData);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let techName = DataModel.TechName(genData);
@@ -39,13 +40,14 @@ export class Model {
             // datafields.push({ name: 'Sc', type: 'string' });
             // datafields.push({ name: 'TechId', type: 'string' });
             datafields.push({ name: 'Tech', type: 'string' });
-            // datafields.push({ name: 'ScDesc', type: 'string' });
-            // datafields.push({ name: 'TechDesc', type: 'string' });
+            datafields.push({ name: 'UnitId', type: 'string' });
+            datafields.push({ name: 'TechDesc', type: 'string' });
             datafields.push({ name: 'Ts', type: 'string' });
 
             //columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' })
-            columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center' })
+            columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
                 if (value === null || value === '') {
