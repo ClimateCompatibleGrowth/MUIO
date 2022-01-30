@@ -29,21 +29,6 @@
                 "PWRTRN": 2584.6536,
                 "PWRWND": 0.0
             }
-        ],
-        "t3": [
-            {
-                "MINCOA": 0.0,
-                "MINGAS": 2181.9619,
-                "MINHYD": 1407.0596,
-                "MINSOL": 596.7026,
-                "MINWND": 0.0,
-                "PWRCOA": 0.0,
-                "PWRGAS": 1090.981,
-                "PWRHYD": 1407.0596,
-                "PWRSOL": 596.7026,
-                "PWRTRN": 2270.9459,
-                "PWRWND": 0.0
-            }
         ]
     }
 }

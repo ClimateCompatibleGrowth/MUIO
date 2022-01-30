@@ -167,19 +167,20 @@ def getParamFile():
 def resultsExists():
     try:
         casename = request.json['casename']
-        # if casename != None:
-        #     resPath = Path(Config.DATA_STORAGE, casename, 'view', 'RYTTs.json')
+        if casename != None:
+            resPath = Path(Config.DATA_STORAGE, casename, 'view', 'RYTTs.json')
 
-        #     dataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json ')
-        #     data = File.readFile(dataPath)
+            dataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json ')
+            data = File.readFile(dataPath)
 
-        #     if os.path.isfile(resPath) and data['osy-cases']:
-        #         response = True      
-        #     else:
-        #         response = False 
-        # else:
-        #     response = None
-        response = True
+            # if os.path.isfile(resPath) and data['osy-cases']:
+            if data['osy-cases']:
+                response = True      
+            else:
+                response = False 
+        else:
+            response = None
+        #response = True
         return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404

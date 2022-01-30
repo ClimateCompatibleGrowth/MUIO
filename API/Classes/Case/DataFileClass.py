@@ -534,9 +534,10 @@ class DataFile(Osemosys):
                     path = Path(self.viewFolderPath, group+'.json')
                     jsonFile = File.readFile(path)
                     for obj in array:
-                        del jsonFile[obj['id']][caserunname]
+                        if caserunname in jsonFile[obj['id']]:
+                            del jsonFile[obj['id']][caserunname]
 
-            File.writeFile(jsonFile, path)
+                    File.writeFile(jsonFile, path)
                     
 
 
