@@ -20,6 +20,8 @@ export class Base {
         return apiUrl
     }
 
+
+    
     static initSyncS3() {
         return new Promise((resolve, reject) => {
             $.ajax({
