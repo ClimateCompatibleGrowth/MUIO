@@ -170,11 +170,11 @@ def resultsExists():
         if casename != None:
             resPath = Path(Config.DATA_STORAGE, casename, 'view', 'RYTTs.json')
 
-            dataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json ')
+            dataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json')
             data = File.readFile(dataPath)
 
-            # if os.path.isfile(resPath) and data['osy-cases']:
-            if data['osy-cases']:
+            if os.path.isfile(resPath) and data['osy-cases']:
+            #if data['osy-cases']:
                 response = True      
             else:
                 response = False 
