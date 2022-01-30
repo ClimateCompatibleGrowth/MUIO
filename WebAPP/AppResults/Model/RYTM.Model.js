@@ -20,14 +20,23 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
             
+            console.log('RYTdata ', RYTMdata)
+
+            console.log('RYT ', DataModelResult.RYTM( RYTMdata))
+
             let RYTMgrid = DataModelResult.RYTMgrid(RYTMdata, genData, PARAMETERS);
+
+            console.log('RYTMgrid ', RYTMgrid)
             let RYTMchart = DataModelResult.RYTMchart(genData, RYTMdata);
+
+            console.log('RYTMchart ', RYTMchart)
+            
             let mods = DataModel.Mods(genData);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
             
-            console.log('RYT ', DataModelResult.RYTM( RYTMdata))
-            console.log('RYTMgrid ', RYTMgrid)
+           
+            
             console.log('RYTMchart ', RYTMchart)
             console.log('PARAMNAMES ', PARAMNAMES)
 

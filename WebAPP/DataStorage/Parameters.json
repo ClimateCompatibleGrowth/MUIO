@@ -195,7 +195,7 @@
         {
             "id": "YS",
             "value": "Year Split",
-            "default": 0.0104,
+            "default": 1,
             "enable": true,
             "menu": 1,
             "unitRule": {
@@ -217,7 +217,7 @@
         {
             "id": "AF",
             "value": "Availability Factor",
-            "default": 1.01,
+            "default": 1,
             "enable": true,
             "menu": 1,
             "unitRule": {

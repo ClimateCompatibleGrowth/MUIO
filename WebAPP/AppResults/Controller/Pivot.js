@@ -10,6 +10,7 @@ import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "../../App/Controller/MessageSelect.js"
 import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 
+
 export default class Pivot {
     static onLoad() {
         Base.getSession()

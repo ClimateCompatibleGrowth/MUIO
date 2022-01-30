@@ -1,0 +1,20 @@
+/*!
+    *
+    * Wijmo Library 5.20213.824
+    * http://wijmo.com/
+    *
+    * Copyright(c) GrapeCity, Inc.  All rights reserved.
+    *
+    * Licensed under the GrapeCity Commercial License.
+    * sales@wijmo.com
+    * wijmo.com/products/wijmo-5/license/
+    *
+    */
+
+// flex-chart.finance
+.wj-flexchart {
+    .fibonacci-arcs path.wj-state-selected {
+        stroke-dasharray: 5 10;
+        stroke-linecap: butt;
+    }
+}

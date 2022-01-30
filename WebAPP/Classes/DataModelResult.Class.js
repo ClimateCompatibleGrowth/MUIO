@@ -326,7 +326,13 @@ export class DataModelResult{
                     chunk['Year'] = year;
                     $.each(genData['osy-tech'], function (idT, tech) {
                     //$.each( data[param][cs], function (tech, obj2) {
-                        chunk[tech.Tech] = data[param][cs][tech.Tech][year]   
+                        
+                        if (data[param][cs][tech.Tech]){
+                            //console.log(param, cs, tech.Tech, year)
+                            chunk[tech.Tech] = data[param][cs][tech.Tech][year];
+                        }else{
+                            //chunk[tech.Tech] = null
+                        }
                         //chunk[tech] = data[param][cs][tech][year]  
                     });        
                     chartData[cs].push(chunk); 
@@ -468,7 +474,12 @@ export class DataModelResult{
                         let chunk = {};
                         chunk['Year'] = year;
                         $.each(genData['osy-tech'], function (idT, tech) {     
-                            chunk[tech.Tech] = RYTM[param][cs][tech.Tech][mo][year];
+                            if(RYTM[param][cs][tech.Tech]){
+                                chunk[tech.Tech] = RYTM[param][cs][tech.Tech][mo][year];
+                            }else{
+                                //chunk[tech.Tech] = null;
+                            }
+                            
                         // $.each(genData['osy-scenarios'], function (idS, sc) {
                         //     chunk[sc.ScenarioId] = RYTM[param][sc.ScenarioId][tech.TechId][mo][year];
                         // });

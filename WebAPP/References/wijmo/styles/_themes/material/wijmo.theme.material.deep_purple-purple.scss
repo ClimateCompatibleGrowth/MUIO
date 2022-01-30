@@ -1,0 +1,24 @@
+/*!
+    *
+    * Wijmo Library 5.20213.824
+    * http://wijmo.com/
+    *
+    * Copyright(c) GrapeCity, Inc.  All rights reserved.
+    *
+    * Licensed under the GrapeCity Commercial License.
+    * sales@wijmo.com
+    * wijmo.com/products/wijmo-5/license/
+    *
+    */
+
+////////////////////////////////////////////////////////////////
+// material theme
+//
+@import "../../misc/constants";
+
+// Primary, accent colors
+$mdl-primary: $mdl-deep-purple !default;
+$mdl-accent: $mdl-purple !default;
+
+@import "../wijmo.theme.material.scss";
+

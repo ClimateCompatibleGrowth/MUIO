@@ -104,6 +104,17 @@ export class Routes {
                 $( ".osy-content" ).load( 'App/View/Versions.html');
             });
 
+            crossroads.addRoute('/PivotWijmo', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                //import ('../../References/wijmo/styles/wijmo.min.css');
+                import('../AppResults/Controller/PivotWijmo.js')
+                .then(PivotWijmo => {
+                    $( ".osy-content" ).load( 'AppResults/View/PivotWijmo.html', function() {
+                        PivotWijmo.default.onLoad();
+                    });
+                });
+            });
+
             crossroads.addRoute('/Pivot', function() {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import('../AppResults/Controller/Pivot.js')

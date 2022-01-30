@@ -48,7 +48,7 @@ export class Model {
             // datafields.push({ name: 'UnitId', type: 'string' });
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
-                if (value === null || value === '') {
+                if (value == null || value === '') {
                     return '<span style="margin: 4px; float:right; ">n/a</span>';
                 } else {
                     var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);

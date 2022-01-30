@@ -1,0 +1,29 @@
+/*!
+    *
+    * Wijmo Library 5.20213.824
+    * http://wijmo.com/
+    *
+    * Copyright(c) GrapeCity, Inc.  All rights reserved.
+    *
+    * Licensed under the GrapeCity Commercial License.
+    * sales@wijmo.com
+    * wijmo.com/products/wijmo-5/license/
+    *
+    */
+
+// wijmo.grid.selector
+
+.wj-flexgrid {
+    .wj-cell {
+        input.wj-column-selector {
+            margin: 4px;
+            vertical-align: bottom;
+            outline: none;
+
+            &.wj-column-selector-group {
+                transform: scale(1.25);
+                margin-right: 6px;
+            }
+        }
+    }
+}
