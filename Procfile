@@ -1,1 +1,1 @@
-web: python API/app.py 
+web: gunicorn --pythonpath API app:app --timeout 360 --workers 2 --threads 50
