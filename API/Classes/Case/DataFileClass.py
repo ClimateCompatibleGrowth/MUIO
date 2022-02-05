@@ -556,6 +556,50 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
+    def saveView(self, data, param):
+        try:
+
+            viewDataPath = Path(Config.DATA_STORAGE,self.case,'view', 'viewDefinitions.json')
+
+            viewData = File.readFile(viewDataPath)
+            viewData["osy-views"][param].append(data)
+
+            File.writeFile( viewData, viewDataPath)
+
+            response = {
+                "message": "You have created view!",
+                "status_code": "success"
+            }  
+
+            return response
+            # urllib.request.urlretrieve(self.dataFile, dataFile)
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+
+    def updateViews(self, data, param):
+        try:
+
+            viewDataPath = Path(Config.DATA_STORAGE,self.case,'view', 'viewDefinitions.json')
+
+            viewData = File.readFile(viewDataPath)
+            viewData["osy-views"][param] = data
+
+            File.writeFile( viewData, viewDataPath)
+
+            response = {
+                "message": "You have updated views!",
+                "status_code": "success"
+            }  
+
+            return response
+            # urllib.request.urlretrieve(self.dataFile, dataFile)
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+
     def readDataFile( self, caserunname ):
         try:
             

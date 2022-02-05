@@ -1,7 +1,7 @@
 import { Message } from "../../Classes/Message.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
-import { Model } from "../Model/Pivot.Model.js";
+import { Model } from "../Model/PivotWijmo.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
@@ -9,6 +9,7 @@ import { GROUPNAMES } from "../../Classes/Const.Class.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "../../App/Controller/MessageSelect.js"
 import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
+import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
 
 
 export default class Pivot {
@@ -25,6 +26,8 @@ export default class Pivot {
                     promise.push(resData);
                     const PARAMETERS = Osemosys.getParamFile('ResultParameters.json');
                     promise.push(PARAMETERS);
+                    const VIEWS = Osemosys.getResultData(casename,'viewDefinitions.json');
+                    promise.push(VIEWS);
                     const DATA = Osemosys.getResultData(casename, 'RYT.json');
                     promise.push(DATA);
                     return Promise.all(promise);
@@ -39,8 +42,9 @@ export default class Pivot {
                 }
             })
             .then(data => {      
-                let [casename, genData, resData, PARAMETERS, DATA] = data;
-                let model = new Model(casename, genData, resData, PARAMETERS, DATA);
+                let [casename, genData, resData, PARAMETERS, VIEWS, DATA] = data;
+                console.log('views ', VIEWS)
+                let model = new Model(casename, genData, resData, PARAMETERS, DATA, VIEWS);
                 this.initPage(model);
                 this.initEvents(model);
             })
@@ -62,6 +66,10 @@ export default class Pivot {
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.group][model.param], 'pivot');
         Html.ddlParamsAll(model.PARAMETERS, model.param);
+        //console.log(model.VIEWS[model.param], model.PARAMETERS[model.group][0]['id'])
+        Html.ddlViews(model.VIEWS[model.param]);
+
+
         //Grid.pivotGrid(model.pivotData);
 
         let app = {};
@@ -86,10 +94,12 @@ export default class Pivot {
             
         });
         app.pivotChart = new wijmo.olap.PivotChart('#pivotChart', {
+            //header: 'Country GDP',
             itemsSource: app.panel,
             showLegend: 'Auto',
             showTitle: false,
-            legendPosition: 4
+            legendPosition: 4,
+            stacking: 0,            
             //rotated: false
             //palette: wijmo.chart.Palettes.dark
         });
@@ -98,13 +108,20 @@ export default class Pivot {
             itemsSource: app.chartTypes,
             displayMemberPath: 'name',
             selectedValuePath: 'value',
-            selectedIndexChanged: function (s, e) {
-                    
+            selectedIndexChanged: function (s, e) {      
                 if(s.selectedValue == 1){
                     console.log(s.selectedValue)
-                    app.pivotChart.rotated = 'true';
+                    app.pivotChart.rotated = 1;
+                    //app.pivotChart.stacking= 1;
                 }
                 app.pivotChart.chartType = s.selectedValue;
+            }
+        });
+
+        app.cmbStackedChart  = new wijmo.input.ComboBox('#cmbStackedChart', {
+            itemsSource: 'None,Stacked,Stacked100pc'.split(','),
+            selectedIndexChanged: function(s, e) {
+                app.pivotChart.stacking = s.text;
             }
         });
 
@@ -114,34 +131,49 @@ export default class Pivot {
         ng.rowFields.push('Case', 'Tech');
         ng.columnFields.push('Year');
         ng.valueFields.push('Value');
-        ng.showRowTotals = 'Subtotals';
-        ng.showColumnTotals = 'Subtotals';
+        ng.showRowTotals = 'None';
+        ng.showColumnTotals = 'None';
 
+        model.DEFAULTVIEW = ng.viewDefinition;
 
+        //console.log('view derf ', ng.viewDefinition)
 
             // toggle showRowTotals
         document.getElementById('showRowTotals').addEventListener('click', function (e) {
-            console.log('totas')
-            // ng.showRowTotals = e.target.checked ?
-            //     wjOlap.ShowTotals.Subtotals : wjOlap.ShowTotals.None;
-            console.log('vew ', ng.viewDefinition)
             ng.showRowTotals = e.target.checked ?
                 wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
         });
 
+        document.getElementById('showColumnTotals').addEventListener('click', function (e) {
+            ng.showColumnTotals = e.target.checked ?
+                wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
+        });
+
+        // document.getElementById('stackedChart').addEventListener('click', function (e) {
+        //     app.pivotChart.stacking = e.target.checked ?
+        //         'Stacked' : 'None';
+        // });
+
+        
+        // document.getElementById('rotateChart').addEventListener('click', function (e) {
+        //     console.log('e.target.checked', e.target.checked)
+        //     app.pivotChart.rotated = e.target.checked;
+        // });
 
         $("#osy-params").off('change');
         $('#osy-params').on('change', function () {
             Message.clearMessages();
             model.group = model.VARGROUPS[this.value]['group'];
             model.param = this.value;
-            console.log('model.param ', model.param);
-            console.log('param change')
+            // console.log('model.param ', model.param);
+            // console.log('param change')
+            // console.log('views ', model.VIEWS[model.param])
 
             Osemosys.getResultData(model.casename, model.group+'.json')
             .then(DATA => {
 
                 Html.title(model.casename, model.PARAMNAMES[model.group][model.param], 'pivot');
+                Html.ddlViews(model.VIEWS[model.param]);
 
                 console.log('DATA ', DATA);
                 let pivotData = DataModelResult.getPivot(DATA[model.param], model.genData['osy-years']);
@@ -151,16 +183,21 @@ export default class Pivot {
 
                 ng.itemsSource = model.pivotData
 
-                ng.rowFields.push('Case', 'Tech');
-                ng.columnFields.push('Year');
-                ng.valueFields.push('Value');
+                if (model.param == 'D' || model.param == 'T'){
+                    ng.rowFields.push('Case', 'Comm');
+                    ng.columnFields.push('Year');
+                    ng.valueFields.push('Value');
+                }else{
+                    ng.rowFields.push('Case', 'Tech');
+                    ng.columnFields.push('Year');
+                    ng.valueFields.push('Value');
+                }
                 
             })
             .catch(error => {
                 Message.danger(error.message);
             });            
         });
-
 
             // NOTE: requires jszip, wijmo.xlsx, and wijmo.grid.xlsx
         $("#xlsExport").off('click');
@@ -180,6 +217,119 @@ export default class Pivot {
             book.save('PivotGrid.xlsx');
         });
 
+            // export the chart to an image
+        $("#pngExport").off('click');
+        $('#pngExport').on('click', function () {
+            app.pivotChart.saveImageToFile('FlexChart.png');
+        });
+
+        $("#createView").jqxValidator({
+            hintType: 'label',
+            animationDuration: 500,
+            rules: [
+                { input: '#osy-viewname', message: "View name is required field!", action: 'keyup', rule: 'required' },
+                {
+                    input: '#osy-viewname', message: "Entered view name is not allowed!", action: 'keyup', rule: function (input, commit) {
+                        var casename = $("#osy-viewname").val();
+                        var result = (/^[a-zA-Z0-9-_ ]*$/.test(casename));
+                        return result;
+                    }
+                }
+            ]
+        });
+
+        $("#btnSaveView").off('click');
+        $("#btnSaveView").on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            $("#createView").jqxValidator('validate')
+        });
+
+        $("#createView").off('validationSuccess');
+        $("#createView").on('validationSuccess', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            var viewname = $("#osy-viewname").val();
+            var desc = $("#osy-viewdesc").val();
+            let param = model.param;
+            let viewId = DefaultObj.getId('VIEW');
+
+            let POSTDATA = {
+                "osy-viewId": viewId,
+                "osy-viewname": viewname,
+                "osy-viewdesc": desc,
+                "osy-viewdef": ng.viewDefinition
+            }
+
+            Osemosys.saveView(model.casename, POSTDATA, param)
+                .then(response => {
+
+                    Message.clearMessages();
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
+                    model.VIEWS[model.param].push(POSTDATA);
+                    Html.ddlViews(model.VIEWS[model.param]);
+                    $('#createView').modal('toggle');
+                
+                })
+                .catch(error => {
+                    Message.bigBoxDanger('Error message', error, null);
+                })
+        });
+
+        $("#deleteView").off('click');
+        $("#deleteView").on('click', function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            //update model
+            if ( model.VIEW != 'null'){
+                $.each(model.VIEWS[model.param], function (id, obj) {
+                    console.log('obj ', obj)
+                    if(obj['osy-viewId'] == model.VIEW){
+                        model.VIEWS[model.param].splice(id, 1)
+                        return false;
+                    }
+                });
+                Html.ddlViews(model.VIEWS[model.param]);
+            }
+
+            Osemosys.updateViews(model.casename, model.VIEWS[model.param], model.param)
+                .then(response => {
+
+                    Message.clearMessages();
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
+                
+                })
+                .catch(error => {
+                    Message.bigBoxDanger('Error message', error, null);
+                })
+        });
+
+        $("#loadView").off('click');
+        $("#loadView").on('click', function (event) {
+            //console.log('model.VIEWS ', model.VIEWS)
+            // let view = $("#osy-views").val();
+            // model.VIEW = view;
+            console.log('model.VIEW ', model.VIEW)
+            if ( model.VIEW == 'null'){
+                ng.viewDefinition = model.DEFAULTVIEW;
+                app.pivotChart.header = '';
+            }else{
+                $.each(model.VIEWS[model.param], function (id, obj) {
+                    if(obj['osy-viewId'] == model.VIEW){
+                        ng.viewDefinition = obj['osy-viewdef'];
+                        app.pivotChart.header = obj['osy-viewname']
+                        //break;
+                    }
+                });
+            }
+
+        });
+
+        $("#osy-views").off('change');
+        $('#osy-views').on('change', function () {
+            model.VIEW = this.value;
+        });
 
     }
 
@@ -194,14 +344,16 @@ export default class Pivot {
                 promise.push(resData);
                 const PARAMETERS = Osemosys.getParamFile('ResultParameters.json');
                 promise.push(PARAMETERS);
+                const VIEWS = Osemosys.getResultData(casename, 'viewDefinitions.json');
+                promise.push(VIEWS);
                 const DATA = Osemosys.getResultData(casename, 'RYT.json');
                 promise.push(DATA);
                 return Promise.all(promise);
             })
             .then(data => {
                 
-                let [casename, genData, resData, PARAMETERS, DATA] = data;
-                let model = new Model(casename, genData, resData, PARAMETERS, DATA);
+                let [casename, genData, resData, PARAMETERS, VIEWS, DATA] = data;
+                let model = new Model(casename, genData, resData, PARAMETERS, DATA, VIEWS);
                 this.initPage(model);
                 this.initEvents(model);
             })
@@ -358,11 +510,6 @@ export default class Pivot {
             var myPivotGridCells = $('#osy-pivotGrid').jqxPivotGrid('getPivotCells');
             console.log(myPivotGridCells)
         });
-
-
-
-
-
 
 
 

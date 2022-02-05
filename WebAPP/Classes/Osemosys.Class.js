@@ -87,6 +87,46 @@ export class Osemosys {
         });
     }
 
+    static saveView(casename, data, param) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "saveView",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, "data": data, "param": param }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static updateViews(casename, data, param) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "updateViews",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, "data": data, "param": param }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
     static generateDataFile(casename, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({

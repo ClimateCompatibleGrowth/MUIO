@@ -156,7 +156,7 @@ export default class DataFile {
                 })
         });
 
-        $("#osy-caseForm").jqxValidator({
+        $("#osy-caseRun").jqxValidator({
             hintType: 'label',
             animationDuration: 500,
             rules: [
@@ -176,7 +176,7 @@ export default class DataFile {
         $("#osy-createCaseRun").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            $("#osy-caseForm").jqxValidator('validate')
+            $("#osy-caseRun").jqxValidator('validate')
         });
 
         $("#osy-updateCaseRun").off('click');
@@ -184,7 +184,7 @@ export default class DataFile {
             event.preventDefault();
             event.stopImmediatePropagation();
             update = true;
-            $("#osy-caseForm").jqxValidator('validate')
+            $("#osy-caseRun").jqxValidator('validate')
         });
 
         $("#osy-newCaseRun").off('click');
@@ -208,8 +208,8 @@ export default class DataFile {
             $(".Results").hide();
         });
 
-        $("#osy-caseForm").off('validationSuccess');
-        $("#osy-caseForm").on('validationSuccess', function (event) {
+        $("#osy-caseRun").off('validationSuccess');
+        $("#osy-caseRun").on('validationSuccess', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             Pace.restart();

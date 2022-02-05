@@ -1,3 +1,4 @@
+from tokenize import group
 from flask import Blueprint, jsonify, request, session
 import os
 from pathlib import Path
@@ -250,6 +251,15 @@ def saveCase():
         casename = genData['osy-casename']
         case = session.get('osycase', None)
 
+        configPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
+        vars = File.readParamFile(configPath)
+        viewDef = {}
+        for group, lists in vars.items():
+            for list in lists:
+                viewDef[list['id']] = []
+
+
+
         #ako je izabran case, edit mode
         if case != None and case != '':
             genDataPath = Path(Config.DATA_STORAGE, case, "genData.json")
@@ -258,6 +268,7 @@ def saveCase():
             resPath = Path(Config.DATA_STORAGE,case,'res')
             viewPath = Path(Config.DATA_STORAGE,case,'view')
             resDataPath = Path(Config.DATA_STORAGE,case,'view','resData.json')
+            viewDataPath = Path(Config.DATA_STORAGE,case,'view','viewDefinitions.json')
             if not os.path.exists(resPath):
                 os.makedirs(resPath, mode=0o777, exist_ok=False)
             if not os.path.exists(viewPath):
@@ -266,6 +277,13 @@ def saveCase():
                     "osy-cases":[]
                 }
                 File.writeFile( resData, resDataPath)
+
+                viewData = {
+                    "osy-views": viewDef
+                }
+                File.writeFile( viewData, viewDataPath)
+
+                
 
             #edit case sa istim imenom
             if case == casename:
@@ -315,6 +333,7 @@ def saveCase():
                 resPath = Path(Config.DATA_STORAGE,casename,'res')
                 viewPath = Path(Config.DATA_STORAGE,casename,'view')
                 resDataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json')
+                viewDataPath = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
                 if not os.path.exists(resPath):
                     os.makedirs(resPath, mode=0o777, exist_ok=False)
                 if not os.path.exists(viewPath):
@@ -323,6 +342,11 @@ def saveCase():
                         "osy-cases":[]
                     }
                     File.writeFile( resData, resDataPath)
+
+                    viewData = {
+                        "osy-views": viewDef
+                    }
+                    File.writeFile( viewData, viewDataPath)
 
                 response = {
                     "message": "You have created new case!",

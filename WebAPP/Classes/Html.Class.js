@@ -275,6 +275,20 @@ export class Html {
         });
     }
 
+    static ddlViews(views) {
+        var container = $('#osy-views');
+        container.empty();
+        container.append('<option value="null" selected>Default view</option>');
+        $.each(views, function (id, obj) {
+           // console.log('obj ', obj)
+            // if (obj['osy-viewId'] == view) {
+            //     container.append('<option value="' + obj['osy-viewId'] + '" selected>' + obj['osy-viewname'] + '</option>');
+            // } else {
+                container.append('<option value="' + obj['osy-viewId'] + '">' + obj['osy-viewname'] + '</option>');
+            //}
+        });
+    }
+
     static ddlParamsAll(params, param) {
         var container = $('#osy-params');
         container.empty();
