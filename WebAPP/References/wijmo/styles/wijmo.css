@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.824
+    * Wijmo Library 5.20213.834
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -1629,6 +1629,8 @@
 }
 
 .wj-flexgrid .wj-cell label {
+  display: inline-block;
+  max-width: 100%;
   margin: 0;
   font-weight: inherit;
   line-height: 1em;
@@ -2028,6 +2030,7 @@
   transform: scale(20);
   cursor: pointer;
   content: '\2605';
+  height: 100%;
 }
 
 .wj-flexgrid .wj-cell.wj-cell-maker.wj-radio-map label:hover {

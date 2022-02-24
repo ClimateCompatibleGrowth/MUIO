@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.824
+    * Wijmo Library 5.20213.834
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -183,6 +183,8 @@
 
         // fix for C1WEB-27716 (auto-size rows and boolean cells)
         label {
+            display: inline-block; // WJM-20982
+            max-width: 100%;
             margin: 0;
             font-weight: inherit;
             line-height: 1em; // WJM-19514

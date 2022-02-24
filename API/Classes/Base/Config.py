@@ -1,15 +1,19 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import platform
 
 #load environment variables
 load_dotenv()
+
+SYSTEM = platform.system()
 
 S3_BUCKET = os.environ.get("S3_BUCKET")
 S3_KEY = os.environ.get("S3_KEY")
 S3_SECRET = os.environ.get("S3_SECRET")
 
 UPLOAD_FOLDER = Path('WebAPP')
+WebAPP_PATH = Path('WebAPP')
 ALLOWED_EXTENSIONS = set(['zip', 'application/zip'])
 DATA_STORAGE = Path("WebAPP", 'DataStorage')
 CLASS_FOLDER = Path("WebAPP", 'Classes')

@@ -11,6 +11,8 @@ import { MessageSelect } from "../../App/Controller/MessageSelect.js"
 import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
 
+//import * as wijmo from '@grapecity/wijmo';
+
 
 export default class Pivot {
     static onLoad() {
@@ -43,7 +45,7 @@ export default class Pivot {
             })
             .then(data => {      
                 let [casename, genData, resData, PARAMETERS, VIEWS, DATA] = data;
-                console.log('views ', VIEWS)
+                //console.log('views ', VIEWS)
                 let model = new Model(casename, genData, resData, PARAMETERS, DATA, VIEWS);
                 this.initPage(model);
                 this.initEvents(model);
@@ -61,7 +63,7 @@ export default class Pivot {
 
     static initPage(model) {
         Message.clearMessages();
-        console.log('model ', model);
+        //console.log('model ', model);
 
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.group][model.param], 'pivot');
@@ -72,6 +74,13 @@ export default class Pivot {
 
         //Grid.pivotGrid(model.pivotData);
 
+        // var key = 'GrapeCity-Internal-Use-Only,127.0.0.1,819193671948885#B0ZZsxWYmpjIyNHZisnOiwmbBJye0ICRiwiI34zZxUENntyT4MGbqlWaVl4ZJJESrhjYzcGS9kEcNdzbQ3STwd7TspmVEtCa0ZWSz8GcY5kVIlzKwwkZFpFeaNWayF6TvkVM5NzdPh7Ltt4bOVVQo9GN6dVWxJHWBhXTvUXM7YVTBlUYShFWoR4cRR7Sw4WZLxGW52WNStkcuJmZBJ4NnlkQmdEUFdlV8dXemJjRNpncxc6dwUDN8tCTodDRxMnT6h6Yih6Q8QEcXx6cXx6TXxEaHlGU9NHTI56V8kVaSREaCdHU9VHWRlzRutyRipGcBx6K7kmercWN7ZFdoBja9sSSMhEUINzVKRGWwEjMXd6c7EHZvRjVYdnYURleRRlQPBXbaNndWZTZ6ZHbiNVe9M6Kt3kZHNEONpkUHhmcPR4R7sSMP5UbCVjeLNDRIlVept6dntyNm3iSRVzM0h6Y6U7StN4aUNUbldlcpRzYOJ6QyllI0IyUiwiIBZUO5I4MyEjI0ICSiwSMzgDM8AjMwcTM0IicfJye#4Xfd5nIJBjMSJiOiMkIsIibvl6cuVGd8VEIgQXZlh6U8VGbGBybtpWaXJiOi8kI1xSfiUTSOFlI0IyQiwiIu3Waz9WZ4hXRgAicldXZpZFdy3GclJFIv5mapdlI0IiTisHL3JyS7gDSiojIDJCLi86bpNnblRHeFBCI73mUpRHb55EIv5mapdlI0IiTisHL3JCNGZDRiojIDJCLi86bpNnblRHeFBCIQFETPBCIv5mapdlI0IiTisHL3JyMDBjQiojIDJCLiUmcvNEIv5mapdlI0IiTisHL3JSV8cTQiojIDJCLi86bpNnblRHeFBCI4JXYoNEbhl6YuFmbpZEIv5mapdlI0IiTis7W0ICZyBlIsICNxgDM5ADIxIjMwIjMwIjI0ICdyNkIsISMuAjLw8yNyEjI0IyctRkIsISej9WZnFEI9dmcl9WRgMWat3GdBBCbh96bpRXYuJXZ49WSiojIh94QiwiI5gDO8QTOxcjNzkTM9EDOiojIklkIs4XXbpjInxmZiwiIzYXMyAjMiojIyVIdMw';
+        // wijmo.setLicenseKey(key);
+
+        // var key = 'GrapeCity-Internal-Use-Only,osemosys,819193671948885#B0nllHbhZmOiI7ckJye0ICbuFkI1pjIEJCLi4TPB5GcEREb9QTSJh5coRWa7cUQ9BTWQt4Q4xUZ6BTYxZUZjVne4FHUVZ4V7EGRTJkTp5GMKp5Z7R7NF9kZ4VnaEdGOBRzTDVXTvx4QTdGUhpGWZlVUsd6dJRmY444djRlYpN6T8c5dWZTUqNkUDhXQsBXZqVlZtBlYkdTTzQHSBVkamZTa7gVR6YDW6EnW4pXbwdXM5Q7NwJVTzFjRqRTbTZVSURDbZlXNrUTQrlWbKxkNaJzYw8kS4w6QnxmM8gFe82mWh36LnZ5KrIVNkJ7RIRUaj54azA5M4x6cHZWRJFTUxMEazJXcY56cBZ7MaNDMVZ6RSxEaTREdq9UY7QmRww6NU3SOUBnNZlTawEEZ6J7ZFZGcsJ7aQhnWPJkMLFUe9B5Ru34NExmRv5kU534KFFFSIpGS7MFbWVnYLl7MWBXaZVnSsNDdvkWZWlUN7lmYxp7Tl34aiojITJCLiQzNCVTOCZkMiojIIJCLyQjN4gTMzETN0IicfJye&Qf35VfikEMyIlI0IyQiwiIu3Waz9WZ4hXRgACdlVGaThXZsZEIv5mapdlI0IiTisHL3JSNJ9UUiojIDJCLi86bpNnblRHeFBCIyV6dllmV4J7bwVmUg2Wbql6ViojIOJyes4nILdDOIJiOiMkIsIibvl6cuVGd8VEIgc7bSlGdsVXTg2Wbql6ViojIOJyes4nI4YkNEJiOiMkIsIibvl6cuVGd8VEIgAVQM3EIg2Wbql6ViojIOJyes4nIzMEMCJiOiMkIsISZy36Qg2Wbql6ViojIOJyes4nIVhzNBJiOiMkIsIibvl6cuVGd8VEIgQnchh6QsFWaj9WYulmRg2Wbql6ViojIOJyebpjIkJHUiwiI5MDOxYDMgEjMyAjMyAjMiojI4J7QiwiI4N7boxWYj3GbiojIz5GRiwiI9NmbldWQgk7ZyVmbFByYp56b4FEIsFmbvlGdh9mclRnbJJiOiEmTDJCLiUDO8gDN9EzN6MTOxkTM8IiOiQWSiwSfdtlOicGbmJCLiMjdxIDMyIiOiIXj4zC';
+        // wijmo.setLicenseKey(key);
+
+        
         let app = {};
 
         app.chartTypes = [
@@ -110,7 +119,7 @@ export default class Pivot {
             selectedValuePath: 'value',
             selectedIndexChanged: function (s, e) {      
                 if(s.selectedValue == 1){
-                    console.log(s.selectedValue)
+                    //console.log(s.selectedValue)
                     app.pivotChart.rotated = 1;
                     //app.pivotChart.stacking= 1;
                 }
@@ -175,9 +184,9 @@ export default class Pivot {
                 Html.title(model.casename, model.PARAMNAMES[model.group][model.param], 'pivot');
                 Html.ddlViews(model.VIEWS[model.param]);
 
-                console.log('DATA ', DATA);
+                //console.log('DATA ', DATA);
                 let pivotData = DataModelResult.getPivot(DATA[model.param], model.genData['osy-years']);
-                console.log('pivotData ', pivotData);
+                //console.log('pivotData ', pivotData);
 
                 model.pivotData = pivotData;
 
@@ -284,7 +293,7 @@ export default class Pivot {
             //update model
             if ( model.VIEW != 'null'){
                 $.each(model.VIEWS[model.param], function (id, obj) {
-                    console.log('obj ', obj)
+                    //console.log('obj ', obj)
                     if(obj['osy-viewId'] == model.VIEW){
                         model.VIEWS[model.param].splice(id, 1)
                         return false;
@@ -310,7 +319,7 @@ export default class Pivot {
             //console.log('model.VIEWS ', model.VIEWS)
             // let view = $("#osy-views").val();
             // model.VIEW = view;
-            console.log('model.VIEW ', model.VIEW)
+            //console.log('model.VIEW ', model.VIEW)
             if ( model.VIEW == 'null'){
                 ng.viewDefinition = model.DEFAULTVIEW;
                 app.pivotChart.header = '';
@@ -506,9 +515,9 @@ export default class Pivot {
         $("#btnGridParam").on('click', function (e) {
             e.preventDefault();
             var myPivotGridRows = $('#osy-pivotGrid').jqxPivotGrid('getPivotRows');
-            console.log('rows ', myPivotGridRows.items);
+            //console.log('rows ', myPivotGridRows.items);
             var myPivotGridCells = $('#osy-pivotGrid').jqxPivotGrid('getPivotCells');
-            console.log(myPivotGridCells)
+            //console.log(myPivotGridCells)
         });
 
 
@@ -547,7 +556,7 @@ export default class Pivot {
 
             var tech = $("#osy-techs").val();
             var configChart = $divChart.jqxChart('getInstance');
-            console.log(model.param,this.value,model.tech)
+            //console.log(model.param,this.value,model.tech)
             configChart.source.records = model.chartData[model.param][this.value][model.tech];
             configChart.update();
         });

@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.824
+    * Wijmo Library 5.20213.834
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -87,6 +87,7 @@
                 transform: scale(20); // twice the original size: big stars
                 cursor: pointer;
                 content: '\2605'; // \272a \2606 \272e \2729 https://www.htmlsymbols.xyz/star-symbols
+                height: 100%; // WJM-22009
             }
 
             &:hover { // hovering over label (symbol)

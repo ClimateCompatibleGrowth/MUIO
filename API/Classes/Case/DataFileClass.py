@@ -3,9 +3,9 @@ import pandas as pd
 import json
 import os
 import subprocess
-from Classes.Base import Config
-from Classes.Case.OsemosysClass import Osemosys
-from Classes.Base.FileClass import File
+from API.Classes.Base import Config
+from API.Classes.Case.OsemosysClass import Osemosys
+from API.Classes.Base.FileClass import File
 import pandas as pd
 from itertools import product
 

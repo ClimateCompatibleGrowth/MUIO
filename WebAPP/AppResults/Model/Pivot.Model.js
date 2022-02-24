@@ -8,7 +8,7 @@ export class Model {
         
         this.d = 2;
         this.decimal = 'd' + this.d;
-        console.log('PARAMETERS ', PARAMETERS)
+        //console.log('PARAMETERS ', PARAMETERS)
 
         let VARGROUPS = DataModelResult.getVarById(PARAMETERS);
 
@@ -17,8 +17,8 @@ export class Model {
         let pivotData = DataModelResult.getPivot(DATA['ANC'], genData['osy-years']);
         let PARAMNAMES = DataModel.AllParamName(PARAMETERS);
 
-        console.log(PARAMETERS)
-        console.log(VARGROUPS)
+        //console.log(PARAMETERS)
+        //console.log(VARGROUPS)
 
         this.casename = casename;
         this.genData = genData;
