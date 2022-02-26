@@ -121,9 +121,9 @@ if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     if Config.HEROKU_DEPLOY == 0: 
         #localhost
-        app.run(host='127.0.0.1', port=port, debug=True)
+        #app.run(host='127.0.0.1', port=port, debug=True)
         #waitress server
-        #serve(app, host='127.0.0.1', port=port)
+        serve(app, host='127.0.0.1', port=port)
     else:
         #HEROKU
         app.run(host='0.0.0.0', port=port, debug=True)
