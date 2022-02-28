@@ -510,7 +510,7 @@ export class Grid {
         });
     }
 
-    static Grid($div, daGrid, columns, groupable = false, filterable = false, clipboard = true) {
+    static Grid($div, daGrid, columns, groupable = false, filterable = false, clipboard = true, editable=true) {
 
         $div.jqxGrid({
             theme: this.theme(),
@@ -533,7 +533,7 @@ export class Grid {
             // pagerheight: 26,
             // pagesize: 20,
             // pagermode: "simple",
-            editable: true,
+            editable: editable,
             altrows: true,
             clipboard: clipboard,
             selectionmode: 'multiplecellsadvanced',
@@ -593,6 +593,107 @@ export class Grid {
 
     }
 
+    static pivotGrid(pivotData){
+        // $('#osy-pivotGridDesigner').empty();
+        // $('#osy-pivotGrid').empty();
+        // console.log('GRID ', pivotData)
+        var source =
+        {
+            localdata: pivotData,
+            datatype: "array",
+            datafields:
+            [
+                { name: 'Case', type: 'string' },
+                { name: 'Year', type: 'string' },
+                { name: 'Tech', type: 'string' },
+                { name: 'Comm', type: 'string' },
+                { name: 'MoId', type: 'number' },
+                { name: 'Ts', type: 'string' },
+                { name: 'Value', type: 'number' }
+            ]
+        };
+
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        dataAdapter.dataBind();
+    // create a pivot data source from the dataAdapter
+    var pivotDataSource = new $.jqx.pivot(
+        dataAdapter,
+        {
+            // customAggregationFunctions: {
+            //     'var': function (values) {
+            //         if (values.length <= 1)
+            //             return 0;
+            //         // sample's mean
+            //         var mean = 0;
+            //         for (var i = 0; i < values.length; i++)
+            //             mean += values[i];
+            //         mean /= values.length;
+            //         // calc squared sum
+            //         var ssum = 0;
+            //         for (var i = 0; i < values.length; i++)
+            //             ssum += Math.pow(values[i] - mean, 2)
+            //         // calc the variance
+            //         var variance = ssum / values.length;
+            //         return variance;
+            //     }
+            // },
+            pivotValuesOnRows: false,
+            fields: [
+                    { dataField: 'Case', text: 'Case' },
+                     { dataField: 'Year', text: 'Year' },
+                     { dataField: 'Tech', text: 'Technology' },
+                     { dataField: 'Comm', text: 'Commodity' },
+                     { dataField: 'MoId', text: 'Mode of operation' },
+                     { dataField: 'Ts', text: 'Timeslice' },
+                     { dataField: 'Value', text: 'Value' }
+            ],
+            rows: [
+                    { dataField: 'Case', text: 'Case' , align: 'right'},
+                    { dataField: 'Tech', text: 'Technology' , align: 'right'},
+                    { dataField: 'Comm', text: 'Commodity', align: 'right' },
+                    { dataField: 'MoId', text: 'Mode of operation' , align: 'right'},
+                    { dataField: 'Ts', text: 'Timeslice', align: 'right' },
+            ],
+            columns: [{ dataField: 'Year', align: 'right' }],
+            // filters: [
+            //     {
+            //         dataField: 'Year',
+            //         text: 'Year',
+            //         filterFunction: function (value) {
+            //             if (value == "2020" || value == "2040")
+            //                 return false;
+            //             return true;
+            //         }
+            //     }
+            // ],
+            values: [
+                { dataField: 'Value', 'function': 'sum', text: 'Sum', align: 'left', formatSettings: { decimalPlaces: 2, align: 'right' }, 
+                     },
+                //{ dataField: 'price', 'function': 'count', text: 'Count', className: 'myItemStyle', classNameSelected: 'myItemStyleSelected' }
+            ]
+        });
+
+        var localization = { 'var': 'Variance' };
+        // create a pivot grid
+        $('#osy-pivotGrid').jqxPivotGrid(
+        {
+            // theme:'bootstrap',
+            localization: localization,
+            source: pivotDataSource,
+            treeStyleRows: false,
+            autoResize: false,
+            multipleSelectionEnabled: true
+        });
+        var pivotGridInstance = $('#osy-pivotGrid').jqxPivotGrid('getInstance');
+        // create a pivot grid
+        $('#osy-pivotGridDesigner').jqxPivotDesigner(
+        {
+            type: 'pivotGrid',
+            theme:'bootstrap',
+            target: pivotGridInstance
+        });
+    }
+    
     static applyRYFilter($divGrid, years, sc = null) {
         //$('#jqxLoader').jqxLoader('open');
         //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });

@@ -2,7 +2,7 @@
 <html lang="en-us">
 	<head>
 		<meta charset="utf-8">
-		<title> Osemosys.ver.1.2 </title>
+		<title> Osemosys.ver.2.0 </title>
 		<meta name="description" content="">
 		<meta name="author" content="">
 			
@@ -18,6 +18,34 @@
 		<!-- <script  src="{{ url_for('static', filename='script.js')}}" data-turbolinks-track="reload"></script> -->
 
 		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/font-awesome.min.css">
+
+
+
+
+		    <!-- Wijmo -->
+			<link rel="stylesheet" href="References/wijmo/styles/wijmo.min.css" />
+			<script src="References/wijmo/controls/wijmo.min.js"></script>
+			<script src="References/wijmo/controls/wijmo.input.min.js"></script>
+			<script src="References/wijmo/controls/wijmo.grid.min.js"></script>
+			<script src="References/wijmo/controls/wijmo.grid.filter.min.js"></script>
+			<script src="References/wijmo/controls/wijmo.chart.min.js"></script>
+			<script src="References/wijmo/controls/wijmo.xlsx.min.js"></script>
+			<script src="References/wijmo/controls/wijmo.grid.xlsx.min.js"></script>
+			<script src="References/wijmo/controls/wijmo.odata.min.js"></script>
+			<script src="References/wijmo/controls/wijmo.olap.min.js"></script>
+
+			<script src="References/jszip/jszip.min.js"></script>
+
+			<script>
+				//GC.Spread.Sheets.LicenseKey = "127.0.0.1,819193671948885#B0ZZsxWYmpjIyNHZisnOiwmbBJye0ICRiwiI34zZxUENntyT4MGbqlWaVl4ZJJESrhjYzcGS9kEcNdzbQ3STwd7TspmVEtCa0ZWSz8GcY5kVIlzKwwkZFpFeaNWayF6TvkVM5NzdPh7Ltt4bOVVQo9GN6dVWxJHWBhXTvUXM7YVTBlUYShFWoR4cRR7Sw4WZLxGW52WNStkcuJmZBJ4NnlkQmdEUFdlV8dXemJjRNpncxc6dwUDN8tCTodDRxMnT6h6Yih6Q8QEcXx6cXx6TXxEaHlGU9NHTI56V8kVaSREaCdHU9VHWRlzRutyRipGcBx6K7kmercWN7ZFdoBja9sSSMhEUINzVKRGWwEjMXd6c7EHZvRjVYdnYURleRRlQPBXbaNndWZTZ6ZHbiNVe9M6Kt3kZHNEONpkUHhmcPR4R7sSMP5UbCVjeLNDRIlVept6dntyNm3iSRVzM0h6Y6U7StN4aUNUbldlcpRzYOJ6QyllI0IyUiwiIBZUO5I4MyEjI0ICSiwSMzgDM8AjMwcTM0IicfJye#4Xfd5nIJBjMSJiOiMkIsIibvl6cuVGd8VEIgQXZlh6U8VGbGBybtpWaXJiOi8kI1xSfiUTSOFlI0IyQiwiIu3Waz9WZ4hXRgAicldXZpZFdy3GclJFIv5mapdlI0IiTisHL3JyS7gDSiojIDJCLi86bpNnblRHeFBCI73mUpRHb55EIv5mapdlI0IiTisHL3JCNGZDRiojIDJCLi86bpNnblRHeFBCIQFETPBCIv5mapdlI0IiTisHL3JyMDBjQiojIDJCLiUmcvNEIv5mapdlI0IiTisHL3JSV8cTQiojIDJCLi86bpNnblRHeFBCI4JXYoNEbhl6YuFmbpZEIv5mapdlI0IiTis7W0ICZyBlIsICNxgDM5ADIxIjMwIjMwIjI0ICdyNkIsISMuAjLw8yNyEjI0IyctRkIsISej9WZnFEI9dmcl9WRgMWat3GdBBCbh96bpRXYuJXZ49WSiojIh94QiwiI5gDO8QTOxcjNzkTM9EDOiojIklkIs4XXbpjInxmZiwiIzYXMyAjMiojIyVIdMw";
+				// var key = 'GrapeCity-Internal-Use-Only,127.0.0.1|localhost,819193671948885#B0MVYdiwSZzxWYmpjIyNHZisnOiwmbBJye0ICRiwiI34zdqJDO9QFWLBTWvhkd0BjTDlWamRWVF9UQmFUdsFlQhd7S6I4LpRDaN5EcYZjex3kRhVTV8c7QxZWOuhldo96U8tWR6oHdwIEcMZHVSd6Z784d9IUbCJDURtmNyskUy54bDJWNDF4RvImZpNWcRB5Q624LZVWUHBVVXZFbNZXRZdHMpFzcvMDdJZ5YrR4RhhXQ4sWR9cXTzAjdCVVRlt6ar24ZhhFaWRERuVkeCF6Z4VVRxMHWWBFTudFNqV4Mr36KmFnUrQnU9xGeHZEU9AjVIlUVXNXNvl5KXRUetRFU5gVd7QWY53GTwJDTHdFWTFWcy5GMa3keKVDb4NTdOtSWW34MqN6VmdUe4VFc8V7SMFUbF3iQzYEb8hjaxUnZWhmTwV5VwdlZ4wWT096VK36TqFGTwEzTZhkS9dkSoRFbyUVQ5FETh5mVwhjT8EWckN6RJZlYyMmI0IyUiwiI9QjN7gDN4cjI0ICSiwSOyITO8YDMyYTM0IicfJye35XX3JSSwIjUiojIDJCLi86bpNnblRHeFBCI4VWZoNFelxmRg2Wbql6ViojIOJyes4nI5kkTRJiOiMkIsIibvl6cuVGd8VEIgIXZ7VWaWRncvBXZSBybtpWaXJiOi8kI1xSfis4N8gkI0IyQiwiIu3Waz9WZ4hXRgAydvJVa4xWdNBybtpWaXJiOi8kI1xSfiQjR6QkI0IyQiwiIu3Waz9WZ4hXRgACUBx4TgAybtpWaXJiOi8kI1xSfiMzQwIkI0IyQiwiIlJ7bDBybtpWaXJiOi8kI1xSfiUFO7EkI0IyQiwiIu3Waz9WZ4hXRgACdyFGaDxWYpNmbh9WaGBybtpWaXJiOi8kI1tlOiQmcQJCLiMTMzATMxASMyIDMyIDMyIiOiQncDJCLiQ7cvhGbhN6bsxSMuAjLw8yNyEjI0IyctRkIsISej9WZnFEI9dmcl9WRgMWat3GdBBCbh96bpRXYuJXZ49WSiojIh94QiwiI5gDO8QTOxcjNzkTM9EDOiojIklkIs4XXbpjInxmZiwiIzYXMyAjMJoII';
+				// 
+				var key = '127.0.0.1|localhost,819193671948885#B0MVYdiwSZzxWYmpjIyNHZisnOiwmbBJye0ICRiwiI34zdqJDO9QFWLBTWvhkd0BjTDlWamRWVF9UQmFUdsFlQhd7S6I4LpRDaN5EcYZjex3kRhVTV8c7QxZWOuhldo96U8tWR6oHdwIEcMZHVSd6Z784d9IUbCJDURtmNyskUy54bDJWNDF4RvImZpNWcRB5Q624LZVWUHBVVXZFbNZXRZdHMpFzcvMDdJZ5YrR4RhhXQ4sWR9cXTzAjdCVVRlt6ar24ZhhFaWRERuVkeCF6Z4VVRxMHWWBFTudFNqV4Mr36KmFnUrQnU9xGeHZEU9AjVIlUVXNXNvl5KXRUetRFU5gVd7QWY53GTwJDTHdFWTFWcy5GMa3keKVDb4NTdOtSWW34MqN6VmdUe4VFc8V7SMFUbF3iQzYEb8hjaxUnZWhmTwV5VwdlZ4wWT096VK36TqFGTwEzTZhkS9dkSoRFbyUVQ5FETh5mVwhjT8EWckN6RJZlYyMmI0IyUiwiI9QjN7gDN4cjI0ICSiwSOyITO8YDMyYTM0IicfJye35XX3JSSwIjUiojIDJCLi86bpNnblRHeFBCI4VWZoNFelxmRg2Wbql6ViojIOJyes4nI5kkTRJiOiMkIsIibvl6cuVGd8VEIgIXZ7VWaWRncvBXZSBybtpWaXJiOi8kI1xSfis4N8gkI0IyQiwiIu3Waz9WZ4hXRgAydvJVa4xWdNBybtpWaXJiOi8kI1xSfiQjR6QkI0IyQiwiIu3Waz9WZ4hXRgACUBx4TgAybtpWaXJiOi8kI1xSfiMzQwIkI0IyQiwiIlJ7bDBybtpWaXJiOi8kI1xSfiUFO7EkI0IyQiwiIu3Waz9WZ4hXRgACdyFGaDxWYpNmbh9WaGBybtpWaXJiOi8kI1tlOiQmcQJCLiMTMzATMxASMyIDMyIDMyIiOiQncDJCLiQ7cvhGbhN6bsxSMuAjLw8yNyEjI0IyctRkIsISej9WZnFEI9dmcl9WRgMWat3GdBBCbh96bpRXYuJXZ49WSiojIh94QiwiI5gDO8QTOxcjNzkTM9EDOiojIklkIs4XXbpjInxmZiwiIzYXMyAjMJoII';
+				
+				wijmo.setLicenseKey(key);
+				console.log('host ',window.location.hostname); 
+			</script> 
+
 
 		<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
 		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/smartadmin-production-plugins.min.css">
@@ -95,7 +123,7 @@
 			<div class="page-footer">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
-						<span class="txt-color-white">OS<small class="white">E</small>MOSYS ver.1.2<span class="hidden-xs"> - Open SourcE Modelling SYStem</span> © 2020</span>
+						<span class="txt-color-white">OS<small class="white">E</small>MOSYS ver.2.0<span class="hidden-xs"> - Open SourcE Modelling SYStem</span> © 2020</span>
 					</div>
 				</div>
 				<!-- end row -->
@@ -107,6 +135,8 @@
         <script> $("header").load("App/View/Navbar.html"); </script>
 		<!-- <script> $("footer").load("Includes/footer.html"); </script> -->
 		<script type="module" src="{{ url_for('static', filename='Routes/Routes.Class.js') }}"></script>
+
+		<!-- <script type="module" src="Routes/Routes.Class.js"></script> -->
 		
 		<script data-pace-options='{ "restartOnRequestAfter": true }' src="References/smartadmin/js/plugin/pace/pace.js"></script>
 

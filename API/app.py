@@ -1,32 +1,46 @@
 #import sys
 import os
+import sys
 from flask import Flask, jsonify, request, session, render_template
 from flask_cors import CORS
 from datetime import timedelta
+from pathlib import Path
+
+#prod server
+from waitress import serve
 
 #import json
-from Classes.Base import Config
-from Classes.Base.SyncS3 import SyncS3
+from API.Classes.Base import Config
+from API.Classes.Base.SyncS3 import SyncS3
 
-from Routes.Upload.UploadRoute import upload_api
-from Routes.Case.CaseRoute import case_api
-from Routes.Case.SyncS3Route import syncs3_api
-from Routes.Case.ViewDataRoute import viewdata_api
-from Routes.DataFile.DataFileRoute import datafile_api
+from API.Routes.Upload.UploadRoute import upload_api
+from API.Routes.Case.CaseRoute import case_api
+from API.Routes.Case.SyncS3Route import syncs3_api
+from API.Routes.Case.ViewDataRoute import viewdata_api
+from API.Routes.DataFile.DataFileRoute import datafile_api
 
-# template_dir = os.path.abspath('WebAPP')
-# static_dir = os.path.abspath('WebAPP')
-
+#RADI
 template_dir = os.path.abspath('WebAPP')
 static_dir = os.path.abspath('WebAPP')
 
+# template_dir = Config.WebAPP_PATH.resolve()
+# static_dir = Config.WebAPP_PATH.resolve()
+
 # template_dir = os.path.join(sys._MEIPASS, 'WebAPP') 
 # static_dir = os.path.join(sys._MEIPASS, 'WebAPP') 
+
 #gets absolute path
 # template_dir = Path('WebAPP').resolve()
 # static_dir = Path('../WebAPP').resolve()
-#template_dir = 'WebAPP'
-#static_dir = '../WebAPP'
+
+# template_dir = 'WebAPP'
+# static_dir = '../WebAPP'
+
+print(template_dir)
+print(static_dir)
+print(sys.executable)
+
+print(__name__)
 
 app = Flask(__name__, static_url_path='', static_folder=static_dir,  template_folder=template_dir)
 
@@ -99,6 +113,7 @@ def setSession():
 
 
 if __name__ == '__main__':
+# if __name__ == 'app':
     #potrebno radi module js importa u index.html ES6 modules
     #Flask.__version__
     import mimetypes
@@ -106,7 +121,11 @@ if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     if Config.HEROKU_DEPLOY == 0: 
         #localhost
-        app.run(host='127.0.0.1', port=port, debug=True)
+        #app.run(host='127.0.0.1', port=port, debug=True)
+        #waitress server
+        serve(app, host='127.0.0.1', port=port)
     else:
         #HEROKU
         app.run(host='0.0.0.0', port=port, debug=True)
+        #app.run(host='127.0.0.1', port=port, debug=True)
+

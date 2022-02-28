@@ -1,0 +1,34 @@
+{
+    "TTMPA": {
+        "t1": [
+            {
+                "MINCOA": 0.0,
+                "MINGAS": 6308.8269,
+                "MINHYD": 0.0,
+                "MINSOL": 0.0,
+                "MINWND": 0.0,
+                "PWRCOA": 0.0,
+                "PWRGAS": 3154.4134,
+                "PWRHYD": 0.0,
+                "PWRSOL": 0.0,
+                "PWRTRN": 2867.6486,
+                "PWRWND": 0.0
+            }
+        ],
+        "t2": [
+            {
+                "MINCOA": 0.0,
+                "MINGAS": 1657.9788,
+                "MINHYD": 2014.1295,
+                "MINSOL": 282.995,
+                "MINWND": 0.0,
+                "PWRCOA": 0.0,
+                "PWRGAS": 828.9894,
+                "PWRHYD": 2014.1295,
+                "PWRSOL": 282.995,
+                "PWRTRN": 2584.6536,
+                "PWRWND": 0.0
+            }
+        ]
+    }
+}

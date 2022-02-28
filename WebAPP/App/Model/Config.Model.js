@@ -1,19 +1,26 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
-import { GROUPNAMES, PARAMORDER, UNITDEFINITION } from "../../Classes/Const.Class.js";
+import { DataModelResult} from "../../Classes/DataModelResult.Class.js"
+import { GROUPNAMES, PARAMORDER, UNITDEFINITION, RESULTGROUPNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
     
-    constructor (PARAMETERS) {
+    constructor (PARAMETERS, VARIABLES) {
 
-        let datafields = [];
-        let columns = [];
+        let datafieldsParam = [];
+        let columnsParam = [];
+
+        let datafieldsVar = [];
+        let columnsVar = [];
 
 
         let unitsDef = DataModel.getUnitsDef(UNITDEFINITION);
         let paramById = DataModel.getParamById(PARAMETERS);
         let paramNames = DataModel.AllParamName(PARAMETERS);
 
-        let gridData = []
+        let varById = DataModelResult.getVarById(VARIABLES);
+        let varNames = DataModelResult.AllVarName(VARIABLES);
+
+        let gridParamData = []
         $.each(PARAMORDER, function (id, group) {   
             $.each(PARAMETERS[group], function (id, obj) {
                 let tmp = {};
@@ -28,9 +35,10 @@ export class Model {
                 let data = unitsDef;
                 tmp['unit'] =jsonLogic.apply(rule, data);
                 tmp['unitRule'] = obj.unitRule;
-                gridData.push(tmp);
+                gridParamData.push(tmp);
             });
         });
+
 
         var cellsrendererbutton = function (row, column, value) { 
             return '<span style="padding:5px; width:100%;" data-toggle="modal" href="#osy-unitRule" class="btn btn-info updateRule" data-id='+ row+' ><i class="fa fa-pencil-square-o "></i>Update rule</span>';
@@ -40,39 +48,95 @@ export class Model {
             editor.jqxNumberInput({ decimalDigits: 5, spinButtons: true, allowNull: false   }); //symbol: ' GWh', symbolPosition: 'right'
         }
 
-        datafields.push({ name: 'groupId', type:'string' });
-        datafields.push({ name: 'groupName', type:'string' });        
-        datafields.push({ name: 'id', type:'string' }); 
-        datafields.push({ name: 'value', type:'string' }); 
-        datafields.push({ name: 'default', type:'number' }); 
-        datafields.push({ name: 'menu', type:'number' }); 
-        datafields.push({ name: 'enable', type:'bool' }); 
-        datafields.push({ name: 'unit', type:'string' });    
-        datafields.push({ name: 'unitRule' });   
+        datafieldsParam.push({ name: 'groupId', type:'string' });
+        datafieldsParam.push({ name: 'groupName', type:'string' });        
+        datafieldsParam.push({ name: 'id', type:'string' }); 
+        datafieldsParam.push({ name: 'value', type:'string' }); 
+        datafieldsParam.push({ name: 'default', type:'number' }); 
+        datafieldsParam.push({ name: 'menu', type:'number' }); 
+        datafieldsParam.push({ name: 'enable', type:'bool' }); 
+        datafieldsParam.push({ name: 'unit', type:'string' });    
+        datafieldsParam.push({ name: 'unitRule' });   
 
-        columns.push({ text: 'groupId', datafield: 'groupId', editable: false, align: 'left',  hidden: true})
-        columns.push({ text: 'PARAMETER GROUP', datafield: 'groupName', editable: false, align: 'left', width: '20%'})
-        columns.push({ text: 'id', datafield: 'id', editable: false, align: 'left',  hidden: true})
-        columns.push({ text: 'PARAMETER NAME', datafield: 'value', editable: false, align: 'left', width: '40%'})
-        columns.push({ text: 'DEFAULT VALUE', datafield: 'default', align: 'right', cellsalign: 'right', width: '15%', columntype: 'numberinput', initeditor:initeditor, cellsformat: 'd5'})
-        columns.push({ text: 'ACTIVE', datafield: 'enable', columntype: 'checkbox', align: 'center',  hidden: true}),
-        columns.push({ text: 'menu', datafield: 'menu', editable: false, align: 'left',  hidden: true}),
-        columns.push({ text: 'UNIT', datafield: 'unit', editable: false, align: 'center', cellsalign: 'center', width: '15%'}),
-        columns.push({ text: 'UNIT RULE', datafield: 'Unit rule',  align: 'center', width: '10%',  cellsrenderer: cellsrendererbutton, editable:false  })
+        columnsParam.push({ text: 'groupId', datafield: 'groupId', editable: false, align: 'left',  hidden: true})
+        columnsParam.push({ text: 'PARAMETER GROUP', datafield: 'groupName', editable: false, align: 'left', width: '20%'})
+        columnsParam.push({ text: 'id', datafield: 'id', editable: false, align: 'left',  hidden: true})
+        columnsParam.push({ text: 'PARAMETER NAME', datafield: 'value', editable: false, align: 'left', width: '40%'})
+        columnsParam.push({ text: 'DEFAULT VALUE', datafield: 'default', align: 'right', cellsalign: 'right', width: '15%', columntype: 'numberinput', initeditor:initeditor, cellsformat: 'd5'})
+        columnsParam.push({ text: 'ACTIVE', datafield: 'enable', columntype: 'checkbox', align: 'center',  hidden: true}),
+        columnsParam.push({ text: 'menu', datafield: 'menu', editable: false, align: 'left',  hidden: true}),
+        columnsParam.push({ text: 'UNIT', datafield: 'unit', editable: false, align: 'center', cellsalign: 'center', width: '15%'}),
+        columnsParam.push({ text: 'UNIT RULE', datafield: 'Unit rule',  align: 'center', width: '10%',  cellsrenderer: cellsrendererbutton, editable:false  })
 
-        let srcGrid = {
+        let srcParamGrid = {
             datatype: "json",
-            localdata: gridData,
-            datafields: datafields
+            localdata: gridParamData,
+            datafields: datafieldsParam
         };
 
-        this.columns = columns;
-        this.gridData = gridData;
-        this.srcGrid = srcGrid;
+        //var Grid
+        let gridVarData = []
+        $.each(RESULTGROUPNAMES, function (group, name) {   
+            $.each(VARIABLES[group], function (id, obj) {
+                let tmp = {};
+                tmp['groupId'] = group;
+                tmp['groupName'] = name;
+                tmp['id'] = obj.id;
+                tmp['value'] = obj.value;
+                tmp['name'] = obj.name;
+                let rule = obj.unitRule;
+                let data = unitsDef;
+                tmp['unit'] =jsonLogic.apply(rule, data);
+                tmp['unitRule'] = obj.unitRule;
+                gridVarData.push(tmp);
+            });
+        });
+
+        console.log('gridVarData ', gridVarData)
+        var cellsrendererbuttonVar = function (row, column, value) { 
+            return '<span style="padding:5px; width:100%;" data-toggle="modal" href="#osy-unitRule" class="btn btn-info updateVarRule" data-id='+ row+' ><i class="fa fa-pencil-square-o "></i>Update rule</span>';
+        }
+
+        datafieldsVar.push({ name: 'groupId', type:'string' });
+        datafieldsVar.push({ name: 'groupName', type:'string' });        
+        datafieldsVar.push({ name: 'id', type:'string' }); 
+        datafieldsVar.push({ name: 'value', type:'string' }); 
+        datafieldsVar.push({ name: 'name', type:'string' }); 
+        datafieldsVar.push({ name: 'unit', type:'string' });    
+        datafieldsVar.push({ name: 'unitRule' });   
+
+        columnsVar.push({ text: 'groupId', datafield: 'groupId', editable: false, align: 'left',  hidden: true})
+        columnsVar.push({ text: 'VARIABLE GROUP', datafield: 'groupName', editable: false, align: 'left', width: '25%'})
+        columnsVar.push({ text: 'id', datafield: 'id', editable: false, align: 'left',  hidden: true})
+        columnsVar.push({ text: 'VARIABLE NAME', datafield: 'value', editable: false, align: 'left', width: '50%'});
+        columnsVar.push({ text: 'name', datafield: 'name', editable: false, align: 'left',  hidden: true})
+        columnsVar.push({ text: 'UNIT', datafield: 'unit', editable: false, align: 'center', cellsalign: 'center', width: '15%'}),
+        columnsVar.push({ text: 'UNIT RULE', datafield: 'Unit rule',  align: 'center', width: '10%',  cellsrenderer: cellsrendererbuttonVar, editable:false  })
+
+        let srcVarGrid = {
+            datatype: "json",
+            localdata: gridVarData,
+            datafields: datafieldsVar
+        };
+
+
+        
+
+        this.tab = 'Params';
+        this.columnsParam = columnsParam;
+        this.gridParamData = gridParamData;
+        this.srcParamGrid = srcParamGrid;
+
+        this.columnsVar = columnsVar;
+        this.gridVarData = gridVarData;
+        this.srcVarGrid = srcVarGrid;
+
         this.unitsDef = unitsDef;
         this.paramById = paramById;
         this.GROUPNAMES = GROUPNAMES;
+        this.RESULTGROUPNAMES = RESULTGROUPNAMES;
         this.paramNames =paramNames;
+        this.varNames = varNames;
         //this.unitIdByVal = unitIdByVal;
     }
 }

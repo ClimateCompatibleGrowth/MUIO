@@ -17,7 +17,9 @@ export class Model {
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
             let mo = genData['osy-mo'];
+
             this.param = param;
+
             let RYTMgrid = DataModel.RYTMgrid(genData, RYTMdata, PARAMETERS);
             let RYTMchart = DataModel.RYTMchart(genData, RYTMdata);
             let mods = DataModel.Mods(genData);

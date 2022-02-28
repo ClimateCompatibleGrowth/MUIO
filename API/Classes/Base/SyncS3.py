@@ -3,7 +3,7 @@ import os
 import glob
 from pathlib import Path
 # from Classes.Base.S3 import S3
-from Classes.Base import Config
+from API.Classes.Base import Config
 from collections.abc import Iterable 
 
 class SyncS3():

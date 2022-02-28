@@ -2,7 +2,7 @@ dist/
 build/
 API/SOLVERs/
 WebAPP/SOLVERs/
-WebAPP/References/jqwidgets12.0.4/
-WebAPP/References/jqwidgets12.1.2/
-WebAPP/References/jqwidgets_12.2/
+WebAPP/References/jqwidgets.13.2/
+WebAPP/References/wijmoFULL/
+WebAPP/References/wijmoOLD/
 app.spec

@@ -1,13 +1,14 @@
+from tokenize import group
 from flask import Blueprint, jsonify, request, session
 import os
 from pathlib import Path
 import shutil
 import time
-from Classes.Base import Config
-from Classes.Base.FileClass import File
-from Classes.Case.CaseClass import Case
-from Classes.Case.UpdateCaseClass import UpdateCase
-from Classes.Base.SyncS3 import SyncS3
+from API.Classes.Base import Config
+from API.Classes.Base.FileClass import File
+from API.Classes.Case.CaseClass import Case
+from API.Classes.Case.UpdateCaseClass import UpdateCase
+from API.Classes.Base.SyncS3 import SyncS3
 
 case_api = Blueprint('CaseRoute', __name__)
 
@@ -41,7 +42,8 @@ def getCases():
 def getResultCSV():
     try:
         casename = request.json['casename']
-        csvFolder = Path(Config.DATA_STORAGE,casename,"res", "csv")
+        caserunname = request.json['caserunname']
+        csvFolder = Path(Config.DATA_STORAGE,casename,"res", caserunname, "csv")
         csvs = [ f.name for f in os.scandir(csvFolder) ]
         return jsonify(csvs), 200
     except(IOError):
@@ -135,12 +137,51 @@ def getData():
     except(IOError):
         return jsonify('No existing cases!'), 404
 
-@case_api.route("/getParamFile", methods=['GET'])
+@case_api.route("/getResultData", methods=['POST'])
+def getResultData():
+    try:
+        casename = request.json['casename']
+        dataJson = request.json['dataJson']
+        if casename != None:
+            dataPath = Path(Config.DATA_STORAGE,casename,'view',dataJson)
+            data = File.readFile(dataPath)
+            response = data   
+
+        else:  
+            response = None     
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@case_api.route("/getParamFile", methods=['POST'])
 def getParamFile():
     try:
-        configPath = Path(Config.DATA_STORAGE, 'Parameters.json')
+        dataJson = request.json['dataJson']
+        configPath = Path(Config.DATA_STORAGE, dataJson)
         ConfigFile = File.readParamFile(configPath)
         response = ConfigFile       
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@case_api.route("/resultsExists", methods=['POST'])
+def resultsExists():
+    try:
+        casename = request.json['casename']
+        if casename != None:
+            resPath = Path(Config.DATA_STORAGE, casename, 'view', 'RYTTs.json')
+
+            dataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json')
+            data = File.readFile(dataPath)
+
+            if os.path.isfile(resPath) and data['osy-cases']:
+            #if data['osy-cases']:
+                response = True      
+            else:
+                response = False 
+        else:
+            response = None
+        #response = True
         return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
@@ -148,11 +189,15 @@ def getParamFile():
 @case_api.route("/saveParamFile", methods=['POST'])
 def saveParamFile():
     try:
-        data = request.json['data']
-        configPath = Path(Config.DATA_STORAGE, 'Parameters.json')
-        File.writeFile( data, configPath)
+        ParamData = request.json['ParamData']
+        VarData = request.json['VarData']
+
+        paramPath = Path(Config.DATA_STORAGE, 'Parameters.json')
+        varPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
+        File.writeFile( ParamData, paramPath)
+        File.writeFile( VarData, varPath)
         response = {
-            "message": "You have updated parameters data!",
+            "message": "You have updated parameters & variables data!",
             "status_code": "success"
         }
        
@@ -206,9 +251,39 @@ def saveCase():
         casename = genData['osy-casename']
         case = session.get('osycase', None)
 
+        configPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
+        vars = File.readParamFile(configPath)
+        viewDef = {}
+        for group, lists in vars.items():
+            for list in lists:
+                viewDef[list['id']] = []
+
+
+
         #ako je izabran case, edit mode
         if case != None and case != '':
             genDataPath = Path(Config.DATA_STORAGE, case, "genData.json")
+
+            ##update za view i res ukoliko nema
+            resPath = Path(Config.DATA_STORAGE,case,'res')
+            viewPath = Path(Config.DATA_STORAGE,case,'view')
+            resDataPath = Path(Config.DATA_STORAGE,case,'view','resData.json')
+            viewDataPath = Path(Config.DATA_STORAGE,case,'view','viewDefinitions.json')
+            if not os.path.exists(resPath):
+                os.makedirs(resPath, mode=0o777, exist_ok=False)
+            if not os.path.exists(viewPath):
+                os.makedirs(viewPath, mode=0o777, exist_ok=False)
+                resData = {
+                    "osy-cases":[]
+                }
+                File.writeFile( resData, resDataPath)
+
+                viewData = {
+                    "osy-views": viewDef
+                }
+                File.writeFile( viewData, viewDataPath)
+
+                
 
             #edit case sa istim imenom
             if case == casename:
@@ -253,7 +328,26 @@ def saveCase():
                 genDataPath = Path(Config.DATA_STORAGE, casename, "genData.json")
                 File.writeFile( genData, genDataPath)
                 case = Case(casename, genData)
-                case.createCase()                
+                case.createCase()  
+
+                resPath = Path(Config.DATA_STORAGE,casename,'res')
+                viewPath = Path(Config.DATA_STORAGE,casename,'view')
+                resDataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json')
+                viewDataPath = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
+                if not os.path.exists(resPath):
+                    os.makedirs(resPath, mode=0o777, exist_ok=False)
+                if not os.path.exists(viewPath):
+                    os.makedirs(viewPath, mode=0o777, exist_ok=False)
+                    resData = {
+                        "osy-cases":[]
+                    }
+                    File.writeFile( resData, resDataPath)
+
+                    viewData = {
+                        "osy-views": viewDef
+                    }
+                    File.writeFile( viewData, viewDataPath)
+
                 response = {
                     "message": "You have created new case!",
                     "status_code": "created"

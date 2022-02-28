@@ -16,6 +16,7 @@ export class Model {
 
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
+            this.param = param;
 
             this.param = param;
 
@@ -51,7 +52,7 @@ export class Model {
             datafields.push({ name: 'ScDesc', type: 'string' });
 
             let validation = function (cell, value) {
-                if (['TMPAU', 'TMPAL'].includes(this.param)){
+                if (['TMPAL', 'TMPAU'].includes(this.param)){
                     return true;
                 }else{
                     if (value < 0) {
@@ -60,7 +61,6 @@ export class Model {
                         return true;
                     }
                 }
-
             }.bind(this);
 
             var cellclass = function (row, columnfield, value, data) {

@@ -30,10 +30,6 @@ export class Model {
             datafields.push({ name: 'UnitId', type: 'string' });
             datafields.push({ name: 'ScDesc', type: 'string' });
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 120, maxWidth: 200 })
-            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', minWidth: 120, maxWidth: 200 })
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
-
 
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_' + id;
@@ -74,6 +70,10 @@ export class Model {
             var cellclass = function (row, columnfield, value, data) {
                 return scClass[data.ScId];
             }
+
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 120, maxWidth: 200 })
+            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', minWidth: 120, maxWidth: 200 })
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });

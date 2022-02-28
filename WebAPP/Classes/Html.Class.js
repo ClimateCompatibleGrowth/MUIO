@@ -3,10 +3,10 @@ import { Message } from "./Message.Class.js";
 
 export class Html {
 
-    static renderCases(cases, selectedCS) {
+    static renderModels(cases, selectedCS) {
         $('#cases').empty();
         $.each(cases, function (index, value) {
-            Html.apendCase(value, selectedCS)
+            Html.apendModel(value, selectedCS)
         });
 
         if (!selectedCS) Message.info("Please select existing or create new case to proceed!");
@@ -17,7 +17,7 @@ export class Html {
         $(`#l_${value.replace(/[^A-Z0-9]/ig, "")}`).remove();
     }
 
-    static apendCase(value, selectedCS) {
+    static apendModel(value, selectedCS) {
         //Base.appendCasePickerHTML(value, selectedCS);
         let htmlstring = `
             <div class="panel panel-default" id=l_${value.replace(/[^A-Z0-9]/ig, "")}>
@@ -28,7 +28,7 @@ export class Html {
                                 <b>
                                     <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select Model">
                                         <span class="glyphicon 
-                                        ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark green `}
+                                        ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark osy-green `}
                                         fa-1.5x icon-btn"></span><span class="pointer">${value}</span>
                                     </span>
                                 </b>
@@ -61,7 +61,7 @@ export class Html {
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span>
-                                    <span class="DeletePS" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
+                                    <span class="deleteModel" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
                                         <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
                                     </span>
                                 </span>
@@ -75,6 +75,57 @@ export class Html {
         $('#cases').append(htmlstring);
     }
 
+    static renderCases(cases) {
+        $('#osy-Cases').empty();
+        $.each(cases, function (index, obj) {
+            Html.apendCase(obj)
+        });
+    }
+
+    
+    static apendCase(value) {
+        //Base.appendCasePickerHTML(value, selectedCS);
+        let scs = []
+        $.each(value.Scenarios, function (index, obj) {
+            if(obj.Active == true){
+                scs.push(obj.Scenario)
+            }   
+        });
+        let htmlstring = `
+            <div class="panel panel-default" id=l_${value.Case.replace(/[^A-Z0-9]/ig, "")}>
+                <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-2">
+                        <b>
+                            <span class="selectCS"  data-ps="${value.Case}" data-toggle="tooltip" data-placement="top" title="Select Model">
+                                <span class="glyphicon glyphicon-cube osy-green fa-1.5x icon-btn"></span><span class="pointer">${value.Case}</span>
+                            </span>
+                        </b>   
+                    </div>
+                    <div class="col-md-4">
+                        <span class="editPS " data-ps="${value.Runtime}" data-toggle="tooltip" data-placement="top" title="Runtime">
+                        <small><i>${value.Runtime}</i></small>
+                        </span>  
+                    </div>
+                    <div class="col-md-5">
+                        <span class="editPS " data-ps="${scs}" data-toggle="tooltip" data-placement="top" title="Runtime">
+                        ${scs}
+                        </span>  
+                    </div>
+                    <div class="col-md-1">
+                        <span class="deleteCase pull-right" data-ps="${value.Case}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
+                            <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
+                        </span>
+                    </div>
+                </div>
+
+                </div>
+                <div id="collapse_${value.Case.replace(/[^A-Z0-9]/ig, "")}" class="panel-collapse collapse">
+                </div>
+        </div>`;
+        $('#osy-Cases').append(htmlstring);
+    }
+
     static renderCasePicker(cases, selectedCS) {
         $('#casePicker').empty();
         $.each(cases, function (index, value) {
@@ -82,21 +133,58 @@ export class Html {
         });
     }
 
-    static renderCSV(csvs){
+    static renderCSV(csvs, cs){
         $('#csvFiles').empty();
 
         $.each(csvs, function (index, value) {
+            $('#osy-downloadResultsFile').html(`<a class="btn btn btn-default pull-right"
+                href="downloadResultsFile?caserunname=${cs}"><i class="fa fa-download"></i> Download Results File
+            </a>`);
+
             let res = `
             <tr>
                 <td>
                     <a class=" " 
-                        href="downloadFile?file=${value}"><i class="fa fa-download"></i> ${value}
+                        href="downloadCSVFile?file=${value}&caserunname=${cs}"><i class="fa fa-download"></i> ${value}
                     </a>
                 </td>
             </tr>
             `;
             $('#csvFiles').append(res);
         });
+
+
+    }
+
+    static renderDataFile(DataFile, model){
+
+        var table = $("<table />");
+        var rows = DataFile.split("\n"); 
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = $("<tr />");
+            var cells = rows[i].split(" ");
+            //var cells = rows[i].match(/.{1,50}/g);
+            if (cells !== null){
+                for (var j = 0; j < cells.length; j++) {
+                    var cell = $(" <td style='padding-right:5px'></td>");
+                    //cells[j] = cells[j].replace(/ /g, '&nbsp;');
+                    cell.html(cells[j]);
+                    row.append(cell);
+                }
+                table.append(row);
+            }
+        }
+
+        
+        $('#osy-DataFileDownload').html(`<a id="osy-downloadDataFile" class="btn btn btn-default pull-right"
+                href="downloadDataFile?caserunname=${model.cs}"><i class="fa fa-download"></i> Download Data
+                File
+            </a>`);
+        $("#osy-DataFile").empty();
+        $("#osy-DataFile").html('');
+        $("#osy-DataFile").append(table);
+        //$('#tabs a[href="#tabDataFile"]').tab('show');
     }
 
     static appendCasePicker(value, selectedCS, pageId) {
@@ -156,6 +244,25 @@ export class Html {
 
     }
 
+    static resData(model) {
+
+        // var container = $('#osy-scOrder');
+        // container.empty();
+        // $.each(CURRENCY, function (key, value) {
+        //     if (value == model.currency) {
+
+        //         container.append(`<option value="${value}" selected> ${value}</option>`);
+        //     } else {
+        //         container.append(`<option value="${value}"> ${value} </option>`);
+        //     }
+        // });
+
+
+        $("#osy-casename").val(model.cs);
+        $("#osy-desc").val(model.desc);
+
+    }
+
     static ddlParams(params, param) {
         var container = $('#osy-ryt');
         container.empty();
@@ -168,6 +275,38 @@ export class Html {
         });
     }
 
+    static ddlViews(views) {
+        var container = $('#osy-views');
+        container.empty();
+        container.append('<option value="null" selected>Default view</option>');
+        $.each(views, function (id, obj) {
+           // console.log('obj ', obj)
+            // if (obj['osy-viewId'] == view) {
+            //     container.append('<option value="' + obj['osy-viewId'] + '" selected>' + obj['osy-viewname'] + '</option>');
+            // } else {
+                container.append('<option value="' + obj['osy-viewId'] + '">' + obj['osy-viewname'] + '</option>');
+            //}
+        });
+    }
+
+    static ddlParamsAll(params, param) {
+        var container = $('#osy-params');
+        container.empty();
+        $.each(params, function (group, array) {
+            if (group != 'RT'){
+                $.each(array, function (id, obj) {
+                    if (obj.id == param){
+                        container.append('<option value="' + obj.id + '" selected>'+ obj.value  +'</option>');
+                    }else{
+                        container.append('<option value="' + obj.id + '">'+ obj.value  +'</option>');
+                    }
+                    
+                });
+            }
+
+        });
+    }
+
     static ddlTechs(techs, tech) {
         var container = $('#osy-techs');
         container.empty();
@@ -176,6 +315,42 @@ export class Html {
                 container.append('<option value="' + obj.TechId + '" selected>' + obj.Tech + '</option>');
             } else {
                 container.append('<option value="' + obj.TechId + '" >' + obj.Tech + '</option>');
+            }
+        });
+    }
+
+    static ddlTechsArray(techs) {
+        var container = $('#osy-techs');
+        container.empty();
+        $.each(techs, function (id, tech) {
+            if (tech == techs[0]) {
+                container.append('<option value="' + tech + '" selected>' + tech + '</option>');
+            } else {
+                container.append('<option value="' + tech + '" >' + tech + '</option>');
+            }
+        });
+    }
+
+    static ddlCommsArray(comms) {
+        var container = $('#osy-comms');
+        container.empty();
+        $.each(comms, function (id, comm) {
+            if (comm == comms[0]) {
+                container.append('<option value="' + comm + '" selected>' + comm + '</option>');
+            } else {
+                container.append('<option value="' + comm + '" >' + comm + '</option>');
+            }
+        });
+    }
+
+    static ddlEmisArray(emis) {
+        var container = $('#osy-emis');
+        container.empty();
+        $.each(emis, function (id, emi) {
+            if (emi == emis[0]) {
+                container.append('<option value="' + emi + '" selected>' + emi + '</option>');
+            } else {
+                container.append('<option value="' + emi + '" >' + emi + '</option>');
             }
         });
     }
@@ -200,6 +375,17 @@ export class Html {
                 container.append('<option value="' + obj.CommId + '" selected>' + obj.Comm + '</option>');
             } else {
                 container.append('<option value="' + obj.CommId + '" >' + obj.Comm + '</option>');
+            }
+        });
+    }
+    static ddlCases(cases, cs) {
+        var container = $('#osy-cases');
+        container.empty();
+        $.each(cases, function (id, obj) {
+            if (obj.CaseId == cs) {
+                container.append('<option value="' + obj.Case + '" selected>' + obj.Case + '</option>');
+            } else {
+                container.append('<option value="' + obj.Case + '" >' + obj.Case + '</option>');
             }
         });
     }
@@ -346,7 +532,15 @@ export class Html {
     static renderScOrder(scs) {
         var sortableList = '';
         $.each(scs, function (sc, flag) {
-            if (flag.ScenarioId != 'SC_0') {
+            if (flag.ScenarioId == 'SC_0') {
+                var sc0 =
+                    `<div class="sortable-item" id=` + flag.ScenarioId + `>
+                    <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario + `
+                    <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked disabled/></span>
+                </div>`;
+                $("#osy-sc0").html(sc0);
+                //$("#osy-sc0").jqxSortable();
+            }else{
                 if (flag.Active) {
                     var sortableElement =
                         `<div class="sortable-item" id=` + flag.ScenarioId + `>
@@ -362,7 +556,7 @@ export class Html {
                     </div>`;
                     sortableList = sortableList + sortableElement;
                 }
-            }
+            }        
         });
         $("#osy-scOrder").html(sortableList);
         $("#osy-scOrder").jqxSortable();
@@ -411,8 +605,8 @@ export class Html {
             $("#osy-unitRuleSort1").html(sortableList1);
             $("#osy-unitRuleSort1").jqxSortable();
 
-            // $("#osy-unitRuleSort2").html(sortableList2);
-            // $("#osy-unitRuleSort2").jqxSortable(); 
+            // $("#osy-unitParamRuleSort2").html(sortableList2);
+            // $("#osy-unitParamRuleSort2").jqxSortable(); 
             $("#osy-unitRuleSort1, #osy-unitRuleSort2").jqxSortable({
                 connectWith: ".osy-unitRuleSort",
                 opacity: 0.5,

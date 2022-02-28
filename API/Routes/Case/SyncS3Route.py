@@ -2,8 +2,8 @@ from flask import Blueprint, jsonify, request
 import os
 from pathlib import Path
 import shutil
-from Classes.Base import Config
-from Classes.Base.SyncS3 import SyncS3
+from API.Classes.Base import Config
+from API.Classes.Base.SyncS3 import SyncS3
 
 syncs3_api = Blueprint('SyncS3Route', __name__)
 

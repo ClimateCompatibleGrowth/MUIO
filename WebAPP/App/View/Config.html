@@ -12,8 +12,6 @@
 	</div>
 </div>
 
-
-
 <div class="row">
     <div class="col-md-12">
         <section>
@@ -39,18 +37,54 @@
     </div>
 </div>
 
+<div id="tabs">
+	<ul class="nav nav-tabs in">
+		<li class="active">
+			<a data-toggle="tab" href="#tabParams" id='Params'> 
+				<i class="fa fa-lg fa-file-text info"></i>
+				<span class="hidden-mobile hidden-tablet"> Parameters </span>
+			</a>
+		</li>
+		<li>
+			<a data-toggle="tab" href="#tabVars" id='Vars'>
+				 <i class="fa fa-lg fa-file-text success"></i>
+				<span class="hidden-mobile hidden-tablet"> Variables </span>
+			</a>
+		</li>
+	</ul>
+</div>
 
-<div class="jarviswidget" >            
-	<div>
-		<div class="widget-body no-padding">
-			<fieldset>
-				<section>
-					<div id="osy-gridParam" class="no-padding-bottom"></div>
-				</section>
-			</fieldset>
+<div class="tab-content">
+	<div class="tab-pane active" id="tabParams">
+		<div class="jarviswidget" >            
+			<div>
+				<div class="widget-body no-padding">
+					<fieldset>
+						<section>
+							<div id="osy-gridParam" class="no-padding-bottom"></div>
+						</section>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tab-pane" id="tabVars">
+		Variables
+		<div class="jarviswidget" >            
+			<div>
+				<div class="widget-body no-padding">
+					<fieldset>
+						<section>
+							<div id="osy-gridVar" class="no-padding-bottom"></div>
+						</section>
+					</fieldset>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+
+
 
 <!-- Modal -->
 <div class="modal fade" id="osy-unitRule" tabindex="-1" role="dialog">

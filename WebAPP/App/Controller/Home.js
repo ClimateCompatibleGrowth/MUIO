@@ -28,16 +28,18 @@ export default class Home {
 
             let cases = Base.getCaseStudies();
             promise.push(cases);
-            let genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData);
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
+            // let genData = Osemosys.getData(casename, 'genData.json');
+            // promise.push(genData);
+            // const PARAMETERS = Osemosys.getParamFile();
+            // promise.push(PARAMETERS); 
+            // const RESULTPARAMETERS = Osemosys.getParamFile('ResultParameters.json');
+            // promise.push(RESULTPARAMETERS);
             $('#loadermain').hide();
             return Promise.all(promise);
         })
         .then(data => {
-            let [ casename, cases, genData, PARAMETERS] = data;
-            let model = new Model(casename, cases, genData, PARAMETERS);
+            let [ casename, cases] = data;
+            let model = new Model(casename, cases);
             this.initPage(model);
         })
         .catch(error =>{ 
@@ -48,8 +50,9 @@ export default class Home {
     static initPage(model){
         Message.clearMessages();
         Navbar.initPage(model.casename);
-        Sidebar.Load(model.genData, model.PARAMETERS);
-        Html.renderCases(model.cases, model.casename);
+        // Sidebar.Load(model.genData, model.PARAMETERS, model.RESULTPARAMETERS);
+        Sidebar.Reload(model.casename);
+        Html.renderModels(model.cases, model.casename);
         Home.initEvents(model);
         loadScript("References/smartadmin/js/plugin/dropzone/dropzone.min.js", Base.uploadFunction);
     }
@@ -61,15 +64,17 @@ export default class Home {
             promise.push(casename);
             let cases = Base.getCaseStudies();
             promise.push(cases);
-            let genData = Osemosys.getData(casename, 'genData.json');
-            promise.push(genData);
-            const PARAMETERS = Osemosys.getParamFile();
-            promise.push(PARAMETERS); 
+            // let genData = Osemosys.getData(casename, 'genData.json');
+            // promise.push(genData);
+            // const PARAMETERS = Osemosys.getParamFile();
+            // promise.push(PARAMETERS); 
+            // const RESULTPARAMETERS = Osemosys.getParamFile('ResultParameters.json');
+            // promise.push(RESULTPARAMETERS);
             return Promise.all(promise);
         })
         .then(data => {
-            let [ casename, cases, genData, PARAMETERS] = data;
-            let model = new Model(casename, cases, genData, PARAMETERS);
+            let [ casename, cases] = data;
+            let model = new Model(casename, cases);
             this.initPage(model);
         })
         .catch(error =>{ 
@@ -121,7 +126,7 @@ export default class Home {
                 if(response.status_code=="success"){
                     Message.bigBoxSuccess('Copy message', response.message, 3000);
                     //REFRESH
-                    Html.apendCase(casename+'_copy');
+                    Html.apendModel(casename+'_copy');
                     Html.appendCasePicker(casename+'_copy', null)
                     if (Base.AWS_SYNC == 1){
                         SyncS3.deleteResultsPreSync(casename)
@@ -153,7 +158,7 @@ export default class Home {
         });
 
         //delete case
-        $(document).delegate(".DeletePS","click",function(e){
+        $(document).delegate(".deleteModel","click",function(e){
             var casename = $(this).attr('data-ps');
             $.SmartMessageBox({
                 title : "Confirmation Box!",
@@ -177,7 +182,8 @@ export default class Home {
                             Message.bigBoxSuccess('Delete message', response.message, 3000);
                             Message.info( "Please select existing or create new case to proceed!");
                             if (model.casename = casename){
-                                Sidebar.Load(null, null);
+                                // Sidebar.Load(null, null);
+                                Sidebar.Reload(null);
                                 //Routes.removeRoutes(model.PARAMETERS);
                             }
                             //REFRESH

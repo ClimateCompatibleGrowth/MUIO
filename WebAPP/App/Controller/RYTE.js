@@ -354,7 +354,7 @@ export default class RYTE {
 
         $("#exportPng").off('click');
         $("#exportPng").click(function () {
-            $("#osy-chartRYTE").jqxChart('saveAsPNG', 'RYTE.png', 'https://www.jqwidgets.com/export_server/export.php');
+            $divChart.jqxChart('saveAsPNG', 'RYTE.png', 'https://www.jqwidgets.com/export_server/export.php');
         });
 
         let res = true;

@@ -96,7 +96,7 @@ export default class AddCase {
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
             Html.updateCasePicker(casename);
-            Sidebar.Reload(casename)
+            Sidebar.Reload(casename);
             AddCase.refreshPage(casename);
             Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
         });
@@ -165,7 +165,8 @@ export default class AddCase {
             //$( "#wid-id-8" ).tabs({ active: 'tabComms' });
             //$("#wid-id-8").tabs("option", "active", 0);
             AddCase.refreshPage(null);
-            Sidebar.Load(null, null)
+            //Sidebar.Load(null, null)
+            Sidebar.Reload(null);
             $("#osy-new").hide();
             $('#osy-updateCase').hide();
             $('#osy-newCase').show();

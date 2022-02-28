@@ -20,6 +20,8 @@ export class Base {
         return apiUrl
     }
 
+
+    
     static initSyncS3() {
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -106,13 +108,13 @@ export class Base {
         });
     }
 
-    static getResultCSV(casename) {
+    static getResultCSV(casename, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: this.apiUrl() + "getResultCSV",
                 async: true,
                 type: 'POST',
-                data: JSON.stringify({ "casename": casename }),
+                data: JSON.stringify({ "casename": casename, "caserunname": caserunname }),
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {
@@ -174,6 +176,27 @@ export class Base {
                 async: true,
                 type: 'POST',
                 data: JSON.stringify({ "casename": casename }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    resolve(result);
+                },
+                error: function (xhr, status, error) {
+                    //custom exception
+                    if (error == 'UNKNOWN') { error = xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static deleteCaseRun(casename, caserunname) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: this.apiUrl() + "deleteCaseRun",
+                async: true,
+                type: 'POST',
+                data: JSON.stringify({ "casename": casename, "caserunname": caserunname }),
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {

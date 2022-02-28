@@ -2,14 +2,15 @@ import { Base } from "./Base.Class.js";
 
 export class Osemosys {
     
-    static getParamFile() {
+    static getParamFile(dataJson='Parameters.json') {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "getParamFile",
                 async: true,  
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 cache: false,
+                data: JSON.stringify({ "dataJson": dataJson }),
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {            
                     resolve(result);
@@ -22,7 +23,7 @@ export class Osemosys {
         });
     }
     
-    static saveParamFile(data) {
+    static saveParamFile(ParamData, VarData) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "saveParamFile",
@@ -30,7 +31,7 @@ export class Osemosys {
                 type: 'POST',
                 cache:false,
                 dataType: 'json',
-                data: JSON.stringify({ "data": data }),
+                data: JSON.stringify({ "ParamData": ParamData, "VarData": VarData }),
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {             
                     resolve(result);
@@ -86,14 +87,54 @@ export class Osemosys {
         });
     }
 
-    static generateDataFile(casename) {
+    static saveView(casename, data, param) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "saveView",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, "data": data, "param": param }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static updateViews(casename, data, param) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "updateViews",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, "data": data, "param": param }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static generateDataFile(casename, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "generateDataFile",
                 async: true,  
                 type: 'POST',
                 dataType: 'json',
-                data: JSON.stringify({ "casename": casename }),
+                data: JSON.stringify({ "casename": casename, 'caserunname': caserunname }),
                 contentType: 'application/json; charset=utf-8',
                 // credentials: 'include',
                 // xhrFields: { withCredentials: true},
@@ -109,14 +150,60 @@ export class Osemosys {
         });
     }
 
-    static run(casename, solver) {
+    static createCaseRun(casename, caserunname, data) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "createCaseRun",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, 'caserunname': caserunname, 'data': data }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static updateCaseRun(casename, caserunname, oldcaserunname, data) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "updateCaseRun",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, 'caserunname': caserunname, 'oldcaserunname': oldcaserunname, 'data': data }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static run(casename, solver, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "run",
                 async: true,  
                 type: 'POST',
                 dataType: 'json',
-                data: JSON.stringify({ "casename": casename, "solver": solver  }),
+                data: JSON.stringify({ "casename": casename, "solver": solver, 'caserunname': caserunname  }),
                 contentType: 'application/json; charset=utf-8',
                 // credentials: 'include',
                 // xhrFields: { withCredentials: true},
@@ -132,14 +219,14 @@ export class Osemosys {
         });
     }
 
-    static readDataFile(casename) {
+    static readDataFile(casename, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url:Base.apiUrl() + "readDataFile",
                 async: true,  
                 type: 'POST',
                 dataType: 'json',
-                data: JSON.stringify({ "casename": casename }),
+                data: JSON.stringify({ "casename": casename, 'caserunname': caserunname }),
                 contentType: 'application/json; charset=utf-8',
                 // credentials: 'include',
                 // xhrFields: { withCredentials: true},
@@ -155,19 +242,17 @@ export class Osemosys {
         });
     }
 
-    static downloadDataFile(casename) {
+    static resultsExists(casename) {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url:Base.apiUrl() + "downloadDataFile",
+                url:Base.apiUrl() + "resultsExists",
                 async: true,  
                 type: 'POST',
                 dataType: 'json',
-                data: JSON.stringify({ "casename": casename }),
+                data: JSON.stringify({"casename": casename }),
                 contentType: 'application/json; charset=utf-8',
-                // credentials: 'include',
-                // xhrFields: { withCredentials: true},
-                // crossDomain: true,
-                success: function (result) {             
+                success: function (result) {  
+                    console.log(result)           
                     resolve(result);
                 },
                 error: function(xhr, status, error) {
@@ -177,6 +262,29 @@ export class Osemosys {
             });
         });
     }
+
+    // static downloadDataFile(casename) {
+    //     return new Promise((resolve, reject) => {
+    //         $.ajax({
+    //             url:Base.apiUrl() + "downloadDataFile",
+    //             async: true,  
+    //             type: 'POST',
+    //             dataType: 'json',
+    //             data: JSON.stringify({ "casename": casename }),
+    //             contentType: 'application/json; charset=utf-8',
+    //             // credentials: 'include',
+    //             // xhrFields: { withCredentials: true},
+    //             // crossDomain: true,
+    //             success: function (result) {             
+    //                 resolve(result);
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+    //                 reject(error);
+    //             }
+    //         });
+    //     });
+    // }
 
     static getData(casename, dataJson) {
         return new Promise((resolve, reject) => {
@@ -198,17 +306,16 @@ export class Osemosys {
         });
     }
 
-    static getDataDirectly(casename, jsonFile) {
+    static getResultData(casename, dataJson) {
         return new Promise((resolve, reject) => {
             $.ajax({
-                //url:Base.apiUrl() + "getData",
-                url: 'WebAPP/DataStorage/'+casename+'/'+jsonFile,
+                url:Base.apiUrl() + "getResultData",
                 async: true,  
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
-                //data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
+                data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
                 contentType: 'application/json; charset=utf-8',
-                success: function (result) {             
+                success: function (result) {                  
                     resolve(result);
                 },
                 error: function(xhr, status, error) {
@@ -218,6 +325,27 @@ export class Osemosys {
             });
         });
     }
+
+    // static getDataDirectly(casename, jsonFile) {
+    //     return new Promise((resolve, reject) => {
+    //         $.ajax({
+    //             //url:Base.apiUrl() + "getData",
+    //             url: 'WebAPP/DataStorage/'+casename+'/'+jsonFile,
+    //             async: true,  
+    //             type: 'GET',
+    //             dataType: 'json',
+    //             //data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
+    //             contentType: 'application/json; charset=utf-8',
+    //             success: function (result) {             
+    //                 resolve(result);
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+    //                 reject(error);
+    //             }
+    //         });
+    //     });
+    // }
 
     static updateData(data, param, dataJson) {
         return new Promise((resolve, reject) => {

@@ -21,6 +21,8 @@ export class Model {
             let scenarios = genData['osy-scenarios'];
 
             this.param = param;
+
+
             //let paramById = DataModel.getParamById(PARAMETERS);
             let RYTgrid = DataModel.RYTgrid(genData, RYTdata, PARAMETERS);
             let RYTchart = DataModel.RYTchart(genData, RYTdata, PARAMETERS);
@@ -44,6 +46,7 @@ export class Model {
             datafields.push({ name: 'UnitId', type: 'string' });
 
             let validation = function (cell, value) {
+                console.log('this.param ', this.param, param)
                 if (['CC', 'FC'].includes(this.param)){
                     return true;
                 }else{

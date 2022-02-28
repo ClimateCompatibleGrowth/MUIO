@@ -48,11 +48,10 @@ export class Model {
             datafields.push({ name: 'EmiDesc', type: 'string' });
             datafields.push({ name: 'TechDesc', type: 'string' });
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' });
-            columns.push({ text: 'Emission', datafield: 'Emis', pinned: true, editable: false, align: 'center' });
-            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+
+            var cellclass = function (row, columnfield, value, data) {
+                return scClass[data.ScId];
+            }
 
             let validation = function (cell, value) {
                 if (value < 0) {
@@ -60,10 +59,6 @@ export class Model {
                 } else {
                     return true;
                 }
-            }
-
-            var cellclass = function (row, columnfield, value, data) {
-                return scClass[data.ScId];
             }
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
@@ -89,6 +84,12 @@ export class Model {
                 }
             }.bind(this);
 
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
+            columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' });
+            columns.push({ text: 'Emission', datafield: 'Emis', pinned: true, editable: false, align: 'center' });
+            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
