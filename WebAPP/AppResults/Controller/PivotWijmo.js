@@ -102,37 +102,37 @@ export default class Pivot {
             showSelectedHeaders: 'All'
             
         });
-        app.pivotChart = new wijmo.olap.PivotChart('#pivotChart', {
-            //header: 'Country GDP',
-            itemsSource: app.panel,
-            showLegend: 'Auto',
-            showTitle: false,
-            legendPosition: 4,
-            stacking: 0,            
-            //rotated: false
-            //palette: wijmo.chart.Palettes.dark
-        });
+        // app.pivotChart = new wijmo.olap.PivotChart('#pivotChart', {
+        //     //header: 'Country GDP',
+        //     itemsSource: app.panel,
+        //     showLegend: 'Auto',
+        //     showTitle: false,
+        //     legendPosition: 4,
+        //     stacking: 0,            
+        //     //rotated: false
+        //     //palette: wijmo.chart.Palettes.dark
+        // });
 
-        app.cmbChartType = new wijmo.input.ComboBox('#cmbChartType', {
-            itemsSource: app.chartTypes,
-            displayMemberPath: 'name',
-            selectedValuePath: 'value',
-            selectedIndexChanged: function (s, e) {      
-                if(s.selectedValue == 1){
-                    //console.log(s.selectedValue)
-                    app.pivotChart.rotated = 1;
-                    //app.pivotChart.stacking= 1;
-                }
-                app.pivotChart.chartType = s.selectedValue;
-            }
-        });
+        // app.cmbChartType = new wijmo.input.ComboBox('#cmbChartType', {
+        //     itemsSource: app.chartTypes,
+        //     displayMemberPath: 'name',
+        //     selectedValuePath: 'value',
+        //     selectedIndexChanged: function (s, e) {      
+        //         if(s.selectedValue == 1){
+        //             //console.log(s.selectedValue)
+        //             app.pivotChart.rotated = 1;
+        //             //app.pivotChart.stacking= 1;
+        //         }
+        //         app.pivotChart.chartType = s.selectedValue;
+        //     }
+        // });
 
-        app.cmbStackedChart  = new wijmo.input.ComboBox('#cmbStackedChart', {
-            itemsSource: 'None,Stacked,Stacked100pc'.split(','),
-            selectedIndexChanged: function(s, e) {
-                app.pivotChart.stacking = s.text;
-            }
-        });
+        // app.cmbStackedChart  = new wijmo.input.ComboBox('#cmbStackedChart', {
+        //     itemsSource: 'None,Stacked,Stacked100pc'.split(','),
+        //     selectedIndexChanged: function(s, e) {
+        //         app.pivotChart.stacking = s.text;
+        //     }
+        // });
 
 
         ng.itemsSource = model.pivotData
@@ -147,27 +147,18 @@ export default class Pivot {
 
         //console.log('view derf ', ng.viewDefinition)
 
-            // toggle showRowTotals
-        document.getElementById('showRowTotals').addEventListener('click', function (e) {
-            ng.showRowTotals = e.target.checked ?
-                wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
-        });
-
-        document.getElementById('showColumnTotals').addEventListener('click', function (e) {
-            ng.showColumnTotals = e.target.checked ?
-                wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
-        });
-
-        // document.getElementById('stackedChart').addEventListener('click', function (e) {
-        //     app.pivotChart.stacking = e.target.checked ?
-        //         'Stacked' : 'None';
+        // toggle showRowTotals
+        // document.getElementById('showRowTotals').addEventListener('click', function (e) {
+        //     ng.showRowTotals = e.target.checked ?
+        //         wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
         // });
 
-        
-        // document.getElementById('rotateChart').addEventListener('click', function (e) {
-        //     console.log('e.target.checked', e.target.checked)
-        //     app.pivotChart.rotated = e.target.checked;
+        // document.getElementById('showColumnTotals').addEventListener('click', function (e) {
+        //     ng.showColumnTotals = e.target.checked ?
+        //         wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
         // });
+
+
 
         $("#osy-params").off('change');
         $('#osy-params').on('change', function () {
