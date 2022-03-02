@@ -288,7 +288,7 @@ export class Base {
 
                         //let casename = value.name.slice(0, -4)
                         let casename = response.response[key]['casename'];
-                        Html.apendCase(casename);
+                        Html.apendModel(casename);
                         Message.bigBoxSuccess("Upload response", response.response[key]['message'], null);
                         value.previewElement.innerHTML = "";
                         $('#modalrestore').modal('toggle');
