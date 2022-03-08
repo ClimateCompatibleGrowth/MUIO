@@ -6,8 +6,7 @@ from flask_cors import CORS
 from datetime import timedelta
 from pathlib import Path
 
-#prod server
-from waitress import serve
+
 
 #import json
 from API.Classes.Base import Config
@@ -123,6 +122,8 @@ if __name__ == '__main__':
         #localhost
         #app.run(host='127.0.0.1', port=port, debug=True)
         #waitress server
+        #prod server
+        from waitress import serve
         serve(app, host='127.0.0.1', port=port)
     else:
         #HEROKU
