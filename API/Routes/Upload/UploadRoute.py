@@ -1,3 +1,4 @@
+import shutil
 from flask import Blueprint, request, jsonify, send_file
 from zipfile import ZipFile
 from pathlib import Path
@@ -7,6 +8,7 @@ import json
 import glob
 
 from API.Classes.Base import Config
+from API.Classes.Base.FileClass import File
 
 upload_api = Blueprint('UploadRoute', __name__)
 
@@ -100,12 +102,24 @@ def backupCase():
         '''File system data storage'''
         with ZipFile(zippedFile, 'w') as zipObj:
             # Iterate over all the files in directory
-            for folderName, subfolders, filenames in os.walk(str(casePath)):
-                for filename in filenames:
-                    #create complete filepath of file in directory
-                    filePath = os.path.join(folderName, filename)
-                    # Add file to zip
-                    zipObj.write(filePath)      
+            # for folderName, subfolders, filenames in os.walk(str(casePath)):
+
+            #     for filename in filenames:
+            #         if filename != 'data.txt':
+            #             #create complete filepath of file in directory
+            #             filePath = os.path.join(folderName, filename)
+            #             # Add file to zip
+            #             zipObj.write(filePath)      
+
+            #osemosys 2.1 backup only input files
+            for filename in os.listdir(str(casePath)):
+                folderName = os.path.join(str(casePath))
+                if os.path.isfile(os.path.join(folderName, filename)):
+                    if filename != 'data.txt':
+                        #create complete filepath of file in directory
+                        filePath = os.path.join(folderName, filename)
+                        # Add file to zip
+                        zipObj.write(filePath)   
 
 
         return send_file(zippedFile.resolve(), as_attachment=True)
@@ -146,11 +160,46 @@ def uploadCase():
                             errorcode = 0
                             
                             if not os.path.exists(Path(Config.DATA_STORAGE,casename)):
-                                data = json.loads(zf.read(zippedfile))
+                                data = json.loads(zf.read(zippedfile).decode('ISO-8859-1'))
                                 #name = data['else-version']
                                 name = data.get('osy-version', None)
-                                if name == '1.0':
+                                if name == '1.0' or name == '2.0':
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+
+
+                                    #add res view folders with json default files
+                                    configPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
+                                    vars = File.readParamFile(configPath)
+                                    viewDef = {}
+                                    for group, lists in vars.items():
+                                        for list in lists:
+                                            viewDef[list['id']] = []
+
+                                    resPath = Path(Config.DATA_STORAGE,case,'res')
+                                    viewPath = Path(Config.DATA_STORAGE,case,'view')
+                                    resDataPath = Path(Config.DATA_STORAGE,case,'view','resData.json')
+                                    viewDataPath = Path(Config.DATA_STORAGE,case,'view','viewDefinitions.json')
+
+                                    # remove res and view folder if ver 1.0
+                                    if os.path.exists(resPath):
+                                        shutil.rmtree(resPath)
+
+                                    if os.path.exists(viewPath):
+                                        shutil.rmtree(viewPath)
+
+                                    
+                                    os.makedirs(resPath, mode=0o777, exist_ok=False)
+                                    os.makedirs(viewPath, mode=0o777, exist_ok=False)
+                                    resData = {
+                                        "osy-cases":[]
+                                    }
+                                    File.writeFile( resData, resDataPath)
+
+                                    viewData = {
+                                        "osy-views": viewDef
+                                    }
+                                    File.writeFile( viewData, viewDataPath)
+
                                     msg.append({
                                         "message": "Case " + casename +" have been uploaded!",
                                         "status_code": "success",
@@ -158,7 +207,7 @@ def uploadCase():
                                     })
                                 else:
                                     msg.append({
-                                        "message": "Case " + casename +" is not valid OSEMOSYS ver 1.0 case!",
+                                        "message": "Case " + casename +" is not valid OSEMOSYS ver 1.0 or 2.0 case!",
                                         "status_code": "error"
                                     })
                             else:

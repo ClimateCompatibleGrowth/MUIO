@@ -717,10 +717,10 @@ class DataFile(Osemosys):
                     param_current = line.split(' ')[1]
                     parsing = True
 
-        try:
-            os.makedirs(os.path.join(base_folder, 'csv'))
-        except FileExistsError:
-            pass
+        # try:
+        #     os.makedirs(os.path.join(base_folder, 'csv'))
+        # except FileExistsError:
+        #     pass
 
         #Read CBC output file
         
