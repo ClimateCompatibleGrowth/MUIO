@@ -1,8 +1,6 @@
 export class Model {
-    constructor (PARAMETERS, RESULTPARAMETERS) { 
-        // this.menu = true;
-        // this.ResultsMenu = RESULTEXISTS;
+    constructor (PARAMETERS, VARIABLES) { 
         this.PARAMETERS = PARAMETERS;
-        this.RESULTPARAMETERS = RESULTPARAMETERS;
+        this.VARIABLES = VARIABLES;
     }
 }

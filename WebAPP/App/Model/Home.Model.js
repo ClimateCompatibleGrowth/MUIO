@@ -7,14 +7,14 @@ export class Model {
             this.cases = cases;
             // this.genData = genData;
             // this.PARAMETERS = PARAMETERS;
-            // this.RESULTPARAMETERS = RESULTPARAMETERS;
+            // this.VARIABLES = VARIABLES;
             this.pageID = 'Home'
         }else{
             this.casename = null; 
             this.cases = cases;
             // this.genData = null;
             // this.PARAMETERS = null;
-            // this.RESULTPARAMETERS = null;
+            // this.VARIABLES = null;
             this.pageID = 'Home'
         }
 

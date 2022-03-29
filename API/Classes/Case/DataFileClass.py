@@ -529,7 +529,7 @@ class DataFile(Osemosys):
 
             File.writeFile( resData, self.resDataPath)
             #delete from view folder
-            for group, array in self.RESULTPARAMETERS.items():
+            for group, array in self.VARIABLES.items():
                 if group != 'RYS':
                     path = Path(self.viewFolderPath, group+'.json')
                     jsonFile = File.readFile(path)
@@ -1501,7 +1501,7 @@ class DataFile(Osemosys):
             cases = [f.name for f in os.scandir(self.resultsPath) ]
             
             paramByName = {}
-            for group, array in self.RESULTPARAMETERS.items():
+            for group, array in self.VARIABLES.items():
                 for obj in array:
                     o = {}
                     o['id'] = obj['id']

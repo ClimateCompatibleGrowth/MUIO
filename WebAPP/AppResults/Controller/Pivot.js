@@ -1,18 +1,12 @@
 import { Message } from "../../Classes/Message.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
-import { Model } from "../Model/PivotWijmo.Model.js";
-import { Grid } from "../../Classes/Grid.Class.js";
-import { Chart } from "../../Classes/Chart.Class.js";
+import { Model } from "../Model/Pivot.Model.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
-import { GROUPNAMES } from "../../Classes/Const.Class.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "../../App/Controller/MessageSelect.js"
 import { DataModelResult } from "../../Classes/DataModelResult.Class.js";
 import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
-
-//import * as wijmo from '@grapecity/wijmo';
-
 
 export default class Pivot {
     static onLoad() {
@@ -155,10 +149,6 @@ export default class Pivot {
             Message.clearMessages();
             model.group = model.VARGROUPS[this.value]['group'];
             model.param = this.value;
-            console.log('model.param ', model.param);
-            console.log('model.group ', model.group);
-            // console.log('param change')
-            // console.log('views ', model.VIEWS[model.param])
 
             Osemosys.getResultData(model.casename, model.group+'.json')
             .then(DATA => {
@@ -166,15 +156,8 @@ export default class Pivot {
                 Html.title(model.casename, model.VARNAMES[model.group][model.param], 'pivot');
                 Html.ddlViews(model.VIEWS[model.param]);
 
-                console.log('model.DATA ', DATA);
-
-                //console.log('DATA ', DATA);
                 let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
-                //console.log('pivotData ', pivotData);
-
                 model.pivotData = pivotData;
-
-                console.log('model.pivotData ', pivotData);
 
                 ng.itemsSource = model.pivotData
 

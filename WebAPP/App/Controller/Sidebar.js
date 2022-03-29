@@ -153,7 +153,7 @@ export class Sidebar {
     }
 
     static initResultsRoutes(model) {
-        Routes.addResultsRoutes(model.VARIABLES);
+        //Routes.addResultsRoutes(model.VARIABLES);
         $('#dynamicResultsRoutes').empty();
         if (model.ResultsMenu) {
             //Routes.addRoutes(model.PARAMETERS);

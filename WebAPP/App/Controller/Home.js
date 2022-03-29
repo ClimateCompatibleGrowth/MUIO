@@ -44,7 +44,7 @@ export default class Home {
     static initPage(model){
         Message.clearMessages();
         Navbar.initPage(model.casename);
-        // Sidebar.Load(model.genData, model.PARAMETERS, model.RESULTPARAMETERS);
+        // Sidebar.Load(model.genData, model.PARAMETERS, model.VARIABLES);
         Sidebar.Reload(model.casename);
         Html.renderModels(model.cases, model.casename);
         Home.initEvents(model);
