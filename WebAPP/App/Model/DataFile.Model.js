@@ -11,17 +11,18 @@ export class Model {
         });
         let cases = resData['osy-cases'];
 
-        let cs;
-        if (resData['osy-cases'] !== undefined && resData['osy-cases'].length != 0) {
-          // array empty or does not exist
-          cs = cases[0]['Case'];
-        }else{
-          cs = null;
-        }
+        // let cs;
+        // if (resData['osy-cases'] !== undefined && resData['osy-cases'].length != 0) {
+        //   // array empty or does not exist
+        //   cs = cases[0]['Case'];
+        // }else{
+        //   cs = null;
+        // }
+
+        let cs = null;
 
         let scBycs = {};
         $.each(resData['osy-cases'], function (id, cs) {
-          console.log('cs ', cs)
           scBycs[cs.Case] = cs.Scenarios
         });
 

@@ -280,12 +280,7 @@ export class Html {
         container.empty();
         container.append('<option value="null" selected>Default view</option>');
         $.each(views, function (id, obj) {
-           // console.log('obj ', obj)
-            // if (obj['osy-viewId'] == view) {
-            //     container.append('<option value="' + obj['osy-viewId'] + '" selected>' + obj['osy-viewname'] + '</option>');
-            // } else {
-                container.append('<option value="' + obj['osy-viewId'] + '">' + obj['osy-viewname'] + '</option>');
-            //}
+            container.append('<option value="' + obj['osy-viewId'] + '">' + obj['osy-viewname'] + '</option>');
         });
     }
 
@@ -484,6 +479,30 @@ export class Html {
                 } else {
                     container.append('<option value="' + obj.Scenario + '" >' + obj.Scenario + '</option>');
                 }
+            }
+        });
+    }
+
+    static ddlScenariosId(scs, sc) {
+        var container = $('#osy-scenarios');
+        container.empty();
+        $.each(scs, function (id, obj) {
+            if (obj.ScenarioId == sc) {
+                container.append('<option value="' + obj.ScenarioId + '" selected>' + obj.Scenario + '</option>');
+            } else {
+                container.append('<option value="' + obj.ScenarioId + '" >' + obj.Scenario + '</option>');
+            }
+        });
+    }
+
+    static ddlYears(years, yr) {
+        var container = $('#osy-years');
+        container.empty();
+        $.each(years, function (id, year) {
+            if (year == yr) {
+                container.append('<option value="' + year + '" selected>' + year + '</option>');
+            } else {
+                container.append('<option value="' + year + '" >' + year + '</option>');
             }
         });
     }

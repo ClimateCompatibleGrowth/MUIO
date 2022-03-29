@@ -26,9 +26,6 @@ export class Model {
             let timeslices = DataModel.Timeslices(genData);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let techName = DataModel.TechName(genData);
-
-            // console.log('RYTTsgrid ', RYTTsgrid)
-            // console.log('RYTTschart ', RYTTschart)
             
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(timeslices, function (id, ts) {

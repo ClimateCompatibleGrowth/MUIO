@@ -84,7 +84,6 @@ export class Routes {
             
             $.each(model.PARAMETERS, function (param, array) {                    
                 $.each(array, function (id, obj) {
-                    //console.log(param, obj.id)
                     addAppRoute(param, obj.id)
                 });
             });
@@ -115,25 +114,35 @@ export class Routes {
                 });
             });
 
-            crossroads.addRoute('/Pivot', function() {
+            crossroads.addRoute('/RESViewer', function() {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-                import('../AppResults/Controller/Pivot.js')
-                .then(Pivot => {
-                    $( ".osy-content" ).load( 'AppResults/View/Pivot.html', function() {
-                        Pivot.default.onLoad();
+                import('../App/Controller/RESViewer.js')
+                .then(RESViewer => {
+                    $( ".osy-content" ).load( 'App/View/RESViewer.html', function() {
+                        RESViewer.default.onLoad();
                     });
                 });
             });
 
-            crossroads.addRoute('/PivotCharts', function() {
-                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
-                import('../AppResults/Controller/PivotCharts.js')
-                .then(PivotCharts => {
-                    $( ".osy-content" ).load( 'AppResults/View/PivotCharts.html', function() {
-                        PivotCharts.default.onLoad();
-                    });
-                });
-            });
+            // crossroads.addRoute('/Pivot', function() {
+            //     $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+            //     import('../AppResults/Controller/Pivot.js')
+            //     .then(Pivot => {
+            //         $( ".osy-content" ).load( 'AppResults/View/Pivot.html', function() {
+            //             Pivot.default.onLoad();
+            //         });
+            //     });
+            // });
+
+            // crossroads.addRoute('/PivotCharts', function() {
+            //     $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+            //     import('../AppResults/Controller/PivotCharts.js')
+            //     .then(PivotCharts => {
+            //         $( ".osy-content" ).load( 'AppResults/View/PivotCharts.html', function() {
+            //             PivotCharts.default.onLoad();
+            //         });
+            //     });
+            // });
 
             function addResRoute(group, id){
                 return crossroads.addRoute(`/${group}/${id}`, function() {
@@ -149,7 +158,6 @@ export class Routes {
             
             $.each(model.RESULTPARAMETERS, function (param, array) {                    
                 $.each(array, function (id, obj) {
-                    //console.log(param, obj.id)
                     addResRoute(param, obj.id)
                 });
             });
@@ -169,8 +177,6 @@ export class Routes {
                 if (hash.length > 0) {
                     route = hash.split('#').pop();
                 }
-            //console.log(hash);
-            //console.log(route);
                 crossroads.parse(route);
             });
             
@@ -236,7 +242,6 @@ export class Routes {
             
             $.each(PARAMETERS, function (param, array) {                    
                 $.each(array, function (id, obj) {
-                    //console.log(param, obj.id)
                     addRoute(param, obj.id)
                 });
             });
@@ -276,8 +281,6 @@ export class Routes {
                 if (hash.length > 0) {
                     route = hash.split('#').pop();
                 }
-            //console.log(hash);
-            //console.log(route);
                 crossroads.parse(route);
             });
             
@@ -290,10 +293,7 @@ export class Routes {
     }
 
     static addResultsRoutes(PARAMETERS){
-
-
         function addRoute(group, id){
-            console.log('result route route')
             return crossroads.addRoute(`/r${group}/${id}`, function() {
                 $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
                 import(`../AppResults/Controller/${group}.js`)

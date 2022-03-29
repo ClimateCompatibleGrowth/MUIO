@@ -41,7 +41,6 @@ export default class RYTTs {
 
     static initPage(model) {
         Message.clearMessages();
-        console.log('model', model)
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlParams(model.PARAMETERS['RYTTs'], model.param);
@@ -114,18 +113,12 @@ export default class RYTTs {
             let param = $("#osy-ryt").val();
             let rytData = $divGrid.jqxGrid('getboundrows');
             let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'TechId', 'Timeslice'].concat(model.years)));
-
-            console.log('data ', data)
             let saveData = {};
             $.each(data, function (id, obj) {
                 if (!saveData[obj.ScId]) { saveData[obj.ScId] = []; }
                 saveData[obj.ScId].push(obj);
                 //delete obj.ScId;
             });
-            console.log('saveData ', saveData)
-
-
-
             Osemosys.updateData(saveData, param, "RYTTs.json")
                 .then(response => {
                     //model.gridData[model.param] = JSON.parse(RYTmodel);

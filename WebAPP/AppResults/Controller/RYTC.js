@@ -37,10 +37,7 @@ export default class RYTC {
                 }
             })
             .then(data => {
-                
                 let [casename, genData, resData, PARAMETERS, RYTCdata] = data;
-                // console.log('RYTCdata ', RYTCdata)
-                // console.log('resData ', resData)
                 if (RYTCdata[param][resData['osy-cases'][0]['Case']].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
@@ -67,7 +64,6 @@ export default class RYTC {
 
     static initPage(model) {
         Message.clearMessages();
-        console.log('model ', model)
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlParams(model.PARAMETERS['RYTC'], model.param);
@@ -147,7 +143,6 @@ export default class RYTC {
         $("#osy-ryt").off('change');
         $('#osy-ryt').on('change', function () {
             Message.clearMessages();
-            //console.log('model.RYTCdata ',model.RYTCdata[this.value])
             if (model.RYTCdata[this.value][model.case].length === 0) {
                 MessageSelect.activity(RYTC.refreshPage.bind(RYTC), model.casename);
                 Message.warning(`There is no data definded for ${model.PARAMNAMES[this.value]} for model ${model.casename}!`);

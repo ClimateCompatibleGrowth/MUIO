@@ -11,7 +11,6 @@ import { MessageSelect } from "../../App/Controller/MessageSelect.js"
 
 export default class RYT {
     static onLoad(group, param) {
-        console.log(group, param)
         Base.getSession()
             .then(response => {
                 let casename = response['session'];

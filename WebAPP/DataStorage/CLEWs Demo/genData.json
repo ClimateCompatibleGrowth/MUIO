@@ -266,16 +266,16 @@
             "Active": true
         },
         {
-            "ScenarioId": "SC_ayjl6",
-            "Scenario": "SC_1",
+            "ScenarioId": "SC_p6iyw",
+            "Scenario": "SC_2",
             "Desc": "Base scenario",
             "Active": true
         },
         {
-            "ScenarioId": "SC_p6iyw",
-            "Scenario": "SC_2",
+            "ScenarioId": "SC_ayjl6",
+            "Scenario": "SC_1",
             "Desc": "Base scenario",
-            "Active": false
+            "Active": true
         }
     ],
     "osy-constraints": [

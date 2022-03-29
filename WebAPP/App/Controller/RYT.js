@@ -255,8 +255,8 @@ export default class RYT {
                 let param = $("#osy-ryt").val();
                 var tech = $("#osy-techs").val();
 
-                console.log('Grid ', model.gridData[param])
-                console.log('Chart ', model.chartData[param][techId])
+                // console.log('Grid ', model.gridData[param])
+                // console.log('Chart ', model.chartData[param][techId])
 
                 //update performance model
                 // let columnIndex = $divGrid.jqxGrid('getcolumnindex', year) - 3;

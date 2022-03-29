@@ -27,15 +27,6 @@ export class Model {
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let Timeslices = DataModel.Timeslices(genData);
 
-            //console.log('PARAMNAMES ', PARAMNAMES)
-
-            console.log('ActivityTechs ', ActivityTechs)
-            console.log('ActivityComms ', ActivityComms)
-
-            // console.log('RYTCTsdata ', RYTCTsdata )
-            // console.log('RYTCTsgrid ',RYTCTsgrid)
-            // console.log('RYTCTschart ',RYTCTschart)
-
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(Timeslices, function (id, ts) {
                 datafieldsChart.push({ name: ts, type: 'number' });

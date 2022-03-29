@@ -165,7 +165,6 @@ export default class RYTEM {
         $("#osy-techs").off('change');
         $('#osy-techs').on('change', function () {
             model.tech = this.value;
-            console.log(model.param, model.case, this.value, model.emi)
             var configChart = $divChart.jqxChart('getInstance');
             configChart.source.records = model.chartData[model.param][model.case][this.value][model.emi];
             configChart.update();

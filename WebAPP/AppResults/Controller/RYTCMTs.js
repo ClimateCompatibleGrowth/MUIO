@@ -197,7 +197,6 @@ export default class RYTCMTs {
             model.comm = model.comms[model.param][model.case][model.tech][0];
 
             var configChart = $divChart.jqxChart('getInstance');
-            console.log(model.param,model.case,this.value,model.comm)
             configChart.source.records = model.chartData[model.param][model.case][this.value][model.comm][model.mod];
             configChart.update();
         });

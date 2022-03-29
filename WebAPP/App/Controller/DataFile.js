@@ -5,7 +5,6 @@ import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { Model } from "../Model/DataFile.Model.js";
 import { MessageSelect } from "./MessageSelect.js";
 import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
-import { Routes } from "../../Routes/Routes.Class.js";
 import { Sidebar } from "./Sidebar.js";
 
 export default class DataFile {
@@ -40,9 +39,8 @@ export default class DataFile {
         //Navbar.initPage(model.casename, model.pageId);
         Html.title(model.casename, model.title, "");
         Html.renderCases(model.cases);
-        // console.log('model scBycs ', model.scBycs)
-        // console.log('model scenarios ', model.scenarios)
         // Html.renderScOrder(model.scBycs[model.cs]);
+        console.log('model ', model)
         Html.renderScOrder(model.scenarios);
         if (model.casename == null) {
             Message.info("Please select model or create new Model!");
@@ -267,14 +265,10 @@ export default class DataFile {
                 "Scenarios": scOrder
             }
 
-            console.log('caseData ', caseData);
-            console.log('update ', update)
-
             if (update) {
                 Osemosys.updateCaseRun(model.casename, caserunname, oldcaserunname, caseData)
                     .then(response => {
                         if (response.status_code == 'success') {
-                            console.log('update run succes')
                             model.cs = caserunname;
                             $.each(model.cases, function (id, cs) {
                                 if (cs.Case == oldcaserunname) {
@@ -386,7 +380,6 @@ export default class DataFile {
 
                         Base.getResultCSV(model.casename, model.cs)
                             .then(csvs => {
-                                console.log('csv ', csvs)
                                 Html.renderCSV(csvs, model.cs)
                             });
 
@@ -477,7 +470,6 @@ export default class DataFile {
                 });
             // Base.getResultCSV(model.casename, model.cs)
             //     .then(csvs => {
-            //         console.log('csv ', csvs)
             //         if (csvs.length == 0){
             //             $(".Results").hide();
             //             $("#osy-solver").show();
@@ -493,14 +485,12 @@ export default class DataFile {
 
         $(document).delegate(".deleteCase", "click", function (e) {
             var caserunname = $(this).attr('data-ps');
-            console.log('model.scBycs 1 ',model.scBycs)
             $.SmartMessageBox({
                 title: "Confirmation Box!",
                 content: "You are about to delete <b class='danger'>" + caserunname + "</b> Model! Are you sure?",
                 buttons: '[No][Yes]'
             }, function (ButtonPressed) {
                 if (ButtonPressed === "Yes") {
-                    console.log(model.casename, caserunname)
                     Base.deleteCaseRun(model.casename, caserunname)
                         .then(response => {
                             Message.clearMessages();

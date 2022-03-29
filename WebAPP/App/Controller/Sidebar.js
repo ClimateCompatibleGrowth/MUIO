@@ -7,10 +7,8 @@ import { Routes } from "../../Routes/Routes.Class.js";
 export class Sidebar {
 
     //ne koristi se
-    // static Load(genData, PARAMETERS, RESULTPARAMETERS, RESULTEXISTS) {
-    //     let model = new Model(PARAMETERS,RESULTPARAMETERS, genData, RESULTEXISTS);
-    //     console.log('PARAMETERS ', PARAMETERS)
-    //     console.log('RESULTPARAMETERS ', RESULTPARAMETERS)
+    // static Load(genData, PARAMETERS, VARIABLES, RESULTEXISTS) {
+    //     let model = new Model(PARAMETERS,VARIABLES, genData, RESULTEXISTS);
     //     this.initAppRoutes(model);
     //     this.initResultsRoutes(model);
     //     this.initEvents();
@@ -23,16 +21,15 @@ export class Sidebar {
             promise.push(genData);
             const PARAMETERS = Osemosys.getParamFile();
             promise.push(PARAMETERS);
-            const RESULTPARAMETERS = Osemosys.getParamFile('ResultParameters.json');
-            promise.push(RESULTPARAMETERS);
+            const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+            promise.push(VARIABLES);
             const RESULTEXISTS = Osemosys.resultsExists(casename);
             promise.push(RESULTEXISTS);
             return Promise.all(promise);
         })
         .then(data => {
-            
-            let [genData, PARAMETERS, RESULTPARAMETERS, RESULTEXISTS] = data;
-            let model = new Model(PARAMETERS,RESULTPARAMETERS, genData, RESULTEXISTS);
+            let [genData, PARAMETERS, VARIABLES, RESULTEXISTS] = data;
+            let model = new Model(PARAMETERS,VARIABLES, genData, RESULTEXISTS);
             this.initAppRoutes(model);
             this.initResultsRoutes(model);
             this.initEvents();
@@ -47,6 +44,12 @@ export class Sidebar {
         if (model.menu) {
             //Routes.addRoutes(model.PARAMETERS);
             $('.dynamicRoutesLink').show();
+            //RES prikazi samo ako ima IAR ili OAR
+            if ( model.menuCondition.IAR || model.menuCondition.OAR) {
+                $('.dynamicRoutesRES').show();
+            }else{
+                $('.dynamicRoutesRES').hide();
+            }
             let res = `
             <label class="input" style="display:block; margin-left:11px">
                 <i class="ace-icon white fa fa-search nav-search-icon"></i>
@@ -144,12 +147,13 @@ export class Sidebar {
             });
         } else {
             $('.dynamicRoutesLink').hide();
+            $('.dynamicRoutesRES').hide();
 
         }
     }
 
     static initResultsRoutes(model) {
-        Routes.addResultsRoutes(model.RESULTPARAMETERS);
+        Routes.addResultsRoutes(model.VARIABLES);
         $('#dynamicResultsRoutes').empty();
         if (model.ResultsMenu) {
             //Routes.addRoutes(model.PARAMETERS);
@@ -162,9 +166,9 @@ export class Sidebar {
             </label>`;
             $('#dynamicResultsRoutes').append(res);
             $.each(RESULTPARAMORDER, function (id, group) {
-                $.each(model.RESULTPARAMETERS[group], function (id, obj) {
+                $.each(model.VARIABLES[group], function (id, obj) {
                     //da li ima parametara definisanih za grupu
-                    if (model.RESULTPARAMETERS[group] !== undefined || model.RESULTPARAMETERS[group].length != 0) {
+                    if (model.VARIABLES[group] !== undefined || model.VARIABLES[group].length != 0) {
                         let res = `
                         <li  class="">
                             <a href="#/${group}/${obj.id}" class="res-items" title="${RESULTGROUPNAMES[group]}">

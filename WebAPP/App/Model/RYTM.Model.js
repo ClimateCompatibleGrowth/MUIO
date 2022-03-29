@@ -3,7 +3,7 @@ import { DataModel } from "../../Classes/DataModel.Class.js";
 export class Model {
 
     constructor(casename, genData, RYTMdata, group, PARAMETERS, param) {
-        this.d = 2;
+        this.d = 4;
         this.decimal = 'd' + this.d;
 
         if (casename) {
@@ -74,7 +74,6 @@ export class Model {
 
             let initeditor = function (row, cellvalue, editor, data) {
                 editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
-
                 var scId = $('#osy-gridRYTM').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
                     $('#' + editor[0].id + ' input').keydown(function (event) {
@@ -93,14 +92,14 @@ export class Model {
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
-                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal,
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass
                 });
-            });
+            }.bind(this));
 
             var srcGrid = {
                 datatype: "json",

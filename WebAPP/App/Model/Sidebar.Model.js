@@ -1,11 +1,11 @@
 export class Model {
-    constructor (PARAMETERS, RESULTPARAMETERS, genData, RESULTEXISTS) { 
+    constructor (PARAMETERS, VARIABLES, genData, RESULTEXISTS) { 
 
       if(genData){
         this.menu = true;
         this.ResultsMenu = RESULTEXISTS;
         this.PARAMETERS = PARAMETERS;
-        this.RESULTPARAMETERS = RESULTPARAMETERS;
+        this.VARIABLES = VARIABLES;
         let techs = genData['osy-tech'];
         let constraints = genData['osy-constraints'];
 

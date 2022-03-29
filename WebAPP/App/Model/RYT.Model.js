@@ -46,7 +46,6 @@ export class Model {
             datafields.push({ name: 'UnitId', type: 'string' });
 
             let validation = function (cell, value) {
-                console.log('this.param ', this.param, param)
                 if (['CC', 'FC'].includes(this.param)){
                     return true;
                 }else{

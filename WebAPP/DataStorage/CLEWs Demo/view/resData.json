@@ -51,6 +51,32 @@
                     "Active": false
                 }
             ]
+        },
+        {
+            "Case": "test",
+            "CaseId": "CS_48zc5",
+            "Desc": "",
+            "Runtime": "Thu Mar 17 2022 18:20:17 GMT+0100 (Central European Standard Time)",
+            "Scenarios": [
+                {
+                    "ScenarioId": "SC_0",
+                    "Scenario": "SC_0",
+                    "Desc": "Base scenario",
+                    "Active": true
+                },
+                {
+                    "ScenarioId": "SC_p6iyw",
+                    "Scenario": "SC_2",
+                    "Desc": "Base scenario",
+                    "Active": true
+                },
+                {
+                    "ScenarioId": "SC_ayjl6",
+                    "Scenario": "SC_1",
+                    "Desc": "Base scenario",
+                    "Active": true
+                }
+            ]
         }
     ]
 }

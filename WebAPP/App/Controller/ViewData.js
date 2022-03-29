@@ -125,7 +125,6 @@ export default class ViewData {
                 $divTEGrid.jqxGrid('updatebounddata');
                 Grid.applyTEviewDataFilter($divTEGrid);
                 $('#gridRT').show();
-                console.log('tech end')
             }
             else if (this.value == 'Comm') {
                 let firstComm = model.comms[0]['CommId'];
@@ -141,7 +140,6 @@ export default class ViewData {
                 Grid.applyViewDataFilter($divGrid, model.years);
 
                 $('#gridRT').hide();
-                console.log('comm end')
             }
             else if (this.value == 'Emi') {
                 let firstEmi = model.emis[0]['EmisId'];
@@ -160,7 +158,6 @@ export default class ViewData {
                 $divTEGrid.jqxGrid('updatebounddata');
                 Grid.applyTEviewDataFilter($divTEGrid);
                 $('#gridRT').show();
-                console.log('emi end')
             }
 
         });
@@ -210,7 +207,7 @@ export default class ViewData {
             $divGrid.jqxGrid('updatebounddata');
             Grid.applyViewDataFilter($divGrid, model.years);
 
-            Message.smallBoxConfirmation("Confirmation!", "Emission <b>" + model.CommName[comm] + "</b> selected!", 3500);
+            Message.smallBoxConfirmation("Confirmation!", "Commodity <b>" + model.CommName[comm] + "</b> selected!", 3500);
         });
 
         let pasteEvent = false;
@@ -382,9 +379,11 @@ export default class ViewData {
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $divGrid.jqxGrid('exportdata', 'xls', 'View data by sets');
-            $divTEGrid.jqxGrid('exportdata', 'xls', 'View data by sets');
+            $divGrid.jqxGrid('exportdata', 'xls', 'View data by sets (time dependant)');
+            setTimeout(function(){$divTEGrid.jqxGrid('exportdata', 'xls', 'View data by sets');}, 1000)
+            
         });
+
 
         $("#decUp").off('click');
         $("#decUp").on('click', function (e) {

@@ -42,7 +42,6 @@ export default class RYTs {
     static initPage(model) {
         Message.clearMessages();
         //Navbar.initPage(model.casename);
-        console.log('model', model)
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlParams(model.PARAMETERS[model.group], model.param);
         Html.ddlTimeslices($('#osy-timeslices1'), model.timeslices);

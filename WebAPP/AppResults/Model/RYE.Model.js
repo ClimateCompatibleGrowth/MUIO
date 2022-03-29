@@ -17,16 +17,9 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
 
-
-            console.log('RYE ', DataModelResult.RYE(RYEdata))
-
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let RYEgrid = DataModelResult.RYEgrid( RYEdata, genData, PARAMETERS);
-            console.log('RYEgrid ', RYEgrid)
             let RYEchart = DataModelResult.RYEchart(genData, RYEdata);
-            console.log('RYEchart ', RYEchart)
-
-
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(emis, function (id, obj) {

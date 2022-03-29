@@ -19,13 +19,8 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
 
-            console.log('RTData ', RTdata)
-
             let RTgrid = DataModelResult.RTgrid( RTdata);
-
-            console.log('RTgrid ', RTgrid)
             let RTchart = DataModelResult.RTchart(RTdata);
-            console.log('RTchart ', RTchart)
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
             let techUnit = {};;

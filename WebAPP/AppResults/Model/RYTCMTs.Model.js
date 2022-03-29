@@ -27,11 +27,6 @@ export class Model {
             let Timeslices = DataModel.Timeslices(genData);
             let mods = DataModel.Mods(genData)
 
-            console.log('RYTCMTsdata ', RYTCMTsdata )
-            //console.log('DataModel.RYTCMTsgrid(RYTCMTsdata) ',DataModel.RYTCTs(RYTCMTsdata))
-            console.log('RYTCMTsgrid ',RYTCMTsgrid)
-            console.log('RYTCMTschart ',RYTCMTschart)
-
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(Timeslices, function (id, ts) {
                 datafieldsChart.push({ name: ts, type: 'number' });

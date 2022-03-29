@@ -76,8 +76,6 @@ export default class RYTCTs {
         // Html.ddlTechs(model.techs[model.param], model.techs[model.param][0]['TechId']);
         // Html.ddlComms(model.comms[model.param][model.techs[model.param][0]['TechId']], model.comms[model.param][model.techs[model.param][0]['TechId']][0]['CommId']);
         //Html.ddlMods($('#osy-mods1'), model.mods);
-
-        console.log('model ', model)
         let $divGrid = $('#osy-gridRYTCTs');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns, true);

@@ -116,4 +116,44 @@ export class Chart {
         };
         $div.jqxChart(settings);
     }
+
+    static SankeyChart($div, model){
+
+        var data = [{
+            type: "sankey",
+            //arrangement: "snap",
+            orientation: "h",
+            valueformat: ".0f",
+            valuesuffix: "",
+            node: {
+              pad: 15,
+              thickness: 30,
+              line: {
+                color: "black",
+                width: 0.5
+              },
+                label: model.label,
+                color: model.color
+            },
+          
+            link: {
+                source: model.source[model.sc][model.year],
+                target: model.target[model.sc][model.year],
+                value:  model.value[model.sc][model.year],
+                label:  model.labelLink[model.sc][model.year]
+            }
+        }];
+          
+        //var data = [data]
+        
+        var layout = {
+            title: "",
+            showlegend: true,
+            font: {
+                size: 12
+            }
+        }
+        
+        Plotly.react('osy-RESViewer', data, layout)
+    }
 }

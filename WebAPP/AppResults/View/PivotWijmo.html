@@ -33,6 +33,39 @@
 									<i class="ace-icon fa fa-file-excel-o "></i>
 								</button>
 							</div>
+							
+							<div class="btn-group pull-right">
+								<button type="button" class="btn btn-danger" id="pngExport" data-toggle="tooltip"
+									data-placement="top" title="Parameters definitions">
+									<i class="ace-icon fa fa-file-image-o "></i>
+								</button>
+							</div>
+							<div class="btn-group pull-right">
+								<a data-toggle="modal" id='osy-btnScOrder' href="#createView"
+									class="btn btn-block btn-labeled btn-default hidden-mobile">
+									<span class="btn-label">
+                                        <span class="fa fa-lg fa-fw fa-plus-square-o info"></span>
+                                    </span>Create view
+								</a>
+							</div>
+							<div class="btn-group pull-right">
+								<button type="button" id="loadView" class="btn btn-labeled btn-default ">
+                                    <span class="btn-label">
+                                        <span class="fa fa-lg fa-fw fa-line-chart success"></span>
+                                    </span>Load View
+                                </button>
+							</div>
+							<div class="btn-group pull-right">
+								<button type="button" id="deleteView" class="btn btn-labeled btn-default ">
+                                    <span class="btn-label">
+                                        <span class="fa fa-lg fa-fw fa-ban danger"></span>
+                                    </span>Delete view
+                                </button>
+							</div>
+
+							<div class="btn-group pull-right">
+								<select id="osy-views" name="osy-views" class="form-control inline"></select>
+							</div>
 							<div class="btn-group">
 								<select id="osy-params" name="osy-params" class="form-control inline"></select>
 							</div>
@@ -44,15 +77,32 @@
 	</div>
 </div>
 
-<!--Grid Pivot version no chart-->
+<!--Chart-->
+
 <div class="row">
 	<div class="col-md-2">
 		<div id="pivotPanel"></div>
 	</div>
 	<div class="col-md-10">
+		<div id="cmbChartType"></div>
+		<div id="cmbStackedChart"></div>
+		<label>
+			Show Row Totals:
+			<input id="showRowTotals" type="checkbox">
+		</label>
+		<label>
+			Show Column Totals:
+			<input id="showColumnTotals" type="checkbox">
+		</label>
+		<div id="pivotChart"></div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<div id="pivotGrid"></div>
 	</div>
 </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="createView" tabindex="-1" role="dialog">

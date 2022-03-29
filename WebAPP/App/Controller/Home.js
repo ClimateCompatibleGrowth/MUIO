@@ -28,12 +28,6 @@ export default class Home {
 
             let cases = Base.getCaseStudies();
             promise.push(cases);
-            // let genData = Osemosys.getData(casename, 'genData.json');
-            // promise.push(genData);
-            // const PARAMETERS = Osemosys.getParamFile();
-            // promise.push(PARAMETERS); 
-            // const RESULTPARAMETERS = Osemosys.getParamFile('ResultParameters.json');
-            // promise.push(RESULTPARAMETERS);
             $('#loadermain').hide();
             return Promise.all(promise);
         })
@@ -64,12 +58,6 @@ export default class Home {
             promise.push(casename);
             let cases = Base.getCaseStudies();
             promise.push(cases);
-            // let genData = Osemosys.getData(casename, 'genData.json');
-            // promise.push(genData);
-            // const PARAMETERS = Osemosys.getParamFile();
-            // promise.push(PARAMETERS); 
-            // const RESULTPARAMETERS = Osemosys.getParamFile('ResultParameters.json');
-            // promise.push(RESULTPARAMETERS);
             return Promise.all(promise);
         })
         .then(data => {

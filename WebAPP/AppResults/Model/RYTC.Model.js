@@ -24,9 +24,6 @@ export class Model {
             let ActivityTechs = DataModelResult.RYTCTechs(RYTCdata);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
-            console.log('RYTCgrid ', RYTCgrid)
-            console.log('RYTCchart ', RYTCchart)
-
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(comms, function (id, obj) {
                 datafieldsChart.push({ name: obj.Comm, type: 'number' });
@@ -65,12 +62,6 @@ export class Model {
                     cellsrenderer: cellsrenderer
                 });
             });
-
-            // console.log('RYTCchart ', RYTCchart)
-            // console.log('RYTCchartAll ', RYTCchartAll)
-            // console.log('ActivityTechs[param][0] ', ActivityTechs[param])
-            // console.log('RYTCgrid[param][cs] ', RYTCgrid[param][cs])
-            // console.log('RYTCchart[param][cs][ActivityTechs[param][0][Tech]] ', RYTCchart[param][cs][ActivityTechs[param][0]['Tech']])
 
             var srcGrid = {
                 datatype: "json",

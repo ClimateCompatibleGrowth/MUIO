@@ -119,8 +119,6 @@ export default class Config {
                 VarData[obj.groupId].push(tmp);
             });
 
-            console.log('VarData ', VarData)
-
             Osemosys.saveParamFile(ParamData, VarData)
             .then(response =>{
                 Message.bigBoxSuccess('Model message', response.message, 3000);
@@ -138,8 +136,7 @@ export default class Config {
         $(".nav-tabs li a").off('click');
         $('.nav-tabs li a').on("click", function(event, ui) { 
             var id = $(this).attr('id'); 
-            model.tab = id;  
-            console.log('model.tab ', model.tab);             
+            model.tab = id;               
         });
 
         //update rule button

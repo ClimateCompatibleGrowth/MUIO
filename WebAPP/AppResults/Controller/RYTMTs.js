@@ -137,8 +137,6 @@ export default class RYTMTs {
         let $divGrid = $('#osy-gridRYTMTs');
         let $divChart = $('#osy-chartRYTMTs');
 
-        console.log(model)
-
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function (e) {
             e.preventDefault();

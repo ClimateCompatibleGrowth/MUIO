@@ -19,26 +19,11 @@ export class Model {
             let mo = genData['osy-mo'];
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
-            
-            console.log('RYTdata ', RYTMdata)
-
-            console.log('RYT ', DataModelResult.RYTM( RYTMdata))
 
             let RYTMgrid = DataModelResult.RYTMgrid(RYTMdata, genData, PARAMETERS);
-
-            console.log('RYTMgrid ', RYTMgrid)
-            let RYTMchart = DataModelResult.RYTMchart(genData, RYTMdata);
-
-            console.log('RYTMchart ', RYTMchart)
-            
+            let RYTMchart = DataModelResult.RYTMchart(genData, RYTMdata);            
             let mods = DataModel.Mods(genData);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
-
-            
-           
-            
-            console.log('RYTMchart ', RYTMchart)
-            console.log('PARAMNAMES ', PARAMNAMES)
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(techs, function (id, obj) {

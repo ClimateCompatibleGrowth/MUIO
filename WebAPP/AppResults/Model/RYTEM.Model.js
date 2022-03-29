@@ -83,7 +83,6 @@ export class Model {
                 datafields: datafields,
             };
 
-            console.log(ActivityTechs[param][cs][0] , ActivityEmis[param][cs][ActivityTechs[param][cs][0]][0])
             var srcChart = {
                 datatype: "json",
                 localdata: RYTEMchart[param][cs][ActivityTechs[param][cs][0]][ActivityEmis[param][cs][ActivityTechs[param][cs][0]][0]],

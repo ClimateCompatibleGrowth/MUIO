@@ -16,7 +16,6 @@ export class Model {
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let RYCTsgrid = DataModelResult.RYCTsgrid(RYCTsdata, genData, PARAMETERS);
-            console.log('RYCTsgrid ',RYCTsgrid)
             let RYCTschart = DataModelResult.RYCTschart(genData, RYCTsdata);
             let timeslices = DataModel.Timeslices(genData);
             let commName = DataModel.CommName(genData);

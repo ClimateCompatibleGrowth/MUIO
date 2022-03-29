@@ -3,16 +3,22 @@ import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export class Model {
 
-    constructor(casename, genData, resData, PARAMETERS, DATA, VIEW) {
+    constructor(casename, genData, resData, VARIABLES, DATA, VIEW) {
 
         
         this.d = 2;
         this.decimal = 'd' + this.d;
-        //console.log('PARAMETERS ', PARAMETERS)
+        
+        //console.log('VARIABLES ', VARIABLES)
+        console.log('resData ', resData)
+        console.log('DATA ', DATA)
 
-        let VARGROUPS = DataModelResult.getVarById(PARAMETERS);
-        let pivotData = DataModelResult.getPivot(DATA['ANC'], genData['osy-years']);
-        let PARAMNAMES = DataModel.AllParamName(PARAMETERS);
+        let group = 'RYT';
+        let param = 'ANC';
+
+        let VARGROUPS = DataModelResult.getVarById(VARIABLES);
+        let pivotData = DataModelResult.getPivot(DATA, genData, VARIABLES, group, param);
+        let VARNAMES = DataModel.AllParamName(VARIABLES);
         let VIEWS = VIEW['osy-views'];
 
         //console.log('PARAMETERS ', PARAMETERS)
@@ -23,11 +29,11 @@ export class Model {
         this.genData = genData;
         this.resData = resData;
         this.pivotData = pivotData;
-        this.group = 'RYT';
-        this.param = 'ANC';
-        this.PARAMETERS = PARAMETERS;
+        this.group = group;
+        this.param = param;
+        this.VARIABLES = VARIABLES;
         this.VARGROUPS = VARGROUPS;
-        this.PARAMNAMES = PARAMNAMES;
+        this.VARNAMES = VARNAMES;
         this.VIEWS = VIEWS
         // this.VIEW = VIEWS['ANC'][0]['osy-viewId'];
         this.VIEW = null;

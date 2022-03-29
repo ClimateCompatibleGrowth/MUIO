@@ -128,22 +128,12 @@ export default class RYTTs {
 
         //change of ddl techs
         $("#osy-techs").off('change');
-        $('#osy-techs').on('change', function () {
-            // var param = $("#osy-ryt").val();
-            // var ts = $("#osy-timeslices1").val();
-            // console.log(this)
-            // console.log($("#osy-techs").val())
-            // console.log($("#osy-techs").text())
-            
+        $('#osy-techs').on('change', function () {            
             model.tech = model.techName[this.value];
-            console.log(model.techName[this.value])
             var configChart = $divChart.jqxChart('getInstance');
             configChart.source.records = model.chartData[model.param][model.case][model.tech];
             configChart.update();
         });
-
-
-
 
         $(".switchChart").off('click');
         $(".switchChart").on('click', function (e) {

@@ -6,14 +6,10 @@ export class Model {
 
     constructor(casename, genData, resData, RYTdata, group, PARAMETERS, param) {
 
-        console.log(casename, genData, RYTdata, group, PARAMETERS, param);
-
         this.d = 2;
         this.decimal = 'd' + this.d;
 
         if (casename) {
-
-        
 
             let datafields = [];
             let datafieldsChart = [];
@@ -24,14 +20,9 @@ export class Model {
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
         
-            console.log('RYT ', DataModelResult.RYT(RYTdata))
             let RYTgrid = DataModelResult.RYTgrid(RYTdata, genData, PARAMETERS);
-            console.log('RYTgrid ', RYTgrid)
             let RYTchart = DataModelResult.RYTchart(genData, RYTdata);
-            console.log('RYTchart ', RYTchart)
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
-            
-            console.log('PARAMNAMES ', PARAMNAMES)
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(techs, function (id, obj) {

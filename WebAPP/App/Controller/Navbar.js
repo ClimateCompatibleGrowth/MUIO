@@ -25,7 +25,6 @@ export class Navbar {
         $("#osy-sounds").on('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            console.log('sounds')
 
 			$.sound_on = !$.sound_on;
             if( $.sound_on ==false){

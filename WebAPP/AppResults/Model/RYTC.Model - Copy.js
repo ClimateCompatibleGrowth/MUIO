@@ -61,11 +61,6 @@ export class Model {
                 });
             });
 
-            console.log('RYTCchart ', RYTCchart)
-            // console.log('ActivityTechs[param][0] ', ActivityTechs[param])
-            // console.log('RYTCgrid[param][cs] ', RYTCgrid[param][cs])
-            // console.log('RYTCchart[param][cs][ActivityTechs[param][0][Tech]] ', RYTCchart[param][cs][ActivityTechs[param][0]['Tech']])
-
             var srcGrid = {
                 datatype: "json",
                 localdata: RYTCgrid[param][cs],

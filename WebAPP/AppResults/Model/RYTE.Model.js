@@ -17,19 +17,12 @@ export class Model {
             let emis = genData['osy-emis'];
             let cases = resData['osy-cases'];
             let cs = cases[0].Case;
-
-            console.log('RYTE ', DataModelResult.RYTE(RYTEdata))
             
             let RYTEgrid = DataModelResult.RYTEgrid(RYTEdata, genData, PARAMETERS);
             let RYTEchart = DataModelResult.RYTEchart(genData, RYTEdata);
 
             let ActivityTechs = DataModelResult.RYTETechs(RYTEdata);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
-
-            
-            console.log('RYTEgrid ', RYTEgrid)
-            console.log('RYTEchart ', RYTEchart)
-            console.log('ActivityTechs ', ActivityTechs)
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(emis, function (id, obj) {
