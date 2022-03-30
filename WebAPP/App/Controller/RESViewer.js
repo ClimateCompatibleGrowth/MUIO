@@ -40,7 +40,7 @@ export default class RESViewer {
 
         let $div = 'osy-RESViewer';
 
-        Html.title(model.casename, 'RES Viewer', model.sc + ' - ' + model.year);
+        Html.title(model.casename, 'RES Viewer', 'Reference Energy System');
         Html.ddlScenariosId(model.scenarios, model.sc);
         Html.ddlYears(model.years, model.year)
         Chart.SankeyChart($div, model);
@@ -84,14 +84,14 @@ export default class RESViewer {
 
         $("#osy-years").off('change');
         $('#osy-years').on('change', function () {
-            Html.title(model.casename, 'RES Viewer', 'Scenario <b>' +  model.sc + '</b> - year <b>' + this.value + '</b>');
+            Html.title(model.casename, 'RES Viewer', 'Reference Energy System');
             model.year = this.value;
             Chart.SankeyChart($div, model)
         });
 
         $("#osy-scenarios").off('change');
         $('#osy-scenarios').on('change', function () {
-            Html.title(model.casename, 'RES Viewer', 'Scenario <b>' +  this.value + '</b> - year <b>' + model.year + '</b>');
+            Html.title(model.casename, 'RES Viewer', 'Reference Energy System');
             model.sc = this.value;
             Chart.SankeyChart($div, model)
         });
