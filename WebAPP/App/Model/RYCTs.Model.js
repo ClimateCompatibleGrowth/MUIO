@@ -64,17 +64,22 @@ export class Model {
 
 
             let initeditor = function (row, cellvalue, editor, data) {
-                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
-
                 var scId = $('#osy-gridRYCTs').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
                             $('#' + editor[0].id).val(null);
                         }
                     })
+                }else{
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false }); //symbol: ' GWh', symbolPosition: 'right'
                 }
             }.bind(this);
+
+            let geteditorvalue =  function (row, cellvalue, editor) {
+                return editor.val() == null ? null : editor.val();
+            }
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center' });
@@ -89,7 +94,8 @@ export class Model {
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
-                    cellclassname: cellclass
+                    cellclassname: cellclass,
+                    geteditorvalue:geteditorvalue
                 });
             });
 

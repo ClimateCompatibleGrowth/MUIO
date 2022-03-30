@@ -73,17 +73,20 @@ export class Model {
 
 
             let initeditor = function (row, cellvalue, editor, data) {
-                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
-
                 var scId = $('#osy-gridRYTCn').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true });
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
                             $('#' + editor[0].id).val(null);
                         }
                     })
-                }
+                }else{editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false });}
             }.bind(this);
+
+            let geteditorvalue =  function (row, cellvalue, editor) {
+                return editor.val() == null ? null : editor.val();
+            }
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
@@ -93,7 +96,8 @@ export class Model {
                     initeditor: initeditor,
                     //validation: validation,
                     cellsrenderer: cellsrenderer,
-                    cellclassname: cellclass
+                    cellclassname: cellclass,
+                    geteditorvalue: geteditorvalue
                 });
             });
 

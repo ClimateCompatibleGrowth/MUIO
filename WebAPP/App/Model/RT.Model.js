@@ -90,6 +90,10 @@ export class Model {
 
             }.bind(this);
 
+            let geteditorvalue =  function (row, cellvalue, editor) {
+                return editor.val() == null ? null : editor.val();
+            }
+
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75 }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 200 });
 
@@ -103,7 +107,8 @@ export class Model {
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
-                    cellclassname: cellclass
+                    cellclassname: cellclass,
+                    geteditorvalue:  geteditorvalue
                 });
             });
 

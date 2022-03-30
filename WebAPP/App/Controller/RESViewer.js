@@ -89,6 +89,13 @@ export default class RESViewer {
             Chart.SankeyChart($div, model)
         });
 
+        $("#osy-scenarios").off('change');
+        $('#osy-scenarios').on('change', function () {
+            Html.title(model.casename, 'RES Viewer', 'Scenario <b>' +  this.value + '</b> - year <b>' + model.year + '</b>');
+            model.sc = this.value;
+            Chart.SankeyChart($div, model)
+        });
+
         $("#showLog").click(function (e) {
             e.preventDefault();
             $('#definition').html(`${DEF[model.group][model.param].definition}`);

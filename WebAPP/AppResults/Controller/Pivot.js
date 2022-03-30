@@ -129,18 +129,16 @@ export default class Pivot {
 
         model.DEFAULTVIEW = ng.viewDefinition;
 
-        //console.log('view derf ', ng.viewDefinition)
-
         // toggle showRowTotals
-        // document.getElementById('showRowTotals').addEventListener('click', function (e) {
-        //     ng.showRowTotals = e.target.checked ?
-        //         wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
-        // });
+        document.getElementById('showRowTotals').addEventListener('click', function (e) {
+            ng.showRowTotals = e.target.checked ?
+                wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
+        });
 
-        // document.getElementById('showColumnTotals').addEventListener('click', function (e) {
-        //     ng.showColumnTotals = e.target.checked ?
-        //         wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
-        // });
+        document.getElementById('showColumnTotals').addEventListener('click', function (e) {
+            ng.showColumnTotals = e.target.checked ?
+                wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
+        });
 
 
 
@@ -265,8 +263,9 @@ export default class Pivot {
         $("#deleteView").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
+            console.log('model.VIEW ', model.VIEW)
             //update model
-            if ( model.VIEW != 'null'){
+            if ( model.VIEW != 'null' &&   model.VIEW != null){
                 $.each(model.VIEWS[model.param], function (id, obj) {
                     //console.log('obj ', obj)
                     if(obj['osy-viewId'] == model.VIEW){
@@ -275,26 +274,43 @@ export default class Pivot {
                     }
                 });
                 Html.ddlViews(model.VIEWS[model.param]);
-            }
+           
 
             Osemosys.updateViews(model.casename, model.VIEWS[model.param], model.param)
                 .then(response => {
-
+                    ng.viewDefinition = model.DEFAULTVIEW;
+                    app.pivotChart.header = '';
                     Message.clearMessages();
-                    Message.bigBoxSuccess('Model message', response.message, 3000);
+                    Message.smallBoxInfo('Model message', response.message, 3000);
                 
                 })
                 .catch(error => {
                     Message.bigBoxDanger('Error message', error, null);
                 })
+            }else{
+                Message.smallBoxWarning('Model message', 'Default view cannot be deleted!', 3000);
+            }
         });
 
-        $("#loadView").off('click');
-        $("#loadView").on('click', function (event) {
-            //console.log('model.VIEWS ', model.VIEWS)
-            // let view = $("#osy-views").val();
-            // model.VIEW = view;
-            //console.log('model.VIEW ', model.VIEW)
+        // $("#loadView").off('click');
+        // $("#loadView").on('click', function (event) {
+        //     if ( model.VIEW == 'null'){
+        //         ng.viewDefinition = model.DEFAULTVIEW;
+        //         app.pivotChart.header = '';
+        //     }else{
+        //         $.each(model.VIEWS[model.param], function (id, obj) {
+        //             if(obj['osy-viewId'] == model.VIEW){
+        //                 ng.viewDefinition = obj['osy-viewdef'];
+        //                 app.pivotChart.header = obj['osy-viewname']
+        //             }
+        //         });
+        //     }
+
+        // });
+
+        $("#osy-views").off('change');
+        $('#osy-views').on('change', function () {
+            model.VIEW = this.value;
             if ( model.VIEW == 'null'){
                 ng.viewDefinition = model.DEFAULTVIEW;
                 app.pivotChart.header = '';
@@ -307,12 +323,6 @@ export default class Pivot {
                     }
                 });
             }
-
-        });
-
-        $("#osy-views").off('change');
-        $('#osy-views').on('change', function () {
-            model.VIEW = this.value;
         });
 
     }

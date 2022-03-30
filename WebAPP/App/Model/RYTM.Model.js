@@ -72,17 +72,33 @@ export class Model {
             }.bind(this);
 
 
+            // let createeditor = function (row, cellvalue, editor, data) {
+            //     editor.jqxNumberInput({ decimalDigits: this.d,  spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
+                
+            // }.bind(this);
+
             let initeditor = function (row, cellvalue, editor, data) {
-                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
+                console.log('this.d ', this.d)
+                console.log('cellvalue ', cellvalue)
                 var scId = $('#osy-gridRYTM').jqxGrid('getcellvalue', row, 'ScId');
+                console.log('scId ', scId)
                 if (scId !== 'SC_0') {
+                    editor.jqxNumberInput({ decimalDigits: this.d,  spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
-                            $('#' + editor[0].id).val(null);
+                            //$('#' + editor[0].id).val(null);
+                            editor.jqxNumberInput('val',null); 
                         }
                     })
+                }else{
+                    editor.jqxNumberInput({ decimalDigits: this.d,  spinButtons: true, allowNull: false }); //symbol: ' GWh', symbolPosition: 'right'
                 }
             }.bind(this);
+
+            let geteditorvalue =  function (row, cellvalue, editor) {
+                console.log('editor.val() ', editor.val())
+                return editor.val() == null ? null :  editor.val();
+            }
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center', cellclassname: cellclass });
@@ -94,10 +110,12 @@ export class Model {
                 columns.push({
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal,
                     groupable: false,
+                    //createeditor: createeditor,
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
-                    cellclassname: cellclass
+                    cellclassname: cellclass,
+                    geteditorvalue: geteditorvalue
                 });
             }.bind(this));
 

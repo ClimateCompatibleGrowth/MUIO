@@ -61,7 +61,7 @@ export default class RE {
 
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
         let $divChart = $('#osy-chartRE');
-        Chart.Chart($divChart, daChart, "RE", model.series, 'Emi');
+        Chart.Chart($divChart, daChart, "RE", model.series, 'Emi', 'Year', 'auto');
         //pageSetUp();
     }
 

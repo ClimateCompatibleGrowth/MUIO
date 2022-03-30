@@ -55,17 +55,24 @@ export class Model {
             }.bind(this);
 
             let initeditor = function (row, cellvalue, editor, data) {
-                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
+                
                 var scId = $('#osy-gridRY').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
                             $('#' + editor[0].id).val(null);
                         }
                     })
+                }else{
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false }); //symbol: ' GWh', symbolPosition: 'right'
                 }
 
             }.bind(this);
+
+            let geteditorvalue =  function (row, cellvalue, editor) {
+                return editor.val() == null ? null : editor.val();
+            }
 
             var cellclass = function (row, columnfield, value, data) {
                 return scClass[data.ScId];
@@ -83,7 +90,8 @@ export class Model {
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
-                    cellclassname: cellclass
+                    cellclassname: cellclass,
+                    geteditorvalue:  geteditorvalue
                 });
             });
 

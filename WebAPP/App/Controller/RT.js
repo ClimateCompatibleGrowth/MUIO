@@ -61,7 +61,12 @@ export default class RT {
 
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
         let $divChart = $('#osy-chartRT');
-        Chart.Chart($divChart, daChart, "RT", model.series, 'Tech');
+        if (['TMPAL', 'TMPAU'].includes(this.param)){
+            Chart.Chart($divChart, daChart, "RT", model.series, 'Tech', 'Year', 'auto');
+        }else{
+            Chart.Chart($divChart, daChart, "RT", model.series, 'Tech');
+        }
+        
         //pageSetUp();
     }
 
@@ -144,6 +149,13 @@ export default class RT {
             Grid.applyRTFilter($divGrid, model.techs);
             var configChart = $divChart.jqxChart('getInstance');
             configChart.source.records = model.chartData[this.value];
+
+            if (['TMPAL', 'TMPAU'].includes(this.value)){
+                configChart.valueAxis.minValue = 'auto';
+            }else{
+                configChart.valueAxis.minValue = 0;
+            }
+
             configChart.update();
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });

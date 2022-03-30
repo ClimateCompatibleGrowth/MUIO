@@ -16,7 +16,7 @@ export class Model {
         let TechUnits = DataModel.getTechUnits(genData);
         let CommUnits = DataModel.getCommUnits(genData);
 
-        // console.log('RYTCMdata ', RYTCMdata);
+        console.log('RYTCMdata ', RYTCMdata);
         // //console.log('ActivityTechs ', ActivityTechs);
         // console.log('ActivityComms ', ActivityComms);
         // console.log('TechNames ', TechNames);
@@ -71,7 +71,7 @@ export class Model {
                                 source[sc][year].push(labelIndex[objData.CommId]);
                                 target[sc][year].push(labelIndex[objData.TechId]);
                                 labelLink[sc][year].push(CommUnits[objData.CommId] + '/' + TechUnits[objData.TechId]['ActUnitId']);
-                                if(objData[year] != 0){
+                                if(objData[year] != 0 && objData[year] != null){
                                     value[sc][year].push(objData[year]);
                                     //value[sc][year].push(1);
                                 }else{
@@ -83,7 +83,7 @@ export class Model {
                                 source[sc][year].push(labelIndex[objData.TechId]);
                                 target[sc][year].push(labelIndex[objData.CommId]);
                                 labelLink[sc][year].push(CommUnits[objData.CommId] + '/' + TechUnits[objData.TechId]['ActUnitId']);
-                                if(objData[year] != 0){
+                                if(objData[year] != 0 && objData[year] != null){
                                     value[sc][year].push(objData[year]);
                                     //value[sc][year].push(1);
                                 }else{

@@ -62,6 +62,7 @@ export class Model {
             }
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
+                //console.log('value ', value)
                 if (value === null || value === '') {
                     return '<span style="margin: 4px; float:right; ">n/a</span>';
                 } else {
@@ -71,24 +72,34 @@ export class Model {
             }.bind(this);
 
             let initeditor = function (row, cellvalue, editor, data) {
-                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
-
                 var scId = $('#osy-gridRYT').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
-                            $('#' + editor[0].id).val(null);
+                            //$('#' + editor[0].id).val(null);
+                            editor.jqxNumberInput('val',null); 
+                            console.log('editor ', editor) 
                         }
                     })
+                }else{
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: false }); //symbol: ' GWh', symbolPosition: 'right'
                 }
 
             }.bind(this);
+
+            let geteditorvalue =  function (row, cellvalue, editor) {
+                return editor.val() == null ? null : editor.val();
+            }
+
+
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, });
             columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
 
             $.each(years, function (id, year) {
+                //console.log('year ',year)
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
@@ -97,7 +108,8 @@ export class Model {
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
-                    cellclassname: cellclass
+                    cellclassname: cellclass,
+                    geteditorvalue:  geteditorvalue
                 });
             });
 

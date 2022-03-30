@@ -3,7 +3,8 @@ export class Chart {
         let theme = "bootstrap";
         return theme
     }
-    static Chart($div, dataAdapter, unit, series, dataField = 'Year') {
+    static Chart($div, dataAdapter, unit, series, dataField = 'Year', minValue = 0) {
+        console.log('dataAdapter ', dataAdapter)
 
         var settings = {
             title: "",
@@ -56,7 +57,7 @@ export class Chart {
             valueAxis:
             {
                 // unitInterval: 500,
-                minValue: 'auto',
+                minValue: minValue,
                 maxValue: 'auto',
                 title: { text: 'Installed power [MW]' },
                 displayValueAxis: true,
@@ -119,6 +120,11 @@ export class Chart {
 
     static SankeyChart($div, model){
 
+        console.log( ' source ', model.source[model.sc][model.year]);
+        console.log( ' target ', model.target[model.sc][model.year]);
+        console.log( ' value ', model.value[model.sc][model.year]);
+        console.log( ' labelLink ', model.labelLink[model.sc][model.year]);
+
         var data = [{
             type: "sankey",
             //arrangement: "snap",
@@ -154,6 +160,6 @@ export class Chart {
             }
         }
         
-        Plotly.react('osy-RESViewer', data, layout)
+        Plotly.react($div, data, layout)
     }
 }
