@@ -51,32 +51,6 @@
                     "Active": false
                 }
             ]
-        },
-        {
-            "Case": "Ilse",
-            "CaseId": "CS_o6s9u",
-            "Desc": "",
-            "Runtime": "Wed Mar 30 2022 15:21:07 GMT+0200 (Central European Summer Time)",
-            "Scenarios": [
-                {
-                    "ScenarioId": "SC_0",
-                    "Scenario": "SC_0",
-                    "Desc": "Base scenario",
-                    "Active": true
-                },
-                {
-                    "ScenarioId": "SC_p6iyw",
-                    "Scenario": "SC_2",
-                    "Desc": "Base scenario",
-                    "Active": true
-                },
-                {
-                    "ScenarioId": "SC_ayjl6",
-                    "Scenario": "SC_1",
-                    "Desc": "Base scenario",
-                    "Active": true
-                }
-            ]
         }
     ]
 }

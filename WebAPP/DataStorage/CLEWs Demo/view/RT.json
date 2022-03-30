@@ -1,20 +1,5 @@
 {
     "TTMPA": {
-        "Ilse": [
-            {
-                "MINCOA": 0.0,
-                "MINGAS": 6308.8269,
-                "MINHYD": 0.0,
-                "MINSOL": 0.0,
-                "MINWND": 0.0,
-                "PWRCOA": 0.0,
-                "PWRGAS": 3154.4134,
-                "PWRHYD": 0.0,
-                "PWRSOL": 0.0,
-                "PWRTRN": 2867.6486,
-                "PWRWND": 0.0
-            }
-        ],
         "t1": [
             {
                 "MINCOA": 0.0,
