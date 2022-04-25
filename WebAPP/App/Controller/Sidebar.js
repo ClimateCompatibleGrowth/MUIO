@@ -57,10 +57,11 @@ export class Sidebar {
                 
             </label>`;
             $('#dynamicRoutes').append(res);
+
             $.each(PARAMORDER, function (id, group) {
                 $.each(model.PARAMETERS[group], function (id, obj) {
                     //da li ima parametara definisanih za grupu
-
+                    
                     if (model.PARAMETERS[group] !== undefined || model.PARAMETERS[group].length != 0) {
                         if (obj.menu) {
                             if (obj.id == 'IAR' && model.menuCondition.IAR) {
@@ -118,7 +119,40 @@ export class Sidebar {
                                 </li>`;
                                 $('#dynamicRoutes').append(res);
                             }
-                            if (obj.id == 'CM' && model.menuCondition.CM) {
+                            if (obj.id == 'CCM' && model.menuCondition.CM) {
+                                let res = `
+                                <li  class="">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
+                
+                                    ${obj.value}
+                                    <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
+                                    </a>
+                                </li>`;
+                                $('#dynamicRoutes').append(res);
+                            }
+                            if (obj.id == 'CNCM' && model.menuCondition.CM) {
+                                let res = `
+                                <li  class="">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
+                
+                                    ${obj.value}
+                                    <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
+                                    </a>
+                                </li>`;
+                                $('#dynamicRoutes').append(res);
+                            }
+                            if (obj.id == 'CAM' && model.menuCondition.CM) {
+                                let res = `
+                                <li  class="">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
+                
+                                    ${obj.value}
+                                    <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
+                                    </a>
+                                </li>`;
+                                $('#dynamicRoutes').append(res);
+                            }
+                            if (obj.id == 'CC' && model.menuCondition.CM) {
                                 let res = `
                                 <li  class="">
                                     <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">

@@ -548,3 +548,9 @@ top: 10px;
 nav ul li ul li>a {
     font-size: 12px!important;
 }
+
+svg[id^="mermaid-"] { 
+    min-width: 500px!important; 
+    width: 1800px!important;
+    max-width: 2200px!important; 
+}

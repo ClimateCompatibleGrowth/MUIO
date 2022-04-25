@@ -62,6 +62,17 @@ export class Message {
         });
     }
 
+    static bigBoxDefault(title, content, timeout) {
+        $.bigBox({
+            title: title,
+            content: content,
+            color: "#4a5168",
+            icon: "fa fa-info-circle swing animated",
+            //number : "2"
+            timeout: timeout
+        });
+    }
+
     static bigBoxWarning(title, content, timeout) {
         $.bigBox({
             title: title,

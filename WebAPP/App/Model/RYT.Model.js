@@ -84,6 +84,7 @@ export class Model {
                     })
                 }else{
                     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: false }); //symbol: ' GWh', symbolPosition: 'right'
+                    editor.val(cellvalue);
                 }
 
             }.bind(this);
@@ -102,7 +103,7 @@ export class Model {
                 //console.log('year ',year)
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
-                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput',
                     groupable: false,
                     sortable: false,
                     initeditor: initeditor,

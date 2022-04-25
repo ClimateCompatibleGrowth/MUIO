@@ -4,7 +4,6 @@ export class Chart {
         return theme
     }
     static Chart($div, dataAdapter, unit, series, dataField = 'Year', minValue = 0) {
-        console.log('dataAdapter ', dataAdapter)
 
         var settings = {
             title: "",
@@ -117,6 +116,54 @@ export class Chart {
         };
         $div.jqxChart(settings);
     }
+
+    static RESChart($div, model){
+
+        // console.log( ' source ', model.source);
+        // console.log( ' target ', model.target);
+        // console.log( ' value ', model.value);
+        // console.log( ' labelLink ', model.labelLink);
+
+        var data = [{
+            type: "sankey",
+            arrangement: "fixed",
+            orientation: "h",
+            valueformat: ".0f",
+            valuesuffix: "",
+            node: {
+              pad: 15,
+              thickness: 30,
+              line: {
+                color: "red",
+                width: 0.5
+              },
+                label: model.label,
+                color: model.color
+            },
+          
+            link: {
+                source: model.source,
+                target: model.target,
+                value:  model.value,
+                label:  model.labelLink
+            }
+        }];
+          
+        //var data = [data]
+        
+        var layout = {
+            title: "",
+            showlegend: true,
+            //width: 1118,
+            height: model.height,
+            font: {
+                size: 12
+            }
+        }
+        
+        Plotly.react($div, data, layout)
+    }
+
 
     static SankeyChart($div, model){
 

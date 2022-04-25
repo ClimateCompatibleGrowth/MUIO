@@ -284,6 +284,14 @@ export class Html {
         });
     }
 
+    static ddlActivityTechs(techs) {
+        var container = $('#osy-activityTechs');
+        container.empty();
+        $.each(techs, function (id, obj) {
+            container.append('<option value="' + obj.TechId+ '">' + obj.Tech + '</option>');
+        });
+    }
+
     static ddlParamsAll(params, param) {
         var container = $('#osy-params');
         container.empty();

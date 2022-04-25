@@ -92,6 +92,7 @@ export class Model {
                     })
                 }else{
                     editor.jqxNumberInput({ decimalDigits: this.d,  spinButtons: true, allowNull: false }); //symbol: ' GWh', symbolPosition: 'right'
+                    editor.val(cellvalue);
                 }
             }.bind(this);
 

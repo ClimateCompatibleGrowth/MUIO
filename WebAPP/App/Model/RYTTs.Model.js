@@ -76,6 +76,7 @@ export class Model {
                     })
                 }else{
                     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false }); 
+                    editor.val(cellvalue);
                 }
             }.bind(this);
 

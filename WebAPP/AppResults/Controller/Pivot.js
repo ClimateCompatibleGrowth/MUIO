@@ -76,6 +76,33 @@ export default class Pivot {
 
         var ng = app.panel.engine;
 
+
+        //New fieled formats
+        let _oldEditField = ng.editField;
+
+        ng.editField = function(fld) {
+            _oldEditField.call(this, fld);
+            if(fld.dataType !== wijmo.DataType.Number) {
+                return;
+            }
+            var format = wijmo.Control.getControl('div[wj-part="div-fmt"]');
+            addFormats(format);
+        }
+
+        function addFormats(format) {
+            const view = format.collectionView;
+            var newFmt = view.addNew();
+            newFmt.key = "Float (n3)";
+            newFmt.val = "n3";
+            newFmt.all = true; // always set it to true
+            var newFmt = view.addNew();
+            newFmt.key = "Float (n4)";
+            newFmt.val = "n4";
+            newFmt.all = true; // always set it to true
+            view.commitNew();
+        }
+        ///////////end field formats
+
         app.pivotGrid = new wijmo.olap.PivotGrid('#pivotGrid', {
             itemsSource: app.panel,
             collapsibleSubtotals: true,
@@ -121,9 +148,18 @@ export default class Pivot {
         ng.itemsSource = model.pivotData
         // ng.palette = app.pivotChart.Pallettes.dark;
         //ng.rowFields.push('Case', 'Tech', 'Comm', 'MoId', 'Ts');
-        ng.rowFields.push('Case', 'Tech');
-        ng.columnFields.push('Year');
-        ng.valueFields.push('Value');
+
+    
+        // ng.fields.push( { binding: 'Case', header: 'Case'});
+        // ng.fields.push( { binding: 'Tech', header: 'Tech' });
+        // ng.fields.push( { binding: 'Comm', header: 'Comm' });
+        // ng.fields.push( { binding: 'Emi', header: 'Emi' });
+        // ng.fields.push( { binding: 'MoId', header: 'MoId' });
+        // ng.fields.push( { binding: 'Value', header: 'Value', format: 'n4' });
+
+        ng.columnFields.push('Case', 'Tech');
+        ng.rowFields.push('Year');
+        ng.valueFields.push( 'Value');
         ng.showRowTotals = 'None';
         ng.showColumnTotals = 'None';
 
@@ -160,18 +196,18 @@ export default class Pivot {
                 ng.itemsSource = model.pivotData
 
                 if (model.param == 'D' || model.param == 'T'){
-                    ng.rowFields.push('Case', 'Comm');
-                    ng.columnFields.push('Year');
+                    ng.columnFields.push('Case', 'Comm');
+                    ng.rowFields.push('Year');
                     ng.valueFields.push('Value');
                 }
                 else if(model.param == 'AE' ){
-                    ng.rowFields.push('Case', 'Emi');
-                    ng.columnFields.push('Year');
+                    ng.columnFields.push('Case', 'Emi');
+                    ng.rowFields.push('Year');
                     ng.valueFields.push('Value');
                 }
                 else{
-                    ng.rowFields.push('Case', 'Tech');
-                    ng.columnFields.push('Year');
+                    ng.columnFields.push('Case', 'Tech');
+                    ng.rowFields.push('Year');
                     ng.valueFields.push('Value');
                 }
                 

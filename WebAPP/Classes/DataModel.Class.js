@@ -293,6 +293,23 @@ export class DataModel{
         return ActivityTechs;
     }
 
+    static getAllActivityTechs(techs){
+        let ActivityTechs = [];
+        let tmp = {};
+        $.each(techs, function (id, obj) {
+            if (obj.IAR.length != 0 || obj.OAR.length != 0) {
+                if (!(obj.TechId in tmp)){
+                    tmp[obj.TechId] = obj.Tech;
+                    let chunk = {};
+                    chunk['TechId'] = obj.TechId;
+                    chunk['Tech'] = obj.Tech;
+                    ActivityTechs.push(chunk)
+                }  
+            }
+        });
+        return ActivityTechs;
+    }
+
     static activityComms(genData){
         let ActivityComms = {};
         ActivityComms['IAR'] = {};

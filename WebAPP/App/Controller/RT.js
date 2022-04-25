@@ -283,6 +283,11 @@ export default class RT {
             $divChart.jqxChart('saveAsPNG', 'RT.png', 'https://www.jqwidgets.com/export_server/export.php');
         });
 
+        $("#osy-getColumns").off('click');
+        $("#getColumns").on('click', function () {
+            $divGrid.jqxGrid('openColumnChooser');
+        });
+
         let res = true;
         $("#resizeColumns").click(function () {
             if (res) {

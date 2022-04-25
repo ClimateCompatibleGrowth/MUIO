@@ -1,0 +1,24 @@
+{
+    "osy-cases": [
+        {
+            "Case": "RunCase",
+            "CaseId": "CS_myvet",
+            "Desc": "",
+            "Runtime": "Mon Apr 25 2022 19:59:30 GMT+0200 (Central European Summer Time)",
+            "Scenarios": [
+                {
+                    "ScenarioId": "SC_0",
+                    "Scenario": "SC_0",
+                    "Desc": "Base scenario",
+                    "Active": true
+                },
+                {
+                    "ScenarioId": "SC_tkqum",
+                    "Scenario": "InputToCap",
+                    "Desc": "Input to capacity test",
+                    "Active": true
+                }
+            ]
+        }
+    ]
+}

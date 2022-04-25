@@ -81,7 +81,11 @@ export class Model {
                             $('#' + editor[0].id).val(null);
                         }
                     })
-                }else{editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false });}
+                }
+                else{
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false });
+                    editor.val(cellvalue);
+                }
             }.bind(this);
 
             let geteditorvalue =  function (row, cellvalue, editor) {

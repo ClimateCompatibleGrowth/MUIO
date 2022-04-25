@@ -4,7 +4,7 @@ import { GROUPNAMES } from "../../Classes/Const.Class.js";
 export class Model {
 
     constructor(casename, genData, RTdata, group, PARAMETERS, param) {
-        this.d = 2;
+        this.d = 5;
         this.decimal = 'd' + this.d;
 
         if (casename) {
@@ -72,37 +72,50 @@ export class Model {
                     return '<span style="margin: 4px; float:right; ">n/a</span>';
                 } else {
                     var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
+
+                    if(columnfield == 'TEC_0' && row == 0){
+                        console.log('cellsrenderer ', value)
+                        console.log('formattedValue ', formattedValue)
+                    }
+
                     return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
                 }
 
             }.bind(this);
 
-            let initeditor = function (row, cellvalue, editor, data) {
-                editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
+            let initeditor = function (row, cellvalue, editor, data) {                
                 var scId = $('#osy-gridRT').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); 
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
                             $('#' + editor[0].id).val(null);
                         }
                     })
+                }else{
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: false }); 
+                    editor.val(cellvalue);
                 }
 
             }.bind(this);
 
             let geteditorvalue =  function (row, cellvalue, editor) {
+                // console.log('editor ', editor)
+                // console.log('editor.val() ', editor.val())
                 return editor.val() == null ? null : editor.val();
             }
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75 }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 200 });
 
+            console.log('this.decimal ', this.decimal)
             let techIds = [];
             $.each(techs, function (id, tech) {
                 techIds.push(tech.TechId);
                 datafields.push({ name: tech['TechId'], type: 'number' });
                 columns.push({
-                    text: tech.Tech + ' <small  style="color:darkgrey">[ ' + techUnit[param][tech.TechId] + ' ]</small>', datafield: tech.TechId, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
+                    text: tech.Tech + ' <small  style="color:darkgrey">[ ' + techUnit[param][tech.TechId] + ' ]</small>', 
+                    datafield: tech.TechId, cellsalign: 'right', minWidth: 120, align: 'center', columntype: 'numberinput', cellsformat: 'd5',
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,

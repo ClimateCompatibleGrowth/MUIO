@@ -120,6 +120,22 @@ export class Routes {
                 });
             });
 
+            crossroads.addRoute('/RESViewerMermaid', function() {
+                $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+                import('../App/Controller/RESViewerMermaid.js')
+
+                .then(RESViewer => {
+                    $( ".osy-content" ).load( 'App/View/RESViewerMermaid.html', function() {
+                        RESViewer.default.onLoad();
+                    });
+                });
+            });
+
+
+            // crossroads.addRoute('/RESViewerMermaid', function() {
+
+            //         $( ".osy-content" ).load( 'App/View/RESViewerMermaid.html');
+            // });
             //dynamic Results routes
             // function addResRoute(group, id){
             //     return crossroads.addRoute(`/${group}/${id}`, function() {

@@ -30,6 +30,19 @@ export class JqxSources {
         return srcTech;
     }
 
+    static srcActTech(techs) {
+        var srcTech = {
+            localdata: techs,
+            datatype: "json",
+            datafields:
+                [
+                    { name: 'TechId', type: 'string' },
+                    { name: 'Tech', type: 'string' }
+                ],
+        }
+        return srcTech;
+    }
+
     static srcComm(commodities) {
         var srcComm = {
             localdata: commodities,
