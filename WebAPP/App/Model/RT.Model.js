@@ -4,7 +4,7 @@ import { GROUPNAMES } from "../../Classes/Const.Class.js";
 export class Model {
 
     constructor(casename, genData, RTdata, group, PARAMETERS, param) {
-        this.d = 5;
+        this.d = 3;
         this.decimal = 'd' + this.d;
 
         if (casename) {
@@ -115,7 +115,7 @@ export class Model {
                 datafields.push({ name: tech['TechId'], type: 'number' });
                 columns.push({
                     text: tech.Tech + ' <small  style="color:darkgrey">[ ' + techUnit[param][tech.TechId] + ' ]</small>', 
-                    datafield: tech.TechId, cellsalign: 'right', minWidth: 120, align: 'center', columntype: 'numberinput', cellsformat: 'd5',
+                    datafield: tech.TechId, cellsalign: 'right', minWidth: 120, align: 'center', columntype: 'numberinput', cellsformat: 'd3',
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,

@@ -312,7 +312,7 @@ export default class AddCase {
             var rowBoundIndex = args.rowindex;
             var value = args.newvalue;
             if (column == 'CapUnitId' || column == 'ActUnitId') {
-                Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', null);
+                Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', 3000);
             }
             if (column != 'IAR' && column != 'OAR' && column != 'EAR' && column != 'INCR' && column != 'ITCR') {
                 model.techs[rowBoundIndex][column] = value;
@@ -379,7 +379,7 @@ export default class AddCase {
             var value = args.newvalue;
             model.commodities[rowBoundIndex][column] = value;
             if (column == 'UnitId') {
-                Message.bigBoxWarning('Unit change warninig!', 'Changing commodity unit will not recalculate entered nor default values in the model.', null);
+                Message.bigBoxWarning('Unit change warninig!', 'Changing commodity unit will not recalculate entered nor default values in the model.', 3000);
             }
             if (column == 'Comm') {
                 var commId = $divComm.jqxGrid('getcellvalue', rowBoundIndex, 'CommId');
@@ -434,7 +434,7 @@ export default class AddCase {
             var value = args.newvalue;
             model.emissions[rowBoundIndex][column] = value;
             if (column == 'UnitId') {
-                Message.bigBoxWarning('Unit change warninig!', 'Changing emission unit will not recalculate entered nor default values in the model.', null);
+                Message.bigBoxWarning('Unit change warninig!', 'Changing emission unit will not recalculate entered nor default values in the model.', 3000);
             }
             if (column == 'Emis') {
                 var emisId = $divEmi.jqxGrid('getcellvalue', rowBoundIndex, 'EmisId');

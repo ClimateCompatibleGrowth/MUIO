@@ -3,7 +3,7 @@ import { DataModel } from "../../Classes/DataModel.Class.js";
 export class Model {
 
     constructor(casename, genData, RYCdata, group, PARAMETERS, param) {
-        this.d = 2;
+        this.d = 3;
         this.decimal = 'd' + this.d;
         if (casename) {
 
@@ -86,7 +86,8 @@ export class Model {
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
-                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', 
+                    cellsformat: 'd3',
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,

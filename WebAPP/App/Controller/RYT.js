@@ -156,11 +156,12 @@ export default class RYT {
         $('#osy-ryt').on('change', function () {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             model.srcGrid.root = this.value;
-            let decimal = Functions.getDecimalPlaces(model.paramData[model.group][this.value]['default']);
-            //console.log(this.value, decimal)
-            model.param = this.value;
-            model.d = decimal;
-            model.decimal = 'd' + model.d;
+
+            //deciml values by params
+            // let decimal = Functions.getDecimalPlaces(model.paramData[model.group][this.value]['default']);
+            // model.param = this.value;
+            // model.d = decimal;
+            // model.decimal = 'd' + model.d;
             $divGrid.jqxGrid('updatebounddata');
 
             Grid.applyRYTFilter($divGrid, model.years);

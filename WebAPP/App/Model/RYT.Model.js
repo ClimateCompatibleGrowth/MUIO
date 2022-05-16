@@ -6,8 +6,11 @@ export class Model {
     constructor(casename, genData, RYTdata, group, PARAMETERS, param) {
 
         let paramData = DataModel.getParamData(PARAMETERS);
-        let decimal = Functions.getDecimalPlaces(paramData[group][param]['default']);
-        this.d = decimal;
+        // let decimal = Functions.getDecimalPlaces(paramData[group][param]['default']);
+        // this.d = decimal;
+        // this.decimal = 'd' + this.d;
+
+        this.d = 3;
         this.decimal = 'd' + this.d;
 
         if (casename) {

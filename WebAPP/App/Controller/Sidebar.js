@@ -152,7 +152,7 @@ export class Sidebar {
                                 </li>`;
                                 $('#dynamicRoutes').append(res);
                             }
-                            if (obj.id == 'CC' && model.menuCondition.CM) {
+                            if (obj.id == 'UCC' && model.menuCondition.CM) {
                                 let res = `
                                 <li  class="">
                                     <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">

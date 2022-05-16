@@ -4,7 +4,7 @@ import { GROUPNAMES } from "../../Classes/Const.Class.js";
 export class Model {
 
     constructor(casename, genData, Rdata, group, PARAMETERS, param) {
-        this.d = 2;
+        this.d = 3;
         this.decimal = 'd' + this.d;
 
         if (casename) {
@@ -85,7 +85,7 @@ export class Model {
             //columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
             columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
             columns.push({
-                text: 'value', datafield: 'value', cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
+                text: 'value', datafield: 'value', cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd3',
                 groupable: false,
                 initeditor: initeditor,
                 validation: validation,

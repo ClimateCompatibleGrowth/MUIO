@@ -3,7 +3,7 @@ import { DataModel } from "../../Classes/DataModel.Class.js";
 export class Model {
 
     constructor(casename, genData, RYTMdata, group, PARAMETERS, param) {
-        this.d = 4;
+        this.d = 3;
         this.decimal = 'd' + this.d;
 
         if (casename) {
