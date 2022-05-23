@@ -37,7 +37,8 @@ class Osemosys():
 
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
         self.glpkFolder = Path(Config.SOLVERs_FOLDER,'glpk-4.65', 'w64')
-        self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
+        # self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
+        self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'Cbc-2.7.5-win64-intel11.1', 'bin')
         self.resultsPath = Path(Config.DATA_STORAGE,case,'res')
 
         self.viewFolderPath = Path(Config.DATA_STORAGE,case,'view')

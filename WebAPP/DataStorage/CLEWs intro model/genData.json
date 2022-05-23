@@ -1,5 +1,5 @@
 {
-    "osy-version": "2.0",
+    "osy-version": "3.0",
     "osy-casename": "CLEWs intro model",
     "osy-desc": "CLEWs exercise model",
     "osy-date": "03/21/2022",
@@ -589,16 +589,16 @@
     ],
     "osy-scenarios": [
         {
-            "ScenarioId": "SC_0",
-            "Scenario": "SC_0",
+            "Active": true,
             "Desc": "Base scenario",
-            "Active": true
+            "Scenario": "SC_0",
+            "ScenarioId": "SC_0"
         },
         {
-            "ScenarioId": "SC_tkqum",
-            "Scenario": "InputToCap",
+            "Active": true,
             "Desc": "Input to capacity test",
-            "Active": true
+            "Scenario": "InputToCap",
+            "ScenarioId": "SC_tkqum"
         }
     ],
     "osy-constraints": [],

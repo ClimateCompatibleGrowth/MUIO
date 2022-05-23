@@ -102,24 +102,26 @@ def backupCase():
         '''File system data storage'''
         with ZipFile(zippedFile, 'w') as zipObj:
             # Iterate over all the files in directory
-            # for folderName, subfolders, filenames in os.walk(str(casePath)):
+            for folderName, subfolders, filenames in os.walk(str(casePath)):
 
-            #     for filename in filenames:
+                for filename in filenames:
+                    if filename != 'lp.lp':
+                        #create complete filepath of file in directory
+                        filePath = os.path.join(folderName, filename)
+                        # Add file to zip
+                        zipObj.write(filePath)      
+
+
+
+            #osemosys 2.1 backup only input files
+            # for filename in os.listdir(str(casePath)):
+            #     folderName = os.path.join(str(casePath))
+            #     if os.path.isfile(os.path.join(folderName, filename)):
             #         if filename != 'data.txt':
             #             #create complete filepath of file in directory
             #             filePath = os.path.join(folderName, filename)
             #             # Add file to zip
-            #             zipObj.write(filePath)      
-
-            #osemosys 2.1 backup only input files
-            for filename in os.listdir(str(casePath)):
-                folderName = os.path.join(str(casePath))
-                if os.path.isfile(os.path.join(folderName, filename)):
-                    if filename != 'data.txt':
-                        #create complete filepath of file in directory
-                        filePath = os.path.join(folderName, filename)
-                        # Add file to zip
-                        zipObj.write(filePath)   
+            #             zipObj.write(filePath)   
 
 
         return send_file(zippedFile.resolve(), as_attachment=True)
@@ -201,18 +203,25 @@ def uploadCase():
                                     File.writeFile( viewData, viewDataPath)
 
                                     msg.append({
-                                        "message": "Case " + casename +" have been uploaded!",
+                                        "message": "Model " + casename +" have been uploaded!",
+                                        "status_code": "success",
+                                        "casename": casename
+                                    })
+                                elif name == '3.0': 
+                                    zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                    msg.append({
+                                        "message": "Model " + casename +" have been uploaded!",
                                         "status_code": "success",
                                         "casename": casename
                                     })
                                 else:
                                     msg.append({
-                                        "message": "Case " + casename +" is not valid OSEMOSYS ver 1.0 or 2.0 case!",
+                                        "message": "Model " + casename +" is not valid OSEMOSYS ver 1.0, 2.0, 3.0 model!",
                                         "status_code": "error"
                                     })
                             else:
                                 msg.append({
-                                    "message": "Case " + casename + " already exists!",
+                                    "message": "Model " + casename + " already exists!",
                                     "status_code": "warning"
                                 })
                             

@@ -1063,7 +1063,7 @@ class DataFile(Osemosys):
                 subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
                 # out = subprocess.run('cbc ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.cbcFolder,  capture_output=True, text=True, shell=True)
                 out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
-                self.generateCSVfromCBC(self.dataFile, self.resFile, caserunname)
+                
             if out.returncode != 0:
             
                 response = {
@@ -1072,6 +1072,7 @@ class DataFile(Osemosys):
                     "status_code": "error"
                 }
             else:
+                self.generateCSVfromCBC(self.dataFile, self.resFile, caserunname)
                 self.generateResultsViewer(caserunname)
                 response = {
                     "message": out.stdout,

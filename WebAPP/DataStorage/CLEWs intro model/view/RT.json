@@ -24,31 +24,6 @@
                 "PWRTRN": 1938.0,
                 "PWRWND": 571.5321
             }
-        ],
-        "test": [
-            {
-                "DEMPWRSURWAT": 0.0,
-                "LNDBLT": 201.5,
-                "LNDFOR": 2433.0,
-                "LNDMAIHI": 0.0,
-                "LNDMAIHR": 969.0,
-                "LNDRICHI": 0.0,
-                "LNDRICHR": 581.5,
-                "LNDWAT": 615.0,
-                "MINCOA": 2391.7972,
-                "MINGAS": 896.9556,
-                "MINHYD": 248.4248,
-                "MINLND": 4800.0,
-                "MINPRC": 5760.0,
-                "MINSOL": 66.0995,
-                "MINWND": 571.5321,
-                "PWRCOA": 797.2658,
-                "PWRGAS": 448.4778,
-                "PWRHYD": 248.4248,
-                "PWRSOL": 66.0995,
-                "PWRTRN": 1938.0,
-                "PWRWND": 571.5321
-            }
         ]
     }
 }

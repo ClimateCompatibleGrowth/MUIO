@@ -19,26 +19,6 @@
                     "Active": true
                 }
             ]
-        },
-        {
-            "Case": "test",
-            "CaseId": "CS_uk8sb",
-            "Desc": "",
-            "Runtime": "Mon May 16 2022 18:50:20 GMT+0200 (Central European Summer Time)",
-            "Scenarios": [
-                {
-                    "ScenarioId": "SC_0",
-                    "Scenario": "SC_0",
-                    "Desc": "Base scenario",
-                    "Active": true
-                },
-                {
-                    "ScenarioId": "SC_tkqum",
-                    "Scenario": "InputToCap",
-                    "Desc": "Input to capacity test",
-                    "Active": true
-                }
-            ]
         }
     ]
 }

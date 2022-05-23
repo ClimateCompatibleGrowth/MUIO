@@ -56,6 +56,7 @@ export default class Pivot {
     }
 
     static initPage(model) {
+
         Message.clearMessages();
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.VARNAMES[model.group][model.param], 'pivot');
@@ -106,9 +107,18 @@ export default class Pivot {
         app.pivotGrid = new wijmo.olap.PivotGrid('#pivotGrid', {
             itemsSource: app.panel,
             collapsibleSubtotals: true,
-            showSelectedHeaders: 'All'
+            showSelectedHeaders: 'All',
             
         });
+
+       
+
+
+
+
+
+
+
         app.pivotChart = new wijmo.olap.PivotChart('#pivotChart', {
             //header: 'Country GDP',
             itemsSource: app.panel,
@@ -118,7 +128,10 @@ export default class Pivot {
             stacking: 0,            
             //rotated: false
             //palette: wijmo.olap.Palettes['dark']
+   
         });
+
+        //app.pivotChart.dataLabel.position = 'Top';
 
         //app.pivotChart.palette = Palettes.dark;
 
@@ -144,6 +157,20 @@ export default class Pivot {
             }
         });
 
+        //legend
+            // allow users to customize the chart legend
+        app.cmbShowLegend =  new wijmo.input.ComboBox('#showLegend', {
+            textChanged: function (s, e) {
+                //app.pivotChart.showLegend = s.text;
+                if(s.text == 'Show legend'){
+                    app.pivotChart.showLegend = 'Auto';
+                }else{
+                    app.pivotChart.showLegend = 'Never';
+                }
+            },
+            // itemsSource: 'Auto,Always,Never'.split(',')
+            itemsSource: 'Show legend, Hide legend'.split(',')
+        });
 
         ng.itemsSource = model.pivotData
         // ng.palette = app.pivotChart.Pallettes.dark;
@@ -162,6 +189,8 @@ export default class Pivot {
         ng.valueFields.push( 'Value');
         ng.showRowTotals = 'None';
         ng.showColumnTotals = 'None';
+
+        ng.fields.getField('Unit').isContentHtml = true;
 
         model.DEFAULTVIEW = ng.viewDefinition;
 

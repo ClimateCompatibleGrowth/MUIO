@@ -42,7 +42,7 @@ export class Model {
 
         $.each(OAR, function (idOAR, objOAR) {
             $.each(IAR, function (idIAR, objIAR) {
-                if(objOAR.CommId == objIAR.CommId){
+                if(objOAR.CommId == objIAR.CommId && objOAR.MoId == 1 && objIAR.MoId == 1){
                     graphString += `${labelIndex[objOAR.TechId]}[${TechNames[objOAR.TechId]}] -- ${CommNames[objIAR.CommId]} --> ${labelIndex[objIAR.TechId]}[${TechNames[objIAR.TechId]}] \n`;
                 }
             });

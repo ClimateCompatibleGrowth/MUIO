@@ -74,7 +74,7 @@ export class Model {
 
         $.each(OAR, function (idOAR, objOAR) {
             $.each(IAR, function (idIAR, objIAR) {
-                if(objOAR.CommId == objIAR.CommId){
+                if(objOAR.CommId == objIAR.CommId && objOAR.MoId == 1 && objIAR.MoId == 1){
                     if (techSelect == null){
                         source.push(labelIndex[objOAR.TechId]);
                         target.push(labelIndex[objIAR.TechId]);

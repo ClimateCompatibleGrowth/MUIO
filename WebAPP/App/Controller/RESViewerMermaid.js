@@ -43,7 +43,9 @@ export default class RESViewer {
 
     static initPage(model) {
         Message.clearMessages();
-        mermaid.initialize({startOnLoad:false});
+        mermaid.initialize({startOnLoad:false, maxTextSize: 900000});
+
+   
         //loadScript("References/mermaid/mermaid.min.js");
         //mermaid.initialize({ startOnLoad: true });
 
