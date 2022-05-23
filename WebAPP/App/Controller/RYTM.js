@@ -21,8 +21,8 @@ export default class RYTM {
                     promise.push(genData);
                     const PARAMETERS = Osemosys.getParamFile();
                     promise.push(PARAMETERS);
-                    //const RYTMdata = Osemosys.getData(casename, "RYTM.json");
-                    const RYTMdata = fetch('../../DataStorage/'+casename+'/RYTM.json', {cache: "no-store"})
+                    const RYTMdata = Osemosys.getData(casename, "RYTM.json");
+                    //const RYTMdata = fetch('../../DataStorage/'+casename+'/RYTM.json', {cache: "no-store"})
                     // .then(response => {
                     //     return response.json();
                     // })
