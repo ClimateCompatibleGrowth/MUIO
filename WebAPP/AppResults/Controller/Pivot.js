@@ -219,10 +219,14 @@ export default class Pivot {
                 Html.title(model.casename, model.VARNAMES[model.group][model.param], 'pivot');
                 Html.ddlViews(model.VIEWS[model.param]);
 
+                
+
                 let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
                 model.pivotData = pivotData;
 
                 ng.itemsSource = model.pivotData
+                //remove title chart
+                app.pivotChart.header = '';
 
                 if (model.param == 'D' || model.param == 'T'){
                     ng.columnFields.push('Case', 'Comm');
@@ -239,6 +243,8 @@ export default class Pivot {
                     ng.rowFields.push('Year');
                     ng.valueFields.push('Value');
                 }
+
+                
                 
             })
             .catch(error => {
