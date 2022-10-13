@@ -64,7 +64,7 @@ CO2 :=
 RE1 0 
 ;
 
-param UDCConstant default 0.0001 := 
+param UDCConstant default 0 := 
 [RE1,*,*]: 
 2020 2021 2022 2023 2024 2025 2026 2027 2028 2029 2030 2031 2032 2033 2034 2035 :=
 ;

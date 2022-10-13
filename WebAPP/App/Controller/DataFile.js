@@ -385,7 +385,9 @@ export default class DataFile {
 
                         Sidebar.Reload(model.casename);
                         Message.clearMessages();
-                        Message.bigBoxSuccess('RUN message', response.message, 3000);
+                        //Message.bigBoxSuccess('RUN message', response.message, 3000);
+
+                        Message.successOsy(response.message);
                     }
                     if (response.status_code == "error") {
                         $('#loadermain').hide();
@@ -400,7 +402,8 @@ export default class DataFile {
                         } else {
                             errormsg = response.stdmsg
                         }
-                        Message.bigBoxDanger('RUN message', errormsg, 3000);
+                        //Message.bigBoxDanger('RUN message', errormsg, 3000);
+                        Message.dangerOsy(errormsg);
                     }
             })
             .catch(error => {
@@ -436,6 +439,7 @@ export default class DataFile {
                     let DataFile = response;
                     const promise = [];
                     promise.push(DataFile);
+
                     let ResultCSV = Base.getResultCSV(model.casename, model.cs)
                     promise.push(ResultCSV);
                     return Promise.all(promise);
@@ -452,7 +456,7 @@ export default class DataFile {
                 })
                 .then(data => {
                     let [DataFile, ResultCSV] = data;
-                    
+                    console.log('ResultCSV ', ResultCSV)
                     if (DataFile && ResultCSV.length != 0) {
                         Html.renderDataFile(DataFile, model);
                         Html.renderCSV(ResultCSV, model.cs)
@@ -468,6 +472,8 @@ export default class DataFile {
                 .catch(error => {
                     Message.danger(error);
                 });
+
+
             // Base.getResultCSV(model.casename, model.cs)
             //     .then(csvs => {
             //         if (csvs.length == 0){

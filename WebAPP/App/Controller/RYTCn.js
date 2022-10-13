@@ -70,7 +70,7 @@ export default class RYTCn {
 
         let $divGrid = $('#osy-gridRYTCn');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, true);
+        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false});
         if (model.scenariosCount > 1) {
             $('#scCommand').show();
             Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);

@@ -16,7 +16,7 @@ export class Model {
         if (casename) {
 
             let datafields = [];
-            let datafieldsChart = [];
+            //let datafieldsChart = [];
             let columns = [];
             let series = [];
             let years = genData['osy-years'];
@@ -28,17 +28,17 @@ export class Model {
 
             //let paramById = DataModel.getParamById(PARAMETERS);
             let RYTgrid = DataModel.RYTgrid(genData, RYTdata, PARAMETERS);
-            let RYTchart = DataModel.RYTchart(genData, RYTdata, PARAMETERS);
+            //let RYTchart = DataModel.RYTchart(genData, RYTdata, PARAMETERS);
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
 
             let scClass = {};
 
-            datafieldsChart.push({ name: 'Year', type: 'string' });
-            $.each(scenarios, function (id, obj) {
-                scClass[obj.ScenarioId] = 'SC_' + id;
-                datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
-                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
-            });
+            // datafieldsChart.push({ name: 'Year', type: 'string' });
+            // $.each(scenarios, function (id, obj) {
+            //     scClass[obj.ScenarioId] = 'SC_' + id;
+            //     datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
+            //     series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
+            // });
 
             datafields.push({ name: 'ScId', type: 'string' });
             datafields.push({ name: 'Sc', type: 'string' });
@@ -98,15 +98,17 @@ export class Model {
 
 
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, }); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, filterable: false}); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, filterable: true});
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false });
 
             $.each(years, function (id, year) {
                 //console.log('year ',year)
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
-                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput',
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
+
+                    filterable: false,
                     groupable: false,
                     sortable: false,
                     initeditor: initeditor,
@@ -115,7 +117,7 @@ export class Model {
                     cellclassname: cellclass,
                     geteditorvalue:  geteditorvalue
                 });
-            });
+            }.bind(this));
 
             let srcGrid = {
                 datatype: "json",
@@ -124,12 +126,12 @@ export class Model {
                 datafields: datafields,
             };
 
-            var srcChart = {
-                datatype: "json",
-                localdata: RYTchart,
-                root: param + '>' + techs[0]['TechId'],
-                datafields: datafieldsChart,
-            };
+            // var srcChart = {
+            //     datatype: "json",
+            //     localdata: RYTchart,
+            //     root: param + '>' + techs[0]['TechId'],
+            //     datafields: datafieldsChart,
+            // };
 
             this.casename = casename;
             this.years = years;
@@ -138,16 +140,16 @@ export class Model {
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.columns = columns;
-            this.series = series;
+           // this.series = series;
             this.gridData = RYTgrid;
-            this.chartData = RYTchart;
+            //this.chartData = RYTchart;
             this.genData = genData;
             // this.param = param;
             this.paramData = paramData;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid,
-                this.srcChart = srcChart,
+                //this.srcChart = srcChart,
                 this.PARAMETERS = PARAMETERS
         } else {
             this.casename = null;

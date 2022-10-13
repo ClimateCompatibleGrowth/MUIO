@@ -20,8 +20,10 @@ CLASS_FOLDER = Path("WebAPP", 'Classes')
 EXTRACT_FOLDER = Path("")
 SOLVERs_FOLDER = Path('WebAPP', 'SOLVERs')
 
-HEROKU_DEPLOY = 1
+HEROKU_DEPLOY = 0
 AWS_SYNC = 0
+
+PINNED_COLUMNS = ('Sc', 'Tech', 'Comm', 'Emis', 'Timeslice', 'MoO', 'UnitId')
 
 TECH_GROUPS = ('RYT', 'RYTM', 'RYTC', 'RYTCn', 'RYTCM', 'RYTE', 'RYTEM', 'RYTTs')
 COMM_GROUPS = ('RYC', 'RYTC', 'RYTCM','RYCTs')

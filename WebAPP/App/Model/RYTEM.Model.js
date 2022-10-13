@@ -100,7 +100,7 @@ export class Model {
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
-                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
                     groupable: false,
                     initeditor: initeditor,
                     //validation: validation,
@@ -108,7 +108,7 @@ export class Model {
                     cellclassname: cellclass,
                     geteditorvalue: geteditorvalue
                 });
-            });
+            }.bind(this));
 
             var srcGrid = {
                 datatype: "json",

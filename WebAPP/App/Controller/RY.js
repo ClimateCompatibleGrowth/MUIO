@@ -50,7 +50,7 @@ export default class RY {
 
         let $divGrid = $('#osy-gridRY');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns)
+        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false});
 
         if (model.scenariosCount > 1) {
             $('#scCommand').show();

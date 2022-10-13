@@ -47,7 +47,7 @@ export default class RYC {
 
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlParams(model.PARAMETERS[model.group], model.param);
-        Html.ddlComms(model.comms, model.comms[0]['CommId']);
+        // Html.ddlComms(model.comms, model.comms[0]['CommId']);
 
         let $divGrid = $('#osy-gridRYC');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
@@ -60,9 +60,9 @@ export default class RYC {
             Grid.applyRYCFilter($divGrid, model.years);
         }
 
-        var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        let $divChart = $('#osy-chartRYC');
-        Chart.Chart($divChart, daChart, "RYC", model.series);
+        // var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
+        // let $divChart = $('#osy-chartRYC');
+        // Chart.Chart($divChart, daChart, "RYC", model.series);
         //pageSetUp();
     }
 
@@ -139,20 +139,20 @@ export default class RYC {
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
             model.param = this.value;
-            var comm = $("#osy-comms").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[this.value][comm];
-            configChart.update();
+            //var comm = $("#osy-comms").val();
+            // var configChart = $divChart.jqxChart('getInstance');
+            // configChart.source.records = model.chartData[this.value][comm];
+            // configChart.update();
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         //change of ddl comms
-        $('#osy-comms').on('change', function () {
-            var param = $("#osy-ryt").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[param][this.value];
-            configChart.update();
-        });
+        // $('#osy-comms').on('change', function () {
+        //     var param = $("#osy-ryt").val();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     configChart.source.records = model.chartData[param][this.value];
+        //     configChart.update();
+        // });
 
         $("#osy-openScData").off('click');
         $("#osy-openScData").on('click', function (e) {
@@ -191,29 +191,31 @@ export default class RYC {
                 setTimeout(function () {
                     let gridData = $divGrid.jqxGrid('getboundrows');
                     let param = $("#osy-ryt").val();
-                    var comm = $("#osy-comms").val();
-
-                    $.each(model.comms, function (idT, comm) {
-                        let chartData = [];
-                        $.each(model.years, function (idY, year) {
-                            let chunk = {};
-                            chunk['Year'] = year;
-                            $.each(gridData, function (id, rytDataObj) {
-                                if (rytDataObj['CommId'] == comm['CommId']) {
-                                    chunk[rytDataObj.ScId] = rytDataObj[year];
-                                }
-                            });
-                            chartData.push(chunk);
-                        });
-                        model.chartData[param][comm['CommId']] = chartData;
-                    });
+                    //var comm = $("#osy-comms").val();
 
                     //update model
                     model.gridData[param] = gridData;
 
-                    var configChart = $divChart.jqxChart('getInstance');
-                    configChart.source.records = model.chartData[param][comm];
-                    configChart.update();
+                    // $.each(model.comms, function (idT, comm) {
+                    //     let chartData = [];
+                    //     $.each(model.years, function (idY, year) {
+                    //         let chunk = {};
+                    //         chunk['Year'] = year;
+                    //         $.each(gridData, function (id, rytDataObj) {
+                    //             if (rytDataObj['CommId'] == comm['CommId']) {
+                    //                 chunk[rytDataObj.ScId] = rytDataObj[year];
+                    //             }
+                    //         });
+                    //         chartData.push(chunk);
+                    //     });
+                    //     model.chartData[param][comm['CommId']] = chartData;
+                    // });
+
+
+
+                    // var configChart = $divChart.jqxChart('getInstance');
+                    // configChart.source.records = model.chartData[param][comm];
+                    // configChart.update();
                 }, 1000);
             }
         }).on('cellvaluechanged', function (event) {
@@ -226,18 +228,18 @@ export default class RYC {
                 var commId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'CommId');
                 var scId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $("#osy-ryt").val();
-                var comm = $("#osy-comms").val();
+                //var comm = $("#osy-comms").val();
 
                 //update model chart
-                $.each(model.chartData[param][commId], function (id, obj) {
-                    if (obj.Year == year) {
-                        if (value) {
-                            obj[scId] = value;
-                        } else {
-                            obj[scId] = 0;
-                        }
-                    }
-                });
+                // $.each(model.chartData[param][commId], function (id, obj) {
+                //     if (obj.Year == year) {
+                //         if (value) {
+                //             obj[scId] = value;
+                //         } else {
+                //             obj[scId] = 0;
+                //         }
+                //     }
+                // });
 
                 //update model grid
                 $.each(model.gridData[param], function (id, obj) {
@@ -250,40 +252,40 @@ export default class RYC {
                     }
                 });
 
-                var configChart = $divChart.jqxChart('getInstance');
-                configChart.source.records = model.chartData[param][comm];
-                configChart.update();
+                // var configChart = $divChart.jqxChart('getInstance');
+                // configChart.source.records = model.chartData[param][comm];
+                // configChart.update();
             }
         });
 
-        $(".switchChart").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            var chartType = $(this).attr('data-chartType');
-            configChart.seriesGroups[0].type = chartType;
-            if (chartType == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.update();
-        });
+        // $(".switchChart").on('click', function (e) {
+        //     e.preventDefault();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     var chartType = $(this).attr('data-chartType');
+        //     configChart.seriesGroups[0].type = chartType;
+        //     if (chartType == 'column') {
+        //         configChart.seriesGroups[0].labels.angle = 90;
+        //     } else {
+        //         configChart.seriesGroups[0].labels.angle = 0;
+        //     }
+        //     configChart.update();
+        // });
 
-        $(".toggleLabels").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            if (configChart.seriesGroups[0].type == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
-            configChart.update();
-        });
+        // $(".toggleLabels").on('click', function (e) {
+        //     e.preventDefault();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     if (configChart.seriesGroups[0].type == 'column') {
+        //         configChart.seriesGroups[0].labels.angle = 90;
+        //     } else {
+        //         configChart.seriesGroups[0].labels.angle = 0;
+        //     }
+        //     configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
+        //     configChart.update();
+        // });
 
-        $("#exportPng").click(function () {
-            $divChart.jqxChart('saveAsPNG', 'RYC.png', 'https://www.jqwidgets.com/export_server/export.php');
-        });
+        // $("#exportPng").click(function () {
+        //     $divChart.jqxChart('saveAsPNG', 'RYC.png', 'https://www.jqwidgets.com/export_server/export.php');
+        // });
 
         let res = true;
         $("#resizeColumns").click(function () {
@@ -297,9 +299,29 @@ export default class RYC {
             res = !res;
         });
 
+        // $("#xlsAll").click(function (e) {
+        //     e.preventDefault();
+        //     $("#osy-gridRYC").jqxGrid('exportdata', 'xls', 'RYC');
+        // });
+
+        $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $("#osy-gridRYC").jqxGrid('exportdata', 'xls', 'RYC');
+
+            let rytData = $divGrid.jqxGrid('getdisplayrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Comm', 'UnitId'].concat(model.years)));
+
+            
+
+            Base.prepareCSV(model.casename, data)
+            .then(response =>{
+                Message.smallBoxInfo('Case study message', response.message, 3000);
+                $('#csvDownload').trigger('click');
+                window.location = $('#csvDownload').attr('href');
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
         $("#decUp").off('click');

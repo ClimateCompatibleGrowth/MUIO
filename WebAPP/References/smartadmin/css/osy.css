@@ -554,3 +554,27 @@ svg[id^="mermaid-"] {
     width: 1800px!important;
     max-width: 2200px!important; 
 }
+
+
+.alert-success-osy {
+    border-color: #3c763d;
+    border-width: 2px;
+    color: #3c763d;
+}
+
+.alert-danger-osy {
+    border-color: #d9534f;
+    border-width: 2px;
+    color: #d9534f;
+}
+.alert-info-osy {
+    border-color: #5bc0de;
+    border-width: 2px;
+    color: #5bc0de;
+}
+
+.alert-warning-osy {
+    border-color: #f0ad4e;
+    border-width: 2px;
+    color: #f0ad4e;
+}

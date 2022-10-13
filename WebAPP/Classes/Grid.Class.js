@@ -507,8 +507,7 @@ export class Grid {
         });
     }
 
-    static Grid($div, daGrid, columns, groupable = false, filterable = false, clipboard = true, editable=true) {
-
+    static Grid($div, daGrid, columns, {groupable = false, filterable = false, clipboard = true, editable=true, pageable=true}={}) {
         $div.jqxGrid({
             theme: this.theme(),
             width: '100%',
@@ -521,15 +520,16 @@ export class Grid {
             columnsresize: true,
             groupable: groupable,
             filterable: filterable,
+            autoshowfiltericon: false,
             sortable: true,
-            filtermode: 'excel',
-            autoshowfiltericon: true,
+            pageable: pageable,
+            pagesize: '20',
+            pagesizeoptions: ['20', '100', '250', '500', '750', '1000'],
+            // pagermode: "simple",
+            //filtermode: 'excel',
+            autoshowfiltericon: false,
             enableellipsis: true,
             enablekeyboarddelete: false,
-            // pageable: true,
-            // pagerheight: 26,
-            // pagesize: 20,
-            // pagermode: "simple",
             editable: editable,
             altrows: true,
             clipboard: clipboard,
@@ -541,6 +541,104 @@ export class Grid {
             autoshowfiltericon: true,
             // virtualmode: true,
             // rendergridrows: rendergridrows,
+            cellhover: function (element, pageX, pageY, record) {
+
+                //var cellValue = $(element.innerHTML).find('span').html(); // you can remove if any element not required in tooltip here
+                var cellValue = $(element.innerHTML).text();
+
+                let tootltipValue;
+                var tooltipContent
+                $.each(daGrid.records, function (id, obj) {
+                    if (obj.Sc == cellValue) {
+                        tootltipValue = obj.ScDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+
+                    }
+                    else if (obj.Tech == cellValue) {
+                        tootltipValue = obj.TechDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                    else if (obj.Comm == cellValue) {
+                        tootltipValue = obj.CommDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                    else if (obj.Emis == cellValue) {
+                        tootltipValue = obj.EmiDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                    else if (obj.Con == cellValue) {
+                        tootltipValue = obj.ConDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                });
+
+                if (tootltipValue && tootltipValue.trim().length > 0) {
+                    $(element).jqxTooltip({ content: tooltipContent });
+                    $(element).jqxTooltip('open', pageX + 15, pageY + 15);
+                } else {
+                    $div.jqxTooltip('close');
+                }
+            },
+
+            columns: columns
+        });
+
+    }
+
+    static VirtualGrid($div, daGrid, columns, gridrows, groupable = false, filterable = false, clipboard = true, editable=true) {
+
+        var generatedata = function (startindex, endindex) {
+            var data = {};
+            for (var i = startindex; i < endindex; i++) {
+                data[i] = gridrows[i];
+            }
+            return data;
+        }
+
+        var rendergridrows = function (params) {
+            var data = generatedata(params.startindex, params.endindex);
+            return data;
+        }
+
+        $div.jqxGrid({
+            theme: this.theme(),
+            width: '100%',
+            //height:71+count*26,
+            autoheight: true,
+            autoshowloadelement: true,
+            rowsheight: 30,
+            source: daGrid,
+            columnsautoresize: true,
+            columnsresize: true,
+            //groupable: groupable,
+            filterable: filterable,
+            autoshowfiltericon: false,
+            sortable: true,
+            //pageable: true,
+            // pagesize: '20',
+            // pagesizeoptions: ['20', '100', '250', '500', '750', '1000'],
+            // pagermode: "simple",
+            virtualmode: true,
+            //filtermode: 'excel',
+            autoshowfiltericon: false,
+            enableellipsis: true,
+            enablekeyboarddelete: false,
+            editable: editable,
+            altrows: true,
+            clipboard: clipboard,
+            selectionmode: 'multiplecellsadvanced',
+            enablehover: true,
+            editmode: 'selectedcell',
+            showsortcolumnbackground: false,
+            showfiltercolumnbackground: false,
+            autoshowfiltericon: true,
+            virtualmode: true,
+            rendergridrows: rendergridrows,
             cellhover: function (element, pageX, pageY, record) {
 
                 //var cellValue = $(element.innerHTML).find('span').html(); // you can remove if any element not required in tooltip here

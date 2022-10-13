@@ -24,11 +24,11 @@ class File:
             f = open(path, mode="w")
             #json
             #f.write(json.dumps(data, ensure_ascii=False, separators=(',', ':')))
-            f.write(json.dumps(data, ensure_ascii=True,  indent=4, sort_keys=False))
+            #f.write(json.dumps(data, ensure_ascii=True,  indent=4, sort_keys=False))
             #ascii false da zapisemo cirilicu u file
             #f.write(json.dumps(data, ensure_ascii=True,  indent=4, sort_keys=False))
             #usjon
-            #f.write(json.dumps(data))
+            f.write(json.dumps(data))
             f.close
         # except(IOError, IndexError):
         #     return('File not found or file is empty')
@@ -41,6 +41,18 @@ class File:
         #drugi nacin pisanj u file
         #with open(self.hData, mode="w") as f:
         #json.dump(data,f)
+
+    @staticmethod
+    def writeFileUJson(data, path):
+        try:
+            f = open(path, mode="w")
+            #usjon
+            f.write(json.dumps(data))
+            f.close
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
 
     @staticmethod
     def readParamFile(path):

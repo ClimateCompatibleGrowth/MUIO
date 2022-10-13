@@ -213,9 +213,12 @@ export default class Pivot {
             model.group = model.VARGROUPS[this.value]['group'];
             model.param = this.value;
 
+                        //fetch('../../DataStorage/'+model.casename+'/view/' + model.group+'.json', {cache: "no-store"})
+
             Osemosys.getResultData(model.casename, model.group+'.json')
             .then(DATA => {
-
+       
+                console.log('data 2 ', DATA)
                 Html.title(model.casename, model.VARNAMES[model.group][model.param], 'pivot');
                 Html.ddlViews(model.VIEWS[model.param]);
 

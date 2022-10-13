@@ -22,10 +22,6 @@ export default class R {
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS); 
                 const Rdata = Osemosys.getData(casename, 'R.json');
-                // const Rdata = fetch('../../DataStorage/'+casename+'/R.json')
-                // .then(response => {
-                //     return response.json();
-                // })
                 promise.push(Rdata); 
                 return Promise.all(promise);
             }else{
@@ -53,7 +49,7 @@ export default class R {
         let $divChart = $('#osy-chartR');
 
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, false)
+        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false})
 
         if (model.scenariosCount>1){
             $('#scCommand').show();

@@ -310,7 +310,7 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            var value = args.newvalue.trim();
             if (column == 'CapUnitId' || column == 'ActUnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', 3000);
             }
@@ -376,7 +376,7 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            var value = args.newvalue.trim();
             model.commodities[rowBoundIndex][column] = value;
             if (column == 'UnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing commodity unit will not recalculate entered nor default values in the model.', 3000);
@@ -431,7 +431,7 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            var value = args.newvalue.trim();
             model.emissions[rowBoundIndex][column] = value;
             if (column == 'UnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing emission unit will not recalculate entered nor default values in the model.', 3000);
@@ -475,7 +475,7 @@ export default class AddCase {
             var args = event.args;
             var datafield = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            var value = args.newvalue.trim();
             model.scenarios[rowBoundIndex][datafield] = value;
         });
 
@@ -521,7 +521,7 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            var value = args.newvalue.trim();
 
             if (column != 'CM' && column != 'Tag') {
                 model.constraints[rowBoundIndex][column] = value;

@@ -24,18 +24,21 @@ export default class RYT {
                     promise.push(genData);
                     const PARAMETERS = Osemosys.getParamFile();
                     promise.push(PARAMETERS);
+
+                    
                     const RYTdata = Osemosys.getData(casename, 'RYT.json');
 
                     //const RYTdata = Osemosys.getDataDirectly(casename, 'RYT.json');
-                    //const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json')
-                    // // const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json', {cache: "no-store"})
-                    // // .then(response => {
-                    // //     return response.json();
-                    // // })
+
+                    // const RYTdata = fetch('../../DataStorage/'+casename+'/RYT.json', {cache: "no-store"})
+                    // .then(response => {
+                    //     return response.json();
+                    // })
 
                     promise.push(RYTdata);
                     promise.push(start);
-                    //console.log('performance get data from API ', performance.now() - start);
+                    console.log('performance get data from API ', performance.now() - start);
+
                     return Promise.all(promise);
                 } else {
                     MessageSelect.init(RYT.refreshPage.bind(RYT));
@@ -43,13 +46,13 @@ export default class RYT {
             })
             .then(data => {
                 let [casename, genData, PARAMETERS, RYTdata, start] = data;
-                // console.log('performance read data from promise ', performance.now() - start);
+                console.log('performance read data from promise ', performance.now() - start);
                 let model = new Model(casename, genData, RYTdata, group, PARAMETERS, param);
-                //console.log('performance model ', performance.now() - start);
+                console.log('performance model ', performance.now() - start);
                 this.initPage(model);
-                //console.log('performance idit page ', performance.now() - start);
+                console.log('performance idit page ', performance.now() - start);
                 this.initEvents(model);
-                //console.log('performance events ', performance.now() - start);
+                console.log('performance events ', performance.now() - start);
             })
             .catch(error => {
                 Message.warning(error);
@@ -70,7 +73,7 @@ export default class RYT {
 
         let $divGrid = $('#osy-gridRYT');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, true)
+        Grid.Grid($divGrid, daGrid, model.columns, {groupable: false, filterable: true});
 
         if (model.scenariosCount > 1) {
             $('#scCommand').show();
@@ -79,9 +82,9 @@ export default class RYT {
             Grid.applyRYTFilter($divGrid, model.years);
         }
 
-        var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        let $divChart = $('#osy-chartRYT');
-        Chart.Chart($divChart, daChart, "RYT", model.series);
+        // var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
+        // let $divChart = $('#osy-chartRYT');
+        // Chart.Chart($divChart, daChart, "RYT", model.series);
         //pageSetUp();
     }
 
@@ -165,10 +168,10 @@ export default class RYT {
             $divGrid.jqxGrid('updatebounddata');
 
             Grid.applyRYTFilter($divGrid, model.years);
-            var configChart = $divChart.jqxChart('getInstance');
-            var tech = $("#osy-techs").val();
-            configChart.source.records = model.chartData[this.value][tech];
-            configChart.update();
+            // var configChart = $divChart.jqxChart('getInstance');
+            // var tech = $("#osy-techs").val();
+            // configChart.source.records = model.chartData[this.value][tech];
+            // configChart.update();
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
@@ -221,27 +224,27 @@ export default class RYT {
                     var tech = $("#osy-techs").val();
 
                     ///////////////////////////////////
-                    $.each(model.techs, function (idT, tech) {
-                        let chartData = [];
-                        $.each(model.years, function (idY, year) {
-                            let chunk = {};
-                            chunk['Year'] = year;
-                            $.each(gridData, function (id, rytDataObj) {
-                                if (rytDataObj['TechId'] == tech['TechId']) {
-                                    chunk[rytDataObj.ScId] = rytDataObj[year];
-                                }
-                            });
-                            chartData.push(chunk);
-                        });
-                        model.chartData[param][tech['TechId']] = chartData;
-                    });
+                    // $.each(model.techs, function (idT, tech) {
+                    //     let chartData = [];
+                    //     $.each(model.years, function (idY, year) {
+                    //         let chunk = {};
+                    //         chunk['Year'] = year;
+                    //         $.each(gridData, function (id, rytDataObj) {
+                    //             if (rytDataObj['TechId'] == tech['TechId']) {
+                    //                 chunk[rytDataObj.ScId] = rytDataObj[year];
+                    //             }
+                    //         });
+                    //         chartData.push(chunk);
+                    //     });
+                    //     model.chartData[param][tech['TechId']] = chartData;
+                    // });
 
                     //update model
                     model.gridData[param] = gridData;
 
-                    var configChart = $divChart.jqxChart('getInstance');
-                    configChart.source.records = model.chartData[param][tech];
-                    configChart.update();
+                    // var configChart = $divChart.jqxChart('getInstance');
+                    // configChart.source.records = model.chartData[param][tech];
+                    // configChart.update();
                 }, 1000);
             }
         }).on('cellvaluechanged', function (event) {
@@ -254,7 +257,7 @@ export default class RYT {
                 var techId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
                 var scId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $("#osy-ryt").val();
-                var tech = $("#osy-techs").val();
+                //var tech = $("#osy-techs").val();
 
                 // console.log('Grid ', model.gridData[param])
                 // console.log('Chart ', model.chartData[param][techId])
@@ -267,15 +270,15 @@ export default class RYT {
 
                 //console.log('columnIndex ', columnIndex)
                 
-                $.each(model.chartData[param][techId], function (id, obj) {
-                    if (obj.Year == year) {
-                        if (value) {
-                            obj[scId] = value;
-                        } else {
-                            obj[scId] = 0;
-                        }
-                    }
-                });
+                // $.each(model.chartData[param][techId], function (id, obj) {
+                //     if (obj.Year == year) {
+                //         if (value) {
+                //             obj[scId] = value;
+                //         } else {
+                //             obj[scId] = 0;
+                //         }
+                //     }
+                // });
                 
                 $.each(model.gridData[param], function (id, obj) {
                     if (obj.TechId == techId && obj.ScId == scId) {
@@ -287,43 +290,43 @@ export default class RYT {
                     }
                 });
 
-                var configChart = $divChart.jqxChart('getInstance');
-                configChart.source.records = model.chartData[param][tech];
-                configChart.update();
+                // var configChart = $divChart.jqxChart('getInstance');
+                // configChart.source.records = model.chartData[param][tech];
+                // configChart.update();
             }
         });
 
-        $(".switchChart").off('click');
-        $(".switchChart").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            var chartType = $(this).attr('data-chartType');
-            configChart.seriesGroups[0].type = chartType;
-            if (chartType == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.update();
-        });
+        // $(".switchChart").off('click');
+        // $(".switchChart").on('click', function (e) {
+        //     e.preventDefault();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     var chartType = $(this).attr('data-chartType');
+        //     configChart.seriesGroups[0].type = chartType;
+        //     if (chartType == 'column') {
+        //         configChart.seriesGroups[0].labels.angle = 90;
+        //     } else {
+        //         configChart.seriesGroups[0].labels.angle = 0;
+        //     }
+        //     configChart.update();
+        // });
 
-        $(".toggleLabels").off('click');
-        $(".toggleLabels").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            if (configChart.seriesGroups[0].type == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
-            configChart.update();
-        });
+        // $(".toggleLabels").off('click');
+        // $(".toggleLabels").on('click', function (e) {
+        //     e.preventDefault();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     if (configChart.seriesGroups[0].type == 'column') {
+        //         configChart.seriesGroups[0].labels.angle = 90;
+        //     } else {
+        //         configChart.seriesGroups[0].labels.angle = 0;
+        //     }
+        //     configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
+        //     configChart.update();
+        // });
 
-        $("#exportPng").off('click');
-        $("#exportPng").click(function () {
-            $divChart.jqxChart('saveAsPNG', 'RYT.png', 'https://www.jqwidgets.com/export_server/export.php');
-        });
+        // $("#exportPng").off('click');
+        // $("#exportPng").click(function () {
+        //     $divChart.jqxChart('saveAsPNG', 'RYT.png', 'https://www.jqwidgets.com/export_server/export.php');
+        // });
 
         $("#resizeColumns").off('click');
         let res = true;
@@ -339,10 +342,32 @@ export default class RYT {
             res = !res;
         });
 
+        // $("#xlsAll").off('click');
+        // $("#xlsAll").click(function (e) {
+        //     e.preventDefault();
+        //     $divGrid.jqxGrid('exportdata', 'xls', 'RYT');
+        // });
+
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $divGrid.jqxGrid('exportdata', 'xls', 'RYT');
+            console.log('model.param ', model.param)
+            console.log('model.gridData[model.param] ',model.gridData[model.param])
+
+            let rytData = $divGrid.jqxGrid('getdisplayrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Tech'].concat(model.years)));
+
+            
+
+            Base.prepareCSV(model.casename, data)
+            .then(response =>{
+                Message.smallBoxInfo('Case study message', response.message, 3000);
+                $('#csvDownload').trigger('click');
+                window.location = $('#csvDownload').attr('href');
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
         $("#decUp").off('click');

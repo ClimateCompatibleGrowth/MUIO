@@ -262,89 +262,25 @@ export class Osemosys {
         });
     }
 
-    // static downloadDataFile(casename) {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             url:Base.apiUrl() + "downloadDataFile",
-    //             async: true,  
-    //             type: 'POST',
-    //             dataType: 'json',
-    //             data: JSON.stringify({ "casename": casename }),
-    //             contentType: 'application/json; charset=utf-8',
-    //             // credentials: 'include',
-    //             // xhrFields: { withCredentials: true},
-    //             // crossDomain: true,
-    //             success: function (result) {             
-    //                 resolve(result);
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-    //                 reject(error);
-    //             }
-    //         });
-    //     });
-    // }
-
     static getData(casename, dataJson) {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url:Base.apiUrl() + "getData",
-                async: true,  
-                type: 'POST',
-                dataType: 'json',
-                data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
-                contentType: 'application/json; charset=utf-8',
-                success: function (result) {                  
-                    resolve(result);
-                },
-                error: function(xhr, status, error) {
-                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-                    reject(error);
-                }
-            });
-        });
+        return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"})  // return this promise
+        .then(response => response.json())
+        .catch(error => error);
     }
 
     static getResultData(casename, dataJson) {
         return new Promise((resolve, reject) => {
-            $.ajax({
-                url:Base.apiUrl() + "getResultData",
-                async: true,  
-                type: 'POST',
-                dataType: 'json',
-                data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
-                contentType: 'application/json; charset=utf-8',
-                success: function (result) {                  
-                    resolve(result);
-                },
-                error: function(xhr, status, error) {
-                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-                    reject(error);
-                }
+            fetch('../../DataStorage/'+casename+'/view/' +dataJson, {cache: "no-store"})
+            .then(DATA => {
+                DATA = DATA.json();
+                resolve(DATA);
+            })
+            .catch(error => {
+                if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                reject(error);
             });
         });
     }
-
-    // static getDataDirectly(casename, jsonFile) {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             //url:Base.apiUrl() + "getData",
-    //             url: 'WebAPP/DataStorage/'+casename+'/'+jsonFile,
-    //             async: true,  
-    //             type: 'GET',
-    //             dataType: 'json',
-    //             //data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
-    //             contentType: 'application/json; charset=utf-8',
-    //             success: function (result) {             
-    //                 resolve(result);
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-    //                 reject(error);
-    //             }
-    //         });
-    //     });
-    // }
 
     static updateData(data, param, dataJson) {
         return new Promise((resolve, reject) => {
@@ -385,6 +321,21 @@ export class Osemosys {
             });
         });
     }
+
+    // static viewData(casename) {
+    //     return fetch(Base.apiUrl() + "viewData", {
+    //         cache: "no-store",
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //           },
+    //         body: JSON.stringify({ "casename": casename })
+    //     })  // return this promise
+    //     .then(response => response.json())
+    //     .catch(error => error);
+    // }
+
 
     static viewTEData(casename) {
         return new Promise((resolve, reject) => {

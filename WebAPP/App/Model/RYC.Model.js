@@ -8,24 +8,24 @@ export class Model {
         if (casename) {
 
             let datafields = [];
-            let datafieldsChart = [];
+            //let datafieldsChart = [];
             let columns = [];
-            let series = [];
+            //let series = [];
             let years = genData['osy-years'];
             let comms = genData['osy-comm'];
             let scenarios = genData['osy-scenarios'];
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let RYCgrid = DataModel.RYCgrid(genData, RYCdata, PARAMETERS);
-            let RYCchart = DataModel.RYCchart(genData, RYCdata);
+            //let RYCchart = DataModel.RYCchart(genData, RYCdata);
 
             let scClass = {};
 
-            datafieldsChart.push({ name: 'Year', type: 'string' });
+            //datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_' + id;
-                datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
-                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
+                //datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
+                //series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
             });
 
             datafields.push({ name: 'ScId', type: 'string' });
@@ -87,7 +87,7 @@ export class Model {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', 
-                    cellsformat: 'd3',
+                    cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,
@@ -95,7 +95,7 @@ export class Model {
                     cellclassname: cellclass,
                     geteditorvalue: geteditorvalue
                 });
-            });
+            }.bind(this));
 
             let srcGrid = {
                 datatype: "json",
@@ -104,12 +104,12 @@ export class Model {
                 datafields: datafields,
             };
 
-            var srcChart = {
-                datatype: "json",
-                localdata: RYCchart,
-                root: param + '>' + comms[0]['CommId'],
-                datafields: datafieldsChart,
-            };
+            // var srcChart = {
+            //     datatype: "json",
+            //     localdata: RYCchart,
+            //     root: param + '>' + comms[0]['CommId'],
+            //     datafields: datafieldsChart,
+            // };
 
             this.casename = casename;
             this.years = years;
@@ -117,29 +117,29 @@ export class Model {
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.columns = columns;
-            this.series = series;
+           // this.series = series;
             this.gridData = RYCgrid;
-            this.chartData = RYCchart;
+            //this.chartData = RYCchart;
             this.genData = genData;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid;
-            this.srcChart = srcChart;
+            //this.srcChart = srcChart;
             this.PARAMETERS = PARAMETERS;
         } else {
             this.casename = null;
             this.years = null;
             this.columns = null;
-            this.series = null;
+            //this.series = null;
             this.gridData = null;
-            this.chartData = null;
+            //this.chartData = null;
             this.genData = null;
             this.PARAMNAMES = null;
             this.param = param;
             this.group = group;
             this.srcGrid = srcGrid;
-            this.srcChart = srcChart;
+            //this.srcChart = srcChart;
             this.PARAMETERS = PARAMETERS;
         }
 

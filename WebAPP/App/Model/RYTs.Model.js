@@ -8,23 +8,23 @@ export class Model {
         if (casename) {
 
             let datafields = [];
-            let datafieldsChart = [];
+            //let datafieldsChart = [];
             let columns = [];
-            let series = [];
+            //let series = [];
             let years = genData['osy-years'];
             let scenarios = genData['osy-scenarios'];
 
             let timeslices = DataModel.Timeslices(genData);
             let RYTsgrid = DataModel.RYTsgrid(genData, RYTsdata);
-            let RYTschart = DataModel.RYTschart(genData, RYTsdata);
+            //let RYTschart = DataModel.RYTschart(genData, RYTsdata);
 
             let scClass = {};
 
-            datafieldsChart.push({ name: 'Year', type: 'string' });
+            //datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_' + id;
-                datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
-                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
+                //datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
+                //series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
             });
 
             datafields.push({ name: 'ScId', type: 'string' });
@@ -80,7 +80,7 @@ export class Model {
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
-                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd3',
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,
@@ -88,7 +88,7 @@ export class Model {
                     cellclassname: cellclass,
                     geteditorvalue: geteditorvalue
                 });
-            });
+            }.bind(this));
 
             let PARAMNAMES = {};
             $.each(PARAMETERS[group], function (id, obj) {
@@ -102,12 +102,12 @@ export class Model {
                 datafields: datafields,
             };
 
-            var srcChart = {
-                datatype: "json",
-                root: param + '>' + timeslices[0],
-                localdata: RYTschart,
-                datafields: datafieldsChart,
-            };
+            // var srcChart = {
+            //     datatype: "json",
+            //     root: param + '>' + timeslices[0],
+            //     localdata: RYTschart,
+            //     datafields: datafieldsChart,
+            // };
 
             this.casename = casename;
             this.years = years;
@@ -115,14 +115,14 @@ export class Model {
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.datafields = datafields;
-            this.datafieldsChart = datafieldsChart;
+            //this.datafieldsChart = datafieldsChart;
             this.columns = columns;
-            this.series = series;
+            //this.series = series;
             this.gridData = RYTsgrid;
-            this.chartData = RYTschart;
+            //this.chartData = RYTschart;
             this.genData = genData;
             this.srcGrid = srcGrid;
-            this.srcChart = srcChart;
+           // this.srcChart = srcChart;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
@@ -131,14 +131,13 @@ export class Model {
             this.casename = null;
             this.years = null;
             this.datafields = null;
-            this.datafieldsChart = null;
-            this.columns = null;
+            //this.datafieldsChart = null;
             this.columns = null;
             this.gridData = null;
-            this.chartData = null;
+            //this.chartData = null;
             this.genData = null;
             this.srcGrid = null;
-            this.srcChart = null;
+            //this.srcChart = null;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;

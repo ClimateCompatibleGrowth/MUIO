@@ -3,7 +3,7 @@ import { Html } from "./Html.Class.js";
 import { SyncS3 } from "./SyncS3.Class.js";
 
 export class Base {
-    static HEROKU = 1;
+    static HEROKU = 0;
     static AWS_SYNC = 0;
     //init sync flag to pull from S3 only one time when visit home page
     static INIT_SYNC = 1;
@@ -203,6 +203,28 @@ export class Base {
                 error: function (xhr, status, error) {
                     //custom exception
                     if (error == 'UNKNOWN') { error = xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static prepareCSV(casename, jsonData) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:this.apiUrl() + "prepareCSV",
+                async: true,  
+                type: 'POST',
+                data: JSON.stringify({ "casename": casename, 'jsonData':  jsonData}),
+                //dataType: "json",
+                contentType: 'application/json',
+                success: function (result) {     
+                    //console.log('result ', result)       
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    //custom exception
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
                     reject(error);
                 }
             });

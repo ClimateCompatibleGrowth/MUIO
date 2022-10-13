@@ -1,9 +1,10 @@
 from tokenize import group
-from flask import Blueprint, jsonify, request, session
+from flask import Blueprint, jsonify, request, session, send_file
 import os
 from pathlib import Path
 import shutil
 import time
+import pandas as pd
 from API.Classes.Base import Config
 from API.Classes.Base.FileClass import File
 from API.Classes.Case.CaseClass import Case
@@ -44,7 +45,10 @@ def getResultCSV():
         casename = request.json['casename']
         caserunname = request.json['caserunname']
         csvFolder = Path(Config.DATA_STORAGE,casename,"res", caserunname, "csv")
-        csvs = [ f.name for f in os.scandir(csvFolder) ]
+        if os.path.isdir(csvFolder):
+            csvs = [ f.name for f in os.scandir(csvFolder) ]
+        else:
+            csvs = []
         return jsonify(csvs), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
@@ -235,7 +239,8 @@ def updateData():
         if case != None:
             sourceData = File.readFile(dataPath)
             sourceData[param] = data
-            File.writeFile( sourceData, dataPath)
+            File.writeFile(sourceData, dataPath)
+            #File.writeFileUJson(sourceData, dataPath)
             response = {
                 "message": "You have updated data!",
                 "status_code": "success"
@@ -361,6 +366,47 @@ def saveCase():
         return jsonify(response), 200
     except(IOError):
         return jsonify('Error saving case IOError!'), 404
+
+@case_api.route("/prepareCSV", methods=['POST'])
+def prepareCSV():
+    try:
+        casename = request.json['casename']
+        jsonData = request.json['jsonData']
+
+        Pd = pd.DataFrame(jsonData)
+
+        i=0
+        for p_col in Config.PINNED_COLUMNS:
+            if p_col in Pd.columns:    
+                col = Pd[p_col]
+                Pd.drop(labels=[p_col], axis=1,inplace = True)
+                Pd.insert(i, p_col, col)
+                i=i+1
+
+        Pd.to_csv(Path(Config.DATA_STORAGE,casename,'export.csv'), index = None)
+
+        # Pd.to_excel(Path(Config.DATA_STORAGE,casename,'export.xlsx'))
+        
+        response = {
+            "message": 'CSV data downloaded!',
+            "status_code": "success"
+        }
+        return jsonify(response), 200
+
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@case_api.route("/downloadCSV", methods=['GET'])
+def downloadCSV():
+    try:
+        casename = session.get('osycase', None)
+        dataFile = Path(Config.DATA_STORAGE,casename,'export.csv')
+        
+        dir = Path(Config.DATA_STORAGE,casename)
+        return send_file(dataFile.resolve(), as_attachment=True,mimetype='application/csv', cache_timeout=0)
+        #return send_from_directory(dir, 'export.csv', as_attachment=True)
+    except(IOError):
+        return jsonify('No existing cases!'), 404
 
 
 # @case_api.route("/deleteResultsPreSync", methods=['POST'])

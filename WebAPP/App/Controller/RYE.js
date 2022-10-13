@@ -47,11 +47,11 @@ export default class RYE {
 
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlParams(model.PARAMETERS[model.group], model.param);
-        Html.ddlEmis(model.emis, model.emis[0]['EmisId']);
+        // Html.ddlEmis(model.emis, model.emis[0]['EmisId']);
 
         let $divGrid = $('#osy-gridRYE');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns)
+        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false});
 
         if (model.scenariosCount > 1) {
             $('#scCommand').show();
@@ -60,9 +60,9 @@ export default class RYE {
             Grid.applyRYEFilter($divGrid, model.years);
         }
 
-        var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        let $divChart = $('#osy-chartRYE');
-        Chart.Chart($divChart, daChart, "RYE", model.series);
+        // var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
+        // let $divChart = $('#osy-chartRYE');
+        // Chart.Chart($divChart, daChart, "RYE", model.series);
         //pageSetUp();
     }
 
@@ -93,7 +93,7 @@ export default class RYE {
     static initEvents(model) {
 
         let $divGrid = $('#osy-gridRYE');
-        let $divChart = $('#osy-chartRYE');
+        //let $divChart = $('#osy-chartRYE');
 
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function (e) {
@@ -139,20 +139,20 @@ export default class RYE {
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
             model.param = this.value;
-            var emi = $("#osy-emis").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[this.value][emi];
-            configChart.update();
+            // var emi = $("#osy-emis").val();
+            // var configChart = $divChart.jqxChart('getInstance');
+            // configChart.source.records = model.chartData[this.value][emi];
+            // configChart.update();
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         //change of ddl emis
-        $('#osy-emis').on('change', function () {
-            var param = $("#osy-ryt").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[param][this.value];
-            configChart.update();
-        });
+        // $('#osy-emis').on('change', function () {
+        //     var param = $("#osy-ryt").val();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     configChart.source.records = model.chartData[param][this.value];
+        //     configChart.update();
+        // });
 
         $("#osy-openScData").off('click');
         $("#osy-openScData").on('click', function (e) {
@@ -191,29 +191,33 @@ export default class RYE {
                 setTimeout(function () {
                     let gridData = $divGrid.jqxGrid('getboundrows');
                     let param = $("#osy-ryt").val();
-                    var emi = $("#osy-emis").val();
+                    
 
-                    $.each(model.emis, function (idT, emi) {
-                        let chartData = [];
-                        $.each(model.years, function (idY, year) {
-                            let chunk = {};
-                            chunk['Year'] = year;
-                            $.each(gridData, function (id, rytDataObj) {
-                                if (rytDataObj['EmisId'] == emi['EmisId']) {
-                                    chunk[rytDataObj.ScId] = rytDataObj[year];
-                                }
-                            });
-                            chartData.push(chunk);
-                        });
-                        model.chartData[param][emi['EmisId']] = chartData;
-                    });
 
                     //update model
                     model.gridData[param] = gridData;
 
-                    var configChart = $divChart.jqxChart('getInstance');
-                    configChart.source.records = model.chartData[param][emi];
-                    configChart.update();
+                    //var emi = $("#osy-emis").val();
+                    // $.each(model.emis, function (idT, emi) {
+                    //     let chartData = [];
+                    //     $.each(model.years, function (idY, year) {
+                    //         let chunk = {};
+                    //         chunk['Year'] = year;
+                    //         $.each(gridData, function (id, rytDataObj) {
+                    //             if (rytDataObj['EmisId'] == emi['EmisId']) {
+                    //                 chunk[rytDataObj.ScId] = rytDataObj[year];
+                    //             }
+                    //         });
+                    //         chartData.push(chunk);
+                    //     });
+                    //     model.chartData[param][emi['EmisId']] = chartData;
+                    // });
+
+                    
+
+                    // var configChart = $divChart.jqxChart('getInstance');
+                    // configChart.source.records = model.chartData[param][emi];
+                    // configChart.update();
                 }, 1000);
             }
         }).on('cellvaluechanged', function (event) {
@@ -226,18 +230,19 @@ export default class RYE {
                 var emiId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'EmisId');
                 var scId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $("#osy-ryt").val();
-                var emi = $("#osy-emis").val();
+                
 
                 //update model chart
-                $.each(model.chartData[param][emiId], function (id, obj) {
-                    if (obj.Year == year) {
-                        if (value) {
-                            obj[scId] = value;
-                        } else {
-                            obj[scId] = 0;
-                        }
-                    }
-                });
+                var emi = $("#osy-emis").val();
+                // $.each(model.chartData[param][emiId], function (id, obj) {
+                //     if (obj.Year == year) {
+                //         if (value) {
+                //             obj[scId] = value;
+                //         } else {
+                //             obj[scId] = 0;
+                //         }
+                //     }
+                // });
 
                 //update model grid
                 $.each(model.gridData[param], function (id, obj) {
@@ -250,43 +255,43 @@ export default class RYE {
                     }
                 });
 
-                var configChart = $divChart.jqxChart('getInstance');
-                configChart.source.records = model.chartData[param][emi];
-                configChart.update();
+                // var configChart = $divChart.jqxChart('getInstance');
+                // configChart.source.records = model.chartData[param][emi];
+                // configChart.update();
             }
         });
 
-        $(".switchChart").off('click');
-        $(".switchChart").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            var chartType = $(this).attr('data-chartType');
-            configChart.seriesGroups[0].type = chartType;
-            if (chartType == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.update();
-        });
+        // $(".switchChart").off('click');
+        // $(".switchChart").on('click', function (e) {
+        //     e.preventDefault();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     var chartType = $(this).attr('data-chartType');
+        //     configChart.seriesGroups[0].type = chartType;
+        //     if (chartType == 'column') {
+        //         configChart.seriesGroups[0].labels.angle = 90;
+        //     } else {
+        //         configChart.seriesGroups[0].labels.angle = 0;
+        //     }
+        //     configChart.update();
+        // });
 
-        $(".toggleLabels").off('click');
-        $(".toggleLabels").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            if (configChart.seriesGroups[0].type == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
-            configChart.update();
-        });
+        // $(".toggleLabels").off('click');
+        // $(".toggleLabels").on('click', function (e) {
+        //     e.preventDefault();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     if (configChart.seriesGroups[0].type == 'column') {
+        //         configChart.seriesGroups[0].labels.angle = 90;
+        //     } else {
+        //         configChart.seriesGroups[0].labels.angle = 0;
+        //     }
+        //     configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
+        //     configChart.update();
+        // });
 
-        $("#exportPng").off('click');
-        $("#exportPng").click(function () {
-            $("#osy-chartRYE").jqxChart('saveAsPNG', 'RYE.png', 'https://www.jqwidgets.com/export_server/export.php');
-        });
+        // $("#exportPng").off('click');
+        // $("#exportPng").click(function () {
+        //     $("#osy-chartRYE").jqxChart('saveAsPNG', 'RYE.png', 'https://www.jqwidgets.com/export_server/export.php');
+        // });
 
         let res = true;
         $("#resizeColumns").off('click');
@@ -304,8 +309,28 @@ export default class RYE {
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $("#osy-gridRYE").jqxGrid('exportdata', 'xls', 'RYE');
+            console.log('model.param ', model.param)
+            console.log('model.gridData[model.param] ',model.gridData[model.param])
+
+            let rytData = $divGrid.jqxGrid('getdisplayrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Emis', 'UnitId'].concat(model.years)));
+
+            Base.prepareCSV(model.casename, data)
+            .then(response =>{
+                Message.smallBoxInfo('Case study message', response.message, 3000);
+                $('#csvDownload').trigger('click');
+                window.location = $('#csvDownload').attr('href');
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
+
+        // $("#xlsAll").off('click');
+        // $("#xlsAll").click(function (e) {
+        //     e.preventDefault();
+        //     $("#osy-gridRYE").jqxGrid('exportdata', 'xls', 'RYE');
+        // });
 
         $("#decUp").off('click');
         $("#decUp").on('click', function (e) {
