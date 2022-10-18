@@ -78,14 +78,14 @@ export class Model {
                 return scClass[data.ScId];
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 120, maxWidth: 200 })
-            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', minWidth: 120, maxWidth: 200 })
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 75, maxWidth: 200 })
+            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', minWidth: 75, maxWidth: 200 })
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass , minWidth: 55, maxWidth: 110});
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
-                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd3',
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,
@@ -93,7 +93,7 @@ export class Model {
                     cellclassname: cellclass,
                     geteditorvalue:  geteditorvalue
                 });
-            });
+            }.bind(this));
 
             datafieldsChart.push({ name: 'Year', type: 'string' });
             datafieldsChart.push({ name: 'Param', type: 'number' });

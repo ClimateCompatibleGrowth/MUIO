@@ -18,13 +18,11 @@ export class Model {
             let datafields = [];
             //let datafieldsChart = [];
             let columns = [];
-            let series = [];
+            //let series = [];
             let years = genData['osy-years'];
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
-
             this.param = param;
-
 
             //let paramById = DataModel.getParamById(PARAMETERS);
             let RYTgrid = DataModel.RYTgrid(genData, RYTdata, PARAMETERS);
@@ -96,18 +94,14 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-
-
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, filterable: false}); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, filterable: true});
             columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false });
 
             $.each(years, function (id, year) {
-                //console.log('year ',year)
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
-
                     filterable: false,
                     groupable: false,
                     sortable: false,
@@ -149,8 +143,8 @@ export class Model {
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid,
-                //this.srcChart = srcChart,
-                this.PARAMETERS = PARAMETERS
+            //this.srcChart = srcChart,
+            this.PARAMETERS = PARAMETERS
         } else {
             this.casename = null;
             this.years = null;

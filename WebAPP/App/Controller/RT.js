@@ -293,8 +293,8 @@ export default class RT {
         let res = true;
         $("#resizeColumns").click(function () {
             if (res) {
-                $divGrid.jqxGrid('autoresizecolumn', 'Sc', "cells");
-                $divGrid.jqxGrid('autoresizecolumn', 'Param', "all");
+                $divGrid.jqxGrid('autoresizecolumn', 'Sc');
+                $divGrid.jqxGrid('autoresizecolumn', 'Param');
             }
             else {
                 $divGrid.jqxGrid('autoresizecolumns');

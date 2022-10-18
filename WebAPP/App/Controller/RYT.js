@@ -73,7 +73,7 @@ export default class RYT {
 
         let $divGrid = $('#osy-gridRYT');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, {groupable: false, filterable: true});
+        Grid.Grid($divGrid, daGrid, model.columns, {groupable: false, filterable: true, sortable:true});
 
         if (model.scenariosCount > 1) {
             $('#scCommand').show();

@@ -75,14 +75,14 @@ export class Model {
                 
                 var scId = $('#osy-gridRE').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
-                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); 
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
                             $('#' + editor[0].id).val(null);
                         }
                     })
                 }else{
-                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false }); //symbol: ' GWh', symbolPosition: 'right'
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false }); 
                 }
 
             }.bind(this);
@@ -91,16 +91,16 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass });
-            //columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200 }); 
+            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200 });
 
             let emiIds = [];
             $.each(emis, function (id, emi) {
                 emiIds.push(emi.EmisId);
                 datafields.push({ name: emi.EmisId, type: 'number' });
                 columns.push({
-                    text: emi.Emis + ' <small  style="color:darkgrey">[ ' + emiUnit[param][emi.EmisId] + ' ]</small>', datafield: emi.EmisId, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd3',
+                    text: emi.Emis + ' <small  style="color:darkgrey">[ ' + emiUnit[param][emi.EmisId] + ' ]</small>', datafield: emi.EmisId, cellsalign: 'right', align: 'center', columntype: 'numberinput', 
+                    cellsformat: this.decimal, minWidth: 110, maxWidth: 200,
                     groupable: false,
                     initeditor: initeditor,
                     //validation: validation,
@@ -108,7 +108,7 @@ export class Model {
                     cellclassname: cellclass,
                     geteditorvalue:  geteditorvalue
                 });
-            });
+            }.bind(this));
 
             let srcGrid = {
                 datatype: "json",

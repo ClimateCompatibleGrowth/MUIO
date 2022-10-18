@@ -91,17 +91,19 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', filterable: false });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' });
-            columns.push({ text: 'Emission', datafield: 'Emis', pinned: true, editable: false, align: 'center' });
-            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center' });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Emission', datafield: 'Emis', pinned: true, editable: false, align: 'center',filterable: false });
+            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center',filterable: false });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', filterable: false});
             
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
                     groupable: false,
+                    filterable: false,
+                    sortable: false,
                     initeditor: initeditor,
                     //validation: validation,
                     cellsrenderer: cellsrenderer,

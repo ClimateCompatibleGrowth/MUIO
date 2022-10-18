@@ -63,7 +63,7 @@ export default class RYTTs {
         let $divGrid = $('#osy-gridRYTTs');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         //console.log('rendaGriddergridrows', daGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, true, true);
+        Grid.Grid($divGrid, daGrid, model.columns, {groupable: true, filterable: true, sortable:true});
         
 
 

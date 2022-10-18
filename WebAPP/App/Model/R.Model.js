@@ -1,5 +1,4 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
-import { GROUPNAMES } from "../../Classes/Const.Class.js";
 
 export class Model {
 
@@ -66,26 +65,24 @@ export class Model {
                     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true });
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
-
                             $('#' + editor[0].id).val(null);
                         }
                     })
                 } else {
                     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false });
                 }
-
             }.bind(this);
 
             let geteditorvalue =  function (row, cellvalue, editor) {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass });
-            //columns.push({ text: 'Technology', datafield: 'Tech', pinned:true, editable: false, align: 'left',   cellclassname: cellclass });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200 });
+            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200,});
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, minWidth: 75, maxWidth: 200 });
+
             columns.push({
-                text: 'value', datafield: 'value', cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd3',
+                text: '', datafield: 'value', cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
                 groupable: false,
                 initeditor: initeditor,
                 validation: validation,

@@ -82,8 +82,8 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 55, maxWidth: 90, filterable: false  });
-            columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center',minWidth: 55, maxWidth: 120, filterable: false  });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 75, maxWidth: 150, filterable: false  });
+            columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center',minWidth: 75, maxWidth: 150  });
             columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned: true, editable: false, align: 'center',minWidth: 55, maxWidth: 90, filterable: false  });
             columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass,minWidth: 55, maxWidth: 90, filterable: false  });
             
@@ -92,6 +92,8 @@ export class Model {
                 columns.push({
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput',  cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
                     groupable: false,
+                    filterable: false,
+                    sortable: false,
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,

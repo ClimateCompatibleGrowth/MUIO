@@ -65,13 +65,14 @@ export default class RYTEM {
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlParams(model.PARAMETERS['RYTEM'], model.param);
-        Html.ddlTechs(model.techs, model.techs[0]['TechId']);
-        Html.ddlEmis(model.emis[model.techs[0]['TechId']], model.emis[model.techs[0]['TechId']][0]['EmisId']);
-        Html.ddlMods($('#osy-mods1'), model.mods);
+        // Html.ddlTechs(model.techs, model.techs[0]['TechId']);
+        // Html.ddlEmis(model.emis[model.techs[0]['TechId']], model.emis[model.techs[0]['TechId']][0]['EmisId']);
+        // Html.ddlMods($('#osy-mods1'), model.mods);
 
         let $divGrid = $('#osy-gridRYTEM');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, true);
+        Grid.Grid($divGrid, daGrid, model.columns, {groupable: true, filterable: true, sortable:true});
+
         if (model.scenariosCount > 1) {
             $('#scCommand').show();
             Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);
@@ -81,9 +82,9 @@ export default class RYTEM {
             Grid.applyRYTEFilter($divGrid, model.years);
         }
 
-        let $divChart = $('#osy-chartRYTEM');
-        var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        Chart.Chart($divChart, daChart, "RYTEM", model.series);
+        // let $divChart = $('#osy-chartRYTEM');
+        // var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
+        // Chart.Chart($divChart, daChart, "RYTEM", model.series);
         //pageSetUp();
     }
 
@@ -132,7 +133,7 @@ export default class RYTEM {
     static initEvents(model) {
 
         let $divGrid = $('#osy-gridRYTEM');
-        let $divChart = $('#osy-chartRYTEM');
+        //let $divChart = $('#osy-chartRYTEM');
 
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function (e) {
@@ -180,25 +181,25 @@ export default class RYTEM {
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
             model.param = this.value;
-            var configChart = $divChart.jqxChart('getInstance');
-            var tech = $("#osy-techs").val();
-            var emi = $("#osy-emis").val();
-            var mo = $("#osy-mods1").val();
-            configChart.source.records = model.chartData[this.value][tech][emi][mo];
-            configChart.update();
+            // var configChart = $divChart.jqxChart('getInstance');
+            // var tech = $("#osy-techs").val();
+            // var emi = $("#osy-emis").val();
+            // var mo = $("#osy-mods1").val();
+            // configChart.source.records = model.chartData[this.value][tech][emi][mo];
+            // configChart.update();
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
-        $("#osy-techs").off('change');
-        $('#osy-techs').on('change', function () {
-            var param = $("#osy-ryt").val();
-            Html.ddlEmis(model.emis[this.value], model.emis[this.value][0]['EmisId']);
-            var emi = $("#osy-emis").val();
-            var mo = $("#osy-mods1").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[param][this.value][emi][mo];
-            configChart.update();
-        });
+        // $("#osy-techs").off('change');
+        // $('#osy-techs').on('change', function () {
+        //     var param = $("#osy-ryt").val();
+        //     Html.ddlEmis(model.emis[this.value], model.emis[this.value][0]['EmisId']);
+        //     var emi = $("#osy-emis").val();
+        //     var mo = $("#osy-mods1").val();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     configChart.source.records = model.chartData[param][this.value][emi][mo];
+        //     configChart.update();
+        // });
 
         $("#osy-techNames").off('change');
         $('#osy-techNames').on('change', function () {
@@ -206,25 +207,25 @@ export default class RYTEM {
             Html.ddlEmiNames(model.emis[tech], model.emis[tech][0]['EmisId']);
         });
 
-        $("#osy-emis").off('change');
-        $('#osy-emis').on('change', function () {
-            var param = $("#osy-ryt").val();
-            var tech = $("#osy-techs").val();
-            var mo = $("#osy-mods1").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[param][tech][this.value][mo];
-            configChart.update();
-        });
+        // $("#osy-emis").off('change');
+        // $('#osy-emis').on('change', function () {
+        //     var param = $("#osy-ryt").val();
+        //     var tech = $("#osy-techs").val();
+        //     var mo = $("#osy-mods1").val();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     configChart.source.records = model.chartData[param][tech][this.value][mo];
+        //     configChart.update();
+        // });
 
-        $("#osy-mods1").off('change');
-        $('#osy-mods1').on('change', function () {
-            var param = $("#osy-ryt").val();
-            var tech = $("#osy-techs").val();
-            var emi = $("#osy-emis").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[param][tech][emi][this.value];
-            configChart.update();
-        });
+        // $("#osy-mods1").off('change');
+        // $('#osy-mods1').on('change', function () {
+        //     var param = $("#osy-ryt").val();
+        //     var tech = $("#osy-techs").val();
+        //     var emi = $("#osy-emis").val();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     configChart.source.records = model.chartData[param][tech][emi][this.value];
+        //     configChart.update();
+        // });
 
         $("#osy-openScData").off('click');
         $("#osy-openScData").on('click', function (e) {
@@ -266,36 +267,37 @@ export default class RYTEM {
                     let gridData = $divGrid.jqxGrid('getboundrows');
 
                     let param = $("#osy-ryt").val();
-                    let tech = $("#osy-techs").val();
-                    let emi = $("#osy-emis").val();
-                    var mo = $("#osy-mods1").val();
+
 
                     //update grid model
                     model.gridData[param] = gridData;
 
                     //update chart model
-                    $.each(model.techs, function (idT, tech) {
-                        $.each(model.emis[tech.TechId], function (idT, emi) {
-                            $.each(model.mods, function (idT, mo) {
-                                let chartData = [];
-                                $.each(model.years, function (idY, year) {
-                                    let chunk = {};
-                                    chunk['Year'] = year;
-                                    $.each(gridData, function (id, obj) {
-                                        if (obj.TechId == tech.TechId && obj.EmisId == emi.EmisId && obj.MoId == mo) {
-                                            chunk[obj.ScId] = obj[year];
-                                        }
-                                    });
-                                    chartData.push(chunk);
-                                });
-                                model.chartData[param][tech.TechId][emi.EmisId][mo] = chartData;
-                            });
-                        });
-                    });
+                    // let tech = $("#osy-techs").val();
+                    // let emi = $("#osy-emis").val();
+                    // var mo = $("#osy-mods1").val();
+                    // $.each(model.techs, function (idT, tech) {
+                    //     $.each(model.emis[tech.TechId], function (idT, emi) {
+                    //         $.each(model.mods, function (idT, mo) {
+                    //             let chartData = [];
+                    //             $.each(model.years, function (idY, year) {
+                    //                 let chunk = {};
+                    //                 chunk['Year'] = year;
+                    //                 $.each(gridData, function (id, obj) {
+                    //                     if (obj.TechId == tech.TechId && obj.EmisId == emi.EmisId && obj.MoId == mo) {
+                    //                         chunk[obj.ScId] = obj[year];
+                    //                     }
+                    //                 });
+                    //                 chartData.push(chunk);
+                    //             });
+                    //             model.chartData[param][tech.TechId][emi.EmisId][mo] = chartData;
+                    //         });
+                    //     });
+                    // });
 
-                    var configChart = $divChart.jqxChart('getInstance');
-                    configChart.source.records = model.chartData[param][tech][emi][mo];
-                    configChart.update();
+                    // var configChart = $divChart.jqxChart('getInstance');
+                    // configChart.source.records = model.chartData[param][tech][emi][mo];
+                    // configChart.update();
                 }, 500);
             }
         }).on('cellvaluechanged', function (event) {
@@ -311,23 +313,24 @@ export default class RYTEM {
                 var scId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
 
                 let param = $("#osy-ryt").val();
-                let tech = $("#osy-techs").val();
-                let emi = $("#osy-emis").val();
-                var mo = $("#osy-mods1").val();
+
 
                 //update chart model
-                $.each(model.chartData[param][techId][emisId][moId], function (id, obj) {
-                    if (obj.Year == year) {
-                        if (value) {
-                            obj[scId] = value;
-                        } else {
-                            obj[scId] = 0;
-                        }
-                    }
-                });
-                var configChart = $divChart.jqxChart('getInstance');
-                configChart.source.records = model.chartData[param][tech][emi][mo];
-                configChart.update();
+                // let tech = $("#osy-techs").val();
+                // let emi = $("#osy-emis").val();
+                // var mo = $("#osy-mods1").val();
+                // $.each(model.chartData[param][techId][emisId][moId], function (id, obj) {
+                //     if (obj.Year == year) {
+                //         if (value) {
+                //             obj[scId] = value;
+                //         } else {
+                //             obj[scId] = 0;
+                //         }
+                //     }
+                // });
+                // var configChart = $divChart.jqxChart('getInstance');
+                // configChart.source.records = model.chartData[param][tech][emi][mo];
+                // configChart.update();
 
                 //update grid model
                 $.each(model.gridData[param], function (id, obj) {
@@ -342,39 +345,39 @@ export default class RYTEM {
             }
         });
 
-        $(".switchChart").off('click');
-        $(".switchChart").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            var chartType = $(this).attr('data-chartType');
-            configChart.seriesGroups[0].type = chartType;
-            if (chartType == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.update();
-            // $('button a').switchClass( "green", "grey" );
-            // $('#'+chartType).switchClass( "grey", "green" );
-        });
+        // $(".switchChart").off('click');
+        // $(".switchChart").on('click', function (e) {
+        //     e.preventDefault();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     var chartType = $(this).attr('data-chartType');
+        //     configChart.seriesGroups[0].type = chartType;
+        //     if (chartType == 'column') {
+        //         configChart.seriesGroups[0].labels.angle = 90;
+        //     } else {
+        //         configChart.seriesGroups[0].labels.angle = 0;
+        //     }
+        //     configChart.update();
+        //     // $('button a').switchClass( "green", "grey" );
+        //     // $('#'+chartType).switchClass( "grey", "green" );
+        // });
 
-        $(".toggleLabels").off('click');
-        $(".toggleLabels").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            if (configChart.seriesGroups[0].type == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
-            configChart.update();
-        });
+        // $(".toggleLabels").off('click');
+        // $(".toggleLabels").on('click', function (e) {
+        //     e.preventDefault();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     if (configChart.seriesGroups[0].type == 'column') {
+        //         configChart.seriesGroups[0].labels.angle = 90;
+        //     } else {
+        //         configChart.seriesGroups[0].labels.angle = 0;
+        //     }
+        //     configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
+        //     configChart.update();
+        // });
 
-        $("#exportPng").off('click');
-        $("#exportPng").click(function () {
-            $divChart.jqxChart('saveAsPNG', 'RYTEM.png', 'https://www.jqwidgets.com/export_server/export.php');
-        });
+        // $("#exportPng").off('click');
+        // $("#exportPng").click(function () {
+        //     $divChart.jqxChart('saveAsPNG', 'RYTEM.png', 'https://www.jqwidgets.com/export_server/export.php');
+        // });
 
         let res = true;
         $("#resizeColumns").off('click');
@@ -390,10 +393,28 @@ export default class RYTEM {
             res = !res;
         });
 
+        // $("#xlsAll").off('click');
+        // $("#xlsAll").click(function (e) {
+        //     e.preventDefault();
+        //     $divGrid.jqxGrid('exportdata', 'xls', 'RYTEM');
+        // });
+
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $divGrid.jqxGrid('exportdata', 'xls', 'RYTEM');
+
+            let rytData = $divGrid.jqxGrid('getdisplayrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Tech', 'Emis', 'MoId', 'UnitId'].concat(model.years)));
+
+            Base.prepareCSV(model.casename, data)
+            .then(response =>{
+                Message.smallBoxInfo('Case study message', response.message, 3000);
+                $('#csvDownload').trigger('click');
+                window.location = $('#csvDownload').attr('href');
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
         $("#decUp").off('click');

@@ -58,7 +58,6 @@ export default class R {
         }
 
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        
         Chart.Chart($divChart, daChart, "R", model.series, 'value');
         //pageSetUp();
     }

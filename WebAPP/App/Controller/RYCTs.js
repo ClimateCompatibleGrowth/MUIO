@@ -53,7 +53,7 @@ export default class RYCTs {
         //let $divChart = $('#osy-chartRYCTs');
 
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, true, true);
+        Grid.Grid($divGrid, daGrid, model.columns, {groupable: false, filterable: true, sortable:true});
 
         if (model.scenariosCount > 1) {
             $('#scCommand').show();

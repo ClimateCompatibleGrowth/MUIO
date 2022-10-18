@@ -79,9 +79,9 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true }); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, filterable: false, }); // minWidth: 75, maxWidth: 150,
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'left', cellclassname: cellclass });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, groupable: false, filterable: false});
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
@@ -89,6 +89,8 @@ export class Model {
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', 
                     cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
                     groupable: false,
+                    filterable: false,
+                    sortable: false,
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,

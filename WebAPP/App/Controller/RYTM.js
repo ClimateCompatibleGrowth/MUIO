@@ -51,7 +51,7 @@ export default class RYTM {
         let $divChart = $('#osy-chartRYTM');
 
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, {groupable: true, filterable: true});
+        Grid.Grid($divGrid, daGrid, model.columns, {groupable: true, filterable: true, sortable:true});
 
         if (model.scenariosCount > 1) {
             $('#scCommand').show();
@@ -345,7 +345,7 @@ export default class RYTM {
             console.log('model.gridData[model.param] ',model.gridData[model.param])
 
             let rytData = $divGrid.jqxGrid('getdisplayrows');
-            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Tech', 'MoId'].concat(model.years)));
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Tech', 'MoId', 'UnitId'].concat(model.years)));
 
             Base.prepareCSV(model.casename, data)
             .then(response =>{

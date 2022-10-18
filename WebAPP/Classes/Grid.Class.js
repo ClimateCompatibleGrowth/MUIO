@@ -507,7 +507,7 @@ export class Grid {
         });
     }
 
-    static Grid($div, daGrid, columns, {groupable = false, filterable = false, clipboard = true, editable=true, pageable=true}={}) {
+    static Grid($div, daGrid, columns, {groupable = false, filterable = false, clipboard = true, editable=true, pageable=true, sortable= false, autoshowfiltericon=false}={}) {
         $div.jqxGrid({
             theme: this.theme(),
             width: '100%',
@@ -520,14 +520,13 @@ export class Grid {
             columnsresize: true,
             groupable: groupable,
             filterable: filterable,
-            autoshowfiltericon: false,
-            sortable: true,
+            autoshowfiltericon: autoshowfiltericon,
+            sortable: sortable,
             pageable: pageable,
             pagesize: '20',
             pagesizeoptions: ['20', '100', '250', '500', '750', '1000'],
             // pagermode: "simple",
             //filtermode: 'excel',
-            autoshowfiltericon: false,
             enableellipsis: true,
             enablekeyboarddelete: false,
             editable: editable,
@@ -538,7 +537,6 @@ export class Grid {
             editmode: 'selectedcell',
             showsortcolumnbackground: false,
             showfiltercolumnbackground: false,
-            autoshowfiltericon: true,
             // virtualmode: true,
             // rendergridrows: rendergridrows,
             cellhover: function (element, pageX, pageY, record) {

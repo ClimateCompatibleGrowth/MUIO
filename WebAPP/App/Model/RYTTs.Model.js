@@ -37,10 +37,6 @@ export class Model {
             datafields.push({ name: 'TechDesc', type: 'string' });
             datafields.push({ name: 'Timeslice', type: 'string' });
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', filterable: false });
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center',minWidth: 95, maxWidth: 150, })
-            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned: true, editable: false, align: 'center',minWidth: 55, maxWidth: 90, filterable: false })
-
             let validation = function (cell, value) {
                 if (value < 0) {
                     return { result: false, message: 'Value must be positive!' };
@@ -84,6 +80,9 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', filterable: false });
+            columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' })
+            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned: true, editable: false, align: 'center', filterable: false })
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
