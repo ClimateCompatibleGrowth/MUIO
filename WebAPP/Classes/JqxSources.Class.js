@@ -18,6 +18,7 @@ export class JqxSources {
                     { name: 'TechId', type: 'string' },
                     { name: 'Tech', type: 'string' },
                     { name: 'Desc', type: 'string' },
+                    { name: 'TG', type: 'array' },
                     { name: 'CapUnitId', type: 'string' },
                     { name: 'ActUnitId', type: 'string' },
                     { name: 'IAR', type: 'array' },
@@ -41,6 +42,20 @@ export class JqxSources {
                 ],
         }
         return srcTech;
+    }
+
+    static srcTechGroup(groups) {
+        var srcTechGroup = {
+            localdata: groups,
+            datatype: "json",
+            datafields:
+                [
+                    { name: 'TechGroupId', type: 'string' },
+                    { name: 'TechGroup', type: 'string' },
+                    { name: 'Desc', type: 'string' }
+                ],
+        }
+        return srcTechGroup;
     }
 
     static srcComm(commodities) {

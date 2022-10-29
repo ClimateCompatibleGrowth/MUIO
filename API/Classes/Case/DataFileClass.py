@@ -1305,6 +1305,8 @@ class DataFile(Osemosys):
             self.dataFile = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data.txt')
             self.dataFile_processed = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data_processed.txt')
             self.resFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'results.txt')
+            self.logFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'logfile.log')
+            self.logFileTxt = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'logfile.txt')
             self.lpFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'lp.lp')
             # self.resCBCPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', self.case, 'res')
             # self.resPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', self.case, 'res', 'csv')
@@ -1313,6 +1315,8 @@ class DataFile(Osemosys):
             datafile = '"{}"'.format(self.dataFile.resolve())
             datafile_processed = '"{}"'.format(self.dataFile_processed.resolve())
             resultfile = '"{}"'.format(self.resFile.resolve())
+            logfile = '"{}"'.format(self.logFile.resolve())
+            logfiletxt = '"{}"'.format(self.logFileTxt.resolve())
             lpfile = '"{}"'.format(self.lpFile.resolve())
             
 
@@ -1321,11 +1325,7 @@ class DataFile(Osemosys):
             # respath = self.resPath.resolve()
             # resCBCPath = self.resCBCPath.resolve()
             if solver == 'glpk':
-
-                # print('glpk folder ', self.glpkFolder)
-                # print('glpk folder ', glpfolder)
                 out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
-                #out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.casePath,  capture_output=True, text=True, shell=False)
             else:
                 #Matrix generation (creates an LP file with GLPK): glpsol --check -m [model].txt -d [data].txt --wlp [LPfile].lp
                 #Optimisation (solves LP file with CBC): cbc [LPfile].lp solve -solu [results].txt
@@ -1333,9 +1333,10 @@ class DataFile(Osemosys):
                 #subprocess.run('preprocess_data.py' + datafile + dataFile_processed)
 
                 self.preprocessData(self.dataFile, self.dataFile_processed)
-                #out1 = subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
-
-                subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder, text=True, shell=True)
+                #return output to variable
+                glpk_out = subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
+                ####output to logfile.txt
+                #subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile +'>'+  logfiletxt+'2>&1', cwd=glpfolder, text=True, shell=True)
 
                 # proc = subprocess.Popen('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder, text=True, shell=True)
                 # try:
@@ -1344,26 +1345,28 @@ class DataFile(Osemosys):
                 #     proc.kill()
                 #     outs, errs = proc.communicate()
 
-                #subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
-
-                # out = subprocess.run('cbc ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.cbcFolder,  capture_output=True, text=True, shell=True)
-                print('lp file generated')
-                out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
-                print('loptimization finished')
+                cbc_out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                ####output to lg file .log i .txt with errors
+                # out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                #out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfiletxt +'2>&1', cwd=cbcfolder,  capture_output=True, text=True, shell=True)
                 
-            if out.returncode != 0:
+            if cbc_out.returncode != 0 and glpk_out.returncode != 0:
             
                 response = {
-                    "message": out.stdout,
-                    "stdmsg": out.stderr,
+                    "cbc_message": cbc_out.stdout,
+                    "cbc_stdmsg": cbc_out.stderr,
+                    "glpk_message": glpk_out.stdout,
+                    "glpk_stdmsg": glpk_out.stderr,
                     "status_code": "error"
                 }
             else:
-                print('generating CSVs')
                 self.generateCSVfromCBC(self.dataFile, self.resFile, caserunname)
                 self.generateResultsViewer(caserunname)
                 response = {
-                    "message": out.stdout,
+                    "cbc_message": cbc_out.stdout,
+                    "cbc_stdmsg": cbc_out.stderr,
+                    "glpk_message": glpk_out.stdout,
+                    "glpk_stdmsg": glpk_out.stderr,
                     "status_code": "success"
                 }           
             return response

@@ -40,7 +40,6 @@ export default class DataFile {
         Html.title(model.casename, model.title, "");
         Html.renderCases(model.cases);
         // Html.renderScOrder(model.scBycs[model.cs]);
-        console.log('model ', model)
         Html.renderScOrder(model.scenarios);
         if (model.casename == null) {
             Message.info("Please select model or create new Model!");
@@ -71,11 +70,13 @@ export default class DataFile {
                 $(".DataFile").hide();
                 $("#osy-DataFile").empty();
                 $("#osy-runOutput").empty();
+                $("#osy-lpOutput").empty();
                 // $("#osy-downloadDataFile").hide();
                 // $("#osy-downloadResultsFile").hide();
                 $("#osy-solver").hide();
                 $("#osy-run").hide();
                 $(".runOutput").hide();
+                $(".lpOutput").hide();
                 $(".Results").hide();
                 DataFile.initPage(model);
                 DataFile.initEvents(model);
@@ -202,6 +203,7 @@ export default class DataFile {
             $("#osy-run").hide();
 
             $(".runOutput").hide();
+            $(".lpOutput").hide();
             $(".DataFile").hide();
             $(".Results").hide();
         });
@@ -283,6 +285,7 @@ export default class DataFile {
                             $("#osy-newCaseRun").show();
                             $(".DataFile").hide();
                             $(".runOutput").hide();
+                            $(".lpOutput").hide();
                             $(".Results").hide();
                             Message.smallBoxInfo('Generate message', response.message, 3000);
                         }
@@ -336,7 +339,9 @@ export default class DataFile {
                     let [DataFile, message] = response;
                     $(".DataFile").show();
                     $("#osy-runOutput").empty();
+                    $("#osy-lpOutput").empty();
                     $(".runOutput").hide();
+                    $(".lpOutput").hide();
                     $(".Results").hide();
                     Html.renderDataFile(DataFile, model)
                     ///////////////////////////////////////////////////////////////////
@@ -369,42 +374,41 @@ export default class DataFile {
             let solver = 'cbc';
             Osemosys.run(model.casename, solver, model.cs)
             .then(response => {
-                    if (response.status_code == "success") {
-                        $('#loadermain').hide();
-                        $(".runOutput").show();
-                        $(".Results").show();
-                        // $("#osy-downloadResultsFile").show();
-                        $("#osy-runOutput").empty();
-                        $("#osy-runOutput").html('<samp>' + response.message + '</samp>');
-                        //$('#tabs a[href="#tabRunOutput"]').tab('show');
-
-                        Base.getResultCSV(model.casename, model.cs)
-                            .then(csvs => {
-                                Html.renderCSV(csvs, model.cs)
-                            });
-
-                        Sidebar.Reload(model.casename);
-                        Message.clearMessages();
-                        //Message.bigBoxSuccess('RUN message', response.message, 3000);
-
-                        Message.successOsy(response.message);
+                if (response.status_code == "success") {
+                    $('#loadermain').hide();
+                    $(".runOutput").show();
+                    $(".lpOutput").show();
+                    $(".Results").show();
+                    $("#osy-runOutput").empty();
+                    $("#osy-runOutput").html('<pre class="log-output">' + response.cbc_message, response.cbc_stdmsg+ '</pre>');
+                    $("#osy-lpOutput").empty();
+                    $("#osy-lpOutput").html('<pre class="log-output">' + response.glpk_message, response.glpk_stdmsg+ '</pre>');
+                    Base.getResultCSV(model.casename, model.cs)
+                        .then(csvs => {
+                            Html.renderCSV(csvs, model.cs)
+                        });
+                    Sidebar.Reload(model.casename);
+                    Message.clearMessages();
+                    Message.successOsy('Optimiziation finished!');
+                }
+                if (response.status_code == "error") {
+                    $('#loadermain').hide();
+                    $(".runOutput").show();
+                    $(".lpOutput").show();
+                    $(".Results").show();
+                    $("#osy-runOutput").empty();
+                    $("#osy-runOutput").html('<pre class="log-output">' + response.cbc_message, response.cbc_stdmsg+ '</pre>');
+                    $("#osy-lpOutput").empty();
+                    $("#osy-lpOutput").html('<pre class="log-output">' + response.glpk_message, response.glpk_stdmsg+ '</pre>');
+                    Message.clearMessages();
+                    let errormsg
+                    if (response.stdmsg == "") {
+                        errormsg = 'Error occured during GLPK run!'
+                    } else {
+                        errormsg = response.stdmsg
                     }
-                    if (response.status_code == "error") {
-                        $('#loadermain').hide();
-                        $(".runOutput").show();
-                        $(".Results").show();
-                        $("#osy-runOutput").empty();
-                        $("#osy-runOutput").html('<samp>' + response.message + '</samp>');
-                        Message.clearMessages();
-                        let errormsg
-                        if (response.stdmsg == "") {
-                            errormsg = 'Error occured during GLPK run!'
-                        } else {
-                            errormsg = response.stdmsg
-                        }
-                        //Message.bigBoxDanger('RUN message', errormsg, 3000);
-                        Message.dangerOsy(errormsg);
-                    }
+                    Message.dangerOsy(errormsg);
+                }
             })
             .catch(error => {
                 $('#loadermain').hide();
@@ -431,6 +435,7 @@ export default class DataFile {
             $("#osy-run").hide();
 
             $(".runOutput").hide();
+            $(".lpOutput").hide();
             $(".DataFile").show();
             $(".Results").show();
 
@@ -456,7 +461,6 @@ export default class DataFile {
                 })
                 .then(data => {
                     let [DataFile, ResultCSV] = data;
-                    console.log('ResultCSV ', ResultCSV)
                     if (DataFile && ResultCSV.length != 0) {
                         Html.renderDataFile(DataFile, model);
                         Html.renderCSV(ResultCSV, model.cs)
@@ -525,6 +529,7 @@ export default class DataFile {
                                     $("#osy-run").hide();
                         
                                     $(".runOutput").hide();
+                                    $(".lpOutput").hide();
                                     $(".DataFile").hide();
                                     $(".Results").hide(); 
                                 }

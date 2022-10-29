@@ -65,7 +65,6 @@ export class Model {
             }
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
-                //console.log('value ', value)
                 if (value === null || value === '') {
                     return '<span style="margin: 4px; float:right; ">n/a</span>';
                 } else {
@@ -82,7 +81,6 @@ export class Model {
                         if (event.keyCode === 46 || event.keyCode === 8) {
                             //$('#' + editor[0].id).val(null);
                             editor.jqxNumberInput('val',null); 
-                            console.log('editor ', editor) 
                         }
                     })
                 }else{

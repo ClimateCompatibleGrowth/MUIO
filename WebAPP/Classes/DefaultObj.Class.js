@@ -21,11 +21,29 @@ export class DefaultObj{
                 "Desc": "Default technology",
                 "CapUnitId": "MW",
                 "ActUnitId": "PJ",
+                "TG": emptyArray,
                 "IAR": emptyArray,
                 "OAR": emptyArray,
                 "EAR": emptyArray,
                 "INCR": emptyArray,
                 "ITCR": emptyArray,
+            }
+        ];
+        return defaultObj;
+    }
+
+    static defaultTechGroup(first=false){
+        let id;
+        if(first){
+            id = 'TG_0';
+        }else{
+            id = this.getId('TG');
+        }
+        let defaultObj = [
+            {
+                "TechGroup": id,
+                "TechGroupId":id,
+                "Desc": "Default technology group",
             }
         ];
         return defaultObj;

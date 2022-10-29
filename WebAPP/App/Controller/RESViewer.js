@@ -53,15 +53,11 @@ export default class RESViewer {
 
       static initPage(model) {
         Message.clearMessages();
-
-        // console.log('init page ')
-        // console.log('model.techCount ', model.techCount)
         let $div = 'osy-RESViewer';
 
         Html.title(model.casename, 'RES Viewer', 'Reference Energy System');
         // Html.ddlScenariosId(model.scenarios, model.sc);
         // Html.ddlYears(model.years, model.year)
-        console.log('model.allActivityTechs ', model.allActivityTechs)
         //Html.ddlActivityTechs(model.allActivityTechs);
 
         var source = JqxSources.srcActTech(model.allActivityTechs);
@@ -116,13 +112,10 @@ export default class RESViewer {
         $("#renderSankey").off('click');
         $("#renderSankey").on('click', function (e) {
             var items = $("#osy-activityTechs").jqxDropDownList('getCheckedItems'); 
-            console.log('items ', items)
             let techSelect = [];
             $.each(items, function (index, obj) {
                 techSelect.push(obj.originalItem.TechId)
             });
-
-            console.log('techSelect ', techSelect)
 
             let modelNew = new Model(model.casename, model.genData, model.RYTCMdata, techSelect);
             
@@ -144,7 +137,6 @@ export default class RESViewer {
 
         var myPlot = document.getElementById('osy-RESViewer');
         myPlot.on('plotly_click', function(data){
-            //console.log('data ', data)
             var pts = '';
             for(var i=0; i < data.points.length; i++){
                 // pts = 'x = '+data.points[i].x +'\ny = '+ data.points[i].y.toPrecision(4) + '\n\n';

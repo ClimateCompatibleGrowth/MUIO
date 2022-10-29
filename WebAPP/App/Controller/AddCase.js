@@ -42,7 +42,9 @@ export default class AddCase {
         Html.genData(model);
 
         Grid.commGrid(model.commodities);
-        Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
+        Grid.techsGrid(model.techs, model.commodities, model.techGroups, model.emissions, model.commNames, model.emiNames, model.techGroupNames);
+      
+        Grid.techGroupGrid(model.techGroups);
         Grid.emisGrid(model.emissions);
         Grid.scenarioGrid(model.scenarios);
         Grid.constraintGrid(model.techs, model.constraints, model.techNames);
@@ -85,6 +87,7 @@ export default class AddCase {
     static initEvents(model) {
 
         let $divTech = $("#osy-gridTech");
+        let $divTechGroup = $("#osy-gridTechGroup");
         let $divComm = $("#osy-gridComm");
         let $divEmi = $("#osy-gridEmis");
         let $divScenario = $("#osy-gridScenario");
@@ -206,7 +209,7 @@ export default class AddCase {
             });
 
             let POSTDATA = {
-                "osy-version": "3.0",
+                "osy-version": "4.0",
                 "osy-casename": casename,
                 "osy-desc": desc,
                 "osy-date": date,
@@ -215,6 +218,7 @@ export default class AddCase {
                 "osy-dt": dt,
                 "osy-mo": mo,
                 "osy-tech": model.techs,
+                "osy-techGroups": model.techGroups,
                 "osy-comm": model.commodities,
                 "osy-emis": model.emissions,
                 "osy-scenarios": model.scenarios,
@@ -271,7 +275,7 @@ export default class AddCase {
             let defaultTech = DefaultObj.defaultTech();
             //tech grid se pravi dinalicki potrebno je updatovati model
             //JSON parse strungify potrebno da iz nekog razloga izbacino elemente uid boundindex...
-            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'IAR', 'OAR', "INCR", "ITCR", 'EAR'])));
+            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'TG', 'IAR', 'OAR', "INCR", "ITCR", 'EAR'])));
             //model.techs.push(defaultTech[0]);
             //update technames
             model.techNames[defaultTech[0]['TechId']] = defaultTech[0]['Tech'];
@@ -314,7 +318,7 @@ export default class AddCase {
             if (column == 'CapUnitId' || column == 'ActUnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', 3000);
             }
-            if (column != 'IAR' && column != 'OAR' && column != 'EAR' && column != 'INCR' && column != 'ITCR') {
+            if (column != 'IAR' && column != 'OAR' && column != 'EAR' && column != 'INCR' && column != 'ITCR'  && column != 'TG') {
                 model.techs[rowBoundIndex][column] = value;
             } else {
                 if (value.includes(',') && value) {
@@ -330,6 +334,61 @@ export default class AddCase {
             if (column == 'Tech') {
                 var techId = $divTech.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
                 model.techNames[techId] = value;
+            }
+        });
+
+
+        $("#osy-addTechGroup").off('click');
+        $("#osy-addTechGroup").on("click", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultTechGroup = DefaultObj.defaultTechGroup();
+            //tech grid se pravi dinalicki potrebno je updatovati model
+            //JSON parse strungify potrebno da iz nekog razloga izbacino elemente uid boundindex...
+            model.techGroups.push(JSON.parse(JSON.stringify(defaultTechGroup[0], ['TechGroupId', 'TechGroup', 'Desc'])));
+            //model.techs.push(defaultTech[0]);
+            //update technames
+            model.techGroupNames[defaultTechGroup[0]['TechGroupId']] = defaultTechGroup[0]['TechGroup'];
+            //add row in grid
+            $divTechGroup.jqxGrid('addrow', null, defaultTechGroup);
+            //upat eza broj techs u tabu
+            model.techGroupCount++;
+            $("#techGroupCount").text(model.techGroupCount);
+        });
+
+        $(document).undelegate(".deleteTechGroup", "click");
+        $(document).delegate(".deleteTechGroup", "click", function (e) {
+            //$(".deleteTech").on("click", function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            if (id != 0) {
+                var techGroupId = $divTechGroup.jqxGrid('getcellvalue', id, 'TechGroupId');
+                var rowid = $divTechGroup.jqxGrid('getrowid', id);
+                $divTechGroup.jqxGrid('deleterow', rowid);
+                model.techGroups.splice(id, 1);
+                //update techNames
+                delete model.techGroupNames[techGroupId];
+                //update count
+                model.techGroupCount--;
+                $("#techGroupCount").text(model.techGroupCount);
+                //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
+                $.each(model.techs, function (id, techObj) {
+                    techObj['TG'] = techObj['TG'].filter(item => item !== techGroupId);
+                });
+            }
+        });
+
+        $divTechGroup.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue.trim();
+            model.techGroups[rowBoundIndex][column] = value;
+
+            if (column == 'TechGroup') {
+                var techGroupId = $divTechGroup.jqxGrid('getcellvalue', rowBoundIndex, 'TechGroupId');
+                model.techGroupNames[techGroupId] = value;
             }
         });
 

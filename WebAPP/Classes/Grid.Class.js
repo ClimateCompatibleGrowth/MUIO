@@ -10,14 +10,19 @@ export class Grid {
         return theme
     }
 
-    static techsGrid(techs, commodities, emissions, commNames, emiNames) {
+    static techsGrid(techs, commodities, techGroups, emissions, commNames, emiNames, techGroupNames) {
 
         this.srcTechs = JqxSources.srcTech(techs);
+        this.srcTechGroups = JqxSources.srcTechGroup(techGroups);
         this.srcComms = JqxSources.srcComm(commodities);
         this.srcEmi = JqxSources.srcEmi(emissions);
         this.srcUnits = JqxSources.srcUnit(JSON.stringify(UNITS));
 
         this.daTechs = new $.jqx.dataAdapter(this.srcTechs);
+
+        this.daTechGroups = new $.jqx.dataAdapter(this.srcTechGroups, {
+            autoBind: true
+        });
         this.daComms = new $.jqx.dataAdapter(this.srcComms, {
             autoBind: true
         });
@@ -29,6 +34,21 @@ export class Grid {
 
         var ddlUnits = function (row, value, editor) {
             editor.jqxDropDownList({ source: this.daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true  });
+        }.bind(this);
+
+
+        var ddlTechGroups = function (row, value, editor) {
+            // let data = this.daComms.records;
+            let data = techGroups;
+            editor.jqxDropDownList({
+                source: this.daTechGroups, displayMember: 'TechGroup', valueMember: 'TechGroupId', checkboxes: true,
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    return tooltipContent
+                }
+                , filterable: true 
+            });
         }.bind(this);
 
         var ddlComms = function (row, value, editor) {
@@ -46,11 +66,6 @@ export class Grid {
                 , filterable: true 
             });
         }.bind(this);
-
-
-        // var ddlComms = function(row, value, editor) {
-        //     editor.jqxDropDownList({ source: this.daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true });
-        // }.bind(this);
 
         var ddlEmis = function (row, value, editor) {
             // let data = this.daEmi.records;
@@ -118,15 +133,24 @@ export class Grid {
         }
 
         var cellsrendererbutton = function (row, column, value) {
-            // var id = $("#osy-gridTech").jqxGrid('getrowid', row);
-            // if (id == 0) {
-            //     return '';
-            // }
             if (row == 0) {
                 return '';
             }
             return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTech" data-id=' + row + '><i class="fa  fa-minus-circle danger"></i>Delete</span>';
         }
+
+        var cellsrendererTechGroups = function (row, columnfield, value, defaulthtml, columnproperties) {
+            let valueNames = [];
+            if (Array.isArray(value)) {
+                var values = value;
+            } else {
+                var values = value.split(/,\s*/);
+            }
+            $.each(values, function (id, techGroupId) {
+                valueNames.push(techGroupNames[techGroupId])
+            });
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+        }.bind(this);
 
         var cellsrendererComms = function (row, columnfield, value, defaulthtml, columnproperties) {
             let valueNames = [];
@@ -140,7 +164,6 @@ export class Grid {
             });
             return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
         }.bind(this);
-
 
         var columnsrenderer = function (value) {
             return '<div style="text-align: center; margin-top: 12px; word-wrap:normal;white-space:normal;">' + value + '</div>';
@@ -191,7 +214,8 @@ export class Grid {
             columns: [
                 { text: 'techId', datafield: 'TechId', hidden: true },
                 { text: 'Technology', datafield: 'Tech', width: '10%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '16%', align: 'center', cellsalign: 'left' },
+                { text: 'Description', datafield: 'Desc', width: '10%', align: 'center', cellsalign: 'left' },
+                { text: 'Technology group', datafield: 'TG', width: '7%',  cellsrenderer: cellsrendererTechGroups, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlTechGroups, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
                 { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
                 { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
@@ -199,6 +223,56 @@ export class Grid {
                 { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+                { text: '', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false },
+            ]
+        });
+    }
+
+    static techGroupGrid(groups) {
+
+        let srcTechGroup = JqxSources.srcTechGroup(groups);
+        var daTechGroup = new $.jqx.dataAdapter(srcTechGroup);
+
+        var validation_1 = function (cell, value) {
+            var validationResult = true;
+            var rows = $('#osy-gridTechGroup').jqxGrid('getrows');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].TechGroup.trim() == value.trim() && i != cell.row) {
+                    validationResult = false;
+                    break;
+                }
+            };
+
+            if (validationResult == false) {
+                Message.smallBoxWarning("Input message", "Technology group name should be unique!", 3000);
+                return { result: false, message: "" };
+            }
+            return true;
+        }
+
+        var cellsrendererbutton = function (row, column, value) {
+            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
+            if (row == 0) {
+                return '';
+            }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTechGroup" data-id=' + row + ' ><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+        }
+
+        $("#osy-gridTechGroup").jqxGrid({
+            width: '100%',
+            autoheight: true,
+            columnsheight: 20,
+            theme: this.theme(),
+            source: daTechGroup,
+            editable: true,
+            selectionmode: 'none',
+            enablehover: false,
+            sortable:true,
+            showsortcolumnbackground: false,
+            columns: [
+                { text: 'TechGroupId', datafield: 'TechGroupId', hidden: true },
+                { text: 'Technology group name', datafield: 'TechGroup', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left' },
                 { text: '', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
             ]
         });

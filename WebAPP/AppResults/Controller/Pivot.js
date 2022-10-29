@@ -39,8 +39,9 @@ export default class Pivot {
             })
             .then(data => {      
                 let [casename, genData, resData, VARIABLES, VIEWS, DATA] = data;
-                //console.log('views ', VIEWS)
+                
                 let model = new Model(casename, genData, resData, VARIABLES, DATA, VIEWS);
+                console.log('model ', model)
                 this.initPage(model);
                 this.initEvents(model);
             })
@@ -55,6 +56,44 @@ export default class Pivot {
             });
     }
 
+    static refreshPage(casename) {
+        Base.setSession(casename)
+            .then(response => {
+                const promise = [];
+                promise.push(casename);
+                const genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData);
+                const resData = Osemosys.getResultData(casename, 'resData.json');
+                promise.push(resData);
+                const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+                promise.push(VARIABLES);
+                const VIEWS = Osemosys.getResultData(casename, 'viewDefinitions.json');
+                promise.push(VIEWS);
+                const DATA = Osemosys.getResultData(casename, 'RYT.json');
+                promise.push(DATA);
+                return Promise.all(promise);
+            })
+            .then(data => {
+                
+                let [casename, genData, resData, VARIABLES, VIEWS, DATA] = data;
+                let model = new Model(casename, genData, resData, VARIABLES, DATA, VIEWS);
+                this.initPage(model);
+                this.initEvents(model);
+            })
+            .catch(error => {
+                console.log('error ', error)
+                setTimeout(function () {
+                    if (error.status_code == 'CaseError') {
+                        MessageSelect.init(Pivot.refreshPage.bind(Pivot));
+                    }
+                    else if (error.status_code == 'ActivityError') {
+                        MessageSelect.activity(Pivot.refreshPage.bind(Pivot), error.casename);
+                    }
+                    Message.warning(error.message);
+                }, 500);
+            });
+    }
+
     static initPage(model) {
 
         Message.clearMessages();
@@ -63,6 +102,7 @@ export default class Pivot {
         Html.ddlParamsAll(model.VARIABLES, model.param);
         Html.ddlViews(model.VIEWS[model.param]);
 
+        
         let app = {};
         app.chartTypes = [
             { name: 'Column', value: wijmo.olap.PivotChartType.Column },
@@ -111,14 +151,6 @@ export default class Pivot {
             
         });
 
-       
-
-
-
-
-
-
-
         app.pivotChart = new wijmo.olap.PivotChart('#pivotChart', {
             //header: 'Country GDP',
             itemsSource: app.panel,
@@ -141,7 +173,6 @@ export default class Pivot {
             selectedValuePath: 'value',
             selectedIndexChanged: function (s, e) {      
                 if(s.selectedValue == 1){
-                    //console.log(s.selectedValue)
                     app.pivotChart.rotated = 1;
                     //app.pivotChart.stacking= 1;
                 }
@@ -217,12 +248,8 @@ export default class Pivot {
 
             Osemosys.getResultData(model.casename, model.group+'.json')
             .then(DATA => {
-       
-                console.log('data 2 ', DATA)
                 Html.title(model.casename, model.VARNAMES[model.group][model.param], 'pivot');
                 Html.ddlViews(model.VIEWS[model.param]);
-
-                
 
                 let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
                 model.pivotData = pivotData;
@@ -246,9 +273,6 @@ export default class Pivot {
                     ng.rowFields.push('Year');
                     ng.valueFields.push('Value');
                 }
-
-                
-                
             })
             .catch(error => {
                 Message.danger(error.message);
@@ -398,50 +422,12 @@ export default class Pivot {
                 });
             }
         });
-
-    }
-
-    static refreshPage(casename) {
-        Base.setSession(casename)
-            .then(response => {
-                const promise = [];
-                promise.push(casename);
-                const genData = Osemosys.getData(casename, 'genData.json');
-                promise.push(genData);
-                const resData = Osemosys.getResultData(casename, 'resData.json');
-                promise.push(resData);
-                const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
-                promise.push(VARIABLES);
-                const VIEWS = Osemosys.getResultData(casename, 'viewDefinitions.json');
-                promise.push(VIEWS);
-                const DATA = Osemosys.getResultData(casename, 'RYT.json');
-                promise.push(DATA);
-                return Promise.all(promise);
-            })
-            .then(data => {
-                
-                let [casename, genData, resData, VARIABLES, VIEWS, DATA] = data;
-                let model = new Model(casename, genData, resData, VARIABLES, DATA, VIEWS);
-                this.initPage(model);
-                this.initEvents(model);
-            })
-            .catch(error => {
-                setTimeout(function () {
-                    if (error.status_code == 'CaseError') {
-                        MessageSelect.init(Pivot.refreshPage.bind(Pivot));
-                    }
-                    else if (error.status_code == 'ActivityError') {
-                        MessageSelect.activity(Pivot.refreshPage.bind(Pivot), error.casename);
-                    }
-                    Message.warning(error.message);
-                }, 500);
-            });
     }
 
     static initEvents(model) {
 
-        let $divGrid = $('#osy-gridPivot');
-        let $divChart = $('#osy-chartPivot');
+        // let $divGrid = $('#osy-gridPivot');
+        // let $divChart = $('#osy-chartPivot');
 
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function (e) {
@@ -457,9 +443,7 @@ export default class Pivot {
         $("#btnGridParam").on('click', function (e) {
             e.preventDefault();
             var myPivotGridRows = $('#osy-pivotGrid').jqxPivotGrid('getPivotRows');
-            //console.log('rows ', myPivotGridRows.items);
             var myPivotGridCells = $('#osy-pivotGrid').jqxPivotGrid('getPivotCells');
-            //console.log(myPivotGridCells)
         });
 
 

@@ -105,6 +105,14 @@ export class DataModel{
         return techNames;
     }
 
+    static TechGroupName(genData){
+        let techGroupNames = {};
+        $.each(genData['osy-techGroups'], function (id, obj) {
+            techGroupNames[obj.TechGroupId] = obj.TechGroup;
+        });
+        return techGroupNames;
+    }
+
     /////////////////////////////////////////////////
     //tech data by id
     static getTechData(genData){

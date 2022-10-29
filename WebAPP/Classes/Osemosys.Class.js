@@ -262,24 +262,50 @@ export class Osemosys {
         });
     }
 
+    // static getData(casename, dataJson) {
+    //     return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"})  // return this promise
+    //     .then(response => response.json())
+    //     .catch(error => error);
+    // }
+
     static getData(casename, dataJson) {
-        return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"})  // return this promise
-        .then(response => response.json())
-        .catch(error => error);
+        // return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"})
+        // .then(response => response.json())
+        // .catch(error => error);
+
+        return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"}) 
+            .then((response) => {
+            if (response.ok) {
+              return response;
+            }
+            throw new Error('No casename selecetd');
+            })
+            .then(response => response.json())
+            .catch(error => null);
     }
 
     static getResultData(casename, dataJson) {
-        return new Promise((resolve, reject) => {
-            fetch('../../DataStorage/'+casename+'/view/' +dataJson, {cache: "no-store"})
-            .then(DATA => {
-                DATA = DATA.json();
-                resolve(DATA);
+        // return new Promise((resolve, reject) => {
+        //     fetch('../../DataStorage/'+casename+'/view/' +dataJson, {cache: "no-store"})
+        //     .then(DATA => {
+        //         DATA = DATA.json();
+        //         resolve(DATA);
+        //     })
+        //     .catch(error => {
+        //         if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+        //         reject(error);
+        //     });
+        // });
+
+        return fetch('../../DataStorage/'+casename+'/view/' +dataJson, {cache: "no-store"})
+            .then((response) => {
+            if (response.ok) {
+            return response;
+            }
+            throw new Error('No casename selecetd');
             })
-            .catch(error => {
-                if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-                reject(error);
-            });
-        });
+            .then(response => response.json())
+            .catch(error => null);
     }
 
     static updateData(data, param, dataJson) {

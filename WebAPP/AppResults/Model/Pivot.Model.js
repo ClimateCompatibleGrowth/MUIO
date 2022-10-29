@@ -10,9 +10,6 @@ export class Model {
 
         let VARGROUPS = DataModelResult.getVarById(VARIABLES);
         let pivotData = DataModelResult.getPivot(DATA, genData, VARIABLES, group, param);
-
-        console.log('DATA ', DATA)
-        console.log('pivotData ', pivotData)
         let VARNAMES = DataModel.AllParamName(VARIABLES);
         let VIEWS = VIEW['osy-views'];
 

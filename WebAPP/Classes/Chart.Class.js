@@ -119,11 +119,6 @@ export class Chart {
 
     static RESChart($div, model){
 
-        // console.log( ' source ', model.source);
-        // console.log( ' target ', model.target);
-        // console.log( ' value ', model.value);
-        // console.log( ' labelLink ', model.labelLink);
-
         var data = [{
             type: "sankey",
             arrangement: "fixed",
@@ -164,13 +159,12 @@ export class Chart {
         Plotly.react($div, data, layout)
     }
 
-
     static SankeyChart($div, model){
 
-        console.log( ' source ', model.source[model.sc][model.year]);
-        console.log( ' target ', model.target[model.sc][model.year]);
-        console.log( ' value ', model.value[model.sc][model.year]);
-        console.log( ' labelLink ', model.labelLink[model.sc][model.year]);
+        // console.log( ' source ', model.source[model.sc][model.year]);
+        // console.log( ' target ', model.target[model.sc][model.year]);
+        // console.log( ' value ', model.value[model.sc][model.year]);
+        // console.log( ' labelLink ', model.labelLink[model.sc][model.year]);
 
         var data = [{
             type: "sankey",

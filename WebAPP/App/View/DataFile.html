@@ -24,21 +24,22 @@
 
             <article class="col-sm-3 col-md-3 col-lg-3">
                 <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false"
-                    data-widget-custombutton="false" data-widget-deletebutton="false" >
+                    data-widget-custombutton="false" data-widget-deletebutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
                         <h2> Case data </h2>
                     </header>
-                    <div> 
+                    <div>
                         <div class="widget-body">
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-12">
-                                    <button id="osy-newCaseRun" class="btn btn-block btn-default"
-                                        style="margin-right: 20px; display: none;">
-                                        <i class="fa fa-plus"></i> New case
+                                    <button class="btn btn-white btn-default" id="osy-newCaseRun"
+                                        style=" display: none;">
+                                        <i class="ace-icon fa fa-plus fa-lg osy-green"></i>
+                                        New case
                                     </button>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="smart-form">
                                 <fieldset>
                                     <div class="row">
@@ -69,41 +70,41 @@
 
                             <!-- <footer> -->
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <a data-toggle="modal" id='osy-btnScOrder' href="#osy-order"
-                                        class="btn btn-block btn-default hidden-mobile">
-                                        <i class="fa fa-sort"></i> Scenario order
+                                        class="btn btn-white btn-default btn-block">
+                                        <i class="fa fa-sort fa-lg danger"></i> Scenario order
                                     </a>
-
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-white btn-default btn-bold btn-block" id="osy-newCaseRun"
+                                        style=" display: none;">
+                                        <i class="ace-icon fa fa-plus fa-lg osy-green"></i>
+                                        New case
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button id="osy-createCaseRun" class="btn btn-white btn-default btn-bold btn-block">
+                                        <i class="fa fa-save fa-lg success"></i> Create case
+                                    </button>
                                 </div>
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-md-12">
-
-                                    <button id="osy-createCaseRun" class="btn btn-block btn-info"
-                                        style="margin-right: 20px;">
-                                        <i class="fa fa-plus"></i> Create case
+                                <div class="col-md-6">
+                                    <button id="osy-updateCaseRun" class="btn btn-white btn-default btn-bold btn-block"
+                                        style="display: none;">
+                                        <i class="fa fa-edit fa-lg primary"></i> Update case
                                     </button>
-                                    <button id="osy-updateCaseRun" class="btn btn-block btn-warning"
-                                        style="margin-right: 20px; display: none;">
-                                        <i class="fa fa-edit"></i> Update case
+                                </div>
+                                <div class="col-md-6">
+                                    <button id="osy-generateDataFile" class="btn btn-white btn-default btn-bold btn-block"
+                                        style=" display: none;">
+                                        <i class="fa fa-cogs fa-lg warning"></i> Generate Data File
                                     </button>
                                 </div>
                             </div>
                             <hr>
-                            <!-- <br> -->
-                            <!-- <div style="border-bottom: 2px solid red;"></div> -->
-                            <div class="row">
-                                <div class="col-md-12">
-
-                                    <button id="osy-generateDataFile" class="btn btn-block btn-primary"
-                                        style="margin-right: 20px; display: none;">
-                                        <i class="fa fa-cogs"></i> Generate Data File
-                                    </button>
-                                </div>
-                            </div>
-                            </br>
                             <div class="row">
                                 <div class="col-md-12">
                                     <!-- <div class="form-inline"> -->
@@ -124,14 +125,14 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button id="osy-run" class="btn btn-block btn-danger" style="display: none;">
-                                        <i class="fa fa-calculator"></i> RUN MODEL
+                                    <button id="osy-run" class="btn btn-white btn-default btn-bold btn-block" style="display: none;">
+                                        <i class="fa fa-play-circle fa-lg danger"></i> RUN MODEL
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
             </article>
 
             <article class="col-sm-9 col-md-9 col-lg-9">
@@ -142,114 +143,139 @@
                         <h2> Case runs </h2>
                     </header>
                     <div> -->
-                        <div id="tabs">
-                            <ul class="nav nav-tabs in">
-                                <li class="active">
-                                    <a data-toggle="tab" href="#tabCases" class='Cases'> <i
-                                            class="fa fa-lg fa-cubes green"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Cases </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#tabDataFile" class="DataFile" style="display: none;"> <i
-                                            class="fa fa-lg fa-file-text success"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Data file </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#tabRunOutput" class="runOutput" style="display: none;">
-                                        <i class="fa fa-lg fa-list-alt "></i>
-                                        <span class="hidden-mobile hidden-tablet"> Solver output </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#tabResultsFile" class='Results' style="display: none;">
-                                        <i class="fa fa-lg fa-download primary"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Results </span>
-                                    </a>
-                                </li>
-                            </ul>
+                <div id="tabs">
+                    <ul class="nav nav-tabs in">
+                        <li class="active">
+                            <a data-toggle="tab" href="#tabCases" class='Cases'> <i class="fa fa-lg fa-cubes"></i>
+                                <span class="hidden-mobile hidden-tablet"> Cases </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#tabDataFile" class="DataFile" style="display: none;"> <i
+                                    class="fa fa-lg fa-file-text"></i>
+                                <span class="hidden-mobile hidden-tablet"> Data file </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#tabRunOutput" class="runOutput" style="display: none;">
+                                <i class="fa fa-lg fa-file-text-o "></i>
+                                <span class="hidden-mobile hidden-tablet"> CBC solver log </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#tabLpOutput" class="lpOutput" style="display: none;">
+                                <i class="fa fa-lg fa-file-text-o "></i>
+                                <span class="hidden-mobile hidden-tablet"> LP file (GLPK) log </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#tabResultsFile" class='Results' style="display: none;">
+                                <i class="fa fa-lg fa-download"></i>
+                                <span class="hidden-mobile hidden-tablet"> Results </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div class="tab-content">
+                    <div class="tab-pane active Cases" id="tabCases">
+                        <div class="jarviswidget">
+                            <div>
+                                <div class="widget-body">
+                                    <fieldset>
+                                        <section style="overflow-x: scroll;">
+                                            <div id="osy-Cases"></div>
+                                        </section>
+                                    </fieldset>
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
-
-                        <div class="tab-content">
-                            <div class="tab-pane active Cases" id="tabCases">
-                                <div class="jarviswidget">
-                                    <div>
-                                        <div class="widget-body">
-                                            <fieldset>
-                                                <section style="overflow-x: scroll;">
-                                                    <div id="osy-Cases"></div>
-                                                </section>
-                                            </fieldset>
+                    <div class="tab-pane" id="tabDataFile">
+                        <!-- 002082 -->
+                        <div class="jarviswidget">
+                            <div>
+                                <div class="widget-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div id='osy-DataFileDownload'></div>
                                         </div>
                                     </div>
+                                    </br>
+                                    <fieldset>
+
+                                        <section>
+                                            <div id="osy-DataFile"></div>
+                                        </section>
+                                    </fieldset>
                                 </div>
                             </div>
-
-                            <div class="tab-pane" id="tabDataFile">
-                                <!-- 002082 -->
-                                <div class="jarviswidget">
-                                    <div style="background-color: #3a3f51!important; color: white;">
-                                        <div class="widget-body">
-                                            <fieldset>
-                                                <section id='osy-DataFileDownload'></section>
-                                                <section style="overflow-x: scroll;">
-                                                    <div id="osy-DataFile"></div>
-                                                </section>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane " id="tabRunOutput">
-                                <div class="jarviswidget ">
-                                    <div style="background-color: black!important; color: white;">
-                                        <div class="widget-body no-padding-bottom">
-                                            <fieldset>
-                                                <section style="background-color: black!important; color: white;">
-                                                    <div id="osy-runOutput"></div>
-                                                </section>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane " id="tabResultsFile">
-                                <div class="jarviswidget ">
-                                    <div>
-                                        <div class="widget-body">
-                                            <fieldset>
-                                                <section id="osy-downloadResultsFile"></section>
-                                            </fieldset>
-                                            <fieldset>
-                                                <hr>
-                                                <section>
-                                                    <div class="well">
-                                                        <table class="table table-striped table-forum">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>
-                                                                        Results CSV files
-                                                                    </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id='csvFiles'>
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </section>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
-                    <!-- </div>
+                    </div>
+
+                    <div class="tab-pane " id="tabRunOutput">
+                        <div class="jarviswidget ">
+                            <div>
+                                <div class="widget-body no-padding-bottom">
+                                    <fieldset>
+                                        <section>
+                                            <div id="osy-runOutput"></div>
+                                        </section>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane " id="tabLpOutput">
+                        <div class="jarviswidget ">
+                            <div>
+                                <div class="widget-body no-padding-bottom">
+                                    <fieldset>
+                                        <section>
+                                            <div id="osy-lpOutput"></div>
+                                        </section>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane " id="tabResultsFile">
+                        <div class="jarviswidget ">
+                            <div>
+                                <div class="widget-body">
+                                    <fieldset>
+                                        <section id="osy-downloadResultsFile"></section>
+                                    </fieldset>
+                                    <fieldset>
+                                        <hr>
+                                        <section>
+                                            <div class="well">
+                                                <table class="table table-striped table-forum">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                Results CSV files
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id='csvFiles'>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </section>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- </div>
                 </div> -->
             </article>
         </div>

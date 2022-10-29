@@ -341,8 +341,6 @@ export default class RYTM {
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            console.log('model.param ', model.param)
-            console.log('model.gridData[model.param] ',model.gridData[model.param])
 
             let rytData = $divGrid.jqxGrid('getdisplayrows');
             let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Tech', 'MoId', 'UnitId'].concat(model.years)));

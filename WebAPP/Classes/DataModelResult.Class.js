@@ -136,6 +136,8 @@ export class DataModelResult{
         let unitData = this.getUnitData(genData, VARIABLES);
         let paramById = DataModel.getParamById(VARIABLES);
         let years = genData['osy-years']
+        let techData = this.getTechData(genData);
+        let techGroupNames = DataModel.TechGroupName(genData);
 
         let pivotData = [];
         let dataT = {};
@@ -144,35 +146,45 @@ export class DataModelResult{
 
         $.each(DATA[param], function (cs, array) {     
             $.each(array, function (id, obj) {
-                $.each(years, function (idY, year) { 
-                    let chunk = {};
-                    chunk['Case'] = cs;
-                    if(obj.Tech){
+
+                let chunk = {};
+                chunk['Case'] = cs;
+                if(obj.Tech){
+                    if(techData[obj.Tech].TG.length != 0){
+                        $.each(techData[obj.Tech].TG, function (id, tg) {
+                            chunk['Tech'] = obj.Tech;  
+                            chunk['TechGroup'] = techGroupNames[tg];
+                            dataT = unitData[group][param][obj.Tech];
+                        })
+                    }else{
                         chunk['Tech'] = obj.Tech;  
+                        chunk['TechGroup'] = 'No group';
                         dataT = unitData[group][param][obj.Tech];
                     }
-                    if(obj.Comm){
-                        chunk['Comm'] = obj.Comm;
-                        dataC = unitData[group][param][obj.Comm];
-                    }
-                    if(obj.Emi){
-                        chunk['Emi'] = obj.Emi;
-                        dataE = unitData[group][param][obj.Emi];
-                    }
-                    if(obj.MoId){
-                        chunk['MoId'] = obj.MoId;
-                    }
-                    if(obj.Ts){
-                        chunk['Ts'] = obj.Ts;
-                    }
-                    chunk['Year'] = year;
-                    
-                    chunk['Value'] = obj[year];
 
-                    let rule = paramById[group][param]['unitRule'];
-                    const data = {...dataT, ...dataC, ...dataE};
-                    chunk['Unit'] = jsonLogic.apply(rule, data);
-      
+                }
+                if(obj.Comm){
+                    chunk['Comm'] = obj.Comm;
+                    dataC = unitData[group][param][obj.Comm];
+                }
+                if(obj.Emi){
+                    chunk['Emi'] = obj.Emi;
+                    dataE = unitData[group][param][obj.Emi];
+                }
+                if(obj.MoId){
+                    chunk['MoId'] = obj.MoId;
+                }
+                if(obj.Ts){
+                    chunk['Ts'] = obj.Ts;
+                }
+
+                let rule = paramById[group][param]['unitRule'];
+                const data = {...dataT, ...dataC, ...dataE};
+                chunk['Unit'] = jsonLogic.apply(rule, data);
+
+                $.each(years, function (idY, year) { 
+                    chunk['Year'] = year;
+                    chunk['Value'] = obj[year];
                     pivotData.push(chunk);
                 });
 
@@ -181,37 +193,61 @@ export class DataModelResult{
         return pivotData;
     }
 
-    // static pivotRYT(RYTdata){
-    //     let RYT = {};
-    //     const cloneData = JSON.parse(JSON.stringify(RYTdata));
-    //     $.each(cloneData, function (cs, array) {
-    //         RYT[cs] = {};
+
+    // static getPivot(DATA, genData, VARIABLES, group, param){
+
+    //     let unitData = this.getUnitData(genData, VARIABLES);
+    //     let paramById = DataModel.getParamById(VARIABLES);
+    //     let years = genData['osy-years']
+
+    //     let pivotData = [];
+    //     let dataT = {};
+    //     let dataC = {};
+    //     let dataE = {};
+
+    //     $.each(DATA[param], function (cs, array) {     
     //         $.each(array, function (id, obj) {
-    //             RYT[cs][obj.Tech] = obj
-    //             delete obj.Tech;
+    //             $.each(years, function (idY, year) { 
+    //                 let chunk = {};
+    //                 chunk['Case'] = cs;
+    //                 if(obj.Tech){
+    //                     chunk['Tech'] = obj.Tech;  
+    //                     dataT = unitData[group][param][obj.Tech];
+    //                 }
+    //                 if(obj.Comm){
+    //                     chunk['Comm'] = obj.Comm;
+    //                     dataC = unitData[group][param][obj.Comm];
+    //                 }
+    //                 if(obj.Emi){
+    //                     chunk['Emi'] = obj.Emi;
+    //                     dataE = unitData[group][param][obj.Emi];
+    //                 }
+    //                 if(obj.MoId){
+    //                     chunk['MoId'] = obj.MoId;
+    //                 }
+    //                 if(obj.Ts){
+    //                     chunk['Ts'] = obj.Ts;
+    //                 }
+    //                 chunk['Year'] = year;
+                    
+    //                 chunk['Value'] = obj[year];
+
+    //                 let rule = paramById[group][param]['unitRule'];
+    //                 const data = {...dataT, ...dataC, ...dataE};
+    //                 chunk['Unit'] = jsonLogic.apply(rule, data);
+      
+    //                 pivotData.push(chunk);
+    //             });
+
     //         });
     //     });
-    //     return RYT;
+    //     return pivotData;
     // }
 
-    // static getPivotChart(DATA, genData){
-    //     let years = genData['osy-years'];
-    //     let techs = genData['osy-tech'];
-    //     let data = this.pivotRYT(DATA);
-    //     let chartData = {};
-    //     $.each(DATA, function (cs, array) {
-    //         chartData[cs] = [];
-    //         $.each(years, function (idY, year) { 
-    //             let chunk = {};
-    //             chunk['Year'] = year;
-    //             $.each(techs, function (idT, tech) {
-    //                 chunk[tech.Tech] = data[cs][tech.Tech][year]    
-    //             });        
-    //             chartData[cs].push(chunk); 
-    //         });  
-    //     });
-    //     return chartData;
-    // }
+
+
+
+
 
     ////////////////////////////////////////////////////////JSON data structures
 

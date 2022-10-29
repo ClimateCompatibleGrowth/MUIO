@@ -1,0 +1,54 @@
+{
+    "osy-views": {
+        "TTMPA": [],
+        "ANC": [
+            {
+                "osy-viewId": "VIEW_q3n50",
+                "osy-viewname": "test",
+                "osy-viewdesc": "",
+                "osy-viewdef": "{\"showZeros\":false,\"showColumnTotals\":0,\"showRowTotals\":0,\"defaultFilterType\":3,\"totalsBeforeData\":false,\"sortableGroups\":true,\"fields\":[{\"binding\":\"Case\",\"header\":\"Case\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Case\"},{\"binding\":\"Tech\",\"header\":\"Tech\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Tech\"},{\"binding\":\"Year\",\"header\":\"Year\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Year\"},{\"binding\":\"Value\",\"header\":\"Value\",\"dataType\":2,\"aggregate\":1,\"showAs\":0,\"descending\":false,\"format\":\"n2\",\"isContentHtml\":false,\"key\":\"Value\"},{\"binding\":\"Unit\",\"header\":\"Unit\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":true,\"key\":\"Unit\"}],\"rowFields\":{\"items\":[\"Tech\"]},\"columnFields\":{\"items\":[\"Year\"]},\"filterFields\":{\"items\":[]},\"valueFields\":{\"items\":[\"Value\"]}}"
+            },
+            {
+                "osy-viewId": "VIEW_au2ag",
+                "osy-viewname": "PWRT",
+                "osy-viewdesc": "",
+                "osy-viewdef": "{\"showZeros\":false,\"showColumnTotals\":0,\"showRowTotals\":0,\"defaultFilterType\":3,\"totalsBeforeData\":false,\"sortableGroups\":true,\"fields\":[{\"binding\":\"Case\",\"header\":\"Case\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Case\"},{\"binding\":\"Tech\",\"header\":\"Tech\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Tech\",\"filter\":{\"filterText\":\"pwr\",\"showValues\":{\"PWRCOA\":true,\"PWRGAS\":true,\"PWRHYD\":true,\"PWRSOL\":true,\"PWRTRN\":true,\"PWRWND\":true}}},{\"binding\":\"Year\",\"header\":\"Year\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Year\"},{\"binding\":\"Value\",\"header\":\"Value\",\"dataType\":2,\"aggregate\":1,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Value\"},{\"binding\":\"Unit\",\"header\":\"Unit\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":true,\"key\":\"Unit\"}],\"rowFields\":{\"items\":[\"Year\"]},\"columnFields\":{\"items\":[\"Case\",\"Tech\"]},\"filterFields\":{\"items\":[]},\"valueFields\":{\"items\":[\"Value\"]}}"
+            }
+        ],
+        "CI": [],
+        "AFOC": [],
+        "AVOC": [],
+        "DSV": [],
+        "DTEP": [],
+        "NC": [],
+        "NONTU": [],
+        "SV": [],
+        "TCA": [],
+        "TTAA": [],
+        "AE": [],
+        "TATABM": [],
+        "ITNC": [],
+        "ITTC": [],
+        "PBTA": [],
+        "UBTA": [],
+        "ATE": [],
+        "ROTA": [],
+        "D": [],
+        "T": [],
+        "ATEBM": [],
+        "PBT": [
+            {
+                "osy-viewId": "VIEW_ce3fu",
+                "osy-viewname": "Electricity",
+                "osy-viewdesc": "",
+                "osy-viewdef": "{\"showZeros\":false,\"showColumnTotals\":0,\"showRowTotals\":0,\"defaultFilterType\":3,\"totalsBeforeData\":false,\"sortableGroups\":true,\"fields\":[{\"binding\":\"Case\",\"header\":\"Case\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Case\"},{\"binding\":\"Tech\",\"header\":\"Tech\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Tech\",\"filter\":{\"filterText\":\"pwr\",\"showValues\":{\"PWRCOA\":true,\"PWRGAS\":true,\"PWRHYD\":true,\"PWRSOL\":true,\"PWRWND\":true}}},{\"binding\":\"Comm\",\"header\":\"Comm\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Comm\"},{\"binding\":\"Ts\",\"header\":\"Ts\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Ts\"},{\"binding\":\"Year\",\"header\":\"Year\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Year\"},{\"binding\":\"Value\",\"header\":\"Value\",\"dataType\":2,\"aggregate\":1,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Value\"},{\"binding\":\"Unit\",\"header\":\"Unit\",\"dataType\":1,\"aggregate\":2,\"showAs\":0,\"descending\":false,\"format\":\"n0\",\"isContentHtml\":false,\"key\":\"Unit\"}],\"rowFields\":{\"items\":[\"Year\"]},\"columnFields\":{\"items\":[\"Case\",\"Tech\",\"Comm\"]},\"filterFields\":{\"items\":[]},\"valueFields\":{\"items\":[\"Value\"]}}"
+            }
+        ],
+        "ROPBT": [],
+        "ROUBT": [],
+        "UBT": [],
+        "ROA": [],
+        "ROPBTBM": [],
+        "ROUBTBM": []
+    }
+}

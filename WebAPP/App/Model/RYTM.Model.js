@@ -94,7 +94,6 @@ export class Model {
             }.bind(this);
 
             let geteditorvalue =  function (row, cellvalue, editor) {
-                console.log('editor.val() ', editor.val())
                 return editor.val() == null ? null :  editor.val();
             }
 

@@ -168,7 +168,6 @@ def uploadCase():
                                 if name == '1.0' or name == '2.0':
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
 
-
                                     #add res view folders with json default files
                                     configPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
                                     vars = File.readParamFile(configPath)
@@ -208,6 +207,26 @@ def uploadCase():
                                         "casename": casename
                                     })
                                 elif name == '3.0': 
+                                    #potrebno dodati tech groups
+                                    #case = data.get('osy-casename', None)
+                                    zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                    genDataPath = Path(Config.DATA_STORAGE, casename, 'genData.json')
+                                    genData = File.readParamFile(genDataPath)
+                                    # genData["osy-techGroups"] = [{"TechGroup": "TG_0", "TechGroupId": "TG_0", "Desc": "Default technology group"}]
+                                    # for dic in genData["osy-tech"]:
+                                    #     dic["TG"] =["TG_0"]
+                                    genData["osy-techGroups"] = []
+                                    for dic in genData["osy-tech"]:
+                                        dic["TG"] =[]
+
+                                    File.writeFile( genData, genDataPath)
+
+                                    msg.append({
+                                        "message": "Model " + casename +" have been uploaded!",
+                                        "status_code": "success",
+                                        "casename": casename
+                                    })
+                                elif name == '4.0': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
@@ -216,7 +235,7 @@ def uploadCase():
                                     })
                                 else:
                                     msg.append({
-                                        "message": "Model " + casename +" is not valid OSEMOSYS ver 1.0, 2.0, 3.0 model!",
+                                        "message": "Model " + casename +" is not valid OSEMOSYS ver 1.0, 2.0, 3.0, 4.0 model!",
                                         "status_code": "error"
                                     })
                             else:

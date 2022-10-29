@@ -80,7 +80,6 @@ export class Model {
                         if (event.keyCode === 46 || event.keyCode === 8) {
                             //$('#' + editor[0].id).val(null);
                             editor.jqxNumberInput('val',null); 
-                            console.log('editor ', editor) 
                         }
                     })
                 }else{

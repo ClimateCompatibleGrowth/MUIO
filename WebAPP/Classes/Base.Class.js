@@ -218,8 +218,7 @@ export class Base {
                 data: JSON.stringify({ "casename": casename, 'jsonData':  jsonData}),
                 //dataType: "json",
                 contentType: 'application/json',
-                success: function (result) {     
-                    //console.log('result ', result)       
+                success: function (result) {          
                     resolve(result);
                 },
                 error: function(xhr, status, error) {
@@ -230,52 +229,6 @@ export class Base {
             });
         });
     }
-
-    // static backupCaseStudy(casename) {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             url:Base.apiUrl() + "backupCase",
-    //             async: true,  
-    //             type: 'POST',
-    //             dataType: 'json',
-    //             data: JSON.stringify({ "casename": casename }),
-    //             contentType: 'application/json; charset=utf-8',
-    //             // credentials: 'include',
-    //             // xhrFields: { withCredentials: true},
-    //             // crossDomain: true,
-    //             success: function (result) {             
-    //                 resolve(result);
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-    //                 reject(error);
-    //             }
-    //         });
-    //     });
-    // }
-
-    // static backupCaseStudy(casename) {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             url:Base.apiUrl() + "backupCase?case="+casename,
-    //             async: true,  
-    //             type: 'GET',
-    //             dataType: 'json',
-    //             //data: JSON.stringify({ "casename": casename }),
-    //             contentType: 'application/json; charset=utf-8',
-    //             // credentials: 'include',
-    //             // xhrFields: { withCredentials: true},
-    //             // crossDomain: true,
-    //             success: function (result) {             
-    //                 resolve(result);
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-    //                 reject(error);
-    //             }
-    //         });
-    //     });
-    // }
 
     static uploadFunction = function () {
         var MyDropzone = new Dropzone("div#myDropzone", {

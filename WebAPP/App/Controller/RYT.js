@@ -259,16 +259,10 @@ export default class RYT {
                 let param = $("#osy-ryt").val();
                 //var tech = $("#osy-techs").val();
 
-                // console.log('Grid ', model.gridData[param])
-                // console.log('Chart ', model.chartData[param][techId])
-
                 //update performance model
                 // let columnIndex = $divGrid.jqxGrid('getcolumnindex', year) - 3;
                 // model.chartData[param][techId][columnIndex][scId] = value;
                 // model.gridData[param][rowBoundIndex][year] = value;
-
-
-                //console.log('columnIndex ', columnIndex)
                 
                 // $.each(model.chartData[param][techId], function (id, obj) {
                 //     if (obj.Year == year) {
@@ -351,13 +345,8 @@ export default class RYT {
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            console.log('model.param ', model.param)
-            console.log('model.gridData[model.param] ',model.gridData[model.param])
-
             let rytData = $divGrid.jqxGrid('getdisplayrows');
             let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Tech'].concat(model.years)));
-
-            
 
             Base.prepareCSV(model.casename, data)
             .then(response =>{

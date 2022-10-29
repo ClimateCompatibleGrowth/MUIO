@@ -62,12 +62,8 @@ export default class RYTTs {
 
         let $divGrid = $('#osy-gridRYTTs');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        //console.log('rendaGriddergridrows', daGrid);
         Grid.Grid($divGrid, daGrid, model.columns, {groupable: true, filterable: true, sortable:true});
         
-
-
-        //console.log('rendergridrows', model.rendergridrows);
         // var daGrid = new $.jqx.dataAdapter(model.srcGrid_v);
         // Grid.VirtualGrid($divGrid, daGrid, model.columns, model.rendergridrows, true, true);
 
@@ -134,7 +130,6 @@ export default class RYTTs {
             event.preventDefault();
             event.stopImmediatePropagation();
 
-            console.log('Save STARt')
             let start = performance.now();
 
             let param = $("#osy-ryt").val();
@@ -209,7 +204,6 @@ export default class RYTTs {
             var sc = $("#osy-scenarios").val();
             var ts = $("#osy-timeslices2").val();
             var tech = $("#osy-techNames").val();
-            console.log(sc, ts, tech)
             Grid.applyRYTTsFilter($divGrid, model.years, sc, tech, ts);
         });
 
@@ -382,8 +376,6 @@ export default class RYTTs {
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            console.log('model.param ', model.param)
-            console.log('model.gridData[model.param] ',model.gridData[model.param])
 
             let rytData = $divGrid.jqxGrid('getdisplayrows');
             let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Tech', 'Timeslice'].concat(model.years)));

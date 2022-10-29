@@ -22,7 +22,7 @@ html {
 }
 /* Optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
-    background: #FF0000;
+    background: #d9d9d9 !important;
 }
 
 .page-footer {
@@ -577,4 +577,9 @@ svg[id^="mermaid-"] {
     border-color: #f0ad4e;
     border-width: 2px;
     color: #f0ad4e;
+}
+
+.log-output{
+    height: 675px; 
+    overflow: auto;
 }

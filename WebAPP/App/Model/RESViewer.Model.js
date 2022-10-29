@@ -17,9 +17,6 @@ export class Model {
         // let TechUnits = DataModel.getTechUnits(genData);
         // let CommUnits = DataModel.getCommUnits(genData);
 
-        console.log('RYTCMdata ', RYTCMdata);
-        console.log('allActivityTechs ', allActivityTechs);
-        console.log('ActivityComms ', ActivityComms);
         // console.log('TechNames ', TechNames);
         // console.log('TechUnits ', TechUnits);
         // console.log('CommUnits ', CommUnits);
@@ -68,9 +65,6 @@ export class Model {
 
         let IAR = RYTCMdata.IAR.SC_0;
         let OAR = RYTCMdata.OAR.SC_0;
-
-        console.log('IAR ', IAR);
-        console.log('OAR ', OAR);
 
         $.each(OAR, function (idOAR, objOAR) {
             $.each(IAR, function (idIAR, objIAR) {
@@ -147,12 +141,12 @@ export class Model {
         //var label = Object.keys(labelIndex);
 
 
-        console.log('labelIndex ', labelIndex);
-        console.log('label ', label);
-        console.log('color ', color);
-        console.log('source ', source);
-        console.log('target ', target);
-        console.log('value ', value);
+        // console.log('labelIndex ', labelIndex);
+        // console.log('label ', label);
+        // console.log('color ', color);
+        // console.log('source ', source);
+        // console.log('target ', target);
+        // console.log('value ', value);
         // console.log('labelLink ', labelLink);
         // console.log('scenarios ', scenarios);
 
