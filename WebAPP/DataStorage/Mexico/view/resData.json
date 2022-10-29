@@ -1,1 +1,0 @@
-{"osy-cases": [{"Case": "REF", "CaseId": "CS_k59ea", "Desc": "", "Runtime": "Mon Oct 03 2022 20:25:58 GMT+0200 (Central European Summer Time)", "Scenarios": [{"ScenarioId": "SC_0", "Scenario": "SC_0", "Desc": "Base scenario", "Active": true}, {"ScenarioId": "SC_a077d", "Scenario": "ReliefValve", "Desc": "Relief valve scenario", "Active": false}]}]}
