@@ -33,7 +33,7 @@ SOLVERs_FOLDER = Path('WebAPP', 'SOLVERs')
 
 os.chmod(DATA_STORAGE, 0o777)
 
-HEROKU_DEPLOY = 0
+HEROKU_DEPLOY = 1
 AWS_SYNC = 0
 
 PINNED_COLUMNS = ('Sc', 'Tech', 'Comm', 'Emis', 'Timeslice', 'MoO', 'UnitId')
