@@ -12,13 +12,26 @@ S3_BUCKET = os.environ.get("S3_BUCKET")
 S3_KEY = os.environ.get("S3_KEY")
 S3_SECRET = os.environ.get("S3_SECRET")
 
+ALLOWED_EXTENSIONS = set(['zip', 'application/zip'])
+
 UPLOAD_FOLDER = Path('WebAPP')
 WebAPP_PATH = Path('WebAPP')
-ALLOWED_EXTENSIONS = set(['zip', 'application/zip'])
 DATA_STORAGE = Path("WebAPP", 'DataStorage')
 CLASS_FOLDER = Path("WebAPP", 'Classes')
 EXTRACT_FOLDER = Path("")
 SOLVERs_FOLDER = Path('WebAPP', 'SOLVERs')
+
+
+#absolute paths
+# OSEMOSYS_ROOT = os.path.abspath(os.getcwd())
+# UPLOAD_FOLDER = Path(OSEMOSYS_ROOT, 'WebAPP')
+# WebAPP_PATH = Path(OSEMOSYS_ROOT, 'WebAPP')
+# DATA_STORAGE = Path(OSEMOSYS_ROOT, "WebAPP", 'DataStorage')
+# CLASS_FOLDER = Path(OSEMOSYS_ROOT, "WebAPP", 'Classes')
+# EXTRACT_FOLDER = Path(OSEMOSYS_ROOT, "")
+# SOLVERs_FOLDER = Path(OSEMOSYS_ROOT, 'WebAPP', 'SOLVERs')
+
+os.chmod(DATA_STORAGE, 0o777)
 
 HEROKU_DEPLOY = 0
 AWS_SYNC = 0

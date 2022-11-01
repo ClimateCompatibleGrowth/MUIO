@@ -76,6 +76,7 @@ def copy():
 
         src =  Path(Config.DATA_STORAGE, case)
         dest =  Path(Config.DATA_STORAGE, case + '_copy')
+
         if(os.path.isdir(dest)):
             response = {
                 "message": 'Case <b>'+ case + '_copy</b> already exists, please rename existing case first!',

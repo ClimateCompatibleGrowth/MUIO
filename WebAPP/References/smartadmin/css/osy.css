@@ -583,3 +583,10 @@ svg[id^="mermaid-"] {
     height: 675px; 
     overflow: auto;
 }
+
+
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}

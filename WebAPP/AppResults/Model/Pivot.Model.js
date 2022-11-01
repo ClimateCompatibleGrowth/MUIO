@@ -13,6 +13,9 @@ export class Model {
         let VARNAMES = DataModel.AllParamName(VARIABLES);
         let VIEWS = VIEW['osy-views'];
 
+        console.log('DATA', DATA)
+        console.log('pivot Data', pivotData)
+
         this.casename = casename;
         this.genData = genData;
         this.resData = resData;
