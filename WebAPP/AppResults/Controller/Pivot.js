@@ -157,7 +157,7 @@ export default class Pivot {
             showLegend: 'Auto',
             showTitle: false,
             legendPosition: 4,
-            stacking: 0,            
+            stacking: 0,           
             //rotated: false
             //palette: wijmo.olap.Palettes['dark']
    
