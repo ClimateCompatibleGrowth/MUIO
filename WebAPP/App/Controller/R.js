@@ -52,9 +52,9 @@ export default class R {
         Grid.Grid($divGrid, daGrid, model.columns, {pageable: false})
 
         if (model.scenariosCount>1){
-            $('#scCommand').show();
+            Html.lblScenario( model.scenariosCount);
             Html.ddlScenarios( model.scenarios, model.scenarios[1]['ScenarioId']);
-            Grid.applyRFilter( $divGrid );
+            Grid.applyRFilter($divGrid);
         }
 
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
@@ -143,27 +143,64 @@ export default class R {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
+        $("#osy-scenarios").off('click');
+        $("#osy-scenarios").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
+
         $("#osy-openScData").off('click');
         $("#osy-openScData").on('click', function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $( "#osy-scenarios" ).val();
-            Grid.applyRFilter( $divGrid, sc );
+            Html.lblScenario(sc);
+            Grid.applyRFilter($divGrid, sc);
+            Message.smallBoxInfo('Info', 'Scenario data opened!', 2000);
         });
+
+        $("#osy-hideScData").off('click');
+        $("#osy-hideScData").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyRFilter($divGrid);
+            Message.smallBoxInfo('Info', 'Scenario data hidden!', 2000);
+        });
+
 
         $("#osy-removeScData").off('click');
         $("#osy-removeScData").on('click', function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $( "#osy-scenarios" ).val();
-            var rows = $divGrid.jqxGrid('getdisplayrows');
+            let rows = $divGrid.jqxGrid('getboundrows');
+
             $.each(rows, function (id, obj) {
-                if (obj.Sc== sc ){
-                    $divGrid.jqxGrid('setcellvalue', obj.uid, 'value', null);
-                    return false;
+                if (obj.Sc == sc) {
+                    model.gridData[model.param][id]['value'] = null;
                 }
             });
-            Grid.applyRFilter( $divGrid );
+
+            model.srcGrid.localdata = model.gridData;
+            $divGrid.jqxGrid('updatebounddata');
+
+            let chartData = [];
+            let chunk = {};
+            chunk['value'] = model.param;
+            $.each(model.gridData[model.param], function (id, rtDataObj) {
+                chunk[rtDataObj.ScId] = rtDataObj['value']; 
+            });
+            chartData.push(chunk);
+            model.chartData[model.param] =  chartData;
+
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[model.param];
+            configChart.update();
+
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyRFilter( $divGrid);
+            Message.smallBoxInfo('Info', 'Scenario data removed!', 2000);
         });
 
         let pasteEvent = false;
@@ -175,22 +212,18 @@ export default class R {
                 pasteEvent = true;
                 setTimeout(function(){ 
                     let gridData = $divGrid.jqxGrid('getboundrows');
-                    let param = $( "#osy-ryt" ).val();
                     let chartData = [];
-                    $.each(model.techs, function (id, tech) { 
-                        let chunk = {};
-                        chunk['TechId'] = tech.TechId;
-                        chunk['Tech'] = tech.Tech;
-                        $.each(gridData, function (id, rtDataObj) {
-                            chunk[rtDataObj.ScId] = rtDataObj[tech.TechId]; 
-                        });
-                        chartData.push(chunk);
-                        model.chartData[param] =  chartData;
+                    let chunk = {};
+                    chunk['value'] = model.param;
+                    $.each(gridData, function (id, rtDataObj) {
+                        chunk[rtDataObj.ScId] = rtDataObj['value']; 
                     });
-                    model.gridData[param] = gridData;
+                    chartData.push(chunk);
+                    model.chartData[model.param] =  chartData;
+                    model.gridData[model.param] = gridData;
 
                     var configChart = $divChart.jqxChart('getInstance');
-                    configChart.source.records = model.chartData[param];
+                    configChart.source.records = model.chartData[model.param];
                     configChart.update();
                 }, 1000);
             }

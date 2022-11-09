@@ -9,7 +9,7 @@ export class Html {
             Html.apendModel(value, selectedCS)
         });
 
-        if (!selectedCS) Message.info("Please select existing or create new case to proceed!");
+        if (!selectedCS) Message.info("Please select existing or create new model to proceed!");
     }
 
     static removeCase(value) {
@@ -219,9 +219,14 @@ export class Html {
             .addClass("glyphicon-check danger");
     }
 
-    static title(casename, title, group,) {
+    static title(casename, title, group, scCount) {
         $("#osy-case").html(casename);
-        $("#osy-title").html('<i class="fa-fw fa fa-home"></i>' + title + ' <small>[' + group + ']</small>');
+        $("#osy-title").html('<i class="fa fa-home fa-lg"></i>' + title + ' <small>[' + group + ']</small>');
+    }
+
+    static lblScenario(label) {
+        $('#scCommand').show();
+        $('#scCount').text(label)
     }
 
     static genData(model) {
@@ -486,6 +491,7 @@ export class Html {
     }
 
     static ddlScenarios(scs, sc) {
+        
         var container = $('#osy-scenarios');
         container.empty();
         $.each(scs, function (id, obj) {

@@ -18,6 +18,8 @@ export class Model {
             let RYTsgrid = DataModel.RYTsgrid(genData, RYTsdata);
             //let RYTschart = DataModel.RYTschart(genData, RYTsdata);
 
+            console.log('RYTsgrid ', RYTsgrid)
+
             let scClass = {};
 
             //datafieldsChart.push({ name: 'Year', type: 'string' });
@@ -33,8 +35,8 @@ export class Model {
             datafields.push({ name: 'ScDesc', type: 'string' });
 
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
-            columns.push({ text: 'Timeslice', datafield: 'YearSplit', pinned: true, editable: false, align: 'center' })
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true });
+            columns.push({ text: 'Timeslice', datafield: 'YearSplit', pinned: true, editable: false, align: 'center', cellclassname: cellclass, enabletooltips: true })
 
             let validation = function (cell, value) {
                 if (value < 0) {
@@ -49,6 +51,10 @@ export class Model {
             }
 
             let cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
+                // if(columnfield = '2020')
+                // console.log('ROW, COLUMN, VALUE ', row, columnfield, value)
+                if(row == 4 && columnfield == '2020')
+                console.log('row renderer ', row,  'row renderer value ',  value)
                 if (value === null || value === '') {
                     return '<span style="margin: 4px; float:right; ">n/a</span>';
                 } else {
@@ -59,21 +65,44 @@ export class Model {
             }.bind(this);
 
             let initeditor = function (row, cellvalue, editor, data) {
+                // var scId = $('#osy-gridRYTs').jqxGrid('getcellvalue', row, 'ScId');
+                // console.log(row, scId, cellvalue, editor.val())
+                // if (scId !== 'SC_0') {
+                    
+                //     $('#' + editor[0].id + ' input').keydown(function (event) {
+                //         if (event.keyCode === 46 || event.keyCode === 8) {
+                //             console.log('46 ili 8')
+                //             //$('#' + editor[0].id).val(null);
+                //             editor.jqxNumberInput('val',null); 
+                //         }
+                //         else{
+                //             editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true });
+                //             editor.val(editor.val());
+                //         }
+                //     })
+                // }else{
+                //     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false });
+                //     editor.val(cellvalue);
+                //     //editor.val(editor.val());
+                // }
+                console.log('row editor ', row, ' editor value ', cellvalue)
                 var scId = $('#osy-gridRYTs').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
-                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true });
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: true }); 
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
-                            $('#' + editor[0].id).val(null);
+                            //$('#' + editor[0].id).val(null);
+                            editor.jqxNumberInput('val',null); 
                         }
                     })
                 }else{
-                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false });
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: false }); 
                     editor.val(cellvalue);
                 }
             }.bind(this);
 
             let geteditorvalue =  function (row, cellvalue, editor) {
+                console.log('row editor ', row, ' cell value ', cellvalue , ' editor value ', editor.val() )
                 return editor.val() == null ? null : editor.val();
             }
 
@@ -81,7 +110,9 @@ export class Model {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
+                    filterable: false,
                     groupable: false,
+                    sortable: false,
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,

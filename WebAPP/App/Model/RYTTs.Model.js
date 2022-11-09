@@ -7,26 +7,19 @@ export class Model {
         this.decimal = 'd' + this.d;
 
         if (casename) {
-
             let datafields = [];
-            //let datafieldsChart = [];
             let columns = [];
-            //let series = [];
 
             let years = genData['osy-years'];
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
 
             let RYTTsgrid = DataModel.RYTTsgrid(genData, RYTTsdata);
-            //let RYTTschart = DataModel.RYTTschart(genData, RYTTsdata);
             let timeslices = DataModel.Timeslices(genData);
             let scClass = {};
 
-            // datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_' + id;
-                //datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
-                //series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
             });
 
             datafields.push({ name: 'ScId', type: 'string' });
@@ -110,22 +103,6 @@ export class Model {
                 datafields: datafields,
             };
 
-
-            // var srcGrid_v =
-            // {
-            //     datatype: "array",
-            //     totalrecords: 100000
-            // };
-
-            // let rendergridrows = RYTTsgrid[param]
-
-            // var srcChart = {
-            //     datatype: "json",
-            //     localdata: RYTTschart,
-            //     root: param + '>' + techs[0]['TechId'] + '>' + timeslices[0],
-            //     datafields: datafieldsChart,
-            // };
-
             this.casename = casename;
             this.years = years;
             this.techs = techs;
@@ -133,38 +110,28 @@ export class Model {
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.datafields = datafields;
-            //this.datafieldsChart = datafieldsChart;
             this.columns = columns;
-            //this.series = series;
             this.gridData = RYTTsgrid;
-            //this.chartData = RYTTschart;
             this.genData = genData;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid;
-            // this.srcGrid_v = srcGrid_v;
-            // this.rendergridrows = rendergridrows;
-            //this.srcChart = srcChart;
             this.PARAMETERS = PARAMETERS;
         } else {
             this.casename = null;
             this.years = null;
             this.techs = null;
             this.datafields = null;
-            //this.datafieldsChart = null;
             this.columns = null;
             this.columns = null;
             this.gridData = null;
-            //this.chartData = null;
             this.genData = null;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = null;
-            //this.srcChart = null;
             this.PARAMETERS = PARAMETERS;
         }
-
     }
 }

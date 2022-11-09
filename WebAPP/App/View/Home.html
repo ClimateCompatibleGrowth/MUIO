@@ -26,10 +26,11 @@
     </div>
 
     <div class="col-md-5 ">
-      <img src="../../References/smartadmin/img/Logos/un_desa_black.png" class="img-fluid img-thumbnail pull-right" alt="UN Department of Economic and Social Affairs" width="290" height="180" style="opacity: 0.6; border:none; background: url(../img/mybg.png);">
-      <img src="../../References/smartadmin/img/Logos/UK_AID_4.png" class="img-fluid img-thumbnail pull-right" alt="UN Department of Economic and Social Affairs" width="95" height="160" style="opacity: 0.6; border:none; background: url(../img/mybg.png); padding-top: 40px;">
-      <img src="../../References/smartadmin/img/Logos/CCG_2.png" class="img-thumbnail img-fluid pull-right" alt="Loughborough University" width="160" height="180" style="opacity: 0.6; border:none; background: url(../img/mybg.png);">
       
+      <img src="../../References/smartadmin/img/Logos/un_desa_black.png" class="img-fluid img-thumbnail pull-right" alt="UN Department of Economic and Social Affairs" width="250" height="170" style="opacity: 0.6; border:none; background: url(../img/mybg.png);">
+      <img src="../../References/smartadmin/img/Logos/UK_AID_4.png" class="img-fluid img-thumbnail pull-right" alt="UN Department of Economic and Social Affairs" width="60" height="160" style="opacity: 0.6; border:none; background: url(../img/mybg.png); padding-top: 40px;">
+      <img src="../../References/smartadmin/img/Logos/CCG_2.png" class="img-thumbnail img-fluid pull-right" alt="Loughborough University" width="120" height="180" style="opacity: 0.6; border:none; background: url(../img/mybg.png);">
+      <!-- <img src="../../References/smartadmin/img/Logos/lu_.png" class="img-fluid img-thumbnail pull-right" alt="LOUGHBOROUGH UNIVERSITY" width="65" height="85" style="opacity: 0.6; border:none; background: url(../img/mybg.png); padding-top: 40px;"> -->
 
     </div>
     <div class="col-md-1"></div>
@@ -37,12 +38,9 @@
   </div>
   <div class="separator"></div>
 </div>
-<div id="row">
-  <div class="col-md-10 col-md-offset-1">
-    <div id="definition" style="display:none">
-    </div>
-  </div>
-</div>
+
+
+
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
     <section id="widget-grid" class="">
@@ -50,11 +48,16 @@
         data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false"
         data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
         <header>
-          <h2> <i id="icon" class="fa fa-cubes"></i> OSeMOSYS models</h2>
-          <!-- <h2> <i id="icon" class="fa fa-cubes"></i> PROTOTYPE case studies</h2> -->
-          <div class="widget-toolbar smart-form pull-right">
-            <div type="button" id="showLog" data-toggle="tooltip" data-placement="top" title="Introduction to OSeMOSYS">
-              <i class="ace-icon fa fa-question-circle warning "></i>
+          <h2> <i id="icon" class="fa fa-cubes fa-lg"></i> OSeMOSYS models</h2>
+          <div class="widget-toolbar pull-right">
+            <div  class="btn btn-white" id="showLog" data-toggle="tooltip" data-placement="top" title="Introduction to OSeMOSYS">
+              <i class="icon-btn fa fa-question-circle fa-lg warning "></i>
+            </div>
+          </div>
+          <div class="widget-toolbar">
+            <div class="btn btn-white btn-osy-green" data-toggle="modal" data-target="#modalrestore" id="restoreCS">
+              <i class="fa fa-upload fa-lg  icon-btn"></i>
+              <b class="">Upload model</b>
             </div>
           </div>
           <div class="widget-toolbar smart-form">
@@ -63,15 +66,13 @@
               <i class="ace-icon fa fa-search nav-search-icon"></i>
             </label>
           </div>
-
-          <div class="widget-toolbar smart-form">
-            <div class="input" data-toggle="modal" data-target="#modalrestore" id="restoreCS">
-              <i class="fa fa-upload white icon-btn"></i>
-              <b class="white">Upload model</b>
+        </header>
+        <div id="row">
+          <div class="col-md-10 col-md-offset-1">
+            <div id="definition" style="display:none">
             </div>
           </div>
-
-        </header>
+        </div>
         <div>
           <div class="jarviswidget-editbox">
           </div>
@@ -97,9 +98,6 @@
     </div>
   </div>
 </div>
-
-
-
 
 
 

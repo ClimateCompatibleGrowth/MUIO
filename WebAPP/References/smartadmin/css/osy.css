@@ -130,6 +130,12 @@ html {
     color: #777!important;
 }
 
+.btn-osy-green {
+    color: #fff;
+    background-color: var(--second-color)!important;
+    border-color: var(--second-darker-color)!important;
+}
+
 /* .bigBox {
     right: 5px;
     top: 50px;
@@ -589,4 +595,30 @@ svg[id^="mermaid-"] {
 .vertical-align {
     display: flex;
     align-items: center;
+}
+
+
+
+.dropdown-header {
+    display: block;
+    padding: 3px 20px;
+    font-size: 12px;
+    line-height: 1.42857143;
+    color: #999;
+    white-space: nowrap;
+}
+*, :after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+user agent stylesheet
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+.dropdown-menu {
+
+    min-width: 280px!important;
+
 }

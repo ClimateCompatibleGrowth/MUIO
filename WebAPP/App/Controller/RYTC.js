@@ -52,6 +52,7 @@ export default class RYTC {
                 }
             })
             .catch(error => {
+                console.log('error ', error)
                 if (error.status_code == 'CaseError') {
                     MessageSelect.init(RYTC.refreshPage.bind(RYTC));
                 }
@@ -60,31 +61,6 @@ export default class RYTC {
                 }
                 Message.warning(error);
             });
-    }
-
-    static initPage(model) {
-        Message.clearMessages();
-
-        //Navbar.initPage(model.casename);
-        Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
-        Html.ddlParams(model.PARAMETERS['RYTC'], model.param);
-        Html.ddlTechs(model.techs[model.param], model.techs[model.param][0]['TechId']);
-        Html.ddlComms(model.comms[model.param][model.techs[model.param][0]['TechId']], model.comms[model.param][model.techs[model.param][0]['TechId']][0]['CommId']);
-        let $divGrid = $('#osy-gridRYTC');
-        var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, true);
-
-        if (model.scenariosCount > 1) {
-            $('#scCommand').show();
-            Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);
-            Html.ddlTechNames(model.techs[model.param], model.techs[model.param][0]['TechId']);
-            Html.ddlCommNames(model.comms[model.param][model.techs[model.param][0]['TechId']], model.comms[model.param][model.techs[model.param][0]['TechId']][0]['CommId']);
-            Grid.applyRYTCFilter($divGrid, model.years);
-        }
-
-        let $divChart = $('#osy-chartRYTC');
-        var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        Chart.Chart($divChart, daChart, "RYTC", model.series);
     }
 
     static refreshPage(casename) {
@@ -104,7 +80,7 @@ export default class RYTC {
             })
             .then(data => {
                 let [casename, genData, PARAMETERS, RYTCdata, cases] = data;
-                if (RYTCdata[PARAMETERS['RYTC'][0]['id']]['SC_0'].length == 0) {
+                if (RYTCdata['INCR']['SC_0'].length == 0 && RYTCdata['ITCR']['SC_0'].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
                         "status_code": "ActivityError",
@@ -112,7 +88,14 @@ export default class RYTC {
                     }
                     return Promise.reject(er);
                 } else {
-                    let model = new Model(casename, genData, RYTCdata, 'RYTC', PARAMETERS, PARAMETERS['RYTC'][0]['id'], cases);
+                    let param;
+                    if (RYTCdata['INCR']['SC_0'].length == 0){
+                        param = 'ITCR';
+                    }else{
+                        param = 'INCR';
+                    }
+                    
+                    let model = new Model(casename, genData, RYTCdata, 'RYTC', PARAMETERS, param, cases);
                     this.initPage(model);
                     this.initEvents(model);
                 }
@@ -128,6 +111,33 @@ export default class RYTC {
                     Message.warning(error.message);
                 }, 500);
             });
+    }
+
+    static initPage(model) {
+        Message.clearMessages();
+
+        //Navbar.initPage(model.casename);
+        Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
+        Html.ddlParams(model.PARAMETERS['RYTC'], model.param);
+        Html.ddlTechs(model.techs[model.param], model.techs[model.param][0]['TechId']);
+        Html.ddlComms(model.comms[model.param][model.techs[model.param][0]['TechId']], model.comms[model.param][model.techs[model.param][0]['TechId']][0]['CommId']);
+        
+        let $divGrid = $('#osy-gridRYTC');
+        var daGrid = new $.jqx.dataAdapter(model.srcGrid);
+        Grid.Grid($divGrid, daGrid, model.columns, true);
+
+        if (model.scenariosCount > 1) {
+            Html.lblScenario( model.scenariosCount);
+            Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);
+            // Html.ddlTechNames(model.techs[model.param], model.techs[model.param][0]['TechId']);
+            // Html.ddlCommNames(model.comms[model.param][model.techs[model.param][0]['TechId']], model.comms[model.param][model.techs[model.param][0]['TechId']][0]['CommId']);
+            //Grid.applyRYTCFilter($divGrid, model.years);
+            Grid.applyGridFilter($divGrid, model.years);
+        }
+
+        let $divChart = $('#osy-chartRYTC');
+        var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
+        Chart.Chart($divChart, daChart, "RYTC", model.series);
     }
 
     static initEvents(model) {
@@ -220,11 +230,17 @@ export default class RYTC {
             configChart.update();
         });
 
-        $("#osy-techNames").off('change');
-        $('#osy-techNames').on('change', function () {
-            var param = $("#osy-ryt").val();
-            let tech = model.techIds[this.value];
-            Html.ddlCommNames(model.comms[param][tech], model.comms[param][tech][0]['CommId']);
+        // $("#osy-techNames").off('change');
+        // $('#osy-techNames').on('change', function () {
+        //     var param = $("#osy-ryt").val();
+        //     let tech = model.techIds[this.value];
+        //     Html.ddlCommNames(model.comms[param][tech], model.comms[param][tech][0]['CommId']);
+        // });
+
+        $("#osy-scenarios").off('click');
+        $("#osy-scenarios").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
         });
 
         $("#osy-openScData").off('click');
@@ -232,9 +248,21 @@ export default class RYTC {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $("#osy-scenarios").val();
-            var comm = $("#osy-commNames").val();
-            var tech = $("#osy-techNames").val();
-            Grid.applyRYTCFilter($divGrid, model.years, sc, tech, comm);
+            // var comm = $("#osy-commNames").val();
+            // var tech = $("#osy-techNames").val();
+            // Grid.applyRYTCFilter($divGrid, model.years, sc, tech, comm);
+            Html.lblScenario(sc);
+            Grid.applyGridFilter($divGrid, model.years, sc);
+            Message.smallBoxInfo('Info', 'Scenario data opened!', 2000);
+        });
+
+        $("#osy-hideScData").off('click');
+        $("#osy-hideScData").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyGridFilter($divGrid, model.years);
+            Message.smallBoxInfo('Info', 'Scenario data hidden!', 2000);
         });
 
         $("#osy-removeScData").off('click');
@@ -242,18 +270,31 @@ export default class RYTC {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $("#osy-scenarios").val();
-            var comm = $("#osy-commNames").val();
-            var tech = $("#osy-techNames").val();
+            // var comm = $("#osy-commNames").val();
+            // var tech = $("#osy-techNames").val();
+            // var rows = $divGrid.jqxGrid('getdisplayrows');
+            // $.each(rows, function (id, obj) {
+            //     if (obj.Sc == sc && obj.Comm == comm && obj.Tech == tech) {
+            //         $.each(model.years, function (i, year) {
+            //             $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+            //         });
+            //         return false; // breaks
+            //     }
+            // });
+            // Grid.applyRYTCFilter($divGrid, model.years);
+
             var rows = $divGrid.jqxGrid('getdisplayrows');
             $.each(rows, function (id, obj) {
-                if (obj.Sc == sc && obj.Comm == comm && obj.Tech == tech) {
+                if (obj.Sc == sc) {
                     $.each(model.years, function (i, year) {
                         $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
                     });
-                    return false; // breaks
                 }
             });
-            Grid.applyRYTCFilter($divGrid, model.years);
+
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyGridFilter($divGrid, model.years);
+            Message.smallBoxInfo('Info', 'Scenario data removed!', 2000);
         });
 
         let pasteEvent = false;

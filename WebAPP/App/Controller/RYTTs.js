@@ -3,7 +3,6 @@ import { Base } from "../../Classes/Base.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
 import { Model } from "../Model/RYTTs.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
-import { Chart } from "../../Classes/Chart.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { GROUPNAMES } from "../../Classes/Const.Class.js";
 import { DEF } from "../../Classes/Definition.Class.js";
@@ -23,15 +22,9 @@ export default class RYTTs {
                     const PARAMETERS = Osemosys.getParamFile();
                     promise.push(PARAMETERS);
                     const RYTTsdata = Osemosys.getData(casename, "RYTTs.json");
-
-                    // const RYTTsdata = fetch('../../DataStorage/'+casename+'/RYTTs.json', {cache: "no-store"})
-                    // .then(response => {
-                    //     return response.json();
-                    // })
-
                     promise.push(RYTTsdata);
                     promise.push(start);
-                    console.log('performance get data from API ', performance.now() - start);
+                    //console.log('performance get data from API ', performance.now() - start);
                     return Promise.all(promise);
                 } else {
                     MessageSelect.init(RYTTs.refreshPage.bind(RYTTs));
@@ -39,13 +32,13 @@ export default class RYTTs {
             })
             .then(data => {
                 let [casename, genData, PARAMETERS, RYTTsdata, start] = data;
-                console.log('performance read data from promise ', performance.now() - start);
+                //console.log('performance read data from promise ', performance.now() - start);
                 let model = new Model(casename, genData, RYTTsdata, group, PARAMETERS, param);
-                console.log('performance model ', performance.now() - start);
+                //console.log('performance model ', performance.now() - start);
                 this.initPage(model);
-                console.log('performance idit page ', performance.now() - start);
+                //console.log('performance idit page ', performance.now() - start);
                 this.initEvents(model);
-                console.log('performance events ', performance.now() - start);
+                //console.log('performance events ', performance.now() - start);
             })
             .catch(error => {
                 Message.warning(error);
@@ -57,28 +50,16 @@ export default class RYTTs {
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlParams(model.PARAMETERS['RYTTs'], model.param);
-        Html.ddlTechs(model.techs, model.techs[0]['TechId']);
-        Html.ddlTimeslices($('#osy-timeslices1'), model.timeslices);
 
         let $divGrid = $('#osy-gridRYTTs');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, {groupable: true, filterable: true, sortable:true});
-        
-        // var daGrid = new $.jqx.dataAdapter(model.srcGrid_v);
-        // Grid.VirtualGrid($divGrid, daGrid, model.columns, model.rendergridrows, true, true);
+        Grid.Grid($divGrid, daGrid, model.columns, {groupable: false, filterable: true, sortable:true});
 
         if (model.scenariosCount > 1) {
-            $('#scCommand').show();
+            Html.lblScenario( model.scenariosCount);
             Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);
-            Html.ddlTechNames(model.techs, model.techs[0]['TechId']);
-            Html.ddlTimeslices($('#osy-timeslices2'), model.timeslices);
-            Grid.applyRYTTsFilter($divGrid, model.years);
+            Grid.applyGridFilter($divGrid, model.years);
         }
-
-        // let $divChart = $('#osy-chartRYTTs');
-        // var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        // Chart.Chart($divChart, daChart, "RYTTs", model.series);
-        //pageSetUp();
     }
 
     static refreshPage(casename) {
@@ -90,11 +71,7 @@ export default class RYTTs {
                 promise.push(genData);
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS);
-                //const RYTTsdata = Osemosys.getData(casename, 'RYTTs.json');
-                const RYTTsdata = fetch('../../DataStorage/'+casename+'/RYTTs.json', {cache: "no-store"})
-                .then(response => {
-                    return response.json();
-                })
+                const RYTTsdata = Osemosys.getData(casename, 'RYTTs.json');
                 promise.push(RYTTsdata);
                 return Promise.all(promise);
             })
@@ -112,7 +89,6 @@ export default class RYTTs {
     static initEvents(model) {
 
         let $divGrid = $('#osy-gridRYTTs');
-        //let $divChart = $('#osy-chartRYTTs');
 
         $("#casePicker").off('click');
         //odabir novog Model iz Model pickera
@@ -143,7 +119,7 @@ export default class RYTTs {
                 //delete obj.ScId;
             });
 
-            console.log('data preparation for save ', performance.now() - start);
+            // console.log('data preparation for save ', performance.now() - start);
 
             Osemosys.updateData(saveData, param, "RYTTs.json")
                 .then(response => {
@@ -177,61 +153,55 @@ export default class RYTTs {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
-        //change of ddl techs
-        // $("#osy-techs").off('change');
-        // $('#osy-techs').on('change', function () {
-        //     var param = $("#osy-ryt").val();
-        //     var ts = $("#osy-timeslices1").val();
-        //     var configChart = $divChart.jqxChart('getInstance');
-        //     configChart.source.records = model.chartData[param][this.value][ts];
-        //     configChart.update();
-        // });
-
-        // //change of ddl techs
-        // $("#osy-timeslices1").off('change');
-        // $('#osy-timeslices1').on('change', function () {
-        //     var param = $("#osy-ryt").val();
-        //     var tech = $("#osy-techs").val();
-        //     var configChart = $divChart.jqxChart('getInstance');
-        //     configChart.source.records = model.chartData[param][tech][this.value];
-        //     configChart.update();
-        // });
+        $("#osy-scenarios").off('click');
+        $("#osy-scenarios").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
 
         $("#osy-openScData").off('click');
         $("#osy-openScData").on('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $("#osy-scenarios").val();
-            var ts = $("#osy-timeslices2").val();
-            var tech = $("#osy-techNames").val();
-            Grid.applyRYTTsFilter($divGrid, model.years, sc, tech, ts);
+            Html.lblScenario(sc);
+            Grid.applyGridFilter($divGrid, model.years, sc);
+            Message.smallBoxInfo('Info', 'Scenario data opened!', 2000);
+        });
+
+        $("#osy-hideScData").off('click');
+        $("#osy-hideScData").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyGridFilter($divGrid, model.years);
+            Message.smallBoxInfo('Info', 'Scenario data hidden!', 2000);
         });
 
         $("#osy-removeScData").off('click');
         $("#osy-removeScData").on('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
+
             var sc = $("#osy-scenarios").val();
-            var ts = $("#osy-timeslices2").val();
-            var tech = $("#osy-techNames").val();
-            var rows = $divGrid.jqxGrid('getdisplayrows');
+            let rows = $divGrid.jqxGrid('getboundrows');
+
             $.each(rows, function (id, obj) {
-                if (obj.Sc == sc && obj.Timeslice == ts && obj.Tech == tech) {
+                if (obj.Sc == sc) {
                     $.each(model.years, function (i, year) {
-                        $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                        //$divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                        model.gridData[model.param][id][year] = null;
                     });
-                    return false; // breaks
                 }
             });
-            Grid.applyRYTTsFilter($divGrid, model.years);
-        });
 
-        // $divGrid.on("filter", function (event) 
-        // {
-        //     var filterinfo = $divGrid.jqxGrid('getfilterinformation');
-        //     console.log('filterinfo ', filterinfo)
-        //     Grid.applyRYTTsFilter($divGrid, model.years);
-        // }); 
+            model.srcGrid.localdata = model.gridData;
+            $divGrid.jqxGrid('updatebounddata');
+
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyGridFilter($divGrid, model.years);
+            Message.smallBoxInfo('Info', 'Scenario data removed!', 2000);
+        });
 
         let pasteEvent = false;
         $divGrid.bind('keydown', function (event) {
@@ -319,40 +289,6 @@ export default class RYTTs {
             }
         });
 
-        // $(".switchChart").off('click');
-        // $(".switchChart").on('click', function (e) {
-        //     e.preventDefault();
-        //     var configChart = $divChart.jqxChart('getInstance');
-        //     var chartType = $(this).attr('data-chartType');
-        //     configChart.seriesGroups[0].type = chartType;
-        //     if (chartType == 'column') {
-        //         configChart.seriesGroups[0].labels.angle = 90;
-        //     } else {
-        //         configChart.seriesGroups[0].labels.angle = 0;
-        //     }
-        //     configChart.update();
-        //     // $('button a').switchClass( "green", "grey" );
-        //     // $('#'+chartType).switchClass( "grey", "green" );
-        // });
-
-        // $(".toggleLabels").off('click');
-        // $(".toggleLabels").on('click', function (e) {
-        //     e.preventDefault();
-        //     var configChart = $divChart.jqxChart('getInstance');
-        //     if (configChart.seriesGroups[0].type == 'column') {
-        //         configChart.seriesGroups[0].labels.angle = 90;
-        //     } else {
-        //         configChart.seriesGroups[0].labels.angle = 0;
-        //     }
-        //     configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
-        //     configChart.update();
-        // });
-
-        // $("#exportPng").off('click');
-        // $("#exportPng").click(function () {
-        //     $("#osy-chartRYTTs").jqxChart('saveAsPNG', 'RYTTs.png', 'https://www.jqwidgets.com/export_server/export.php');
-        // });
-
         let res = true;
         $("#resizeColumns").off('click');
         $("#resizeColumns").click(function () {
@@ -366,12 +302,6 @@ export default class RYTTs {
             }
             res = !res;
         });
-
-        // $("#xlsAll").off('click');
-        // $("#xlsAll").click(function (e) {
-        //     e.preventDefault();
-        //     $divGrid.jqxGrid('exportdata', 'xls', 'RYTTs');
-        // });
 
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {

@@ -185,8 +185,8 @@ export class Message {
     static SmartMessageBoxDDL(cases, init_f) {
         var casesArr = '"[' + cases.join('][') + ']"';
         $.SmartMessageBox({
-            title: "No active Model: Select",
-            content: "Please select one of existing cases to proceed.",
+            title: "<i class='fa fa-exclamation-triangle danger'></i>No active Model.",
+            content: "Please select one of existing models to proceed.",
             buttons: "[Continue]",
             input: "select",
             //options : "[Costa Rica][United States][Autralia][Spain]"
@@ -203,8 +203,8 @@ export class Message {
     static ddlActivity(cases, init_f) {
         var casesArr = '"[' + cases.join('][') + ']"';
         $.SmartMessageBox({
-            title: "<i class='fa fa-exclamation-triangle danger'></i>Selected model has no activity defines: Select",
-            content: "Please select cases to proceed.",
+            title: "<i class='fa fa-exclamation-triangle danger'></i>Selected model has no activity defines.",
+            content: "Please select model to proceed.",
             buttons: "[Continue]",
             input: "select",
             //options : "[Costa Rica][United States][Autralia][Spain]"

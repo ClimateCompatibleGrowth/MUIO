@@ -50,13 +50,13 @@ export default class AddCase {
         Grid.constraintGrid(model.techs, model.constraints, model.techNames);
 
         if (model.casename == null) {
-            $('#osy-newCase').show();
-            $('#osy-updateCase').hide();
-            Message.info("Please select case or create new Model!");
+            $('#osy-save').show();
+            $('#osy-update').hide();
+            Message.info("Please select existing or create new model!");
         } else {
             $("#osy-new").show();
-            $('#osy-updateCase').show();
-            $('#osy-newCase').hide();
+            $('#osy-update').show();
+            $('#osy-save').hide();
         }
         loadScript("References/smartadmin/js/plugin/ion-slider/ion.rangeSlider.min.js", SmartAdmin.rangeSlider.bind(null, model.years));
         pageSetUp();
@@ -171,8 +171,8 @@ export default class AddCase {
             //Sidebar.Load(null, null)
             Sidebar.Reload(null);
             $("#osy-new").hide();
-            $('#osy-updateCase').hide();
-            $('#osy-newCase').show();
+            $('#osy-update').hide();
+            $('#osy-save').show();
             Message.smallBoxConfirmation("Confirmation!", "Configure new Model!", 3500);
         });
 
@@ -230,8 +230,8 @@ export default class AddCase {
                 .then(response => {
                     if (response.status_code == "created") {
                         $("#osy-new").show();
-                        $('#osy-updateCase').show();
-                        $('#osy-newCase').hide();
+                        $('#osy-update').show();
+                        $('#osy-save').hide();
                         Message.clearMessages();
                         Message.bigBoxSuccess('Model message', response.message, 3000);
                         Html.appendCasePicker(casename, casename);

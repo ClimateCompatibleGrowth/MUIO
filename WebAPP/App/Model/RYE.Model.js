@@ -8,24 +8,17 @@ export class Model {
         if (casename) {
 
             let datafields = [];
-            let datafieldsChart = [];
             let columns = [];
-            let series = [];
             let years = genData['osy-years'];
             let emis = genData['osy-emis'];
             let scenarios = genData['osy-scenarios'];
-
             let scClass = {};
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let RYEgrid = DataModel.RYEgrid(genData, RYEdata, PARAMETERS);
-            let RYEchart = DataModel.RYEchart(genData, RYEdata);
 
-            datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_' + id;
-                datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
-                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
             });
 
             datafields.push({ name: 'ScId', type: 'string' });
@@ -61,14 +54,14 @@ export class Model {
             let initeditor = function (row, cellvalue, editor, data) {
                 var scId = $('#osy-gridRYE').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
-                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); //symbol: ' GWh', symbolPosition: 'right'
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); 
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
                             $('#' + editor[0].id).val(null);
                         }
                     })
                 }else{
-                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false }); //symbol: ' GWh', symbolPosition: 'right'
+                    editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: false }); 
                     editor.val(cellvalue);
                 }
 
@@ -78,7 +71,7 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass }); // 
             columns.push({ text: 'Emission', datafield: 'Emis', pinned: true, editable: false, align: 'left', cellclassname: cellclass });
             columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass });
 
@@ -102,44 +95,30 @@ export class Model {
                 datafields: datafields,
             };
 
-            var srcChart = {
-                datatype: "json",
-                localdata: RYEchart,
-                root: param + '>' + emis[0]['EmisId'],
-                datafields: datafieldsChart,
-            };
-
             this.casename = casename;
             this.years = years;
             this.emis = emis;
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.columns = columns;
-            this.series = series;
             this.gridData = RYEgrid;
-            this.chartData = RYEchart;
             this.genData = genData;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid;
-            this.srcChart = srcChart;
             this.PARAMETERS = PARAMETERS;
         } else {
             this.casename = null;
             this.years = null;
             this.columns = null;
-            this.series = null;
             this.gridData = null;
-            this.chartData = null;
             this.genData = null;
             this.PARAMNAMES = null;
             this.param = param;
             this.group = group;
             this.srcGrid = srcGrid;
-            this.srcChart = srcChart;
             this.PARAMETERS = PARAMETERS;
         }
-
     }
 }

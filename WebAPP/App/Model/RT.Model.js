@@ -73,10 +73,10 @@ export class Model {
                 } else {
                     var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
 
-                    if(columnfield == 'TEC_0' && row == 0){
-                        console.log('cellsrenderer ', value)
-                        console.log('formattedValue ', formattedValue)
-                    }
+                    // if(columnfield == 'TEC_0' && row == 0){
+                    //     console.log('cellsrenderer ', value)
+                    //     console.log('formattedValue ', formattedValue)
+                    // }
 
                     return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
                 }
@@ -100,8 +100,6 @@ export class Model {
             }.bind(this);
 
             let geteditorvalue =  function (row, cellvalue, editor) {
-                // console.log('editor ', editor)
-                // console.log('editor.val() ', editor.val())
                 return editor.val() == null ? null : editor.val();
             }
 

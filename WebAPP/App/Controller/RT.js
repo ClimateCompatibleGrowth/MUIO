@@ -23,10 +23,6 @@ export default class RT {
                     const PARAMETERS = Osemosys.getParamFile();
                     promise.push(PARAMETERS);
                     const RTdata = Osemosys.getData(casename, 'RT.json');
-                    // const RTdata = fetch('../../DataStorage/'+casename+'/RT.json')
-                    // .then(response => {
-                    //     return response.json();
-                    // })
                     promise.push(RTdata);
                     return Promise.all(promise);
                 } else {
@@ -53,10 +49,8 @@ export default class RT {
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns, {pageable: false})
 
-
-
         if (model.scenariosCount > 1) {
-            $('#scCommand').show();
+            Html.lblScenario( model.scenariosCount);
             Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);
             Grid.applyRTFilter($divGrid, model.techs);
         }
@@ -162,14 +156,32 @@ export default class RT {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
+        $("#osy-scenarios").off('click');
+        $("#osy-scenarios").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
+
         $("#osy-openScData").off('click');
         $("#osy-openScData").on('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $("#osy-scenarios").val();
             var param = $("#osy-ryt").val();
+            Html.lblScenario(sc);
             // let group = $divGrid.jqxGrid('getgroup', 0);
             Grid.applyRTFilter($divGrid, model.techs, sc, model.PARAMNAMES[param]);
+            Message.smallBoxInfo('Info', 'Scenario data opened!', 2000);
+        });
+
+        
+        $("#osy-hideScData").off('click');
+        $("#osy-hideScData").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyRTFilter($divGrid, model.techs);
+            Message.smallBoxInfo('Info', 'Scenario data hidden!', 2000);
         });
 
         $("#osy-removeScData").off('click');
@@ -177,17 +189,41 @@ export default class RT {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $("#osy-scenarios").val();
-            var param = $("#osy-ryt").val();
-            var rows = $divGrid.jqxGrid('getdisplayrows');
+
+            let rows = $divGrid.jqxGrid('getboundrows');
+
             $.each(rows, function (id, obj) {
-                if (obj.Sc == sc && obj.Param == model.PARAMNAMES[param]) {
+                if (obj.Sc == sc && obj.Param == model.PARAMNAMES[model.param]) {
                     $.each(model.techs, function (i, tech) {
-                        $divGrid.jqxGrid('setcellvalue', obj.uid, tech.TechId, null);
+                        //$divGrid.jqxGrid('setcellvalue', obj.uid, tech.TechId, null);
+                        model.gridData[model.param][id][tech.TechId] = null;
                     });
-                    return false; // breaks
                 }
             });
+            model.srcGrid.localdata = model.gridData;
+            $divGrid.jqxGrid('updatebounddata');
+
+
+            let chartData = [];
+            $.each(model.techs, function (id, tech) {
+                let chunk = {};
+                chunk['TechId'] = tech.TechId;
+                chunk['Tech'] = tech.Tech;
+                $.each(model.gridData[model.param], function (id, rtDataObj) {
+                    chunk[rtDataObj.ScId] = rtDataObj[tech.TechId];
+                });
+                chartData.push(chunk);
+                model.chartData[model.param] = chartData;
+            });
+
+
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[model.param];
+            configChart.update();
+
+            Html.lblScenario( model.scenariosCount);
             Grid.applyRTFilter($divGrid, model.techs);
+            Message.smallBoxInfo('Info', 'Scenario data removed!', 2000);
         });
 
         let pasteEvent = false;

@@ -760,106 +760,176 @@ export class Grid {
 
     }
 
-    // static pivotGrid(pivotData){
-    //     // $('#osy-pivotGridDesigner').empty();
-    //     // $('#osy-pivotGrid').empty();
-    //     var source =
-    //     {
-    //         localdata: pivotData,
-    //         datatype: "array",
-    //         datafields:
-    //         [
-    //             { name: 'Case', type: 'string' },
-    //             { name: 'Year', type: 'string' },
-    //             { name: 'Tech', type: 'string' },
-    //             { name: 'Comm', type: 'string' },
-    //             { name: 'MoId', type: 'number' },
-    //             { name: 'Ts', type: 'string' },
-    //             { name: 'Value', type: 'number' }
-    //         ]
-    //     };
+    // TEST FILTER 
+    static applyGridFilter($divGrid, years, sc = null) {
+        $divGrid.jqxGrid('clearfilters');
+        //filter column 2
+        if (sc !== null) {
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
 
-    //     var dataAdapter = new $.jqx.dataAdapter(source);
-    //     dataAdapter.dataBind();
-    // // create a pivot data source from the dataAdapter
-    // var pivotDataSource = new $.jqx.pivot(
-    //     dataAdapter,
-    //     {
-    //         // customAggregationFunctions: {
-    //         //     'var': function (values) {
-    //         //         if (values.length <= 1)
-    //         //             return 0;
-    //         //         // sample's mean
-    //         //         var mean = 0;
-    //         //         for (var i = 0; i < values.length; i++)
-    //         //             mean += values[i];
-    //         //         mean /= values.length;
-    //         //         // calc squared sum
-    //         //         var ssum = 0;
-    //         //         for (var i = 0; i < values.length; i++)
-    //         //             ssum += Math.pow(values[i] - mean, 2)
-    //         //         // calc the variance
-    //         //         var variance = ssum / values.length;
-    //         //         return variance;
-    //         //     }
-    //         // },
-    //         pivotValuesOnRows: false,
-    //         fields: [
-    //                 { dataField: 'Case', text: 'Case' },
-    //                  { dataField: 'Year', text: 'Year' },
-    //                  { dataField: 'Tech', text: 'Technology' },
-    //                  { dataField: 'Comm', text: 'Commodity' },
-    //                  { dataField: 'MoId', text: 'Mode of operation' },
-    //                  { dataField: 'Ts', text: 'Timeslice' },
-    //                  { dataField: 'Value', text: 'Value' }
-    //         ],
-    //         rows: [
-    //                 { dataField: 'Case', text: 'Case' , align: 'right'},
-    //                 { dataField: 'Tech', text: 'Technology' , align: 'right'},
-    //                 { dataField: 'Comm', text: 'Commodity', align: 'right' },
-    //                 { dataField: 'MoId', text: 'Mode of operation' , align: 'right'},
-    //                 { dataField: 'Ts', text: 'Timeslice', align: 'right' },
-    //         ],
-    //         columns: [{ dataField: 'Year', align: 'right' }],
-    //         // filters: [
-    //         //     {
-    //         //         dataField: 'Year',
-    //         //         text: 'Year',
-    //         //         filterFunction: function (value) {
-    //         //             if (value == "2020" || value == "2040")
-    //         //                 return false;
-    //         //             return true;
-    //         //         }
-    //         //     }
-    //         // ],
-    //         values: [
-    //             { dataField: 'Value', 'function': 'sum', text: 'Sum', align: 'left', formatSettings: { decimalPlaces: 2, align: 'right' }, 
-    //                  },
-    //             //{ dataField: 'price', 'function': 'count', text: 'Count', className: 'myItemStyle', classNameSelected: 'myItemStyleSelected' }
-    //         ]
-    //     });
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+        }
 
-    //     var localization = { 'var': 'Variance' };
-    //     // create a pivot grid
-    //     $('#osy-pivotGrid').jqxPivotGrid(
-    //     {
-    //         // theme:'bootstrap',
-    //         localization: localization,
-    //         source: pivotDataSource,
-    //         treeStyleRows: false,
-    //         autoResize: false,
-    //         multipleSelectionEnabled: true
-    //     });
-    //     var pivotGridInstance = $('#osy-pivotGrid').jqxPivotGrid('getInstance');
-    //     // create a pivot grid
-    //     $('#osy-pivotGridDesigner').jqxPivotDesigner(
-    //     {
-    //         type: 'pivotGrid',
-    //         theme:'bootstrap',
-    //         target: pivotGridInstance
-    //     });
-    // }
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $.each(years, function (id, year) {
+            $divGrid.jqxGrid('addfilter', year, filtergroup1);
+        });
+
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
+
+    static applyRFilter($divGrid, sc = null) {
+        //$('#jqxLoader').jqxLoader('open');
+        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
+        $divGrid.jqxGrid('clearfilters');
+
+        //filter column 2
+        if (sc !== null) {
+
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $divGrid.jqxGrid('addfilter', 'value', filtergroup1);
+
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
+
+    static applyRTFilter($divGrid, techs, sc = null, param = null) {
+        //$('#jqxLoader').jqxLoader('open');
+        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
+        $divGrid.jqxGrid('clearfilters');
+
+        //filter column 2
+        if (sc !== null && param != null) {
+
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+
+            var filtergroup3 = new $.jqx.filter();
+            filtergroup3.operator = 'and';
+            var filtertype3 = 'stringfilter';
+            var filter_or_operator3 = 0;
+            var filtervalue3 = param;
+            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
+            filtergroup3.addfilter(filter_or_operator3, filter3);
+            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $.each(techs, function (id, tech) {
+            $divGrid.jqxGrid('addfilter', tech.TechId, filtergroup1);
+        });
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
     
+    static applyREFilter($divGrid, emis, sc = null, param = null) {
+        //$('#jqxLoader').jqxLoader('open');
+        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
+        $divGrid.jqxGrid('clearfilters');
+
+        //filter column 2
+        if (sc !== null && param != null) {
+
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+
+            var filtergroup3 = new $.jqx.filter();
+            filtergroup3.operator = 'and';
+            var filtertype3 = 'stringfilter';
+            var filter_or_operator3 = 0;
+            var filtervalue3 = param;
+            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
+            filtergroup3.addfilter(filter_or_operator3, filter3);
+            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $.each(emis, function (id, emi) {
+            $divGrid.jqxGrid('addfilter', emi.EmisId, filtergroup1);
+        });
+
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
+    
+    //Legacy filters
     static applyRYFilter($divGrid, years, sc = null) {
         //$('#jqxLoader').jqxLoader('open');
         //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
@@ -1497,140 +1567,6 @@ export class Grid {
         $.each(years, function (id, year) {
             $divGrid.jqxGrid('addfilter', year, filtergroup1);
         });
-
-        // // apply the filters.
-        $divGrid.jqxGrid('applyfilters');
-    }
-
-    static applyRTFilter($divGrid, techs, sc = null, param = null) {
-        //$('#jqxLoader').jqxLoader('open');
-        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
-        $divGrid.jqxGrid('clearfilters');
-
-        //filter column 2
-        if (sc !== null && param != null) {
-
-            var filtergroup2 = new $.jqx.filter();
-            filtergroup2.operator = 'and';
-            var filtertype2 = 'stringfilter';
-            var filter_or_operator2 = 0;
-            var filtervalue2 = sc;
-            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
-            filtergroup2.addfilter(filter_or_operator2, filter2);
-            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
-
-            var filtergroup3 = new $.jqx.filter();
-            filtergroup3.operator = 'and';
-            var filtertype3 = 'stringfilter';
-            var filter_or_operator3 = 0;
-            var filtervalue3 = param;
-            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
-            filtergroup3.addfilter(filter_or_operator3, filter3);
-            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
-        }
-
-        //filter colum 1 null values
-        var filtergroup1 = new $.jqx.filter();
-        filtergroup1.operator = 'or';
-        var filtertype1 = 'numericfilter';
-        var filter_or_operator1 = 1;
-        var filtervalue1 = null;
-        var filtercondition1 = 'NOT_NULL';
-
-        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
-        filtergroup1.addfilter(filter_or_operator1, filter1);
-        $.each(techs, function (id, tech) {
-            $divGrid.jqxGrid('addfilter', tech.TechId, filtergroup1);
-        });
-        // // apply the filters.
-        $divGrid.jqxGrid('applyfilters');
-    }
-
-    static applyREFilter($divGrid, emis, sc = null, param = null) {
-        //$('#jqxLoader').jqxLoader('open');
-        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
-        $divGrid.jqxGrid('clearfilters');
-
-        //filter column 2
-        if (sc !== null && param != null) {
-
-            var filtergroup2 = new $.jqx.filter();
-            filtergroup2.operator = 'and';
-            var filtertype2 = 'stringfilter';
-            var filter_or_operator2 = 0;
-            var filtervalue2 = sc;
-            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
-            filtergroup2.addfilter(filter_or_operator2, filter2);
-            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
-
-            var filtergroup3 = new $.jqx.filter();
-            filtergroup3.operator = 'and';
-            var filtertype3 = 'stringfilter';
-            var filter_or_operator3 = 0;
-            var filtervalue3 = param;
-            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
-            filtergroup3.addfilter(filter_or_operator3, filter3);
-            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
-        }
-
-        //filter colum 1 null values
-        var filtergroup1 = new $.jqx.filter();
-        filtergroup1.operator = 'or';
-        var filtertype1 = 'numericfilter';
-        var filter_or_operator1 = 1;
-        var filtervalue1 = null;
-        var filtercondition1 = 'NOT_NULL';
-
-        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
-        filtergroup1.addfilter(filter_or_operator1, filter1);
-        $.each(emis, function (id, emi) {
-            $divGrid.jqxGrid('addfilter', emi.EmisId, filtergroup1);
-        });
-
-        // // apply the filters.
-        $divGrid.jqxGrid('applyfilters');
-    }
-
-    static applyRFilter($divGrid, sc = null) {
-        //$('#jqxLoader').jqxLoader('open');
-        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
-        $divGrid.jqxGrid('clearfilters');
-
-        //filter column 2
-        if (sc !== null) {
-
-            var filtergroup2 = new $.jqx.filter();
-            filtergroup2.operator = 'and';
-            var filtertype2 = 'stringfilter';
-            var filter_or_operator2 = 0;
-            var filtervalue2 = sc;
-            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
-            filtergroup2.addfilter(filter_or_operator2, filter2);
-            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
-
-        }
-
-        //filter colum 1 null values
-        var filtergroup1 = new $.jqx.filter();
-        filtergroup1.operator = 'or';
-        var filtertype1 = 'numericfilter';
-        var filter_or_operator1 = 1;
-        var filtervalue1 = null;
-        var filtercondition1 = 'NOT_NULL';
-
-        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
-        filtergroup1.addfilter(filter_or_operator1, filter1);
-        $divGrid.jqxGrid('addfilter', 'value', filtergroup1);
 
         // // apply the filters.
         $divGrid.jqxGrid('applyfilters');

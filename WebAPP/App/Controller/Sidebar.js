@@ -2,18 +2,8 @@ import { GROUPNAMES, PARAMORDER, PARAMCOLORS, RESULTPARAMORDER, RESULTPARAMCOLOR
 import { Model } from "../Model/Sidebar.Model.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { Message } from "../../Classes/Message.Class.js";
-import { Routes } from "../../Routes/Routes.Class.js";
 
 export class Sidebar {
-
-    //ne koristi se
-    // static Load(genData, PARAMETERS, VARIABLES, RESULTEXISTS) {
-    //     let model = new Model(PARAMETERS,VARIABLES, genData, RESULTEXISTS);
-    //     this.initAppRoutes(model);
-    //     this.initResultsRoutes(model);
-    //     this.initEvents();
-    // }
-
     static Reload(casename) {
         Osemosys.getData(casename, 'genData.json')
         .then(genData => {
@@ -31,7 +21,6 @@ export class Sidebar {
             let [genData, PARAMETERS, VARIABLES, RESULTEXISTS] = data;
             let model = new Model(PARAMETERS,VARIABLES, genData, RESULTEXISTS);
             this.initAppRoutes(model);
-            this.initResultsRoutes(model);
             this.initEvents();
         })
         .catch(error => {
@@ -179,45 +168,14 @@ export class Sidebar {
                     }
                 });
             });
-        } else {
+        } 
+        if(model.ResultsMenu){
+            $('.dynamicResults').show();
+        }
+        else {
             $('.dynamicRoutesLink').hide();
             $('.dynamicRoutesRES').hide();
-
-        }
-    }
-
-    static initResultsRoutes(model) {
-        //Routes.addResultsRoutes(model.VARIABLES);
-        $('#dynamicResultsRoutes').empty();
-        if (model.ResultsMenu) {
-            //Routes.addRoutes(model.PARAMETERS);
-            $('.dynamicResults').show();
-            let res = `
-            <label class="input" style="display:block; margin-left:11px">
-                <i class="ace-icon white fa fa-search nav-search-icon"></i>
-                <input type="text" placeholder="Search ..." class="nav-search-input" id="ResultSearch" />
-                
-            </label>`;
-            $('#dynamicResultsRoutes').append(res);
-            $.each(RESULTPARAMORDER, function (id, group) {
-                $.each(model.VARIABLES[group], function (id, obj) {
-                    //da li ima parametara definisanih za grupu
-                    if (model.VARIABLES[group] !== undefined || model.VARIABLES[group].length != 0) {
-                        let res = `
-                        <li  class="">
-                            <a href="#/${group}/${obj.id}" class="res-items" title="${RESULTGROUPNAMES[group]}">
-        
-                            ${obj.value}
-                            <span class="badge badge-sm inbox-badge bg-color-${RESULTPARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
-                            </a>
-                        </li>`;
-                        $('#dynamicResultsRoutes').append(res);
-                    }
-                });
-            });
-        } else {
             $('.dynamicResults').hide();
-
         }
     }
 
@@ -241,22 +199,11 @@ export class Sidebar {
         $('#MenuSearch').keyup(function () {
             var query = $.trim($('#MenuSearch').val()).toLowerCase();
             $('.menu-items').each(function () {
-
                 var $this = $(this);
                 if ($this.text().toLowerCase().indexOf(query) === -1)
                     $this.closest('li').fadeOut();
                 else $this.closest('li').fadeIn();
             });
         });
-        $('#ResultSearch').keyup(function () {
-            var query = $.trim($('#ResultSearch').val()).toLowerCase();
-            $('.res-items').each(function () {
-
-                var $this = $(this);
-                if ($this.text().toLowerCase().indexOf(query) === -1)
-                    $this.closest('li').fadeOut();
-                else $this.closest('li').fadeIn();
-            });
-        })
     }
 }

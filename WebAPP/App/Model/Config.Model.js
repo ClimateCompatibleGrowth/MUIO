@@ -41,7 +41,7 @@ export class Model {
 
 
         var cellsrendererbutton = function (row, column, value) { 
-            return '<span style="padding:5px; width:100%;" data-toggle="modal" href="#osy-unitRule" class="btn btn-info updateRule" data-id='+ row+' ><i class="fa fa-pencil-square-o "></i>Update rule</span>';
+            return '<span style="padding:5px; width:100%;" data-toggle="modal" href="#osy-unitRule" class="btn btn-white btn-default updateRule" data-id='+ row+' ><i class="fa fa-pencil-square-o  fa-lg primary"></i>Update rule</span>';
         }
 
         let initeditor = function(row, cellvalue, editor, data) {
@@ -93,7 +93,7 @@ export class Model {
         });
 
         var cellsrendererbuttonVar = function (row, column, value) { 
-            return '<span style="padding:5px; width:100%;" data-toggle="modal" href="#osy-unitRule" class="btn btn-info updateVarRule" data-id='+ row+' ><i class="fa fa-pencil-square-o "></i>Update rule</span>';
+            return '<span style="padding:5px; width:100%;" data-toggle="modal" href="#osy-unitRule" class="btn btn-white btn-default updateVarRule" data-id='+ row+' ><i class="fa fa-pencil-square-o fa-lg success"></i>Update rule</span>';
         }
 
         datafieldsVar.push({ name: 'groupId', type:'string' });
