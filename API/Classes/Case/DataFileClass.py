@@ -462,6 +462,31 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
+    def deleteScenarioCaseRuns(self, scenarioId):
+        try:
+            resData = File.readFile(self.resDataPath)
+            cases = resData['osy-cases']
+
+            for cs in cases:
+                for sc in cs['Scenarios']:
+                    if sc['ScenarioId'] == scenarioId:
+                        cs['Scenarios'].remove(sc)
+
+
+            File.writeFile(resData, self.resDataPath)
+            response = {
+                "message": "You have deleted scenario from caseruns!",
+                "status_code": "success"
+            } 
+
+
+            return response
+            # urllib.request.urlretrieve(self.dataFile, dataFile)
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+
     def updateCaseRun(self, caserunname, oldcaserunname, data):
         try:
             caseRunPath = Path(Config.DATA_STORAGE,self.case,'res', oldcaserunname)

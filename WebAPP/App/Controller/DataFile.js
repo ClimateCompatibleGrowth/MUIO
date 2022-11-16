@@ -100,10 +100,24 @@ export default class DataFile {
 
         $("#osy-btnScOrder").off('click');
         $("#osy-btnScOrder").on('click', function (event) {
-
-            // Html.renderScOrder(model.scenarios);
+            console.log('model, ', model)
             if(model.cs in  model.scBycs){
-                Html.renderScOrder(model.scBycs[model.cs]);
+                //pored originalnih scenarija u caserunu, potrebno dodati eventualno nove scenarije koji su dodani poslije uspjesnog RUN-a, kao neaktivne
+                let sccsMap = {};
+                $.each(model.scBycs[model.cs], function (id, scObj) {
+                    sccsMap[scObj.ScenarioId] = scObj;
+                });
+                let scArray = model.scBycs[model.cs].slice()
+                $.each(model.scenarios, function (key, obj) {
+                    if(obj.ScenarioId in sccsMap === false){
+                        console.log('obj.Scenario ', obj.Scenario)
+                        let sc = JSON.parse(JSON.stringify(obj));
+                        sc.Active = false;
+                        console.log('sc ', sc)
+                        scArray.push(sc);
+                    }
+                });
+                Html.renderScOrder(scArray);
             }else{
                 Html.renderScOrder(model.scenarios);
             }
@@ -112,47 +126,50 @@ export default class DataFile {
 
         $("#btnSaveOrder").off('click');
         $("#btnSaveOrder").on('click', function (event) {
-            //let order = $("#osy-scOrder").jqxSortable("serialize")
-            let order = $("#osy-scOrder").jqxSortable("toArray")
-            var scAcitive = new Array();
-            $.each($('input[type="checkbox"]:checked'), function (key, value) {
-                scAcitive.push($(value).attr("id"));
-            });
-            let scOrder = DefaultObj.defaultScenario(true);
-            $.each(order, function (id, sc) {
-                let tmp = {};
-                if (scAcitive.includes(sc)) {
-                    tmp['ScenarioId'] = sc;
-                    tmp['Scenario'] = model.scMap[sc]['Scenario'];
-                    tmp['Desc'] = model.scMap[sc]['Desc'];
-                    tmp['Active'] = true
-                } else {
-                    tmp['ScenarioId'] = sc;
-                    tmp['Scenario'] = model.scMap[sc]['Scenario'];
-                    tmp['Desc'] = model.scMap[sc]['Desc'];
-                    tmp['Active'] = false;
-                }
-                scOrder.push(tmp);
-            });
+            Message.clearMessages();
+            Message.bigBoxSuccess('Sceanario order', 'You have updated scenarios order data!', 3000);
+            $('#osy-order').modal('toggle');
 
+            //nema potrebe da spasavmo scenario order jer se on ada nalazi u resData
+            // let order = $("#osy-scOrder").jqxSortable("toArray")
+            // var scAcitive = new Array();
+            // $.each($('input[type="checkbox"]:checked'), function (key, value) {
+            //     scAcitive.push($(value).attr("id"));
+            // });
+            // let scOrder = DefaultObj.defaultScenario(true);
 
-            Osemosys.saveScOrder(scOrder, model.casename)
-                .then(response => {
-                    if (response.status_code == "success") {
-                        $('#osy-order').modal('toggle');
-                        model.scenarios = scOrder;
-                        Message.clearMessages();
-                        Message.bigBoxSuccess('Sceanario order', response.message, 3000);
-                        //sync S3
-                        if (Base.AWS_SYNC == 1) {
-                            Base.updateSync(model.casename, "genData.json");
-                        }
+            // $.each(order, function (id, sc) {
+            //     let tmp = {};
+            //     if (scAcitive.includes(sc)) {
+            //         tmp['ScenarioId'] = sc;
+            //         tmp['Scenario'] = model.scMap[sc]['Scenario'];
+            //         tmp['Desc'] = model.scMap[sc]['Desc'];
+            //         tmp['Active'] = true
+            //     } else {
+            //         tmp['ScenarioId'] = sc;
+            //         tmp['Scenario'] = model.scMap[sc]['Scenario'];
+            //         tmp['Desc'] = model.scMap[sc]['Desc'];
+            //         tmp['Active'] = false;
+            //     }
+            //     scOrder.push(tmp);
+            // });
 
-                    }
-                })
-                .catch(error => {
-                    Message.bigBoxDanger('Error message', error, null);
-                })
+            // Osemosys.saveScOrder(scOrder, model.casename)
+            // .then(response => {
+            //     if (response.status_code == "success") {
+            //         $('#osy-order').modal('toggle');
+            //         model.scenarios = scOrder;
+            //         Message.clearMessages();
+            //         Message.bigBoxSuccess('Sceanario order', response.message, 3000);
+            //         //sync S3
+            //         if (Base.AWS_SYNC == 1) {
+            //             Base.updateSync(model.casename, "genData.json");
+            //         }
+            //     }
+            // })
+            // .catch(error => {
+            //     Message.bigBoxDanger('Error message', error, null);
+            // })
         });
 
         $("#osy-caseRun").jqxValidator({
@@ -191,6 +208,7 @@ export default class DataFile {
             event.preventDefault();
             event.stopImmediatePropagation();
             Html.title(model.casename, model.title, "");
+            model.cs = '';
             $("#osy-casename").val(null);
             $("#osy-desc").val(null);
             $('#tabs a[href="#tabCases"]').tab('show');
@@ -217,20 +235,6 @@ export default class DataFile {
             var caserunname = $("#osy-casename").val();
             let oldcaserunname = model.cs;
             var desc = $("#osy-desc").val();
-
-            //scenarios
-            // let order = $("#osy-scOrder").jqxSortable("toArray")
-            // var scAcitive = new Array();
-            // $.each($('input[type="checkbox"]:checked'), function (key, value) {
-            //     scAcitive.push($(value).attr("id"));
-            // });
-
-            // let scData = []
-            // $.each(order, function (id, sc) {
-            //     if (scAcitive.includes(sc)){
-            //         scData.push(model.scMap[sc]['Scenario'])
-            //     }
-            // });
 
             let order = $("#osy-scOrder").jqxSortable("toArray")
             var scAcitive = new Array();
@@ -263,61 +267,60 @@ export default class DataFile {
                 "CaseId": caseId,
                 "Desc": desc,
                 "Runtime": Date().toLocaleString('en-US', { hour12: false, hour: "numeric", minute: "numeric" }),
-                // "Scenarios": scData
                 "Scenarios": scOrder
             }
 
             if (update) {
                 Osemosys.updateCaseRun(model.casename, caserunname, oldcaserunname, caseData)
-                    .then(response => {
-                        if (response.status_code == 'success') {
-                            model.cs = caserunname;
-                            $.each(model.cases, function (id, cs) {
-                                if (cs.Case == oldcaserunname) {
-                                    model.cases[id] = caseData;
-                                }
-                            });
-                            model.scBycs[model.cs] = scOrder;
-                            Html.title(model.casename, model.title, caserunname);
-                            Html.renderCases(model.cases);
-                            $('#tabs a[href="#tabCases"]').tab('show');
-                            $('#osy-generateDataFile').show();
-                            $("#osy-newCaseRun").show();
-                            $(".DataFile").hide();
-                            $(".runOutput").hide();
-                            $(".lpOutput").hide();
-                            $(".Results").hide();
-                            Message.smallBoxInfo('Generate message', response.message, 3000);
-                        }
-                        if (response.status_code == 'exist') {
-                            Message.smallBoxWarning('Generate message', response.message, 3000);
-                        }
-                    })
-                    .catch(error => {
-                        Message.bigBoxDanger('Error message', error, null);
-                    })
+                .then(response => {
+                    if (response.status_code == 'success') {
+                        model.cs = caserunname;
+                        $.each(model.cases, function (id, cs) {
+                            if (cs.Case == oldcaserunname) {
+                                model.cases[id] = caseData;
+                            }
+                        });
+                        model.scBycs[model.cs] = scOrder;
+                        Html.title(model.casename, model.title, caserunname);
+                        Html.renderCases(model.cases);
+                        $('#tabs a[href="#tabCases"]').tab('show');
+                        $('#osy-generateDataFile').show();
+                        $("#osy-newCaseRun").show();
+                        $(".DataFile").hide();
+                        $(".runOutput").hide();
+                        $(".lpOutput").hide();
+                        $(".Results").hide();
+                        Message.smallBoxInfo('Generate message', response.message, 3000);
+                    }
+                    if (response.status_code == 'exist') {
+                        Message.smallBoxWarning('Generate message', response.message, 3000);
+                    }
+                })
+                .catch(error => {
+                    Message.bigBoxDanger('Error message', error, null);
+                })
             } else {
                 Osemosys.createCaseRun(model.casename, caserunname, caseData)
-                    .then(response => {
-                        if (response.status_code == 'success') {
-                            $('#osy-generateDataFile').show();
-                            model.cs = caserunname;
-                            model.cases.push(caseData);
-                            model.scBycs[model.cs] = scOrder;
-                            $("#osy-createCaseRun").hide();
-                            $("#osy-updateCaseRun").show();
-                            $("#osy-newCaseRun").show();
-                            Html.renderCases(model.cases);
-                            Html.title(model.casename, model.title, caserunname);
-                            Message.smallBoxInfo('Generate message', response.message, 3000);
-                        }
-                        if (response.status_code == 'exist') {
-                            Message.smallBoxWarning('Generate message', response.message, 3000);
-                        }
-                    })
-                    .catch(error => {
-                        Message.bigBoxDanger('Error message', error, null);
-                    })
+                .then(response => {
+                    if (response.status_code == 'success') {
+                        $('#osy-generateDataFile').show();
+                        model.cs = caserunname;
+                        model.cases.push(caseData);
+                        model.scBycs[model.cs] = scOrder;
+                        $("#osy-createCaseRun").hide();
+                        $("#osy-updateCaseRun").show();
+                        $("#osy-newCaseRun").show();
+                        Html.renderCases(model.cases);
+                        Html.title(model.casename, model.title, caserunname);
+                        Message.smallBoxInfo('Generate message', response.message, 3000);
+                    }
+                    if (response.status_code == 'exist') {
+                        Message.smallBoxWarning('Generate message', response.message, 3000);
+                    }
+                })
+                .catch(error => {
+                    Message.bigBoxDanger('Error message', error, null);
+                })
             }
 
         });
@@ -423,6 +426,7 @@ export default class DataFile {
             e.stopImmediatePropagation();
             var caserunanme = $(this).attr('data-ps');
             model.cs = caserunanme
+
             Html.resData(model);
             Html.title(model.casename, model.title, caserunanme);
 
@@ -440,56 +444,30 @@ export default class DataFile {
             $(".Results").show();
 
             Osemosys.readDataFile(model.casename, model.cs)
-                .then(response => {
-                    let DataFile = response;
-                    const promise = [];
-                    promise.push(DataFile);
-
-                    let ResultCSV = Base.getResultCSV(model.casename, model.cs)
-                    promise.push(ResultCSV);
-                    return Promise.all(promise);
-
-                    // if (response) {
-                    //     let DataFile = response;
-                    //     Html.renderDataFile(DataFile, model);
-                    // } else {
-                    //     $(".DataFile").hide();
-                    //     $("#osy-generateDataFile").show();
-                    //     Message.smallBoxWarning("Run case message", "Please generate data file!", 3000);
-                    // }
-
-                })
-                .then(data => {
-                    let [DataFile, ResultCSV] = data;
-                    if (DataFile && ResultCSV.length != 0) {
-                        Html.renderDataFile(DataFile, model);
-                        Html.renderCSV(ResultCSV, model.cs)
-                    } 
-                    else if(!DataFile && ResultCSV.length == 0){
-                        $(".DataFile").hide();
-                        $(".Results").hide();
-                        $("#osy-generateDataFile").show();
-                        Message.smallBoxWarning("Run case message", "Please generate data file!", 3000);
-                    }
-
-                })
-                .catch(error => {
-                    Message.danger(error);
-                });
-
-
-            // Base.getResultCSV(model.casename, model.cs)
-            //     .then(csvs => {
-            //         if (csvs.length == 0){
-            //             $(".Results").hide();
-            //             $("#osy-solver").show();
-            //             $("#osy-run").show();
-            //         }else{
-            //             Html.renderCSV(csvs, model.cs)
-            //         }
-                    
-            //     });
-
+            .then(response => {
+                let DataFile = response;
+                const promise = [];
+                promise.push(DataFile);
+                let ResultCSV = Base.getResultCSV(model.casename, model.cs)
+                promise.push(ResultCSV);
+                return Promise.all(promise);
+            })
+            .then(data => {
+                let [DataFile, ResultCSV] = data;
+                if (DataFile && ResultCSV.length != 0) {
+                    Html.renderDataFile(DataFile, model);
+                    Html.renderCSV(ResultCSV, model.cs)
+                } 
+                else if(!DataFile && ResultCSV.length == 0){
+                    $(".DataFile").hide();
+                    $(".Results").hide();
+                    $("#osy-generateDataFile").show();
+                    Message.smallBoxWarning("Run case message", "Please generate data file!", 3000);
+                }
+            })
+            .catch(error => {
+                Message.danger(error);
+            });
             Message.smallBoxInfo("Case selection", caserunanme + " is selected!", 3000);
         });
 
@@ -515,7 +493,7 @@ export default class DataFile {
                                 //relod sidebar
                                 Sidebar.Reload(model.casename);
 
-                                if (model.cs == caserunname){
+                                if (model.cs == caserunname || model.cs == ''){
                                     Html.title(model.casename, model.title, '');
                                     model.cs = null;
                                     $("#osy-casename").val(null);

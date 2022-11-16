@@ -447,6 +447,29 @@ export class DataModel{
         });
         return ConstraintTechs;
     }
+
+    static getCaserunByScenario(genData, resData){
+        let scenarios = genData["osy-scenarios"];
+        let caseruns = resData["osy-cases"];
+        let csbysc = {};
+        $.each(scenarios, function (i, objSc) {
+            csbysc[objSc.ScenarioId] = [];
+            if (caseruns.length != 0) {
+                console.log('caseruns ', caseruns)
+                console.log('objSc.ScenarioId ', objSc.ScenarioId)
+                $.each(caseruns, function (j, objCs) {
+                    $.each(objCs.Scenarios, function (k, objCsSc) {
+                        console.log('objCsSc ', objCsSc)
+                        if(objCsSc.Active == true && objSc.ScenarioId == objCsSc.ScenarioId){
+                            console.log('objSc.ScenarioId ', objSc.ScenarioId)
+                            csbysc[objSc.ScenarioId].push(objCs.Case)
+                        }
+                    });
+                });
+            }
+        });
+        return csbysc;
+    }
     // static activityTechsComms(techs){
     //     let ActivityTechs = {};
     //     ActivityTechs['IAR'] = [];

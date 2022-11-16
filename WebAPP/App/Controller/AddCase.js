@@ -19,13 +19,16 @@ export default class AddCase {
                 const promise = [];
                 let genData = Osemosys.getData(casename, 'genData.json');
                 promise.push(genData);
+                const resData = Osemosys.getResultData(casename, 'resData.json');
+                promise.push(resData);
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS);
                 return Promise.all(promise);
             })
             .then(data => {
-                let [genData, PARAMETERS] = data;
-                let model = new Model(genData, PARAMETERS, "AddCase");
+                let [genData, resData, PARAMETERS] = data;
+                let model = new Model(genData, resData, PARAMETERS, "AddCase");
+                
                 this.initPage(model);
             })
             .catch(error => {
@@ -70,22 +73,25 @@ export default class AddCase {
                 const promise = [];
                 let genData = Osemosys.getData(casename, 'genData.json');
                 promise.push(genData);
+                const resData = Osemosys.getResultData(casename, 'resData.json');
+                promise.push(resData);
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS);
                 return Promise.all(promise);
             })
             .then(data => {
-                let [genData, PARAMETERS] = data;
-                let model = new Model(genData, PARAMETERS, "AddCase");
+                let [genData, resData, PARAMETERS] = data;
+                let model = new Model(genData, resData, PARAMETERS, "AddCase");
                 AddCase.initPage(model);
             })
             .catch(error => {
-                Message.bigBoxInfo(error);
+                Message.bigBoxDanger(error);
             })
     }
 
     static initEvents(model) {
 
+        console.log('model ', model)
         let $divTech = $("#osy-gridTech");
         let $divTechGroup = $("#osy-gridTechGroup");
         let $divComm = $("#osy-gridComm");
@@ -195,13 +201,13 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
 
-            var casename = $("#osy-casename").val();
-            var desc = $("#osy-desc").val();
+            var casename = $("#osy-casename").val().trim();
+            var desc = $("#osy-desc").val().trim();
             var date = $("#osy-date").val();
             var currency = $("#osy-currency").val();
-            var mo = $("#osy-mo").val();
-            var ns = $("#osy-ns").val();
-            var dt = $("#osy-dt").val();
+            var mo = $("#osy-mo").val().trim();
+            var ns = $("#osy-ns").val().trim();
+            var dt = $("#osy-dt").val().trim();
 
             var years = new Array();
             $.each($('input[type="checkbox"]:checked'), function (key, value) {
@@ -508,6 +514,8 @@ export default class AddCase {
             event.stopImmediatePropagation();
             let defaultSc = DefaultObj.defaultScenario();
             model.scenarios.push(JSON.parse(JSON.stringify(defaultSc[0], ['ScenarioId', 'Scenario', 'Desc', 'Active'])));
+            //add scenario id to caserunByScenario
+            model.caserunByScenario[defaultSc[0].ScenarioId] =[];
             $divScenario.jqxGrid('addrow', null, defaultSc);
             model.scenariosCount++;
             $("#scenariosCount").text(model.scenariosCount);
@@ -520,13 +528,28 @@ export default class AddCase {
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
             if (id != 0) {
-                //var emisId = $divScenario.jqxGrid('getcellvalue', id, 'ScenarioId');
-                var rowid = $divScenario.jqxGrid('getrowid', id);
-                $divScenario.jqxGrid('deleterow', rowid);
-                model.scenarios.splice(id, 1);
-                //smanji counter za broj emisjia i update html
-                model.scenariosCount--;
-                $("#scenariosCount").text(model.scenariosCount);
+                if(model.caserunByScenario[model.scenarios[id]['ScenarioId']].length != 0){
+                    Message.bigBoxDanger('Alert', 
+                        `You cannot delete this scenario. It is used in ${model.caserunByScenario[model.scenarios[id]['ScenarioId']]}  caserun(s)! 
+                        Plese reomve these scenario from caseruns before deletion.`, null)
+                }
+                else{
+                    let scId = model.scenarios[id]['ScenarioId'];
+                    Osemosys.deleteScenarioCaseRuns(model.casename, scId)
+                    .then(response=>{
+                        console.log('delete ', response)
+                        var rowid = $divScenario.jqxGrid('getrowid', id);
+                        $divScenario.jqxGrid('deleterow', rowid);
+                        model.scenarios.splice(id, 1);
+                        model.scenariosCount--;
+                        $("#scenariosCount").text(model.scenariosCount);
+                        Message.smallBoxInfo(response.message)
+                    })
+                    .catch(error => {
+                        Message.bigBoxDanger(error);
+                    })
+
+                }
             }
         });
 

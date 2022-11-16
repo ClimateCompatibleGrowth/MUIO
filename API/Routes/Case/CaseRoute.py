@@ -1,9 +1,7 @@
-from tokenize import group
 from flask import Blueprint, jsonify, request, session, send_file
 import os
 from pathlib import Path
 import shutil
-import time
 import pandas as pd
 from API.Classes.Base import Config
 from API.Classes.Base.FileClass import File
@@ -216,7 +214,6 @@ def saveScOrder():
         data = request.json['data']
         case = request.json['casename']
         genDataPath = Path(Config.DATA_STORAGE, case, 'genData.json')
-        # File.writeFile( data, configPath)
         genData = File.readFile(genDataPath)
         genData['osy-scenarios'] = data
         File.writeFile( genData, genDataPath)
@@ -300,6 +297,8 @@ def saveCase():
                 #update genData
                 File.writeFile( genData, genDataPath)
 
+                ###########################potrebno updateovati i resData ukoliko smo brisali ili dodavali scenarios
+
                 response = {
                     "message": "You have change case general data!",
                     "status_code": "edited"
@@ -307,11 +306,18 @@ def saveCase():
             #edit case sa drugim imenom, moramo provjeriit da li novo ime postoji u sistemu
             else:
                 if not os.path.exists(Path(Config.DATA_STORAGE,casename)):
+
                     #update modela 
                     caseUpdate = UpdateCase(case, genData)
                     caseUpdate.updateCase() 
+
                     #update gen data sa novim imenom
                     File.writeFile( genData, genDataPath)
+
+                    #nedostaje update resData u smislu novih ili izbirsanih scenarija
+
+
+
                     #rename case sa novim imenom
                     os.rename(Path(Config.DATA_STORAGE,case), Path(Config.DATA_STORAGE,casename ))
                     session['osycase'] = casename

@@ -173,6 +173,26 @@ export class Osemosys {
         });
     }
 
+    static deleteScenarioCaseRuns(casename, scenarioId) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "deleteScenarioCaseRuns",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename,"scenarioId": scenarioId }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
     static updateCaseRun(casename, caserunname, oldcaserunname, data) {
         return new Promise((resolve, reject) => {
             $.ajax({

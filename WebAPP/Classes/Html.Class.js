@@ -82,7 +82,6 @@ export class Html {
         });
     }
 
-    
     static apendCase(value) {
         //Base.appendCasePickerHTML(value, selectedCS);
         let scs = []
@@ -91,25 +90,27 @@ export class Html {
                 scs.push(obj.Scenario)
             }   
         });
+
+        let dt = new Date(value.Runtime).toLocaleString()
         let htmlstring = `
             <div class="panel panel-default" id=l_${value.Case.replace(/[^A-Z0-9]/ig, "")}>
                 <div class="panel-heading">
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-2 selectCS pointer" data-ps="${value.Case}" >
                         <b>
-                            <span class="selectCS"  data-ps="${value.Case}" data-toggle="tooltip" data-placement="top" title="Select Model">
-                                <span class="glyphicon glyphicon-cube osy-green fa-1.5x icon-btn"></span><span class="pointer">${value.Case}</span>
+                            <span  data-toggle="tooltip" data-placement="top" title="Select Model">
+                                <span class="glyphicon glyphicon-cube osy-green fa-1.5x icon-btn"></span><span >${value.Case}</span>
                             </span>
                         </b>   
                     </div>
-                    <div class="col-md-4">
-                        <span class="editPS " data-ps="${value.Runtime}" data-toggle="tooltip" data-placement="top" title="Runtime">
-                        <small><i>${value.Runtime}</i></small>
+                    <div class="col-md-6 selectCS pointer" data-ps="${value.Case}" >
+                        <span  data-ps="${value.Desc}" data-toggle="tooltip" data-placement="top" title="Runtime">
+                        <small><i>${value.Desc} [${dt}]</i></small>
                         </span>  
                     </div>
-                    <div class="col-md-5">
-                        <span class="editPS " data-ps="${scs}" data-toggle="tooltip" data-placement="top" title="Runtime">
-                        ${scs}
+                    <div class="col-md-3 selectCS pointer" data-ps="${value.Case}" >
+                        <span data-ps="${scs}" data-toggle="tooltip" data-placement="top" title="Runtime">
+                        <small>${scs}</small>
                         </span>  
                     </div>
                     <div class="col-md-1">
@@ -250,6 +251,7 @@ export class Html {
         $("#osy-mo").val(model.mo);
 
         $("#commCount").text(model.commCount);
+        $("#techGroupCount").text(model.techGroupCount);
         $("#techCount").text(model.techCount);
         $("#emisCount").text(model.emisCount);
         $("#scenariosCount").text(model.scenariosCount);
@@ -258,22 +260,14 @@ export class Html {
     }
 
     static resData(model) {
-
-        // var container = $('#osy-scOrder');
-        // container.empty();
-        // $.each(CURRENCY, function (key, value) {
-        //     if (value == model.currency) {
-
-        //         container.append(`<option value="${value}" selected> ${value}</option>`);
-        //     } else {
-        //         container.append(`<option value="${value}"> ${value} </option>`);
-        //     }
-        // });
-
-
+        let desc = '';
+        $.each(model.cases, function (id, csObj) {
+            if (csObj.Case == model.cs) {
+                desc = csObj.Desc;
+            } 
+        });
         $("#osy-casename").val(model.cs);
-        $("#osy-desc").val(model.desc);
-
+        $("#osy-desc").val(desc);
     }
 
     static ddlParams(params, param) {
@@ -575,8 +569,7 @@ export class Html {
         $.each(scs, function (sc, flag) {
             if (flag.ScenarioId == 'SC_0') {
                 var sc0 =
-                    `<div class="sortable-item" id=` + flag.ScenarioId + `>
-                    <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario + `
+                    `<div class="sortable-item" id=` + flag.ScenarioId + `>` + flag.Scenario + `
                     <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked disabled/></span>
                 </div>`;
                 $("#osy-sc0").html(sc0);
@@ -585,14 +578,14 @@ export class Html {
                 if (flag.Active) {
                     var sortableElement =
                         `<div class="sortable-item" id=` + flag.ScenarioId + `>
-                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario + `
+                        <i class="fa fa-sort fa-lg danger" aria-hidden="true"></i>` + flag.Scenario + `
                         <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked/></span>
                     </div>`;
                     sortableList = sortableList + sortableElement;
                 } else {
                     var sortableElement =
                         `<div class="sortable-item" id=` + flag.ScenarioId + `>
-                        <i class="fa fa-sort danger" aria-hidden="true"></i>` + flag.Scenario + `
+                        <i class="fa fa-sort fa-lg danger" aria-hidden="true"></i>` + flag.Scenario + `
                         <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" /></span>
                     </div>`;
                     sortableList = sortableList + sortableElement;

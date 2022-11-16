@@ -1,3 +1,3 @@
-jqxwidgets ver 13.2.0
+jqxwidgets ver 14.0.0
 
 

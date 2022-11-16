@@ -30,7 +30,12 @@ export class Sidebar {
 
     static initAppRoutes(model) {
         $('#dynamicRoutes').empty();
+        $('.dynamicRoutesLink').hide();
+        $('.dynamicRoutesRES').hide();
+        $('.dynamicResults').hide();
+
         if (model.menu) {
+
             //Routes.addRoutes(model.PARAMETERS);
             $('.dynamicRoutesLink').show();
             //RES prikazi samo ako ima IAR ili OAR
@@ -47,10 +52,11 @@ export class Sidebar {
             </label>`;
             $('#dynamicRoutes').append(res);
 
+            
+
             $.each(PARAMORDER, function (id, group) {
                 $.each(model.PARAMETERS[group], function (id, obj) {
                     //da li ima parametara definisanih za grupu
-                    
                     if (model.PARAMETERS[group] !== undefined || model.PARAMETERS[group].length != 0) {
                         if (obj.menu) {
                             if (obj.id == 'IAR' && model.menuCondition.IAR) {
@@ -171,11 +177,6 @@ export class Sidebar {
         } 
         if(model.ResultsMenu){
             $('.dynamicResults').show();
-        }
-        else {
-            $('.dynamicRoutesLink').hide();
-            $('.dynamicRoutesRES').hide();
-            $('.dynamicResults').hide();
         }
     }
 

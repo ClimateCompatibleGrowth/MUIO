@@ -2,7 +2,7 @@ import { DefaultObj } from "../../Classes/DefaultObj.Class.js";
 import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export class Model {
-  constructor(genData, PARAMETERS, pageId) {
+  constructor(genData, resData, PARAMETERS, pageId) {
     if (genData) {
       this.casename = genData['osy-casename'];
       this.PARAMETERS = PARAMETERS;
@@ -10,6 +10,7 @@ export class Model {
       this.techGroupNames = DataModel.TechGroupName(genData);
       this.commNames = DataModel.CommName(genData);
       this.emiNames = DataModel.EmiName(genData);
+      this.caserunByScenario = DataModel.getCaserunByScenario(genData, resData);
       this.title = "Model";
       this.desc = genData['osy-desc'];
       this.date = genData['osy-date'];
@@ -42,6 +43,7 @@ export class Model {
       this.techGroupNames = { 'TG_0': 'TG_0'};
       this.commNames = { 'COM_0': 'COM_0' };
       this.emiNames = { 'EMI_0': 'EMI_0' };
+      this.caserunByScenario = {'SC_0': []};
       this.title = "Model";
       this.desc = null;
       this.date = null;
