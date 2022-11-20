@@ -58,7 +58,7 @@ def getDesc():
         genDataPath = Path(Config.DATA_STORAGE,casename,"genData.json")
         genData = File.readFile(genDataPath)
         response = {
-            "message": "Get case description success",
+            "message": "Get model description success",
             "desc": genData['osy-desc']
         }
         return jsonify(response), 200
@@ -77,7 +77,7 @@ def copy():
 
         if(os.path.isdir(dest)):
             response = {
-                "message": 'Case <b>'+ case + '_copy</b> already exists, please rename existing case first!',
+                "message": 'Model <b>'+ case + '_copy</b> already exists, please rename existing model first!',
                 "status_code": "warning"
             }
         else:
@@ -87,7 +87,7 @@ def copy():
             genData['osy-casename'] = case_copy
             File.writeFile(genData, casePath)
             response = {
-                "message": 'Case <b>'+ case + '</b> copied!',
+                "message": 'Model <b>'+ case + '</b> copied!',
                 "status_code": "success"
             }
         return(response)
@@ -107,12 +107,12 @@ def deleteCase():
         if case == session.get('osycase'):
             session['osycase'] = None
             response = {
-                "message": 'Case <b>'+ case + '</b> deleted!',
+                "message": 'Model <b>'+ case + '</b> deleted!',
                 "status_code": "success_session"
             }
         else:
             response = {
-                "message": 'Case <b>'+ case + '</b> deleted!',
+                "message": 'Model <b>'+ case + '</b> deleted!',
                 "status_code": "success"
             }
         return jsonify(response), 200
@@ -240,7 +240,7 @@ def updateData():
             File.writeFile(sourceData, dataPath)
             #File.writeFileUJson(sourceData, dataPath)
             response = {
-                "message": "You have updated data!",
+                "message": "Your data has been saved!",
                 "status_code": "success"
             }      
         return jsonify(response), 200
@@ -300,7 +300,7 @@ def saveCase():
                 ###########################potrebno updateovati i resData ukoliko smo brisali ili dodavali scenarios
 
                 response = {
-                    "message": "You have change case general data!",
+                    "message": "Your model configuration has been updated!",
                     "status_code": "edited"
                 }
             #edit case sa drugim imenom, moramo provjeriit da li novo ime postoji u sistemu
@@ -323,13 +323,13 @@ def saveCase():
                     session['osycase'] = casename
                     
                     response = {
-                        "message": "You have change case general data!",
+                        "message": "Your model configuration has been updated!",
                         "status_code": "edited"
                     }
                 #ako vec postoji case sa istim imenom
                 else:
                     response = {
-                        "message": "Case with same name already exists!",
+                        "message": "Model with same name already exists!",
                         "status_code": "exist"
                     }
         #novi case 
@@ -361,18 +361,18 @@ def saveCase():
                     File.writeFile( viewData, viewDataPath)
 
                 response = {
-                    "message": "You have created new case!",
+                    "message": "Your model configuration has been saved!",
                     "status_code": "created"
                 }
             else:
                 response = {
-                    "message": "Case with same name already exists!",
+                    "message": "Model with same name already exists!",
                     "status_code": "exist"
                 }       
 
         return jsonify(response), 200
     except(IOError):
-        return jsonify('Error saving case IOError!'), 404
+        return jsonify('Error saving model IOError!'), 404
 
 @case_api.route("/prepareCSV", methods=['POST'])
 def prepareCSV():

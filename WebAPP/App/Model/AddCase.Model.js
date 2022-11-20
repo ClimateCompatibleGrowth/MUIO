@@ -11,7 +11,7 @@ export class Model {
       this.commNames = DataModel.CommName(genData);
       this.emiNames = DataModel.EmiName(genData);
       this.caserunByScenario = DataModel.getCaserunByScenario(genData, resData);
-      this.title = "Model";
+      this.title = "Model configuration";
       this.desc = genData['osy-desc'];
       this.date = genData['osy-date'];
       this.ns = genData['osy-ns'];
@@ -44,7 +44,7 @@ export class Model {
       this.commNames = { 'COM_0': 'COM_0' };
       this.emiNames = { 'EMI_0': 'EMI_0' };
       this.caserunByScenario = {'SC_0': []};
-      this.title = "Model";
+      this.title = "Model configuration";
       this.desc = null;
       this.date = null;
       this.ns = null;

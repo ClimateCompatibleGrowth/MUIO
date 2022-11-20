@@ -18,9 +18,11 @@
 				<fieldset>
 					<div class="form-inline">
 						<div class="btn-toolbar">
-							<button id="osy-saveRYTCndata" class="btn btn-success">
-								<i class="fa fa-save"></i> Save data 
-							 </button>
+							<div  class="btn-group pull-right">
+								<button id="osy-saveRYTCndata" class="btn btn-white btn-default">
+									<i class="fa fa-save fa-lg success"></i> Save data 
+								</button>
+							 </div>
                              <div  class="btn-group pull-right">
 								<button type="button" class="btn btn-default" id="showLog" data-toggle="tooltip" data-placement="top" title="Parameters definitions">
 									<i class="ace-icon fa fa-question-circle warning "></i>
@@ -99,12 +101,23 @@
 					<fieldset>
 						<div class="form-inline">
 							<div class="btn-toolbar">
-								<div  class="btn-group" id='scCommand' style="display: none;">
-									<select id="osy-scenarios" name="osy-scenarios" class="form-control pull-left"></select>
-									<select id="osy-conNames" name="osy-conNames" class="form-control pull-left"></select>
-									<select id="osy-techNames" name="osy-techNames" class="form-control pull-left"></select>
-									<button id="osy-openScData" class="btn btn-info " data-toggle="tooltip" data-placement="top" title="Open scenario data!"> <i class="fa fa-folder-open-o"></i></button>
-									<button id="osy-removeScData" class="btn btn-danger " title="Remove scenario data!">  <i class="fa fa-times"></i></button>
+								<div  class="btn-group">
+									<a data-toggle="dropdown" class="dropdown-toggle btn btn-white btn-default btn-block pull-left" href="#">
+										<i class="ace-icon fa  fa-line-chart fa-lg"></i>
+										<span class="badge badge-important bg-color-blue" id="scCount">8</span>
+									</a>
+									<ul class="dropdown-menu dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+										<li class="dropdown-header">
+											<i class="ace-icon fa fa-info-circle fa-lg primary"></i>
+											 Scenarios
+										</li>
+										<div class="btn-group" id='scCommand' style="display: none; padding: 10px;">
+											<select id="osy-scenarios" name="osy-scenarios" class="form-control pull-left"></select>
+											<button id="osy-openScData" class="btn btn-white btn-default" data-toggle="tooltip" data-placement="top" title="Open scenario data!"> <i class="fa fa-folder-open-o fa-lg info"></i></button>
+											<button id="osy-hideScData" class="btn btn-white btn-default" data-toggle="tooltip" data-placement="top" title="Hide scenario!"> <i class="fa fa-chain-broken fa-lg warning"></i></button>
+											<button id="osy-removeScData" class="btn tn-white btn-default" title="Remove scenario and data!">  <i class="fa fa-times fa-lg danger"></i></button>
+										</div>
+									</ul>
 								</div>
 								<div  class="btn-group pull-right">
 									<button type="button" class="btn btn-default" id="resizeColumns" data-toggle="tooltip" data-placement="top" title="Resize columns">

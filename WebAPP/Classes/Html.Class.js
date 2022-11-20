@@ -26,7 +26,7 @@ export class Html {
                         <tr>
                             <td>
                                 <b>
-                                    <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select Model">
+                                    <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select model">
                                         <span class="glyphicon 
                                         ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark osy-green `}
                                         fa-1.5x icon-btn"></span><span class="pointer">${value}</span>
@@ -41,27 +41,27 @@ export class Html {
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
-                                <span class="editPS " data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Edit Model">
+                                <span class="editPS " data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Configure model">
                                     <span class="glyphicon glyphicon-edit text-info icon-btn"></span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span class="backupCS" data-ps="${value}" 
-                                data-toggle="tooltip" data-placement="top" title="Backup Model" >
+                                data-toggle="tooltip" data-placement="top" title="Backup model" >
                                 <a href="backupCase?case=${value}"> <span class="glyphicon glyphicon-download-alt text-info icon-btn"></span></a>
                                
                                 </span>
                                 </td>
                             <td style="width:40px; text-align:center">
                                 <span data-toggle="modal" data-target="#modalcopy">
-                                <span class="copyCS" data-ps="${value}"' + 'id="copy_${value}"  data-toggle="tooltip" data-placement="top" title="Copy Model" >
+                                <span class="copyCS" data-ps="${value}"' + 'id="copy_${value}"  data-toggle="tooltip" data-placement="top" title="Copy model" >
                                 <span class="glyphicon glyphicon-duplicate text-info icon-btn"></span>
                                 </span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span>
-                                    <span class="deleteModel" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
+                                    <span class="deleteModel" data-ps="${value}"'+'data-toggle="tooltip" data-placement="top" title="Delete model">
                                         <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
                                     </span>
                                 </span>
