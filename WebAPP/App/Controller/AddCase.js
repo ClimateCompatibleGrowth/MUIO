@@ -603,7 +603,13 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue.trim();
+            console.log('newvalue ', args.newvalue)
+            if(typeof args.newvalue !== 'object'){
+                var value = args.newvalue.trim();
+            }else{
+                var value = args.newvalue;
+            }
+            
 
             if (column != 'CM' && column != 'Tag') {
                 model.constraints[rowBoundIndex][column] = value;
@@ -618,6 +624,7 @@ export default class AddCase {
                 }
                 model.constraints[rowBoundIndex][column] = array;
             } else if (column == 'Tag') {
+                console.log('eqyuality ', value.value)
                 model.constraints[rowBoundIndex][column] = value.value;
             }
         });
