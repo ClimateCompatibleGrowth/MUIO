@@ -259,6 +259,45 @@ export class Html {
 
     }
 
+    static importData() {
+        var container = $('#osy-currency');
+        container.empty();
+
+        $.each(CURRENCY, function (key, value) {
+            container.append(`<option value="${value}"> ${value} </option>`);
+        });
+
+        $("#osy-date").datepicker().datepicker("setDate", new Date());
+    }
+
+    static enableImportProcess() {
+        console.log('import SHOW')
+        $("#osy-process").removeAttr('disabled');
+        $('#osy-import').prop("disabled", true);
+        $("#osy-casename").prop("disabled", true);
+        $("#osy-desc").prop("disabled", true);
+        $("#osy-date").prop("disabled", true);
+        $("#osy-currency").prop("disabled", true);
+        $("#osy-data").prop("disabled", true);
+        $("#osy-newImport").show();
+    }
+
+    static newImportProcess() {
+        console.log('new import SHOW')
+        $("#osy-process").prop("disabled", true);
+
+        $('#osy-import').removeAttr('disabled');
+        $("#osy-casename").removeAttr('disabled');
+        $("#osy-desc").removeAttr('disabled');
+        $("#osy-date").removeAttr('disabled');;
+        $("#osy-currency").removeAttr('disabled');
+        $("#osy-data").removeAttr('disabled');
+        $("#osy-newImport").hide();
+
+        $("#osy-casename").val("");
+        $("#osy-desc").val("");
+    }
+
     static resData(model) {
         let desc = '';
         $.each(model.cases, function (id, csObj) {

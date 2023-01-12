@@ -12,6 +12,7 @@ import { MessageSelect } from "./MessageSelect.js";
 
 export default class RT {
     static onLoad(group, param) {
+        Message.loaderStart('Loading data...');
         Base.getSession()
             .then(response => {
                 let casename = response['session'];
@@ -27,6 +28,7 @@ export default class RT {
                     return Promise.all(promise);
                 } else {
                     MessageSelect.init(RT.refreshPage.bind(RT));
+                    Message.loaderEnd();
                 }
             })
             .then(data => {
@@ -37,6 +39,7 @@ export default class RT {
             })
             .catch(error => {
                 Message.warning(error);
+                Message.loaderEnd();
             });
     }
 
@@ -67,6 +70,7 @@ export default class RT {
     }
 
     static refreshPage(casename) {
+        Message.loaderStart('Loading data...');
         Base.setSession(casename)
             .then(response => {
                 const promise = [];
@@ -87,6 +91,7 @@ export default class RT {
             })
             .catch(error => {
                 Message.warning(error);
+                Message.loaderEnd();
             });
     }
 
@@ -366,5 +371,7 @@ export default class RT {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
+
+        Message.loaderEnd();
     }
 }

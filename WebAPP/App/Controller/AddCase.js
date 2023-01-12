@@ -116,7 +116,7 @@ export default class AddCase {
             }
             this._message = $("<span class='jqx-validator-error-label'>" + message + "</span>")
             this._message.appendTo("#yearsselectmsg");
-            Message.smallBoxWarning("Selection", "Case has to have one year at least!", 3000);
+            Message.smallBoxWarning("Selection", "Model has to have one year at least!", 3000);
             return this._message;
         }
 
@@ -124,9 +124,9 @@ export default class AddCase {
             hintType: 'label',
             animationDuration: 500,
             rules: [
-                { input: '#osy-casename', message: "Case name is required field!", action: 'keyup', rule: 'required' },
+                { input: '#osy-casename', message: "Model name is required field!", action: 'keyup', rule: 'required' },
                 {
-                    input: '#osy-casename', message: "Entered case name is not allowed!", action: 'keyup', rule: function (input, commit) {
+                    input: '#osy-casename', message: "Entered model name is not allowed!", action: 'keyup', rule: function (input, commit) {
                         var casename = $("#osy-casename").val();
                         var result = (/^[a-zA-Z0-9-_ ]*$/.test(casename));
                         return result;

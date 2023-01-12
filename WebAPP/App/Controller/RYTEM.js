@@ -10,6 +10,7 @@ import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTEM {
     static onLoad(group, param) {
+        Message.loaderStart('Loading data...');
         Base.getSession()
         .then(response => {
             let casename = response['session'];
@@ -55,6 +56,7 @@ export default class RYTEM {
             else if (error.status_code == 'ActivityError') {
                 MessageSelect.activity(RYTEM.refreshPage.bind(RYTEM), error.casename);
             }
+            Message.loaderEnd();
             Message.warning(error);
         });
     }
@@ -75,6 +77,7 @@ export default class RYTEM {
     }
 
     static refreshPage(casename) {
+        Message.loaderStart('Loading data...');
         Base.setSession(casename)
         .then(response => {
             const promise = [];
@@ -312,5 +315,7 @@ export default class RYTEM {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
+
+        Message.loaderEnd();
     }
 }

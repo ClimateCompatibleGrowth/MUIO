@@ -154,10 +154,13 @@ export default class Pivot {
         app.pivotChart = new wijmo.olap.PivotChart('#pivotChart', {
             //header: 'Country GDP',
             itemsSource: app.panel,
-            showLegend: 'Auto',
+            
             showTitle: false,
             legendPosition: 4,
-            stacking: 0,           
+            // showLegend: 'Auto',
+            // 
+            // stacking: 0,        
+
             //rotated: false
             //palette: wijmo.olap.Palettes['dark']
    
@@ -165,7 +168,7 @@ export default class Pivot {
 
         //app.pivotChart.dataLabel.position = 'Top';
 
-        //app.pivotChart.palette = Palettes.dark;
+        //app.pivotChart.palette = wijmo.olap.Palettes.
 
         app.cmbChartType = new wijmo.input.ComboBox('#cmbChartType', {
             itemsSource: app.chartTypes,

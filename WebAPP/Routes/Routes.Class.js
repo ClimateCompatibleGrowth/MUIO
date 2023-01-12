@@ -60,6 +60,15 @@ export class Routes {
                 });
             });
         });
+        crossroads.addRoute('/LegacyImport', function() {
+            $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
+            import('../App/Controller/LegacyImport.js')
+            .then(ViewData => {
+                $( ".osy-content" ).load( 'App/View/LegacyImport.html', function() {
+                    ViewData.default.onLoad();
+                });
+            });
+        });
         //dynamic routes
         function addAppRoute(group, id){
             return crossroads.addRoute(`/${group}/${id}`, function() {

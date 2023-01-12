@@ -1,7 +1,7 @@
 import { Message } from "../../Classes/Message.Class.js";
 import { Base } from "../../Classes/Base.Class.js";
 import { Html } from "../../Classes/Html.Class.js";
-import { Model } from "../Model/RESViewer.Model.js";
+import { Model } from "../Model/RESViewer.ModelTEST.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
@@ -37,6 +37,7 @@ export default class RESViewer {
     }
 
     static sankeySize(model){
+        console.log('model.techCount ', model.techCount)
         if(model.techCount <= 20){
             model.height = 620;
         }else if(model.techCount > 20 && model.techCount <= 50){
@@ -45,7 +46,7 @@ export default class RESViewer {
             model.height = 2000;
         }else if(model.techCount > 100 && model.techCount <= 150){
             model.height = 3000;
-        }else if(model.techCount > 150 && model.techCount <= 200){
+        }else if(model.techCount > 150 ){
             model.height = 6000;
         }
     }
@@ -113,9 +114,12 @@ export default class RESViewer {
         $("#renderSankey").on('click', function (e) {
             var items = $("#osy-activityTechs").jqxDropDownList('getCheckedItems'); 
             let techSelect = [];
+            
             $.each(items, function (index, obj) {
                 techSelect.push(obj.originalItem.TechId)
             });
+
+            console.log('techSelect ', techSelect)
 
             let modelNew = new Model(model.casename, model.genData, model.RYTCMdata, techSelect);
             

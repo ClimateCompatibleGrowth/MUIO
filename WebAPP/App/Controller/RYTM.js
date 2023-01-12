@@ -10,6 +10,7 @@ import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTM {
     static onLoad(group, param) {
+        Message.loaderStart('Loading data...');
         Base.getSession()
             .then(response => {
                 let casename = response['session'];
@@ -24,6 +25,7 @@ export default class RYTM {
                     promise.push(RYTMdata);
                     return Promise.all(promise);
                 } else {
+                    Message.loaderEnd();
                     MessageSelect.init(RYTM.refreshPage.bind(RYTM));
                 }
             })
@@ -34,6 +36,7 @@ export default class RYTM {
                 this.initEvents(model);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
@@ -57,6 +60,7 @@ export default class RYTM {
     }
 
     static refreshPage(casename) {
+        Message.loaderStart('Loading data...');
         Base.setSession(casename)
             .then(response => {
                 const promise = [];
@@ -76,6 +80,7 @@ export default class RYTM {
                 this.initEvents(model);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
@@ -273,5 +278,7 @@ export default class RYTM {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
+
+        Message.loaderEnd();
     }
 }

@@ -11,6 +11,7 @@ import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYCTs {
     static onLoad(group, param) {
+        Message.loaderStart('Loading data...');
         Base.getSession()
             .then(response => {
                 let casename = response['session'];
@@ -273,5 +274,7 @@ export default class RYCTs {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
+
+        Message.loaderEnd();
     }
 }

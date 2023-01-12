@@ -10,6 +10,7 @@ import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYE {
     static onLoad(group, param) {
+        Message.loaderStart('Loading data...');
         Base.getSession()
             .then(response => {
                 let casename = response['session'];
@@ -25,6 +26,7 @@ export default class RYE {
                     return Promise.all(promise);
                     ;
                 } else {
+                    Message.loaderEnd();
                     MessageSelect.init(RYE.refreshPage.bind(RYE));
                 }
             })
@@ -35,6 +37,7 @@ export default class RYE {
                 this.initEvents(model);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
@@ -57,6 +60,7 @@ export default class RYE {
     }
 
     static refreshPage(casename) {
+        Message.loaderStart('Loading data...');
         Base.setSession(casename)
             .then(response => {
                 const promise = [];
@@ -76,6 +80,7 @@ export default class RYE {
                 this.initEvents(model);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
@@ -263,5 +268,6 @@ export default class RYE {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
+        Message.loaderEnd();
     }
 }

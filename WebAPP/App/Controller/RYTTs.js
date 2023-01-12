@@ -10,6 +10,7 @@ import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTTs {
     static onLoad(group, param) {
+        Message.loaderStart('Loading data...');
         Base.getSession()
             .then(response => {
                 let casename = response['session'];
@@ -27,6 +28,7 @@ export default class RYTTs {
                     //console.log('performance get data from API ', performance.now() - start);
                     return Promise.all(promise);
                 } else {
+                    Message.loaderEnd();
                     MessageSelect.init(RYTTs.refreshPage.bind(RYTTs));
                 }
             })
@@ -41,6 +43,7 @@ export default class RYTTs {
                 //console.log('performance events ', performance.now() - start);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
@@ -63,6 +66,7 @@ export default class RYTTs {
     }
 
     static refreshPage(casename) {
+        Message.loaderStart('Loading data...');
         Base.setSession(casename)
             .then(response => {
                 const promise = [];
@@ -82,6 +86,7 @@ export default class RYTTs {
                 this.initEvents(model);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
@@ -344,5 +349,7 @@ export default class RYTTs {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
+
+        Message.loaderEnd();
     }
 }

@@ -10,6 +10,7 @@ import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYTCM {
     static onLoad(group, param) {
+        Message.loaderStart('Loading data...');
         Base.getSession()
             .then(response => {
                 let casename = response['session'];
@@ -30,6 +31,7 @@ export default class RYTCM {
                         "message": 'There is no model selected!',
                         "status_code": "CaseError"
                     }
+                    Message.loaderEnd();
                     return Promise.reject(er);
                     // MessageSelect.init(RYTCM.refreshPage.bind(RYTCM));
                     // throw new Error('No Model selected');
@@ -37,6 +39,7 @@ export default class RYTCM {
             })
             .then(data => {
                 let [casename, genData, PARAMETERS, RYTCMdata, cases] = data;
+                console.log('RYTCMdata ', RYTCMdata)
                 if (RYTCMdata[param]['SC_0'].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
@@ -57,12 +60,14 @@ export default class RYTCM {
                 else if (error.status_code == 'ActivityError') {
                     MessageSelect.activity(RYTCM.refreshPage.bind(RYTCM), error.casename);
                 }
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
 
     static initPage(model) {
         Message.clearMessages();
+        
 
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
@@ -84,6 +89,7 @@ export default class RYTCM {
     }
 
     static refreshPage(casename) {
+        Message.loaderStart('Loading data...');
         Base.setSession(casename)
             .then(response => {
                 const promise = [];
@@ -121,6 +127,7 @@ export default class RYTCM {
                     else if (error.status_code == 'ActivityError') {
                         MessageSelect.activity(RYTCM.refreshPage.bind(RYTCM), error.casename);
                     }
+                    Message.loaderEnd();
                     Message.warning(error.message);
                 }, 500);
             });
@@ -354,5 +361,7 @@ export default class RYTCM {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
+
+        Message.loaderEnd();
     }
 }

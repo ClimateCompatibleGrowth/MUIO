@@ -13,6 +13,7 @@ S3_KEY = os.environ.get("S3_KEY")
 S3_SECRET = os.environ.get("S3_SECRET")
 
 ALLOWED_EXTENSIONS = set(['zip', 'application/zip'])
+ALLOWED_EXTENSIONS_XLS = set(['xls', 'xlsx'])
 
 UPLOAD_FOLDER = Path('WebAPP')
 WebAPP_PATH = Path('WebAPP')

@@ -9,6 +9,7 @@ import { Sidebar } from "./Sidebar.js";
 
 export default class DataFile {
     static onLoad() {
+        Message.loaderStart('Loading data...');
         Base.getSession()
             .then(response => {
                 let casename = response.session;
@@ -26,10 +27,12 @@ export default class DataFile {
                 if (casename) {
                     this.initPage(model);
                 } else {
+                    Message.loaderEnd();
                     MessageSelect.init(DataFile.refreshPage.bind(DataFile));
                 }
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.danger(error);
             });
     }
@@ -53,6 +56,7 @@ export default class DataFile {
     }
 
     static refreshPage(casename) {
+        Message.loaderStart('Loading data...');
         Base.setSession(casename)
             .then(response => {
                 Message.clearMessages();
@@ -82,6 +86,7 @@ export default class DataFile {
                 DataFile.initEvents(model);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.bigBoxInfo(error);
             })
     }
@@ -328,6 +333,7 @@ export default class DataFile {
         $("#osy-generateDataFile").off('click');
         $("#osy-generateDataFile").on('click', function (event) {
             Pace.restart();
+            Message.loaderStart('Generating data file!')
             Osemosys.generateDataFile(model.casename, model.cs)
                 .then(response => {
                     if (response.status_code == "success") {
@@ -359,9 +365,11 @@ export default class DataFile {
                     }
                     //Message.clearMessages();
                     //Message.bigBoxSuccess('Generate message', message, 3000);
+                    Message.loaderEnd();
                     Message.smallBoxInfo('Generate message', message, 3000);
                 })
                 .catch(error => {
+                    Message.loaderEnd();
                     Message.bigBoxDanger('Error message', error, null);
                 })
         });
@@ -370,15 +378,14 @@ export default class DataFile {
         $("#osy-run").off('click');
         $("#osy-run").on('click', function (event) {
             Pace.restart();
-            $('#loadermain h4').text('Optimization in process!'); 
-            $('#loadermain').show();
+            Message.loaderStart('Optimization in process!')
             //promijenjeno da radimo samo sa cBCsolverom
             //let solver = $('input[name="solver"]:checked').val();
             let solver = 'cbc';
             Osemosys.run(model.casename, solver, model.cs)
             .then(response => {
                 if (response.status_code == "success") {
-                    $('#loadermain').hide();
+                    Message.loaderEnd();
                     $(".runOutput").show();
                     $(".lpOutput").show();
                     $(".Results").show();
@@ -395,7 +402,7 @@ export default class DataFile {
                     Message.successOsy('Optimiziation finished!');
                 }
                 if (response.status_code == "error") {
-                    $('#loadermain').hide();
+                    Message.loaderEnd();
                     $(".runOutput").show();
                     $(".lpOutput").show();
                     $(".Results").show();
@@ -404,17 +411,19 @@ export default class DataFile {
                     $("#osy-lpOutput").empty();
                     $("#osy-lpOutput").html('<pre class="log-output">' + response.glpk_message, response.glpk_stdmsg+ '</pre>');
                     Message.clearMessages();
-                    let errormsg
-                    if (response.stdmsg == "") {
-                        errormsg = 'Error occured during GLPK run!'
-                    } else {
-                        errormsg = response.stdmsg
-                    }
+                    let errormsg = '';
+                    if (response.glpk_message != "" || response.glpk_stdmsg != "") {
+                        errormsg += 'Error occured during creation of LP file, GLPK run! See LP file (GLPK) log for more details. '
+                    } 
+                    if (response.cbc_message != "" || response.cbc_stdmsg != "") {
+                        errormsg += 'Error occured during optimization process, CBC run! See CBC solver log for more details.'
+                    } 
+
                     Message.dangerOsy(errormsg);
                 }
             })
             .catch(error => {
-                $('#loadermain').hide();
+                Message.loaderEnd();
                 Message.bigBoxDanger('Error message', error, null);
             })
         });
@@ -439,9 +448,7 @@ export default class DataFile {
             $("#osy-run").hide();
 
             $(".runOutput").hide();
-            $(".lpOutput").hide();
-            $(".DataFile").show();
-            $(".Results").show();
+            $(".lpOutput").hide();            
 
             Osemosys.readDataFile(model.casename, model.cs)
             .then(response => {
@@ -454,9 +461,13 @@ export default class DataFile {
             })
             .then(data => {
                 let [DataFile, ResultCSV] = data;
-                if (DataFile && ResultCSV.length != 0) {
-                    Html.renderDataFile(DataFile, model);
+                if (ResultCSV.length != 0) {
+                    $(".Results").show();
                     Html.renderCSV(ResultCSV, model.cs)
+                } 
+                if (DataFile) {
+                    $(".DataFile").show();
+                    Html.renderDataFile(DataFile, model);
                 } 
                 else if(!DataFile && ResultCSV.length == 0){
                     $(".DataFile").hide();
@@ -551,6 +562,8 @@ export default class DataFile {
             //e.preventDefault();
             e.stopImmediatePropagation();
         });
+
+        Message.loaderEnd();
     }
 }
 

@@ -8,11 +8,16 @@ export class Model {
         let years = genData['osy-years'];
         let scenarios = genData['osy-scenarios'];
 
+        console.log('MOMDELS Start')
+        console.log('RYTCMdata.IAR.SC_0; ', RYTCMdata.IAR.SC_0.length)
+
         //let ActivityTechs = DataModel.activityTechs(genData['osy-tech']);
         let allActivityTechs = DataModel.getAllActivityTechs(genData['osy-tech'])
         let ActivityComms = DataModel.activityComms(genData);
         let TechNames = DataModel.TechName(genData);
         let CommNames = DataModel.CommName(genData);
+
+        console.log('allActivityTechs ', allActivityTechs) 
 
         // let TechUnits = DataModel.getTechUnits(genData);
         // let CommUnits = DataModel.getCommUnits(genData);
@@ -55,6 +60,8 @@ export class Model {
             });
         });
 
+        console.log('label ', label) 
+
 
         let source = [];
         let target = [];
@@ -92,6 +99,8 @@ export class Model {
                 }
             });
         });
+
+        console.log('source ', source) 
 
         // $.each(RYTCMdata, function (IO, obj) {
         //     $.each(obj, function (sc, array) {
@@ -141,13 +150,13 @@ export class Model {
         //var label = Object.keys(labelIndex);
 
 
-        // console.log('labelIndex ', labelIndex);
-        // console.log('label ', label);
-        // console.log('color ', color);
-        // console.log('source ', source);
-        // console.log('target ', target);
-        // console.log('value ', value);
-        // console.log('labelLink ', labelLink);
+        console.log('labelIndex ', labelIndex);
+        console.log('label ', label);
+        console.log('color ', color);
+        console.log('source ', source);
+        console.log('target ', target);
+        console.log('value ', value);
+        console.log('labelLink ', labelLink);
         // console.log('scenarios ', scenarios);
 
         this.casename = casename; 

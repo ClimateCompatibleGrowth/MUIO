@@ -10,6 +10,7 @@ import { MessageSelect } from "./MessageSelect.js";
 
 export default class RYT {
     static onLoad(group, param) {
+        Message.loaderStart('Loading data...');
         Base.getSession()
             .then(response => {
                 let start = performance.now();
@@ -28,6 +29,7 @@ export default class RYT {
 
                     return Promise.all(promise);
                 } else {
+                    Message.loaderEnd();
                     MessageSelect.init(RYT.refreshPage.bind(RYT));
                 }
             })
@@ -42,6 +44,7 @@ export default class RYT {
                 //console.log('performance events ', performance.now() - start);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
@@ -66,6 +69,7 @@ export default class RYT {
     }
 
     static refreshPage(casename) {
+        Message.loaderStart('Loading data...');
         Base.setSession(casename)
             .then(response => {
                 const promise = [];
@@ -85,6 +89,7 @@ export default class RYT {
                 this.initEvents(model);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
@@ -284,5 +289,6 @@ export default class RYT {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
+        Message.loaderEnd();
     }
 }

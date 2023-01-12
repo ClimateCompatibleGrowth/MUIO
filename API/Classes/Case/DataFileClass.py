@@ -1375,7 +1375,7 @@ class DataFile(Osemosys):
                 # out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
                 #out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfiletxt +'2>&1', cwd=cbcfolder,  capture_output=True, text=True, shell=True)
                 
-            if cbc_out.returncode != 0 and glpk_out.returncode != 0:
+            if cbc_out.returncode != 0 or glpk_out.returncode != 0:
             
                 response = {
                     "cbc_message": cbc_out.stdout,

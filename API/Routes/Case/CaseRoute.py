@@ -7,6 +7,7 @@ from API.Classes.Base import Config
 from API.Classes.Base.FileClass import File
 from API.Classes.Case.CaseClass import Case
 from API.Classes.Case.UpdateCaseClass import UpdateCase
+from API.Classes.Case.ImportTemplate import ImportTemplate
 from API.Classes.Base.SyncS3 import SyncS3
 
 case_api = Blueprint('CaseRoute', __name__)
@@ -120,25 +121,6 @@ def deleteCase():
         return jsonify('No existing cases!'), 404
     except OSError:
         raise OSError
-
-# @case_api.route("/getData", methods=['POST'])
-# def getData():
-#     try:
-#         start = time.time()
-#         casename = request.json['casename']
-#         dataJson = request.json['dataJson']
-#         if casename != None:
-#             dataPath = Path(Config.DATA_STORAGE,casename,dataJson)
-#             data = File.readFile(dataPath)
-#             diff = time.time() - start
-#             print('get data time ', diff)
-#             response = data   
-
-#         else:  
-#             response = None     
-#         return jsonify(response), 200
-#     except(IOError):
-#         return jsonify('No existing cases!'), 404
 
 @case_api.route("/getResultData", methods=['POST'])
 def getResultData():
@@ -415,6 +397,39 @@ def downloadCSV():
     except(IOError):
         return jsonify('No existing cases!'), 404
 
+
+@case_api.route("/importTemplate", methods=['POST'])
+def run():
+    try:
+        data = request.json['data']
+        template = ImportTemplate(data["osy-template"])
+        response = template.importProcess(data)
+ 
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+
+####################################################################################OBSOLETE AND SyncS3###################################################
+
+# @case_api.route("/getData", methods=['POST'])
+# def getData():
+#     try:
+#         start = time.time()
+#         casename = request.json['casename']
+#         dataJson = request.json['dataJson']
+#         if casename != None:
+#             dataPath = Path(Config.DATA_STORAGE,casename,dataJson)
+#             data = File.readFile(dataPath)
+#             diff = time.time() - start
+#             print('get data time ', diff)
+#             response = data   
+
+#         else:  
+#             response = None     
+#         return jsonify(response), 200
+#     except(IOError):
+#         return jsonify('No existing cases!'), 404
 
 # @case_api.route("/deleteResultsPreSync", methods=['POST'])
 # def deleteResultsPreSync():

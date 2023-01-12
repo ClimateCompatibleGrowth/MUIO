@@ -215,4 +215,12 @@ export class Message {
             //alert(ButtonPress + " " + Value);
         });
     }
+
+    static loaderStart(msg){
+        $('#loadermain h4').text(msg); 
+        $('#loadermain').show();
+    }
+    static loaderEnd(){
+        $('#loadermain').hide();
+    }
 }

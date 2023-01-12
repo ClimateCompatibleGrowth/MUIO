@@ -1,0 +1,167 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-7 col-md-7 col-lg-6">
+    <h2 class="page-title txt-color-blueDark" id="osy-title"><i class="fa-fw fa fa-home"></i> Parameters
+      <small>[Technology]</small> <span></span>
+    </h2>
+  </div>
+  <div class="col-xs-12 col-sm-5 col-md-5 col-lg-6">
+    <ul id="sparks" class="">
+      <li class="sparks-info">
+        <h5> Selected model: <span class="txt-color-blue" id="osy-case"></span></h5>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jarviswidget">
+  <div>
+    <div class="widget-body no-padding-bottom">
+      <fieldset>
+        <section>
+          <div class="row">
+            <div class="col-xs-12">
+              <blockquote>
+                <p class="lighter line-height-125">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+                </p>
+
+                <small>
+                  Someone famous
+                  <cite title="Source Title">Source Title</cite>
+                </small>
+              </blockquote>
+            </div>
+          </div>
+        </section>
+
+      </fieldset>
+    </div>
+  </div>
+</div>
+
+
+<div id="osy-caseForm">
+  <article class="col-sm-12 col-md-12 col-lg-12">
+    <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false"
+      data-widget-custombutton="false" data-widget-deletebutton="false">
+      <header>
+        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+        <h2> Import facility </h2>
+      </header>
+      <div>
+        <div class="jarviswidget-editbox"></div>
+        <div class="widget-body no-padding">
+          <div class="smart-form">
+
+            <fieldset>
+              <div class="row">
+                <section class="col col-2">
+                  <label class="label">Model name</label>
+                  <label class="input">
+                    <input type="text" placeholder="model name" name="osy-casename" id="osy-casename">
+                    <input type="hidden" id="osy-template" name="osy-template" value="">
+                  </label>
+                  <div class="note">
+                    <strong>!@#$%^&*()</strong> are not allowed in model name!
+                  </div>
+                </section>
+                <section class="col col-2">
+                  <label style="margin-top:7px">Select a date</label>
+                  <div class="input-group">
+                    <input type="text" name="osy-date" id="osy-date" placeholder="Select a date"
+                      class="form-control datepicker" data-dateformat="dd/mm/yy">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                  </div>
+                </section>
+                <section class="col col-1">
+                  <label class="label">Currency</label>
+                  <label class="select">
+                    <select id="osy-currency" class="input-sm" name="osy-currency"></select>
+                  </label>
+                </section>
+                <section class="col col-4">
+                  <label class="label">Model description</label>
+                  <label class="textarea">
+                    <textarea rows="2" class="custom-scroll" name="osy-desc" id="osy-desc"></textarea>
+                  </label>
+                  <div class="note">
+                    <strong>Note:</strong> description is not required field.
+                  </div>
+                </section>
+
+                <section class="col col-1">
+                  <label class="label">Include data</label>
+                  <div class="checkbox">
+                    <label class="block">
+                      <input name="form-field-checkbox" type="checkbox" class="checkbox input-lg" id="osy-data">
+                      <span class="lbl bigger-120"></span>
+                    </label>
+                  </div>
+                </section>
+
+
+
+
+                <section class="col col-2 center">
+
+                </section>
+
+              </div>
+            </fieldset>
+            <footer>
+
+              <button id="osy-process" class="btn btn-sm btn-danger" disabled>
+                <i class="fa fa-play fa-lg"></i> Start process
+              </button>
+
+              <button id="osy-import" class="btn btn-sm btn-primary">
+                <i class="fa fa-upload fa-lg"></i> Upload template
+              </button>
+              <button id="osy-newImport" class="btn btn-sm btn-white" style="display: none;">
+                <i class="fa fa-refresh fa-lg success"></i> New import
+              </button>
+
+            </footer>
+        </div>
+      </div>
+  </article>
+
+</div>
+
+
+<article class="col-sm-12 col-md-12 col-lg-12">
+  <div class="jarviswidget" id="wid-id-1" data-widget-colorbutton="false" data-widget-editbutton="false"
+    data-widget-custombutton="false" data-widget-deletebutton="false">
+    <header>
+      <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+      <h2> Import output </h2>
+    </header>
+    <div>
+      <div class="jarviswidget-editbox"></div>
+      <div class="widget-body no-padding">
+        <div class="smart-form">
+          <fieldset>
+            <section>
+              <div id="osy-importOutput"></div>
+            </section>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+</article>
+
+
+<!--Modal restore cs -->
+<div id="modalrestore" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Import legacy model via .xls template</h4>
+      </div>
+      <div class="modal-body">
+        <div class="dropzone" id="importDropzone"></div>
+      </div>
+    </div>
+  </div>
+</div>
