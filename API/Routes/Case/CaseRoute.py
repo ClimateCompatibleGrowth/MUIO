@@ -1,13 +1,13 @@
-from tokenize import group
-from flask import Blueprint, jsonify, request, session
+from flask import Blueprint, jsonify, request, session, send_file
 import os
 from pathlib import Path
 import shutil
-import time
+import pandas as pd
 from API.Classes.Base import Config
 from API.Classes.Base.FileClass import File
 from API.Classes.Case.CaseClass import Case
 from API.Classes.Case.UpdateCaseClass import UpdateCase
+from API.Classes.Case.ImportTemplate import ImportTemplate
 from API.Classes.Base.SyncS3 import SyncS3
 
 case_api = Blueprint('CaseRoute', __name__)
@@ -44,7 +44,10 @@ def getResultCSV():
         casename = request.json['casename']
         caserunname = request.json['caserunname']
         csvFolder = Path(Config.DATA_STORAGE,casename,"res", caserunname, "csv")
-        csvs = [ f.name for f in os.scandir(csvFolder) ]
+        if os.path.isdir(csvFolder):
+            csvs = [ f.name for f in os.scandir(csvFolder) ]
+        else:
+            csvs = []
         return jsonify(csvs), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
@@ -56,7 +59,7 @@ def getDesc():
         genDataPath = Path(Config.DATA_STORAGE,casename,"genData.json")
         genData = File.readFile(genDataPath)
         response = {
-            "message": "Get case description success",
+            "message": "Get model description success",
             "desc": genData['osy-desc']
         }
         return jsonify(response), 200
@@ -72,9 +75,10 @@ def copy():
 
         src =  Path(Config.DATA_STORAGE, case)
         dest =  Path(Config.DATA_STORAGE, case + '_copy')
+
         if(os.path.isdir(dest)):
             response = {
-                "message": 'Case <b>'+ case + '_copy</b> already exists, please rename existing case first!',
+                "message": 'Model <b>'+ case + '_copy</b> already exists, please rename existing model first!',
                 "status_code": "warning"
             }
         else:
@@ -84,7 +88,7 @@ def copy():
             genData['osy-casename'] = case_copy
             File.writeFile(genData, casePath)
             response = {
-                "message": 'Case <b>'+ case + '</b> copied!',
+                "message": 'Model <b>'+ case + '</b> copied!',
                 "status_code": "success"
             }
         return(response)
@@ -104,12 +108,12 @@ def deleteCase():
         if case == session.get('osycase'):
             session['osycase'] = None
             response = {
-                "message": 'Case <b>'+ case + '</b> deleted!',
+                "message": 'Model <b>'+ case + '</b> deleted!',
                 "status_code": "success_session"
             }
         else:
             response = {
-                "message": 'Case <b>'+ case + '</b> deleted!',
+                "message": 'Model <b>'+ case + '</b> deleted!',
                 "status_code": "success"
             }
         return jsonify(response), 200
@@ -117,25 +121,6 @@ def deleteCase():
         return jsonify('No existing cases!'), 404
     except OSError:
         raise OSError
-
-@case_api.route("/getData", methods=['POST'])
-def getData():
-    try:
-        start = time.time()
-        casename = request.json['casename']
-        dataJson = request.json['dataJson']
-        if casename != None:
-            dataPath = Path(Config.DATA_STORAGE,casename,dataJson)
-            data = File.readFile(dataPath)
-            diff = time.time() - start
-            print('get data time ', diff)
-            response = data   
-
-        else:  
-            response = None     
-        return jsonify(response), 200
-    except(IOError):
-        return jsonify('No existing cases!'), 404
 
 @case_api.route("/getResultData", methods=['POST'])
 def getResultData():
@@ -211,7 +196,6 @@ def saveScOrder():
         data = request.json['data']
         case = request.json['casename']
         genDataPath = Path(Config.DATA_STORAGE, case, 'genData.json')
-        # File.writeFile( data, configPath)
         genData = File.readFile(genDataPath)
         genData['osy-scenarios'] = data
         File.writeFile( genData, genDataPath)
@@ -235,9 +219,10 @@ def updateData():
         if case != None:
             sourceData = File.readFile(dataPath)
             sourceData[param] = data
-            File.writeFile( sourceData, dataPath)
+            File.writeFile(sourceData, dataPath)
+            #File.writeFileUJson(sourceData, dataPath)
             response = {
-                "message": "You have updated data!",
+                "message": "Your data has been saved!",
                 "status_code": "success"
             }      
         return jsonify(response), 200
@@ -294,30 +279,39 @@ def saveCase():
                 #update genData
                 File.writeFile( genData, genDataPath)
 
+                ###########################potrebno updateovati i resData ukoliko smo brisali ili dodavali scenarios
+
                 response = {
-                    "message": "You have change case general data!",
+                    "message": "Your model configuration has been updated!",
                     "status_code": "edited"
                 }
             #edit case sa drugim imenom, moramo provjeriit da li novo ime postoji u sistemu
             else:
                 if not os.path.exists(Path(Config.DATA_STORAGE,casename)):
+
                     #update modela 
                     caseUpdate = UpdateCase(case, genData)
                     caseUpdate.updateCase() 
+
                     #update gen data sa novim imenom
                     File.writeFile( genData, genDataPath)
+
+                    #nedostaje update resData u smislu novih ili izbirsanih scenarija
+
+
+
                     #rename case sa novim imenom
                     os.rename(Path(Config.DATA_STORAGE,case), Path(Config.DATA_STORAGE,casename ))
                     session['osycase'] = casename
                     
                     response = {
-                        "message": "You have change case general data!",
+                        "message": "Your model configuration has been updated!",
                         "status_code": "edited"
                     }
                 #ako vec postoji case sa istim imenom
                 else:
                     response = {
-                        "message": "Case with same name already exists!",
+                        "message": "Model with same name already exists!",
                         "status_code": "exist"
                     }
         #novi case 
@@ -349,19 +343,93 @@ def saveCase():
                     File.writeFile( viewData, viewDataPath)
 
                 response = {
-                    "message": "You have created new case!",
+                    "message": "Your model configuration has been saved!",
                     "status_code": "created"
                 }
             else:
                 response = {
-                    "message": "Case with same name already exists!",
+                    "message": "Model with same name already exists!",
                     "status_code": "exist"
                 }       
 
         return jsonify(response), 200
     except(IOError):
-        return jsonify('Error saving case IOError!'), 404
+        return jsonify('Error saving model IOError!'), 404
 
+@case_api.route("/prepareCSV", methods=['POST'])
+def prepareCSV():
+    try:
+        casename = request.json['casename']
+        jsonData = request.json['jsonData']
+
+        Pd = pd.DataFrame(jsonData)
+
+        i=0
+        for p_col in Config.PINNED_COLUMNS:
+            if p_col in Pd.columns:    
+                col = Pd[p_col]
+                Pd.drop(labels=[p_col], axis=1,inplace = True)
+                Pd.insert(i, p_col, col)
+                i=i+1
+
+        Pd.to_csv(Path(Config.DATA_STORAGE,casename,'export.csv'), index = None)
+
+        # Pd.to_excel(Path(Config.DATA_STORAGE,casename,'export.xlsx'))
+        
+        response = {
+            "message": 'CSV data downloaded!',
+            "status_code": "success"
+        }
+        return jsonify(response), 200
+
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+@case_api.route("/downloadCSV", methods=['GET'])
+def downloadCSV():
+    try:
+        casename = session.get('osycase', None)
+        dataFile = Path(Config.DATA_STORAGE,casename,'export.csv')
+        
+        dir = Path(Config.DATA_STORAGE,casename)
+        return send_file(dataFile.resolve(), as_attachment=True,mimetype='application/csv', cache_timeout=0)
+        #return send_from_directory(dir, 'export.csv', as_attachment=True)
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+
+@case_api.route("/importTemplate", methods=['POST'])
+def run():
+    try:
+        data = request.json['data']
+        template = ImportTemplate(data["osy-template"])
+        response = template.importProcess(data)
+ 
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
+
+####################################################################################OBSOLETE AND SyncS3###################################################
+
+# @case_api.route("/getData", methods=['POST'])
+# def getData():
+#     try:
+#         start = time.time()
+#         casename = request.json['casename']
+#         dataJson = request.json['dataJson']
+#         if casename != None:
+#             dataPath = Path(Config.DATA_STORAGE,casename,dataJson)
+#             data = File.readFile(dataPath)
+#             diff = time.time() - start
+#             print('get data time ', diff)
+#             response = data   
+
+#         else:  
+#             response = None     
+#         return jsonify(response), 200
+#     except(IOError):
+#         return jsonify('No existing cases!'), 404
 
 # @case_api.route("/deleteResultsPreSync", methods=['POST'])
 # def deleteResultsPreSync():

@@ -105,6 +105,14 @@ export class DataModel{
         return techNames;
     }
 
+    static TechGroupName(genData){
+        let techGroupNames = {};
+        $.each(genData['osy-techGroups'], function (id, obj) {
+            techGroupNames[obj.TechGroupId] = obj.TechGroup;
+        });
+        return techGroupNames;
+    }
+
     /////////////////////////////////////////////////
     //tech data by id
     static getTechData(genData){
@@ -310,6 +318,76 @@ export class DataModel{
         return ActivityTechs;
     }
 
+    static getAllActivityTechsSankey(techs, techSelect, TechNames){
+        let index = 0;
+        let ActivityTechs = {};
+        ActivityTechs['ddlTechs'] = [];
+        ActivityTechs['label'] = [];
+        ActivityTechs['color'] = [];
+        ActivityTechs['labelIndex'] = {};
+
+        ActivityTechs['actIAR'] = {};
+        ActivityTechs['actOAR'] = {};
+        let tmp = {};
+        $.each(techs, function (id, obj) {
+            if (obj.IAR.length != 0 || obj.OAR.length != 0) {
+                if (!(obj.TechId in tmp)){
+                    tmp[obj.TechId] = obj.Tech;
+                    let chunk = {};
+                    chunk['TechId'] = obj.TechId;
+                    chunk['Tech'] = obj.Tech;
+                    ActivityTechs['ddlTechs'].push(chunk)
+                } 
+                if (typeof ActivityTechs['labelIndex'][obj.TechId] === "undefined" ){
+                    if (techSelect == null){
+                        ActivityTechs['labelIndex'][obj.TechId] = index;
+                        ActivityTechs['label'].push(TechNames[obj.TechId]);
+                        index++;
+                        ActivityTechs['color'].push('#3a3f51');
+                    }else{
+                        if(techSelect.includes(obj.TechId)){
+                            ActivityTechs['labelIndex'][obj.TechId] = index;
+                            ActivityTechs['label'].push(TechNames[obj.TechId]);
+                            index++;
+                            ActivityTechs['color'].push('#3a3f51');
+                        }
+                    }
+                } 
+            }
+
+            if (obj.IAR.length != 0 ) {
+                $.each(obj.IAR, function (i, cIarId) {
+                    if (typeof ActivityTechs['actIAR'][cIarId] === "undefined") {
+                        ActivityTechs['actIAR'][cIarId] = [];
+                    }
+                    if (techSelect == null){
+                        ActivityTechs['actIAR'][cIarId].push(obj.TechId)
+                    }else{
+                        if(techSelect.includes(obj.TechId)){
+                            ActivityTechs['actIAR'][cIarId].push(obj.TechId)
+                        }
+                    }
+                })
+            }
+            if (obj.OAR.length != 0 ) {
+                $.each(obj.OAR, function (i, cIarId) {
+                    if (typeof ActivityTechs['actOAR'][cIarId] === "undefined") {
+                        ActivityTechs['actOAR'][cIarId] = [];
+                    }
+                    if (techSelect == null){
+                        ActivityTechs['actOAR'][cIarId].push(obj.TechId)
+                    }else{
+                        if(techSelect.includes(obj.TechId)){
+                            ActivityTechs['actOAR'][cIarId].push(obj.TechId)
+                        }
+                    }
+                    
+                })
+            }
+        });
+        return ActivityTechs;
+    }
+
     static activityComms(genData){
         let ActivityComms = {};
         ActivityComms['IAR'] = {};
@@ -438,6 +516,29 @@ export class DataModel{
             }
         });
         return ConstraintTechs;
+    }
+
+    static getCaserunByScenario(genData, resData){
+        let scenarios = genData["osy-scenarios"];
+        let caseruns = resData["osy-cases"];
+        let csbysc = {};
+        $.each(scenarios, function (i, objSc) {
+            csbysc[objSc.ScenarioId] = [];
+            if (caseruns.length != 0) {
+                console.log('caseruns ', caseruns)
+                console.log('objSc.ScenarioId ', objSc.ScenarioId)
+                $.each(caseruns, function (j, objCs) {
+                    $.each(objCs.Scenarios, function (k, objCsSc) {
+                        console.log('objCsSc ', objCsSc)
+                        if(objCsSc.Active == true && objSc.ScenarioId == objCsSc.ScenarioId){
+                            console.log('objSc.ScenarioId ', objSc.ScenarioId)
+                            csbysc[objSc.ScenarioId].push(objCs.Case)
+                        }
+                    });
+                });
+            }
+        });
+        return csbysc;
     }
     // static activityTechsComms(techs){
     //     let ActivityTechs = {};

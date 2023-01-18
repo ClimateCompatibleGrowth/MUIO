@@ -10,14 +10,19 @@ export class Grid {
         return theme
     }
 
-    static techsGrid(techs, commodities, emissions, commNames, emiNames) {
+    static techsGrid(techs, commodities, techGroups, emissions, commNames, emiNames, techGroupNames) {
 
         this.srcTechs = JqxSources.srcTech(techs);
+        this.srcTechGroups = JqxSources.srcTechGroup(techGroups);
         this.srcComms = JqxSources.srcComm(commodities);
         this.srcEmi = JqxSources.srcEmi(emissions);
         this.srcUnits = JqxSources.srcUnit(JSON.stringify(UNITS));
 
         this.daTechs = new $.jqx.dataAdapter(this.srcTechs);
+
+        this.daTechGroups = new $.jqx.dataAdapter(this.srcTechGroups, {
+            autoBind: true
+        });
         this.daComms = new $.jqx.dataAdapter(this.srcComms, {
             autoBind: true
         });
@@ -29,6 +34,21 @@ export class Grid {
 
         var ddlUnits = function (row, value, editor) {
             editor.jqxDropDownList({ source: this.daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true  });
+        }.bind(this);
+
+
+        var ddlTechGroups = function (row, value, editor) {
+            // let data = this.daComms.records;
+            let data = techGroups;
+            editor.jqxDropDownList({
+                source: this.daTechGroups, displayMember: 'TechGroup', valueMember: 'TechGroupId', checkboxes: true,
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    return tooltipContent
+                }
+                , filterable: true 
+            });
         }.bind(this);
 
         var ddlComms = function (row, value, editor) {
@@ -46,11 +66,6 @@ export class Grid {
                 , filterable: true 
             });
         }.bind(this);
-
-
-        // var ddlComms = function(row, value, editor) {
-        //     editor.jqxDropDownList({ source: this.daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true });
-        // }.bind(this);
 
         var ddlEmis = function (row, value, editor) {
             // let data = this.daEmi.records;
@@ -118,15 +133,24 @@ export class Grid {
         }
 
         var cellsrendererbutton = function (row, column, value) {
-            // var id = $("#osy-gridTech").jqxGrid('getrowid', row);
-            // if (id == 0) {
-            //     return '';
-            // }
             if (row == 0) {
                 return '';
             }
             return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTech" data-id=' + row + '><i class="fa  fa-minus-circle danger"></i>Delete</span>';
         }
+
+        var cellsrendererTechGroups = function (row, columnfield, value, defaulthtml, columnproperties) {
+            let valueNames = [];
+            if (Array.isArray(value)) {
+                var values = value;
+            } else {
+                var values = value.split(/,\s*/);
+            }
+            $.each(values, function (id, techGroupId) {
+                valueNames.push(techGroupNames[techGroupId])
+            });
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+        }.bind(this);
 
         var cellsrendererComms = function (row, columnfield, value, defaulthtml, columnproperties) {
             let valueNames = [];
@@ -140,7 +164,6 @@ export class Grid {
             });
             return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
         }.bind(this);
-
 
         var columnsrenderer = function (value) {
             return '<div style="text-align: center; margin-top: 12px; word-wrap:normal;white-space:normal;">' + value + '</div>';
@@ -191,7 +214,8 @@ export class Grid {
             columns: [
                 { text: 'techId', datafield: 'TechId', hidden: true },
                 { text: 'Technology', datafield: 'Tech', width: '10%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '16%', align: 'center', cellsalign: 'left' },
+                { text: 'Description', datafield: 'Desc', width: '10%', align: 'center', cellsalign: 'left' },
+                { text: 'Technology group', datafield: 'TG', width: '7%',  cellsrenderer: cellsrendererTechGroups, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlTechGroups, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
                 { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
                 { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
@@ -199,6 +223,56 @@ export class Grid {
                 { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+                { text: '', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false },
+            ]
+        });
+    }
+
+    static techGroupGrid(groups) {
+
+        let srcTechGroup = JqxSources.srcTechGroup(groups);
+        var daTechGroup = new $.jqx.dataAdapter(srcTechGroup);
+
+        var validation_1 = function (cell, value) {
+            var validationResult = true;
+            var rows = $('#osy-gridTechGroup').jqxGrid('getrows');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].TechGroup.trim() == value.trim() && i != cell.row) {
+                    validationResult = false;
+                    break;
+                }
+            };
+
+            if (validationResult == false) {
+                Message.smallBoxWarning("Input message", "Technology group name should be unique!", 3000);
+                return { result: false, message: "" };
+            }
+            return true;
+        }
+
+        var cellsrendererbutton = function (row, column, value) {
+            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
+            if (row == 0) {
+                return '';
+            }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTechGroup" data-id=' + row + ' ><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+        }
+
+        $("#osy-gridTechGroup").jqxGrid({
+            width: '100%',
+            autoheight: true,
+            columnsheight: 20,
+            theme: this.theme(),
+            source: daTechGroup,
+            editable: true,
+            selectionmode: 'none',
+            enablehover: false,
+            sortable:true,
+            showsortcolumnbackground: false,
+            columns: [
+                { text: 'TechGroupId', datafield: 'TechGroupId', hidden: true },
+                { text: 'Technology group name', datafield: 'TechGroup', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left' },
                 { text: '', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
             ]
         });
@@ -507,8 +581,7 @@ export class Grid {
         });
     }
 
-    static Grid($div, daGrid, columns, groupable = false, filterable = false, clipboard = true, editable=true) {
-
+    static Grid($div, daGrid, columns, {groupable = false, filterable = false, clipboard = true, editable=true, pageable=true, sortable= false, autoshowfiltericon=false}={}) {
         $div.jqxGrid({
             theme: this.theme(),
             width: '100%',
@@ -521,15 +594,15 @@ export class Grid {
             columnsresize: true,
             groupable: groupable,
             filterable: filterable,
-            sortable: true,
-            filtermode: 'excel',
-            autoshowfiltericon: true,
+            autoshowfiltericon: autoshowfiltericon,
+            sortable: sortable,
+            pageable: pageable,
+            pagesize: '20',
+            pagesizeoptions: ['20', '100', '250', '500', '750', '1000'],
+            // pagermode: "simple",
+            //filtermode: 'excel',
             enableellipsis: true,
             enablekeyboarddelete: false,
-            // pageable: true,
-            // pagerheight: 26,
-            // pagesize: 20,
-            // pagermode: "simple",
             editable: editable,
             altrows: true,
             clipboard: clipboard,
@@ -538,7 +611,6 @@ export class Grid {
             editmode: 'selectedcell',
             showsortcolumnbackground: false,
             showfiltercolumnbackground: false,
-            autoshowfiltericon: true,
             // virtualmode: true,
             // rendergridrows: rendergridrows,
             cellhover: function (element, pageX, pageY, record) {
@@ -590,106 +662,274 @@ export class Grid {
 
     }
 
-    // static pivotGrid(pivotData){
-    //     // $('#osy-pivotGridDesigner').empty();
-    //     // $('#osy-pivotGrid').empty();
-    //     var source =
-    //     {
-    //         localdata: pivotData,
-    //         datatype: "array",
-    //         datafields:
-    //         [
-    //             { name: 'Case', type: 'string' },
-    //             { name: 'Year', type: 'string' },
-    //             { name: 'Tech', type: 'string' },
-    //             { name: 'Comm', type: 'string' },
-    //             { name: 'MoId', type: 'number' },
-    //             { name: 'Ts', type: 'string' },
-    //             { name: 'Value', type: 'number' }
-    //         ]
-    //     };
+    static VirtualGrid($div, daGrid, columns, gridrows, groupable = false, filterable = false, clipboard = true, editable=true) {
 
-    //     var dataAdapter = new $.jqx.dataAdapter(source);
-    //     dataAdapter.dataBind();
-    // // create a pivot data source from the dataAdapter
-    // var pivotDataSource = new $.jqx.pivot(
-    //     dataAdapter,
-    //     {
-    //         // customAggregationFunctions: {
-    //         //     'var': function (values) {
-    //         //         if (values.length <= 1)
-    //         //             return 0;
-    //         //         // sample's mean
-    //         //         var mean = 0;
-    //         //         for (var i = 0; i < values.length; i++)
-    //         //             mean += values[i];
-    //         //         mean /= values.length;
-    //         //         // calc squared sum
-    //         //         var ssum = 0;
-    //         //         for (var i = 0; i < values.length; i++)
-    //         //             ssum += Math.pow(values[i] - mean, 2)
-    //         //         // calc the variance
-    //         //         var variance = ssum / values.length;
-    //         //         return variance;
-    //         //     }
-    //         // },
-    //         pivotValuesOnRows: false,
-    //         fields: [
-    //                 { dataField: 'Case', text: 'Case' },
-    //                  { dataField: 'Year', text: 'Year' },
-    //                  { dataField: 'Tech', text: 'Technology' },
-    //                  { dataField: 'Comm', text: 'Commodity' },
-    //                  { dataField: 'MoId', text: 'Mode of operation' },
-    //                  { dataField: 'Ts', text: 'Timeslice' },
-    //                  { dataField: 'Value', text: 'Value' }
-    //         ],
-    //         rows: [
-    //                 { dataField: 'Case', text: 'Case' , align: 'right'},
-    //                 { dataField: 'Tech', text: 'Technology' , align: 'right'},
-    //                 { dataField: 'Comm', text: 'Commodity', align: 'right' },
-    //                 { dataField: 'MoId', text: 'Mode of operation' , align: 'right'},
-    //                 { dataField: 'Ts', text: 'Timeslice', align: 'right' },
-    //         ],
-    //         columns: [{ dataField: 'Year', align: 'right' }],
-    //         // filters: [
-    //         //     {
-    //         //         dataField: 'Year',
-    //         //         text: 'Year',
-    //         //         filterFunction: function (value) {
-    //         //             if (value == "2020" || value == "2040")
-    //         //                 return false;
-    //         //             return true;
-    //         //         }
-    //         //     }
-    //         // ],
-    //         values: [
-    //             { dataField: 'Value', 'function': 'sum', text: 'Sum', align: 'left', formatSettings: { decimalPlaces: 2, align: 'right' }, 
-    //                  },
-    //             //{ dataField: 'price', 'function': 'count', text: 'Count', className: 'myItemStyle', classNameSelected: 'myItemStyleSelected' }
-    //         ]
-    //     });
+        var generatedata = function (startindex, endindex) {
+            var data = {};
+            for (var i = startindex; i < endindex; i++) {
+                data[i] = gridrows[i];
+            }
+            return data;
+        }
 
-    //     var localization = { 'var': 'Variance' };
-    //     // create a pivot grid
-    //     $('#osy-pivotGrid').jqxPivotGrid(
-    //     {
-    //         // theme:'bootstrap',
-    //         localization: localization,
-    //         source: pivotDataSource,
-    //         treeStyleRows: false,
-    //         autoResize: false,
-    //         multipleSelectionEnabled: true
-    //     });
-    //     var pivotGridInstance = $('#osy-pivotGrid').jqxPivotGrid('getInstance');
-    //     // create a pivot grid
-    //     $('#osy-pivotGridDesigner').jqxPivotDesigner(
-    //     {
-    //         type: 'pivotGrid',
-    //         theme:'bootstrap',
-    //         target: pivotGridInstance
-    //     });
-    // }
+        var rendergridrows = function (params) {
+            var data = generatedata(params.startindex, params.endindex);
+            return data;
+        }
+
+        $div.jqxGrid({
+            theme: this.theme(),
+            width: '100%',
+            //height:71+count*26,
+            autoheight: true,
+            autoshowloadelement: true,
+            rowsheight: 30,
+            source: daGrid,
+            columnsautoresize: true,
+            columnsresize: true,
+            //groupable: groupable,
+            filterable: filterable,
+            autoshowfiltericon: false,
+            sortable: true,
+            //pageable: true,
+            // pagesize: '20',
+            // pagesizeoptions: ['20', '100', '250', '500', '750', '1000'],
+            // pagermode: "simple",
+            virtualmode: true,
+            //filtermode: 'excel',
+            autoshowfiltericon: false,
+            enableellipsis: true,
+            enablekeyboarddelete: false,
+            editable: editable,
+            altrows: true,
+            clipboard: clipboard,
+            selectionmode: 'multiplecellsadvanced',
+            enablehover: true,
+            editmode: 'selectedcell',
+            showsortcolumnbackground: false,
+            showfiltercolumnbackground: false,
+            autoshowfiltericon: true,
+            virtualmode: true,
+            rendergridrows: rendergridrows,
+            cellhover: function (element, pageX, pageY, record) {
+
+                //var cellValue = $(element.innerHTML).find('span').html(); // you can remove if any element not required in tooltip here
+                var cellValue = $(element.innerHTML).text();
+
+                let tootltipValue;
+                var tooltipContent
+                $.each(daGrid.records, function (id, obj) {
+                    if (obj.Sc == cellValue) {
+                        tootltipValue = obj.ScDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+
+                    }
+                    else if (obj.Tech == cellValue) {
+                        tootltipValue = obj.TechDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                    else if (obj.Comm == cellValue) {
+                        tootltipValue = obj.CommDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                    else if (obj.Emis == cellValue) {
+                        tootltipValue = obj.EmiDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                    else if (obj.Con == cellValue) {
+                        tootltipValue = obj.ConDesc;
+                        tooltipContent = "<div>" + tootltipValue + "</div>";
+                        return;
+                    }
+                });
+
+                if (tootltipValue && tootltipValue.trim().length > 0) {
+                    $(element).jqxTooltip({ content: tooltipContent });
+                    $(element).jqxTooltip('open', pageX + 15, pageY + 15);
+                } else {
+                    $div.jqxTooltip('close');
+                }
+            },
+
+            columns: columns
+        });
+
+    }
+
+    // TEST FILTER 
+    static applyGridFilter($divGrid, years, sc = null) {
+        $divGrid.jqxGrid('clearfilters');
+        //filter column 2
+        if (sc !== null) {
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $.each(years, function (id, year) {
+            $divGrid.jqxGrid('addfilter', year, filtergroup1);
+        });
+
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
+
+    static applyRFilter($divGrid, sc = null) {
+        //$('#jqxLoader').jqxLoader('open');
+        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
+        $divGrid.jqxGrid('clearfilters');
+
+        //filter column 2
+        if (sc !== null) {
+
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $divGrid.jqxGrid('addfilter', 'value', filtergroup1);
+
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
+
+    static applyRTFilter($divGrid, techs, sc = null, param = null) {
+        //$('#jqxLoader').jqxLoader('open');
+        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
+        $divGrid.jqxGrid('clearfilters');
+
+        //filter column 2
+        if (sc !== null && param != null) {
+
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+
+            var filtergroup3 = new $.jqx.filter();
+            filtergroup3.operator = 'and';
+            var filtertype3 = 'stringfilter';
+            var filter_or_operator3 = 0;
+            var filtervalue3 = param;
+            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
+            filtergroup3.addfilter(filter_or_operator3, filter3);
+            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $.each(techs, function (id, tech) {
+            $divGrid.jqxGrid('addfilter', tech.TechId, filtergroup1);
+        });
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
     
+    static applyREFilter($divGrid, emis, sc = null, param = null) {
+        //$('#jqxLoader').jqxLoader('open');
+        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
+        $divGrid.jqxGrid('clearfilters');
+
+        //filter column 2
+        if (sc !== null && param != null) {
+
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+
+            var filtergroup3 = new $.jqx.filter();
+            filtergroup3.operator = 'and';
+            var filtertype3 = 'stringfilter';
+            var filter_or_operator3 = 0;
+            var filtervalue3 = param;
+            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
+            filtergroup3.addfilter(filter_or_operator3, filter3);
+            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $.each(emis, function (id, emi) {
+            $divGrid.jqxGrid('addfilter', emi.EmisId, filtergroup1);
+        });
+
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
+    
+    //Legacy filters
     static applyRYFilter($divGrid, years, sc = null) {
         //$('#jqxLoader').jqxLoader('open');
         //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
@@ -1327,140 +1567,6 @@ export class Grid {
         $.each(years, function (id, year) {
             $divGrid.jqxGrid('addfilter', year, filtergroup1);
         });
-
-        // // apply the filters.
-        $divGrid.jqxGrid('applyfilters');
-    }
-
-    static applyRTFilter($divGrid, techs, sc = null, param = null) {
-        //$('#jqxLoader').jqxLoader('open');
-        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
-        $divGrid.jqxGrid('clearfilters');
-
-        //filter column 2
-        if (sc !== null && param != null) {
-
-            var filtergroup2 = new $.jqx.filter();
-            filtergroup2.operator = 'and';
-            var filtertype2 = 'stringfilter';
-            var filter_or_operator2 = 0;
-            var filtervalue2 = sc;
-            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
-            filtergroup2.addfilter(filter_or_operator2, filter2);
-            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
-
-            var filtergroup3 = new $.jqx.filter();
-            filtergroup3.operator = 'and';
-            var filtertype3 = 'stringfilter';
-            var filter_or_operator3 = 0;
-            var filtervalue3 = param;
-            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
-            filtergroup3.addfilter(filter_or_operator3, filter3);
-            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
-        }
-
-        //filter colum 1 null values
-        var filtergroup1 = new $.jqx.filter();
-        filtergroup1.operator = 'or';
-        var filtertype1 = 'numericfilter';
-        var filter_or_operator1 = 1;
-        var filtervalue1 = null;
-        var filtercondition1 = 'NOT_NULL';
-
-        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
-        filtergroup1.addfilter(filter_or_operator1, filter1);
-        $.each(techs, function (id, tech) {
-            $divGrid.jqxGrid('addfilter', tech.TechId, filtergroup1);
-        });
-        // // apply the filters.
-        $divGrid.jqxGrid('applyfilters');
-    }
-
-    static applyREFilter($divGrid, emis, sc = null, param = null) {
-        //$('#jqxLoader').jqxLoader('open');
-        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
-        $divGrid.jqxGrid('clearfilters');
-
-        //filter column 2
-        if (sc !== null && param != null) {
-
-            var filtergroup2 = new $.jqx.filter();
-            filtergroup2.operator = 'and';
-            var filtertype2 = 'stringfilter';
-            var filter_or_operator2 = 0;
-            var filtervalue2 = sc;
-            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
-            filtergroup2.addfilter(filter_or_operator2, filter2);
-            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
-
-            var filtergroup3 = new $.jqx.filter();
-            filtergroup3.operator = 'and';
-            var filtertype3 = 'stringfilter';
-            var filter_or_operator3 = 0;
-            var filtervalue3 = param;
-            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
-            filtergroup3.addfilter(filter_or_operator3, filter3);
-            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
-        }
-
-        //filter colum 1 null values
-        var filtergroup1 = new $.jqx.filter();
-        filtergroup1.operator = 'or';
-        var filtertype1 = 'numericfilter';
-        var filter_or_operator1 = 1;
-        var filtervalue1 = null;
-        var filtercondition1 = 'NOT_NULL';
-
-        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
-        filtergroup1.addfilter(filter_or_operator1, filter1);
-        $.each(emis, function (id, emi) {
-            $divGrid.jqxGrid('addfilter', emi.EmisId, filtergroup1);
-        });
-
-        // // apply the filters.
-        $divGrid.jqxGrid('applyfilters');
-    }
-
-    static applyRFilter($divGrid, sc = null) {
-        //$('#jqxLoader').jqxLoader('open');
-        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
-        $divGrid.jqxGrid('clearfilters');
-
-        //filter column 2
-        if (sc !== null) {
-
-            var filtergroup2 = new $.jqx.filter();
-            filtergroup2.operator = 'and';
-            var filtertype2 = 'stringfilter';
-            var filter_or_operator2 = 0;
-            var filtervalue2 = sc;
-            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
-
-            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
-            filtergroup2.addfilter(filter_or_operator2, filter2);
-            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
-
-        }
-
-        //filter colum 1 null values
-        var filtergroup1 = new $.jqx.filter();
-        filtergroup1.operator = 'or';
-        var filtertype1 = 'numericfilter';
-        var filter_or_operator1 = 1;
-        var filtervalue1 = null;
-        var filtercondition1 = 'NOT_NULL';
-
-        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
-        filtergroup1.addfilter(filter_or_operator1, filter1);
-        $divGrid.jqxGrid('addfilter', 'value', filtergroup1);
 
         // // apply the filters.
         $divGrid.jqxGrid('applyfilters');

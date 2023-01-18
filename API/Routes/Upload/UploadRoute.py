@@ -16,6 +16,10 @@ upload_api = Blueprint('UploadRoute', __name__)
 def allowed_filename(filename):
     return '.' in filename and filename.rsplit('.',1)[1] in Config.ALLOWED_EXTENSIONS
 
+#File extension checking
+def allowed_filename_xls(filename):
+    return '.' in filename and filename.rsplit('.',1)[1] in Config.ALLOWED_EXTENSIONS_XLS
+
 def download_dir(prefix, local, bucket, client):
     """
     params:
@@ -168,7 +172,6 @@ def uploadCase():
                                 if name == '1.0' or name == '2.0':
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
 
-
                                     #add res view folders with json default files
                                     configPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
                                     vars = File.readParamFile(configPath)
@@ -208,6 +211,26 @@ def uploadCase():
                                         "casename": casename
                                     })
                                 elif name == '3.0': 
+                                    #potrebno dodati tech groups
+                                    #case = data.get('osy-casename', None)
+                                    zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                    genDataPath = Path(Config.DATA_STORAGE, casename, 'genData.json')
+                                    genData = File.readParamFile(genDataPath)
+                                    # genData["osy-techGroups"] = [{"TechGroup": "TG_0", "TechGroupId": "TG_0", "Desc": "Default technology group"}]
+                                    # for dic in genData["osy-tech"]:
+                                    #     dic["TG"] =["TG_0"]
+                                    genData["osy-techGroups"] = []
+                                    for dic in genData["osy-tech"]:
+                                        dic["TG"] =[]
+
+                                    File.writeFile( genData, genDataPath)
+
+                                    msg.append({
+                                        "message": "Model " + casename +" have been uploaded!",
+                                        "status_code": "success",
+                                        "casename": casename
+                                    })
+                                elif name == '4.0': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
@@ -216,7 +239,7 @@ def uploadCase():
                                     })
                                 else:
                                     msg.append({
-                                        "message": "Model " + casename +" is not valid OSEMOSYS ver 1.0, 2.0, 3.0 model!",
+                                        "message": "Model " + casename +" is not valid OSEMOSYS ver 1.0, 2.0, 3.0, 4.0 model!",
                                         "status_code": "error"
                                     })
                             else:
@@ -232,6 +255,47 @@ def uploadCase():
                         })
                 os.remove(os.path.join(Config.DATA_STORAGE, filename))
         
+        response = {
+            "response" :msg
+        }
+
+        return jsonify(response), 200
+    except(IOError):
+        raise IOError
+    except OSError:
+        raise OSError
+
+@upload_api.route('/uploadXls', methods=['POST'])
+def uploadXls():
+    try: 
+        msg = []
+        submitted_storage =  request.files.to_dict()
+        for files in submitted_storage.items():
+            file = files[1]
+            submitted_file = file.filename
+            
+            case = os.path.splitext(submitted_file)[0]
+
+            if submitted_file and allowed_filename_xls(submitted_file):
+                filename = secure_filename(submitted_file)
+                #spasiti zip u data storage
+                file.save(os.path.join(Config.DATA_STORAGE, filename))
+                #zipfiles = []
+
+                ##os.remove(os.path.join(Config.DATA_STORAGE, filename))
+        
+                msg.append({
+                    "message": "Template " + submitted_file +" have been uploaded!",
+                    "status_code": "success",
+                    "casename": case
+                })
+            else:
+                msg.append({
+                    "message": "Template " + submitted_file +" is not valid .xlsx file!",
+                    "status_code": "warning",
+                    "casename": case
+                })
+
         response = {
             "response" :msg
         }

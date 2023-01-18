@@ -194,6 +194,21 @@ export const UNITS =
     {id:"mm3",name:"10<sup>6</sup>m<sup>3</sup>", group: "Volume"},
     {id:"bm3",name:"10<sup>9</sup>m<sup>3</sup>", group: "Volume"},
 
+    {id:"vkm",name:"kms", group: "Transportation"},
+    {id:"vkm3",name:"10<sup>3</sup>kms", group: "Transportation"},
+    {id:"vkm6",name:"10<sup>6</sup>kms", group: "Transportation"},
+    {id:"vkm9",name:"10<sup>9</sup>kms", group: "Transportation"},
+
+    {id:"tkm",name:"tonne-kms", group: "Transportation"},
+    {id:"tkm3",name:"10<sup>3</sup>tonne-kms", group: "Transportation"},
+    {id:"tkm6",name:"10<sup>6</sup>tonne-kms", group: "Transportation"},
+    {id:"tkm9",name:"10<sup>9</sup>tonne-kms", group: "Transportation"},
+
+    {id:"pkm",name:"passenger-kms", group: "Transportation"},
+    {id:"pkm3",name:"10<sup>3</sup>passenger-kms", group: "Transportation"},
+    {id:"pkm6",name:"10<sup>6</sup>passenger-kms", group: "Transportation"},
+    {id:"pkm9",name:"10<sup>9</sup>passenger-kms", group: "Transportation"},
+
     {id:"103",name:"10<sup>3</sup>", group: "Counts"},
     {id:"106",name:"10<sup>6</sup>", group: "Counts"},
     {id:"109",name:"10<sup>9</sup>", group: "Counts"},

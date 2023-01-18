@@ -18,12 +18,15 @@
 				<fieldset>
 					<div class="form-inline">
 						<div class="btn-toolbar">
-							<button id="osy-saveRYTdata" class="btn btn-success">
-								Save data <i class="fa fa-save"></i>
-							 </button>
+
                              <div  class="btn-group pull-right">
 								<button type="button" class="btn btn-default" id="showLog" data-toggle="tooltip" data-placement="top" title="Parameters definitions">
-									<i class="ace-icon fa fa-question-circle warning "></i>
+									<i class="ace-icon fa fa-question-circle warning fa-lg"></i>
+								</button>
+							</div>
+							<div  class="btn-group pull-right">
+								<button id="osy-saveRYTdata" class="btn btn-white btn-default">
+									<i class="fa fa-save fa-lg success"></i> Save data
 								</button>
 							</div>
 							<select id="osy-ryt" name="osy-ryt" class="form-control inline"></select>			
@@ -53,23 +56,23 @@
 								
 								<div  class="btn-group pull-right">
 									<button type="button" class="btn btn-default toggleLabels" data-toggle="tooltip" data-placement="top" title="Labels on/off">
-										<i class="ace-icon fa fa-tags danger "></i>
+										<i class="ace-icon fa fa-tags danger fa-lg"></i>
 									</button>
 								</div>
 								<div  class="btn-group pull-right">
 									<button type="button" class="btn btn-default" id="exportPng" data-toggle="tooltip" data-placement="top" title="Export Chart as png">
-										<i class="ace-icon fa fa-file-image-o primary "></i>
+										<i class="ace-icon fa fa-file-image-o primary fa-lg"></i>
 									</button>
 								</div>
 								<div class="btn-group pull-right">
 									<button type="button" class="btn btn-default switchChart" id="stackedcolumn" data-chartType="stackedcolumn" id-chart="6"  data-toggle="tooltip" data-placement="top" title="Stacked Column Chart">
-										<i class="ace-icon fa fa-bars "></i>
+										<i class="ace-icon fa fa-bars fa-lg"></i>
 									</button>							
 									<button type="button" class="btn btn-default switchChart" id="coulmn" data-chartType="column" id-chart="6"  data-toggle="tooltip" data-placement="top" title="Stacked Area Chart">
-										<i class="ace-icon fa fa-bar-chart "></i>
+										<i class="ace-icon fa fa-bar-chart fa-lg"></i>
 									</button>
 									<button type="button" class="btn btn-default switchChart"  id="line" data-chartType="line" id-chart="6"  data-toggle="tooltip" data-placement="top" title="Line Chart">
-										<i class="ace-icon fa fa-line-chart "></i>
+										<i class="ace-icon fa fa-line-chart fa-lg"></i>
 									</button>
 								</div>
 							</div>
@@ -97,28 +100,40 @@
 					<fieldset>
 						<div class="form-inline">
 							<div class="btn-toolbar">
-								<div  class="btn-group" id='scCommand' style="display: none;">
-									<select id="osy-scenarios" name="osy-scenarios" class="form-control inline col-md-2"></select>
-									<button id="osy-openScData" class="btn btn-info " data-toggle="tooltip" data-placement="top" title="Open scenario data!"> <i class="fa fa-folder-open-o"></i></button>
-									<button id="osy-removeScData" class="btn btn-danger " title="Remove scenario data!">  <i class="fa fa-times"></i></button>
-
+								<div  class="btn-group">
+									<a data-toggle="dropdown" class="dropdown-toggle btn btn-white btn-default btn-block pull-left" href="#">
+										<i class="ace-icon fa  fa-line-chart fa-lg"></i>
+										<span class="badge badge-important bg-color-blue" id="scCount"></span>
+									</a>
+									<ul class="dropdown-menu dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+										<li class="dropdown-header">
+											<i class="ace-icon fa fa-info-circle fa-lg primary"></i>
+											 Scenarios
+										</li>
+										<div class="btn-group" id='scCommand' style="display: none; padding: 10px;">
+											<select id="osy-scenarios" name="osy-scenarios" class="form-control pull-left"></select>
+											<button id="osy-openScData" class="btn btn-white btn-default" data-toggle="tooltip" data-placement="top" title="Open scenario data!"> <i class="fa fa-folder-open-o fa-lg info"></i></button>
+											<button id="osy-hideScData" class="btn btn-white btn-default" data-toggle="tooltip" data-placement="top" title="Hide scenario!"> <i class="fa fa-chain-broken fa-lg warning"></i></button>
+											<button id="osy-removeScData" class="btn tn-white btn-default" title="Remove scenario and data!">  <i class="fa fa-times fa-lg danger"></i></button>
+										</div>
+									</ul>
 								</div>
 								<div  class="btn-group pull-right">
 									<button type="button" class="btn btn-default" id="resizeColumns" data-toggle="tooltip" data-placement="top" title="Resize columns">
-										<i class="ace-icon fa fa-arrows-h "></i>
+										<i class="ace-icon fa fa-arrows-h fa-lg"></i>
 									</button>
 								</div>
 								<div  class="btn-group pull-right">
 									<button type="button" class="btn btn-default" id="xlsAll" data-toggle="tooltip" data-placement="top" title="Exportgrid to excel">
-										<i class="ace-icon fa fa-file-excel-o green "></i>
+										<i class="ace-icon fa fa-file-excel-o green fa-lg"></i>
 									</button>
 								</div>
 								<div  class="btn-group pull-right">
 									<button type="button" class="btn btn-default" id="decDown" data-toggle="tooltip" data-placement="top" title="Decrease decimal places">
-										<sub>0.0  &nbsp; &nbsp; </sub> <i class="ace-icon fa fa-chevron-left"></i>
+										<sub>0.0  &nbsp; &nbsp; </sub> <i class="ace-icon fa fa-chevron-left fa-lg"></i>
 									</button>
 									<button type="button" class="btn btn-default"  id="decUp" data-toggle="tooltip" data-placement="top" title="Increase decimal places">
-										<sub>0.000</sub> <i class="ace-icon fa fa-chevron-right"></i>
+										<sub>0.000</sub> <i class="ace-icon fa fa-chevron-right fa-lg"></i>
 									</button>
 								</div>
 							</div>

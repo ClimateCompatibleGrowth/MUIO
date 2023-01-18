@@ -2,13 +2,13 @@ from pathlib import Path
 import pandas as pd
 import json
 import os
+from collections import defaultdict
 import subprocess
 from API.Classes.Base import Config
 from API.Classes.Case.OsemosysClass import Osemosys
 from API.Classes.Base.FileClass import File
 import pandas as pd
 from itertools import product
-
 
 class DataFile(Osemosys):
     # def __init__(self, case):
@@ -462,6 +462,31 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
+    def deleteScenarioCaseRuns(self, scenarioId):
+        try:
+            resData = File.readFile(self.resDataPath)
+            cases = resData['osy-cases']
+
+            for cs in cases:
+                for sc in cs['Scenarios']:
+                    if sc['ScenarioId'] == scenarioId:
+                        cs['Scenarios'].remove(sc)
+
+
+            File.writeFile(resData, self.resDataPath)
+            response = {
+                "message": "You have deleted scenario from caseruns!",
+                "status_code": "success"
+            } 
+
+
+            return response
+            # urllib.request.urlretrieve(self.dataFile, dataFile)
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+
     def updateCaseRun(self, caserunname, oldcaserunname, data):
         try:
             caseRunPath = Path(Config.DATA_STORAGE,self.case,'res', oldcaserunname)
@@ -532,23 +557,19 @@ class DataFile(Osemosys):
             for group, array in self.VARIABLES.items():
                 if group != 'RYS':
                     path = Path(self.viewFolderPath, group+'.json')
-                    jsonFile = File.readFile(path)
-                    for obj in array:
-                        if caserunname in jsonFile[obj['id']]:
-                            del jsonFile[obj['id']][caserunname]
+                    if path.is_file():
+                        jsonFile = File.readFile(path)
+                        for obj in array:
+                            if caserunname in jsonFile[obj['id']]:
+                                del jsonFile[obj['id']][caserunname]
 
-                    File.writeFile(jsonFile, path)
+                        File.writeFile(jsonFile, path)
                     
-
-
             response = {
                 "message": "You have deleted a case run!",
                 "status_code": "success"
             } 
 
-
-
-            
             return response
             # urllib.request.urlretrieve(self.dataFile, dataFile)
         except(IOError, IndexError):
@@ -1033,17 +1054,294 @@ class DataFile(Osemosys):
             df_emi.to_csv(os.path.join(base_folder, 'WebAPP','DataStorage',self.case,'res',caserunname,'csv', 'AnnualEmissions.csv'), index=None)
             all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
 
+    def preprocessData(self, data_infile, data_outfile):
+
+        lines = []
+
+        with open(data_infile, 'r') as f1:
+            for line in f1:
+                if not line.startswith(('set MODEper','set MODEx', 'end;')):
+                    lines.append(line)
+
+        with open(data_outfile, 'w') as f2:
+            f2.writelines(lines)
+
+        parsing = False
+        parsing_year = False
+        parsing_tech = False
+        parsing_fuel = False
+        parsing_mode = False
+        parsing_storage = False
+        parsing_emission = False
+
+        otoole = False
+
+        year_list = []
+        fuel_list = []
+        tech_list = []
+        storage_list = []
+        mode_list = []
+        emission_list = []
+
+        data_all = []
+        data_out = []
+        data_inp = []
+        output_table = []
+        storage_to = []
+        storage_from = []
+        emission_table = []
+
+        params_to_check = ['OutputActivityRatio', 
+                        'InputActivityRatio', 
+                        'TechnologyToStorage', 
+                        'TechnologyFromStorage', 
+                        'EmissionActivityRatio']
+
+        with open(data_infile, 'r') as f:
+            for line in f:
+                line = line.rstrip().replace('\t', ' ')
+                if line.startswith('# Model file written by *otoole*'):
+                    otoole = True
+                if parsing_year:
+                    year_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_fuel:
+                    fuel_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_tech:
+                    tech_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_storage:
+                    storage_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_mode:
+                    mode_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_emission:
+                    emission_list += [line.strip()] if line.strip() not in ['', ';'] else []
+
+                if line.startswith('set YEAR'):
+                    if len(line.split('=')[1]) > 1:
+                        year_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_year = True
+                if line.startswith('set COMMODITY'):  # Extracts list of COMMODITIES from data file. Some models use FUEL instead.
+                    if len(line.split('=')[1]) > 1:
+                        fuel_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_fuel = True
+                if line.startswith('set FUEL'):  # Extracts list of FUELS from data file. Some models use COMMODITIES instead.
+                    if len(line.split('=')[1]) > 1:
+                        fuel_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_fuel = True
+                if line.startswith('set TECHNOLOGY'):
+                    if len(line.split('=')[1]) > 1:
+                        tech_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_tech = True
+                if line.startswith('set STORAGE'):
+                    if len(line.split('=')[1]) > 1:
+                        storage_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_storage = True
+                if line.startswith('set MODE_OF_OPERATION'):
+                    if len(line.split('=')[1]) > 1:
+                        mode_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_mode = True
+                if line.startswith('set EMISSION'):
+                    if len(line.split('=')[1]) > 1:
+                        emission_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_emission = True
+
+                if line.startswith(";"):
+                    parsing_year = False
+                    parsing_tech = False
+                    parsing_fuel = False
+                    parsing_mode = False
+                    parsing_storage = False
+                    parsing_emission = False
+
+        start_year = year_list[0]
+
+        if not otoole:
+            with open(data_infile, 'r') as f:
+                for line in f:
+                    line = line.rstrip().replace('\t', ' ')
+                    if line.startswith(";"):
+                        parsing = False
+
+                    if parsing:
+                        if line.startswith('['):
+                            fuel = line.split(',')[2]
+                            tech = line.split(',')[1]
+                        elif line.startswith(start_year):
+                            years = line.rstrip(':= ;\n').split(' ')[0:]
+                            years = [i.strip(':=') for i in years]
+                        else:
+                            values = line.rstrip().split(' ')[1:]
+                            mode = line.split(' ')[0]
+
+                            if param_current =='OutputActivityRatio':
+                                data_out.append(tuple([fuel, tech, mode]))
+                                data_all.append(tuple([tech, mode]))
+                                for i in range(0,len(years)):
+                                    output_table.append(tuple([tech, fuel, mode, years[i], values[i]]))
+
+                            if param_current =='InputActivityRatio':
+                                data_inp.append(tuple([fuel, tech, mode]))
+                                data_all.append(tuple([tech, mode]))
+
+                            if param_current == 'TechnologyToStorage' or param_current == 'TechnologyFromStorage':
+                                if not line.startswith(mode_list[0]):
+                                    storage = line.split(' ')[0]
+                                    values = line.rstrip().split(' ')[1:]
+                                    for i in range(0, len(mode_list)):
+                                        if values[i] != '0':
+                                            if param_current == 'TechnologyToStorage':
+                                                storage_to.append(tuple([storage, tech, mode_list[i]]))
+                                                data_all.append(tuple([tech, mode_list[i]]))
+                                            if param_current == 'TechnologyFromStorage':
+                                                storage_from.append(tuple([storage, tech, mode_list[i]]))
+                                                data_all.append(tuple([tech, mode_list[i]]))
+
+                    if line.startswith(('param OutputActivityRatio',
+                                        'param InputActivityRatio',
+                                        'param TechnologyToStorage',
+                                        'param TechnologyFromStorage')):
+                        param_current = line.split(' ')[1]
+                        parsing = True
+
+        if otoole:
+            with open(data_infile, 'r') as f:
+                for line in f:
+                    details = line.split(' ')
+                    if line.startswith(";"):
+                        parsing = False
+                    if parsing:
+                        if len(details) > 1:
+                            if param_current == 'OutputActivityRatio':
+                                tech = details[1].strip()
+                                fuel = details[2].strip()
+                                mode = details[3].strip()
+                                year = details[4].strip()
+                                value = details[5].strip()
+
+                                if float(value) != 0.0:
+                                    data_out.append(tuple([fuel, tech, mode]))
+                                    output_table.append(tuple([tech, fuel, mode, year, value]))
+                                    data_all.append(tuple([tech, mode]))
+
+                            if param_current == 'InputActivityRatio':
+                                tech = details[1].strip()
+                                fuel = details[2].strip()
+                                mode = details[3].strip()
+                                value = details[5].strip()
+                                if float(value) != 0.0:
+                                    data_inp.append(tuple([fuel, tech, mode]))
+                                    data_all.append(tuple([tech, mode]))
+
+                            if param_current == 'TechnologyToStorage':
+                                tech = details[1].strip()
+                                storage = details[2].strip()
+                                mode = details[3].strip()
+                                value = details[4].strip()
+                                if float(value) > 0.0:
+                                    storage_to.append(tuple([storage, tech, mode]))
+                                    data_all.append(tuple([storage, mode]))
+
+                            if param_current == 'TechnologyFromStorage':
+                                tech = details[1].strip()
+                                storage = details[2].strip()
+                                mode = details[3].strip()
+                                value = details[4].strip()
+                                if float(value) > 0.0:
+                                    storage_from.append(tuple([storage, tech, mode]))
+                                    data_all.append(tuple([storage, mode]))
+
+                            if param_current == 'EmissionActivityRatio':
+                                tech = details[1].strip()
+                                emission = details[2].strip()
+                                mode = details[3].strip()
+                                value = details[5].strip()
+                                if float(value) != 0.0:
+                                    emission_table.append(tuple([emission, tech, mode]))
+                                    data_all.append(tuple([tech, mode]))
+
+                    if any(param in line for param in params_to_check):
+                        param_current = details[-2]
+                        parsing = True
+
+        data_out = list(set(data_out))
+        data_inp = list(set(data_inp))
+        data_all = list(set(data_all))
+        storage_to = list(set(storage_to))
+        storage_from = list(set(storage_from))
+        emission_table = list(set(emission_table))
+
+        dict_out = defaultdict(list)
+        dict_inp = defaultdict(list)
+        dict_all = defaultdict(list)
+        dict_stt = defaultdict(list)
+        dict_stf = defaultdict(list)
+
+        for fuel, tech, mode in data_out:
+            dict_out[fuel].append((mode, tech))
+
+        for fuel, tech, mode in data_inp:
+            dict_inp[fuel].append((mode, tech))
+
+        for tech, mode in data_all:
+            if mode not in dict_all[tech]:
+                dict_all[tech].append(mode)
+
+        for storage, tech, mode in storage_to:
+            dict_stt[storage].append((mode, tech))
+
+        for storage, tech, mode in storage_from:
+            dict_stf[storage].append((mode, tech))
+
+        def file_output_function(if_dict, str_dict, set_list, set_name, extra_char):
+            for each in set_list:
+                if each in if_dict.keys():
+                    line = set_name + str(each) + ']:=' + str(str_dict[each]) + extra_char
+                    if set_list == tech_list:
+                        line = line.replace(',', '').replace(':=[', ':= ').replace(']*', '').replace("'", "")
+                    else:
+                        line = line.replace('),', ')').replace('[(', ' (').replace(')]', ')').replace("'", "")
+                else:
+                    line = set_name + str(each) + ']:='
+                file_out.write(line + ';' + '\n')
+
+        # Append lines at the end of the data file
+        with open(data_outfile, 'w') as file_out:  # 'a' to open in 'append' mode
+
+            file_out.writelines(lines)
+
+            file_output_function(dict_out, dict_out, fuel_list, 'set MODExTECHNOLOGYperFUELout[', '')
+            file_output_function(dict_inp, dict_inp, fuel_list, 'set MODExTECHNOLOGYperFUELin[', '')
+            file_output_function(dict_all, dict_all, tech_list, 'set MODEperTECHNOLOGY[', '*')
+
+            if '' not in storage_list:
+                file_output_function(dict_stt, dict_stt, storage_list, 'set MODExTECHNOLOGYperSTORAGEto[', '')
+                file_output_function(dict_stf, dict_stf, storage_list, 'set MODExTECHNOLOGYperSTORAGEfrom[', '')
+
+            file_out.write('end;')
+
     def run( self, solver, caserunname ):
         try:
             self.dataFile = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data.txt')
+            self.dataFile_processed = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data_processed.txt')
             self.resFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'results.txt')
+            self.logFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'logfile.log')
+            self.logFileTxt = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'logfile.txt')
             self.lpFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'lp.lp')
             # self.resCBCPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', self.case, 'res')
             # self.resPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', self.case, 'res', 'csv')
 
             modelfile = '"{}"'.format(self.osemosysFile.resolve())
             datafile = '"{}"'.format(self.dataFile.resolve())
+            datafile_processed = '"{}"'.format(self.dataFile_processed.resolve())
             resultfile = '"{}"'.format(self.resFile.resolve())
+            logfile = '"{}"'.format(self.logFile.resolve())
+            logfiletxt = '"{}"'.format(self.logFileTxt.resolve())
             lpfile = '"{}"'.format(self.lpFile.resolve())
             
 
@@ -1052,30 +1350,48 @@ class DataFile(Osemosys):
             # respath = self.resPath.resolve()
             # resCBCPath = self.resCBCPath.resolve()
             if solver == 'glpk':
-
-                # print('glpk folder ', self.glpkFolder)
-                # print('glpk folder ', glpfolder)
                 out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
-                #out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.casePath,  capture_output=True, text=True, shell=False)
             else:
                 #Matrix generation (creates an LP file with GLPK): glpsol --check -m [model].txt -d [data].txt --wlp [LPfile].lp
                 #Optimisation (solves LP file with CBC): cbc [LPfile].lp solve -solu [results].txt
-                subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
-                # out = subprocess.run('cbc ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=self.cbcFolder,  capture_output=True, text=True, shell=True)
-                out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                #PREPROCESS data.txt
+                #subprocess.run('preprocess_data.py' + datafile + dataFile_processed)
+
+                self.preprocessData(self.dataFile, self.dataFile_processed)
+                #return output to variable
+                glpk_out = subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
+                ####output to logfile.txt
+                #subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile +'>'+  logfiletxt+'2>&1', cwd=glpfolder, text=True, shell=True)
+
+                # proc = subprocess.Popen('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder, text=True, shell=True)
+                # try:
+                #     outs, errs = proc.communicate(timeout=25)
+                # except:
+                #     proc.kill()
+                #     outs, errs = proc.communicate()
+
+                cbc_out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                ####output to lg file .log i .txt with errors
+                # out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                #out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfiletxt +'2>&1', cwd=cbcfolder,  capture_output=True, text=True, shell=True)
                 
-            if out.returncode != 0:
+            if cbc_out.returncode != 0 or glpk_out.returncode != 0:
             
                 response = {
-                    "message": out.stdout,
-                    "stdmsg": out.stderr,
+                    "cbc_message": cbc_out.stdout,
+                    "cbc_stdmsg": cbc_out.stderr,
+                    "glpk_message": glpk_out.stdout,
+                    "glpk_stdmsg": glpk_out.stderr,
                     "status_code": "error"
                 }
             else:
                 self.generateCSVfromCBC(self.dataFile, self.resFile, caserunname)
                 self.generateResultsViewer(caserunname)
                 response = {
-                    "message": out.stdout,
+                    "cbc_message": cbc_out.stdout,
+                    "cbc_stdmsg": cbc_out.stderr,
+                    "glpk_message": glpk_out.stdout,
+                    "glpk_stdmsg": glpk_out.stderr,
                     "status_code": "success"
                 }           
             return response
@@ -1092,7 +1408,9 @@ class DataFile(Osemosys):
             #CSV
             csvs = [f.name for f in os.scandir(csvFolderPath) ]
             # cases = [f.name for f in os.scandir(self.resultsPath) if not os.listdir(csvFolderPath) ]
-            cases = [f.name for f in os.scandir(self.resultsPath) ]
+
+            #uzeti samo caseRunove koji imaju csv fileve, sto znaci da su imalu success run
+            cases = [f.name for f in os.scandir(self.resultsPath) if os.path.isdir(Path(self.resultsPath, f.name, 'csv')) and len(os.listdir(Path(self.resultsPath, f.name, 'csv'))) != 0 ]
             
             paramByName = {}
             for group, array in self.VARIABLES.items():
@@ -1103,6 +1421,7 @@ class DataFile(Osemosys):
                     paramByName[obj['name']] = o
 
             DATA = {}
+            #updateje sve caserunove
             for case in cases:
                 for csv in csvs:
                     # df = pd.read_csv(Path('res','csv', csv))
@@ -1275,7 +1594,7 @@ class DataFile(Osemosys):
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                     f = open(path, mode="w")
                                     f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close    
+                                    f.close  
 
                                 if paramobj['group'] == 'RYCTs':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1392,7 +1711,7 @@ class DataFile(Osemosys):
                                     f = open(path, mode="w")
                                     f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
                                     f.close 
-
+                                    
                                 if paramobj['group'] == 'RYTCMTs':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
                                         DATA[paramobj['group']][paramobj['id']] = {}

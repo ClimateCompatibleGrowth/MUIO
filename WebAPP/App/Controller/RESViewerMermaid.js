@@ -36,7 +36,6 @@ export default class RESViewer {
     }
 
     static renderMermaid(){
-        console.log('render mermaid')
 		mermaid.init(undefined, document.querySelectorAll(".mermaid"));
 	}
 
@@ -59,16 +58,16 @@ export default class RESViewer {
         //     var graph = mermaid.mermaidAPI.render('graphDiv', graphDefinition, insertSvg); 
         // });
 
-        console.log( model.graphString)
+
         $('.mermaid').removeAttr('data-processed');
         $('.mermaid').empty();
         $('.mermaid').append(model.graphString);
-        console.log(' mermaid start')
+
         
         // mermaid.flowchartConfig = {
         //     width: '100%'
         // }
-        console.log(' mermaid init false')
+
         this.renderMermaid();
 
         Html.title(model.casename, 'Model diagram', '');

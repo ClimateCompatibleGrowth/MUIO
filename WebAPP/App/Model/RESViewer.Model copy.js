@@ -16,7 +16,6 @@ export class Model {
         let TechUnits = DataModel.getTechUnits(genData);
         let CommUnits = DataModel.getCommUnits(genData);
 
-        console.log('RYTCMdata ', RYTCMdata);
         // //console.log('ActivityTechs ', ActivityTechs);
         // console.log('ActivityComms ', ActivityComms);
         // console.log('TechNames ', TechNames);

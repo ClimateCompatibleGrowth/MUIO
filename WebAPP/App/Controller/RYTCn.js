@@ -70,13 +70,11 @@ export default class RYTCn {
 
         let $divGrid = $('#osy-gridRYTCn');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, true);
+        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false});
         if (model.scenariosCount > 1) {
-            $('#scCommand').show();
+            Html.lblScenario( model.scenariosCount);
             Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);
-            Html.ddlConNames(model.cons, model.cons[0]['ConId']);
-            Html.ddlTechNames(model.techs[model.cons[0]['ConId']], model.techs[model.cons[0]['ConId']][0]['TechId']);
-            Grid.applyRYTCnFilter($divGrid, model.years);
+            Grid.applyGridFilter($divGrid, model.years);
         }
 
         let $divChart = $('#osy-chartRYTCn');
@@ -100,7 +98,7 @@ export default class RYTCn {
             })
             .then(data => {
                 let [casename, genData, PARAMETERS, RYTCndata] = data;
-                if (RYTCndata['CM']['SC_0'].length == 0) {
+                if (RYTCndata['CCM']['SC_0'].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',
                         "status_code": "ActivityError",
@@ -205,10 +203,11 @@ export default class RYTCn {
             configChart.update();
         });
 
-        $("#osy-conNames").off('change');
-        $('#osy-conNames').on('change', function () {
-            let conId = model.conId[this.value]
-            Html.ddlTechNames(model.techs[conId], model.techs[conId][0]['TechId']);
+
+        $("#osy-scenarios").off('click');
+        $("#osy-scenarios").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
         });
 
         $("#osy-openScData").off('click');
@@ -216,9 +215,18 @@ export default class RYTCn {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $("#osy-scenarios").val();
-            var con = $("#osy-conNames").val();
-            var tech = $("#osy-techNames").val();
-            Grid.applyRYTCnFilter($divGrid, model.years, sc, tech, con);
+            Html.lblScenario(sc);
+            Grid.applyGridFilter($divGrid, model.years, sc);
+            Message.smallBoxInfo('Info', 'Scenario data opened!', 2000);
+        });
+
+        $("#osy-hideScData").off('click');
+        $("#osy-hideScData").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyGridFilter($divGrid, model.years);
+            Message.smallBoxInfo('Info', 'Scenario data hidden!', 2000);
         });
 
         $("#osy-removeScData").off('click');
@@ -226,18 +234,23 @@ export default class RYTCn {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $("#osy-scenarios").val();
-            var con = $("#osy-conNames").val();
-            var tech = $("#osy-techNames").val();
-            var rows = $divGrid.jqxGrid('getdisplayrows');
+            let rows = $divGrid.jqxGrid('getboundrows');
+
             $.each(rows, function (id, obj) {
-                if (obj.Sc == sc && obj.Emi == con && obj.Tech == tech) {
+                if (obj.Sc == sc) {
                     $.each(model.years, function (i, year) {
-                        $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                        //$divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                        model.gridData[model.param][id][year] = null;
                     });
-                    return false; // breaks
                 }
             });
-            Grid.applyRYTCnFilter($divGrid, model.years);
+
+            model.srcGrid.localdata = model.gridData;
+            $divGrid.jqxGrid('updatebounddata');
+
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyGridFilter($divGrid, model.years);
+            Message.smallBoxInfo('Info', 'Scenario data removed!', 2000);
         });
 
         let pasteEvent = false;

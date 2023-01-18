@@ -3,7 +3,7 @@ import { Html } from "./Html.Class.js";
 import { SyncS3 } from "./SyncS3.Class.js";
 
 export class Base {
-    static HEROKU = 1;
+    static HEROKU = 0;
     static AWS_SYNC = 0;
     //init sync flag to pull from S3 only one time when visit home page
     static INIT_SYNC = 1;
@@ -209,58 +209,33 @@ export class Base {
         });
     }
 
-    // static backupCaseStudy(casename) {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             url:Base.apiUrl() + "backupCase",
-    //             async: true,  
-    //             type: 'POST',
-    //             dataType: 'json',
-    //             data: JSON.stringify({ "casename": casename }),
-    //             contentType: 'application/json; charset=utf-8',
-    //             // credentials: 'include',
-    //             // xhrFields: { withCredentials: true},
-    //             // crossDomain: true,
-    //             success: function (result) {             
-    //                 resolve(result);
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-    //                 reject(error);
-    //             }
-    //         });
-    //     });
-    // }
-
-    // static backupCaseStudy(casename) {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             url:Base.apiUrl() + "backupCase?case="+casename,
-    //             async: true,  
-    //             type: 'GET',
-    //             dataType: 'json',
-    //             //data: JSON.stringify({ "casename": casename }),
-    //             contentType: 'application/json; charset=utf-8',
-    //             // credentials: 'include',
-    //             // xhrFields: { withCredentials: true},
-    //             // crossDomain: true,
-    //             success: function (result) {             
-    //                 resolve(result);
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-    //                 reject(error);
-    //             }
-    //         });
-    //     });
-    // }
+    static prepareCSV(casename, jsonData) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:this.apiUrl() + "prepareCSV",
+                async: true,  
+                type: 'POST',
+                data: JSON.stringify({ "casename": casename, 'jsonData':  jsonData}),
+                //dataType: "json",
+                contentType: 'application/json',
+                success: function (result) {          
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    //custom exception
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
 
     static uploadFunction = function () {
         var MyDropzone = new Dropzone("div#myDropzone", {
             //url: "http://127.0.0.1:5000/upload",
             url: Base.apiUrl() + "uploadCase",
             addRemoveLinks: true,
-            maxFilesize: 1000,
+            maxFilesize: 2048,//2GB upload size
             uploadMultiple: true,
             acceptedFiles: "application/zip, .zip",
             dictDefaultMessage: `
@@ -280,6 +255,7 @@ export class Base {
             //   }
             //   else { done(); }
             // },
+
             successmultiple: function (file, response) {
                 $.each(file, function (key, value) {
                     if (response.response[key]['status_code'] == 'success') {
@@ -311,6 +287,56 @@ export class Base {
             error: function (file, error) {
                 Message.bigBoxDanger("Upload response", file.name + " failed to upload! " + error + " Please remove from dropzone.", null);
             },
+            
         });
+    }
+
+        static uploadXls = function () {
+            var casename = $("#osy-casename").val().trim();
+            console.log('casename ', casename)
+            var MyDropzone = new Dropzone("div#importDropzone", {
+                //url: "http://127.0.0.1:5000/upload",
+                url: Base.apiUrl() + "uploadXls",
+                addRemoveLinks: true,
+                maxFilesize: 1024,//2GB upload size
+                uploadMultiple: false,
+                acceptedFiles: ".xlsx",
+                dictDefaultMessage: `
+                        <span class="text-center">
+                          <span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg">
+                            <i class="fa fa-caret-right text-danger"></i> Drop .xls template <span class="font-xs">to import
+                          </span>
+                        </span>
+                        <span>&nbsp&nbsp<h4 class="display-inline"> (Or Click)</h4></span> `,
+                dictResponseError: 'Error uploading file!',
+                dictFileTooBig: ` <i class="fa fa-caret-right text-danger"></i>Filers too big!`,
+                dictRemoveFile: `Remove Case!`,
+                dictInvalidFileType: "Not valid .xlsx file!",
+                success: function (file, response) {
+                    console.log('file ',file )
+                    console.log('response ', response)
+                    let res = response.response[0];
+                    if (res['status_code'] == 'success') {
+                        Html.enableImportProcess();
+                        Message.successOsy(res['message']);
+                        
+                        Message.bigBoxSuccess("Upload response", res['message'], 3000);
+                        $("#osy-template").val(file.name);
+                        $('#modalrestore').modal('toggle');
+
+                    } else if (res['status_code'] == 'warning') {
+                        Message.warningOsy(res['message']);
+                        $("#osy-newImport").show();
+                        Message.bigBoxWarning("Upload response", res['message'], null);
+                    } else if (res['status_code'] == 'error') {
+                        Message.dangerOsy(res['message'])
+                        $("#osy-newImport").show();
+                        Message.bigBoxDanger("Upload response", res['message'], null);
+                    }
+                },
+                error: function (file, error) {
+                    Message.bigBoxDanger("Upload response", file.name + " failed to upload! " + error + " Please remove from dropzone.", null);
+                },
+            });
     }
 }

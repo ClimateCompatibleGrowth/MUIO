@@ -9,12 +9,16 @@ export class Model {
         let param = 'ANC';
 
         let VARGROUPS = DataModelResult.getVarById(VARIABLES);
-        let pivotData = DataModelResult.getPivot(DATA, genData, VARIABLES, group, param);
-
-        console.log('DATA ', DATA)
-        console.log('pivotData ', pivotData)
+        console.log('VARGROUPS ', VARGROUPS)
         let VARNAMES = DataModel.AllParamName(VARIABLES);
+        console.log('VARNAMES ', VARNAMES)
+        let pivotData = DataModelResult.getPivot(DATA, genData, VARIABLES, group, param);
+        console.log('pivotData ', pivotData)
+
         let VIEWS = VIEW['osy-views'];
+
+        console.log('DATA', DATA)
+        console.log('pivot Data', pivotData)
 
         this.casename = casename;
         this.genData = genData;

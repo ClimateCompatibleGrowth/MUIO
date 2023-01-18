@@ -22,7 +22,7 @@ html {
 }
 /* Optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
-    background: #FF0000;
+    background: #d9d9d9 !important;
 }
 
 .page-footer {
@@ -130,14 +130,17 @@ html {
     color: #777!important;
 }
 
-/* .bigBox {
-    right: 5px;
-    top: 50px;
-
+.btn-osy-green {
+    color: #fff;
+    background-color: var(--second-color)!important;
+    border-color: var(--second-darker-color)!important;
 }
-#divMiniIcons {
-top: 10px;
-} */
+
+.btn-osy-red {
+    color: #fff;
+    background-color: #d9534f!important;
+    border-color: #d9534f!important;
+}
 
 #sparks li h5 {
     margin: 0px!important;
@@ -205,43 +208,6 @@ top: 10px;
      border-color:  var(--main-lighter-color)!important;
 }
 
-/*loader*/
-
-.loader {
-    border: 12px solid #ccc; 
-    border-top: 12px solid var(--second-color);
-    border-radius: 50% !important;
-    width: 80px;
-    height: 80px;
-    animation: spin 1s linear infinite;
-    position:fixed;
-    top:30%;
-    left:45%;
-    z-index: 999999;
-}
-
- #loadermain h4 {
-    width: 120px;
-    height: 120px;
-    position:fixed;
-    top:45%;
-    left:42.5%;
-    text-align: center;
-    z-index: 999999;
-}
-
-#loadermain{
-    background-color:transparent;
-    width:100%;
-    height:100%;
-    opacity:0.7;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 99999;
-}  
 
 /*bootsratb jqx grid ***********/
 .jqx-widget-header-bootstrap {
@@ -386,31 +352,7 @@ top: 10px;
         width: 89%!important;
     }
 
-    /* .jarviswidget {
-        border-top: 1px solid var(--second-color)!important ;
-    } */
 
-    /* #osy-unitRuleSort {
-        list-style-type: none;
-        margin: 2px;
-        padding: 5px;
-        float: left;
-        width: 312px;
-        border: lightblue solid 2px;
-    }
-    #osy-unitRuleSort div {
-            margin: 1px;
-            background-color: lightblue;
-            border: DodgerBlue solid 1px;
-            padding: 0;
-            float: left;
-            padding-left: 0;
-            text-align: center;
-            cursor: pointer;
-            font-size: 5.8em;
-            width: 100px;
-            height: 100px;
-        } */
 
         .osy-unitRuleSort {
             list-style-type: 'horizontal';
@@ -440,14 +382,14 @@ top: 10px;
 
 /*loader*/
 .loader {
-    border: 16px solid #ccc; /* Light grey */
-    border-top: 16px solid var(--main-color) !important; /* Blue */
+    border: 14px solid var(--main-color); /* Light grey */
+    border-top: 14px solid var(--second-darker-color) !important; /* Blue */
     border-radius: 50% !important;
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     animation: spin 2s linear infinite;
     position:fixed;
-    top:30%;
+    top:33%;
     left:45%;
     z-index: 999999!important;
 }
@@ -457,7 +399,7 @@ top: 10px;
     height: 120px;
     position:fixed;
     top:45%;
-    left:42.5%;
+    left:42%;
     text-align: center;
     z-index: 999999!important;
 }
@@ -507,6 +449,23 @@ top: 10px;
     100% { transform: rotate(360deg); }
 }
 
+@keyframes pulse {
+    0% {
+          transform: scale(.5);
+          background-color: var(--main-color);
+          border-radius: 100%;
+      }
+
+      50% {
+          background-color:var(--second-color)
+      }
+
+      100% {
+          transform: scale(2.0);
+          background-color: var(--second-darker-color);
+      }
+}
+
 .gridTooltip{
     width: 100%; 
     height: 100%;
@@ -553,4 +512,66 @@ svg[id^="mermaid-"] {
     min-width: 500px!important; 
     width: 1800px!important;
     max-width: 2200px!important; 
+}
+
+
+.alert-success-osy {
+    border-color: #3c763d;
+    border-width: 2px;
+    color: #3c763d;
+}
+
+.alert-danger-osy {
+    border-color: #d9534f;
+    border-width: 2px;
+    color: #d9534f;
+}
+.alert-info-osy {
+    border-color: #5bc0de;
+    border-width: 2px;
+    color: #5bc0de;
+}
+
+.alert-warning-osy {
+    border-color: #f0ad4e;
+    border-width: 2px;
+    color: #f0ad4e;
+}
+
+.log-output{
+    height: 675px; 
+    overflow: auto;
+}
+
+
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+
+
+.dropdown-header {
+    display: block;
+    padding: 3px 20px;
+    font-size: 12px;
+    line-height: 1.42857143;
+    color: #999;
+    white-space: nowrap;
+}
+*, :after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+user agent stylesheet
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+.dropdown-menu {
+
+    min-width: 280px!important;
+
 }

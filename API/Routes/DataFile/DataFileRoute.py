@@ -85,6 +85,20 @@ def deleteCaseRun():
     except OSError:
         raise OSError
 
+@datafile_api.route("/deleteScenarioCaseRuns", methods=['POST'])
+def deleteScenarioCaseRuns():
+    try:
+        scenarioId = request.json['scenarioId']
+        casename = request.json['casename']
+
+        if casename != None:
+            caserun = DataFile(casename)
+            response = caserun.deleteScenarioCaseRuns(scenarioId)
+     
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
+
 @datafile_api.route("/saveView", methods=['POST'])
 def saveView():
     try:

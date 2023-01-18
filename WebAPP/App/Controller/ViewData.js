@@ -9,6 +9,7 @@ import { MessageSelect } from "./MessageSelect.js";
 
 export default class ViewData {
     static onLoad() {
+        Message.loaderStart('Loading data...');
         Base.getSession()
             .then(response => {
                 let casename = response['session'];
@@ -28,6 +29,7 @@ export default class ViewData {
                     return Promise.all(promise);
                     ;
                 } else {
+                    Message.loaderEnd();
                     MessageSelect.init(ViewData.refreshPage.bind(ViewData));
                 }
             })
@@ -38,6 +40,7 @@ export default class ViewData {
                 this.initEvents(model);
             })
             .catch(error => {
+                Message.loaderEnd();
                 Message.warning(error);
             });
     }
@@ -61,7 +64,7 @@ export default class ViewData {
     }
 
     static refreshPage(casename) {
-        //$('#loadermain').show(); 
+        Message.loaderStart('Loading data...');
         Pace.restart();
         Base.setSession(casename)
             .then(response => {
@@ -86,6 +89,7 @@ export default class ViewData {
 
             })
             .catch(error => {
+                Message.loaderEnd();
                 //$('#loadermain').hide(); 
                 Message.warning(error);
             });
@@ -413,5 +417,7 @@ export default class ViewData {
             `);
             $('#definition').toggle('slow');
         });
+
+        Message.loaderEnd();
     }
 }

@@ -173,6 +173,26 @@ export class Osemosys {
         });
     }
 
+    static deleteScenarioCaseRuns(casename, scenarioId) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "deleteScenarioCaseRuns",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename,"scenarioId": scenarioId }),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
     static updateCaseRun(casename, caserunname, oldcaserunname, data) {
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -262,89 +282,71 @@ export class Osemosys {
         });
     }
 
-    // static downloadDataFile(casename) {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             url:Base.apiUrl() + "downloadDataFile",
-    //             async: true,  
-    //             type: 'POST',
-    //             dataType: 'json',
-    //             data: JSON.stringify({ "casename": casename }),
-    //             contentType: 'application/json; charset=utf-8',
-    //             // credentials: 'include',
-    //             // xhrFields: { withCredentials: true},
-    //             // crossDomain: true,
-    //             success: function (result) {             
-    //                 resolve(result);
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-    //                 reject(error);
-    //             }
-    //         });
-    //     });
+    // static getData(casename, dataJson) {
+    //     return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"})  // return this promise
+    //     .then(response => response.json())
+    //     .catch(error => error);
     // }
 
     static getData(casename, dataJson) {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url:Base.apiUrl() + "getData",
-                async: true,  
-                type: 'POST',
-                dataType: 'json',
-                data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
-                contentType: 'application/json; charset=utf-8',
-                success: function (result) {                  
-                    resolve(result);
-                },
-                error: function(xhr, status, error) {
-                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-                    reject(error);
+        // return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"})
+        // .then(response => response.json())
+        // .catch(error => error);
+
+        return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"}) 
+            .then((response) => {
+                if (response.ok) {
+                    console.log('response ', response)
+                    //console.log('data ', response.json())
+                return response;
                 }
+                throw new Error('No casename selecetd');
+            })
+            .then(response => response.json())
+            .catch(error => null);
+    }
+
+    static getData_(casename, dataJson) {
+        return  fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"})
+        .then((response) => {
+            if (response.status !== 200) {
+              console.log('Looks like there was a problem. Status Code: ' + response.status);
+              return response;
+            }
+            // Examine the text in the response
+            response.json().then(function(data) {
+              console.log(data);
             });
+        })
+        .then(response => response.json())
+        .catch(function(err) {
+          console.log('Fetch Error :-S', err);
         });
     }
 
     static getResultData(casename, dataJson) {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url:Base.apiUrl() + "getResultData",
-                async: true,  
-                type: 'POST',
-                dataType: 'json',
-                data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
-                contentType: 'application/json; charset=utf-8',
-                success: function (result) {                  
-                    resolve(result);
-                },
-                error: function(xhr, status, error) {
-                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-                    reject(error);
-                }
-            });
-        });
-    }
+        // return new Promise((resolve, reject) => {
+        //     fetch('../../DataStorage/'+casename+'/view/' +dataJson, {cache: "no-store"})
+        //     .then(DATA => {
+        //         DATA = DATA.json();
+        //         resolve(DATA);
+        //     })
+        //     .catch(error => {
+        //         if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+        //         reject(error);
+        //     });
+        // });
 
-    // static getDataDirectly(casename, jsonFile) {
-    //     return new Promise((resolve, reject) => {
-    //         $.ajax({
-    //             //url:Base.apiUrl() + "getData",
-    //             url: 'WebAPP/DataStorage/'+casename+'/'+jsonFile,
-    //             async: true,  
-    //             type: 'GET',
-    //             dataType: 'json',
-    //             //data: JSON.stringify({ "casename": casename, "dataJson": dataJson }),
-    //             contentType: 'application/json; charset=utf-8',
-    //             success: function (result) {             
-    //                 resolve(result);
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
-    //                 reject(error);
-    //             }
-    //         });
-    //     });
-    // }
+        return fetch('../../DataStorage/'+casename+'/view/' +dataJson, {cache: "no-store"})
+            .then((response) => {
+            if (response.ok) {
+            return response;
+            }
+            throw new Error('No casename selecetd');
+            })
+            .then(response => response.json())
+            .catch(error => null);
+    }
 
     static updateData(data, param, dataJson) {
         return new Promise((resolve, reject) => {
@@ -385,6 +387,21 @@ export class Osemosys {
             });
         });
     }
+
+    // static viewData(casename) {
+    //     return fetch(Base.apiUrl() + "viewData", {
+    //         cache: "no-store",
+    //         method: 'POST',
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //           },
+    //         body: JSON.stringify({ "casename": casename })
+    //     })  // return this promise
+    //     .then(response => response.json())
+    //     .catch(error => error);
+    // }
+
 
     static viewTEData(casename) {
         return new Promise((resolve, reject) => {
@@ -436,6 +453,26 @@ export class Osemosys {
                 dataType: 'json',
                 data: JSON.stringify({ "casename": casename, scId:ScId,
                  groupId: GroupId, paramId: ParamId, techId: TechId, emisId: EmisId, value: value}),
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    static importTemplate(data) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "importTemplate",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({"data": data }),
                 contentType: 'application/json; charset=utf-8',
                 success: function (result) {             
                     resolve(result);

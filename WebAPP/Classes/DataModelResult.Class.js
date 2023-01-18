@@ -28,11 +28,19 @@ export class DataModelResult{
     }
 
     static getTechData(genData){
-        let techNames = {};
+        let techData = {};
         $.each(genData['osy-tech'], function (id, obj) {
-            techNames[obj.Tech] = obj;
+            techData[obj.Tech] = obj;
         });
-        return techNames;
+        return techData;
+    }
+
+    static getTechGroupData(genData){
+        let techGroupData = {};
+        $.each(genData['osy-techGroups'], function (id, obj) {
+            techGroupData[obj.TechGroupId] = obj;
+        });
+        return techGroupData;
     }
 
     static getEmiData(genData){
@@ -128,13 +136,17 @@ export class DataModelResult{
         return unitData;       
     }
 
-
     //////////////////////////////////////////////////////// P I V O T///////////////////////////////////////////////////////////////////////////////////
 
     static getPivot(DATA, genData, VARIABLES, group, param){
 
         let unitData = this.getUnitData(genData, VARIABLES);
         let paramById = DataModel.getParamById(VARIABLES);
+        let techData = this.getTechData(genData);
+        let commData = this.getCommData(genData);
+        let techGroupData = this.getTechGroupData(genData);
+        console.log('techGroupData ', techGroupData)
+        let techGroupNames = DataModel.TechGroupName(genData);
         let years = genData['osy-years']
 
         let pivotData = [];
@@ -147,12 +159,13 @@ export class DataModelResult{
                 $.each(years, function (idY, year) { 
                     let chunk = {};
                     chunk['Case'] = cs;
-                    if(obj.Tech){
-                        chunk['Tech'] = obj.Tech;  
-                        dataT = unitData[group][param][obj.Tech];
-                    }
+                    // if(obj.Tech){
+                    //     chunk['Tech'] = obj.Tech;  
+                    //     dataT = unitData[group][param][obj.Tech];
+                    // }
                     if(obj.Comm){
                         chunk['Comm'] = obj.Comm;
+                        chunk['CommDesc'] = commData[obj.Comm]["Desc"];
                         dataC = unitData[group][param][obj.Comm];
                     }
                     if(obj.Emi){
@@ -173,7 +186,33 @@ export class DataModelResult{
                     const data = {...dataT, ...dataC, ...dataE};
                     chunk['Unit'] = jsonLogic.apply(rule, data);
       
-                    pivotData.push(chunk);
+                    if(obj.Tech){
+                        
+                        if(techData[obj.Tech].TG.length != 0){
+                            $.each(techData[obj.Tech].TG, function (id, tg) {
+                                console.log('tsec hada ', tg, techGroupData[tg])
+                                let tmp = {};
+                                tmp = JSON.parse(JSON.stringify(chunk));
+                                tmp['Tech'] = obj.Tech;  
+                                tmp['TechGroup'] = techGroupNames[tg];
+                                tmp['TechDesc'] = techData[obj.Tech]["Desc"];
+                                tmp['TechGroupDesc'] = techGroupData[tg]["Desc"];
+                                dataT = unitData[group][param][obj.Tech];
+                                pivotData.push(tmp);
+                            })
+                        }else{
+                            chunk['Tech'] = obj.Tech;  
+                            chunk['TechGroup'] = 'No group';
+                            chunk['TechDesc'] = techData[obj.Tech]["Desc"];
+                            chunk['TechGroupDesc'] = 'No group';
+                            dataT = unitData[group][param][obj.Tech];
+                            pivotData.push(chunk);
+                        }
+                    }
+                    if(!obj.Tech){
+                        pivotData.push(chunk);
+                    }
+                    
                 });
 
             });
@@ -181,36 +220,68 @@ export class DataModelResult{
         return pivotData;
     }
 
-    // static pivotRYT(RYTdata){
-    //     let RYT = {};
-    //     const cloneData = JSON.parse(JSON.stringify(RYTdata));
-    //     $.each(cloneData, function (cs, array) {
-    //         RYT[cs] = {};
+    // static getPivot(DATA, genData, VARIABLES, group, param){
+
+    //     let unitData = this.getUnitData(genData, VARIABLES);
+    //     let paramById = DataModel.getParamById(VARIABLES);
+    //     let years = genData['osy-years']
+    //     let techData = this.getTechData(genData);
+    //     let techGroupNames = DataModel.TechGroupName(genData);
+
+    //     let pivotData = [];
+    //     let dataT = {};
+    //     let dataC = {};
+    //     let dataE = {};
+
+    //     $.each(DATA[param], function (cs, array) {     
     //         $.each(array, function (id, obj) {
-    //             RYT[cs][obj.Tech] = obj
-    //             delete obj.Tech;
+
+    //             let chunk = {};
+    //             chunk['Case'] = cs;
+    //             if(obj.Tech){
+    //                 if(techData[obj.Tech].TG.length != 0){
+    //                     $.each(techData[obj.Tech].TG, function (id, tg) {
+    //                         chunk['Tech'] = obj.Tech;  
+    //                         chunk['TechGroup'] = techGroupNames[tg];
+    //                         dataT = unitData[group][param][obj.Tech];
+    //                     })
+    //                 }else{
+    //                     chunk['Tech'] = obj.Tech;  
+    //                     chunk['TechGroup'] = 'No group';
+    //                     dataT = unitData[group][param][obj.Tech];
+    //                 }
+
+    //             }
+    //             if(obj.Comm){
+    //                 chunk['Comm'] = obj.Comm;
+    //                 dataC = unitData[group][param][obj.Comm];
+    //             }
+    //             if(obj.Emi){
+    //                 chunk['Emi'] = obj.Emi;
+    //                 dataE = unitData[group][param][obj.Emi];
+    //             }
+    //             if(obj.MoId){
+    //                 chunk['MoId'] = obj.MoId;
+    //             }
+    //             if(obj.Ts){
+    //                 chunk['Ts'] = obj.Ts;
+    //             }
+
+    //             let rule = paramById[group][param]['unitRule'];
+    //             const data = {...dataT, ...dataC, ...dataE};
+    //             chunk['Unit'] = jsonLogic.apply(rule, data);
+
+    //             $.each(years, function (idY, year) { 
+    //                 let tmp = {};
+    //                 tmp = JSON.parse(JSON.stringify(chunk));
+    //                 tmp['Year'] = year;
+    //                 tmp['Value'] = obj[year];
+    //                 pivotData.push(tmp);
+    //             });
+
     //         });
     //     });
-    //     return RYT;
-    // }
-
-    // static getPivotChart(DATA, genData){
-    //     let years = genData['osy-years'];
-    //     let techs = genData['osy-tech'];
-    //     let data = this.pivotRYT(DATA);
-    //     let chartData = {};
-    //     $.each(DATA, function (cs, array) {
-    //         chartData[cs] = [];
-    //         $.each(years, function (idY, year) { 
-    //             let chunk = {};
-    //             chunk['Year'] = year;
-    //             $.each(techs, function (idT, tech) {
-    //                 chunk[tech.Tech] = data[cs][tech.Tech][year]    
-    //             });        
-    //             chartData[cs].push(chunk); 
-    //         });  
-    //     });
-    //     return chartData;
+    //     return pivotData;
     // }
 
     ////////////////////////////////////////////////////////JSON data structures

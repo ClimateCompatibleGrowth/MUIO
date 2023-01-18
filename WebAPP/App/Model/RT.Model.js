@@ -73,10 +73,10 @@ export class Model {
                 } else {
                     var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
 
-                    if(columnfield == 'TEC_0' && row == 0){
-                        console.log('cellsrenderer ', value)
-                        console.log('formattedValue ', formattedValue)
-                    }
+                    // if(columnfield == 'TEC_0' && row == 0){
+                    //     console.log('cellsrenderer ', value)
+                    //     console.log('formattedValue ', formattedValue)
+                    // }
 
                     return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
                 }
@@ -100,22 +100,19 @@ export class Model {
             }.bind(this);
 
             let geteditorvalue =  function (row, cellvalue, editor) {
-                // console.log('editor ', editor)
-                // console.log('editor.val() ', editor.val())
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75 }); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 200 });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200 }); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200 });
 
-            console.log('this.decimal ', this.decimal)
             let techIds = [];
             $.each(techs, function (id, tech) {
                 techIds.push(tech.TechId);
                 datafields.push({ name: tech['TechId'], type: 'number' });
                 columns.push({
                     text: tech.Tech + ' <small  style="color:darkgrey">[ ' + techUnit[param][tech.TechId] + ' ]</small>', 
-                    datafield: tech.TechId, cellsalign: 'right', minWidth: 120, align: 'center', columntype: 'numberinput', cellsformat: 'd3',
+                    datafield: tech.TechId, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 150, maxWidth: 300,
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,
@@ -123,7 +120,7 @@ export class Model {
                     cellclassname: cellclass,
                     geteditorvalue:  geteditorvalue
                 });
-            });
+            }.bind(this));
 
             let srcGrid = {
                 datatype: "json",

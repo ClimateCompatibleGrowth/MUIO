@@ -1,32 +1,46 @@
 <div class=" text-left" style="padding-top:25px; color: #3a3f51; font-weight:bold; ">
-  <div class="row">
-    <div class="col-md-11 col-md-offset-1">
-      <h1 lang="en" data-lang-token="else">OS<small>E</small>MOSYS<span class="hidden-xs"> - Open source modelling
-          system</span> </h1>
-      <!-- <h1 lang="en" data-lang-token="else">PROTOTYPE<span class="hidden-xs"> - Data File Preparation Tool</span> </h1> -->
-    </div>
+  <div class="row vertical-align">
+    <!-- <div class="col-md-11 col-md-offset-1">
+      <h1 lang="en" data-lang-token="else" >OS<small>E</small>MOSYS<span class="hidden-xs"> - Open source modelling system</span> </h1>
+    </div> -->
     <div class="col-md-1 col-md-offset-1">
-      <i id="icon" class="fa fa-cubes" style="
+      <!-- <i id="icon" class="fa fa-cubes" style="
         text-shadow: #d9d9d9; font-size: 77px; 
         color: #fff; height: 129px; width: 129px; 
         line-height: 129px; border-radius: 12%; 
         text-align: center; background-color: #3a3f51;">
+      </i> -->
+      <i id="icon" class="fa fa-cubes" style="
+        text-shadow: #d9d9d9; 
+        font-size: 90px; 
+        color: #3a3f51; height: 129px; width: 129px; 
+        line-height: 129px; border-radius: 12%; 
+        text-align: center; ">
       </i>
     </div>
-    <div class="col-md-10">
-      <h3 lang="en">Sustainable Development </h3>
+    <div class="col-md-4">
+      <h1 lang="en" data-lang-token="else" >OS<small>E</small>MOSYS<span class="hidden-xs"> - Open source modelling system</span> </h1>
+      <!-- <h3 lang="en">Sustainable Development </h3>
       <h5 lang="en">Department of Economic and Social Affairs</h5>
-      <h5 lang="en">United Nations</h5>
+      <h5 lang="en">United Nations</h5> -->
     </div>
+
+    <div class="col-md-5 ">
+      
+      <img src="../../References/smartadmin/img/Logos/un_desa_black.png" class="img-fluid img-thumbnail pull-right" alt="UN Department of Economic and Social Affairs" width="250" height="170" style="opacity: 0.6; border:none; background: url(../img/mybg.png);">
+      <img src="../../References/smartadmin/img/Logos/UK_AID_4.png" class="img-fluid img-thumbnail pull-right" alt="UN Department of Economic and Social Affairs" width="60" height="160" style="opacity: 0.6; border:none; background: url(../img/mybg.png); padding-top: 40px;">
+      <img src="../../References/smartadmin/img/Logos/CCG_2.png" class="img-thumbnail img-fluid pull-right" alt="Loughborough University" width="120" height="180" style="opacity: 0.6; border:none; background: url(../img/mybg.png);">
+      <!-- <img src="../../References/smartadmin/img/Logos/lu_.png" class="img-fluid img-thumbnail pull-right" alt="LOUGHBOROUGH UNIVERSITY" width="65" height="85" style="opacity: 0.6; border:none; background: url(../img/mybg.png); padding-top: 40px;"> -->
+
+    </div>
+    <div class="col-md-1"></div>
+
   </div>
   <div class="separator"></div>
 </div>
-<div id="row">
-  <div class="col-md-10 col-md-offset-1">
-    <div id="definition" style="display:none">
-    </div>
-  </div>
-</div>
+
+
+
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
     <section id="widget-grid" class="">
@@ -34,12 +48,21 @@
         data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false"
         data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
         <header>
-          <h2> <i id="icon" class="fa fa-cubes"></i> OSeMOSYS models</h2>
-          <!-- <h2> <i id="icon" class="fa fa-cubes"></i> PROTOTYPE case studies</h2> -->
-          <div class="widget-toolbar smart-form pull-right">
-            <div type="button" id="showLog" data-toggle="tooltip" data-placement="top" title="Introduction to OSeMOSYS">
-              <i class="ace-icon fa fa-question-circle warning "></i>
+          <h2> <i id="icon" class="fa fa-cubes fa-lg"></i> OSeMOSYS models</h2>
+          <div class="widget-toolbar pull-right">
+            <div  class="btn btn-white" id="showLog" data-toggle="tooltip" data-placement="top" title="Introduction to OSeMOSYS">
+              <i class="icon-btn fa fa-question-circle fa-lg warning "></i>
             </div>
+          </div>
+          <div class="widget-toolbar">
+            <div class="btn btn-white btn-osy-green" data-toggle="modal" data-target="#modalrestore" id="restoreCS">
+              <i class="fa fa-upload fa-lg  icon-btn"></i>
+              <b class="">Restore model</b>
+            </div>
+            <a class="btn btn-white btn-osy-red" href="#LegacyImport">
+              <i class="fa fa-cogs fa-lg  icon-btn"></i>
+              <b class="">Import model</b>
+            </a>
           </div>
           <div class="widget-toolbar smart-form">
             <label class="input">
@@ -47,15 +70,13 @@
               <i class="ace-icon fa fa-search nav-search-icon"></i>
             </label>
           </div>
-
-          <div class="widget-toolbar smart-form">
-            <div class="input" data-toggle="modal" data-target="#modalrestore" id="restoreCS">
-              <i class="fa fa-upload white icon-btn"></i>
-              <b class="white">Upload model</b>
+        </header>
+        <div id="row">
+          <div class="col-md-10 col-md-offset-1">
+            <div id="definition" style="display:none">
             </div>
           </div>
-
-        </header>
+        </div>
         <div>
           <div class="jarviswidget-editbox">
           </div>
@@ -81,6 +102,8 @@
     </div>
   </div>
 </div>
+
+
 
 <!--Modal restore cs -->
 <div id="modalrestore" class="modal fade" role="dialog">

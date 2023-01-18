@@ -50,12 +50,13 @@ export default class RY {
 
         let $divGrid = $('#osy-gridRY');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns)
+        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false});
 
         if (model.scenariosCount > 1) {
-            $('#scCommand').show();
+            Html.lblScenario( model.scenariosCount);
+            
             Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);
-            Grid.applyRYFilter($divGrid, model.years);
+            Grid.applyGridFilter($divGrid, model.years);
         }
 
         var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
@@ -145,30 +146,71 @@ export default class RY {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
+        $("#osy-scenarios").off('click');
+        $("#osy-scenarios").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
+
         $("#osy-openScData").off('click');
         $("#osy-openScData").on('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $("#osy-scenarios").val();
-            Grid.applyRYFilter($divGrid, model.years, sc);
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyGridFilter($divGrid, model.years, sc);
+            Message.smallBoxInfo('Info', 'Scenario data hidden!', 2000);
         });
+
+        $("#osy-hideScData").off('click');
+        $("#osy-hideScData").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyGridFilter($divGrid, model.years);
+            Message.smallBoxInfo('Info', 'Scenario data hidden!', 2000);
+        });
+
 
         $("#osy-removeScData").off('click');
         $("#osy-removeScData").on('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var sc = $("#osy-scenarios").val();
-            var param = $("#osy-ryt").val();
-            var rows = $divGrid.jqxGrid('getdisplayrows');
+            let rows = $divGrid.jqxGrid('getboundrows');
+
             $.each(rows, function (id, obj) {
-                if (obj.Sc == sc && obj.Param == model.PARAMNAMES[param]) {
+                if (obj.Sc == sc && obj.Param == model.PARAMNAMES[model.param]) {
                     $.each(model.years, function (i, year) {
-                        $divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                        //$divGrid.jqxGrid('setcellvalue', obj.uid, year, null);
+                        model.gridData[model.param][id][year] = null;
                     });
-                    return false; // breaks
                 }
             });
-            Grid.applyRYFilter($divGrid, model.years);
+
+            model.srcGrid.localdata = model.gridData;
+            $divGrid.jqxGrid('updatebounddata');
+
+
+            let chartData = [];
+            $.each(model.years, function (idY, year) {
+                let chunk = {};
+                chunk['Year'] = year;
+                $.each(model.gridData[model.param], function (id, rytDataObj) {
+                    chunk[rytDataObj.ScId] = rytDataObj[year];
+                });
+                chartData.push(chunk);
+            });
+
+            //update model
+            model.chartData[model.param] = chartData;
+            var configChart = $divChart.jqxChart('getInstance');
+            configChart.source.records = model.chartData[model.param];
+            configChart.update();
+
+            Html.lblScenario( model.scenariosCount);
+            Grid.applyGridFilter($divGrid, model.years);
+            Message.smallBoxInfo('Info', 'Scenario data removed!', 2000);
         });
 
         let pasteEvent = false;

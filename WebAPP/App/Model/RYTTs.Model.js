@@ -7,26 +7,19 @@ export class Model {
         this.decimal = 'd' + this.d;
 
         if (casename) {
-
             let datafields = [];
-            let datafieldsChart = [];
             let columns = [];
-            let series = [];
 
             let years = genData['osy-years'];
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
 
             let RYTTsgrid = DataModel.RYTTsgrid(genData, RYTTsdata);
-            let RYTTschart = DataModel.RYTTschart(genData, RYTTsdata);
             let timeslices = DataModel.Timeslices(genData);
             let scClass = {};
 
-            datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_' + id;
-                datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
-                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
             });
 
             datafields.push({ name: 'ScId', type: 'string' });
@@ -36,10 +29,6 @@ export class Model {
             datafields.push({ name: 'ScDesc', type: 'string' });
             datafields.push({ name: 'TechDesc', type: 'string' });
             datafields.push({ name: 'Timeslice', type: 'string' });
-
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
-            columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' })
-            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned: true, editable: false, align: 'center' })
 
             let validation = function (cell, value) {
                 if (value < 0) {
@@ -84,10 +73,15 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', filterable: false });
+            columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' })
+            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned: true, editable: false, align: 'center', filterable: false })
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
-                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd3',
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
+
+                    filterable: false,
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,
@@ -95,7 +89,7 @@ export class Model {
                     cellclassname: cellclass,
                     geteditorvalue: geteditorvalue
                 });
-            });
+            }.bind(this));
 
             let PARAMNAMES = {};
             $.each(PARAMETERS[group], function (id, obj) {
@@ -109,13 +103,6 @@ export class Model {
                 datafields: datafields,
             };
 
-            var srcChart = {
-                datatype: "json",
-                localdata: RYTTschart,
-                root: param + '>' + techs[0]['TechId'] + '>' + timeslices[0],
-                datafields: datafieldsChart,
-            };
-
             this.casename = casename;
             this.years = years;
             this.techs = techs;
@@ -123,36 +110,28 @@ export class Model {
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.datafields = datafields;
-            this.datafieldsChart = datafieldsChart;
             this.columns = columns;
-            this.series = series;
             this.gridData = RYTTsgrid;
-            this.chartData = RYTTschart;
             this.genData = genData;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid;
-            this.srcChart = srcChart;
             this.PARAMETERS = PARAMETERS;
         } else {
             this.casename = null;
             this.years = null;
             this.techs = null;
             this.datafields = null;
-            this.datafieldsChart = null;
             this.columns = null;
             this.columns = null;
             this.gridData = null;
-            this.chartData = null;
             this.genData = null;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = null;
-            this.srcChart = null;
             this.PARAMETERS = PARAMETERS;
         }
-
     }
 }

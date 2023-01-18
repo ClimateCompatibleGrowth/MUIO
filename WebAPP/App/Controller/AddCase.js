@@ -19,13 +19,16 @@ export default class AddCase {
                 const promise = [];
                 let genData = Osemosys.getData(casename, 'genData.json');
                 promise.push(genData);
+                const resData = Osemosys.getResultData(casename, 'resData.json');
+                promise.push(resData);
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS);
                 return Promise.all(promise);
             })
             .then(data => {
-                let [genData, PARAMETERS] = data;
-                let model = new Model(genData, PARAMETERS, "AddCase");
+                let [genData, resData, PARAMETERS] = data;
+                let model = new Model(genData, resData, PARAMETERS, "AddCase");
+                
                 this.initPage(model);
             })
             .catch(error => {
@@ -42,19 +45,21 @@ export default class AddCase {
         Html.genData(model);
 
         Grid.commGrid(model.commodities);
-        Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
+        Grid.techsGrid(model.techs, model.commodities, model.techGroups, model.emissions, model.commNames, model.emiNames, model.techGroupNames);
+      
+        Grid.techGroupGrid(model.techGroups);
         Grid.emisGrid(model.emissions);
         Grid.scenarioGrid(model.scenarios);
         Grid.constraintGrid(model.techs, model.constraints, model.techNames);
 
         if (model.casename == null) {
-            $('#osy-newCase').show();
-            $('#osy-updateCase').hide();
-            Message.info("Please select case or create new Model!");
+            $('#osy-save').show();
+            $('#osy-update').hide();
+            Message.info("Please select existing or create new model!");
         } else {
             $("#osy-new").show();
-            $('#osy-updateCase').show();
-            $('#osy-newCase').hide();
+            $('#osy-update').show();
+            $('#osy-save').hide();
         }
         loadScript("References/smartadmin/js/plugin/ion-slider/ion.rangeSlider.min.js", SmartAdmin.rangeSlider.bind(null, model.years));
         pageSetUp();
@@ -68,23 +73,27 @@ export default class AddCase {
                 const promise = [];
                 let genData = Osemosys.getData(casename, 'genData.json');
                 promise.push(genData);
+                const resData = Osemosys.getResultData(casename, 'resData.json');
+                promise.push(resData);
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS);
                 return Promise.all(promise);
             })
             .then(data => {
-                let [genData, PARAMETERS] = data;
-                let model = new Model(genData, PARAMETERS, "AddCase");
+                let [genData, resData, PARAMETERS] = data;
+                let model = new Model(genData, resData, PARAMETERS, "AddCase");
                 AddCase.initPage(model);
             })
             .catch(error => {
-                Message.bigBoxInfo(error);
+                Message.bigBoxDanger(error);
             })
     }
 
     static initEvents(model) {
 
+        console.log('model ', model)
         let $divTech = $("#osy-gridTech");
+        let $divTechGroup = $("#osy-gridTechGroup");
         let $divComm = $("#osy-gridComm");
         let $divEmi = $("#osy-gridEmis");
         let $divScenario = $("#osy-gridScenario");
@@ -107,7 +116,7 @@ export default class AddCase {
             }
             this._message = $("<span class='jqx-validator-error-label'>" + message + "</span>")
             this._message.appendTo("#yearsselectmsg");
-            Message.smallBoxWarning("Selection", "Case has to have one year at least!", 3000);
+            Message.smallBoxWarning("Selection", "Model has to have one year at least!", 3000);
             return this._message;
         }
 
@@ -115,9 +124,9 @@ export default class AddCase {
             hintType: 'label',
             animationDuration: 500,
             rules: [
-                { input: '#osy-casename', message: "Case name is required field!", action: 'keyup', rule: 'required' },
+                { input: '#osy-casename', message: "Model name is required field!", action: 'keyup', rule: 'required' },
                 {
-                    input: '#osy-casename', message: "Entered case name is not allowed!", action: 'keyup', rule: function (input, commit) {
+                    input: '#osy-casename', message: "Entered model name is not allowed!", action: 'keyup', rule: function (input, commit) {
                         var casename = $("#osy-casename").val();
                         var result = (/^[a-zA-Z0-9-_ ]*$/.test(casename));
                         return result;
@@ -168,8 +177,8 @@ export default class AddCase {
             //Sidebar.Load(null, null)
             Sidebar.Reload(null);
             $("#osy-new").hide();
-            $('#osy-updateCase').hide();
-            $('#osy-newCase').show();
+            $('#osy-update').hide();
+            $('#osy-save').show();
             Message.smallBoxConfirmation("Confirmation!", "Configure new Model!", 3500);
         });
 
@@ -192,13 +201,13 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
 
-            var casename = $("#osy-casename").val();
-            var desc = $("#osy-desc").val();
+            var casename = $("#osy-casename").val().trim();
+            var desc = $("#osy-desc").val().trim();
             var date = $("#osy-date").val();
             var currency = $("#osy-currency").val();
-            var mo = $("#osy-mo").val();
-            var ns = $("#osy-ns").val();
-            var dt = $("#osy-dt").val();
+            var mo = $("#osy-mo").val().trim();
+            var ns = $("#osy-ns").val().trim();
+            var dt = $("#osy-dt").val().trim();
 
             var years = new Array();
             $.each($('input[type="checkbox"]:checked'), function (key, value) {
@@ -206,7 +215,7 @@ export default class AddCase {
             });
 
             let POSTDATA = {
-                "osy-version": "3.0",
+                "osy-version": "4.0",
                 "osy-casename": casename,
                 "osy-desc": desc,
                 "osy-date": date,
@@ -215,6 +224,7 @@ export default class AddCase {
                 "osy-dt": dt,
                 "osy-mo": mo,
                 "osy-tech": model.techs,
+                "osy-techGroups": model.techGroups,
                 "osy-comm": model.commodities,
                 "osy-emis": model.emissions,
                 "osy-scenarios": model.scenarios,
@@ -226,8 +236,8 @@ export default class AddCase {
                 .then(response => {
                     if (response.status_code == "created") {
                         $("#osy-new").show();
-                        $('#osy-updateCase').show();
-                        $('#osy-newCase').hide();
+                        $('#osy-update').show();
+                        $('#osy-save').hide();
                         Message.clearMessages();
                         Message.bigBoxSuccess('Model message', response.message, 3000);
                         Html.appendCasePicker(casename, casename);
@@ -271,7 +281,7 @@ export default class AddCase {
             let defaultTech = DefaultObj.defaultTech();
             //tech grid se pravi dinalicki potrebno je updatovati model
             //JSON parse strungify potrebno da iz nekog razloga izbacino elemente uid boundindex...
-            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'IAR', 'OAR', "INCR", "ITCR", 'EAR'])));
+            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'TG', 'IAR', 'OAR', "INCR", "ITCR", 'EAR'])));
             //model.techs.push(defaultTech[0]);
             //update technames
             model.techNames[defaultTech[0]['TechId']] = defaultTech[0]['Tech'];
@@ -310,11 +320,11 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            var value = args.newvalue.trim();
             if (column == 'CapUnitId' || column == 'ActUnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing technology unit will not recalculate entered nor default values in the model.', 3000);
             }
-            if (column != 'IAR' && column != 'OAR' && column != 'EAR' && column != 'INCR' && column != 'ITCR') {
+            if (column != 'IAR' && column != 'OAR' && column != 'EAR' && column != 'INCR' && column != 'ITCR'  && column != 'TG') {
                 model.techs[rowBoundIndex][column] = value;
             } else {
                 if (value.includes(',') && value) {
@@ -330,6 +340,61 @@ export default class AddCase {
             if (column == 'Tech') {
                 var techId = $divTech.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
                 model.techNames[techId] = value;
+            }
+        });
+
+
+        $("#osy-addTechGroup").off('click');
+        $("#osy-addTechGroup").on("click", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultTechGroup = DefaultObj.defaultTechGroup();
+            //tech grid se pravi dinalicki potrebno je updatovati model
+            //JSON parse strungify potrebno da iz nekog razloga izbacino elemente uid boundindex...
+            model.techGroups.push(JSON.parse(JSON.stringify(defaultTechGroup[0], ['TechGroupId', 'TechGroup', 'Desc'])));
+            //model.techs.push(defaultTech[0]);
+            //update technames
+            model.techGroupNames[defaultTechGroup[0]['TechGroupId']] = defaultTechGroup[0]['TechGroup'];
+            //add row in grid
+            $divTechGroup.jqxGrid('addrow', null, defaultTechGroup);
+            //upat eza broj techs u tabu
+            model.techGroupCount++;
+            $("#techGroupCount").text(model.techGroupCount);
+        });
+
+        $(document).undelegate(".deleteTechGroup", "click");
+        $(document).delegate(".deleteTechGroup", "click", function (e) {
+            //$(".deleteTech").on("click", function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            if (id != 0) {
+                var techGroupId = $divTechGroup.jqxGrid('getcellvalue', id, 'TechGroupId');
+                var rowid = $divTechGroup.jqxGrid('getrowid', id);
+                $divTechGroup.jqxGrid('deleterow', rowid);
+                model.techGroups.splice(id, 1);
+                //update techNames
+                delete model.techGroupNames[techGroupId];
+                //update count
+                model.techGroupCount--;
+                $("#techGroupCount").text(model.techGroupCount);
+                //izbirsati iz modela za tech nz EAR za izbrisanu emisiju ako je slucajno odabrana za neku tehnologiju
+                $.each(model.techs, function (id, techObj) {
+                    techObj['TG'] = techObj['TG'].filter(item => item !== techGroupId);
+                });
+            }
+        });
+
+        $divTechGroup.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue.trim();
+            model.techGroups[rowBoundIndex][column] = value;
+
+            if (column == 'TechGroup') {
+                var techGroupId = $divTechGroup.jqxGrid('getcellvalue', rowBoundIndex, 'TechGroupId');
+                model.techGroupNames[techGroupId] = value;
             }
         });
 
@@ -376,7 +441,7 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            var value = args.newvalue.trim();
             model.commodities[rowBoundIndex][column] = value;
             if (column == 'UnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing commodity unit will not recalculate entered nor default values in the model.', 3000);
@@ -431,7 +496,7 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            var value = args.newvalue.trim();
             model.emissions[rowBoundIndex][column] = value;
             if (column == 'UnitId') {
                 Message.bigBoxWarning('Unit change warninig!', 'Changing emission unit will not recalculate entered nor default values in the model.', 3000);
@@ -449,6 +514,8 @@ export default class AddCase {
             event.stopImmediatePropagation();
             let defaultSc = DefaultObj.defaultScenario();
             model.scenarios.push(JSON.parse(JSON.stringify(defaultSc[0], ['ScenarioId', 'Scenario', 'Desc', 'Active'])));
+            //add scenario id to caserunByScenario
+            model.caserunByScenario[defaultSc[0].ScenarioId] =[];
             $divScenario.jqxGrid('addrow', null, defaultSc);
             model.scenariosCount++;
             $("#scenariosCount").text(model.scenariosCount);
@@ -461,13 +528,28 @@ export default class AddCase {
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
             if (id != 0) {
-                //var emisId = $divScenario.jqxGrid('getcellvalue', id, 'ScenarioId');
-                var rowid = $divScenario.jqxGrid('getrowid', id);
-                $divScenario.jqxGrid('deleterow', rowid);
-                model.scenarios.splice(id, 1);
-                //smanji counter za broj emisjia i update html
-                model.scenariosCount--;
-                $("#scenariosCount").text(model.scenariosCount);
+                if(model.caserunByScenario[model.scenarios[id]['ScenarioId']].length != 0){
+                    Message.bigBoxDanger('Alert', 
+                        `You cannot delete this scenario. It is used in ${model.caserunByScenario[model.scenarios[id]['ScenarioId']]}  caserun(s)! 
+                        Plese reomve these scenario from caseruns before deletion.`, null)
+                }
+                else{
+                    let scId = model.scenarios[id]['ScenarioId'];
+                    Osemosys.deleteScenarioCaseRuns(model.casename, scId)
+                    .then(response=>{
+                        console.log('delete ', response)
+                        var rowid = $divScenario.jqxGrid('getrowid', id);
+                        $divScenario.jqxGrid('deleterow', rowid);
+                        model.scenarios.splice(id, 1);
+                        model.scenariosCount--;
+                        $("#scenariosCount").text(model.scenariosCount);
+                        Message.smallBoxInfo(response.message)
+                    })
+                    .catch(error => {
+                        Message.bigBoxDanger(error);
+                    })
+
+                }
             }
         });
 
@@ -475,7 +557,7 @@ export default class AddCase {
             var args = event.args;
             var datafield = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            var value = args.newvalue.trim();
             model.scenarios[rowBoundIndex][datafield] = value;
         });
 
@@ -521,7 +603,13 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            var value = args.newvalue;
+            console.log('newvalue ', args.newvalue)
+            if(typeof args.newvalue !== 'object'){
+                var value = args.newvalue.trim();
+            }else{
+                var value = args.newvalue;
+            }
+            
 
             if (column != 'CM' && column != 'Tag') {
                 model.constraints[rowBoundIndex][column] = value;
@@ -536,6 +624,7 @@ export default class AddCase {
                 }
                 model.constraints[rowBoundIndex][column] = array;
             } else if (column == 'Tag') {
+                console.log('eqyuality ', value.value)
                 model.constraints[rowBoundIndex][column] = value.value;
             }
         });
