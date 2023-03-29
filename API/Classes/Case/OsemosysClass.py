@@ -232,7 +232,9 @@ class Osemosys():
         for param in self.PARAMETERS['RYTEM']:
             techIds[param['id']] = []
             for tech in self.genData["osy-tech"]:
-                if tech[param['id']]: 
+                #dodali smo novi paramtear pored EAR imamo i EACR, sad se uslov mora promijneniti
+                #if tech[param['id']]: 
+                if tech['EAR']: 
                     techIds[param['id']].append(tech['TechId'])
         return techIds
 
@@ -241,8 +243,11 @@ class Osemosys():
         for param in self.PARAMETERS['RYTEM']:
             commIds[param['id']] = {}
             for tech in self.genData["osy-tech"]:
-                if tech[param['id']]: 
-                    commIds[param['id']][tech['TechId']] = tech[param['id']]
+                #dodali smo novi paramtear pored EAR imamo i EACR, sad se uslov mora promijneniti
+                # if tech[param['id']]: 
+                #     commIds[param['id']][tech['TechId']] = tech[param['id']]
+                if tech['EAR']: 
+                    commIds[param['id']][tech['TechId']] = tech['EAR']
         return commIds
 
     def R(self, Rdata):

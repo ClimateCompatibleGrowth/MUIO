@@ -642,7 +642,7 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
-    def generateCSVfromCBC(self, data_file, results_file, caserunname, base_folder=os.getcwd()):
+    def generateCSVfromCBC(self, data_file, results_file, base_folder=os.getcwd()):
 
         pd.set_option('mode.chained_assignment', None)
 
@@ -738,10 +738,10 @@ class DataFile(Osemosys):
                     param_current = line.split(' ')[1]
                     parsing = True
 
-        # try:
-        #     os.makedirs(os.path.join(base_folder, 'csv'))
-        # except FileExistsError:
-        #     pass
+        try:
+            os.makedirs(os.path.join(base_folder, 'csv'))
+        except FileExistsError:
+            pass
 
         #Read CBC output file
         
@@ -762,6 +762,7 @@ class DataFile(Osemosys):
                 'ProductionByTechnology':['r','l','t','f','y'],
                 'ProductionByTechnologyAnnual':['r','t','f','y'],
                 'AnnualTechnologyEmissionByMode':['r','t','e','m','y'],
+                'EmissionByActivityChange':['r','t','e','m','y'],
                 'AnnualTechnologyEmission':['r','t','e','y'],
                 'AnnualEmissions':['r','e','y'],
                 'DiscountedTechnologyEmissionsPenalty':['r','t','y'],
@@ -769,7 +770,7 @@ class DataFile(Osemosys):
                 'RateOfUseByTechnology':['r','l','t','f','y'],
                 'UseByTechnology':['r','l','t','f','y'],
                 'UseByTechnologyAnnual':['r','t','f','y'],
-                'RateOfProductionByTechnologyByMode':['r','l','t','m','f','y'],
+                #ss'RateOfProductionByTechnologyByMode':['r','l','t','m','f','y'],
                 'RateOfUseByTechnologyByMode':['r','l','t','m','f','y'],
                 'TechnologyActivityChangeByMode':['r','t','m','y'],
                 'TechnologyActivityChangeByModeCostTotal':['r','t','m','y'],
@@ -840,12 +841,13 @@ class DataFile(Osemosys):
                         'Demand',
                         'Trade',
                         'AnnualTechnologyEmissionByMode',
+                        'EmissionByActivityChange',
                         'ProductionByTechnology',
                         'RateOfProductionByTechnology',
                         'RateOfUseByTechnology',
                         'UseByTechnology',
                         'RateOfActivity',
-                        'RateOfProductionByTechnologyByMode',
+                        #'RateOfProductionByTechnologyByMode',
                         'RateOfUseByTechnologyByMode'
                         ]
         
@@ -909,15 +911,45 @@ class DataFile(Osemosys):
                 sorted_df = df.copy()
             return sorted_df
         
+        def tuple_to_dict(data_table):
+            
+            tuple_list = [[col1, col2, col3, col4, col5] 
+                        for (col1, col2, col3, col4, col5) 
+                        in data_table]
+            df = pd.DataFrame(tuple_list,
+                            columns=['t','f','m','y','value']) 
+            df = df[['t','f','m','y']].drop_duplicates()
+            return df
+        
+        df_all = pd.concat([tuple_to_dict(input_table),
+                            tuple_to_dict(output_table)])
+        combo_cols = list(df_all.columns)    
+
         for each_result in results_list:
             iter_list = []
-            
-            for each_index in cols[each_result]:
+            df_combinations = pd.DataFrame()
+            cols_in_df = []
+            cols_notin_df = []
+            if any(x in combo_cols for x in cols[each_result]):
+                cols_in_df = [v for v in cols[each_result]
+                            if v in combo_cols]
+                cols_notin_df = [v for v in cols[each_result]
+                                if v not in combo_cols]
+                
+            df_combinations = df_all[cols_in_df].drop_duplicates()
+                            
+            for each_index in cols_notin_df:
                 iter_list.append(index_dict[each_index])
             
-            df_combinations = pd.DataFrame(product(*iter_list),
-                                        columns=cols[each_result])
+            df_combinations_2 = pd.DataFrame(product(*iter_list),
+                                            columns=cols_notin_df)
             
+            df_combinations['key'] = 1
+            df_combinations_2['key'] = 1
+            df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', 1)
+            
+            #df_combinations = pd.DataFrame(product(*iter_list),
+            #                                   columns=cols[each_result])
             if any(substring in each_result for substring in ['Production', 'Output']):
                 col_keep = []
                 for each_col in df_output.columns:
@@ -950,16 +982,17 @@ class DataFile(Osemosys):
                     if each_col in df_combinations:
                         col_keep.append(each_col)
                 
-                df_input_output = pd.concat([df_input,
-                                            df_output],
-                                            sort=True)
-                df_input_output = df_input_output[col_keep]
-                df_input_output.drop_duplicates(inplace=True)
-                df_combinations = pd.merge(df_input_output,
-                                        df_combinations,
-                                        how='left',
-                                        on=col_keep)
-                df_combinations.drop_duplicates(inplace=True)
+                if len(df) > 0:
+                    df_input_output = pd.concat([df_input,
+                                                df_output],
+                                                sort=True)
+                    df_input_output = df_input_output[col_keep]
+                    df_input_output.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_input_output,
+                                            df_combinations,
+                                            how='left',
+                                            on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
                 
             if 'e' in cols[each_result]:
                 col_keep = []
@@ -999,11 +1032,13 @@ class DataFile(Osemosys):
             final_cols = cols[each_result].copy()
             final_cols.append(each_result)
             df_combinations = df_combinations[final_cols]
-            df_combinations.to_csv(os.path.join(base_folder,'WebAPP','DataStorage',self.case,'res',caserunname,
+            
+            
+            df_combinations.to_csv(os.path.join(base_folder,
                                                 'csv',
                                                 each_result+'.csv'),
                                 index=None)
-        
+            
         ####################################################################################
         
         if len(df) > 0:
@@ -1019,7 +1054,7 @@ class DataFile(Osemosys):
             df_prod = df_prod.groupby(['r','t','f','y'])['ProductionByTechnologyAnnual'].sum().reset_index()
             df_prod['ProductionByTechnologyAnnual'] = df_prod['ProductionByTechnologyAnnual'].astype(float).round(4)
             df_prod = df_prod.sort_values(by=['r','t','f','y'])
-            df_prod.to_csv(os.path.join(base_folder,'WebAPP','DataStorage',self.case,'res',caserunname, 'csv', 'ProductionByTechnologyAnnual.csv'), index=None)
+            df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyAnnual.csv'), index=None)
             all_params['ProductionByTechnologyAnnual'] = df_prod.rename(columns={'ProductionByTechnologyAnnual':'value'})
 
             ####################################################################################
@@ -1036,7 +1071,7 @@ class DataFile(Osemosys):
             df_use = df_use.groupby(['r','t','f','y'])['UseByTechnologyAnnual'].sum().reset_index()
             df_use['UseByTechnologyAnnual'] = df_use['UseByTechnologyAnnual'].astype(float).round(4)
             df_use = df_use.sort_values(by=['r','t','f','y'])
-            df_use.to_csv(os.path.join(base_folder, 'WebAPP','DataStorage',self.case,'res',caserunname,'csv', 'UseByTechnologyAnnual.csv'), index=None)
+            df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyAnnual.csv'), index=None)
             all_params['UseByTechnologyAnnual'] = df_use.rename(columns={'UseByTechnologyAnnual':'value'})
 
             ###################################################################################
@@ -1051,9 +1086,9 @@ class DataFile(Osemosys):
             df_emi = df_emi.groupby(['r','t','e','y'])['AnnualEmissions'].sum().reset_index()
             df_emi['AnnualEmissions'] = df_emi['AnnualEmissions'].astype(float).round(4)
             df_emi = df_emi.sort_values(by=['r','t','e','y'])
-            df_emi.to_csv(os.path.join(base_folder, 'WebAPP','DataStorage',self.case,'res',caserunname,'csv', 'AnnualEmissions.csv'), index=None)
+            df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
             all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
-
+    
     def preprocessData(self, data_infile, data_outfile):
 
         lines = []
@@ -1336,6 +1371,8 @@ class DataFile(Osemosys):
             # self.resCBCPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', self.case, 'res')
             # self.resPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', self.case, 'res', 'csv')
 
+            self.resPath = Path(Config.DATA_STORAGE,self.case, 'res',caserunname)
+
             modelfile = '"{}"'.format(self.osemosysFile.resolve())
             datafile = '"{}"'.format(self.dataFile.resolve())
             datafile_processed = '"{}"'.format(self.dataFile_processed.resolve())
@@ -1358,8 +1395,11 @@ class DataFile(Osemosys):
                 #subprocess.run('preprocess_data.py' + datafile + dataFile_processed)
 
                 self.preprocessData(self.dataFile, self.dataFile_processed)
+                print("Data file preprocessed done!")
                 #return output to variable
                 glpk_out = subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
+                
+                print("lp file done!")
                 ####output to logfile.txt
                 #subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile +'>'+  logfiletxt+'2>&1', cwd=glpfolder, text=True, shell=True)
 
@@ -1371,6 +1411,7 @@ class DataFile(Osemosys):
                 #     outs, errs = proc.communicate()
 
                 cbc_out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                print("solution done!")
                 ####output to lg file .log i .txt with errors
                 # out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
                 #out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfiletxt +'2>&1', cwd=cbcfolder,  capture_output=True, text=True, shell=True)
@@ -1385,8 +1426,10 @@ class DataFile(Osemosys):
                     "status_code": "error"
                 }
             else:
-                self.generateCSVfromCBC(self.dataFile, self.resFile, caserunname)
+                self.generateCSVfromCBC(self.dataFile, self.resFile, self.resPath)
+                print("csv created!")
                 self.generateResultsViewer(caserunname)
+                print("result viewer created!")
                 response = {
                     "cbc_message": cbc_out.stdout,
                     "cbc_stdmsg": cbc_out.stderr,
@@ -1405,6 +1448,7 @@ class DataFile(Osemosys):
         try:
             csvFolderPath = Path(Config.DATA_STORAGE,self.case,'res',caserunname, 'csv')
             #viewFolderPath = Path(Config.DATA_STORAGE,self.case,'view')
+
             #CSV
             csvs = [f.name for f in os.scandir(csvFolderPath) ]
             # cases = [f.name for f in os.scandir(self.resultsPath) if not os.listdir(csvFolderPath) ]
@@ -1424,10 +1468,12 @@ class DataFile(Osemosys):
             #updateje sve caserunove
             for case in cases:
                 for csv in csvs:
-                    # df = pd.read_csv(Path('res','csv', csv))
+
+                    #read csv file
                     df = pd.read_csv(Path(Config.DATA_STORAGE,self.case,'res', case, 'csv', csv))
                     data = df.to_json(orient='records', indent=2)
                     jsondata = json.loads(data)
+
                     if len(jsondata) != 0:
                         for param, paramobj in paramByName.items():
                             if param in jsondata[0]:
@@ -1442,11 +1488,9 @@ class DataFile(Osemosys):
                                     for obj in jsondata:
                                         tmp[ obj['t']] =obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close     
+                                    File.writeFile( DATA[paramobj['group']], path)
+ 
 
                                 if paramobj['group'] == 'RYT':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1466,9 +1510,7 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close    
+                                    File.writeFile( DATA[paramobj['group']], path)  
 
                                 if paramobj['group'] == 'RYE':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1488,9 +1530,7 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close    
+                                    File.writeFile( DATA[paramobj['group']], path)  
 
                                 if paramobj['group'] == 'RYTM':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1514,10 +1554,8 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close    
-
+                                    File.writeFile( DATA[paramobj['group']], path)
+ 
                                 if paramobj['group'] == 'RYTC':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
                                         DATA[paramobj['group']][paramobj['id']] = {}
@@ -1540,9 +1578,7 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close    
+                                    File.writeFile( DATA[paramobj['group']], path)
 
                                 if paramobj['group'] == 'RYTE':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1566,10 +1602,8 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close    
-
+                                    File.writeFile( DATA[paramobj['group']], path)
+  
                                 if paramobj['group'] == 'RYTTs':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
                                         DATA[paramobj['group']][paramobj['id']] = {}
@@ -1592,9 +1626,8 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close  
+                                    File.writeFile( DATA[paramobj['group']], path)
+  
 
                                 if paramobj['group'] == 'RYCTs':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1618,9 +1651,7 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close 
+                                    File.writeFile( DATA[paramobj['group']], path)
 
                                 if paramobj['group'] == 'RYTEM':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1648,9 +1679,7 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close 
+                                    File.writeFile( DATA[paramobj['group']], path)
 
                                 if paramobj['group'] == 'RYTCTs':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1678,9 +1707,7 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close 
+                                    File.writeFile( DATA[paramobj['group']], path)
 
                                 if paramobj['group'] == 'RYTMTs':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1708,9 +1735,7 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close 
+                                    File.writeFile( DATA[paramobj['group']], path)
                                     
                                 if paramobj['group'] == 'RYTCMTs':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
@@ -1742,9 +1767,7 @@ class DataFile(Osemosys):
                                             tmp[obj['y']] = obj[param]
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    f = open(path, mode="w")
-                                    f.write(json.dumps( DATA[paramobj['group']], ensure_ascii=True,  indent=4, sort_keys=False))
-                                    f.close 
+                                    File.writeFile( DATA[paramobj['group']], path)
                                 break
 
         except(IOError, IndexError):

@@ -760,6 +760,26 @@
                     }
                 ]
             }
+        },
+        {
+            "id": "EACR",
+            "value": "Emission To Activity Change Ratio",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "EmiUnit"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "ActUnitId"
+                    }
+                ]
+            }
         }
     ]
 }

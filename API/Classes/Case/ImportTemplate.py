@@ -545,8 +545,8 @@ class ImportTemplate():
                     viewDef[list['id']] = []
 
 
-
-            os.makedirs(Path(Config.DATA_STORAGE,casename))
+            if not os.path.exists(Path(Config.DATA_STORAGE,casename)):
+                os.makedirs(Path(Config.DATA_STORAGE,casename))
 
             genDataPath = Path( Config.DATA_STORAGE,casename, "genData.json")
             File.writeFile(genData, genDataPath)

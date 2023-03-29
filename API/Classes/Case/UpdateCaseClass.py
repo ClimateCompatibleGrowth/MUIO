@@ -453,8 +453,11 @@ class UpdateCase(Osemosys):
                 for sc in scenarios:
                     RYTEMdata[ryt['id']][sc['ScenarioId']] = [] 
                     for tech in techs:
-                        if tech[ryt['id']]:
-                            for emi in tech[ryt['id']]:
+                        #samo ako tech ima emisije tj. EAR Emission activity ratio, posto smo dodali pored EAR i EACR Emission Activity Change Ratio u grupu RYTEM moramo promijeniti uslov
+                        # if tech[ryt['id']]:
+                        if tech['EAR']:
+                            #for emi in tech[ryt['id']]:
+                            for emi in tech['EAR']:
                                 for m in range(1, mo):
                                     chunk = {}
                                     chunk['TechId'] = tech['TechId']

@@ -23,7 +23,9 @@ export default class DataFile {
             })
             .then(data => {
                 let [casename, genData, resData] = data;
+                console.log('casename ', casename)
                 let model = new Model(casename, genData, resData, "DataFile");
+                console.log('casename from model ', model.casename)
                 if (casename) {
                     this.initPage(model);
                 } else {
@@ -482,8 +484,13 @@ export default class DataFile {
             Message.smallBoxInfo("Case selection", caserunanme + " is selected!", 3000);
         });
 
-        $(document).delegate(".deleteCase", "click", function (e) {
+        //$(document).delegate(".deleteCase", "click", function (e) {
+        $(".deleteCase").off('click');
+        $(".deleteCase").on('click', function (e) {
             var caserunname = $(this).attr('data-ps');
+            console.log('model.casename ', model.casename)
+
+
             $.SmartMessageBox({
                 title: "Confirmation Box!",
                 content: "You are about to delete <b class='danger'>" + caserunname + "</b> Model! Are you sure?",
