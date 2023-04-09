@@ -1081,11 +1081,21 @@ class DataFile(Osemosys):
             df_emi['r'] = str(region[0])
             df_emi['TotalAnnualTechnologyActivityByMode'].fillna(0, inplace=True)
 
+            #04042023 Annual Emisssions not sumed by technologies v.k.
+            # df_emi['AnnualEmissions'] = df_emi['EmissionActivityRatio']*df_emi['TotalAnnualTechnologyActivityByMode']
+            # df_emi = df_emi.drop(['EmissionActivityRatio','TotalAnnualTechnologyActivityByMode'], axis=1)
+            # df_emi = df_emi.groupby(['r','t','e','y'])['AnnualEmissions'].sum().reset_index()
+            # df_emi['AnnualEmissions'] = df_emi['AnnualEmissions'].astype(float).round(4)
+            # df_emi = df_emi.sort_values(by=['r','t','e','y'])
+            # df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
+            # all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
+
+
             df_emi['AnnualEmissions'] = df_emi['EmissionActivityRatio']*df_emi['TotalAnnualTechnologyActivityByMode']
             df_emi = df_emi.drop(['EmissionActivityRatio','TotalAnnualTechnologyActivityByMode'], axis=1)
-            df_emi = df_emi.groupby(['r','t','e','y'])['AnnualEmissions'].sum().reset_index()
+            df_emi = df_emi.groupby(['r','e','y'])['AnnualEmissions'].sum().reset_index()
             df_emi['AnnualEmissions'] = df_emi['AnnualEmissions'].astype(float).round(4)
-            df_emi = df_emi.sort_values(by=['r','t','e','y'])
+            df_emi = df_emi.sort_values(by=['r','e','y'])
             df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
             all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
     
