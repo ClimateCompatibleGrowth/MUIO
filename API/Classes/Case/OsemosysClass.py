@@ -36,6 +36,8 @@ class Osemosys():
         self.rytemPath = Path(Config.DATA_STORAGE,case,'RYTEM.json')
 
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys_preprocessing.txt')
+        self.osemosysFileOriginal = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
+
         self.glpkFolder = Path(Config.SOLVERs_FOLDER,'glpk-4.65', 'w64')
         # self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
         self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'Cbc-2.7.5-win64-intel11.1', 'bin')

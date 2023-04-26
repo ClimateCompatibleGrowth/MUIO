@@ -2,6 +2,7 @@ from pathlib import Path
 import pandas as pd
 import json
 import os
+import time
 from collections import defaultdict
 import subprocess
 from API.Classes.Base import Config
@@ -1372,6 +1373,8 @@ class DataFile(Osemosys):
 
     def run( self, solver, caserunname ):
         try:
+            start_time = time.time()
+            txtOut = ""
             self.dataFile = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data.txt')
             self.dataFile_processed = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data_processed.txt')
             self.resFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'results.txt')
@@ -1384,6 +1387,7 @@ class DataFile(Osemosys):
             self.resPath = Path(Config.DATA_STORAGE,self.case, 'res',caserunname)
 
             modelfile = '"{}"'.format(self.osemosysFile.resolve())
+            modelfile_original = '"{}"'.format(self.osemosysFileOriginal.resolve())
             datafile = '"{}"'.format(self.dataFile.resolve())
             datafile_processed = '"{}"'.format(self.dataFile_processed.resolve())
             resultfile = '"{}"'.format(self.resFile.resolve())
@@ -1405,11 +1409,19 @@ class DataFile(Osemosys):
                 #subprocess.run('preprocess_data.py' + datafile + dataFile_processed)
 
                 self.preprocessData(self.dataFile, self.dataFile_processed)
-                print("Data file preprocessed done!")
-                #return output to variable
+                print("PREPROCESSING DONE! --- %s seconds ---" % (time.time() - start_time))
+                txtOut = txtOut + ("Preprocessing time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
+
+                #return output to variable preprocessed data file
                 glpk_out = subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
                 
-                print("lp file done!")
+                #original data file without preprocessing
+                #glpk_out = subprocess.run('glpsol --check -m ' + modelfile_original +' -d ' + datafile +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
+                
+                print("CREATINON OF LP FILE DONE! --- %s seconds ---" % (time.time() - start_time))
+                txtOut = txtOut + ("Creation of LP file time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
+
+
                 ####output to logfile.txt
                 #subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile +'>'+  logfiletxt+'2>&1', cwd=glpfolder, text=True, shell=True)
 
@@ -1421,7 +1433,10 @@ class DataFile(Osemosys):
                 #     outs, errs = proc.communicate()
 
                 cbc_out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
-                print("solution done!")
+
+
+                print("SOLUTION DONE! --- %s seconds ---" % (time.time() - start_time))
+                txtOut = txtOut + ("Solution time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
                 ####output to lg file .log i .txt with errors
                 # out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
                 #out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfiletxt +'2>&1', cwd=cbcfolder,  capture_output=True, text=True, shell=True)
@@ -1433,18 +1448,22 @@ class DataFile(Osemosys):
                     "cbc_stdmsg": cbc_out.stderr,
                     "glpk_message": glpk_out.stdout,
                     "glpk_stdmsg": glpk_out.stderr,
+                    "timer": txtOut,
                     "status_code": "error"
                 }
             else:
                 self.generateCSVfromCBC(self.dataFile, self.resFile, self.resPath)
-                print("csv created!")
+                print("CSV DONE! --- %s seconds ---" % (time.time() - start_time))
+                txtOut = txtOut + ("csv files extraction time {:0.2f} s;{}".format(time.time() - start_time, '\n'))
                 self.generateResultsViewer(caserunname)
-                print("result viewer created!")
+                print("PIVOT TABLE DONE! --- %s seconds ---" % (time.time() - start_time))
+                txtOut = txtOut + ("Pivot data preparation time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
                 response = {
                     "cbc_message": cbc_out.stdout,
                     "cbc_stdmsg": cbc_out.stderr,
                     "glpk_message": glpk_out.stdout,
                     "glpk_stdmsg": glpk_out.stderr,
+                    "timer": txtOut,
                     "status_code": "success"
                 }           
             return response

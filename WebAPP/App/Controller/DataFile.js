@@ -44,6 +44,7 @@ export default class DataFile {
         //Navbar.initPage(model.casename, model.pageId);
         Html.title(model.casename, model.title, "");
         Html.renderCases(model.cases);
+        //potrebno je napraviti render svih scenarija (mozda je dodan novi scenario u medjuvremenu), on mora biti dodan u listu scenarija po case run samo sto nece biti aktivan
         // Html.renderScOrder(model.scBycs[model.cs]);
         Html.renderScOrder(model.scenarios);
         if (model.casename == null) {
@@ -108,26 +109,36 @@ export default class DataFile {
         $("#osy-btnScOrder").off('click');
         $("#osy-btnScOrder").on('click', function (event) {
             console.log('model, ', model)
+
             if(model.cs in  model.scBycs){
-                //pored originalnih scenarija u caserunu, potrebno dodati eventualno nove scenarije koji su dodani poslije uspjesnog RUN-a, kao neaktivne
-                let sccsMap = {};
-                $.each(model.scBycs[model.cs], function (id, scObj) {
-                    sccsMap[scObj.ScenarioId] = scObj;
-                });
-                let scArray = model.scBycs[model.cs].slice()
-                $.each(model.scenarios, function (key, obj) {
-                    if(obj.ScenarioId in sccsMap === false){
-                        console.log('obj.Scenario ', obj.Scenario)
-                        let sc = JSON.parse(JSON.stringify(obj));
-                        sc.Active = false;
-                        console.log('sc ', sc)
-                        scArray.push(sc);
-                    }
-                });
-                Html.renderScOrder(scArray);
+                Html.renderScOrder( model.scBycs[model.cs]);
             }else{
                 Html.renderScOrder(model.scenarios);
             }
+
+            //nove scenarije dodjeamo sad u modelu ovaj dio je nepotreban
+            // if(model.cs in  model.scBycs){
+            //     //pored originalnih scenarija u caserunu, potrebno dodati eventualno nove 
+            //     //scenarije koji su dodani poslije uspjesnog RUN-a, kao neaktivne
+            //     let sccsMap = {};
+            //     $.each(model.scBycs[model.cs], function (id, scObj) {
+            //         sccsMap[scObj.ScenarioId] = scObj;
+            //     });
+            //     //create shallow copy of array
+            //     let scArray = model.scBycs[model.cs].slice()
+            //     $.each(model.scenarios, function (key, obj) {
+            //         if(obj.ScenarioId in sccsMap === false){
+            //             console.log('obj.Scenario ', obj.Scenario)
+            //             let sc = JSON.parse(JSON.stringify(obj));
+            //             sc.Active = false;
+            //             console.log('sc ', sc)
+            //             scArray.push(sc);
+            //         }
+            //     });
+            //     Html.renderScOrder(scArray);
+            // }else{
+            //     Html.renderScOrder(model.scenarios);
+            // }
             
         });
 
@@ -215,6 +226,7 @@ export default class DataFile {
             event.preventDefault();
             event.stopImmediatePropagation();
             Html.title(model.casename, model.title, "");
+            Html.renderScOrder(model.scenarios);
             model.cs = '';
             $("#osy-casename").val(null);
             $("#osy-desc").val(null);
@@ -401,7 +413,7 @@ export default class DataFile {
                         });
                     Sidebar.Reload(model.casename);
                     Message.clearMessages();
-                    Message.successOsy('Optimiziation finished!');
+                    Message.successOsy('Optimiziation finished! <small><i class="">' + response.timer +'</i></small>');
                 }
                 if (response.status_code == "error") {
                     Message.loaderEnd();
@@ -435,8 +447,11 @@ export default class DataFile {
             //$(document).delegate(".selectCS","click",function(e){
             e.preventDefault();
             e.stopImmediatePropagation();
+            Html.renderScOrder( model.scBycs[model.cs]);
+            console.log('model, ', model)
             var caserunanme = $(this).attr('data-ps');
-            model.cs = caserunanme
+            model.cs = caserunanme;
+            Html.renderScOrder( model.scBycs[model.cs]);
 
             Html.resData(model);
             Html.title(model.casename, model.title, caserunanme);
@@ -485,12 +500,13 @@ export default class DataFile {
         });
 
         //$(document).delegate(".deleteCase", "click", function (e) {
-        $(".deleteCase").off('click');
-        $(".deleteCase").on('click', function (e) {
+        // $(".deleteCase").off('click');
+        // $(".deleteCase").on('click', function (e) {
+        //$("#osy-Cases").off('click');
+        $("#osy-Cases").on('click', '.deleteCase', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
             var caserunname = $(this).attr('data-ps');
-            console.log('model.casename ', model.casename)
-
-
             $.SmartMessageBox({
                 title: "Confirmation Box!",
                 content: "You are about to delete <b class='danger'>" + caserunname + "</b> Model! Are you sure?",
