@@ -11,8 +11,14 @@ import pytest
 
 from pandas.errors import EmptyDataError
 
-from pandas import DataFrame, Index
+from pandas import (
+    DataFrame,
+    Index,
+)
 import pandas._testing as tm
+
+# XFAIL ME PLS once hanging tests issues identified
+pytestmark = pytest.mark.usefixtures("pyarrow_skip")
 
 
 @pytest.mark.parametrize("skiprows", [list(range(6)), 6])
@@ -93,7 +99,7 @@ line 12",2
 2,"line 21
 line 22",2
 3,"line 31",1""",
-            dict(skiprows=[1]),
+            {"skiprows": [1]},
             DataFrame(
                 [[2, "line 21\nline 22", 2], [3, "line 31", 1]],
                 columns=["id", "text", "num_lines"],
@@ -101,7 +107,7 @@ line 22",2
         ),
         (
             "a,b,c\n~a\n b~,~e\n d~,~f\n f~\n1,2,~12\n 13\n 14~",
-            dict(quotechar="~", skiprows=[2]),
+            {"quotechar": "~", "skiprows": [2]},
             DataFrame([["a\n b", "e\n d", "f\n f"]], columns=["a", "b", "c"]),
         ),
         (
@@ -111,7 +117,7 @@ line 22",2
                 "example\n sentence\n two~,url2\n~"
                 "example\n sentence\n three~,url3"
             ),
-            dict(quotechar="~", skiprows=[1, 3]),
+            {"quotechar": "~", "skiprows": [1, 3]},
             DataFrame([["example\n sentence\n two", "url2"]], columns=["Text", "url"]),
         ),
     ],
@@ -174,9 +180,9 @@ def test_skip_row_with_newline_and_quote(all_parsers, data, exp_data):
 
 
 @pytest.mark.parametrize(
-    "line_terminator", ["\n", "\r\n", "\r"]  # "LF"  # "CRLF"  # "CR"
+    "lineterminator", ["\n", "\r\n", "\r"]  # "LF"  # "CRLF"  # "CR"
 )
-def test_skiprows_lineterminator(all_parsers, line_terminator):
+def test_skiprows_lineterminator(all_parsers, lineterminator, request):
     # see gh-9079
     parser = all_parsers
     data = "\n".join(
@@ -196,10 +202,11 @@ def test_skiprows_lineterminator(all_parsers, line_terminator):
         columns=["date", "time", "var", "flag", "oflag"],
     )
 
-    if parser.engine == "python" and line_terminator == "\r":
-        pytest.skip("'CR' not respect with the Python parser yet")
+    if parser.engine == "python" and lineterminator == "\r":
+        mark = pytest.mark.xfail(reason="'CR' not respect with the Python parser yet")
+        request.node.add_marker(mark)
 
-    data = data.replace("\n", line_terminator)
+    data = data.replace("\n", lineterminator)
     result = parser.read_csv(
         StringIO(data),
         skiprows=1,
@@ -222,8 +229,8 @@ def test_skiprows_infield_quote(all_parsers):
 @pytest.mark.parametrize(
     "kwargs,expected",
     [
-        (dict(), DataFrame({"1": [3, 5]})),
-        (dict(header=0, names=["foo"]), DataFrame({"foo": [3, 5]})),
+        ({}, DataFrame({"1": [3, 5]})),
+        ({"header": 0, "names": ["foo"]}, DataFrame({"foo": [3, 5]})),
     ],
 )
 def test_skip_rows_callable(all_parsers, kwargs, expected):
@@ -231,6 +238,17 @@ def test_skip_rows_callable(all_parsers, kwargs, expected):
     data = "a\n1\n2\n3\n4\n5"
 
     result = parser.read_csv(StringIO(data), skiprows=lambda x: x % 2 == 0, **kwargs)
+    tm.assert_frame_equal(result, expected)
+
+
+def test_skip_rows_callable_not_in(all_parsers):
+    parser = all_parsers
+    data = "0,a\n1,b\n2,c\n3,d\n4,e"
+    expected = DataFrame([[1, "b"], [3, "d"]])
+
+    result = parser.read_csv(
+        StringIO(data), header=None, skiprows=lambda x: x not in [1, 3]
+    )
     tm.assert_frame_equal(result, expected)
 
 
@@ -250,3 +268,21 @@ def test_skip_rows_bad_callable(all_parsers):
 
     with pytest.raises(ZeroDivisionError, match=msg):
         parser.read_csv(StringIO(data), skiprows=lambda x: 1 / 0)
+
+
+def test_skip_rows_and_n_rows(all_parsers):
+    # GH#44021
+    data = """a,b
+1,a
+2,b
+3,c
+4,d
+5,e
+6,f
+7,g
+8,h
+"""
+    parser = all_parsers
+    result = parser.read_csv(StringIO(data), nrows=5, skiprows=[2, 4, 6])
+    expected = DataFrame({"a": [1, 3, 5, 7, 8], "b": ["a", "c", "e", "g", "h"]})
+    tm.assert_frame_equal(result, expected)

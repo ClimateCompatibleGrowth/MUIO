@@ -1,15 +1,34 @@
 """
 Read SAS sas7bdat or xport files.
 """
-from abc import ABCMeta, abstractmethod
-from typing import TYPE_CHECKING, Optional, Union, overload
+from __future__ import annotations
 
-from pandas._typing import FilePathOrBuffer, Label
+from abc import (
+    ABCMeta,
+    abstractmethod,
+)
+from typing import (
+    TYPE_CHECKING,
+    Hashable,
+    overload,
+)
+
+from pandas._typing import (
+    CompressionOptions,
+    FilePath,
+    ReadBuffer,
+)
+from pandas.util._decorators import (
+    deprecate_nonkeyword_arguments,
+    doc,
+)
+
+from pandas.core.shared_docs import _shared_docs
 
 from pandas.io.common import stringify_path
 
 if TYPE_CHECKING:
-    from pandas import DataFrame  # noqa: F401
+    from pandas import DataFrame
 
 
 # TODO(PY38): replace with Protocol in Python 3.8
@@ -19,64 +38,69 @@ class ReaderBase(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def read(self, nrows=None):
+    def read(self, nrows: int | None = None) -> DataFrame:
         pass
 
     @abstractmethod
-    def close(self):
+    def close(self) -> None:
         pass
+
+    def __enter__(self) -> ReaderBase:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        self.close()
 
 
 @overload
 def read_sas(
-    filepath_or_buffer: FilePathOrBuffer,
-    format: Optional[str] = ...,
-    index: Optional[Label] = ...,
-    encoding: Optional[str] = ...,
+    filepath_or_buffer: FilePath | ReadBuffer[bytes],
+    format: str | None = ...,
+    index: Hashable | None = ...,
+    encoding: str | None = ...,
     chunksize: int = ...,
     iterator: bool = ...,
+    compression: CompressionOptions = ...,
 ) -> ReaderBase:
     ...
 
 
 @overload
 def read_sas(
-    filepath_or_buffer: FilePathOrBuffer,
-    format: Optional[str] = ...,
-    index: Optional[Label] = ...,
-    encoding: Optional[str] = ...,
+    filepath_or_buffer: FilePath | ReadBuffer[bytes],
+    format: str | None = ...,
+    index: Hashable | None = ...,
+    encoding: str | None = ...,
     chunksize: None = ...,
     iterator: bool = ...,
-) -> Union["DataFrame", ReaderBase]:
+    compression: CompressionOptions = ...,
+) -> DataFrame | ReaderBase:
     ...
 
 
+@deprecate_nonkeyword_arguments(version=None, allowed_args=["filepath_or_buffer"])
+@doc(decompression_options=_shared_docs["decompression_options"] % "filepath_or_buffer")
 def read_sas(
-    filepath_or_buffer: FilePathOrBuffer,
-    format: Optional[str] = None,
-    index: Optional[Label] = None,
-    encoding: Optional[str] = None,
-    chunksize: Optional[int] = None,
+    filepath_or_buffer: FilePath | ReadBuffer[bytes],
+    format: str | None = None,
+    index: Hashable | None = None,
+    encoding: str | None = None,
+    chunksize: int | None = None,
     iterator: bool = False,
-) -> Union["DataFrame", ReaderBase]:
+    compression: CompressionOptions = "infer",
+) -> DataFrame | ReaderBase:
     """
     Read SAS files stored as either XPORT or SAS7BDAT format files.
 
     Parameters
     ----------
-    filepath_or_buffer : str, path object or file-like object
-        Any valid string path is acceptable. The string could be a URL. Valid
-        URL schemes include http, ftp, s3, and file. For file URLs, a host is
+    filepath_or_buffer : str, path object, or file-like object
+        String, path object (implementing ``os.PathLike[str]``), or file-like
+        object implementing a binary ``read()`` function. The string could be a URL.
+        Valid URL schemes include http, ftp, s3, and file. For file URLs, a host is
         expected. A local file could be:
         ``file://localhost/path/to/table.sas``.
-
-        If you want to pass in a path object, pandas accepts any
-        ``os.PathLike``.
-
-        By file-like object, we refer to objects with a ``read()`` method,
-        such as a file handler (e.g. via builtin ``open`` function)
-        or ``StringIO``.
-    format : str {'xport', 'sas7bdat'} or None
+    format : str {{'xport', 'sas7bdat'}} or None
         If None, file format is inferred from file extension. If 'xport' or
         'sas7bdat', uses the corresponding format.
     index : identifier of index column, defaults to None
@@ -85,8 +109,17 @@ def read_sas(
         Encoding for text data.  If None, text data are stored as raw bytes.
     chunksize : int
         Read file `chunksize` lines at a time, returns iterator.
+
+        .. versionchanged:: 1.2
+
+            ``TextFileReader`` is a context manager.
     iterator : bool, defaults to False
         If True, returns an iterator for reading the file incrementally.
+
+        .. versionchanged:: 1.2
+
+            ``TextFileReader`` is a context manager.
+    {decompression_options}
 
     Returns
     -------
@@ -102,25 +135,35 @@ def read_sas(
         if not isinstance(filepath_or_buffer, str):
             raise ValueError(buffer_error_msg)
         fname = filepath_or_buffer.lower()
-        if fname.endswith(".xpt"):
+        if ".xpt" in fname:
             format = "xport"
-        elif fname.endswith(".sas7bdat"):
+        elif ".sas7bdat" in fname:
             format = "sas7bdat"
         else:
-            raise ValueError("unable to infer format of SAS file")
+            raise ValueError(
+                f"unable to infer format of SAS file from filename: {repr(fname)}"
+            )
 
     reader: ReaderBase
     if format.lower() == "xport":
         from pandas.io.sas.sas_xport import XportReader
 
         reader = XportReader(
-            filepath_or_buffer, index=index, encoding=encoding, chunksize=chunksize
+            filepath_or_buffer,
+            index=index,
+            encoding=encoding,
+            chunksize=chunksize,
+            compression=compression,
         )
     elif format.lower() == "sas7bdat":
         from pandas.io.sas.sas7bdat import SAS7BDATReader
 
         reader = SAS7BDATReader(
-            filepath_or_buffer, index=index, encoding=encoding, chunksize=chunksize
+            filepath_or_buffer,
+            index=index,
+            encoding=encoding,
+            chunksize=chunksize,
+            compression=compression,
         )
     else:
         raise ValueError("unknown SAS format")
@@ -128,6 +171,5 @@ def read_sas(
     if iterator or chunksize:
         return reader
 
-    data = reader.read()
-    reader.close()
-    return data
+    with reader:
+        return reader.read()

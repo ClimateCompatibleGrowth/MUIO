@@ -1,41 +1,37 @@
-# flake8: noqa
+from __future__ import annotations
 
 __docformat__ = "restructuredtext"
 
 # Let users know if they're missing any of our hard dependencies
-hard_dependencies = ("numpy", "pytz", "dateutil")
-missing_dependencies = []
+_hard_dependencies = ("numpy", "pytz", "dateutil")
+_missing_dependencies = []
 
-for dependency in hard_dependencies:
+for _dependency in _hard_dependencies:
     try:
-        __import__(dependency)
-    except ImportError as e:
-        missing_dependencies.append(f"{dependency}: {e}")
+        __import__(_dependency)
+    except ImportError as _e:
+        _missing_dependencies.append(f"{_dependency}: {_e}")
 
-if missing_dependencies:
+if _missing_dependencies:
     raise ImportError(
-        "Unable to import required dependencies:\n" + "\n".join(missing_dependencies)
+        "Unable to import required dependencies:\n" + "\n".join(_missing_dependencies)
     )
-del hard_dependencies, dependency, missing_dependencies
+del _hard_dependencies, _dependency, _missing_dependencies
 
 # numpy compat
-from pandas.compat.numpy import (
-    _np_version_under1p16,
-    _np_version_under1p17,
-    _np_version_under1p18,
-    _is_numpy_dev,
-)
+from pandas.compat import is_numpy_dev as _is_numpy_dev  # pyright: ignore # noqa:F401
 
 try:
     from pandas._libs import hashtable as _hashtable, lib as _lib, tslib as _tslib
-except ImportError as e:  # pragma: no cover
-    # hack but overkill to use re
-    module = str(e).replace("cannot import name ", "")
+except ImportError as _err:  # pragma: no cover
+    _module = _err.name
     raise ImportError(
-        f"C extension: {module} not built. If you want to import "
+        f"C extension: {_module} not built. If you want to import "
         "pandas from the source directory, you may need to run "
-        "'python setup.py build_ext --inplace --force' to build the C extensions first."
-    ) from e
+        "'python setup.py build_ext --force' to build the C extensions first."
+    ) from _err
+else:
+    del _tslib, _lib, _hashtable
 
 from pandas._config import (
     get_option,
@@ -47,10 +43,11 @@ from pandas._config import (
 )
 
 # let init-time option registration happen
-import pandas.core.config_init
+import pandas.core.config_init  # pyright: ignore # noqa:F401
 
 from pandas.core.api import (
     # dtype
+    ArrowDtype,
     Int8Dtype,
     Int16Dtype,
     Int32Dtype,
@@ -59,6 +56,8 @@ from pandas.core.api import (
     UInt16Dtype,
     UInt32Dtype,
     UInt64Dtype,
+    Float32Dtype,
+    Float64Dtype,
     CategoricalDtype,
     PeriodDtype,
     IntervalDtype,
@@ -74,10 +73,7 @@ from pandas.core.api import (
     # indexes
     Index,
     CategoricalIndex,
-    Int64Index,
-    UInt64Index,
     RangeIndex,
-    Float64Index,
     MultiIndex,
     IntervalIndex,
     TimedeltaIndex,
@@ -101,6 +97,7 @@ from pandas.core.api import (
     to_datetime,
     to_timedelta,
     # misc
+    Flags,
     Grouper,
     factorize,
     unique,
@@ -132,11 +129,13 @@ from pandas.core.reshape.api import (
     pivot,
     pivot_table,
     get_dummies,
+    from_dummies,
     cut,
     qcut,
 )
 
-import pandas.api
+from pandas import api, arrays, errors, io, plotting, tseries
+from pandas import testing  # noqa:PDF015
 from pandas.util._print_versions import show_versions
 
 from pandas.io.api import (
@@ -165,6 +164,7 @@ from pandas.io.api import (
     read_feather,
     read_gbq,
     read_html,
+    read_xml,
     read_json,
     read_stata,
     read_sas,
@@ -174,11 +174,9 @@ from pandas.io.api import (
 from pandas.io.json import _json_normalize as json_normalize
 
 from pandas.util._tester import test
-import pandas.testing
-import pandas.arrays
 
 # use the closest tagged version if possible
-from ._version import get_versions
+from pandas._version import get_versions
 
 v = get_versions()
 __version__ = v.get("closest-tag", v["version"])
@@ -186,180 +184,84 @@ __git_version__ = v.get("full-revisionid")
 del get_versions, v
 
 # GH 27101
-# TODO: remove Panel compat in 1.0
-if pandas.compat.PY37:
-
-    def __getattr__(name):
-        import warnings
-
-        if name == "Panel":
-
-            warnings.warn(
-                "The Panel class is removed from pandas. Accessing it "
-                "from the top-level namespace will also be removed in the next version",
-                FutureWarning,
-                stacklevel=2,
-            )
-
-            class Panel:
-                pass
-
-            return Panel
-
-        elif name == "datetime":
-            warnings.warn(
-                "The pandas.datetime class is deprecated "
-                "and will be removed from pandas in a future version. "
-                "Import from datetime module instead.",
-                FutureWarning,
-                stacklevel=2,
-            )
-
-            from datetime import datetime as dt
-
-            return dt
-
-        elif name == "np":
-
-            warnings.warn(
-                "The pandas.np module is deprecated "
-                "and will be removed from pandas in a future version. "
-                "Import numpy directly instead",
-                FutureWarning,
-                stacklevel=2,
-            )
-            import numpy as np
-
-            return np
-
-        elif name in {"SparseSeries", "SparseDataFrame"}:
-            warnings.warn(
-                f"The {name} class is removed from pandas. Accessing it from "
-                "the top-level namespace will also be removed in the next version",
-                FutureWarning,
-                stacklevel=2,
-            )
-
-            return type(name, (), {})
-
-        elif name == "SparseArray":
-
-            warnings.warn(
-                "The pandas.SparseArray class is deprecated "
-                "and will be removed from pandas in a future version. "
-                "Use pandas.arrays.SparseArray instead.",
-                FutureWarning,
-                stacklevel=2,
-            )
-            from pandas.core.arrays.sparse import SparseArray as _SparseArray
-
-            return _SparseArray
-
-        raise AttributeError(f"module 'pandas' has no attribute '{name}'")
+__deprecated_num_index_names = ["Float64Index", "Int64Index", "UInt64Index"]
 
 
-else:
+def __dir__() -> list[str]:
+    # GH43028
+    # Int64Index etc. are deprecated, but we still want them to be available in the dir.
+    # Remove in Pandas 2.0, when we remove Int64Index etc. from the code base.
+    return list(globals().keys()) + __deprecated_num_index_names
 
-    class Panel:
-        pass
 
-    class SparseDataFrame:
-        pass
+def __getattr__(name):
+    import warnings
 
-    class SparseSeries:
-        pass
+    if name in __deprecated_num_index_names:
+        warnings.warn(
+            f"pandas.{name} is deprecated "
+            "and will be removed from pandas in a future version. "
+            "Use pandas.Index with the appropriate dtype instead.",
+            FutureWarning,
+            stacklevel=2,
+        )
+        from pandas.core.api import Float64Index, Int64Index, UInt64Index
 
-    class __numpy:
-        def __init__(self):
-            import numpy as np
-            import warnings
-
-            self.np = np
-            self.warnings = warnings
-
-        def __getattr__(self, item):
-            self.warnings.warn(
-                "The pandas.np module is deprecated "
-                "and will be removed from pandas in a future version. "
-                "Import numpy directly instead",
-                FutureWarning,
-                stacklevel=2,
-            )
-
-            try:
-                return getattr(self.np, item)
-            except AttributeError as err:
-                raise AttributeError(f"module numpy has no attribute {item}") from err
-
-    np = __numpy()
-
-    class __Datetime(type):
+        return {
+            "Float64Index": Float64Index,
+            "Int64Index": Int64Index,
+            "UInt64Index": UInt64Index,
+        }[name]
+    elif name == "datetime":
+        warnings.warn(
+            "The pandas.datetime class is deprecated "
+            "and will be removed from pandas in a future version. "
+            "Import from datetime module instead.",
+            FutureWarning,
+            stacklevel=2,
+        )
 
         from datetime import datetime as dt
 
-        datetime = dt
+        return dt
 
-        def __getattr__(cls, item):
-            cls.emit_warning()
+    elif name == "np":
 
-            try:
-                return getattr(cls.datetime, item)
-            except AttributeError as err:
-                raise AttributeError(
-                    f"module datetime has no attribute {item}"
-                ) from err
+        warnings.warn(
+            "The pandas.np module is deprecated "
+            "and will be removed from pandas in a future version. "
+            "Import numpy directly instead.",
+            FutureWarning,
+            stacklevel=2,
+        )
+        import numpy as np
 
-        def __instancecheck__(cls, other):
-            return isinstance(other, cls.datetime)
+        return np
 
-    class __DatetimeSub(metaclass=__Datetime):
-        def emit_warning(dummy=0):
-            import warnings
+    elif name in {"SparseSeries", "SparseDataFrame"}:
+        warnings.warn(
+            f"The {name} class is removed from pandas. Accessing it from "
+            "the top-level namespace will also be removed in the next version.",
+            FutureWarning,
+            stacklevel=2,
+        )
 
-            warnings.warn(
-                "The pandas.datetime class is deprecated "
-                "and will be removed from pandas in a future version. "
-                "Import from datetime instead.",
-                FutureWarning,
-                stacklevel=3,
-            )
+        return type(name, (), {})
 
-        def __new__(cls, *args, **kwargs):
-            cls.emit_warning()
-            from datetime import datetime as dt
+    elif name == "SparseArray":
 
-            return dt(*args, **kwargs)
+        warnings.warn(
+            "The pandas.SparseArray class is deprecated "
+            "and will be removed from pandas in a future version. "
+            "Use pandas.arrays.SparseArray instead.",
+            FutureWarning,
+            stacklevel=2,
+        )
+        from pandas.core.arrays.sparse import SparseArray as _SparseArray
 
-    datetime = __DatetimeSub
+        return _SparseArray
 
-    class __SparseArray(type):
-
-        from pandas.core.arrays.sparse import SparseArray as sa
-
-        SparseArray = sa
-
-        def __instancecheck__(cls, other):
-            return isinstance(other, cls.SparseArray)
-
-    class __SparseArraySub(metaclass=__SparseArray):
-        def emit_warning(dummy=0):
-            import warnings
-
-            warnings.warn(
-                "The pandas.SparseArray class is deprecated "
-                "and will be removed from pandas in a future version. "
-                "Use pandas.arrays.SparseArray instead.",
-                FutureWarning,
-                stacklevel=3,
-            )
-
-        def __new__(cls, *args, **kwargs):
-            cls.emit_warning()
-            from pandas.core.arrays.sparse import SparseArray as sa
-
-            return sa(*args, **kwargs)
-
-    SparseArray = __SparseArraySub
+    raise AttributeError(f"module 'pandas' has no attribute '{name}'")
 
 
 # module level doc-string
@@ -402,3 +304,123 @@ Here are just a few of the things that pandas does well:
   - Time series-specific functionality: date range generation and frequency
     conversion, moving window statistics, date shifting and lagging.
 """
+
+# Use __all__ to let type checkers know what is part of the public API.
+# Pandas is not (yet) a py.typed library: the public API is determined
+# based on the documentation.
+__all__ = [
+    "ArrowDtype",
+    "BooleanDtype",
+    "Categorical",
+    "CategoricalDtype",
+    "CategoricalIndex",
+    "DataFrame",
+    "DateOffset",
+    "DatetimeIndex",
+    "DatetimeTZDtype",
+    "ExcelFile",
+    "ExcelWriter",
+    "Flags",
+    "Float32Dtype",
+    "Float64Dtype",
+    "Grouper",
+    "HDFStore",
+    "Index",
+    "IndexSlice",
+    "Int16Dtype",
+    "Int32Dtype",
+    "Int64Dtype",
+    "Int8Dtype",
+    "Interval",
+    "IntervalDtype",
+    "IntervalIndex",
+    "MultiIndex",
+    "NA",
+    "NaT",
+    "NamedAgg",
+    "Period",
+    "PeriodDtype",
+    "PeriodIndex",
+    "RangeIndex",
+    "Series",
+    "SparseDtype",
+    "StringDtype",
+    "Timedelta",
+    "TimedeltaIndex",
+    "Timestamp",
+    "UInt16Dtype",
+    "UInt32Dtype",
+    "UInt64Dtype",
+    "UInt8Dtype",
+    "api",
+    "array",
+    "arrays",
+    "bdate_range",
+    "concat",
+    "crosstab",
+    "cut",
+    "date_range",
+    "describe_option",
+    "errors",
+    "eval",
+    "factorize",
+    "get_dummies",
+    "from_dummies",
+    "get_option",
+    "infer_freq",
+    "interval_range",
+    "io",
+    "isna",
+    "isnull",
+    "json_normalize",
+    "lreshape",
+    "melt",
+    "merge",
+    "merge_asof",
+    "merge_ordered",
+    "notna",
+    "notnull",
+    "offsets",
+    "option_context",
+    "options",
+    "period_range",
+    "pivot",
+    "pivot_table",
+    "plotting",
+    "qcut",
+    "read_clipboard",
+    "read_csv",
+    "read_excel",
+    "read_feather",
+    "read_fwf",
+    "read_gbq",
+    "read_hdf",
+    "read_html",
+    "read_json",
+    "read_orc",
+    "read_parquet",
+    "read_pickle",
+    "read_sas",
+    "read_spss",
+    "read_sql",
+    "read_sql_query",
+    "read_sql_table",
+    "read_stata",
+    "read_table",
+    "read_xml",
+    "reset_option",
+    "set_eng_float_format",
+    "set_option",
+    "show_versions",
+    "test",
+    "testing",
+    "timedelta_range",
+    "to_datetime",
+    "to_numeric",
+    "to_pickle",
+    "to_timedelta",
+    "tseries",
+    "unique",
+    "value_counts",
+    "wide_to_long",
+]

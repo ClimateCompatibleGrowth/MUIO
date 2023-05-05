@@ -207,23 +207,20 @@ def _get_linear_ramps(padded, axis, width_pair, end_value_pair):
     """
     edge_pair = _get_edges(padded, axis, width_pair)
 
-    left_ramp = np.linspace(
-        start=end_value_pair[0],
-        stop=edge_pair[0].squeeze(axis),  # Dimensions is replaced by linspace
-        num=width_pair[0],
-        endpoint=False,
-        dtype=padded.dtype,
-        axis=axis,
+    left_ramp, right_ramp = (
+        np.linspace(
+            start=end_value,
+            stop=edge.squeeze(axis), # Dimension is replaced by linspace
+            num=width,
+            endpoint=False,
+            dtype=padded.dtype,
+            axis=axis
+        )
+        for end_value, edge, width in zip(
+            end_value_pair, edge_pair, width_pair
+        )
     )
-
-    right_ramp = np.linspace(
-        start=end_value_pair[1],
-        stop=edge_pair[1].squeeze(axis),  # Dimension is replaced by linspace
-        num=width_pair[1],
-        endpoint=False,
-        dtype=padded.dtype,
-        axis=axis,
-    )
+        
     # Reverse linear space in appropriate dimension
     right_ramp = right_ramp[_slice_at_axis(slice(None, None, -1), axis)]
 
@@ -540,11 +537,12 @@ def pad(array, pad_width, mode='constant', **kwargs):
         The array to pad.
     pad_width : {sequence, array_like, int}
         Number of values padded to the edges of each axis.
-        ((before_1, after_1), ... (before_N, after_N)) unique pad widths
+        ``((before_1, after_1), ... (before_N, after_N))`` unique pad widths
         for each axis.
-        ((before, after),) yields same before and after pad for each axis.
-        (pad,) or int is a shortcut for before = after = pad width for all
-        axes.
+        ``(before, after)`` or ``((before, after),)`` yields same before
+        and after pad for each axis.
+        ``(pad,)`` or ``int`` is a shortcut for before = after = pad width
+        for all axes.
     mode : str or function, optional
         One of the following string values or a user supplied function.
 
@@ -589,14 +587,14 @@ def pad(array, pad_width, mode='constant', **kwargs):
         Used in 'maximum', 'mean', 'median', and 'minimum'.  Number of
         values at edge of each axis used to calculate the statistic value.
 
-        ((before_1, after_1), ... (before_N, after_N)) unique statistic
+        ``((before_1, after_1), ... (before_N, after_N))`` unique statistic
         lengths for each axis.
 
-        ((before, after),) yields same before and after statistic lengths
-        for each axis.
+        ``(before, after)`` or ``((before, after),)`` yields same before
+        and after statistic lengths for each axis.
 
-        (stat_length,) or int is a shortcut for before = after = statistic
-        length for all axes.
+        ``(stat_length,)`` or ``int`` is a shortcut for
+        ``before = after = statistic`` length for all axes.
 
         Default is ``None``, to use the entire axis.
     constant_values : sequence or scalar, optional
@@ -606,11 +604,11 @@ def pad(array, pad_width, mode='constant', **kwargs):
         ``((before_1, after_1), ... (before_N, after_N))`` unique pad constants
         for each axis.
 
-        ``((before, after),)`` yields same before and after constants for each
-        axis.
+        ``(before, after)`` or ``((before, after),)`` yields same before
+        and after constants for each axis.
 
-        ``(constant,)`` or ``constant`` is a shortcut for ``before = after = constant`` for
-        all axes.
+        ``(constant,)`` or ``constant`` is a shortcut for
+        ``before = after = constant`` for all axes.
 
         Default is 0.
     end_values : sequence or scalar, optional
@@ -620,11 +618,11 @@ def pad(array, pad_width, mode='constant', **kwargs):
         ``((before_1, after_1), ... (before_N, after_N))`` unique end values
         for each axis.
 
-        ``((before, after),)`` yields same before and after end values for each
-        axis.
+        ``(before, after)`` or ``((before, after),)`` yields same before
+        and after end values for each axis.
 
-        ``(constant,)`` or ``constant`` is a shortcut for ``before = after = constant`` for
-        all axes.
+        ``(constant,)`` or ``constant`` is a shortcut for
+        ``before = after = constant`` for all axes.
 
         Default is 0.
     reflect_type : {'even', 'odd'}, optional
@@ -783,7 +781,7 @@ def pad(array, pad_width, mode='constant', **kwargs):
     try:
         unsupported_kwargs = set(kwargs) - set(allowed_kwargs[mode])
     except KeyError:
-        raise ValueError("mode '{}' is not supported".format(mode))
+        raise ValueError("mode '{}' is not supported".format(mode)) from None
     if unsupported_kwargs:
         raise ValueError("unsupported keyword arguments for mode '{}': {}"
                          .format(mode, unsupported_kwargs))

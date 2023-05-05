@@ -38,9 +38,13 @@ def test_read_writer_table():
     tm.assert_frame_equal(result, expected)
 
 
-def test_nonexistent_sheetname_raises(read_ext):
-    # GH-27676
-    # Specifying a non-existent sheet_name parameter should throw an error
-    # with the sheet name.
-    with pytest.raises(ValueError, match="sheet xyz not found"):
-        pd.read_excel("blank.ods", sheet_name="xyz")
+def test_read_newlines_between_xml_elements_table():
+    # GH#45598
+    expected = pd.DataFrame(
+        [[1.0, 4.0, 7], [np.nan, np.nan, 8], [3.0, 6.0, 9]],
+        columns=["Column 1", "Column 2", "Column 3"],
+    )
+
+    result = pd.read_excel("test_newlines.ods")
+
+    tm.assert_frame_equal(result, expected)

@@ -139,7 +139,7 @@ export class Html {
 
         $.each(csvs, function (index, value) {
             $('#osy-downloadResultsFile').html(`<a class="btn btn btn-default pull-right"
-                href="downloadResultsFile?caserunname=${cs}"><i class="fa fa-download"></i> Download Results File
+                href="downloadResultsFile?caserunname=${cs}"><i class="fa fa-download default"></i> Download Results File
             </a>`);
 
             let res = `
@@ -190,7 +190,7 @@ export class Html {
         $('#tabs a[href="#tabDataFile"]').tab('show');
 
         $('#osy-DataFileDownload').html(`<a id="osy-downloadDataFile" class="btn btn btn-default"
-                href="downloadDataFile?caserunname=${model.cs}"><i class="fa fa-download"></i> Download Data
+                href="downloadDataFile?caserunname=${model.cs}"><i class="fa fa-download default"></i> Download Data
                 File
             </a>`);
 

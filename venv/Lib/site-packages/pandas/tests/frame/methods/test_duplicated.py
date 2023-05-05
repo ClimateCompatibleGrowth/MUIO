@@ -3,7 +3,11 @@ import re
 import numpy as np
 import pytest
 
-from pandas import DataFrame, Series, date_range
+from pandas import (
+    DataFrame,
+    Series,
+    date_range,
+)
 import pandas._testing as tm
 
 
@@ -58,7 +62,7 @@ def test_duplicated_keep(keep, expected):
     ],
 )
 def test_duplicated_nan_none(keep, expected):
-    df = DataFrame({"C": [np.nan, 3, 3, None, np.nan]}, dtype=object)
+    df = DataFrame({"C": [np.nan, 3, 3, None, np.nan], "x": 1}, dtype=object)
 
     result = df.duplicated(keep=keep)
     tm.assert_series_equal(result, expected)
@@ -105,5 +109,5 @@ def test_frame_datetime64_duplicated():
     assert (-result).all()
 
     tst = DataFrame({"date": dates})
-    result = tst.duplicated()
+    result = tst.date.duplicated()
     assert (-result).all()

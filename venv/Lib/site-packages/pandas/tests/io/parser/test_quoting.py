@@ -8,21 +8,24 @@ from io import StringIO
 
 import pytest
 
+from pandas.compat import PY311
 from pandas.errors import ParserError
 
 from pandas import DataFrame
 import pandas._testing as tm
 
+pytestmark = pytest.mark.usefixtures("pyarrow_skip")
+
 
 @pytest.mark.parametrize(
     "kwargs,msg",
     [
-        (dict(quotechar="foo"), '"quotechar" must be a(n)? 1-character string'),
+        ({"quotechar": "foo"}, '"quotechar" must be a(n)? 1-character string'),
         (
-            dict(quotechar=None, quoting=csv.QUOTE_MINIMAL),
+            {"quotechar": None, "quoting": csv.QUOTE_MINIMAL},
             "quotechar must be set if quoting enabled",
         ),
-        (dict(quotechar=2), '"quotechar" must be string, not int'),
+        ({"quotechar": 2}, '"quotechar" must be string( or None)?, not int'),
     ],
 )
 def test_bad_quote_char(all_parsers, kwargs, msg):
@@ -36,7 +39,7 @@ def test_bad_quote_char(all_parsers, kwargs, msg):
 @pytest.mark.parametrize(
     "quoting,msg",
     [
-        ("foo", '"quoting" must be an integer'),
+        ("foo", '"quoting" must be an integer|Argument'),
         (5, 'bad "quoting" value'),  # quoting must be in the range [0, 3]
     ],
 )
@@ -72,17 +75,22 @@ def test_quote_char_various(all_parsers, quote_char):
 @pytest.mark.parametrize("quoting", [csv.QUOTE_MINIMAL, csv.QUOTE_NONE])
 @pytest.mark.parametrize("quote_char", ["", None])
 def test_null_quote_char(all_parsers, quoting, quote_char):
-    kwargs = dict(quotechar=quote_char, quoting=quoting)
+    kwargs = {"quotechar": quote_char, "quoting": quoting}
     data = "a,b,c\n1,2,3"
     parser = all_parsers
 
     if quoting != csv.QUOTE_NONE:
         # Sanity checking.
-        msg = "quotechar must be set if quoting enabled"
+        msg = (
+            '"quotechar" must be a 1-character string'
+            if PY311 and all_parsers.engine == "python" and quote_char == ""
+            else "quotechar must be set if quoting enabled"
+        )
 
         with pytest.raises(TypeError, match=msg):
             parser.read_csv(StringIO(data), **kwargs)
-    else:
+    elif not (PY311 and all_parsers.engine == "python"):
+        # Python 3.11+ doesn't support null/blank quote chars in their csv parsers
         expected = DataFrame([[1, 2, 3]], columns=["a", "b", "c"])
         result = parser.read_csv(StringIO(data), **kwargs)
         tm.assert_frame_equal(result, expected)
@@ -91,17 +99,17 @@ def test_null_quote_char(all_parsers, quoting, quote_char):
 @pytest.mark.parametrize(
     "kwargs,exp_data",
     [
-        (dict(), [[1, 2, "foo"]]),  # Test default.
+        ({}, [[1, 2, "foo"]]),  # Test default.
         # QUOTE_MINIMAL only applies to CSV writing, so no effect on reading.
-        (dict(quotechar='"', quoting=csv.QUOTE_MINIMAL), [[1, 2, "foo"]]),
+        ({"quotechar": '"', "quoting": csv.QUOTE_MINIMAL}, [[1, 2, "foo"]]),
         # QUOTE_MINIMAL only applies to CSV writing, so no effect on reading.
-        (dict(quotechar='"', quoting=csv.QUOTE_ALL), [[1, 2, "foo"]]),
+        ({"quotechar": '"', "quoting": csv.QUOTE_ALL}, [[1, 2, "foo"]]),
         # QUOTE_NONE tells the reader to do no special handling
         # of quote characters and leave them alone.
-        (dict(quotechar='"', quoting=csv.QUOTE_NONE), [[1, 2, '"foo"']]),
+        ({"quotechar": '"', "quoting": csv.QUOTE_NONE}, [[1, 2, '"foo"']]),
         # QUOTE_NONNUMERIC tells the reader to cast
         # all non-quoted fields to float
-        (dict(quotechar='"', quoting=csv.QUOTE_NONNUMERIC), [[1.0, 2.0, "foo"]]),
+        ({"quotechar": '"', "quoting": csv.QUOTE_NONNUMERIC}, [[1.0, 2.0, "foo"]]),
     ],
 )
 def test_quoting_various(all_parsers, kwargs, exp_data):

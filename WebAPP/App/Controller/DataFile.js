@@ -23,9 +23,7 @@ export default class DataFile {
             })
             .then(data => {
                 let [casename, genData, resData] = data;
-                console.log('casename ', casename)
                 let model = new Model(casename, genData, resData, "DataFile");
-                console.log('casename from model ', model.casename)
                 if (casename) {
                     this.initPage(model);
                 } else {

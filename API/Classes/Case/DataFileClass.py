@@ -796,7 +796,9 @@ class DataFile(Osemosys):
         if len(df) > 0:
             df[['temp','value']] = df['temp'].str.split(')', expand=True)
             df = df.applymap(lambda x: x.strip() if isinstance(x,str) else x)
-            df['value'] = df['value'].str.split(' ', expand=True)
+            #error when moved to ython 3.11, Columns must have smae length as key
+            # df['value'] = df['value'].str.split(' ', expand=True)
+            df['value'] = df['value'].str.split(' ', expand=True)[0]
             df[['parameter','id']] = df['temp'].str.split('(', expand=True)
             df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]
             df = df.drop('temp', axis=1)

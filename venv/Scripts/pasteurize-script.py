@@ -1,4 +1,4 @@
-#!c:\wamp64\www\osemosys\osemosys.1.0.0\venv\scripts\python.exe
+#!C:\wamp64\www\OSeMOSYS\osemosys.1.0.0\venv\Scripts\python.exe
 # EASY-INSTALL-ENTRY-SCRIPT: 'future==0.18.2','console_scripts','pasteurize'
 import re
 import sys

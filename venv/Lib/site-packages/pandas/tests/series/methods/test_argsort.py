@@ -1,7 +1,11 @@
 import numpy as np
 import pytest
 
-from pandas import Series, Timestamp, isna
+from pandas import (
+    Series,
+    Timestamp,
+    isna,
+)
 import pandas._testing as tm
 
 
@@ -9,7 +13,7 @@ class TestSeriesArgsort:
     def _check_accum_op(self, name, ser, check_dtype=True):
         func = getattr(np, name)
         tm.assert_numpy_array_equal(
-            func(ser).values, func(np.array(ser)), check_dtype=check_dtype,
+            func(ser).values, func(np.array(ser)), check_dtype=check_dtype
         )
 
         # with missing values
@@ -34,11 +38,11 @@ class TestSeriesArgsort:
         assert isna(shifted[4])
 
         result = s.argsort()
-        expected = Series(range(5), dtype="int64")
+        expected = Series(range(5), dtype=np.intp)
         tm.assert_series_equal(result, expected)
 
         result = shifted.argsort()
-        expected = Series(list(range(4)) + [-1], dtype="int64")
+        expected = Series(list(range(4)) + [-1], dtype=np.intp)
         tm.assert_series_equal(result, expected)
 
     def test_argsort_stable(self):

@@ -68,6 +68,8 @@ class TestFrameAsof:
         result = df.asof(dates, subset="B")
         expected = df.resample("25s", closed="right").ffill().reindex(dates)
         expected.iloc[20:] = 9
+        # no "missing", so "B" can retain int dtype (df["A"].dtype platform-dependent)
+        expected["B"] = expected["B"].astype(df["B"].dtype)
 
         tm.assert_frame_equal(result, expected)
 
@@ -96,12 +98,16 @@ class TestFrameAsof:
         result = df.asof("1989-12-31")
         assert isinstance(result.name, Period)
 
+    def test_asof_all_nans(self, frame_or_series):
+        # GH 15713
+        # DataFrame/Series is all nans
+        result = frame_or_series([np.nan]).asof([0])
+        expected = frame_or_series([np.nan])
+        tm.assert_equal(result, expected)
+
     def test_all_nans(self, date_range_frame):
         # GH 15713
         # DataFrame is all nans
-        result = DataFrame([np.nan]).asof([0])
-        expected = DataFrame([np.nan])
-        tm.assert_frame_equal(result, expected)
 
         # testing non-default indexes, multiple inputs
         N = 150
@@ -131,11 +137,11 @@ class TestFrameAsof:
         [
             (
                 Timestamp("2018-01-01 23:22:43.325+00:00"),
-                Series(2.0, name=Timestamp("2018-01-01 23:22:43.325+00:00")),
+                Series(2, name=Timestamp("2018-01-01 23:22:43.325+00:00")),
             ),
             (
                 Timestamp("2018-01-01 22:33:20.682+01:00"),
-                Series(1.0, name=Timestamp("2018-01-01 22:33:20.682+01:00")),
+                Series(1, name=Timestamp("2018-01-01 22:33:20.682+01:00")),
             ),
         ],
     )
@@ -176,3 +182,14 @@ class TestFrameAsof:
         msg = "Input has different freq"
         with pytest.raises(IncompatibleFrequency, match=msg):
             df.asof(rng.asfreq("D"))
+
+    def test_asof_preserves_bool_dtype(self):
+        # GH#16063 was casting bools to floats
+        dti = date_range("2017-01-01", freq="MS", periods=4)
+        ser = Series([True, False, True], index=dti[:-1])
+
+        ts = dti[-1]
+        res = ser.asof([ts])
+
+        expected = Series([True], index=[ts])
+        tm.assert_series_equal(res, expected)

@@ -1,27 +1,36 @@
 """
 Module for formatting output data in HTML.
 """
+from __future__ import annotations
 
 from textwrap import dedent
-from typing import IO, Any, Dict, Iterable, List, Mapping, Optional, Tuple, Union, cast
+from typing import (
+    Any,
+    Final,
+    Hashable,
+    Iterable,
+    Mapping,
+    cast,
+)
 
 from pandas._config import get_option
 
 from pandas._libs import lib
 
-from pandas import MultiIndex, option_context
+from pandas import (
+    MultiIndex,
+    option_context,
+)
 
 from pandas.io.common import is_url
 from pandas.io.formats.format import (
     DataFrameFormatter,
-    TableFormatter,
-    buffer_put_lines,
     get_level_lengths,
 )
 from pandas.io.formats.printing import pprint_thing
 
 
-class HTMLFormatter(TableFormatter):
+class HTMLFormatter:
     """
     Internal class for formatting output data in html.
     This class is intended for shared functionality between
@@ -31,33 +40,59 @@ class HTMLFormatter(TableFormatter):
     and this class responsible for only producing html markup.
     """
 
-    indent_delta = 2
+    indent_delta: Final = 2
 
     def __init__(
         self,
         formatter: DataFrameFormatter,
-        classes: Optional[Union[str, List[str], Tuple[str, ...]]] = None,
-        border: Optional[int] = None,
+        classes: str | list[str] | tuple[str, ...] | None = None,
+        border: int | bool | None = None,
+        table_id: str | None = None,
+        render_links: bool = False,
     ) -> None:
         self.fmt = formatter
         self.classes = classes
 
         self.frame = self.fmt.frame
         self.columns = self.fmt.tr_frame.columns
-        self.elements: List[str] = []
+        self.elements: list[str] = []
         self.bold_rows = self.fmt.bold_rows
         self.escape = self.fmt.escape
         self.show_dimensions = self.fmt.show_dimensions
-        if border is None:
+        if border is None or border is True:
             border = cast(int, get_option("display.html.border"))
+        elif not border:
+            border = None
+
         self.border = border
-        self.table_id = self.fmt.table_id
-        self.render_links = self.fmt.render_links
+        self.table_id = table_id
+        self.render_links = render_links
 
         self.col_space = {
             column: f"{value}px" if isinstance(value, int) else value
             for column, value in self.fmt.col_space.items()
         }
+
+    def to_string(self) -> str:
+        lines = self.render()
+        if any(isinstance(x, str) for x in lines):
+            lines = [str(x) for x in lines]
+        return "\n".join(lines)
+
+    def render(self) -> list[str]:
+        self._write_table()
+
+        if self.should_show_dimensions:
+            by = chr(215)  # ×
+            self.write(
+                f"<p>{len(self.frame)} rows {by} {len(self.frame.columns)} columns</p>"
+            )
+
+        return self.elements
+
+    @property
+    def should_show_dimensions(self) -> bool:
+        return self.fmt.should_show_dimensions
 
     @property
     def show_row_idx_names(self) -> bool:
@@ -85,9 +120,8 @@ class HTMLFormatter(TableFormatter):
     def _get_columns_formatted_values(self) -> Iterable:
         return self.columns
 
-    # https://github.com/python/mypy/issues/1237
     @property
-    def is_truncated(self) -> bool:  # type: ignore
+    def is_truncated(self) -> bool:
         return self.fmt.is_truncated
 
     @property
@@ -99,7 +133,7 @@ class HTMLFormatter(TableFormatter):
         self.elements.append(" " * indent + rs)
 
     def write_th(
-        self, s: Any, header: bool = False, indent: int = 0, tags: Optional[str] = None
+        self, s: Any, header: bool = False, indent: int = 0, tags: str | None = None
     ) -> None:
         """
         Method for writing a formatted <th> cell.
@@ -131,11 +165,11 @@ class HTMLFormatter(TableFormatter):
 
         self._write_cell(s, kind="th", indent=indent, tags=tags)
 
-    def write_td(self, s: Any, indent: int = 0, tags: Optional[str] = None) -> None:
+    def write_td(self, s: Any, indent: int = 0, tags: str | None = None) -> None:
         self._write_cell(s, kind="td", indent=indent, tags=tags)
 
     def _write_cell(
-        self, s: Any, kind: str = "td", indent: int = 0, tags: Optional[str] = None
+        self, s: Any, kind: str = "td", indent: int = 0, tags: str | None = None
     ) -> None:
         if tags is not None:
             start_tag = f"<{kind} {tags}>"
@@ -165,8 +199,8 @@ class HTMLFormatter(TableFormatter):
         indent: int = 0,
         indent_delta: int = 0,
         header: bool = False,
-        align: Optional[str] = None,
-        tags: Optional[Dict[int, str]] = None,
+        align: str | None = None,
+        tags: dict[int, str] | None = None,
         nindex_levels: int = 0,
     ) -> None:
         if tags is None:
@@ -188,20 +222,6 @@ class HTMLFormatter(TableFormatter):
         indent -= indent_delta
         self.write("</tr>", indent)
 
-    def render(self) -> List[str]:
-        self._write_table()
-
-        if self.should_show_dimensions:
-            by = chr(215)  # ×
-            self.write(
-                f"<p>{len(self.frame)} rows {by} {len(self.frame.columns)} columns</p>"
-            )
-
-        return self.elements
-
-    def write_result(self, buf: IO[str]) -> None:
-        buffer_put_lines(buf, self.render())
-
     def _write_table(self, indent: int = 0) -> None:
         _classes = ["dataframe"]  # Default class.
         use_mathjax = get_option("display.html.use_mathjax")
@@ -222,8 +242,13 @@ class HTMLFormatter(TableFormatter):
         else:
             id_section = f' id="{self.table_id}"'
 
+        if self.border is None:
+            border_attr = ""
+        else:
+            border_attr = f' border="{self.border}"'
+
         self.write(
-            f'<table border="{self.border}" class="{" ".join(_classes)}"{id_section}>',
+            f'<table{border_attr} class="{" ".join(_classes)}"{id_section}>',
             indent,
         )
 
@@ -235,10 +260,12 @@ class HTMLFormatter(TableFormatter):
         self.write("</table>", indent)
 
     def _write_col_header(self, indent: int) -> None:
-        truncate_h = self.fmt.truncate_h
+        row: list[Hashable]
+        is_truncated_horizontally = self.fmt.is_truncated_horizontally
         if isinstance(self.columns, MultiIndex):
             template = 'colspan="{span:d}" halign="left"'
 
+            sentinel: lib.NoDefault | bool
             if self.fmt.sparsify:
                 # GH3547
                 sentinel = lib.no_default
@@ -248,7 +275,7 @@ class HTMLFormatter(TableFormatter):
             level_lengths = get_level_lengths(levels, sentinel)
             inner_lvl = len(level_lengths) - 1
             for lnum, (records, values) in enumerate(zip(level_lengths, levels)):
-                if truncate_h:
+                if is_truncated_horizontally:
                     # modify the header lines
                     ins_col = self.fmt.tr_col_num
                     if self.fmt.sparsify:
@@ -345,16 +372,16 @@ class HTMLFormatter(TableFormatter):
             row.extend(self._get_columns_formatted_values())
             align = self.fmt.justify
 
-            if truncate_h:
+            if is_truncated_horizontally:
                 ins_col = self.row_levels + self.fmt.tr_col_num
                 row.insert(ins_col, "...")
 
             self.write_tr(row, indent, self.indent_delta, header=True, align=align)
 
     def _write_row_header(self, indent: int) -> None:
-        truncate_h = self.fmt.truncate_h
+        is_truncated_horizontally = self.fmt.is_truncated_horizontally
         row = [x if x is not None else "" for x in self.frame.index.names] + [""] * (
-            self.ncols + (1 if truncate_h else 0)
+            self.ncols + (1 if is_truncated_horizontally else 0)
         )
         self.write_tr(row, indent, self.indent_delta, header=True)
 
@@ -369,9 +396,9 @@ class HTMLFormatter(TableFormatter):
 
         self.write("</thead>", indent)
 
-    def _get_formatted_values(self) -> Dict[int, List[str]]:
+    def _get_formatted_values(self) -> dict[int, list[str]]:
         with option_context("display.max_colwidth", None):
-            fmt_values = {i: self.fmt._format_col(i) for i in range(self.ncols)}
+            fmt_values = {i: self.fmt.format_col(i) for i in range(self.ncols)}
         return fmt_values
 
     def _write_body(self, indent: int) -> None:
@@ -387,10 +414,10 @@ class HTMLFormatter(TableFormatter):
         self.write("</tbody>", indent)
 
     def _write_regular_rows(
-        self, fmt_values: Mapping[int, List[str]], indent: int
+        self, fmt_values: Mapping[int, list[str]], indent: int
     ) -> None:
-        truncate_h = self.fmt.truncate_h
-        truncate_v = self.fmt.truncate_v
+        is_truncated_horizontally = self.fmt.is_truncated_horizontally
+        is_truncated_vertically = self.fmt.is_truncated_vertically
 
         nrows = len(self.fmt.tr_frame)
 
@@ -401,10 +428,10 @@ class HTMLFormatter(TableFormatter):
             else:
                 index_values = self.fmt.tr_frame.index.format()
 
-        row: List[str] = []
+        row: list[str] = []
         for i in range(nrows):
 
-            if truncate_v and i == (self.fmt.tr_row_num):
+            if is_truncated_vertically and i == (self.fmt.tr_row_num):
                 str_sep_row = ["..."] * len(row)
                 self.write_tr(
                     str_sep_row,
@@ -425,7 +452,7 @@ class HTMLFormatter(TableFormatter):
                 row.append("")
             row.extend(fmt_values[j][i] for j in range(self.ncols))
 
-            if truncate_h:
+            if is_truncated_horizontally:
                 dot_col_ix = self.fmt.tr_col_num + self.row_levels
                 row.insert(dot_col_ix, "...")
             self.write_tr(
@@ -433,12 +460,12 @@ class HTMLFormatter(TableFormatter):
             )
 
     def _write_hierarchical_rows(
-        self, fmt_values: Mapping[int, List[str]], indent: int
+        self, fmt_values: Mapping[int, list[str]], indent: int
     ) -> None:
         template = 'rowspan="{span}" valign="top"'
 
-        truncate_h = self.fmt.truncate_h
-        truncate_v = self.fmt.truncate_v
+        is_truncated_horizontally = self.fmt.is_truncated_horizontally
+        is_truncated_vertically = self.fmt.is_truncated_vertically
         frame = self.fmt.tr_frame
         nrows = len(frame)
 
@@ -453,12 +480,10 @@ class HTMLFormatter(TableFormatter):
 
             level_lengths = get_level_lengths(levels, sentinel)
             inner_lvl = len(level_lengths) - 1
-            if truncate_v:
+            if is_truncated_vertically:
                 # Insert ... row and adjust idx_values and
                 # level_lengths to take this into account.
                 ins_row = self.fmt.tr_row_num
-                # cast here since if truncate_v is True, self.fmt.tr_row_num is not None
-                ins_row = cast(int, ins_row)
                 inserted = False
                 for lnum, records in enumerate(level_lengths):
                     rec_new = {}
@@ -519,7 +544,7 @@ class HTMLFormatter(TableFormatter):
                     row.append(v)
 
                 row.extend(fmt_values[j][i] for j in range(self.ncols))
-                if truncate_h:
+                if is_truncated_horizontally:
                     row.insert(
                         self.row_levels - sparse_offset + self.fmt.tr_col_num, "..."
                     )
@@ -533,7 +558,7 @@ class HTMLFormatter(TableFormatter):
         else:
             row = []
             for i in range(len(frame)):
-                if truncate_v and i == (self.fmt.tr_row_num):
+                if is_truncated_vertically and i == (self.fmt.tr_row_num):
                     str_sep_row = ["..."] * len(row)
                     self.write_tr(
                         str_sep_row,
@@ -549,7 +574,7 @@ class HTMLFormatter(TableFormatter):
                 row = []
                 row.extend(idx_values[i])
                 row.extend(fmt_values[j][i] for j in range(self.ncols))
-                if truncate_h:
+                if is_truncated_horizontally:
                     row.insert(self.row_levels + self.fmt.tr_col_num, "...")
                 self.write_tr(
                     row,
@@ -567,10 +592,10 @@ class NotebookFormatter(HTMLFormatter):
     DataFrame._repr_html_() and DataFrame.to_html(notebook=True)
     """
 
-    def _get_formatted_values(self) -> Dict[int, List[str]]:
-        return {i: self.fmt._format_col(i) for i in range(self.ncols)}
+    def _get_formatted_values(self) -> dict[int, list[str]]:
+        return {i: self.fmt.format_col(i) for i in range(self.ncols)}
 
-    def _get_columns_formatted_values(self) -> List[str]:
+    def _get_columns_formatted_values(self) -> list[str]:
         return self.columns.format()
 
     def write_style(self) -> None:
@@ -601,7 +626,7 @@ class NotebookFormatter(HTMLFormatter):
         template = dedent("\n".join((template_first, template_mid, template_last)))
         self.write(template)
 
-    def render(self) -> List[str]:
+    def render(self) -> list[str]:
         self.write("<div>")
         self.write_style()
         super().render()

@@ -3,11 +3,23 @@ import pytest
 
 from pandas._libs.tslibs import IncompatibleFrequency
 
-from pandas import Index, PeriodIndex, period_range
+from pandas import (
+    Index,
+    PeriodIndex,
+    period_range,
+)
 import pandas._testing as tm
 
 
 class TestJoin:
+    def test_join_outer_indexer(self):
+        pi = period_range("1/1/2000", "1/20/2000", freq="D")
+
+        result = pi._outer_indexer(pi)
+        tm.assert_extension_array_equal(result[0], pi._values)
+        tm.assert_numpy_array_equal(result[1], np.arange(len(pi), dtype=np.intp))
+        tm.assert_numpy_array_equal(result[2], np.arange(len(pi), dtype=np.intp))
+
     def test_joins(self, join_type):
         index = period_range("1/1/2000", "1/20/2000", freq="D")
 
@@ -30,15 +42,17 @@ class TestJoin:
             c_idx_type="p",
             r_idx_type="dt",
         )
-        s = df.iloc[:2, 0]
+        ser = df.iloc[:2, 0]
 
-        res = s.index.join(df.columns, how="outer")
-        expected = Index([s.index[0], s.index[1], df.columns[0], df.columns[1]], object)
+        res = ser.index.join(df.columns, how="outer")
+        expected = Index(
+            [ser.index[0], ser.index[1], df.columns[0], df.columns[1]], object
+        )
         tm.assert_index_equal(res, expected)
 
     def test_join_mismatched_freq_raises(self):
         index = period_range("1/1/2000", "1/20/2000", freq="D")
         index3 = period_range("1/1/2000", "1/20/2000", freq="2D")
-        msg = r".*Input has different freq=2D from PeriodIndex\(freq=D\)"
+        msg = r".*Input has different freq=2D from Period\(freq=D\)"
         with pytest.raises(IncompatibleFrequency, match=msg):
             index.join(index3)

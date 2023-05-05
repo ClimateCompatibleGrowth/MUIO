@@ -1,10 +1,14 @@
 """
 datetimelike delegation
 """
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 import warnings
 
 import numpy as np
+
+from pandas.util._exceptions import find_stack_level
 
 from pandas.core.dtypes.common import (
     is_categorical_dtype,
@@ -17,18 +21,36 @@ from pandas.core.dtypes.common import (
 )
 from pandas.core.dtypes.generic import ABCSeries
 
-from pandas.core.accessor import PandasDelegate, delegate_names
-from pandas.core.arrays import DatetimeArray, PeriodArray, TimedeltaArray
-from pandas.core.base import NoNewAttributesMixin, PandasObject
+from pandas.core.accessor import (
+    PandasDelegate,
+    delegate_names,
+)
+from pandas.core.arrays import (
+    DatetimeArray,
+    PeriodArray,
+    TimedeltaArray,
+)
+from pandas.core.base import (
+    NoNewAttributesMixin,
+    PandasObject,
+)
 from pandas.core.indexes.datetimes import DatetimeIndex
 from pandas.core.indexes.timedeltas import TimedeltaIndex
 
 if TYPE_CHECKING:
-    from pandas import Series  # noqa:F401
+    from pandas import (
+        DataFrame,
+        Series,
+    )
 
 
 class Properties(PandasDelegate, PandasObject, NoNewAttributesMixin):
-    def __init__(self, data: "Series", orig):
+    _hidden_attrs = PandasObject._hidden_attrs | {
+        "orig",
+        "name",
+    }
+
+    def __init__(self, data: Series, orig) -> None:
         if not isinstance(data, ABCSeries):
             raise TypeError(
                 f"cannot convert an object of type {type(data)} to a datetimelike index"
@@ -78,7 +100,7 @@ class Properties(PandasDelegate, PandasObject, NoNewAttributesMixin):
         else:
             index = self._parent.index
         # return the result as a Series, which is by definition a copy
-        result = Series(result, index=index, name=self.name)
+        result = Series(result, index=index, name=self.name).__finalize__(self._parent)
 
         # setting this object will show a SettingWithCopyWarning/Error
         result._is_copy = (
@@ -106,7 +128,9 @@ class Properties(PandasDelegate, PandasObject, NoNewAttributesMixin):
         if not is_list_like(result):
             return result
 
-        result = Series(result, index=self._parent.index, name=self.name)
+        result = Series(result, index=self._parent.index, name=self.name).__finalize__(
+            self._parent
+        )
 
         # setting this object will show a SettingWithCopyWarning/Error
         result._is_copy = (
@@ -172,7 +196,7 @@ class DatetimeProperties(Properties):
 
     def to_pydatetime(self) -> np.ndarray:
         """
-        Return the data as an array of native Python datetime objects.
+        Return the data as an array of :class:`datetime.datetime` objects.
 
         Timezone information is retained if present.
 
@@ -220,22 +244,23 @@ class DatetimeProperties(Properties):
     def freq(self):
         return self._get_values().inferred_freq
 
-    def isocalendar(self):
+    def isocalendar(self) -> DataFrame:
         """
-        Returns a DataFrame with the year, week, and day calculated according to
-        the ISO 8601 standard.
+        Calculate year, week, and day according to the ISO 8601 standard.
 
         .. versionadded:: 1.1.0
 
         Returns
         -------
         DataFrame
-            with columns year, week and day
+            With columns year, week and day.
 
         See Also
         --------
-        Timestamp.isocalendar
-        datetime.date.isocalendar
+        Timestamp.isocalendar : Function return a 3-tuple containing ISO year,
+            week number, and weekday for the given Timestamp object.
+        datetime.date.isocalendar : Return a named tuple object with
+            three components: year, week and weekday.
 
         Examples
         --------
@@ -254,18 +279,19 @@ class DatetimeProperties(Properties):
     @property
     def weekofyear(self):
         """
-        The week ordinal of the year.
+        The week ordinal of the year according to the ISO 8601 standard.
 
         .. deprecated:: 1.1.0
 
-        Series.dt.weekofyear and Series.dt.week have been deprecated.
-        Please use Series.dt.isocalendar().week instead.
+        Series.dt.weekofyear and Series.dt.week have been deprecated.  Please
+        call :func:`Series.dt.isocalendar` and access the ``week`` column
+        instead.
         """
         warnings.warn(
-            "Series.dt.weekofyear and Series.dt.week have been deprecated.  "
+            "Series.dt.weekofyear and Series.dt.week have been deprecated. "
             "Please use Series.dt.isocalendar().week instead.",
             FutureWarning,
-            stacklevel=2,
+            stacklevel=find_stack_level(),
         )
         week_series = self.isocalendar().week
         week_series.name = self.name
@@ -310,7 +336,7 @@ class TimedeltaProperties(Properties):
 
     def to_pytimedelta(self) -> np.ndarray:
         """
-        Return an array of native `datetime.timedelta` objects.
+        Return an array of native :class:`datetime.timedelta` objects.
 
         Python's standard `datetime` library uses a different representation
         timedelta's. This method converts a Series of pandas Timedeltas
@@ -324,7 +350,8 @@ class TimedeltaProperties(Properties):
 
         See Also
         --------
-        datetime.timedelta
+        datetime.timedelta : A duration expressing the difference
+            between two date, time, or datetime.
 
         Examples
         --------
@@ -371,7 +398,11 @@ class TimedeltaProperties(Properties):
         3     0      0        0        3             0             0            0
         4     0      0        0        4             0             0            0
         """
-        return self._get_values().components.set_index(self._parent.index)
+        return (
+            self._get_values()
+            .components.set_index(self._parent.index)
+            .__finalize__(self._parent)
+        )
 
     @property
     def freq(self):
@@ -448,7 +479,7 @@ class PeriodProperties(Properties):
 class CombinedDatetimelikeProperties(
     DatetimeProperties, TimedeltaProperties, PeriodProperties
 ):
-    def __new__(cls, data: "Series"):
+    def __new__(cls, data: Series):
         # CombinedDatetimelikeProperties isn't really instantiated. Instead
         # we need to choose which parent (datetime or timedelta) is
         # appropriate. Since we're checking the dtypes anyway, we'll just
@@ -466,6 +497,7 @@ class CombinedDatetimelikeProperties(
                 name=orig.name,
                 copy=False,
                 dtype=orig._values.categories.dtype,
+                index=orig.index,
             )
 
         if is_datetime64_dtype(data.dtype):
