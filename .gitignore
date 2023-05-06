@@ -1,8 +1,10 @@
 dist/
 build/
-API/SOLVERs/
 WebAPP/SOLVERs/
-WebAPP/References/jqwidgets.13.2/
+WebAPP/SOLVERs/GLPK
+WebAPP/SOLVERs/COIN-OR
+WebAPP/References/jqwidgets_14.0
+WebAPP/References/jqwidgets_licenced
 WebAPP/References/wijmoFULL/
 WebAPP/References/wijmoOLD/
 WebAPP/References/wijmo/DistributionKey.txt

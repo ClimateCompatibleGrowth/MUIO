@@ -38,7 +38,7 @@ class Osemosys():
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys_preprocessing.txt')
         self.osemosysFileOriginal = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
 
-        self.glpkFolder = Path(Config.SOLVERs_FOLDER,'glpk-4.65', 'w64')
+        self.glpkFolder = Path(Config.SOLVERs_FOLDER, 'GLPK','glpk-4.65', 'w64')
         
 
         #self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'Cbc-2.7.5-win64-intel11.1', 'bin')
