@@ -4,13 +4,11 @@ import sys
 from flask import Flask, jsonify, request, session, render_template
 from flask_cors import CORS
 from datetime import timedelta
-from pathlib import Path
-
-
+# from pathlib import Path
 
 #import json
 from API.Classes.Base import Config
-from API.Classes.Base.SyncS3 import SyncS3
+# from API.Classes.Base.SyncS3 import SyncS3
 
 from API.Routes.Upload.UploadRoute import upload_api
 from API.Routes.Case.CaseRoute import case_api
@@ -118,6 +116,7 @@ if __name__ == '__main__':
     import mimetypes
     mimetypes.add_type('application/javascript', '.js')
     port = int(os.environ.get("PORT", 5000))
+    print("PORTTTTTTTTTTT")
     if Config.HEROKU_DEPLOY == 0: 
         #localhost
         #app.run(host='127.0.0.1', port=port, debug=True)

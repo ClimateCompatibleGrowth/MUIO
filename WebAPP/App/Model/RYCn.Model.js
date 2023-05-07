@@ -8,24 +8,18 @@ export class Model {
         if (casename) {
 
             let datafields = [];
-            let datafieldsChart = [];
             let columns = [];
-            let series = [];
             let years = genData['osy-years'];
             let cons = genData['osy-constraints'];
             let scenarios = genData['osy-scenarios'];
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let RYCngrid = DataModel.RYCngrid(genData, RYCndata, PARAMETERS);
-            let RYCnchart = DataModel.RYCnchart(genData, RYCndata);
 
             let scClass = {};
 
-            datafieldsChart.push({ name: 'Year', type: 'string' });
             $.each(scenarios, function (id, obj) {
                 scClass[obj.ScenarioId] = 'SC_' + id;
-                datafieldsChart.push({ name: obj.ScenarioId, type: 'number' });
-                series.push({ dataField: obj.ScenarioId, displayText: obj.Scenario });
             });
 
             datafields.push({ name: 'ScId', type: 'string' });
@@ -79,24 +73,25 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Contraint', datafield: 'Con', pinned: true, editable: false, align: 'left', cellclassname: cellclass });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, filterable: false }); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Contraint', datafield: 'Con', pinned: true, editable: false, align: 'left', cellclassname: cellclass,  filterable: true });
             //columns.push({ text: 'Unit', datafield: 'UnitId', pinned:true, editable: false, align: 'center',cellsalign: 'center', cellclassname: cellclass });
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
-                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2',
+                    text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput',
+                    cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
                     groupable: false,
+                    filterable: false,
+                    sortable: false,
                     initeditor: initeditor,
                     //validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
                     geteditorvalue: geteditorvalue
                 });
-            });
-
-
+            }.bind(this));
 
             let srcGrid = {
                 datatype: "json",
@@ -105,42 +100,29 @@ export class Model {
                 datafields: datafields,
             };
 
-            var srcChart = {
-                datatype: "json",
-                localdata: RYCnchart,
-                root: param + '>' + cons[0]['ConId'],
-                datafields: datafieldsChart,
-            };
-
             this.casename = casename;
             this.years = years;
             this.cons = cons;
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.columns = columns;
-            this.series = series;
             this.gridData = RYCngrid;
-            this.chartData = RYCnchart;
             this.genData = genData;
             this.param = param;
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid;
-            this.srcChart = srcChart;
             this.PARAMETERS = PARAMETERS;
         } else {
             this.casename = null;
             this.years = null;
             this.columns = null;
-            this.series = null;
             this.gridData = null;
-            this.chartData = null;
             this.genData = null;
             this.PARAMNAMES = null;
             this.param = param;
             this.group = group;
             this.srcGrid = srcGrid;
-            this.srcChart = srcChart;
             this.PARAMETERS = PARAMETERS;
         }
 

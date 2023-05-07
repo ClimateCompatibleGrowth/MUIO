@@ -26,10 +26,11 @@
     </div>
 
     <div class="col-md-5 ">
+      <img src="../../References/smartadmin/img/Logos/CCG_2.png" class="img-thumbnail img-fluid pull-right" alt="Loughborough University" width="100" height="180" style="opacity: 0.6; border:none; background: url(../img/mybg.png);  padding-top: 20px;">
       
-      <img src="../../References/smartadmin/img/Logos/un_desa_black.png" class="img-fluid img-thumbnail pull-right" alt="UN Department of Economic and Social Affairs" width="250" height="170" style="opacity: 0.6; border:none; background: url(../img/mybg.png);">
+      
       <img src="../../References/smartadmin/img/Logos/UK_AID_4.png" class="img-fluid img-thumbnail pull-right" alt="UN Department of Economic and Social Affairs" width="60" height="160" style="opacity: 0.6; border:none; background: url(../img/mybg.png); padding-top: 40px;">
-      <img src="../../References/smartadmin/img/Logos/CCG_2.png" class="img-thumbnail img-fluid pull-right" alt="Loughborough University" width="120" height="180" style="opacity: 0.6; border:none; background: url(../img/mybg.png);">
+      <img src="../../References/smartadmin/img/Logos/un_desa_black.png" class="img-fluid img-thumbnail pull-right" alt="UN Department of Economic and Social Affairs" width="350" height="170" style="opacity: 0.6; border:none; background: url(../img/mybg.png);">
       <!-- <img src="../../References/smartadmin/img/Logos/lu_.png" class="img-fluid img-thumbnail pull-right" alt="LOUGHBOROUGH UNIVERSITY" width="65" height="85" style="opacity: 0.6; border:none; background: url(../img/mybg.png); padding-top: 40px;"> -->
 
     </div>
@@ -51,18 +52,8 @@
           <h2> <i id="icon" class="fa fa-cubes fa-lg"></i> OSeMOSYS models</h2>
           <div class="widget-toolbar pull-right">
             <div  class="btn btn-white" id="showLog" data-toggle="tooltip" data-placement="top" title="Introduction to OSeMOSYS">
-              <i class="icon-btn fa fa-question-circle fa-lg warning "></i>
+              <i class="fa fa-question-circle fa-lg warning "></i>
             </div>
-          </div>
-          <div class="widget-toolbar">
-            <div class="btn btn-white btn-osy-green" data-toggle="modal" data-target="#modalrestore" id="restoreCS">
-              <i class="fa fa-upload fa-lg  icon-btn"></i>
-              <b class="">Restore model</b>
-            </div>
-            <a class="btn btn-white btn-osy-red" href="#LegacyImport">
-              <i class="fa fa-cogs fa-lg  icon-btn"></i>
-              <b class="">Import model</b>
-            </a>
           </div>
           <div class="widget-toolbar smart-form">
             <label class="input">
@@ -70,6 +61,17 @@
               <i class="ace-icon fa fa-search nav-search-icon"></i>
             </label>
           </div>
+          <div class="widget-toolbar">
+            <div class="btn btn-default " data-toggle="modal" data-target="#modalrestore" id="restoreCS">
+              <i class="fa fa-upload fa-lg  osy-green"></i>
+              <b class="">Restore model</b>
+            </div>
+            <a class="btn btn-default " href="#LegacyImport">
+              <i class="fa fa-cogs fa-lg  danger"></i>
+              <b class="">Import model</b>
+            </a>
+          </div>
+
         </header>
         <div id="row">
           <div class="col-md-10 col-md-offset-1">

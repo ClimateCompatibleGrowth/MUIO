@@ -51,10 +51,10 @@ export default class RYCn {
         Html.ddlCons(model.cons, model.cons[0]['CommId']);
 
         let $divGrid = $('#osy-gridRYCn');
-        let $divChart = $('#osy-chartRYCn');
+        //let $divChart = $('#osy-chartRYCn');
 
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false})
+        Grid.Grid($divGrid, daGrid, model.columns, {groupable: false, filterable: true, sortable:true})
 
         // if (model.scenariosCount > 1) {
         //     $('#scCommand').show();
@@ -69,8 +69,8 @@ export default class RYCn {
             Grid.applyGridFilter($divGrid, model.years);
         }
 
-        var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
-        Chart.Chart($divChart, daChart, "RYCn", model.series);
+        //var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
+        //Chart.Chart($divChart, daChart, "RYCn", model.series);
         //pageSetUp();
     }
 
@@ -147,20 +147,20 @@ export default class RYCn {
             model.srcGrid.root = this.value;
             $divGrid.jqxGrid('updatebounddata');
             model.param = this.value;
-            var con = $("#osy-cons").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[this.value][con];
-            configChart.update();
+            // var con = $("#osy-cons").val();
+            // var configChart = $divChart.jqxChart('getInstance');
+            // configChart.source.records = model.chartData[this.value][con];
+            // configChart.update();
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
-        //change of ddl cons
-        $('#osy-cons').on('change', function () {
-            var param = $("#osy-ryt").val();
-            var configChart = $divChart.jqxChart('getInstance');
-            configChart.source.records = model.chartData[param][this.value];
-            configChart.update();
-        });
+        // //change of ddl cons
+        // $('#osy-cons').on('change', function () {
+        //     var param = $("#osy-ryt").val();
+        //     var configChart = $divChart.jqxChart('getInstance');
+        //     configChart.source.records = model.chartData[param][this.value];
+        //     configChart.update();
+        // });
 
         $("#osy-scenarios").off('click');
         $("#osy-scenarios").on('click', function (e) {
@@ -235,29 +235,9 @@ export default class RYCn {
                 setTimeout(function () {
                     let gridData = $divGrid.jqxGrid('getboundrows');
                     let param = $("#osy-ryt").val();
-                    var conId = $("#osy-cons").val();
-
-                    $.each(model.cons, function (idT, con) {
-                        let chartData = [];
-                        $.each(model.years, function (idY, year) {
-                            let chunk = {};
-                            chunk['Year'] = year;
-                            $.each(gridData, function (id, rytDataObj) {
-                                if (rytDataObj.ConId == con.ConId) {
-                                    chunk[rytDataObj.ScId] = rytDataObj[year];
-                                }
-                            });
-                            chartData.push(chunk);
-                        });
-                        model.chartData[param][con.ConId] = chartData;
-                    });
 
                     //update model
                     model.gridData[param] = gridData;
-
-                    var configChart = $divChart.jqxChart('getInstance');
-                    configChart.source.records = model.chartData[param][conId];
-                    configChart.update();
                 }, 1000);
             }
         }).on('cellvaluechanged', function (event) {
@@ -270,18 +250,6 @@ export default class RYCn {
                 var conId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ConId');
                 var scId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $("#osy-ryt").val();
-                var con = $("#osy-cons").val();
-
-                //update model chart
-                $.each(model.chartData[param][conId], function (id, obj) {
-                    if (obj.Year == year) {
-                        if (value) {
-                            obj[scId] = value;
-                        } else {
-                            obj[scId] = 0;
-                        }
-                    }
-                });
 
                 //update model grid
                 $.each(model.gridData[param], function (id, obj) {
@@ -293,41 +261,11 @@ export default class RYCn {
                         }
                     }
                 });
-
-                var configChart = $divChart.jqxChart('getInstance');
-                configChart.source.records = model.chartData[param][con];
-                configChart.update();
             }
         });
 
-        $(".switchChart").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            var chartType = $(this).attr('data-chartType');
-            configChart.seriesGroups[0].type = chartType;
-            if (chartType == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.update();
-        });
 
-        $(".toggleLabels").on('click', function (e) {
-            e.preventDefault();
-            var configChart = $divChart.jqxChart('getInstance');
-            if (configChart.seriesGroups[0].type == 'column') {
-                configChart.seriesGroups[0].labels.angle = 90;
-            } else {
-                configChart.seriesGroups[0].labels.angle = 0;
-            }
-            configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
-            configChart.update();
-        });
 
-        $("#exportPng").click(function () {
-            $divChart.jqxChart('saveAsPNG', 'RYCn.png', 'https://www.jqwidgets.com/export_server/export.php');
-        });
 
         let res = true;
         $("#resizeColumns").click(function () {
@@ -341,9 +279,25 @@ export default class RYCn {
             res = !res;
         });
 
+        // $("#xlsAll").click(function (e) {
+        //     e.preventDefault();
+        //     $divGrid.jqxGrid('exportdata', 'xls', 'RYCn');
+        // });
+
+        $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $divGrid.jqxGrid('exportdata', 'xls', 'RYCn');
+            let rytData = $divGrid.jqxGrid('getdisplayrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Con'].concat(model.years)));
+            Base.prepareCSV(model.casename, data)
+            .then(response =>{
+                Message.smallBoxInfo('Case study message', response.message, 3000);
+                $('#csvDownload').trigger('click');
+                window.location = $('#csvDownload').attr('href');
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
         $("#decUp").off('click');
