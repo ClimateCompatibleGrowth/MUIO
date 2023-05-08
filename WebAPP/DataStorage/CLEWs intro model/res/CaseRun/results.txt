@@ -1,11 +1,10 @@
-Optimal - objective value 28301.19684730
-      0 DiscountedSalvageValue(RE1,MINCOA,2020)                                 0.00035398504                       0
-     16 DiscountedSalvageValue(RE1,MINGAS,2020)                                 0.00026590238                       0
-     20 DiscountedSalvageValue(RE1,MINGAS,2024)                                 1.2008084e-05                       0
-     21 DiscountedSalvageValue(RE1,MINGAS,2025)                                  2.309567e-05                       0
-     24 DiscountedSalvageValue(RE1,MINGAS,2028)                                 7.5685897e-05                       0
-     28 DiscountedSalvageValue(RE1,MINGAS,2032)                                 7.3615503e-05                       0
-     42 DiscountedSalvageValue(RE1,PWRGAS,2030)                                     401.24176                       0
+Optimal - objective value 29047.08113387
+      0 DiscountedSalvageValue(RE1,MINCOA,2020)                                 9.4396012e-05                       0
+      1 DiscountedSalvageValue(RE1,MINCOA,2021)                                 0.00027220357                       0
+     16 DiscountedSalvageValue(RE1,MINGAS,2020)                                 0.00039828837                       0
+     31 DiscountedSalvageValue(RE1,MINGAS,2035)                                 6.5870922e-06                       0
+     32 DiscountedSalvageValue(RE1,PWRGAS,2020)                                     276.89581                       0
+     42 DiscountedSalvageValue(RE1,PWRGAS,2030)                                     15.250779                       0
      43 DiscountedSalvageValue(RE1,PWRGAS,2031)                                     621.67704                       0
      44 DiscountedSalvageValue(RE1,PWRGAS,2032)                                     98.592191                       0
      45 DiscountedSalvageValue(RE1,PWRGAS,2033)                                     133.90564                       0
@@ -28,22 +27,18 @@ Optimal - objective value 28301.19684730
      78 DiscountedSalvageValue(RE1,PWRTRN,2034)                                      268.6016                       0
      79 DiscountedSalvageValue(RE1,PWRTRN,2035)                                     358.52347                       0
     277 DiscountedSalvageValue(RE1,PWRHYD,2025)                                     270.84626                       0
-    311 DiscountedSalvageValue(RE1,PWRWND,2027)                                     333.75627                       0
-    312 DiscountedSalvageValue(RE1,PWRWND,2028)                                     449.23713                       0
-    313 DiscountedSalvageValue(RE1,PWRWND,2029)                                     476.11666                       0
-    314 DiscountedSalvageValue(RE1,PWRWND,2030)                                     2868.1515                       0
+    314 DiscountedSalvageValue(RE1,PWRWND,2030)                                     4269.3167                       0
     315 DiscountedSalvageValue(RE1,PWRWND,2031)                                     151.42679                       0
     316 DiscountedSalvageValue(RE1,PWRWND,2032)                                     158.11009                       0
     317 DiscountedSalvageValue(RE1,PWRWND,2033)                                     219.30018                       0
     318 DiscountedSalvageValue(RE1,PWRWND,2034)                                     170.53708                       0
     319 DiscountedSalvageValue(RE1,PWRWND,2035)                                     235.08049                       0
-    864 NewCapacity(RE1,MINCOA,2020)                                                       12                       0
-    880 NewCapacity(RE1,MINGAS,2020)                                                 9.014021                       0
-    884 NewCapacity(RE1,MINGAS,2024)                                               0.34470409                       0
-    885 NewCapacity(RE1,MINGAS,2025)                                               0.64127496                       0
-    888 NewCapacity(RE1,MINGAS,2028)                                                1.9294428                       0
-    892 NewCapacity(RE1,MINGAS,2032)                                                1.7184137                       0
-    906 NewCapacity(RE1,PWRGAS,2030)                                               0.78060563                       0
+    864 NewCapacity(RE1,MINCOA,2020)                                                      3.2                       0
+    865 NewCapacity(RE1,MINCOA,2021)                                                      8.8                       0
+    880 NewCapacity(RE1,MINGAS,2020)                                                13.501871                       0
+    895 NewCapacity(RE1,MINGAS,2035)                                               0.14598525                       0
+    896 NewCapacity(RE1,PWRGAS,2020)                                               0.75093563                       0
+    906 NewCapacity(RE1,PWRGAS,2030)                                              0.029670003                       0
     907 NewCapacity(RE1,PWRGAS,2031)                                                1.1841158                       0
     908 NewCapacity(RE1,PWRGAS,2032)                                               0.18411576                       0
     909 NewCapacity(RE1,PWRGAS,2033)                                               0.24548768                       0
@@ -216,9 +211,9 @@ Optimal - objective value 28301.19684730
    1124 NewCapacity(RE1,MINWND,2024)                                                      0.3                       0
    1125 NewCapacity(RE1,MINWND,2025)                                                      0.3                       0
    1126 NewCapacity(RE1,MINWND,2026)                                                      0.3                       0
-   1127 NewCapacity(RE1,MINWND,2027)                                               0.50494673                       0
-   1128 NewCapacity(RE1,MINWND,2028)                                                0.7634748                       0
-   1129 NewCapacity(RE1,MINWND,2029)                                                1.0220029                       0
+   1127 NewCapacity(RE1,MINWND,2027)                                                      0.3                       0
+   1128 NewCapacity(RE1,MINWND,2028)                                                      0.3                       0
+   1129 NewCapacity(RE1,MINWND,2029)                                                      0.3                       0
    1130 NewCapacity(RE1,MINWND,2030)                                                2.4999253                       0
    1131 NewCapacity(RE1,MINWND,2031)                                                2.5743376                       0
    1132 NewCapacity(RE1,MINWND,2032)                                                2.6487499                       0
@@ -226,18 +221,15 @@ Optimal - objective value 28301.19684730
    1134 NewCapacity(RE1,MINWND,2034)                                                2.8223787                       0
    1135 NewCapacity(RE1,MINWND,2035)                                                2.9215951                       0
    1141 NewCapacity(RE1,PWRHYD,2025)                                                      0.5                       0
-   1175 NewCapacity(RE1,PWRWND,2027)                                               0.68315576                       0
-   1176 NewCapacity(RE1,PWRWND,2028)                                               0.86176023                       0
-   1177 NewCapacity(RE1,PWRWND,2029)                                               0.86176023                       0
-   1178 NewCapacity(RE1,PWRWND,2030)                                                4.9264081                       0
+   1178 NewCapacity(RE1,PWRWND,2030)                                                7.3330844                       0
    1179 NewCapacity(RE1,PWRWND,2031)                                               0.24804104                       0
    1180 NewCapacity(RE1,PWRWND,2032)                                               0.24804104                       0
    1181 NewCapacity(RE1,PWRWND,2033)                                               0.33072139                       0
    1182 NewCapacity(RE1,PWRWND,2034)                                               0.24804104                       0
    1183 NewCapacity(RE1,PWRWND,2035)                                               0.33072139                       0
    1297 RateOfActivity(RE1,S12,MINCOA,1,2020)                                          72.696                       0
-   1298 RateOfActivity(RE1,S21,MINCOA,1,2020)                                       261.89936                       0
-   1299 RateOfActivity(RE1,S22,MINCOA,1,2020)                                         378.432                       0
+   1298 RateOfActivity(RE1,S21,MINCOA,1,2020)                                        100.9152                       0
+   1299 RateOfActivity(RE1,S22,MINCOA,1,2020)                                        100.9152                       0
    1301 RateOfActivity(RE1,S12,MINCOA,1,2021)                                          76.296                       0
    1302 RateOfActivity(RE1,S21,MINCOA,1,2021)                                       272.38172                       0
    1303 RateOfActivity(RE1,S22,MINCOA,1,2021)                                         378.432                       0
@@ -259,17 +251,17 @@ Optimal - objective value 28301.19684730
    1321 RateOfActivity(RE1,S12,MINCOA,1,2026)                                         77.7048                       0
    1322 RateOfActivity(RE1,S21,MINCOA,1,2026)                                       294.15325                       0
    1323 RateOfActivity(RE1,S22,MINCOA,1,2026)                                         378.432                       0
-   1324 RateOfActivity(RE1,S11,MINCOA,1,2027)                                       167.62093                       0
-   1325 RateOfActivity(RE1,S12,MINCOA,1,2027)                                         68.3784                       0
-   1326 RateOfActivity(RE1,S21,MINCOA,1,2027)                                        288.4776                       0
+   1324 RateOfActivity(RE1,S11,MINCOA,1,2027)                                       187.01053                       0
+   1325 RateOfActivity(RE1,S12,MINCOA,1,2027)                                         81.3048                       0
+   1326 RateOfActivity(RE1,S21,MINCOA,1,2027)                                        304.6356                       0
    1327 RateOfActivity(RE1,S22,MINCOA,1,2027)                                         378.432                       0
-   1328 RateOfActivity(RE1,S11,MINCOA,1,2028)                                       150.20211                       0
-   1329 RateOfActivity(RE1,S12,MINCOA,1,2028)                                       55.672518                       0
-   1330 RateOfActivity(RE1,S21,MINCOA,1,2028)                                        278.5776                       0
+   1328 RateOfActivity(RE1,S11,MINCOA,1,2028)                                       194.05053                       0
+   1329 RateOfActivity(RE1,S12,MINCOA,1,2028)                                         84.9048                       0
+   1330 RateOfActivity(RE1,S21,MINCOA,1,2028)                                       315.11795                       0
    1331 RateOfActivity(RE1,S22,MINCOA,1,2028)                                         378.432                       0
-   1332 RateOfActivity(RE1,S11,MINCOA,1,2029)                                       132.78329                       0
-   1333 RateOfActivity(RE1,S12,MINCOA,1,2029)                                       42.966635                       0
-   1334 RateOfActivity(RE1,S21,MINCOA,1,2029)                                        268.6776                       0
+   1332 RateOfActivity(RE1,S11,MINCOA,1,2029)                                       201.09053                       0
+   1333 RateOfActivity(RE1,S12,MINCOA,1,2029)                                         88.5048                       0
+   1334 RateOfActivity(RE1,S21,MINCOA,1,2029)                                       325.60031                       0
    1335 RateOfActivity(RE1,S22,MINCOA,1,2029)                                         378.432                       0
    1338 RateOfActivity(RE1,S21,MINCOA,1,2030)                                       162.64055                       0
    1339 RateOfActivity(RE1,S22,MINCOA,1,2030)                                         189.216                       0
@@ -283,32 +275,34 @@ Optimal - objective value 28301.19684730
    1355 RateOfActivity(RE1,S22,MINCOA,1,2034)                                         189.216                       0
    1358 RateOfActivity(RE1,S21,MINCOA,1,2035)                                        188.7961                       0
    1359 RateOfActivity(RE1,S22,MINCOA,1,2035)                                         189.216                       0
-   1363 RateOfActivity(RE1,S22,MINGAS,1,2020)                                       240.78381                       0
+   1362 RateOfActivity(RE1,S21,MINGAS,1,2020)                                       107.32278                       0
+   1363 RateOfActivity(RE1,S22,MINGAS,1,2020)                                       425.79501                       0
    1367 RateOfActivity(RE1,S22,MINGAS,1,2021)                                       257.08969                       0
    1371 RateOfActivity(RE1,S22,MINGAS,1,2022)                                       267.96028                       0
    1375 RateOfActivity(RE1,S22,MINGAS,1,2023)                                       284.26616                       0
    1379 RateOfActivity(RE1,S22,MINGAS,1,2024)                                       295.13675                       0
    1383 RateOfActivity(RE1,S22,MINGAS,1,2025)                                       295.67464                       0
    1387 RateOfActivity(RE1,S22,MINGAS,1,2026)                                       311.98052                       0
-   1391 RateOfActivity(RE1,S22,MINGAS,1,2027)                                          315.36                       0
-   1395 RateOfActivity(RE1,S22,MINGAS,1,2028)                                          315.36                       0
-   1399 RateOfActivity(RE1,S22,MINGAS,1,2029)                                          315.36                       0
+   1391 RateOfActivity(RE1,S22,MINGAS,1,2027)                                        328.2864                       0
+   1395 RateOfActivity(RE1,S22,MINGAS,1,2028)                                       344.59228                       0
+   1399 RateOfActivity(RE1,S22,MINGAS,1,2029)                                       360.89816                       0
    1403 RateOfActivity(RE1,S22,MINGAS,1,2030)                                       364.59436                       0
    1407 RateOfActivity(RE1,S22,MINGAS,1,2031)                                       376.20691                       0
    1411 RateOfActivity(RE1,S22,MINGAS,1,2032)                                       387.81946                       0
    1415 RateOfActivity(RE1,S22,MINGAS,1,2033)                                       403.30285                       0
    1419 RateOfActivity(RE1,S22,MINGAS,1,2034)                                        414.9154                       0
    1423 RateOfActivity(RE1,S22,MINGAS,1,2035)                                        430.3988                       0
-   1427 RateOfActivity(RE1,S22,PWRGAS,1,2020)                                       120.39191                       0
+   1426 RateOfActivity(RE1,S21,PWRGAS,1,2020)                                       53.661388                       0
+   1427 RateOfActivity(RE1,S22,PWRGAS,1,2020)                                       212.89751                       0
    1431 RateOfActivity(RE1,S22,PWRGAS,1,2021)                                       128.54485                       0
    1435 RateOfActivity(RE1,S22,PWRGAS,1,2022)                                       133.98014                       0
    1439 RateOfActivity(RE1,S22,PWRGAS,1,2023)                                       142.13308                       0
    1443 RateOfActivity(RE1,S22,PWRGAS,1,2024)                                       147.56838                       0
    1447 RateOfActivity(RE1,S22,PWRGAS,1,2025)                                       147.83732                       0
    1451 RateOfActivity(RE1,S22,PWRGAS,1,2026)                                       155.99026                       0
-   1455 RateOfActivity(RE1,S22,PWRGAS,1,2027)                                          157.68                       0
-   1459 RateOfActivity(RE1,S22,PWRGAS,1,2028)                                          157.68                       0
-   1463 RateOfActivity(RE1,S22,PWRGAS,1,2029)                                          157.68                       0
+   1455 RateOfActivity(RE1,S22,PWRGAS,1,2027)                                        164.1432                       0
+   1459 RateOfActivity(RE1,S22,PWRGAS,1,2028)                                       172.29614                       0
+   1463 RateOfActivity(RE1,S22,PWRGAS,1,2029)                                       180.44908                       0
    1467 RateOfActivity(RE1,S22,PWRGAS,1,2030)                                       182.29718                       0
    1471 RateOfActivity(RE1,S22,PWRGAS,1,2031)                                       188.10345                       0
    1475 RateOfActivity(RE1,S22,PWRGAS,1,2032)                                       193.90973                       0
@@ -316,8 +310,8 @@ Optimal - objective value 28301.19684730
    1483 RateOfActivity(RE1,S22,PWRGAS,1,2034)                                        207.4577                       0
    1487 RateOfActivity(RE1,S22,PWRGAS,1,2035)                                        215.1994                       0
    1489 RateOfActivity(RE1,S12,PWRCOA,1,2020)                                          24.232                       0
-   1490 RateOfActivity(RE1,S21,PWRCOA,1,2020)                                       87.299788                       0
-   1491 RateOfActivity(RE1,S22,PWRCOA,1,2020)                                         126.144                       0
+   1490 RateOfActivity(RE1,S21,PWRCOA,1,2020)                                         33.6384                       0
+   1491 RateOfActivity(RE1,S22,PWRCOA,1,2020)                                         33.6384                       0
    1493 RateOfActivity(RE1,S12,PWRCOA,1,2021)                                          25.432                       0
    1494 RateOfActivity(RE1,S21,PWRCOA,1,2021)                                       90.793906                       0
    1495 RateOfActivity(RE1,S22,PWRCOA,1,2021)                                         126.144                       0
@@ -339,17 +333,17 @@ Optimal - objective value 28301.19684730
    1513 RateOfActivity(RE1,S12,PWRCOA,1,2026)                                         25.9016                       0
    1514 RateOfActivity(RE1,S21,PWRCOA,1,2026)                                       98.051082                       0
    1515 RateOfActivity(RE1,S22,PWRCOA,1,2026)                                         126.144                       0
-   1516 RateOfActivity(RE1,S11,PWRCOA,1,2027)                                       55.873644                       0
-   1517 RateOfActivity(RE1,S12,PWRCOA,1,2027)                                         22.7928                       0
-   1518 RateOfActivity(RE1,S21,PWRCOA,1,2027)                                         96.1592                       0
+   1516 RateOfActivity(RE1,S11,PWRCOA,1,2027)                                       62.336844                       0
+   1517 RateOfActivity(RE1,S12,PWRCOA,1,2027)                                         27.1016                       0
+   1518 RateOfActivity(RE1,S21,PWRCOA,1,2027)                                        101.5452                       0
    1519 RateOfActivity(RE1,S22,PWRCOA,1,2027)                                         126.144                       0
-   1520 RateOfActivity(RE1,S11,PWRCOA,1,2028)                                        50.06737                       0
-   1521 RateOfActivity(RE1,S12,PWRCOA,1,2028)                                       18.557506                       0
-   1522 RateOfActivity(RE1,S21,PWRCOA,1,2028)                                         92.8592                       0
+   1520 RateOfActivity(RE1,S11,PWRCOA,1,2028)                                       64.683511                       0
+   1521 RateOfActivity(RE1,S12,PWRCOA,1,2028)                                         28.3016                       0
+   1522 RateOfActivity(RE1,S21,PWRCOA,1,2028)                                       105.03932                       0
    1523 RateOfActivity(RE1,S22,PWRCOA,1,2028)                                         126.144                       0
-   1524 RateOfActivity(RE1,S11,PWRCOA,1,2029)                                       44.261095                       0
-   1525 RateOfActivity(RE1,S12,PWRCOA,1,2029)                                       14.322212                       0
-   1526 RateOfActivity(RE1,S21,PWRCOA,1,2029)                                         89.5592                       0
+   1524 RateOfActivity(RE1,S11,PWRCOA,1,2029)                                       67.030178                       0
+   1525 RateOfActivity(RE1,S12,PWRCOA,1,2029)                                         29.5016                       0
+   1526 RateOfActivity(RE1,S21,PWRCOA,1,2029)                                       108.53344                       0
    1527 RateOfActivity(RE1,S22,PWRCOA,1,2029)                                         126.144                       0
    1530 RateOfActivity(RE1,S21,PWRCOA,1,2030)                                       54.213516                       0
    1531 RateOfActivity(RE1,S22,PWRCOA,1,2030)                                          63.072                       0
@@ -937,8 +931,8 @@ Optimal - objective value 28301.19684730
    2253 RateOfActivity(RE1,S12,MINHYD,1,2035)                                         14.1912                       0
    2254 RateOfActivity(RE1,S21,MINHYD,1,2035)                                          23.652                       0
    2255 RateOfActivity(RE1,S22,MINHYD,1,2035)                                          23.652                       0
-   2256 RateOfActivity(RE1,S11,MINSOL,1,2020)                                          5.5188                       0
    2258 RateOfActivity(RE1,S21,MINSOL,1,2020)                                          5.5188                       0
+   2260 RateOfActivity(RE1,S11,MINSOL,1,2021)                                          5.5188                       0
    2262 RateOfActivity(RE1,S21,MINSOL,1,2021)                                          5.5188                       0
    2264 RateOfActivity(RE1,S11,MINSOL,1,2022)                                          5.5188                       0
    2266 RateOfActivity(RE1,S21,MINSOL,1,2022)                                          5.5188                       0
@@ -968,11 +962,11 @@ Optimal - objective value 28301.19684730
    2314 RateOfActivity(RE1,S21,MINSOL,1,2034)                                          5.5188                       0
    2316 RateOfActivity(RE1,S11,MINSOL,1,2035)                                          7.0956                       0
    2318 RateOfActivity(RE1,S21,MINSOL,1,2035)                                          5.5188                       0
-   2320 RateOfActivity(RE1,S11,MINWND,1,2020)                                          2.6204                       0
+   2320 RateOfActivity(RE1,S11,MINWND,1,2020)                                          8.1392                       0
    2321 RateOfActivity(RE1,S12,MINWND,1,2020)                                          6.3072                       0
    2322 RateOfActivity(RE1,S21,MINWND,1,2020)                                           7.884                       0
    2323 RateOfActivity(RE1,S22,MINWND,1,2020)                                          9.4608                       0
-   2324 RateOfActivity(RE1,S11,MINWND,1,2021)                                          8.6672                       0
+   2324 RateOfActivity(RE1,S11,MINWND,1,2021)                                          3.1484                       0
    2325 RateOfActivity(RE1,S12,MINWND,1,2021)                                          6.3072                       0
    2326 RateOfActivity(RE1,S21,MINWND,1,2021)                                           7.884                       0
    2327 RateOfActivity(RE1,S22,MINWND,1,2021)                                          9.4608                       0
@@ -996,18 +990,18 @@ Optimal - objective value 28301.19684730
    2345 RateOfActivity(RE1,S12,MINWND,1,2026)                                          6.3072                       0
    2346 RateOfActivity(RE1,S21,MINWND,1,2026)                                           7.884                       0
    2347 RateOfActivity(RE1,S22,MINWND,1,2026)                                          9.4608                       0
-   2348 RateOfActivity(RE1,S11,MINWND,1,2027)                                          15.924                       0
-   2349 RateOfActivity(RE1,S12,MINWND,1,2027)                                          10.616                       0
-   2350 RateOfActivity(RE1,S21,MINWND,1,2027)                                           13.27                       0
-   2351 RateOfActivity(RE1,S22,MINWND,1,2027)                                          15.924                       0
-   2352 RateOfActivity(RE1,S11,MINWND,1,2028)                                       24.076941                       0
-   2353 RateOfActivity(RE1,S12,MINWND,1,2028)                                       16.051294                       0
-   2354 RateOfActivity(RE1,S21,MINWND,1,2028)                                       20.064118                       0
-   2355 RateOfActivity(RE1,S22,MINWND,1,2028)                                       24.076941                       0
-   2356 RateOfActivity(RE1,S11,MINWND,1,2029)                                       32.229882                       0
-   2357 RateOfActivity(RE1,S12,MINWND,1,2029)                                       21.486588                       0
-   2358 RateOfActivity(RE1,S21,MINWND,1,2029)                                       26.858235                       0
-   2359 RateOfActivity(RE1,S22,MINWND,1,2029)                                       32.229882                       0
+   2348 RateOfActivity(RE1,S11,MINWND,1,2027)                                          9.4608                       0
+   2349 RateOfActivity(RE1,S12,MINWND,1,2027)                                          6.3072                       0
+   2350 RateOfActivity(RE1,S21,MINWND,1,2027)                                           7.884                       0
+   2351 RateOfActivity(RE1,S22,MINWND,1,2027)                                          9.4608                       0
+   2352 RateOfActivity(RE1,S11,MINWND,1,2028)                                          9.4608                       0
+   2353 RateOfActivity(RE1,S12,MINWND,1,2028)                                          6.3072                       0
+   2354 RateOfActivity(RE1,S21,MINWND,1,2028)                                           7.884                       0
+   2355 RateOfActivity(RE1,S22,MINWND,1,2028)                                          9.4608                       0
+   2356 RateOfActivity(RE1,S11,MINWND,1,2029)                                          9.4608                       0
+   2357 RateOfActivity(RE1,S12,MINWND,1,2029)                                          6.3072                       0
+   2358 RateOfActivity(RE1,S21,MINWND,1,2029)                                           7.884                       0
+   2359 RateOfActivity(RE1,S22,MINWND,1,2029)                                          9.4608                       0
    2360 RateOfActivity(RE1,S11,MINWND,1,2030)                                       78.837644                       0
    2361 RateOfActivity(RE1,S12,MINWND,1,2030)                                            51.2                       0
    2362 RateOfActivity(RE1,S21,MINWND,1,2030)                                       65.698037                       0
@@ -1094,8 +1088,8 @@ Optimal - objective value 28301.19684730
    2445 RateOfActivity(RE1,S12,PWRHYD,1,2035)                                         14.1912                       0
    2446 RateOfActivity(RE1,S21,PWRHYD,1,2035)                                          23.652                       0
    2447 RateOfActivity(RE1,S22,PWRHYD,1,2035)                                          23.652                       0
-   2448 RateOfActivity(RE1,S11,PWRSOL,1,2020)                                          5.5188                       0
    2450 RateOfActivity(RE1,S21,PWRSOL,1,2020)                                          5.5188                       0
+   2452 RateOfActivity(RE1,S11,PWRSOL,1,2021)                                          5.5188                       0
    2454 RateOfActivity(RE1,S21,PWRSOL,1,2021)                                          5.5188                       0
    2456 RateOfActivity(RE1,S11,PWRSOL,1,2022)                                          5.5188                       0
    2458 RateOfActivity(RE1,S21,PWRSOL,1,2022)                                          5.5188                       0
@@ -1125,11 +1119,11 @@ Optimal - objective value 28301.19684730
    2506 RateOfActivity(RE1,S21,PWRSOL,1,2034)                                          5.5188                       0
    2508 RateOfActivity(RE1,S11,PWRSOL,1,2035)                                          7.0956                       0
    2510 RateOfActivity(RE1,S21,PWRSOL,1,2035)                                          5.5188                       0
-   2512 RateOfActivity(RE1,S11,PWRWND,1,2020)                                          2.6204                       0
+   2512 RateOfActivity(RE1,S11,PWRWND,1,2020)                                          8.1392                       0
    2513 RateOfActivity(RE1,S12,PWRWND,1,2020)                                          6.3072                       0
    2514 RateOfActivity(RE1,S21,PWRWND,1,2020)                                           7.884                       0
    2515 RateOfActivity(RE1,S22,PWRWND,1,2020)                                          9.4608                       0
-   2516 RateOfActivity(RE1,S11,PWRWND,1,2021)                                          8.6672                       0
+   2516 RateOfActivity(RE1,S11,PWRWND,1,2021)                                          3.1484                       0
    2517 RateOfActivity(RE1,S12,PWRWND,1,2021)                                          6.3072                       0
    2518 RateOfActivity(RE1,S21,PWRWND,1,2021)                                           7.884                       0
    2519 RateOfActivity(RE1,S22,PWRWND,1,2021)                                          9.4608                       0
@@ -1153,18 +1147,18 @@ Optimal - objective value 28301.19684730
    2537 RateOfActivity(RE1,S12,PWRWND,1,2026)                                          6.3072                       0
    2538 RateOfActivity(RE1,S21,PWRWND,1,2026)                                           7.884                       0
    2539 RateOfActivity(RE1,S22,PWRWND,1,2026)                                          9.4608                       0
-   2540 RateOfActivity(RE1,S11,PWRWND,1,2027)                                          15.924                       0
-   2541 RateOfActivity(RE1,S12,PWRWND,1,2027)                                          10.616                       0
-   2542 RateOfActivity(RE1,S21,PWRWND,1,2027)                                           13.27                       0
-   2543 RateOfActivity(RE1,S22,PWRWND,1,2027)                                          15.924                       0
-   2544 RateOfActivity(RE1,S11,PWRWND,1,2028)                                       24.076941                       0
-   2545 RateOfActivity(RE1,S12,PWRWND,1,2028)                                       16.051294                       0
-   2546 RateOfActivity(RE1,S21,PWRWND,1,2028)                                       20.064118                       0
-   2547 RateOfActivity(RE1,S22,PWRWND,1,2028)                                       24.076941                       0
-   2548 RateOfActivity(RE1,S11,PWRWND,1,2029)                                       32.229882                       0
-   2549 RateOfActivity(RE1,S12,PWRWND,1,2029)                                       21.486588                       0
-   2550 RateOfActivity(RE1,S21,PWRWND,1,2029)                                       26.858235                       0
-   2551 RateOfActivity(RE1,S22,PWRWND,1,2029)                                       32.229882                       0
+   2540 RateOfActivity(RE1,S11,PWRWND,1,2027)                                          9.4608                       0
+   2541 RateOfActivity(RE1,S12,PWRWND,1,2027)                                          6.3072                       0
+   2542 RateOfActivity(RE1,S21,PWRWND,1,2027)                                           7.884                       0
+   2543 RateOfActivity(RE1,S22,PWRWND,1,2027)                                          9.4608                       0
+   2544 RateOfActivity(RE1,S11,PWRWND,1,2028)                                          9.4608                       0
+   2545 RateOfActivity(RE1,S12,PWRWND,1,2028)                                          6.3072                       0
+   2546 RateOfActivity(RE1,S21,PWRWND,1,2028)                                           7.884                       0
+   2547 RateOfActivity(RE1,S22,PWRWND,1,2028)                                          9.4608                       0
+   2548 RateOfActivity(RE1,S11,PWRWND,1,2029)                                          9.4608                       0
+   2549 RateOfActivity(RE1,S12,PWRWND,1,2029)                                          6.3072                       0
+   2550 RateOfActivity(RE1,S21,PWRWND,1,2029)                                           7.884                       0
+   2551 RateOfActivity(RE1,S22,PWRWND,1,2029)                                          9.4608                       0
    2552 RateOfActivity(RE1,S11,PWRWND,1,2030)                                       78.837644                       0
    2553 RateOfActivity(RE1,S12,PWRWND,1,2030)                                            51.2                       0
    2554 RateOfActivity(RE1,S21,PWRWND,1,2030)                                       65.698037                       0
@@ -1189,64 +1183,64 @@ Optimal - objective value 28301.19684730
    2573 RateOfActivity(RE1,S12,PWRWND,1,2035)                                         43.8088                       0
    2574 RateOfActivity(RE1,S21,PWRWND,1,2035)                                       76.779519                       0
    2575 RateOfActivity(RE1,S22,PWRWND,1,2035)                                       92.135422                       0
-   2640 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2020)                      124.84945                       0
+   2640 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2020)                      50.304288                       0
    2641 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2021)                      127.42345                       0
    2642 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2022)                      129.13945                       0
    2643 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2023)                      131.71345                       0
    2644 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2024)                      214.46623                       0
    2645 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2025)                      206.67929                       0
    2646 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2026)                      212.42129                       0
-   2647 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2027)                       203.8473                       0
-   2648 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2028)                      191.53054                       0
-   2649 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2029)                      179.21377                       0
+   2647 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2027)                      218.16329                       0
+   2648 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2028)                      223.90529                       0
+   2649 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2029)                      229.64729                       0
    2650 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2030)                      59.815613                       0
    2651 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2031)                       60.60028                       0
    2652 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2032)                      61.384946                       0
    2653 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2033)                      62.431169                       0
    2654 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2034)                      63.215835                       0
    2655 TotalAnnualTechnologyActivityByMode(RE1,MINCOA,1,2035)                      64.262058                       0
-   2656 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2020)                      40.933248                       0
+   2656 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2020)                      90.630024                       0
    2657 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2021)                      43.705248                       0
    2658 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2022)                      45.553248                       0
    2659 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2023)                      48.325248                       0
    2660 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2024)                      50.173248                       0
    2661 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2025)                      50.264688                       0
    2662 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2026)                      53.036688                       0
-   2663 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2027)                        53.6112                       0
-   2664 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2028)                        53.6112                       0
-   2665 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2029)                        53.6112                       0
+   2663 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2027)                      55.808688                       0
+   2664 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2028)                      58.580688                       0
+   2665 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2029)                      61.352688                       0
    2666 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2030)                      61.981041                       0
    2667 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2031)                      63.955174                       0
    2668 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2032)                      65.929308                       0
    2669 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2033)                      68.561485                       0
    2670 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2034)                      70.535619                       0
    2671 TotalAnnualTechnologyActivityByMode(RE1,MINGAS,1,2035)                      73.167796                       0
-   2672 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2020)                      20.466624                       0
+   2672 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2020)                      45.315012                       0
    2673 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2021)                      21.852624                       0
    2674 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2022)                      22.776624                       0
    2675 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2023)                      24.162624                       0
    2676 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2024)                      25.086624                       0
    2677 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2025)                      25.132344                       0
    2678 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2026)                      26.518344                       0
-   2679 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2027)                        26.8056                       0
-   2680 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2028)                        26.8056                       0
-   2681 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2029)                        26.8056                       0
+   2679 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2027)                      27.904344                       0
+   2680 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2028)                      29.290344                       0
+   2681 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2029)                      30.676344                       0
    2682 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2030)                       30.99052                       0
    2683 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2031)                      31.977587                       0
    2684 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2032)                      32.964654                       0
    2685 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2033)                      34.280743                       0
    2686 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2034)                      35.267809                       0
    2687 TotalAnnualTechnologyActivityByMode(RE1,PWRGAS,1,2035)                      36.583898                       0
-   2688 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2020)                      41.616484                       0
+   2688 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2020)                      16.768096                       0
    2689 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2021)                      42.474484                       0
    2690 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2022)                      43.046484                       0
    2691 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2023)                      43.904484                       0
    2692 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2024)                      71.488744                       0
    2693 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2025)                      68.893096                       0
    2694 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2026)                      70.807096                       0
-   2695 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2027)                        67.9491                       0
-   2696 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2028)                      63.843512                       0
-   2697 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2029)                      59.737924                       0
+   2695 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2027)                      72.721096                       0
+   2696 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2028)                      74.635096                       0
+   2697 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2029)                      76.549096                       0
    2698 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2030)                      19.938538                       0
    2699 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2031)                      20.200093                       0
    2700 TotalAnnualTechnologyActivityByMode(RE1,PWRCOA,1,2032)                      20.461649                       0
@@ -1397,8 +1391,8 @@ Optimal - objective value 28301.19684730
    2877 TotalAnnualTechnologyActivityByMode(RE1,MINHYD,1,2033)                      17.549784                       0
    2878 TotalAnnualTechnologyActivityByMode(RE1,MINHYD,1,2034)                      17.549784                       0
    2879 TotalAnnualTechnologyActivityByMode(RE1,MINHYD,1,2035)                      17.549784                       0
-   2880 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2020)                      11.975796                       0
-   2881 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2021)                       0.938196                       0
+   2880 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2020)                       0.938196                       0
+   2881 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2021)                      11.975796                       0
    2882 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2022)                      11.975796                       0
    2883 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2023)                      11.975796                       0
    2884 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2024)                       4.131216                       0
@@ -1413,16 +1407,16 @@ Optimal - objective value 28301.19684730
    2893 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2033)                       4.131216                       0
    2894 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2034)                       4.131216                       0
    2895 TotalAnnualTechnologyActivityByMode(RE1,MINSOL,1,2035)                       4.131216                       0
-   2896 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2020)                          9.577                       0
-   2897 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2021)                        21.6706                       0
+   2896 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2020)                        20.6146                       0
+   2897 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2021)                         10.633                       0
    2898 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2022)                         11.337                       0
    2899 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2023)                        23.2578                       0
    2900 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2024)                        8.59356                       0
    2901 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2025)                        8.59356                       0
    2902 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2026)                        8.59356                       0
-   2903 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2027)                        14.4643                       0
-   2904 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2028)                      21.869888                       0
-   2905 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2029)                      29.275476                       0
+   2903 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2027)                        8.59356                       0
+   2904 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2028)                        8.59356                       0
+   2905 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2029)                        8.59356                       0
    2906 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2030)                      71.312006                       0
    2907 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2031)                      73.363384                       0
    2908 TotalAnnualTechnologyActivityByMode(RE1,MINWND,1,2032)                      72.292697                       0
@@ -1445,8 +1439,8 @@ Optimal - objective value 28301.19684730
    2925 TotalAnnualTechnologyActivityByMode(RE1,PWRHYD,1,2033)                      17.549784                       0
    2926 TotalAnnualTechnologyActivityByMode(RE1,PWRHYD,1,2034)                      17.549784                       0
    2927 TotalAnnualTechnologyActivityByMode(RE1,PWRHYD,1,2035)                      17.549784                       0
-   2928 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2020)                      11.975796                       0
-   2929 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2021)                       0.938196                       0
+   2928 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2020)                       0.938196                       0
+   2929 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2021)                      11.975796                       0
    2930 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2022)                      11.975796                       0
    2931 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2023)                      11.975796                       0
    2932 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2024)                       4.131216                       0
@@ -1461,23 +1455,23 @@ Optimal - objective value 28301.19684730
    2941 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2033)                       4.131216                       0
    2942 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2034)                       4.131216                       0
    2943 TotalAnnualTechnologyActivityByMode(RE1,PWRSOL,1,2035)                       4.131216                       0
-   2944 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2020)                          9.577                       0
-   2945 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2021)                        21.6706                       0
+   2944 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2020)                        20.6146                       0
+   2945 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2021)                         10.633                       0
    2946 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2022)                         11.337                       0
    2947 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2023)                        23.2578                       0
    2948 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2024)                        8.59356                       0
    2949 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2025)                        8.59356                       0
    2950 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2026)                        8.59356                       0
-   2951 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2027)                        14.4643                       0
-   2952 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2028)                      21.869888                       0
-   2953 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2029)                      29.275476                       0
+   2951 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2027)                        8.59356                       0
+   2952 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2028)                        8.59356                       0
+   2953 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2029)                        8.59356                       0
    2954 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2030)                      71.312006                       0
    2955 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2031)                      73.363384                       0
    2956 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2032)                      72.292697                       0
    2957 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2033)                      75.027868                       0
    2958 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2034)                      77.079246                       0
    2959 TotalAnnualTechnologyActivityByMode(RE1,PWRWND,1,2035)                      79.814416                       0
-   2976 AccumulatedNewCapacity(RE1,MINCOA,2020)                                            12                       0
+   2976 AccumulatedNewCapacity(RE1,MINCOA,2020)                                           3.2                       0
    2977 AccumulatedNewCapacity(RE1,MINCOA,2021)                                            12                       0
    2978 AccumulatedNewCapacity(RE1,MINCOA,2022)                                            12                       0
    2979 AccumulatedNewCapacity(RE1,MINCOA,2023)                                            12                       0
@@ -1493,22 +1487,32 @@ Optimal - objective value 28301.19684730
    2989 AccumulatedNewCapacity(RE1,MINCOA,2033)                                            12                       0
    2990 AccumulatedNewCapacity(RE1,MINCOA,2034)                                            12                       0
    2991 AccumulatedNewCapacity(RE1,MINCOA,2035)                                            12                       0
-   2992 AccumulatedNewCapacity(RE1,MINGAS,2020)                                      9.014021                       0
-   2993 AccumulatedNewCapacity(RE1,MINGAS,2021)                                      9.014021                       0
-   2994 AccumulatedNewCapacity(RE1,MINGAS,2022)                                      9.014021                       0
-   2995 AccumulatedNewCapacity(RE1,MINGAS,2023)                                      9.014021                       0
-   2996 AccumulatedNewCapacity(RE1,MINGAS,2024)                                      9.358725                       0
-   2997 AccumulatedNewCapacity(RE1,MINGAS,2025)                                            10                       0
-   2998 AccumulatedNewCapacity(RE1,MINGAS,2026)                                            10                       0
-   2999 AccumulatedNewCapacity(RE1,MINGAS,2027)                                            10                       0
-   3000 AccumulatedNewCapacity(RE1,MINGAS,2028)                                     11.929443                       0
-   3001 AccumulatedNewCapacity(RE1,MINGAS,2029)                                     11.929443                       0
-   3002 AccumulatedNewCapacity(RE1,MINGAS,2030)                                     11.929443                       0
-   3003 AccumulatedNewCapacity(RE1,MINGAS,2031)                                     11.929443                       0
-   3004 AccumulatedNewCapacity(RE1,MINGAS,2032)                                     13.647857                       0
-   3005 AccumulatedNewCapacity(RE1,MINGAS,2033)                                     13.647857                       0
-   3006 AccumulatedNewCapacity(RE1,MINGAS,2034)                                     13.647857                       0
+   2992 AccumulatedNewCapacity(RE1,MINGAS,2020)                                     13.501871                       0
+   2993 AccumulatedNewCapacity(RE1,MINGAS,2021)                                     13.501871                       0
+   2994 AccumulatedNewCapacity(RE1,MINGAS,2022)                                     13.501871                       0
+   2995 AccumulatedNewCapacity(RE1,MINGAS,2023)                                     13.501871                       0
+   2996 AccumulatedNewCapacity(RE1,MINGAS,2024)                                     13.501871                       0
+   2997 AccumulatedNewCapacity(RE1,MINGAS,2025)                                     13.501871                       0
+   2998 AccumulatedNewCapacity(RE1,MINGAS,2026)                                     13.501871                       0
+   2999 AccumulatedNewCapacity(RE1,MINGAS,2027)                                     13.501871                       0
+   3000 AccumulatedNewCapacity(RE1,MINGAS,2028)                                     13.501871                       0
+   3001 AccumulatedNewCapacity(RE1,MINGAS,2029)                                     13.501871                       0
+   3002 AccumulatedNewCapacity(RE1,MINGAS,2030)                                     13.501871                       0
+   3003 AccumulatedNewCapacity(RE1,MINGAS,2031)                                     13.501871                       0
+   3004 AccumulatedNewCapacity(RE1,MINGAS,2032)                                     13.501871                       0
+   3005 AccumulatedNewCapacity(RE1,MINGAS,2033)                                     13.501871                       0
+   3006 AccumulatedNewCapacity(RE1,MINGAS,2034)                                     13.501871                       0
    3007 AccumulatedNewCapacity(RE1,MINGAS,2035)                                     13.647857                       0
+   3008 AccumulatedNewCapacity(RE1,PWRGAS,2020)                                    0.75093563                       0
+   3009 AccumulatedNewCapacity(RE1,PWRGAS,2021)                                    0.75093563                       0
+   3010 AccumulatedNewCapacity(RE1,PWRGAS,2022)                                    0.75093563                       0
+   3011 AccumulatedNewCapacity(RE1,PWRGAS,2023)                                    0.75093563                       0
+   3012 AccumulatedNewCapacity(RE1,PWRGAS,2024)                                    0.75093563                       0
+   3013 AccumulatedNewCapacity(RE1,PWRGAS,2025)                                    0.75093563                       0
+   3014 AccumulatedNewCapacity(RE1,PWRGAS,2026)                                    0.75093563                       0
+   3015 AccumulatedNewCapacity(RE1,PWRGAS,2027)                                    0.75093563                       0
+   3016 AccumulatedNewCapacity(RE1,PWRGAS,2028)                                    0.75093563                       0
+   3017 AccumulatedNewCapacity(RE1,PWRGAS,2029)                                    0.75093563                       0
    3018 AccumulatedNewCapacity(RE1,PWRGAS,2030)                                    0.78060563                       0
    3019 AccumulatedNewCapacity(RE1,PWRGAS,2031)                                     1.9647214                       0
    3020 AccumulatedNewCapacity(RE1,PWRGAS,2032)                                     2.1488371                       0
@@ -1682,9 +1686,9 @@ Optimal - objective value 28301.19684730
    3236 AccumulatedNewCapacity(RE1,MINWND,2024)                                           0.3                       0
    3237 AccumulatedNewCapacity(RE1,MINWND,2025)                                           0.3                       0
    3238 AccumulatedNewCapacity(RE1,MINWND,2026)                                           0.3                       0
-   3239 AccumulatedNewCapacity(RE1,MINWND,2027)                                    0.50494673                       0
-   3240 AccumulatedNewCapacity(RE1,MINWND,2028)                                     0.7634748                       0
-   3241 AccumulatedNewCapacity(RE1,MINWND,2029)                                     1.0220029                       0
+   3239 AccumulatedNewCapacity(RE1,MINWND,2027)                                           0.3                       0
+   3240 AccumulatedNewCapacity(RE1,MINWND,2028)                                           0.3                       0
+   3241 AccumulatedNewCapacity(RE1,MINWND,2029)                                           0.3                       0
    3242 AccumulatedNewCapacity(RE1,MINWND,2030)                                     2.4999253                       0
    3243 AccumulatedNewCapacity(RE1,MINWND,2031)                                     2.5743376                       0
    3244 AccumulatedNewCapacity(RE1,MINWND,2032)                                     2.6487499                       0
@@ -1702,16 +1706,13 @@ Optimal - objective value 28301.19684730
    3261 AccumulatedNewCapacity(RE1,PWRHYD,2033)                                           0.5                       0
    3262 AccumulatedNewCapacity(RE1,PWRHYD,2034)                                           0.5                       0
    3263 AccumulatedNewCapacity(RE1,PWRHYD,2035)                                           0.5                       0
-   3287 AccumulatedNewCapacity(RE1,PWRWND,2027)                                    0.68315576                       0
-   3288 AccumulatedNewCapacity(RE1,PWRWND,2028)                                      1.544916                       0
-   3289 AccumulatedNewCapacity(RE1,PWRWND,2029)                                     2.4066762                       0
    3290 AccumulatedNewCapacity(RE1,PWRWND,2030)                                     7.3330844                       0
    3291 AccumulatedNewCapacity(RE1,PWRWND,2031)                                     7.5811254                       0
    3292 AccumulatedNewCapacity(RE1,PWRWND,2032)                                     7.8291664                       0
    3293 AccumulatedNewCapacity(RE1,PWRWND,2033)                                     8.1598878                       0
    3294 AccumulatedNewCapacity(RE1,PWRWND,2034)                                     8.4079289                       0
    3295 AccumulatedNewCapacity(RE1,PWRWND,2035)                                     8.7386502                       0
-   3408 TotalCapacityAnnual(RE1,MINCOA,2020)                                               12                       0
+   3408 TotalCapacityAnnual(RE1,MINCOA,2020)                                              3.2                       0
    3409 TotalCapacityAnnual(RE1,MINCOA,2021)                                               12                       0
    3410 TotalCapacityAnnual(RE1,MINCOA,2022)                                               12                       0
    3411 TotalCapacityAnnual(RE1,MINCOA,2023)                                               12                       0
@@ -1727,32 +1728,32 @@ Optimal - objective value 28301.19684730
    3421 TotalCapacityAnnual(RE1,MINCOA,2033)                                               12                       0
    3422 TotalCapacityAnnual(RE1,MINCOA,2034)                                               12                       0
    3423 TotalCapacityAnnual(RE1,MINCOA,2035)                                               12                       0
-   3424 TotalCapacityAnnual(RE1,MINGAS,2020)                                         9.014021                       0
-   3425 TotalCapacityAnnual(RE1,MINGAS,2021)                                         9.014021                       0
-   3426 TotalCapacityAnnual(RE1,MINGAS,2022)                                         9.014021                       0
-   3427 TotalCapacityAnnual(RE1,MINGAS,2023)                                         9.014021                       0
-   3428 TotalCapacityAnnual(RE1,MINGAS,2024)                                         9.358725                       0
-   3429 TotalCapacityAnnual(RE1,MINGAS,2025)                                               10                       0
-   3430 TotalCapacityAnnual(RE1,MINGAS,2026)                                               10                       0
-   3431 TotalCapacityAnnual(RE1,MINGAS,2027)                                               10                       0
-   3432 TotalCapacityAnnual(RE1,MINGAS,2028)                                        11.929443                       0
-   3433 TotalCapacityAnnual(RE1,MINGAS,2029)                                        11.929443                       0
-   3434 TotalCapacityAnnual(RE1,MINGAS,2030)                                        11.929443                       0
-   3435 TotalCapacityAnnual(RE1,MINGAS,2031)                                        11.929443                       0
-   3436 TotalCapacityAnnual(RE1,MINGAS,2032)                                        13.647857                       0
-   3437 TotalCapacityAnnual(RE1,MINGAS,2033)                                        13.647857                       0
-   3438 TotalCapacityAnnual(RE1,MINGAS,2034)                                        13.647857                       0
+   3424 TotalCapacityAnnual(RE1,MINGAS,2020)                                        13.501871                       0
+   3425 TotalCapacityAnnual(RE1,MINGAS,2021)                                        13.501871                       0
+   3426 TotalCapacityAnnual(RE1,MINGAS,2022)                                        13.501871                       0
+   3427 TotalCapacityAnnual(RE1,MINGAS,2023)                                        13.501871                       0
+   3428 TotalCapacityAnnual(RE1,MINGAS,2024)                                        13.501871                       0
+   3429 TotalCapacityAnnual(RE1,MINGAS,2025)                                        13.501871                       0
+   3430 TotalCapacityAnnual(RE1,MINGAS,2026)                                        13.501871                       0
+   3431 TotalCapacityAnnual(RE1,MINGAS,2027)                                        13.501871                       0
+   3432 TotalCapacityAnnual(RE1,MINGAS,2028)                                        13.501871                       0
+   3433 TotalCapacityAnnual(RE1,MINGAS,2029)                                        13.501871                       0
+   3434 TotalCapacityAnnual(RE1,MINGAS,2030)                                        13.501871                       0
+   3435 TotalCapacityAnnual(RE1,MINGAS,2031)                                        13.501871                       0
+   3436 TotalCapacityAnnual(RE1,MINGAS,2032)                                        13.501871                       0
+   3437 TotalCapacityAnnual(RE1,MINGAS,2033)                                        13.501871                       0
+   3438 TotalCapacityAnnual(RE1,MINGAS,2034)                                        13.501871                       0
    3439 TotalCapacityAnnual(RE1,MINGAS,2035)                                        13.647857                       0
-   3440 TotalCapacityAnnual(RE1,PWRGAS,2020)                                                6                       0
-   3441 TotalCapacityAnnual(RE1,PWRGAS,2021)                                                6                       0
-   3442 TotalCapacityAnnual(RE1,PWRGAS,2022)                                                6                       0
-   3443 TotalCapacityAnnual(RE1,PWRGAS,2023)                                                6                       0
-   3444 TotalCapacityAnnual(RE1,PWRGAS,2024)                                                6                       0
-   3445 TotalCapacityAnnual(RE1,PWRGAS,2025)                                                6                       0
-   3446 TotalCapacityAnnual(RE1,PWRGAS,2026)                                                5                       0
-   3447 TotalCapacityAnnual(RE1,PWRGAS,2027)                                                5                       0
-   3448 TotalCapacityAnnual(RE1,PWRGAS,2028)                                                5                       0
-   3449 TotalCapacityAnnual(RE1,PWRGAS,2029)                                                5                       0
+   3440 TotalCapacityAnnual(RE1,PWRGAS,2020)                                        6.7509356                       0
+   3441 TotalCapacityAnnual(RE1,PWRGAS,2021)                                        6.7509356                       0
+   3442 TotalCapacityAnnual(RE1,PWRGAS,2022)                                        6.7509356                       0
+   3443 TotalCapacityAnnual(RE1,PWRGAS,2023)                                        6.7509356                       0
+   3444 TotalCapacityAnnual(RE1,PWRGAS,2024)                                        6.7509356                       0
+   3445 TotalCapacityAnnual(RE1,PWRGAS,2025)                                        6.7509356                       0
+   3446 TotalCapacityAnnual(RE1,PWRGAS,2026)                                        5.7509356                       0
+   3447 TotalCapacityAnnual(RE1,PWRGAS,2027)                                        5.7509356                       0
+   3448 TotalCapacityAnnual(RE1,PWRGAS,2028)                                        5.7509356                       0
+   3449 TotalCapacityAnnual(RE1,PWRGAS,2029)                                        5.7509356                       0
    3450 TotalCapacityAnnual(RE1,PWRGAS,2030)                                        5.7806056                       0
    3451 TotalCapacityAnnual(RE1,PWRGAS,2031)                                        5.9647214                       0
    3452 TotalCapacityAnnual(RE1,PWRGAS,2032)                                        6.1488371                       0
@@ -1942,9 +1943,9 @@ Optimal - objective value 28301.19684730
    3668 TotalCapacityAnnual(RE1,MINWND,2024)                                              0.3                       0
    3669 TotalCapacityAnnual(RE1,MINWND,2025)                                              0.3                       0
    3670 TotalCapacityAnnual(RE1,MINWND,2026)                                              0.3                       0
-   3671 TotalCapacityAnnual(RE1,MINWND,2027)                                       0.50494673                       0
-   3672 TotalCapacityAnnual(RE1,MINWND,2028)                                        0.7634748                       0
-   3673 TotalCapacityAnnual(RE1,MINWND,2029)                                        1.0220029                       0
+   3671 TotalCapacityAnnual(RE1,MINWND,2027)                                              0.3                       0
+   3672 TotalCapacityAnnual(RE1,MINWND,2028)                                              0.3                       0
+   3673 TotalCapacityAnnual(RE1,MINWND,2029)                                              0.3                       0
    3674 TotalCapacityAnnual(RE1,MINWND,2030)                                        2.4999253                       0
    3675 TotalCapacityAnnual(RE1,MINWND,2031)                                        2.5743376                       0
    3676 TotalCapacityAnnual(RE1,MINWND,2032)                                        2.6487499                       0
@@ -1990,22 +1991,21 @@ Optimal - objective value 28301.19684730
    3716 TotalCapacityAnnual(RE1,PWRWND,2024)                                                1                       0
    3717 TotalCapacityAnnual(RE1,PWRWND,2025)                                                1                       0
    3718 TotalCapacityAnnual(RE1,PWRWND,2026)                                                1                       0
-   3719 TotalCapacityAnnual(RE1,PWRWND,2027)                                        1.6831558                       0
-   3720 TotalCapacityAnnual(RE1,PWRWND,2028)                                         2.544916                       0
-   3721 TotalCapacityAnnual(RE1,PWRWND,2029)                                        3.4066762                       0
+   3719 TotalCapacityAnnual(RE1,PWRWND,2027)                                                1                       0
+   3720 TotalCapacityAnnual(RE1,PWRWND,2028)                                                1                       0
+   3721 TotalCapacityAnnual(RE1,PWRWND,2029)                                                1                       0
    3722 TotalCapacityAnnual(RE1,PWRWND,2030)                                        8.3330844                       0
    3723 TotalCapacityAnnual(RE1,PWRWND,2031)                                        8.5811254                       0
    3724 TotalCapacityAnnual(RE1,PWRWND,2032)                                        8.8291664                       0
    3725 TotalCapacityAnnual(RE1,PWRWND,2033)                                        9.1598878                       0
    3726 TotalCapacityAnnual(RE1,PWRWND,2034)                                        9.4079289                       0
    3727 TotalCapacityAnnual(RE1,PWRWND,2035)                                        9.7386502                       0
-   3840 CapitalInvestment(RE1,MINCOA,2020)                                             0.0012                       0
-   3856 CapitalInvestment(RE1,MINGAS,2020)                                       0.0009014021                       0
-   3860 CapitalInvestment(RE1,MINGAS,2024)                                      3.4470409e-05                       0
-   3861 CapitalInvestment(RE1,MINGAS,2025)                                      6.4127496e-05                       0
-   3864 CapitalInvestment(RE1,MINGAS,2028)                                      0.00019294428                       0
-   3868 CapitalInvestment(RE1,MINGAS,2032)                                      0.00017184137                       0
-   3882 CapitalInvestment(RE1,PWRGAS,2030)                                          975.75704                       0
+   3840 CapitalInvestment(RE1,MINCOA,2020)                                            0.00032                       0
+   3841 CapitalInvestment(RE1,MINCOA,2021)                                            0.00088                       0
+   3856 CapitalInvestment(RE1,MINGAS,2020)                                       0.0013501871                       0
+   3871 CapitalInvestment(RE1,MINGAS,2035)                                      1.4598525e-05                       0
+   3872 CapitalInvestment(RE1,PWRGAS,2020)                                          938.66953                       0
+   3882 CapitalInvestment(RE1,PWRGAS,2030)                                          37.087503                       0
    3883 CapitalInvestment(RE1,PWRGAS,2031)                                          1480.1447                       0
    3884 CapitalInvestment(RE1,PWRGAS,2032)                                           230.1447                       0
    3885 CapitalInvestment(RE1,PWRGAS,2033)                                          306.85959                       0
@@ -2178,9 +2178,9 @@ Optimal - objective value 28301.19684730
    4100 CapitalInvestment(RE1,MINWND,2024)                                              3e-05                       0
    4101 CapitalInvestment(RE1,MINWND,2025)                                              3e-05                       0
    4102 CapitalInvestment(RE1,MINWND,2026)                                              3e-05                       0
-   4103 CapitalInvestment(RE1,MINWND,2027)                                      5.0494673e-05                       0
-   4104 CapitalInvestment(RE1,MINWND,2028)                                       7.634748e-05                       0
-   4105 CapitalInvestment(RE1,MINWND,2029)                                      0.00010220029                       0
+   4103 CapitalInvestment(RE1,MINWND,2027)                                              3e-05                       0
+   4104 CapitalInvestment(RE1,MINWND,2028)                                              3e-05                       0
+   4105 CapitalInvestment(RE1,MINWND,2029)                                              3e-05                       0
    4106 CapitalInvestment(RE1,MINWND,2030)                                      0.00024999253                       0
    4107 CapitalInvestment(RE1,MINWND,2031)                                      0.00025743376                       0
    4108 CapitalInvestment(RE1,MINWND,2032)                                      0.00026487499                       0
@@ -2188,105 +2188,102 @@ Optimal - objective value 28301.19684730
    4110 CapitalInvestment(RE1,MINWND,2034)                                      0.00028223787                       0
    4111 CapitalInvestment(RE1,MINWND,2035)                                      0.00029215951                       0
    4117 CapitalInvestment(RE1,PWRHYD,2025)                                                600                       0
-   4151 CapitalInvestment(RE1,PWRWND,2027)                                          1093.0492                       0
-   4152 CapitalInvestment(RE1,PWRWND,2028)                                          1378.8164                       0
-   4153 CapitalInvestment(RE1,PWRWND,2029)                                          1378.8164                       0
-   4154 CapitalInvestment(RE1,PWRWND,2030)                                           7882.253                       0
+   4154 CapitalInvestment(RE1,PWRWND,2030)                                          11732.935                       0
    4155 CapitalInvestment(RE1,PWRWND,2031)                                          396.86566                       0
    4156 CapitalInvestment(RE1,PWRWND,2032)                                          396.86566                       0
    4157 CapitalInvestment(RE1,PWRWND,2033)                                          529.15422                       0
    4158 CapitalInvestment(RE1,PWRWND,2034)                                          396.86566                       0
    4159 CapitalInvestment(RE1,PWRWND,2035)                                          529.15422                       0
-   4272 AnnualTechnologyEmission(RE1,MINCOA,CO2,2020)                                11486.15                       0
+   4272 AnnualTechnologyEmission(RE1,MINCOA,CO2,2020)                               4627.9945                       0
    4274 AnnualTechnologyEmission(RE1,MINCOA,CO2,2021)                               11722.958                       0
    4276 AnnualTechnologyEmission(RE1,MINCOA,CO2,2022)                                11880.83                       0
    4278 AnnualTechnologyEmission(RE1,MINCOA,CO2,2023)                               12117.638                       0
    4280 AnnualTechnologyEmission(RE1,MINCOA,CO2,2024)                               19730.893                       0
    4282 AnnualTechnologyEmission(RE1,MINCOA,CO2,2025)                               19014.494                       0
    4284 AnnualTechnologyEmission(RE1,MINCOA,CO2,2026)                               19542.758                       0
-   4286 AnnualTechnologyEmission(RE1,MINCOA,CO2,2027)                               18753.952                       0
-   4288 AnnualTechnologyEmission(RE1,MINCOA,CO2,2028)                               17620.809                       0
-   4290 AnnualTechnologyEmission(RE1,MINCOA,CO2,2029)                               16487.667                       0
+   4286 AnnualTechnologyEmission(RE1,MINCOA,CO2,2027)                               20071.022                       0
+   4288 AnnualTechnologyEmission(RE1,MINCOA,CO2,2028)                               20599.286                       0
+   4290 AnnualTechnologyEmission(RE1,MINCOA,CO2,2029)                                21127.55                       0
    4292 AnnualTechnologyEmission(RE1,MINCOA,CO2,2030)                               5503.0364                       0
    4294 AnnualTechnologyEmission(RE1,MINCOA,CO2,2031)                               5575.2257                       0
    4296 AnnualTechnologyEmission(RE1,MINCOA,CO2,2032)                               5647.4151                       0
    4298 AnnualTechnologyEmission(RE1,MINCOA,CO2,2033)                               5743.6675                       0
    4300 AnnualTechnologyEmission(RE1,MINCOA,CO2,2034)                               5815.8569                       0
    4302 AnnualTechnologyEmission(RE1,MINCOA,CO2,2035)                               5912.1093                       0
-   4304 AnnualTechnologyEmission(RE1,MINGAS,CO2,2020)                               2046.6624                       0
+   4304 AnnualTechnologyEmission(RE1,MINGAS,CO2,2020)                               4531.5012                       0
    4306 AnnualTechnologyEmission(RE1,MINGAS,CO2,2021)                               2185.2624                       0
    4308 AnnualTechnologyEmission(RE1,MINGAS,CO2,2022)                               2277.6624                       0
    4310 AnnualTechnologyEmission(RE1,MINGAS,CO2,2023)                               2416.2624                       0
    4312 AnnualTechnologyEmission(RE1,MINGAS,CO2,2024)                               2508.6624                       0
    4314 AnnualTechnologyEmission(RE1,MINGAS,CO2,2025)                               2513.2344                       0
    4316 AnnualTechnologyEmission(RE1,MINGAS,CO2,2026)                               2651.8344                       0
-   4318 AnnualTechnologyEmission(RE1,MINGAS,CO2,2027)                                 2680.56                       0
-   4320 AnnualTechnologyEmission(RE1,MINGAS,CO2,2028)                                 2680.56                       0
-   4322 AnnualTechnologyEmission(RE1,MINGAS,CO2,2029)                                 2680.56                       0
+   4318 AnnualTechnologyEmission(RE1,MINGAS,CO2,2027)                               2790.4344                       0
+   4320 AnnualTechnologyEmission(RE1,MINGAS,CO2,2028)                               2929.0344                       0
+   4322 AnnualTechnologyEmission(RE1,MINGAS,CO2,2029)                               3067.6344                       0
    4324 AnnualTechnologyEmission(RE1,MINGAS,CO2,2030)                                3099.052                       0
    4326 AnnualTechnologyEmission(RE1,MINGAS,CO2,2031)                               3197.7587                       0
    4328 AnnualTechnologyEmission(RE1,MINGAS,CO2,2032)                               3296.4654                       0
    4330 AnnualTechnologyEmission(RE1,MINGAS,CO2,2033)                               3428.0743                       0
    4332 AnnualTechnologyEmission(RE1,MINGAS,CO2,2034)                               3526.7809                       0
    4334 AnnualTechnologyEmission(RE1,MINGAS,CO2,2035)                               3658.3898                       0
-   6448 AnnualVariableOperatingCost(RE1,MINCOA,2020)                                624.24726                       0
+   6448 AnnualVariableOperatingCost(RE1,MINCOA,2020)                                251.52144                       0
    6449 AnnualVariableOperatingCost(RE1,MINCOA,2021)                                637.11726                       0
    6450 AnnualVariableOperatingCost(RE1,MINCOA,2022)                                645.69726                       0
    6451 AnnualVariableOperatingCost(RE1,MINCOA,2023)                                658.56726                       0
    6452 AnnualVariableOperatingCost(RE1,MINCOA,2024)                                1072.3312                       0
    6453 AnnualVariableOperatingCost(RE1,MINCOA,2025)                                1033.3964                       0
    6454 AnnualVariableOperatingCost(RE1,MINCOA,2026)                                1062.1064                       0
-   6455 AnnualVariableOperatingCost(RE1,MINCOA,2027)                                1019.2365                       0
-   6456 AnnualVariableOperatingCost(RE1,MINCOA,2028)                                957.65268                       0
-   6457 AnnualVariableOperatingCost(RE1,MINCOA,2029)                                896.06885                       0
+   6455 AnnualVariableOperatingCost(RE1,MINCOA,2027)                                1090.8164                       0
+   6456 AnnualVariableOperatingCost(RE1,MINCOA,2028)                                1119.5264                       0
+   6457 AnnualVariableOperatingCost(RE1,MINCOA,2029)                                1148.2364                       0
    6458 AnnualVariableOperatingCost(RE1,MINCOA,2030)                                299.07807                       0
    6459 AnnualVariableOperatingCost(RE1,MINCOA,2031)                                 303.0014                       0
    6460 AnnualVariableOperatingCost(RE1,MINCOA,2032)                                306.92473                       0
    6461 AnnualVariableOperatingCost(RE1,MINCOA,2033)                                312.15584                       0
    6462 AnnualVariableOperatingCost(RE1,MINCOA,2034)                                316.07918                       0
    6463 AnnualVariableOperatingCost(RE1,MINCOA,2035)                                321.31029                       0
-   6464 AnnualVariableOperatingCost(RE1,MINGAS,2020)                                409.33248                       0
+   6464 AnnualVariableOperatingCost(RE1,MINGAS,2020)                                906.30024                       0
    6465 AnnualVariableOperatingCost(RE1,MINGAS,2021)                                437.05248                       0
    6466 AnnualVariableOperatingCost(RE1,MINGAS,2022)                                455.53248                       0
    6467 AnnualVariableOperatingCost(RE1,MINGAS,2023)                                483.25248                       0
    6468 AnnualVariableOperatingCost(RE1,MINGAS,2024)                                501.73248                       0
    6469 AnnualVariableOperatingCost(RE1,MINGAS,2025)                                502.64688                       0
    6470 AnnualVariableOperatingCost(RE1,MINGAS,2026)                                530.36688                       0
-   6471 AnnualVariableOperatingCost(RE1,MINGAS,2027)                                  536.112                       0
-   6472 AnnualVariableOperatingCost(RE1,MINGAS,2028)                                  536.112                       0
-   6473 AnnualVariableOperatingCost(RE1,MINGAS,2029)                                  536.112                       0
+   6471 AnnualVariableOperatingCost(RE1,MINGAS,2027)                                558.08688                       0
+   6472 AnnualVariableOperatingCost(RE1,MINGAS,2028)                                585.80688                       0
+   6473 AnnualVariableOperatingCost(RE1,MINGAS,2029)                                613.52688                       0
    6474 AnnualVariableOperatingCost(RE1,MINGAS,2030)                                619.81041                       0
    6475 AnnualVariableOperatingCost(RE1,MINGAS,2031)                                639.55174                       0
    6476 AnnualVariableOperatingCost(RE1,MINGAS,2032)                                659.29308                       0
    6477 AnnualVariableOperatingCost(RE1,MINGAS,2033)                                685.61485                       0
    6478 AnnualVariableOperatingCost(RE1,MINGAS,2034)                                705.35619                       0
    6479 AnnualVariableOperatingCost(RE1,MINGAS,2035)                                731.67796                       0
-   6480 AnnualVariableOperatingCost(RE1,PWRGAS,2020)                             0.0020466624                       0
+   6480 AnnualVariableOperatingCost(RE1,PWRGAS,2020)                             0.0045315012                       0
    6481 AnnualVariableOperatingCost(RE1,PWRGAS,2021)                             0.0021852624                       0
    6482 AnnualVariableOperatingCost(RE1,PWRGAS,2022)                             0.0022776624                       0
    6483 AnnualVariableOperatingCost(RE1,PWRGAS,2023)                             0.0024162624                       0
    6484 AnnualVariableOperatingCost(RE1,PWRGAS,2024)                             0.0025086624                       0
    6485 AnnualVariableOperatingCost(RE1,PWRGAS,2025)                             0.0025132344                       0
    6486 AnnualVariableOperatingCost(RE1,PWRGAS,2026)                             0.0026518344                       0
-   6487 AnnualVariableOperatingCost(RE1,PWRGAS,2027)                               0.00268056                       0
-   6488 AnnualVariableOperatingCost(RE1,PWRGAS,2028)                               0.00268056                       0
-   6489 AnnualVariableOperatingCost(RE1,PWRGAS,2029)                               0.00268056                       0
+   6487 AnnualVariableOperatingCost(RE1,PWRGAS,2027)                             0.0027904344                       0
+   6488 AnnualVariableOperatingCost(RE1,PWRGAS,2028)                             0.0029290344                       0
+   6489 AnnualVariableOperatingCost(RE1,PWRGAS,2029)                             0.0030676344                       0
    6490 AnnualVariableOperatingCost(RE1,PWRGAS,2030)                              0.003099052                       0
    6491 AnnualVariableOperatingCost(RE1,PWRGAS,2031)                             0.0031977587                       0
    6492 AnnualVariableOperatingCost(RE1,PWRGAS,2032)                             0.0032964654                       0
    6493 AnnualVariableOperatingCost(RE1,PWRGAS,2033)                             0.0034280743                       0
    6494 AnnualVariableOperatingCost(RE1,PWRGAS,2034)                             0.0035267809                       0
    6495 AnnualVariableOperatingCost(RE1,PWRGAS,2035)                             0.0036583898                       0
-   6496 AnnualVariableOperatingCost(RE1,PWRCOA,2020)                             0.0041616484                       0
+   6496 AnnualVariableOperatingCost(RE1,PWRCOA,2020)                             0.0016768096                       0
    6497 AnnualVariableOperatingCost(RE1,PWRCOA,2021)                             0.0042474484                       0
    6498 AnnualVariableOperatingCost(RE1,PWRCOA,2022)                             0.0043046484                       0
    6499 AnnualVariableOperatingCost(RE1,PWRCOA,2023)                             0.0043904484                       0
    6500 AnnualVariableOperatingCost(RE1,PWRCOA,2024)                             0.0071488744                       0
    6501 AnnualVariableOperatingCost(RE1,PWRCOA,2025)                             0.0068893096                       0
    6502 AnnualVariableOperatingCost(RE1,PWRCOA,2026)                             0.0070807096                       0
-   6503 AnnualVariableOperatingCost(RE1,PWRCOA,2027)                               0.00679491                       0
-   6504 AnnualVariableOperatingCost(RE1,PWRCOA,2028)                             0.0063843512                       0
-   6505 AnnualVariableOperatingCost(RE1,PWRCOA,2029)                             0.0059737924                       0
+   6503 AnnualVariableOperatingCost(RE1,PWRCOA,2027)                             0.0072721096                       0
+   6504 AnnualVariableOperatingCost(RE1,PWRCOA,2028)                             0.0074635096                       0
+   6505 AnnualVariableOperatingCost(RE1,PWRCOA,2029)                             0.0076549096                       0
    6506 AnnualVariableOperatingCost(RE1,PWRCOA,2030)                             0.0019938538                       0
    6507 AnnualVariableOperatingCost(RE1,PWRCOA,2031)                             0.0020200093                       0
    6508 AnnualVariableOperatingCost(RE1,PWRCOA,2032)                             0.0020461649                       0
@@ -2437,8 +2434,8 @@ Optimal - objective value 28301.19684730
    6685 AnnualVariableOperatingCost(RE1,MINHYD,2033)                             0.0017549784                       0
    6686 AnnualVariableOperatingCost(RE1,MINHYD,2034)                             0.0017549784                       0
    6687 AnnualVariableOperatingCost(RE1,MINHYD,2035)                             0.0017549784                       0
-   6688 AnnualVariableOperatingCost(RE1,MINSOL,2020)                             0.0011975796                       0
-   6689 AnnualVariableOperatingCost(RE1,MINSOL,2021)                              9.38196e-05                       0
+   6688 AnnualVariableOperatingCost(RE1,MINSOL,2020)                              9.38196e-05                       0
+   6689 AnnualVariableOperatingCost(RE1,MINSOL,2021)                             0.0011975796                       0
    6690 AnnualVariableOperatingCost(RE1,MINSOL,2022)                             0.0011975796                       0
    6691 AnnualVariableOperatingCost(RE1,MINSOL,2023)                             0.0011975796                       0
    6692 AnnualVariableOperatingCost(RE1,MINSOL,2024)                             0.0004131216                       0
@@ -2453,16 +2450,16 @@ Optimal - objective value 28301.19684730
    6701 AnnualVariableOperatingCost(RE1,MINSOL,2033)                             0.0004131216                       0
    6702 AnnualVariableOperatingCost(RE1,MINSOL,2034)                             0.0004131216                       0
    6703 AnnualVariableOperatingCost(RE1,MINSOL,2035)                             0.0004131216                       0
-   6704 AnnualVariableOperatingCost(RE1,MINWND,2020)                                0.0009577                       0
-   6705 AnnualVariableOperatingCost(RE1,MINWND,2021)                               0.00216706                       0
+   6704 AnnualVariableOperatingCost(RE1,MINWND,2020)                               0.00206146                       0
+   6705 AnnualVariableOperatingCost(RE1,MINWND,2021)                                0.0010633                       0
    6706 AnnualVariableOperatingCost(RE1,MINWND,2022)                                0.0011337                       0
    6707 AnnualVariableOperatingCost(RE1,MINWND,2023)                               0.00232578                       0
    6708 AnnualVariableOperatingCost(RE1,MINWND,2024)                              0.000859356                       0
    6709 AnnualVariableOperatingCost(RE1,MINWND,2025)                              0.000859356                       0
    6710 AnnualVariableOperatingCost(RE1,MINWND,2026)                              0.000859356                       0
-   6711 AnnualVariableOperatingCost(RE1,MINWND,2027)                               0.00144643                       0
-   6712 AnnualVariableOperatingCost(RE1,MINWND,2028)                             0.0021869888                       0
-   6713 AnnualVariableOperatingCost(RE1,MINWND,2029)                             0.0029275476                       0
+   6711 AnnualVariableOperatingCost(RE1,MINWND,2027)                              0.000859356                       0
+   6712 AnnualVariableOperatingCost(RE1,MINWND,2028)                              0.000859356                       0
+   6713 AnnualVariableOperatingCost(RE1,MINWND,2029)                              0.000859356                       0
    6714 AnnualVariableOperatingCost(RE1,MINWND,2030)                             0.0071312006                       0
    6715 AnnualVariableOperatingCost(RE1,MINWND,2031)                             0.0073363384                       0
    6716 AnnualVariableOperatingCost(RE1,MINWND,2032)                             0.0072292697                       0
@@ -2485,8 +2482,8 @@ Optimal - objective value 28301.19684730
    6733 AnnualVariableOperatingCost(RE1,PWRHYD,2033)                             0.0017549784                       0
    6734 AnnualVariableOperatingCost(RE1,PWRHYD,2034)                             0.0017549784                       0
    6735 AnnualVariableOperatingCost(RE1,PWRHYD,2035)                             0.0017549784                       0
-   6736 AnnualVariableOperatingCost(RE1,PWRSOL,2020)                             0.0011975796                       0
-   6737 AnnualVariableOperatingCost(RE1,PWRSOL,2021)                              9.38196e-05                       0
+   6736 AnnualVariableOperatingCost(RE1,PWRSOL,2020)                              9.38196e-05                       0
+   6737 AnnualVariableOperatingCost(RE1,PWRSOL,2021)                             0.0011975796                       0
    6738 AnnualVariableOperatingCost(RE1,PWRSOL,2022)                             0.0011975796                       0
    6739 AnnualVariableOperatingCost(RE1,PWRSOL,2023)                             0.0011975796                       0
    6740 AnnualVariableOperatingCost(RE1,PWRSOL,2024)                             0.0004131216                       0
@@ -2501,32 +2498,32 @@ Optimal - objective value 28301.19684730
    6749 AnnualVariableOperatingCost(RE1,PWRSOL,2033)                             0.0004131216                       0
    6750 AnnualVariableOperatingCost(RE1,PWRSOL,2034)                             0.0004131216                       0
    6751 AnnualVariableOperatingCost(RE1,PWRSOL,2035)                             0.0004131216                       0
-   6752 AnnualVariableOperatingCost(RE1,PWRWND,2020)                                0.0009577                       0
-   6753 AnnualVariableOperatingCost(RE1,PWRWND,2021)                               0.00216706                       0
+   6752 AnnualVariableOperatingCost(RE1,PWRWND,2020)                               0.00206146                       0
+   6753 AnnualVariableOperatingCost(RE1,PWRWND,2021)                                0.0010633                       0
    6754 AnnualVariableOperatingCost(RE1,PWRWND,2022)                                0.0011337                       0
    6755 AnnualVariableOperatingCost(RE1,PWRWND,2023)                               0.00232578                       0
    6756 AnnualVariableOperatingCost(RE1,PWRWND,2024)                              0.000859356                       0
    6757 AnnualVariableOperatingCost(RE1,PWRWND,2025)                              0.000859356                       0
    6758 AnnualVariableOperatingCost(RE1,PWRWND,2026)                              0.000859356                       0
-   6759 AnnualVariableOperatingCost(RE1,PWRWND,2027)                               0.00144643                       0
-   6760 AnnualVariableOperatingCost(RE1,PWRWND,2028)                             0.0021869888                       0
-   6761 AnnualVariableOperatingCost(RE1,PWRWND,2029)                             0.0029275476                       0
+   6759 AnnualVariableOperatingCost(RE1,PWRWND,2027)                              0.000859356                       0
+   6760 AnnualVariableOperatingCost(RE1,PWRWND,2028)                              0.000859356                       0
+   6761 AnnualVariableOperatingCost(RE1,PWRWND,2029)                              0.000859356                       0
    6762 AnnualVariableOperatingCost(RE1,PWRWND,2030)                             0.0071312006                       0
    6763 AnnualVariableOperatingCost(RE1,PWRWND,2031)                             0.0073363384                       0
    6764 AnnualVariableOperatingCost(RE1,PWRWND,2032)                             0.0072292697                       0
    6765 AnnualVariableOperatingCost(RE1,PWRWND,2033)                             0.0075027868                       0
    6766 AnnualVariableOperatingCost(RE1,PWRWND,2034)                             0.0077079246                       0
    6767 AnnualVariableOperatingCost(RE1,PWRWND,2035)                             0.0079814416                       0
-   6912 AnnualFixedOperatingCost(RE1,PWRGAS,2020)                                         180                       0
-   6913 AnnualFixedOperatingCost(RE1,PWRGAS,2021)                                         180                       0
-   6914 AnnualFixedOperatingCost(RE1,PWRGAS,2022)                                         180                       0
-   6915 AnnualFixedOperatingCost(RE1,PWRGAS,2023)                                         180                       0
-   6916 AnnualFixedOperatingCost(RE1,PWRGAS,2024)                                         180                       0
-   6917 AnnualFixedOperatingCost(RE1,PWRGAS,2025)                                         180                       0
-   6918 AnnualFixedOperatingCost(RE1,PWRGAS,2026)                                         150                       0
-   6919 AnnualFixedOperatingCost(RE1,PWRGAS,2027)                                         150                       0
-   6920 AnnualFixedOperatingCost(RE1,PWRGAS,2028)                                         150                       0
-   6921 AnnualFixedOperatingCost(RE1,PWRGAS,2029)                                         150                       0
+   6912 AnnualFixedOperatingCost(RE1,PWRGAS,2020)                                   202.52807                       0
+   6913 AnnualFixedOperatingCost(RE1,PWRGAS,2021)                                   202.52807                       0
+   6914 AnnualFixedOperatingCost(RE1,PWRGAS,2022)                                   202.52807                       0
+   6915 AnnualFixedOperatingCost(RE1,PWRGAS,2023)                                   202.52807                       0
+   6916 AnnualFixedOperatingCost(RE1,PWRGAS,2024)                                   202.52807                       0
+   6917 AnnualFixedOperatingCost(RE1,PWRGAS,2025)                                   202.52807                       0
+   6918 AnnualFixedOperatingCost(RE1,PWRGAS,2026)                                   172.52807                       0
+   6919 AnnualFixedOperatingCost(RE1,PWRGAS,2027)                                   172.52807                       0
+   6920 AnnualFixedOperatingCost(RE1,PWRGAS,2028)                                   172.52807                       0
+   6921 AnnualFixedOperatingCost(RE1,PWRGAS,2029)                                   172.52807                       0
    6922 AnnualFixedOperatingCost(RE1,PWRGAS,2030)                                   173.41817                       0
    6923 AnnualFixedOperatingCost(RE1,PWRGAS,2031)                                   178.94164                       0
    6924 AnnualFixedOperatingCost(RE1,PWRGAS,2032)                                   184.46511                       0
@@ -2588,22 +2585,21 @@ Optimal - objective value 28301.19684730
    7188 AnnualFixedOperatingCost(RE1,PWRWND,2024)                                          20                       0
    7189 AnnualFixedOperatingCost(RE1,PWRWND,2025)                                          20                       0
    7190 AnnualFixedOperatingCost(RE1,PWRWND,2026)                                          20                       0
-   7191 AnnualFixedOperatingCost(RE1,PWRWND,2027)                                   33.663115                       0
-   7192 AnnualFixedOperatingCost(RE1,PWRWND,2028)                                    50.89832                       0
-   7193 AnnualFixedOperatingCost(RE1,PWRWND,2029)                                   68.133524                       0
+   7191 AnnualFixedOperatingCost(RE1,PWRWND,2027)                                          20                       0
+   7192 AnnualFixedOperatingCost(RE1,PWRWND,2028)                                          20                       0
+   7193 AnnualFixedOperatingCost(RE1,PWRWND,2029)                                          20                       0
    7194 AnnualFixedOperatingCost(RE1,PWRWND,2030)                                   166.66169                       0
    7195 AnnualFixedOperatingCost(RE1,PWRWND,2031)                                   171.62251                       0
    7196 AnnualFixedOperatingCost(RE1,PWRWND,2032)                                   176.58333                       0
    7197 AnnualFixedOperatingCost(RE1,PWRWND,2033)                                   183.19776                       0
    7198 AnnualFixedOperatingCost(RE1,PWRWND,2034)                                   188.15858                       0
    7199 AnnualFixedOperatingCost(RE1,PWRWND,2035)                                     194.773                       0
-   7616 SalvageValue(RE1,MINCOA,2020)                                           0.00077270496                       0
-   7632 SalvageValue(RE1,MINGAS,2020)                                           0.00058043156                       0
-   7636 SalvageValue(RE1,MINGAS,2024)                                            2.621214e-05                       0
-   7637 SalvageValue(RE1,MINGAS,2025)                                           5.0414951e-05                       0
-   7640 SalvageValue(RE1,MINGAS,2028)                                           0.00016521282                       0
-   7644 SalvageValue(RE1,MINGAS,2032)                                           0.00016069341                       0
-   7658 SalvageValue(RE1,PWRGAS,2030)                                               875.86045                       0
+   7616 SalvageValue(RE1,MINCOA,2020)                                           0.00020605466                       0
+   7617 SalvageValue(RE1,MINCOA,2021)                                           0.00059418625                       0
+   7632 SalvageValue(RE1,MINGAS,2020)                                           0.00086941357                       0
+   7647 SalvageValue(RE1,MINGAS,2035)                                           1.4378796e-05                       0
+   7648 SalvageValue(RE1,PWRGAS,2020)                                               604.42883                       0
+   7658 SalvageValue(RE1,PWRGAS,2030)                                               33.290538                       0
    7659 SalvageValue(RE1,PWRGAS,2031)                                                1357.043                       0
    7660 SalvageValue(RE1,PWRGAS,2032)                                               215.21439                       0
    7661 SalvageValue(RE1,PWRGAS,2033)                                               292.29921                       0
@@ -2626,19 +2622,16 @@ Optimal - objective value 28301.19684730
    7694 SalvageValue(RE1,PWRTRN,2034)                                               586.32361                       0
    7695 SalvageValue(RE1,PWRTRN,2035)                                               782.61176                       0
    7701 SalvageValue(RE1,PWRHYD,2025)                                               591.22342                       0
-   7735 SalvageValue(RE1,PWRWND,2027)                                               728.54809                       0
-   7736 SalvageValue(RE1,PWRWND,2028)                                               980.62832                       0
-   7737 SalvageValue(RE1,PWRWND,2029)                                                1039.303                       0
-   7738 SalvageValue(RE1,PWRWND,2030)                                               6260.8149                       0
+   7738 SalvageValue(RE1,PWRWND,2030)                                               9319.3829                       0
    7739 SalvageValue(RE1,PWRWND,2031)                                               330.54569                       0
    7740 SalvageValue(RE1,PWRWND,2032)                                               345.13449                       0
    7741 SalvageValue(RE1,PWRWND,2033)                                               478.70478                       0
    7742 SalvageValue(RE1,PWRWND,2034)                                               372.26106                       0
    7743 SalvageValue(RE1,PWRWND,2035)                                               513.15123                       0
-   7744 TotalTechnologyModelPeriodActivity(RE1,MINCOA)                              2092.9941                       0
-   7745 TotalTechnologyModelPeriodActivity(RE1,MINGAS)                              896.95564                       0
-   7746 TotalTechnologyModelPeriodActivity(RE1,PWRGAS)                              448.47782                       0
-   7747 TotalTechnologyModelPeriodActivity(RE1,PWRCOA)                              697.66471                       0
+   7744 TotalTechnologyModelPeriodActivity(RE1,MINCOA)                              2115.5732                       0
+   7745 TotalTechnologyModelPeriodActivity(RE1,MINGAS)                              961.56088                       0
+   7746 TotalTechnologyModelPeriodActivity(RE1,PWRGAS)                              480.78044                       0
+   7747 TotalTechnologyModelPeriodActivity(RE1,PWRCOA)                              705.19107                       0
    7748 TotalTechnologyModelPeriodActivity(RE1,PWRTRN)                                   1938                       0
    7749 TotalTechnologyModelPeriodActivity(RE1,MINLND)                                   4800                       0
    7750 TotalTechnologyModelPeriodActivity(RE1,LNDMAIHR)                                  969                       0
@@ -2649,10 +2642,10 @@ Optimal - objective value 28301.19684730
    7757 TotalTechnologyModelPeriodActivity(RE1,MINPRC)                                   5760                       0
    7758 TotalTechnologyModelPeriodActivity(RE1,MINHYD)                              293.09494                       0
    7759 TotalTechnologyModelPeriodActivity(RE1,MINSOL)                              86.440176                       0
-   7760 TotalTechnologyModelPeriodActivity(RE1,MINWND)                              606.12236                       0
+   7760 TotalTechnologyModelPeriodActivity(RE1,MINWND)                              566.29338                       0
    7761 TotalTechnologyModelPeriodActivity(RE1,PWRHYD)                              293.09494                       0
    7762 TotalTechnologyModelPeriodActivity(RE1,PWRSOL)                              86.440176                       0
-   7763 TotalTechnologyModelPeriodActivity(RE1,PWRWND)                              606.12236                       0
+   7763 TotalTechnologyModelPeriodActivity(RE1,PWRWND)                              566.29338                       0
   24231 InputToTotalCapacity(RE1,PWRHYD,LWAT,2020)                                         10                       0
   24285 InputToTotalCapacity(RE1,PWRHYD,LWAT,2021)                                         10                       0
   24339 InputToTotalCapacity(RE1,PWRHYD,LWAT,2022)                                         10                       0
@@ -2669,64 +2662,64 @@ Optimal - objective value 28301.19684730
   24933 InputToTotalCapacity(RE1,PWRHYD,LWAT,2033)                                         15                       0
   24987 InputToTotalCapacity(RE1,PWRHYD,LWAT,2034)                                         15                       0
   25041 InputToTotalCapacity(RE1,PWRHYD,LWAT,2035)                                         15                       0
-  26779 TotalTechnologyAnnualActivity(RE1,MINCOA,2020)                              124.84945                       0
+  26779 TotalTechnologyAnnualActivity(RE1,MINCOA,2020)                              50.304288                       0
   26780 TotalTechnologyAnnualActivity(RE1,MINCOA,2021)                              127.42345                       0
   26781 TotalTechnologyAnnualActivity(RE1,MINCOA,2022)                              129.13945                       0
   26782 TotalTechnologyAnnualActivity(RE1,MINCOA,2023)                              131.71345                       0
   26783 TotalTechnologyAnnualActivity(RE1,MINCOA,2024)                              214.46623                       0
   26784 TotalTechnologyAnnualActivity(RE1,MINCOA,2025)                              206.67929                       0
   26785 TotalTechnologyAnnualActivity(RE1,MINCOA,2026)                              212.42129                       0
-  26786 TotalTechnologyAnnualActivity(RE1,MINCOA,2027)                               203.8473                       0
-  26787 TotalTechnologyAnnualActivity(RE1,MINCOA,2028)                              191.53054                       0
-  26788 TotalTechnologyAnnualActivity(RE1,MINCOA,2029)                              179.21377                       0
+  26786 TotalTechnologyAnnualActivity(RE1,MINCOA,2027)                              218.16329                       0
+  26787 TotalTechnologyAnnualActivity(RE1,MINCOA,2028)                              223.90529                       0
+  26788 TotalTechnologyAnnualActivity(RE1,MINCOA,2029)                              229.64729                       0
   26789 TotalTechnologyAnnualActivity(RE1,MINCOA,2030)                              59.815613                       0
   26790 TotalTechnologyAnnualActivity(RE1,MINCOA,2031)                               60.60028                       0
   26791 TotalTechnologyAnnualActivity(RE1,MINCOA,2032)                              61.384946                       0
   26792 TotalTechnologyAnnualActivity(RE1,MINCOA,2033)                              62.431169                       0
   26793 TotalTechnologyAnnualActivity(RE1,MINCOA,2034)                              63.215835                       0
   26794 TotalTechnologyAnnualActivity(RE1,MINCOA,2035)                              64.262058                       0
-  26795 TotalTechnologyAnnualActivity(RE1,MINGAS,2020)                              40.933248                       0
+  26795 TotalTechnologyAnnualActivity(RE1,MINGAS,2020)                              90.630024                       0
   26796 TotalTechnologyAnnualActivity(RE1,MINGAS,2021)                              43.705248                       0
   26797 TotalTechnologyAnnualActivity(RE1,MINGAS,2022)                              45.553248                       0
   26798 TotalTechnologyAnnualActivity(RE1,MINGAS,2023)                              48.325248                       0
   26799 TotalTechnologyAnnualActivity(RE1,MINGAS,2024)                              50.173248                       0
   26800 TotalTechnologyAnnualActivity(RE1,MINGAS,2025)                              50.264688                       0
   26801 TotalTechnologyAnnualActivity(RE1,MINGAS,2026)                              53.036688                       0
-  26802 TotalTechnologyAnnualActivity(RE1,MINGAS,2027)                                53.6112                       0
-  26803 TotalTechnologyAnnualActivity(RE1,MINGAS,2028)                                53.6112                       0
-  26804 TotalTechnologyAnnualActivity(RE1,MINGAS,2029)                                53.6112                       0
+  26802 TotalTechnologyAnnualActivity(RE1,MINGAS,2027)                              55.808688                       0
+  26803 TotalTechnologyAnnualActivity(RE1,MINGAS,2028)                              58.580688                       0
+  26804 TotalTechnologyAnnualActivity(RE1,MINGAS,2029)                              61.352688                       0
   26805 TotalTechnologyAnnualActivity(RE1,MINGAS,2030)                              61.981041                       0
   26806 TotalTechnologyAnnualActivity(RE1,MINGAS,2031)                              63.955174                       0
   26807 TotalTechnologyAnnualActivity(RE1,MINGAS,2032)                              65.929308                       0
   26808 TotalTechnologyAnnualActivity(RE1,MINGAS,2033)                              68.561485                       0
   26809 TotalTechnologyAnnualActivity(RE1,MINGAS,2034)                              70.535619                       0
   26810 TotalTechnologyAnnualActivity(RE1,MINGAS,2035)                              73.167796                       0
-  26811 TotalTechnologyAnnualActivity(RE1,PWRGAS,2020)                              20.466624                       0
+  26811 TotalTechnologyAnnualActivity(RE1,PWRGAS,2020)                              45.315012                       0
   26812 TotalTechnologyAnnualActivity(RE1,PWRGAS,2021)                              21.852624                       0
   26813 TotalTechnologyAnnualActivity(RE1,PWRGAS,2022)                              22.776624                       0
   26814 TotalTechnologyAnnualActivity(RE1,PWRGAS,2023)                              24.162624                       0
   26815 TotalTechnologyAnnualActivity(RE1,PWRGAS,2024)                              25.086624                       0
   26816 TotalTechnologyAnnualActivity(RE1,PWRGAS,2025)                              25.132344                       0
   26817 TotalTechnologyAnnualActivity(RE1,PWRGAS,2026)                              26.518344                       0
-  26818 TotalTechnologyAnnualActivity(RE1,PWRGAS,2027)                                26.8056                       0
-  26819 TotalTechnologyAnnualActivity(RE1,PWRGAS,2028)                                26.8056                       0
-  26820 TotalTechnologyAnnualActivity(RE1,PWRGAS,2029)                                26.8056                       0
+  26818 TotalTechnologyAnnualActivity(RE1,PWRGAS,2027)                              27.904344                       0
+  26819 TotalTechnologyAnnualActivity(RE1,PWRGAS,2028)                              29.290344                       0
+  26820 TotalTechnologyAnnualActivity(RE1,PWRGAS,2029)                              30.676344                       0
   26821 TotalTechnologyAnnualActivity(RE1,PWRGAS,2030)                               30.99052                       0
   26822 TotalTechnologyAnnualActivity(RE1,PWRGAS,2031)                              31.977587                       0
   26823 TotalTechnologyAnnualActivity(RE1,PWRGAS,2032)                              32.964654                       0
   26824 TotalTechnologyAnnualActivity(RE1,PWRGAS,2033)                              34.280743                       0
   26825 TotalTechnologyAnnualActivity(RE1,PWRGAS,2034)                              35.267809                       0
   26826 TotalTechnologyAnnualActivity(RE1,PWRGAS,2035)                              36.583898                       0
-  26827 TotalTechnologyAnnualActivity(RE1,PWRCOA,2020)                              41.616484                       0
+  26827 TotalTechnologyAnnualActivity(RE1,PWRCOA,2020)                              16.768096                       0
   26828 TotalTechnologyAnnualActivity(RE1,PWRCOA,2021)                              42.474484                       0
   26829 TotalTechnologyAnnualActivity(RE1,PWRCOA,2022)                              43.046484                       0
   26830 TotalTechnologyAnnualActivity(RE1,PWRCOA,2023)                              43.904484                       0
   26831 TotalTechnologyAnnualActivity(RE1,PWRCOA,2024)                              71.488744                       0
   26832 TotalTechnologyAnnualActivity(RE1,PWRCOA,2025)                              68.893096                       0
   26833 TotalTechnologyAnnualActivity(RE1,PWRCOA,2026)                              70.807096                       0
-  26834 TotalTechnologyAnnualActivity(RE1,PWRCOA,2027)                                67.9491                       0
-  26835 TotalTechnologyAnnualActivity(RE1,PWRCOA,2028)                              63.843512                       0
-  26836 TotalTechnologyAnnualActivity(RE1,PWRCOA,2029)                              59.737924                       0
+  26834 TotalTechnologyAnnualActivity(RE1,PWRCOA,2027)                              72.721096                       0
+  26835 TotalTechnologyAnnualActivity(RE1,PWRCOA,2028)                              74.635096                       0
+  26836 TotalTechnologyAnnualActivity(RE1,PWRCOA,2029)                              76.549096                       0
   26837 TotalTechnologyAnnualActivity(RE1,PWRCOA,2030)                              19.938538                       0
   26838 TotalTechnologyAnnualActivity(RE1,PWRCOA,2031)                              20.200093                       0
   26839 TotalTechnologyAnnualActivity(RE1,PWRCOA,2032)                              20.461649                       0
@@ -2877,8 +2870,8 @@ Optimal - objective value 28301.19684730
   27016 TotalTechnologyAnnualActivity(RE1,MINHYD,2033)                              17.549784                       0
   27017 TotalTechnologyAnnualActivity(RE1,MINHYD,2034)                              17.549784                       0
   27018 TotalTechnologyAnnualActivity(RE1,MINHYD,2035)                              17.549784                       0
-  27019 TotalTechnologyAnnualActivity(RE1,MINSOL,2020)                              11.975796                       0
-  27020 TotalTechnologyAnnualActivity(RE1,MINSOL,2021)                               0.938196                       0
+  27019 TotalTechnologyAnnualActivity(RE1,MINSOL,2020)                               0.938196                       0
+  27020 TotalTechnologyAnnualActivity(RE1,MINSOL,2021)                              11.975796                       0
   27021 TotalTechnologyAnnualActivity(RE1,MINSOL,2022)                              11.975796                       0
   27022 TotalTechnologyAnnualActivity(RE1,MINSOL,2023)                              11.975796                       0
   27023 TotalTechnologyAnnualActivity(RE1,MINSOL,2024)                               4.131216                       0
@@ -2893,16 +2886,16 @@ Optimal - objective value 28301.19684730
   27032 TotalTechnologyAnnualActivity(RE1,MINSOL,2033)                               4.131216                       0
   27033 TotalTechnologyAnnualActivity(RE1,MINSOL,2034)                               4.131216                       0
   27034 TotalTechnologyAnnualActivity(RE1,MINSOL,2035)                               4.131216                       0
-  27035 TotalTechnologyAnnualActivity(RE1,MINWND,2020)                                  9.577                       0
-  27036 TotalTechnologyAnnualActivity(RE1,MINWND,2021)                                21.6706                       0
+  27035 TotalTechnologyAnnualActivity(RE1,MINWND,2020)                                20.6146                       0
+  27036 TotalTechnologyAnnualActivity(RE1,MINWND,2021)                                 10.633                       0
   27037 TotalTechnologyAnnualActivity(RE1,MINWND,2022)                                 11.337                       0
   27038 TotalTechnologyAnnualActivity(RE1,MINWND,2023)                                23.2578                       0
   27039 TotalTechnologyAnnualActivity(RE1,MINWND,2024)                                8.59356                       0
   27040 TotalTechnologyAnnualActivity(RE1,MINWND,2025)                                8.59356                       0
   27041 TotalTechnologyAnnualActivity(RE1,MINWND,2026)                                8.59356                       0
-  27042 TotalTechnologyAnnualActivity(RE1,MINWND,2027)                                14.4643                       0
-  27043 TotalTechnologyAnnualActivity(RE1,MINWND,2028)                              21.869888                       0
-  27044 TotalTechnologyAnnualActivity(RE1,MINWND,2029)                              29.275476                       0
+  27042 TotalTechnologyAnnualActivity(RE1,MINWND,2027)                                8.59356                       0
+  27043 TotalTechnologyAnnualActivity(RE1,MINWND,2028)                                8.59356                       0
+  27044 TotalTechnologyAnnualActivity(RE1,MINWND,2029)                                8.59356                       0
   27045 TotalTechnologyAnnualActivity(RE1,MINWND,2030)                              71.312006                       0
   27046 TotalTechnologyAnnualActivity(RE1,MINWND,2031)                              73.363384                       0
   27047 TotalTechnologyAnnualActivity(RE1,MINWND,2032)                              72.292697                       0
@@ -2925,8 +2918,8 @@ Optimal - objective value 28301.19684730
   27064 TotalTechnologyAnnualActivity(RE1,PWRHYD,2033)                              17.549784                       0
   27065 TotalTechnologyAnnualActivity(RE1,PWRHYD,2034)                              17.549784                       0
   27066 TotalTechnologyAnnualActivity(RE1,PWRHYD,2035)                              17.549784                       0
-  27067 TotalTechnologyAnnualActivity(RE1,PWRSOL,2020)                              11.975796                       0
-  27068 TotalTechnologyAnnualActivity(RE1,PWRSOL,2021)                               0.938196                       0
+  27067 TotalTechnologyAnnualActivity(RE1,PWRSOL,2020)                               0.938196                       0
+  27068 TotalTechnologyAnnualActivity(RE1,PWRSOL,2021)                              11.975796                       0
   27069 TotalTechnologyAnnualActivity(RE1,PWRSOL,2022)                              11.975796                       0
   27070 TotalTechnologyAnnualActivity(RE1,PWRSOL,2023)                              11.975796                       0
   27071 TotalTechnologyAnnualActivity(RE1,PWRSOL,2024)                               4.131216                       0
@@ -2941,16 +2934,16 @@ Optimal - objective value 28301.19684730
   27080 TotalTechnologyAnnualActivity(RE1,PWRSOL,2033)                               4.131216                       0
   27081 TotalTechnologyAnnualActivity(RE1,PWRSOL,2034)                               4.131216                       0
   27082 TotalTechnologyAnnualActivity(RE1,PWRSOL,2035)                               4.131216                       0
-  27083 TotalTechnologyAnnualActivity(RE1,PWRWND,2020)                                  9.577                       0
-  27084 TotalTechnologyAnnualActivity(RE1,PWRWND,2021)                                21.6706                       0
+  27083 TotalTechnologyAnnualActivity(RE1,PWRWND,2020)                                20.6146                       0
+  27084 TotalTechnologyAnnualActivity(RE1,PWRWND,2021)                                 10.633                       0
   27085 TotalTechnologyAnnualActivity(RE1,PWRWND,2022)                                 11.337                       0
   27086 TotalTechnologyAnnualActivity(RE1,PWRWND,2023)                                23.2578                       0
   27087 TotalTechnologyAnnualActivity(RE1,PWRWND,2024)                                8.59356                       0
   27088 TotalTechnologyAnnualActivity(RE1,PWRWND,2025)                                8.59356                       0
   27089 TotalTechnologyAnnualActivity(RE1,PWRWND,2026)                                8.59356                       0
-  27090 TotalTechnologyAnnualActivity(RE1,PWRWND,2027)                                14.4643                       0
-  27091 TotalTechnologyAnnualActivity(RE1,PWRWND,2028)                              21.869888                       0
-  27092 TotalTechnologyAnnualActivity(RE1,PWRWND,2029)                              29.275476                       0
+  27090 TotalTechnologyAnnualActivity(RE1,PWRWND,2027)                                8.59356                       0
+  27091 TotalTechnologyAnnualActivity(RE1,PWRWND,2028)                                8.59356                       0
+  27092 TotalTechnologyAnnualActivity(RE1,PWRWND,2029)                                8.59356                       0
   27093 TotalTechnologyAnnualActivity(RE1,PWRWND,2030)                              71.312006                       0
   27094 TotalTechnologyAnnualActivity(RE1,PWRWND,2031)                              73.363384                       0
   27095 TotalTechnologyAnnualActivity(RE1,PWRWND,2032)                              72.292697                       0
@@ -2960,9 +2953,9 @@ Optimal - objective value 28301.19684730
   27215 RateOfTotalActivity(RE1,MINCOA,S11,2024)                                    180.08173                       0
   27216 RateOfTotalActivity(RE1,MINCOA,S11,2025)                                    172.93053                       0
   27217 RateOfTotalActivity(RE1,MINCOA,S11,2026)                                    179.97053                       0
-  27218 RateOfTotalActivity(RE1,MINCOA,S11,2027)                                    167.62093                       0
-  27219 RateOfTotalActivity(RE1,MINCOA,S11,2028)                                    150.20211                       0
-  27220 RateOfTotalActivity(RE1,MINCOA,S11,2029)                                    132.78329                       0
+  27218 RateOfTotalActivity(RE1,MINCOA,S11,2027)                                    187.01053                       0
+  27219 RateOfTotalActivity(RE1,MINCOA,S11,2028)                                    194.05053                       0
+  27220 RateOfTotalActivity(RE1,MINCOA,S11,2029)                                    201.09053                       0
   27227 RateOfTotalActivity(RE1,MINCOA,S12,2020)                                       72.696                       0
   27228 RateOfTotalActivity(RE1,MINCOA,S12,2021)                                       76.296                       0
   27229 RateOfTotalActivity(RE1,MINCOA,S12,2022)                                       78.696                       0
@@ -2970,26 +2963,26 @@ Optimal - objective value 28301.19684730
   27231 RateOfTotalActivity(RE1,MINCOA,S12,2024)                                       84.696                       0
   27232 RateOfTotalActivity(RE1,MINCOA,S12,2025)                                      74.1048                       0
   27233 RateOfTotalActivity(RE1,MINCOA,S12,2026)                                      77.7048                       0
-  27234 RateOfTotalActivity(RE1,MINCOA,S12,2027)                                      68.3784                       0
-  27235 RateOfTotalActivity(RE1,MINCOA,S12,2028)                                    55.672518                       0
-  27236 RateOfTotalActivity(RE1,MINCOA,S12,2029)                                    42.966635                       0
-  27243 RateOfTotalActivity(RE1,MINCOA,S21,2020)                                    261.89936                       0
+  27234 RateOfTotalActivity(RE1,MINCOA,S12,2027)                                      81.3048                       0
+  27235 RateOfTotalActivity(RE1,MINCOA,S12,2028)                                      84.9048                       0
+  27236 RateOfTotalActivity(RE1,MINCOA,S12,2029)                                      88.5048                       0
+  27243 RateOfTotalActivity(RE1,MINCOA,S21,2020)                                     100.9152                       0
   27244 RateOfTotalActivity(RE1,MINCOA,S21,2021)                                    272.38172                       0
   27245 RateOfTotalActivity(RE1,MINCOA,S21,2022)                                    279.36995                       0
   27246 RateOfTotalActivity(RE1,MINCOA,S21,2023)                                    289.85231                       0
   27247 RateOfTotalActivity(RE1,MINCOA,S21,2024)                                    296.84054                       0
   27248 RateOfTotalActivity(RE1,MINCOA,S21,2025)                                    283.67089                       0
   27249 RateOfTotalActivity(RE1,MINCOA,S21,2026)                                    294.15325                       0
-  27250 RateOfTotalActivity(RE1,MINCOA,S21,2027)                                     288.4776                       0
-  27251 RateOfTotalActivity(RE1,MINCOA,S21,2028)                                     278.5776                       0
-  27252 RateOfTotalActivity(RE1,MINCOA,S21,2029)                                     268.6776                       0
+  27250 RateOfTotalActivity(RE1,MINCOA,S21,2027)                                     304.6356                       0
+  27251 RateOfTotalActivity(RE1,MINCOA,S21,2028)                                    315.11795                       0
+  27252 RateOfTotalActivity(RE1,MINCOA,S21,2029)                                    325.60031                       0
   27253 RateOfTotalActivity(RE1,MINCOA,S21,2030)                                    162.64055                       0
   27254 RateOfTotalActivity(RE1,MINCOA,S21,2031)                                    167.25623                       0
   27255 RateOfTotalActivity(RE1,MINCOA,S21,2032)                                    171.87192                       0
   27256 RateOfTotalActivity(RE1,MINCOA,S21,2033)                                    178.02617                       0
   27257 RateOfTotalActivity(RE1,MINCOA,S21,2034)                                    182.64185                       0
   27258 RateOfTotalActivity(RE1,MINCOA,S21,2035)                                     188.7961                       0
-  27259 RateOfTotalActivity(RE1,MINCOA,S22,2020)                                      378.432                       0
+  27259 RateOfTotalActivity(RE1,MINCOA,S22,2020)                                     100.9152                       0
   27260 RateOfTotalActivity(RE1,MINCOA,S22,2021)                                      378.432                       0
   27261 RateOfTotalActivity(RE1,MINCOA,S22,2022)                                      378.432                       0
   27262 RateOfTotalActivity(RE1,MINCOA,S22,2023)                                      378.432                       0
@@ -3005,32 +2998,34 @@ Optimal - objective value 28301.19684730
   27272 RateOfTotalActivity(RE1,MINCOA,S22,2033)                                      189.216                       0
   27273 RateOfTotalActivity(RE1,MINCOA,S22,2034)                                      189.216                       0
   27274 RateOfTotalActivity(RE1,MINCOA,S22,2035)                                      189.216                       0
-  27323 RateOfTotalActivity(RE1,MINGAS,S22,2020)                                    240.78381                       0
+  27307 RateOfTotalActivity(RE1,MINGAS,S21,2020)                                    107.32278                       0
+  27323 RateOfTotalActivity(RE1,MINGAS,S22,2020)                                    425.79501                       0
   27324 RateOfTotalActivity(RE1,MINGAS,S22,2021)                                    257.08969                       0
   27325 RateOfTotalActivity(RE1,MINGAS,S22,2022)                                    267.96028                       0
   27326 RateOfTotalActivity(RE1,MINGAS,S22,2023)                                    284.26616                       0
   27327 RateOfTotalActivity(RE1,MINGAS,S22,2024)                                    295.13675                       0
   27328 RateOfTotalActivity(RE1,MINGAS,S22,2025)                                    295.67464                       0
   27329 RateOfTotalActivity(RE1,MINGAS,S22,2026)                                    311.98052                       0
-  27330 RateOfTotalActivity(RE1,MINGAS,S22,2027)                                       315.36                       0
-  27331 RateOfTotalActivity(RE1,MINGAS,S22,2028)                                       315.36                       0
-  27332 RateOfTotalActivity(RE1,MINGAS,S22,2029)                                       315.36                       0
+  27330 RateOfTotalActivity(RE1,MINGAS,S22,2027)                                     328.2864                       0
+  27331 RateOfTotalActivity(RE1,MINGAS,S22,2028)                                    344.59228                       0
+  27332 RateOfTotalActivity(RE1,MINGAS,S22,2029)                                    360.89816                       0
   27333 RateOfTotalActivity(RE1,MINGAS,S22,2030)                                    364.59436                       0
   27334 RateOfTotalActivity(RE1,MINGAS,S22,2031)                                    376.20691                       0
   27335 RateOfTotalActivity(RE1,MINGAS,S22,2032)                                    387.81946                       0
   27336 RateOfTotalActivity(RE1,MINGAS,S22,2033)                                    403.30285                       0
   27337 RateOfTotalActivity(RE1,MINGAS,S22,2034)                                     414.9154                       0
   27338 RateOfTotalActivity(RE1,MINGAS,S22,2035)                                     430.3988                       0
-  27387 RateOfTotalActivity(RE1,PWRGAS,S22,2020)                                    120.39191                       0
+  27371 RateOfTotalActivity(RE1,PWRGAS,S21,2020)                                    53.661388                       0
+  27387 RateOfTotalActivity(RE1,PWRGAS,S22,2020)                                    212.89751                       0
   27388 RateOfTotalActivity(RE1,PWRGAS,S22,2021)                                    128.54485                       0
   27389 RateOfTotalActivity(RE1,PWRGAS,S22,2022)                                    133.98014                       0
   27390 RateOfTotalActivity(RE1,PWRGAS,S22,2023)                                    142.13308                       0
   27391 RateOfTotalActivity(RE1,PWRGAS,S22,2024)                                    147.56838                       0
   27392 RateOfTotalActivity(RE1,PWRGAS,S22,2025)                                    147.83732                       0
   27393 RateOfTotalActivity(RE1,PWRGAS,S22,2026)                                    155.99026                       0
-  27394 RateOfTotalActivity(RE1,PWRGAS,S22,2027)                                       157.68                       0
-  27395 RateOfTotalActivity(RE1,PWRGAS,S22,2028)                                       157.68                       0
-  27396 RateOfTotalActivity(RE1,PWRGAS,S22,2029)                                       157.68                       0
+  27394 RateOfTotalActivity(RE1,PWRGAS,S22,2027)                                     164.1432                       0
+  27395 RateOfTotalActivity(RE1,PWRGAS,S22,2028)                                    172.29614                       0
+  27396 RateOfTotalActivity(RE1,PWRGAS,S22,2029)                                    180.44908                       0
   27397 RateOfTotalActivity(RE1,PWRGAS,S22,2030)                                    182.29718                       0
   27398 RateOfTotalActivity(RE1,PWRGAS,S22,2031)                                    188.10345                       0
   27399 RateOfTotalActivity(RE1,PWRGAS,S22,2032)                                    193.90973                       0
@@ -3040,9 +3035,9 @@ Optimal - objective value 28301.19684730
   27407 RateOfTotalActivity(RE1,PWRCOA,S11,2024)                                    60.027244                       0
   27408 RateOfTotalActivity(RE1,PWRCOA,S11,2025)                                    57.643511                       0
   27409 RateOfTotalActivity(RE1,PWRCOA,S11,2026)                                    59.990178                       0
-  27410 RateOfTotalActivity(RE1,PWRCOA,S11,2027)                                    55.873644                       0
-  27411 RateOfTotalActivity(RE1,PWRCOA,S11,2028)                                     50.06737                       0
-  27412 RateOfTotalActivity(RE1,PWRCOA,S11,2029)                                    44.261095                       0
+  27410 RateOfTotalActivity(RE1,PWRCOA,S11,2027)                                    62.336844                       0
+  27411 RateOfTotalActivity(RE1,PWRCOA,S11,2028)                                    64.683511                       0
+  27412 RateOfTotalActivity(RE1,PWRCOA,S11,2029)                                    67.030178                       0
   27419 RateOfTotalActivity(RE1,PWRCOA,S12,2020)                                       24.232                       0
   27420 RateOfTotalActivity(RE1,PWRCOA,S12,2021)                                       25.432                       0
   27421 RateOfTotalActivity(RE1,PWRCOA,S12,2022)                                       26.232                       0
@@ -3050,26 +3045,26 @@ Optimal - objective value 28301.19684730
   27423 RateOfTotalActivity(RE1,PWRCOA,S12,2024)                                       28.232                       0
   27424 RateOfTotalActivity(RE1,PWRCOA,S12,2025)                                      24.7016                       0
   27425 RateOfTotalActivity(RE1,PWRCOA,S12,2026)                                      25.9016                       0
-  27426 RateOfTotalActivity(RE1,PWRCOA,S12,2027)                                      22.7928                       0
-  27427 RateOfTotalActivity(RE1,PWRCOA,S12,2028)                                    18.557506                       0
-  27428 RateOfTotalActivity(RE1,PWRCOA,S12,2029)                                    14.322212                       0
-  27435 RateOfTotalActivity(RE1,PWRCOA,S21,2020)                                    87.299788                       0
+  27426 RateOfTotalActivity(RE1,PWRCOA,S12,2027)                                      27.1016                       0
+  27427 RateOfTotalActivity(RE1,PWRCOA,S12,2028)                                      28.3016                       0
+  27428 RateOfTotalActivity(RE1,PWRCOA,S12,2029)                                      29.5016                       0
+  27435 RateOfTotalActivity(RE1,PWRCOA,S21,2020)                                      33.6384                       0
   27436 RateOfTotalActivity(RE1,PWRCOA,S21,2021)                                    90.793906                       0
   27437 RateOfTotalActivity(RE1,PWRCOA,S21,2022)                                    93.123318                       0
   27438 RateOfTotalActivity(RE1,PWRCOA,S21,2023)                                    96.617435                       0
   27439 RateOfTotalActivity(RE1,PWRCOA,S21,2024)                                    98.946847                       0
   27440 RateOfTotalActivity(RE1,PWRCOA,S21,2025)                                    94.556965                       0
   27441 RateOfTotalActivity(RE1,PWRCOA,S21,2026)                                    98.051082                       0
-  27442 RateOfTotalActivity(RE1,PWRCOA,S21,2027)                                      96.1592                       0
-  27443 RateOfTotalActivity(RE1,PWRCOA,S21,2028)                                      92.8592                       0
-  27444 RateOfTotalActivity(RE1,PWRCOA,S21,2029)                                      89.5592                       0
+  27442 RateOfTotalActivity(RE1,PWRCOA,S21,2027)                                     101.5452                       0
+  27443 RateOfTotalActivity(RE1,PWRCOA,S21,2028)                                    105.03932                       0
+  27444 RateOfTotalActivity(RE1,PWRCOA,S21,2029)                                    108.53344                       0
   27445 RateOfTotalActivity(RE1,PWRCOA,S21,2030)                                    54.213516                       0
   27446 RateOfTotalActivity(RE1,PWRCOA,S21,2031)                                    55.752078                       0
   27447 RateOfTotalActivity(RE1,PWRCOA,S21,2032)                                     57.29064                       0
   27448 RateOfTotalActivity(RE1,PWRCOA,S21,2033)                                    59.342056                       0
   27449 RateOfTotalActivity(RE1,PWRCOA,S21,2034)                                    60.880618                       0
   27450 RateOfTotalActivity(RE1,PWRCOA,S21,2035)                                    62.932034                       0
-  27451 RateOfTotalActivity(RE1,PWRCOA,S22,2020)                                      126.144                       0
+  27451 RateOfTotalActivity(RE1,PWRCOA,S22,2020)                                      33.6384                       0
   27452 RateOfTotalActivity(RE1,PWRCOA,S22,2021)                                      126.144                       0
   27453 RateOfTotalActivity(RE1,PWRCOA,S22,2022)                                      126.144                       0
   27454 RateOfTotalActivity(RE1,PWRCOA,S22,2023)                                      126.144                       0
@@ -3659,7 +3654,7 @@ Optimal - objective value 28301.19684730
   28168 RateOfTotalActivity(RE1,MINHYD,S22,2033)                                       23.652                       0
   28169 RateOfTotalActivity(RE1,MINHYD,S22,2034)                                       23.652                       0
   28170 RateOfTotalActivity(RE1,MINHYD,S22,2035)                                       23.652                       0
-  28171 RateOfTotalActivity(RE1,MINSOL,S11,2020)                                       5.5188                       0
+  28172 RateOfTotalActivity(RE1,MINSOL,S11,2021)                                       5.5188                       0
   28173 RateOfTotalActivity(RE1,MINSOL,S11,2022)                                       5.5188                       0
   28174 RateOfTotalActivity(RE1,MINSOL,S11,2023)                                       5.5188                       0
   28175 RateOfTotalActivity(RE1,MINSOL,S11,2024)                                       7.0956                       0
@@ -3690,16 +3685,16 @@ Optimal - objective value 28301.19684730
   28216 RateOfTotalActivity(RE1,MINSOL,S21,2033)                                       5.5188                       0
   28217 RateOfTotalActivity(RE1,MINSOL,S21,2034)                                       5.5188                       0
   28218 RateOfTotalActivity(RE1,MINSOL,S21,2035)                                       5.5188                       0
-  28235 RateOfTotalActivity(RE1,MINWND,S11,2020)                                       2.6204                       0
-  28236 RateOfTotalActivity(RE1,MINWND,S11,2021)                                       8.6672                       0
+  28235 RateOfTotalActivity(RE1,MINWND,S11,2020)                                       8.1392                       0
+  28236 RateOfTotalActivity(RE1,MINWND,S11,2021)                                       3.1484                       0
   28237 RateOfTotalActivity(RE1,MINWND,S11,2022)                                       3.5004                       0
   28238 RateOfTotalActivity(RE1,MINWND,S11,2023)                                       9.4608                       0
   28239 RateOfTotalActivity(RE1,MINWND,S11,2024)                                       9.4608                       0
   28240 RateOfTotalActivity(RE1,MINWND,S11,2025)                                       9.4608                       0
   28241 RateOfTotalActivity(RE1,MINWND,S11,2026)                                       9.4608                       0
-  28242 RateOfTotalActivity(RE1,MINWND,S11,2027)                                       15.924                       0
-  28243 RateOfTotalActivity(RE1,MINWND,S11,2028)                                    24.076941                       0
-  28244 RateOfTotalActivity(RE1,MINWND,S11,2029)                                    32.229882                       0
+  28242 RateOfTotalActivity(RE1,MINWND,S11,2027)                                       9.4608                       0
+  28243 RateOfTotalActivity(RE1,MINWND,S11,2028)                                       9.4608                       0
+  28244 RateOfTotalActivity(RE1,MINWND,S11,2029)                                       9.4608                       0
   28245 RateOfTotalActivity(RE1,MINWND,S11,2030)                                    78.837644                       0
   28246 RateOfTotalActivity(RE1,MINWND,S11,2031)                                    81.184311                       0
   28247 RateOfTotalActivity(RE1,MINWND,S11,2032)                                    83.530978                       0
@@ -3713,9 +3708,9 @@ Optimal - objective value 28301.19684730
   28255 RateOfTotalActivity(RE1,MINWND,S12,2024)                                       6.3072                       0
   28256 RateOfTotalActivity(RE1,MINWND,S12,2025)                                       6.3072                       0
   28257 RateOfTotalActivity(RE1,MINWND,S12,2026)                                       6.3072                       0
-  28258 RateOfTotalActivity(RE1,MINWND,S12,2027)                                       10.616                       0
-  28259 RateOfTotalActivity(RE1,MINWND,S12,2028)                                    16.051294                       0
-  28260 RateOfTotalActivity(RE1,MINWND,S12,2029)                                    21.486588                       0
+  28258 RateOfTotalActivity(RE1,MINWND,S12,2027)                                       6.3072                       0
+  28259 RateOfTotalActivity(RE1,MINWND,S12,2028)                                       6.3072                       0
+  28260 RateOfTotalActivity(RE1,MINWND,S12,2029)                                       6.3072                       0
   28261 RateOfTotalActivity(RE1,MINWND,S12,2030)                                         51.2                       0
   28262 RateOfTotalActivity(RE1,MINWND,S12,2031)                                         52.4                       0
   28263 RateOfTotalActivity(RE1,MINWND,S12,2032)                                      39.4088                       0
@@ -3729,9 +3724,9 @@ Optimal - objective value 28301.19684730
   28271 RateOfTotalActivity(RE1,MINWND,S21,2024)                                        7.884                       0
   28272 RateOfTotalActivity(RE1,MINWND,S21,2025)                                        7.884                       0
   28273 RateOfTotalActivity(RE1,MINWND,S21,2026)                                        7.884                       0
-  28274 RateOfTotalActivity(RE1,MINWND,S21,2027)                                        13.27                       0
-  28275 RateOfTotalActivity(RE1,MINWND,S21,2028)                                    20.064118                       0
-  28276 RateOfTotalActivity(RE1,MINWND,S21,2029)                                    26.858235                       0
+  28274 RateOfTotalActivity(RE1,MINWND,S21,2027)                                        7.884                       0
+  28275 RateOfTotalActivity(RE1,MINWND,S21,2028)                                        7.884                       0
+  28276 RateOfTotalActivity(RE1,MINWND,S21,2029)                                        7.884                       0
   28277 RateOfTotalActivity(RE1,MINWND,S21,2030)                                    65.698037                       0
   28278 RateOfTotalActivity(RE1,MINWND,S21,2031)                                    67.653593                       0
   28279 RateOfTotalActivity(RE1,MINWND,S21,2032)                                    69.609148                       0
@@ -3745,9 +3740,9 @@ Optimal - objective value 28301.19684730
   28287 RateOfTotalActivity(RE1,MINWND,S22,2024)                                       9.4608                       0
   28288 RateOfTotalActivity(RE1,MINWND,S22,2025)                                       9.4608                       0
   28289 RateOfTotalActivity(RE1,MINWND,S22,2026)                                       9.4608                       0
-  28290 RateOfTotalActivity(RE1,MINWND,S22,2027)                                       15.924                       0
-  28291 RateOfTotalActivity(RE1,MINWND,S22,2028)                                    24.076941                       0
-  28292 RateOfTotalActivity(RE1,MINWND,S22,2029)                                    32.229882                       0
+  28290 RateOfTotalActivity(RE1,MINWND,S22,2027)                                       9.4608                       0
+  28291 RateOfTotalActivity(RE1,MINWND,S22,2028)                                       9.4608                       0
+  28292 RateOfTotalActivity(RE1,MINWND,S22,2029)                                       9.4608                       0
   28293 RateOfTotalActivity(RE1,MINWND,S22,2030)                                    78.837644                       0
   28294 RateOfTotalActivity(RE1,MINWND,S22,2031)                                    81.184311                       0
   28295 RateOfTotalActivity(RE1,MINWND,S22,2032)                                    83.530978                       0
@@ -3816,7 +3811,7 @@ Optimal - objective value 28301.19684730
   28360 RateOfTotalActivity(RE1,PWRHYD,S22,2033)                                       23.652                       0
   28361 RateOfTotalActivity(RE1,PWRHYD,S22,2034)                                       23.652                       0
   28362 RateOfTotalActivity(RE1,PWRHYD,S22,2035)                                       23.652                       0
-  28363 RateOfTotalActivity(RE1,PWRSOL,S11,2020)                                       5.5188                       0
+  28364 RateOfTotalActivity(RE1,PWRSOL,S11,2021)                                       5.5188                       0
   28365 RateOfTotalActivity(RE1,PWRSOL,S11,2022)                                       5.5188                       0
   28366 RateOfTotalActivity(RE1,PWRSOL,S11,2023)                                       5.5188                       0
   28367 RateOfTotalActivity(RE1,PWRSOL,S11,2024)                                       7.0956                       0
@@ -3847,16 +3842,16 @@ Optimal - objective value 28301.19684730
   28408 RateOfTotalActivity(RE1,PWRSOL,S21,2033)                                       5.5188                       0
   28409 RateOfTotalActivity(RE1,PWRSOL,S21,2034)                                       5.5188                       0
   28410 RateOfTotalActivity(RE1,PWRSOL,S21,2035)                                       5.5188                       0
-  28427 RateOfTotalActivity(RE1,PWRWND,S11,2020)                                       2.6204                       0
-  28428 RateOfTotalActivity(RE1,PWRWND,S11,2021)                                       8.6672                       0
+  28427 RateOfTotalActivity(RE1,PWRWND,S11,2020)                                       8.1392                       0
+  28428 RateOfTotalActivity(RE1,PWRWND,S11,2021)                                       3.1484                       0
   28429 RateOfTotalActivity(RE1,PWRWND,S11,2022)                                       3.5004                       0
   28430 RateOfTotalActivity(RE1,PWRWND,S11,2023)                                       9.4608                       0
   28431 RateOfTotalActivity(RE1,PWRWND,S11,2024)                                       9.4608                       0
   28432 RateOfTotalActivity(RE1,PWRWND,S11,2025)                                       9.4608                       0
   28433 RateOfTotalActivity(RE1,PWRWND,S11,2026)                                       9.4608                       0
-  28434 RateOfTotalActivity(RE1,PWRWND,S11,2027)                                       15.924                       0
-  28435 RateOfTotalActivity(RE1,PWRWND,S11,2028)                                    24.076941                       0
-  28436 RateOfTotalActivity(RE1,PWRWND,S11,2029)                                    32.229882                       0
+  28434 RateOfTotalActivity(RE1,PWRWND,S11,2027)                                       9.4608                       0
+  28435 RateOfTotalActivity(RE1,PWRWND,S11,2028)                                       9.4608                       0
+  28436 RateOfTotalActivity(RE1,PWRWND,S11,2029)                                       9.4608                       0
   28437 RateOfTotalActivity(RE1,PWRWND,S11,2030)                                    78.837644                       0
   28438 RateOfTotalActivity(RE1,PWRWND,S11,2031)                                    81.184311                       0
   28439 RateOfTotalActivity(RE1,PWRWND,S11,2032)                                    83.530978                       0
@@ -3870,9 +3865,9 @@ Optimal - objective value 28301.19684730
   28447 RateOfTotalActivity(RE1,PWRWND,S12,2024)                                       6.3072                       0
   28448 RateOfTotalActivity(RE1,PWRWND,S12,2025)                                       6.3072                       0
   28449 RateOfTotalActivity(RE1,PWRWND,S12,2026)                                       6.3072                       0
-  28450 RateOfTotalActivity(RE1,PWRWND,S12,2027)                                       10.616                       0
-  28451 RateOfTotalActivity(RE1,PWRWND,S12,2028)                                    16.051294                       0
-  28452 RateOfTotalActivity(RE1,PWRWND,S12,2029)                                    21.486588                       0
+  28450 RateOfTotalActivity(RE1,PWRWND,S12,2027)                                       6.3072                       0
+  28451 RateOfTotalActivity(RE1,PWRWND,S12,2028)                                       6.3072                       0
+  28452 RateOfTotalActivity(RE1,PWRWND,S12,2029)                                       6.3072                       0
   28453 RateOfTotalActivity(RE1,PWRWND,S12,2030)                                         51.2                       0
   28454 RateOfTotalActivity(RE1,PWRWND,S12,2031)                                         52.4                       0
   28455 RateOfTotalActivity(RE1,PWRWND,S12,2032)                                      39.4088                       0
@@ -3886,9 +3881,9 @@ Optimal - objective value 28301.19684730
   28463 RateOfTotalActivity(RE1,PWRWND,S21,2024)                                        7.884                       0
   28464 RateOfTotalActivity(RE1,PWRWND,S21,2025)                                        7.884                       0
   28465 RateOfTotalActivity(RE1,PWRWND,S21,2026)                                        7.884                       0
-  28466 RateOfTotalActivity(RE1,PWRWND,S21,2027)                                        13.27                       0
-  28467 RateOfTotalActivity(RE1,PWRWND,S21,2028)                                    20.064118                       0
-  28468 RateOfTotalActivity(RE1,PWRWND,S21,2029)                                    26.858235                       0
+  28466 RateOfTotalActivity(RE1,PWRWND,S21,2027)                                        7.884                       0
+  28467 RateOfTotalActivity(RE1,PWRWND,S21,2028)                                        7.884                       0
+  28468 RateOfTotalActivity(RE1,PWRWND,S21,2029)                                        7.884                       0
   28469 RateOfTotalActivity(RE1,PWRWND,S21,2030)                                    65.698037                       0
   28470 RateOfTotalActivity(RE1,PWRWND,S21,2031)                                    67.653593                       0
   28471 RateOfTotalActivity(RE1,PWRWND,S21,2032)                                    69.609148                       0
@@ -3902,57 +3897,57 @@ Optimal - objective value 28301.19684730
   28479 RateOfTotalActivity(RE1,PWRWND,S22,2024)                                       9.4608                       0
   28480 RateOfTotalActivity(RE1,PWRWND,S22,2025)                                       9.4608                       0
   28481 RateOfTotalActivity(RE1,PWRWND,S22,2026)                                       9.4608                       0
-  28482 RateOfTotalActivity(RE1,PWRWND,S22,2027)                                       15.924                       0
-  28483 RateOfTotalActivity(RE1,PWRWND,S22,2028)                                    24.076941                       0
-  28484 RateOfTotalActivity(RE1,PWRWND,S22,2029)                                    32.229882                       0
+  28482 RateOfTotalActivity(RE1,PWRWND,S22,2027)                                       9.4608                       0
+  28483 RateOfTotalActivity(RE1,PWRWND,S22,2028)                                       9.4608                       0
+  28484 RateOfTotalActivity(RE1,PWRWND,S22,2029)                                       9.4608                       0
   28485 RateOfTotalActivity(RE1,PWRWND,S22,2030)                                    78.837644                       0
   28486 RateOfTotalActivity(RE1,PWRWND,S22,2031)                                    81.184311                       0
   28487 RateOfTotalActivity(RE1,PWRWND,S22,2032)                                    83.530978                       0
   28488 RateOfTotalActivity(RE1,PWRWND,S22,2033)                                    86.659867                       0
   28489 RateOfTotalActivity(RE1,PWRWND,S22,2034)                                    89.006533                       0
   28490 RateOfTotalActivity(RE1,PWRWND,S22,2035)                                    92.135422                       0
-  28939 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2020)                        11486.15                       0
+  28939 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2020)                       4627.9945                       0
   28940 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2021)                       11722.958                       0
   28941 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2022)                        11880.83                       0
   28942 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2023)                       12117.638                       0
   28943 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2024)                       19730.893                       0
   28944 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2025)                       19014.494                       0
   28945 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2026)                       19542.758                       0
-  28946 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2027)                       18753.952                       0
-  28947 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2028)                       17620.809                       0
-  28948 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2029)                       16487.667                       0
+  28946 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2027)                       20071.022                       0
+  28947 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2028)                       20599.286                       0
+  28948 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2029)                        21127.55                       0
   28949 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2030)                       5503.0364                       0
   28950 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2031)                       5575.2257                       0
   28951 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2032)                       5647.4151                       0
   28952 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2033)                       5743.6675                       0
   28953 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2034)                       5815.8569                       0
   28954 AnnualTechnologyEmissionByMode(RE1,MINCOA,CO2,1,2035)                       5912.1093                       0
-  28955 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2020)                       2046.6624                       0
+  28955 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2020)                       4531.5012                       0
   28956 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2021)                       2185.2624                       0
   28957 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2022)                       2277.6624                       0
   28958 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2023)                       2416.2624                       0
   28959 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2024)                       2508.6624                       0
   28960 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2025)                       2513.2344                       0
   28961 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2026)                       2651.8344                       0
-  28962 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2027)                         2680.56                       0
-  28963 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2028)                         2680.56                       0
-  28964 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2029)                         2680.56                       0
+  28962 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2027)                       2790.4344                       0
+  28963 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2028)                       2929.0344                       0
+  28964 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2029)                       3067.6344                       0
   28965 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2030)                        3099.052                       0
   28966 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2031)                       3197.7587                       0
   28967 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2032)                       3296.4654                       0
   28968 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2033)                       3428.0743                       0
   28969 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2034)                       3526.7809                       0
   28970 AnnualTechnologyEmissionByMode(RE1,MINGAS,CO2,1,2035)                       3658.3898                       0
-  29275 AnnualEmissions(RE1,CO2,2020)                                               13532.812                       0
+  29275 AnnualEmissions(RE1,CO2,2020)                                               9159.4957                       0
   29276 AnnualEmissions(RE1,CO2,2021)                                                13908.22                       0
   29277 AnnualEmissions(RE1,CO2,2022)                                               14158.492                       0
   29278 AnnualEmissions(RE1,CO2,2023)                                                 14533.9                       0
   29279 AnnualEmissions(RE1,CO2,2024)                                               22239.556                       0
   29280 AnnualEmissions(RE1,CO2,2025)                                               21527.729                       0
   29281 AnnualEmissions(RE1,CO2,2026)                                               22194.593                       0
-  29282 AnnualEmissions(RE1,CO2,2027)                                               21434.512                       0
-  29283 AnnualEmissions(RE1,CO2,2028)                                               20301.369                       0
-  29284 AnnualEmissions(RE1,CO2,2029)                                               19168.227                       0
+  29282 AnnualEmissions(RE1,CO2,2027)                                               22861.457                       0
+  29283 AnnualEmissions(RE1,CO2,2028)                                               23528.321                       0
+  29284 AnnualEmissions(RE1,CO2,2029)                                               24195.185                       0
   29285 AnnualEmissions(RE1,CO2,2030)                                               8602.0885                       0
   29286 AnnualEmissions(RE1,CO2,2031)                                               8772.9845                       0
   29287 AnnualEmissions(RE1,CO2,2032)                                               8943.8805                       0

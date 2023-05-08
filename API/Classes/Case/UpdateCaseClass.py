@@ -1,7 +1,6 @@
-from pathlib import Path
-from API.Classes.Base import Config
-from API.Classes.Base.FileClass import File
-from API.Classes.Case.OsemosysClass import Osemosys
+from Classes.Base import Config
+from Classes.Base.FileClass import File
+from Classes.Case.OsemosysClass import Osemosys
 
 class UpdateCase(Osemosys):
     def __init__(self, case, genData):

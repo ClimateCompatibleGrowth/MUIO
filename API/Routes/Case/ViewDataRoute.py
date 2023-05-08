@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from API.Classes.Case.OsemosysClass import Osemosys
+from Classes.Case.OsemosysClass import Osemosys
 
 viewdata_api = Blueprint('ViewDataRoute', __name__)
 

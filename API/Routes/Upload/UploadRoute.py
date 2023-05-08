@@ -7,8 +7,8 @@ import os
 import json
 import glob
 
-from API.Classes.Base import Config
-from API.Classes.Base.FileClass import File
+from Classes.Base import Config
+from Classes.Base.FileClass import File
 
 upload_api = Blueprint('UploadRoute', __name__)
 

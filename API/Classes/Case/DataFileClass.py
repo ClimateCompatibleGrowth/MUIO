@@ -5,11 +5,12 @@ import os
 import time
 from collections import defaultdict
 import subprocess
-from API.Classes.Base import Config
-from API.Classes.Case.OsemosysClass import Osemosys
-from API.Classes.Base.FileClass import File
-import pandas as pd
 from itertools import product
+
+from Classes.Base import Config
+from Classes.Case.OsemosysClass import Osemosys
+from Classes.Base.FileClass import File
+
 
 class DataFile(Osemosys):
     # def __init__(self, case):
@@ -949,6 +950,7 @@ class DataFile(Osemosys):
             
             df_combinations['key'] = 1
             df_combinations_2['key'] = 1
+            #In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
             df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', 1)
             
             #df_combinations = pd.DataFrame(product(*iter_list),

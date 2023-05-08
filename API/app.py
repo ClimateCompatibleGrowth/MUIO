@@ -1,20 +1,20 @@
 #import sys
 import os
 import sys
+
 from flask import Flask, jsonify, request, session, render_template
 from flask_cors import CORS
 from datetime import timedelta
 # from pathlib import Path
 
 #import json
-from API.Classes.Base import Config
+from Classes.Base import Config
 # from API.Classes.Base.SyncS3 import SyncS3
-
-from API.Routes.Upload.UploadRoute import upload_api
-from API.Routes.Case.CaseRoute import case_api
-from API.Routes.Case.SyncS3Route import syncs3_api
-from API.Routes.Case.ViewDataRoute import viewdata_api
-from API.Routes.DataFile.DataFileRoute import datafile_api
+from Routes.Upload.UploadRoute import upload_api
+from Routes.Case.CaseRoute import case_api
+from Routes.Case.SyncS3Route import syncs3_api
+from Routes.Case.ViewDataRoute import viewdata_api
+from Routes.DataFile.DataFileRoute import datafile_api
 
 #RADI
 template_dir = os.path.abspath('WebAPP')

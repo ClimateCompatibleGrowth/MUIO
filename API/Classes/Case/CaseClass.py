@@ -1,6 +1,6 @@
 from pathlib import Path
-from API.Classes.Base import Config
-from API.Classes.Base.FileClass import File
+from Classes.Base import Config
+from Classes.Base.FileClass import File
 
 class Case:
     def __init__(self, case, genData):

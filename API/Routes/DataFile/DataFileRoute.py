@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request, send_file, session
-from API.Classes.Case.DataFileClass import DataFile
 from pathlib import Path
 import shutil
-from API.Classes.Base import Config
+from Classes.Case.DataFileClass import DataFile
+from Classes.Base import Config
 
 datafile_api = Blueprint('DataFileRoute', __name__)
 

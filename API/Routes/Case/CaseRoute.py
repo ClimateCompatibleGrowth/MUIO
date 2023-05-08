@@ -3,12 +3,12 @@ import os
 from pathlib import Path
 import shutil
 import pandas as pd
-from API.Classes.Base import Config
-from API.Classes.Base.FileClass import File
-from API.Classes.Case.CaseClass import Case
-from API.Classes.Case.UpdateCaseClass import UpdateCase
-from API.Classes.Case.ImportTemplate import ImportTemplate
-from API.Classes.Base.SyncS3 import SyncS3
+from Classes.Base import Config
+from Classes.Base.FileClass import File
+from Classes.Case.CaseClass import Case
+from Classes.Case.UpdateCaseClass import UpdateCase
+from Classes.Case.ImportTemplate import ImportTemplate
+from Classes.Base.SyncS3 import SyncS3
 
 case_api = Blueprint('CaseRoute', __name__)
 

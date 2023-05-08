@@ -1,4 +1,4 @@
-#!C:\wamp64\www\OSeMOSYS\osemosys.1.0.0\venv\Scripts\python.exe
+#!C:\wamp64\www\OSeMOSYS\osemosys\venv\Scripts\python.exe
 
 import sys
 import json

@@ -6,9 +6,9 @@ import json
 import os.path
 import time
 
-from API.Classes.Base import Config
-from API.Classes.Case.CaseClass import Case
-from API.Classes.Base.FileClass import File
+from Classes.Base import Config
+from Classes.Case.CaseClass import Case
+from Classes.Base.FileClass import File
 
 class ImportTemplate():
     def __init__(self,template):
