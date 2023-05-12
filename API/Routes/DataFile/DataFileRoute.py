@@ -160,7 +160,7 @@ def downloadDataFile():
         case = session.get('osycase', None)
         caserunname = request.args.get('caserunname')
         dataFile = Path(Config.DATA_STORAGE,case, 'res',caserunname, 'data.txt')
-        return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
+        return send_file(dataFile.resolve(), as_attachment=True, max_age=0)
     
     except(IOError):
         return jsonify('No existing cases!'), 404
@@ -171,7 +171,7 @@ def downloadFile():
         case = session.get('osycase', None)
         file = request.args.get('file')
         dataFile = Path(Config.DATA_STORAGE,case,'res','csv',file)
-        return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
+        return send_file(dataFile.resolve(), as_attachment=True, max_age=0)
     
     except(IOError):
         return jsonify('No existing cases!'), 404
@@ -183,7 +183,7 @@ def downloadCSVFile():
         file = request.args.get('file')
         caserunname = request.args.get('caserunname')
         dataFile = Path(Config.DATA_STORAGE,case,'res',caserunname,'csv',file)
-        return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
+        return send_file(dataFile.resolve(), as_attachment=True, max_age=0)
     
     except(IOError):
         return jsonify('No existing cases!'), 404
@@ -194,7 +194,7 @@ def downloadResultsFile():
         case = session.get('osycase', None)
         caserunname = request.args.get('caserunname')
         dataFile = Path(Config.DATA_STORAGE,case, 'res', caserunname,'results.txt')
-        return send_file(dataFile.resolve(), as_attachment=True, cache_timeout=0)
+        return send_file(dataFile.resolve(), as_attachment=True, max_age=0)
     
     except(IOError):
         return jsonify('No existing cases!'), 404

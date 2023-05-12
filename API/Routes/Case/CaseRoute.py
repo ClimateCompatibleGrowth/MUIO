@@ -392,7 +392,7 @@ def downloadCSV():
         dataFile = Path(Config.DATA_STORAGE,casename,'export.csv')
         
         dir = Path(Config.DATA_STORAGE,casename)
-        return send_file(dataFile.resolve(), as_attachment=True,mimetype='application/csv', cache_timeout=0)
+        return send_file(dataFile.resolve(), as_attachment=True,mimetype='application/csv', max_age=0)
         #return send_from_directory(dir, 'export.csv', as_attachment=True)
     except(IOError):
         return jsonify('No existing cases!'), 404

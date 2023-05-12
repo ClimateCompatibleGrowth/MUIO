@@ -1,0 +1,1 @@
+{"osy-cases": [{"Case": "Run", "CaseId": "CS_2pozs", "Desc": "", "Runtime": "Fri May 12 2023 16:09:26 GMT+0200 (Central European Summer Time)", "Scenarios": [{"ScenarioId": "SC_0", "Scenario": "SC_0", "Desc": "Base scenario", "Active": true}, {"ScenarioId": "SC_tkqum", "Scenario": "InputToCap", "Desc": "Input to capacity test", "Active": false}]}]}
