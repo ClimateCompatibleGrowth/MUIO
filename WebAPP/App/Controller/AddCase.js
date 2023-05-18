@@ -91,7 +91,7 @@ export default class AddCase {
 
     static initEvents(model) {
 
-        console.log('model ', model)
+        //console.log('model ', model)
         let $divTech = $("#osy-gridTech");
         let $divTechGroup = $("#osy-gridTechGroup");
         let $divComm = $("#osy-gridComm");
@@ -537,7 +537,7 @@ export default class AddCase {
                     let scId = model.scenarios[id]['ScenarioId'];
                     Osemosys.deleteScenarioCaseRuns(model.casename, scId)
                     .then(response=>{
-                        console.log('delete ', response)
+                        //console.log('delete ', response)
                         var rowid = $divScenario.jqxGrid('getrowid', id);
                         $divScenario.jqxGrid('deleterow', rowid);
                         model.scenarios.splice(id, 1);
@@ -603,7 +603,7 @@ export default class AddCase {
             var args = event.args;
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
-            console.log('newvalue ', args.newvalue)
+            //console.log('newvalue ', args.newvalue)
             if(typeof args.newvalue !== 'object'){
                 var value = args.newvalue.trim();
             }else{
@@ -624,7 +624,7 @@ export default class AddCase {
                 }
                 model.constraints[rowBoundIndex][column] = array;
             } else if (column == 'Tag') {
-                console.log('eqyuality ', value.value)
+                //console.log('eqyuality ', value.value)
                 model.constraints[rowBoundIndex][column] = value.value;
             }
         });

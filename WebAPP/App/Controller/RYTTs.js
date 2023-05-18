@@ -128,7 +128,7 @@ export default class RYTTs {
 
             Osemosys.updateData(saveData, param, "RYTTs.json")
                 .then(response => {
-                    console.log('response from api ', performance.now() - start);
+                    //console.log('response from api ', performance.now() - start);
                     //model.gridData[model.param] = JSON.parse(RYTmodel);
                     Message.bigBoxSuccess('Model message', response.message, 3000);
                     //sync S3

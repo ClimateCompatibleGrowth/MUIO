@@ -37,7 +37,7 @@ export default class RESViewer {
     }
 
     static sankeySize(model){
-        console.log('model.techCount ', model.techCount)
+        //console.log('model.techCount ', model.techCount)
         if(model.techCount <= 20){
             model.height = 620;
         }else if(model.techCount > 20 && model.techCount <= 50){
@@ -119,7 +119,7 @@ export default class RESViewer {
                 techSelect.push(obj.originalItem.TechId)
             });
 
-            console.log('techSelect ', techSelect)
+            //console.log('techSelect ', techSelect)
 
             let modelNew = new Model(model.casename, model.genData, model.RYTCMdata, techSelect);
             

@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import platform
 from Classes.Base import Config
 from Classes.Base.FileClass import File
 
@@ -35,23 +35,21 @@ class Osemosys():
         self.rytePath = Path(Config.DATA_STORAGE,case,'RYTE.json')
         self.rytemPath = Path(Config.DATA_STORAGE,case,'RYTEM.json')
 
+        
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys_preprocessing.txt')
         self.osemosysFileOriginal = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
-
-        self.glpkFolder = Path(Config.SOLVERs_FOLDER, 'GLPK','glpk-4.65', 'w64')
         
+        if platform.system() == 'Windows':
+            self.glpkFolder = Path(Config.SOLVERs_FOLDER, 'GLPK','glpk-4.65', 'w64')
+            self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'Cbc-2.10-win64-msvc16-md', 'bin')
+        else:
+            self.glpkFolder = Path(Config.SOLVERs_FOLDER, 'GLPK','glpk-4.65', 'w64')
+            self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'Cbc-2.10-osx10.15-x86_64-gcc9', 'bin')
 
-        #self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'Cbc-2.7.5-win64-intel11.1', 'bin')
-
-        # self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'win32-msvc11', 'bin')
-        # self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'Cbc-2.10.5-x86_64-w64', 'bin')
-        # self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'Cbc-2.10.5-i686-w64-mingw32', 'bin')
-        self.cbcFolder = Path(Config.SOLVERs_FOLDER,'COIN-OR', 'Cbc-2.10-win64-msvc16-md', 'bin')
         self.resultsPath = Path(Config.DATA_STORAGE,case,'res')
-
         self.viewFolderPath = Path(Config.DATA_STORAGE,case,'view')
-
         self.resDataPath = Path(Config.DATA_STORAGE,case,'view', 'resData.json')
+
         # self.resPath = Path(Config.DATA_STORAGE,case,'res', 'csv')
         
         #self.dataFile = Path(Config.DATA_STORAGE,case, 'res','data.txt')
@@ -200,7 +198,6 @@ class Osemosys():
                 if tech[param['id']]: 
                     commIds[param['id']][tech['TechId']] = tech[param['id']]
         return commIds
-
 
     #output actTech['INCR'] = ['Tech_1', 'Tech_2'...]
     def getInputCapTechIds(self):

@@ -243,8 +243,6 @@ def saveCase():
             for list in lists:
                 viewDef[list['id']] = []
 
-
-
         #ako je izabran case, edit mode
         if case != None and case != '':
             genDataPath = Path(Config.DATA_STORAGE, case, "genData.json")
@@ -267,8 +265,6 @@ def saveCase():
                     "osy-views": viewDef
                 }
                 File.writeFile( viewData, viewDataPath)
-
-                
 
             #edit case sa istim imenom
             if case == casename:
@@ -297,9 +293,6 @@ def saveCase():
                     File.writeFile( genData, genDataPath)
 
                     #nedostaje update resData u smislu novih ili izbirsanih scenarija
-
-
-
                     #rename case sa novim imenom
                     os.rename(Path(Config.DATA_STORAGE,case), Path(Config.DATA_STORAGE,casename ))
                     session['osycase'] = casename

@@ -80,7 +80,7 @@ export default class LegacyImport {
             event.stopImmediatePropagation();
             //Message.clearMessages();
 
-            console.log('cases ', model.cases)
+            //console.log('cases ', model.cases)
             var casename = $("#osy-casename").val().trim();
             if(model.cases.includes(casename)){
                 Message.smallBoxWarning('Warning', 'Model with same name already exists, please change name.', 5000)
@@ -130,7 +130,7 @@ export default class LegacyImport {
             .then(response => {
                 if (response.status_code == "success") {
                     Message.loaderEnd();
-                    console.log('response ', response)
+                    //console.log('response ', response)
                     $("#osy-importOutput").html('<pre class="log-output">' + response.output + '</pre>');
                     $("#osy-newImport").show();
                     Message.successOsy(response.message);

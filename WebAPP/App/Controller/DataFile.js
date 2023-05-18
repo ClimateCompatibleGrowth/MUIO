@@ -106,7 +106,7 @@ export default class DataFile {
 
         $("#osy-btnScOrder").off('click');
         $("#osy-btnScOrder").on('click', function (event) {
-            console.log('model, ', model)
+            //console.log('model, ', model)
 
             if(model.cs in  model.scBycs){
                 Html.renderScOrder( model.scBycs[model.cs]);
@@ -411,7 +411,24 @@ export default class DataFile {
                         });
                     Sidebar.Reload(model.casename);
                     Message.clearMessages();
-                    Message.successOsy('Optimiziation finished! <small><i class="">' + response.timer +'</i></small>');
+                    Message.successOsy( response.timer);
+                }
+                if (response.status_code == "warning") {
+                    Message.loaderEnd();
+                    $(".runOutput").show();
+                    $(".lpOutput").show();
+                    $(".Results").show();
+                    $("#osy-runOutput").empty();
+                    $("#osy-runOutput").html('<pre class="log-output">' + response.cbc_message, response.cbc_stdmsg+ '</pre>');
+                    $("#osy-lpOutput").empty();
+                    $("#osy-lpOutput").html('<pre class="log-output">' + response.glpk_message, response.glpk_stdmsg+ '</pre>');
+                    Base.getResultCSV(model.casename, model.cs)
+                        .then(csvs => {
+                            Html.renderCSV(csvs, model.cs)
+                        });
+                    Sidebar.Reload(model.casename);
+                    Message.clearMessages();
+                    Message.warningOsy( response.timer );
                 }
                 if (response.status_code == "error") {
                     Message.loaderEnd();
@@ -423,15 +440,16 @@ export default class DataFile {
                     $("#osy-lpOutput").empty();
                     $("#osy-lpOutput").html('<pre class="log-output">' + response.glpk_message, response.glpk_stdmsg+ '</pre>');
                     Message.clearMessages();
-                    let errormsg = '';
-                    if (response.glpk_message != "" || response.glpk_stdmsg != "") {
-                        errormsg += 'Error occured during creation of LP file, GLPK run! See LP file (GLPK) log for more details. '
-                    } 
-                    if (response.cbc_message != "" || response.cbc_stdmsg != "") {
-                        errormsg += 'Error occured during optimization process, CBC run! See CBC solver log for more details.'
-                    } 
+                    // let errormsg = '';
+                    // if (response.glpk_message != "" || response.glpk_stdmsg != "") {
+                    //     errormsg += 'Error occured during creation of LP file, GLPK run! See LP file (GLPK) log for more details. '
+                    // } 
+                    // if (response.cbc_message != "" || response.cbc_stdmsg != "") {
+                    //     errormsg += 'Error occured during optimization process, CBC run! See CBC solver log for more details.'
+                    // } 
 
-                    Message.dangerOsy(errormsg);
+                    // Message.dangerOsy(errormsg);
+                    Message.dangerOsy( response.timer );
                 }
             })
             .catch(error => {
@@ -446,7 +464,7 @@ export default class DataFile {
             e.preventDefault();
             e.stopImmediatePropagation();
             Html.renderScOrder( model.scBycs[model.cs]);
-            console.log('model, ', model)
+            //console.log('model, ', model)
             var caserunanme = $(this).attr('data-ps');
             model.cs = caserunanme;
             Html.renderScOrder( model.scBycs[model.cs]);

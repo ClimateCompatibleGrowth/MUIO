@@ -1,5 +1,5 @@
 :root {
-    --main-color: #3a3f51;
+    --main-color: #3a3f51; 
     --second-color: #71a06a;
     --second-darker-color: #567c50;
     --main-lighter-color: #555c77;
@@ -129,6 +129,7 @@ html {
 .Lignite{
     color: #777!important;
 }
+
 
 .btn-osy-green {
     color: #fff;
@@ -574,4 +575,8 @@ li {
 
     min-width: 280px!important;
 
+}
+
+.darkGrey{
+    color: var(main-darker-color)!important;
 }

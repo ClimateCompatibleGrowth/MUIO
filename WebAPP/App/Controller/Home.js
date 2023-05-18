@@ -203,7 +203,7 @@ export default class Home {
         //Search cases
         $('#CaseSearch').keyup(function () {
             var query = $.trim($('#CaseSearch').val()).toLowerCase();
-            console.log('query ', query)
+            //console.log('query ', query)
             $('.selectCS').each(function () {
                 var $this = $(this);
                 if ($this.text().toLowerCase().indexOf(query) === -1)

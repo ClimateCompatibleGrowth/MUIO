@@ -293,7 +293,7 @@ export class Base {
 
         static uploadXls = function () {
             var casename = $("#osy-casename").val().trim();
-            console.log('casename ', casename)
+            //console.log('casename ', casename)
             var MyDropzone = new Dropzone("div#importDropzone", {
                 //url: "http://127.0.0.1:5000/upload",
                 url: Base.apiUrl() + "uploadXls",
@@ -313,8 +313,8 @@ export class Base {
                 dictRemoveFile: `Remove Case!`,
                 dictInvalidFileType: "Not valid .xlsx file!",
                 success: function (file, response) {
-                    console.log('file ',file )
-                    console.log('response ', response)
+                    //console.log('file ',file )
+                    //console.log('response ', response)
                     let res = response.response[0];
                     if (res['status_code'] == 'success') {
                         Html.enableImportProcess();

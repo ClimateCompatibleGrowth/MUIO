@@ -296,7 +296,7 @@ export class Osemosys {
         return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"}) 
             .then((response) => {
                 if (response.ok) {
-                    console.log('response ', response)
+                    //console.log('response ', response)
                     //console.log('data ', response.json())
                 return response;
                 }
@@ -310,17 +310,17 @@ export class Osemosys {
         return  fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"})
         .then((response) => {
             if (response.status !== 200) {
-              console.log('Looks like there was a problem. Status Code: ' + response.status);
+              //console.log('Looks like there was a problem. Status Code: ' + response.status);
               return response;
             }
             // Examine the text in the response
             response.json().then(function(data) {
-              console.log(data);
+              //console.log(data);
             });
         })
         .then(response => response.json())
         .catch(function(err) {
-          console.log('Fetch Error :-S', err);
+          //console.log('Fetch Error :-S', err);
         });
     }
 

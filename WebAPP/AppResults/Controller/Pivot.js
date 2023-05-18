@@ -41,7 +41,7 @@ export default class Pivot {
                 let [casename, genData, resData, VARIABLES, VIEWS, DATA] = data;
                 
                 let model = new Model(casename, genData, resData, VARIABLES, DATA, VIEWS);
-                console.log('model ', model)
+                //console.log('model ', model)
                 this.initPage(model);
                 this.initEvents(model);
             })
@@ -364,7 +364,7 @@ export default class Pivot {
         $("#deleteView").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            console.log('model.VIEW ', model.VIEW)
+            //console.log('model.VIEW ', model.VIEW)
             //update model
             if ( model.VIEW != 'null' &&   model.VIEW != null){
                 $.each(model.VIEWS[model.param], function (id, obj) {

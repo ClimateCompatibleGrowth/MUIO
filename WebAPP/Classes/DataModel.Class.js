@@ -525,13 +525,13 @@ export class DataModel{
         $.each(scenarios, function (i, objSc) {
             csbysc[objSc.ScenarioId] = [];
             if (caseruns.length != 0) {
-                console.log('caseruns ', caseruns)
-                console.log('objSc.ScenarioId ', objSc.ScenarioId)
+                //console.log('caseruns ', caseruns)
+                //console.log('objSc.ScenarioId ', objSc.ScenarioId)
                 $.each(caseruns, function (j, objCs) {
                     $.each(objCs.Scenarios, function (k, objCsSc) {
-                        console.log('objCsSc ', objCsSc)
+                        //console.log('objCsSc ', objCsSc)
                         if(objCsSc.Active == true && objSc.ScenarioId == objCsSc.ScenarioId){
-                            console.log('objSc.ScenarioId ', objSc.ScenarioId)
+                            //console.log('objSc.ScenarioId ', objSc.ScenarioId)
                             csbysc[objSc.ScenarioId].push(objCs.Case)
                         }
                     });

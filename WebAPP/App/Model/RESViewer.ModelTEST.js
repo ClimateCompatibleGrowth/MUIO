@@ -41,17 +41,17 @@ export class Model {
         });
 
 
-        console.log('actIAR ', actIAR)
-        console.log('actOAR ', actOAR)
-        console.log('label ', label) 
+        // console.log('actIAR ', actIAR)
+        // console.log('actOAR ', actOAR)
+        // console.log('label ', label) 
 
-        console.log('labelIndex ', labelIndex);
-        console.log('label ', label);
-        console.log('color ', color);
-        console.log('source ', source);
-        console.log('target ', target);
-        console.log('value ', value);
-        console.log('labelLink ', labelLink);
+        // console.log('labelIndex ', labelIndex);
+        // console.log('label ', label);
+        // console.log('color ', color);
+        // console.log('source ', source);
+        // console.log('target ', target);
+        // console.log('value ', value);
+        // console.log('labelLink ', labelLink);
         //console.log('scenarios ', scenarios);
 
         this.casename = casename; 

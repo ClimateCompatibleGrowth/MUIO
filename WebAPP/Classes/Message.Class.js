@@ -17,7 +17,7 @@ export class Message {
         $("#osy-warning").html(`<div class="alert alert-warning fade in">
                                         <button class="close" data-dismiss="alert">×</button>
                                         <i class="fa-fw fa fa-warning"></i>
-                                        <strong>Warning</strong> `+ message + `
+                                        <strong>Warning!</strong> `+ message + `
                                     </div>`);
     }
 
@@ -25,7 +25,7 @@ export class Message {
         $("#osy-success").html(`<div class="alert alert-success fade in">
                                         <button class="close" data-dismiss="alert">×</button>
                                         <i class="fa-fw fa fa-check"></i>
-                                        <strong>Success</strong> `+ message + `
+                                        <strong>Success!</strong> `+ message + `
                                     </div>`);
     }
 
@@ -46,18 +46,20 @@ export class Message {
     }
 
     static warningOsy(message) {
-        $("#osy-warning-transparent").html(`<div class="alert alert-warning-osy fade in">
+        $("#osy-warning-transparent").html(`
+                                    <div class="alert alert-warning-osy fade in">
                                         <button class="close" data-dismiss="alert">×</button>
                                         <i class="fa-fw fa fa-warning fa-2x warning"></i>
-                                        <strong>Warning</strong> `+ message + `
+                                        <strong>Warning!</strong> <i style="color:grey">`+ message + `</i>
                                     </div>`);
     }
 
     static successOsy(message) {
-        $("#osy-success-transparent").html(`<div class="alert alert-success-osy fade in">
+        $("#osy-success-transparent").html(`
+                                    <div class="alert alert-success-osy fade in">
                                         <button class="close" data-dismiss="alert">×</button>
                                         <i class="fa-fw fa fa-check fa-2x success"></i>
-                                        <strong>Success</strong> `+ message + `
+                                        <strong>Success!</strong><i style="color:grey">`+ message + `</i>
                                     </div>`);
     }
 
@@ -65,7 +67,7 @@ export class Message {
         $("#osy-info-transparent").html(`<div class="alert alert-info-osy fade in">
                                         <button class="close" data-dismiss="alert">×</button>
                                         <i class="fa-fw fa fa-info fa-2x info"></i>
-                                        <strong>Info!</strong> `+ message + `
+                                        <strong>Info!</strong> <i style="color:grey">`+ message + `</i>
                                     </div>`);
     }
 
@@ -73,7 +75,7 @@ export class Message {
         $("#osy-danger-transparent").html(`<div class="alert alert-danger-osy fade in">
                                         <button class="close" data-dismiss="alert">×</button>
                                         <i class="fa-fw fa fa-exclamation-triangle fa-2x danger"></i>
-                                        <strong>Error!</strong> `+ message + `
+                                        <strong>Error!</strong> <i style="color:grey">`+ message + `</i>
                                     </div>`);
     }
 

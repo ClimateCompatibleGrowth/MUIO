@@ -1385,9 +1385,6 @@ class DataFile(Osemosys):
             self.logFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'logfile.log')
             self.logFileTxt = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'logfile.txt')
             self.lpFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'lp.lp')
-            # self.resCBCPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', self.case, 'res')
-            # self.resPath = Path('..', '..', '..', '..', 'WebAPP', 'DataStorage', self.case, 'res', 'csv')
-
             self.resPath = Path(Config.DATA_STORAGE,self.case, 'res',caserunname)
 
             modelfile = '"{}"'.format(self.osemosysFile.resolve())
@@ -1445,6 +1442,7 @@ class DataFile(Osemosys):
                 # out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
                 #out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfiletxt +'2>&1', cwd=cbcfolder,  capture_output=True, text=True, shell=True)
                 
+            #CBC or GLPK return error
             if cbc_out.returncode != 0 or glpk_out.returncode != 0:
             
                 response = {
@@ -1452,7 +1450,7 @@ class DataFile(Osemosys):
                     "cbc_stdmsg": cbc_out.stderr,
                     "glpk_message": glpk_out.stdout,
                     "glpk_stdmsg": glpk_out.stderr,
-                    "timer": txtOut,
+                    "timer": "Error occured either during cration of LP file or solution! Please check CBC and GLPK logs.",
                     "status_code": "error"
                 }
             else:
@@ -1462,13 +1460,41 @@ class DataFile(Osemosys):
                 self.generateResultsViewer(caserunname)
                 print("PIVOT TABLE DONE! --- %s seconds ---" % (time.time() - start_time))
                 txtOut = txtOut + ("Pivot data preparation time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
+
+
+                msg = cbc_out.stdout.splitlines()
+
+                statusFlag = "warning"
+                customMsg = "   "
+                if any("Optimal" in s for s in msg):
+                    matching = [s for s in msg if "Optimal" in s]
+                    customMsg = customMsg + matching[0] + " - "
+                    times = [s for s in msg if "Total time (CPU seconds):" in s]
+                    customMsg = customMsg + times[0]
+                    statusFlag = "success"
+
+                if any("infeasible" in s for s in msg):
+                    matching = [s for s in msg if "infeasible" in s]
+                    customMsg = customMsg + matching[0] + " - "
+                    times = [s for s in msg if "Total time (CPU seconds):" in s]
+                    customMsg = customMsg + times[0]
+                    statusFlag = "warning"
+
+                if any("ERROR" in s for s in msg):
+                    matching = [s for s in msg if "ERROR" in s]
+                    customMsg = customMsg + matching[0] + " - "
+                    times = [s for s in msg if "Total time (CPU seconds):" in s]
+                    customMsg = customMsg + times[0]
+                    statusFlag = "error"
+
+
                 response = {
                     "cbc_message": cbc_out.stdout,
                     "cbc_stdmsg": cbc_out.stderr,
                     "glpk_message": glpk_out.stdout,
                     "glpk_stdmsg": glpk_out.stderr,
-                    "timer": txtOut,
-                    "status_code": "success"
+                    "timer": customMsg,
+                    "status_code": statusFlag
                 }           
             return response
             # urllib.request.urlretrieve(self.dataFile, dataFile)
@@ -1477,6 +1503,10 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
     
+
+
+
+
     def generateResultsViewer(self, caserunname):
         try:
             csvFolderPath = Path(Config.DATA_STORAGE,self.case,'res',caserunname, 'csv')

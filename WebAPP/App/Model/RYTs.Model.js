@@ -85,7 +85,7 @@ export class Model {
                 //     editor.val(cellvalue);
                 //     //editor.val(editor.val());
                 // }
-                console.log('row editor ', row, ' editor value ', cellvalue)
+                //console.log('row editor ', row, ' editor value ', cellvalue)
                 var scId = $('#osy-gridRYTs').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
                     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: true }); 
@@ -102,7 +102,7 @@ export class Model {
             }.bind(this);
 
             let geteditorvalue =  function (row, cellvalue, editor) {
-                console.log('row editor ', row, ' cell value ', cellvalue , ' editor value ', editor.val() )
+                //console.log('row editor ', row, ' cell value ', cellvalue , ' editor value ', editor.val() )
                 return editor.val() == null ? null : editor.val();
             }
 

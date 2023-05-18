@@ -19,9 +19,9 @@ export class Model {
         });
 
 
-        console.log('cases ', cases)
-        console.log('scenarios ', scenarios)
-        console.log('scBycs ', scBycs)
+        // console.log('cases ', cases)
+        // console.log('scenarios ', scenarios)
+        // console.log('scBycs ', scBycs)
 
         //26.04.2023. VK
         //dodati eventualno nove scenarije koji su dodani poslije uspjesnog RUN-a i nema ih u resData
@@ -39,17 +39,17 @@ export class Model {
 
           $.each(scenarios, function (key, obj) {
               if(obj.ScenarioId in sccsMap[csObj.Case] === false){
-                  console.log('obj.Scenario ', obj.Scenario)
+                  //console.log('obj.Scenario ', obj.Scenario)
                   let sc = JSON.parse(JSON.stringify(obj));
                   sc.Active = false;
-                  console.log('sc ', sc)
+                  //console.log('sc ', sc)
                   scBycs[csObj.Case].push(sc);
               }
           });
         });
 
 
-        console.log('sccsMap ', sccsMap)
+        //console.log('sccsMap ', sccsMap)
 
         
         this.casename = casename;

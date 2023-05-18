@@ -39,7 +39,7 @@ export default class RYTCM {
             })
             .then(data => {
                 let [casename, genData, PARAMETERS, RYTCMdata, cases] = data;
-                console.log('RYTCMdata ', RYTCMdata)
+                //console.log('RYTCMdata ', RYTCMdata)
                 if (RYTCMdata[param]['SC_0'].length == 0) {
                     let er = {
                         "message": 'There is no activity defined!',

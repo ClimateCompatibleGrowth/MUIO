@@ -28,16 +28,17 @@ export class Html {
                                 <b>
                                     <span class="selectCS"  data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Select model">
                                         <span class="glyphicon 
-                                        ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark osy-green `}
-                                        fa-1.5x icon-btn"></span><span class="pointer">${value}</span>
+                                            ${selectedCS == value ? ` glyphicon-check danger ` : ` glyphicon-bookmark osy-green `}  icon-btn">
+                                        </span>
+                                        <span class="pointer">${value}</span>
                                     </span>
                                 </b>
                             </td>
                             <td style="width:40px; text-align:center">
                                 <span data-toggle="modal" data-target="#modaldescriptionps">
-                                <span class="descriptionPS" data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Model description">
-                                <span class="glyphicon glyphicon-info-sign text-info icon-btn"></span>
-                                </span>
+                                    <span class="descriptionPS" data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Model description">
+                                        <span class="glyphicon glyphicon-info-sign text-info icon-btn"></span>
+                                    </span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
@@ -46,17 +47,15 @@ export class Html {
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
-                                <span class="backupCS" data-ps="${value}" 
-                                data-toggle="tooltip" data-placement="top" title="Backup model" >
-                                <a href="backupCase?case=${value}"> <span class="glyphicon glyphicon-download-alt text-info icon-btn"></span></a>
-                               
+                                <span class="backupCS" data-ps="${value}" data-toggle="tooltip" data-placement="top" title="Backup model" >
+                                    <a href="backupCase?case=${value}"> <span class="glyphicon glyphicon-download-alt text-info icon-btn"></span></a>
                                 </span>
-                                </td>
+                            </td>
                             <td style="width:40px; text-align:center">
                                 <span data-toggle="modal" data-target="#modalcopy">
-                                <span class="copyCS" data-ps="${value}"' + 'id="copy_${value}"  data-toggle="tooltip" data-placement="top" title="Copy model" >
-                                <span class="glyphicon glyphicon-duplicate text-info icon-btn"></span>
-                                </span>
+                                    <span class="copyCS" data-ps="${value}"' + 'id="copy_${value}"  data-toggle="tooltip" data-placement="top" title="Copy model" >
+                                        <span class="glyphicon glyphicon-duplicate text-info icon-btn"></span>
+                                    </span>
                                 </span>
                             </td>
                             <td style="width:40px; text-align:center">
@@ -271,7 +270,7 @@ export class Html {
     }
 
     static enableImportProcess() {
-        console.log('import SHOW')
+        //console.log('import SHOW')
         $("#osy-process").removeAttr('disabled');
         $('#osy-import').prop("disabled", true);
         $("#osy-casename").prop("disabled", true);
@@ -283,7 +282,7 @@ export class Html {
     }
 
     static newImportProcess() {
-        console.log('new import SHOW')
+        //console.log('new import SHOW')
         $("#osy-process").prop("disabled", true);
 
         $('#osy-import').removeAttr('disabled');
