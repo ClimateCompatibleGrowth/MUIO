@@ -48,6 +48,7 @@ class Osemosys():
 
         self.resultsPath = Path(Config.DATA_STORAGE,case,'res')
         self.viewFolderPath = Path(Config.DATA_STORAGE,case,'view')
+        
         self.resDataPath = Path(Config.DATA_STORAGE,case,'view', 'resData.json')
 
         # self.resPath = Path(Config.DATA_STORAGE,case,'res', 'csv')

@@ -1,8 +1,6 @@
 from pathlib import Path
 import pandas as pd
-import json
-import os
-import time
+import json, shutil, os, time, subprocess
 from collections import defaultdict
 import subprocess
 from itertools import product
@@ -543,6 +541,23 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
+    def deleteCaseResultsJSON(self, caserunname):
+
+        csvPath = Path(self.resultsPath, caserunname, "csv")
+        if os.path.exists(csvPath):
+            shutil.rmtree(csvPath)
+
+        for group, array in self.VARIABLES.items():
+            if group != 'RYS':
+                path = Path(self.viewFolderPath, group+'.json')
+                if path.is_file():
+                    jsonFile = File.readFile(path)
+                    for obj in array:
+                        if caserunname in jsonFile[obj['id']]:
+                            del jsonFile[obj['id']][caserunname]
+                    File.writeFile(jsonFile, path)
+
+
     def deleteCaseRun(self, caserunname):
         try:
             #caseRunPath = Path(Config.DATA_STORAGE,self.case,'res', caserunname)
@@ -555,6 +570,7 @@ class DataFile(Osemosys):
                     resData['osy-cases'].remove(obj)
 
             File.writeFile( resData, self.resDataPath)
+
             #delete from view folder
             for group, array in self.VARIABLES.items():
                 if group != 'RYS':
@@ -1401,6 +1417,9 @@ class DataFile(Osemosys):
             cbcfolder =self.cbcFolder.resolve()
             # respath = self.resPath.resolve()
             # resCBCPath = self.resCBCPath.resolve()
+
+            self.deleteCaseResultsJSON(caserunname)
+
             if solver == 'glpk':
                 out = subprocess.run('glpsol -m ' + modelfile +' -d ' + datafile +' -o ' + resultfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
             else:
@@ -1487,6 +1506,9 @@ class DataFile(Osemosys):
                     customMsg = customMsg + times[0]
                     statusFlag = "error"
 
+
+                print("MESSAGES DONE! --- %s seconds ---" % (time.time() - start_time))
+                txtOut = txtOut + ("Message preparation time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
 
                 response = {
                     "cbc_message": cbc_out.stdout,
