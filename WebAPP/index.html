@@ -10,12 +10,7 @@
 		
 		<!-- #CSS Links -->
 		<!-- Basic Styles -->
-
 		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/bootstrap.min.css">
-
-		<!-- <link rel="stylesheet" media="all" href="{{ url_for('static', filename='References/smartadmin/css/bootstrap.min.css')}}"> -->
-		<!-- <script  src="{{ url_for('static', filename='script.js')}}" data-turbolinks-track="reload"></script> -->
-
 		<link rel="stylesheet" type="text/css" media="screen" href="References/smartadmin/css/font-awesome.min.css">
 
 		<!-- Wijmo -->
@@ -30,7 +25,6 @@
 		<script src="References/wijmo/controls/wijmo.odata.min.js"></script>
 		<script src="References/wijmo/controls/wijmo.olap.min.js"></script>
 		<script src="References/wijmo/licence.js"></script>
-
 		<script src="References/jszip/jszip.min.js"></script>
 
 		<!-- plotly -->
@@ -63,20 +57,14 @@
 
     	<!-- jqx widgets-->
 		<script type="text/javascript" src="References/jqwidgets/jqx-all.js"></script>
+
 		<!--crossroad-->
 		<script type="text/javascript" src="References/signals/signals.min.js"></script>
 		<script type="text/javascript" src="References/crossroad/crossroad.min.js"></script>
 		<script type="text/javascript" src="References/hasher/hasher.min.js"></script>
 
+		<!-- mermaid -->
 		<script src="References/mermaid/mermaid.min.js"></script>
-
-		<!-- <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> -->
-
-		<!--bootbox-->
-		<!-- <script type="text/javascript" src="References/bootbox/bootbox.min.js"></script> -->
-
-		<!-- #GOOGLE FONT -->
-		<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700"> -->
 		
 		<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -96,12 +84,7 @@
 		<!-- #NAVIGATION -->
 		<!-- Left panel : Navigation area -->
 		<!-- Note: This width of the aside area can be adjusted through LESS/SASS variables -->
-		<aside id="left-panel">
-			
-			<!-- <nav>
-				<ul id="Navi"></ul>
-			</nav> -->
-		</aside>
+		<aside id="left-panel"></aside>
 		
 		<!-- #MAIN PANEL -->
 		<div id="main" role="main">	
@@ -134,9 +117,9 @@
 		
 		<script> $("aside").load("App/View/Sidebar.html"); </script>
         <script> $("header").load("App/View/Navbar.html"); </script>
-		<!-- <script> $("footer").load("Includes/footer.html"); </script> -->
-		<script type="module" src="{{ url_for('static', filename='Routes/Routes.Class.js') }}"></script>
 
+		<!--ROUTES-->
+		<script type="module" src="{{ url_for('static', filename='Routes/Routes.Class.js') }}"></script>
 		<!-- <script type="module" src="Routes/Routes.Class.js"></script> -->
 		
 		<script data-pace-options='{ "restartOnRequestAfter": true }' src="References/smartadmin/js/plugin/pace/pace.js"></script>
@@ -161,13 +144,5 @@
 
 		<!-- MAIN APP JS FILE -->
 		<script src="References/smartadmin/js/app.min.js"></script> 
-
-		<!--ROUTES-->
-		<!-- <script src="{{ url_for('static', filename='Routes/routes.js')}}"></script> -->
-		<!-- <script type="module" src="Routes/routes.js"></script> -->
-
-		<!-- Radilo sa reg edit promjenom -->
-		<!-- <script type="module" src="{{ url_for('static', filename='Routes/routes.js')}}" data-turbolinks-track="reload"></script>  -->
-
 	</body>
 </html>
