@@ -1,4 +1,5 @@
 Procfile
+.env
 dist/
 build/
 venv/
