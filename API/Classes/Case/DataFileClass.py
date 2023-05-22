@@ -557,7 +557,6 @@ class DataFile(Osemosys):
                             del jsonFile[obj['id']][caserunname]
                     File.writeFile(jsonFile, path)
 
-
     def deleteCaseRun(self, caserunname):
         try:
             #caseRunPath = Path(Config.DATA_STORAGE,self.case,'res', caserunname)
@@ -788,8 +787,8 @@ class DataFile(Osemosys):
                 'RateOfUseByTechnology':['r','l','t','f','y'],
                 'UseByTechnology':['r','l','t','f','y'],
                 'UseByTechnologyAnnual':['r','t','f','y'],
-                #ss'RateOfProductionByTechnologyByMode':['r','l','t','m','f','y'],
-                'RateOfUseByTechnologyByMode':['r','l','t','m','f','y'],
+                #'RateOfProductionByTechnologyByMode':['r','l','t','m','f','y'],
+                #'RateOfUseByTechnologyByMode':['r','l','t','m','f','y'],
                 'TechnologyActivityChangeByMode':['r','t','m','y'],
                 'TechnologyActivityChangeByModeCostTotal':['r','t','m','y'],
                 'InputToNewCapacity':['r','t','f','y'],
@@ -866,9 +865,9 @@ class DataFile(Osemosys):
                         'RateOfProductionByTechnology',
                         'RateOfUseByTechnology',
                         'UseByTechnology',
-                        'RateOfActivity',
+                        'RateOfActivity'
                         #'RateOfProductionByTechnologyByMode',
-                        'RateOfUseByTechnologyByMode'
+                        #'RateOfUseByTechnologyByMode'
                         ]
         
         year_split = []
@@ -1525,10 +1524,6 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
     
-
-
-
-
     def generateResultsViewer(self, caserunname):
         try:
             csvFolderPath = Path(Config.DATA_STORAGE,self.case,'res',caserunname, 'csv')
@@ -1821,7 +1816,8 @@ class DataFile(Osemosys):
                                     DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                     File.writeFile( DATA[paramobj['group']], path)
-                                    
+                                
+                                #ne koristi se jer smo izbrisali variajablu ROUBTBM Rate Of Use By Technology By Mode
                                 if paramobj['group'] == 'RYTCMTs':
                                     if paramobj['id'] not in DATA[paramobj['group']]:
                                         DATA[paramobj['group']][paramobj['id']] = {}

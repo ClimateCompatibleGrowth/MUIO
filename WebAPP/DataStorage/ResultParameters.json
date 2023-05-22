@@ -25,6 +25,4 @@
 
 "RYTCTs": [{"id": "PBT", "value": "Production By Technology", "name": "ProductionByTechnology", "unitRule": {"cat": [{"var": "CommUnit"}]}}, {"id": "ROPBT", "value": "Rate Of Production By Technology", "name": "RateOfProductionByTechnology", "unitRule": {"cat": [{"var": "CommUnit"}]}}, {"id": "ROUBT", "value": "Rate Of Use By Technology", "name": "RateOfUseByTechnology", "unitRule": {"cat": [{"var": "CommUnit"}]}}, {"id": "UBT", "value": "Use By Technology", "name": "UseByTechnology", "unitRule": {"cat": [{"var": "CommUnit"}]}}], 
 
-"RYTMTs": [{"id": "ROA", "value": "Rate Of Activity", "name": "RateOfActivity", "unitRule": {"cat": [{"var": "ActUnitId"}]}}], 
-
-"RYTCMTs": [{"id": "ROUBTBM", "value": "Rate Of Use By Technology By Mode", "name": "RateOfUseByTechnologyByMode", "unitRule": {"cat": [{"var": "CommUnit"}]}}]}
+"RYTMTs": [{"id": "ROA", "value": "Rate Of Activity", "name": "RateOfActivity", "unitRule": {"cat": [{"var": "ActUnitId"}]}}]}

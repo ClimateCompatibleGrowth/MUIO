@@ -3,6 +3,7 @@ Procfile
 dist/
 build/
 venv/
+venv
 API/__pycache__
 API/Classes/__pycache__
 API/Classes/Base/__pycache__
