@@ -1,6 +1,7 @@
 dist/
 build/
 venv/
+API/__pycache__
 API/Classes/__pycache__
 API/Classes/Base/__pycache__
 API/Classes/Case/__pycache__
