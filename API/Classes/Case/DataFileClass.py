@@ -1054,10 +1054,7 @@ class DataFile(Osemosys):
             df_combinations = df_combinations[final_cols]
             
             
-            df_combinations.to_csv(os.path.join(base_folder,
-                                                'csv',
-                                                each_result+'.csv'),
-                                index=None)
+            df_combinations.to_csv(os.path.join(base_folder, 'csv', each_result+'.csv'), index=None)
             
         ####################################################################################
         
@@ -1110,14 +1107,14 @@ class DataFile(Osemosys):
             # df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
             # all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
 
-
-            df_emi['AnnualEmissions'] = df_emi['EmissionActivityRatio']*df_emi['TotalAnnualTechnologyActivityByMode']
-            df_emi = df_emi.drop(['EmissionActivityRatio','TotalAnnualTechnologyActivityByMode'], axis=1)
-            df_emi = df_emi.groupby(['r','e','y'])['AnnualEmissions'].sum().reset_index()
-            df_emi['AnnualEmissions'] = df_emi['AnnualEmissions'].astype(float).round(4)
-            df_emi = df_emi.sort_values(by=['r','e','y'])
-            df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
-            all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
+            ## 26052023 This variable is calculated in solver, added equation in model file for AnnuallEmisssions V.K.
+            # df_emi['AnnualEmissions'] = df_emi['EmissionActivityRatio']*df_emi['TotalAnnualTechnologyActivityByMode']
+            # df_emi = df_emi.drop(['EmissionActivityRatio','TotalAnnualTechnologyActivityByMode'], axis=1)
+            # df_emi = df_emi.groupby(['r','e','y'])['AnnualEmissions'].sum().reset_index()
+            # df_emi['AnnualEmissions'] = df_emi['AnnualEmissions'].astype(float).round(4)
+            # df_emi = df_emi.sort_values(by=['r','e','y'])
+            # df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
+            # all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
     
     def preprocessData(self, data_infile, data_outfile):
 
