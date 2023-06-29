@@ -149,6 +149,11 @@ export class DataModelResult{
         let techGroupNames = DataModel.TechGroupName(genData);
         let years = genData['osy-years']
 
+
+        // console.log('techData ', techData)
+        // console.log('techGroupData ', techGroupData)
+
+
         let pivotData = [];
         let dataT = {};
         let dataC = {};
@@ -187,7 +192,7 @@ export class DataModelResult{
                     chunk['Unit'] = jsonLogic.apply(rule, data);
       
                     if(obj.Tech){
-                        //console.log('techData ', obj.Tech, '------',  techData[obj.Tech])   //DEMINDLFO 
+                        console.log('techData ', obj.Tech, '------',  techData[obj.Tech])   //DEMINDLFO 
                         if(techData[obj.Tech].TG.length != 0){
                             $.each(techData[obj.Tech].TG, function (id, tg) {
                                 //console.log('tsec hada ', tg, techGroupData[tg])
