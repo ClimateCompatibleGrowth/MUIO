@@ -251,31 +251,41 @@ export default class Pivot {
 
             Osemosys.getResultData(model.casename, model.group+'.json')
             .then(DATA => {
-                Html.title(model.casename, model.VARNAMES[model.group][model.param], 'pivot');
-                Html.ddlViews(model.VIEWS[model.param]);
 
-                let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
-                model.pivotData = pivotData;
 
-                ng.itemsSource = model.pivotData
-                //remove title chart
-                app.pivotChart.header = '';
+                console.log(model.param, model.VARNAMES[model.group][model.param])
+                console.log('Data ', DATA)
 
-                if (model.param == 'D' || model.param == 'T'){
-                    ng.columnFields.push('Case', 'Comm');
-                    ng.rowFields.push('Year');
-                    ng.valueFields.push('Value');
-                }
-                else if(model.param == 'AE' ){
-                    ng.columnFields.push('Case', 'Emi');
-                    ng.rowFields.push('Year');
-                    ng.valueFields.push('Value');
+                if (model.param in DATA){
+                    Html.title(model.casename, model.VARNAMES[model.group][model.param], 'pivot');
+                    Html.ddlViews(model.VIEWS[model.param]);
+                    let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
+                    model.pivotData = pivotData;
+    
+                    ng.itemsSource = model.pivotData
+                    //remove title chart
+                    app.pivotChart.header = '';
+    
+                    if (model.param == 'D' || model.param == 'T'){
+                        ng.columnFields.push('Case', 'Comm');
+                        ng.rowFields.push('Year');
+                        ng.valueFields.push('Value');
+                    }
+                    else if(model.param == 'AE' ){
+                        ng.columnFields.push('Case', 'Emi');
+                        ng.rowFields.push('Year');
+                        ng.valueFields.push('Value');
+                    }
+                    else{
+                        ng.columnFields.push('Case', 'Tech');
+                        ng.rowFields.push('Year');
+                        ng.valueFields.push('Value');
+                    }
                 }
                 else{
-                    ng.columnFields.push('Case', 'Tech');
-                    ng.rowFields.push('Year');
-                    ng.valueFields.push('Value');
+                    Message.dangerOsy("Results do not contain values for variable <b>"+model.VARNAMES[model.group][model.param] + "</b> please rerun the model.")
                 }
+
             })
             .catch(error => {
                 Message.danger(error.message);

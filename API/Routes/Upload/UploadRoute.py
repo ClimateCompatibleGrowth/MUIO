@@ -233,6 +233,14 @@ def uploadCase():
                                 elif name == '4.0': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
                                     msg.append({
+                                        "message_warning": "You have restored model created prior to 4.5 version.In order to adapt chnages to new version you need to update model in configuration page.",
+                                        "message": "Model " + casename +" have been uploaded!",
+                                        "status_code": "warning",
+                                        "casename": casename
+                                    })
+                                elif name == '4.5': 
+                                    zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                    msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
                                         "status_code": "success",
                                         "casename": casename

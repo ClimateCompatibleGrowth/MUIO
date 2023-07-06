@@ -553,8 +553,10 @@ class DataFile(Osemosys):
                 if path.is_file():
                     jsonFile = File.readFile(path)
                     for obj in array:
-                        if caserunname in jsonFile[obj['id']]:
-                            del jsonFile[obj['id']][caserunname]
+                        #potrebna provjera jer smo u 4.5 verziji dodali varijablu EBAC i dolazilo je do greske jer nije bilo u reyultataima
+                        if obj['id'] in jsonFile:
+                            if caserunname in jsonFile[obj['id']]:
+                                del jsonFile[obj['id']][caserunname]
                     File.writeFile(jsonFile, path)
 
     def deleteCaseRun(self, caserunname):
@@ -1547,306 +1549,306 @@ class DataFile(Osemosys):
                 for csv in csvs:
 
                     #read csv file
-                    df = pd.read_csv(Path(Config.DATA_STORAGE,self.case,'res', case, 'csv', csv))
-                    data = df.to_json(orient='records', indent=2)
-                    jsondata = json.loads(data)
+                    csv_path = Path(Config.DATA_STORAGE,self.case,'res', case, 'csv', csv)
+                    if csv_path.is_file():
+                        df = pd.read_csv(csv_path)
+                        data = df.to_json(orient='records', indent=2)
+                        jsondata = json.loads(data)
 
-                    if len(jsondata) != 0:
-                        for param, paramobj in paramByName.items():
-                            if param in jsondata[0]:
-                                if paramobj['group'] not in DATA:
-                                    DATA[paramobj['group']] = {}
+                        if len(jsondata) != 0:
+                            for param, paramobj in paramByName.items():
+                                if param in jsondata[0]:
+                                    if paramobj['group'] not in DATA:
+                                        DATA[paramobj['group']] = {}
 
-                                if paramobj['group'] == 'RT':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        tmp[ obj['t']] =obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
+                                    if paramobj['group'] == 'RT':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            tmp[ obj['t']] =obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
  
+                                    if paramobj['group'] == 'RYT':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tech = jsondata[0]['t']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if tech == obj['t']:
+                                                tmp['Tech'] = obj['t']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                tech = obj['t']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Tech'] = obj['t']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)  
 
-                                if paramobj['group'] == 'RYT':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tech = jsondata[0]['t']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if tech == obj['t']:
-                                            tmp['Tech'] = obj['t']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            tech = obj['t']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Tech'] = obj['t']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)  
+                                    if paramobj['group'] == 'RYE':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        emi = jsondata[0]['e']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if emi == obj['e']:
+                                                tmp['Emi'] = obj['e']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                emi = obj['e']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Emi'] = obj['e']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)  
 
-                                if paramobj['group'] == 'RYE':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    emi = jsondata[0]['e']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if emi == obj['e']:
-                                            tmp['Emi'] = obj['e']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            emi = obj['e']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Emi'] = obj['e']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)  
-
-                                if paramobj['group'] == 'RYTM':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tech = jsondata[0]['t']
-                                    mod = jsondata[0]['m']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if tech == obj['t'] and mod == obj['m']:
-                                            tmp['Tech'] = obj['t']
-                                            tmp['MoId'] = obj['m']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            tech = obj['t']
-                                            mod = obj['m']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Tech'] = obj['t']
-                                            tmp['MoId'] = obj['m']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
+                                    if paramobj['group'] == 'RYTM':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tech = jsondata[0]['t']
+                                        mod = jsondata[0]['m']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if tech == obj['t'] and mod == obj['m']:
+                                                tmp['Tech'] = obj['t']
+                                                tmp['MoId'] = obj['m']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                tech = obj['t']
+                                                mod = obj['m']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Tech'] = obj['t']
+                                                tmp['MoId'] = obj['m']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
  
-                                if paramobj['group'] == 'RYTC':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tech = jsondata[0]['t']
-                                    comm = jsondata[0]['f']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if tech == obj['t'] and comm == obj['f']:
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Comm'] = obj['f']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            tech = obj['t']
-                                            comm = obj['f']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Comm'] = obj['f']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
+                                    if paramobj['group'] == 'RYTC':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tech = jsondata[0]['t']
+                                        comm = jsondata[0]['f']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if tech == obj['t'] and comm == obj['f']:
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Comm'] = obj['f']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                tech = obj['t']
+                                                comm = obj['f']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Comm'] = obj['f']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
 
-                                if paramobj['group'] == 'RYTE':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tech = jsondata[0]['t']
-                                    emi = jsondata[0]['e']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if tech == obj['t'] and emi == obj['e']:
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Emi'] = obj['e']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            tech = obj['t']
-                                            emi = obj['e']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Emi'] = obj['e']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
+                                    if paramobj['group'] == 'RYTE':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tech = jsondata[0]['t']
+                                        emi = jsondata[0]['e']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if tech == obj['t'] and emi == obj['e']:
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Emi'] = obj['e']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                tech = obj['t']
+                                                emi = obj['e']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Emi'] = obj['e']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
   
-                                if paramobj['group'] == 'RYTTs':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tech = jsondata[0]['t']
-                                    ts = jsondata[0]['l']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if tech == obj['t'] and ts == obj['l']:
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            tech = obj['t']
-                                            ts = obj['l']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
+                                    if paramobj['group'] == 'RYTTs':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tech = jsondata[0]['t']
+                                        ts = jsondata[0]['l']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if tech == obj['t'] and ts == obj['l']:
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                tech = obj['t']
+                                                ts = obj['l']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
   
+                                    if paramobj['group'] == 'RYCTs':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        comm = jsondata[0]['f']
+                                        ts = jsondata[0]['l']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if comm == obj['f'] and ts == obj['l']:
+                                                tmp['Comm'] = obj['f']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                comm = obj['f']
+                                                ts = obj['l']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Comm'] = obj['f']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
 
-                                if paramobj['group'] == 'RYCTs':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    comm = jsondata[0]['f']
-                                    ts = jsondata[0]['l']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if comm == obj['f'] and ts == obj['l']:
-                                            tmp['Comm'] = obj['f']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            comm = obj['f']
-                                            ts = obj['l']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Comm'] = obj['f']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
+                                    if paramobj['group'] == 'RYTEM':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tech = jsondata[0]['t']
+                                        emi = jsondata[0]['e']
+                                        mod = jsondata[0]['m']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if tech == obj['t'] and emi == obj['e'] and mod == obj['m']:
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Emi'] = obj['e']
+                                                tmp['MoId'] = obj['m']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                tech = obj['t']
+                                                emi = obj['e']
+                                                mod = obj['m']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Emi'] = obj['e']
+                                                tmp['MoId'] = obj['m']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
 
-                                if paramobj['group'] == 'RYTEM':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tech = jsondata[0]['t']
-                                    emi = jsondata[0]['e']
-                                    mod = jsondata[0]['m']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if tech == obj['t'] and emi == obj['e'] and mod == obj['m']:
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Emi'] = obj['e']
-                                            tmp['MoId'] = obj['m']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            tech = obj['t']
-                                            emi = obj['e']
-                                            mod = obj['m']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Emi'] = obj['e']
-                                            tmp['MoId'] = obj['m']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
+                                    if paramobj['group'] == 'RYTCTs':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tech = jsondata[0]['t']
+                                        comm = jsondata[0]['f']
+                                        ts = jsondata[0]['l']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if tech == obj['t'] and comm == obj['f'] and ts == obj['l']:
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Comm'] = obj['f']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                tech = obj['t']
+                                                comm = obj['f']
+                                                ts = obj['l']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Comm'] = obj['f']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
 
-                                if paramobj['group'] == 'RYTCTs':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tech = jsondata[0]['t']
-                                    comm = jsondata[0]['f']
-                                    ts = jsondata[0]['l']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if tech == obj['t'] and comm == obj['f'] and ts == obj['l']:
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Comm'] = obj['f']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            tech = obj['t']
-                                            comm = obj['f']
-                                            ts = obj['l']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Comm'] = obj['f']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
-
-                                if paramobj['group'] == 'RYTMTs':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tech = jsondata[0]['t']
-                                    mod = jsondata[0]['m']
-                                    ts = jsondata[0]['l']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if tech == obj['t'] and mod == obj['m'] and ts == obj['l']:
-                                            tmp['Tech'] = obj['t']
-                                            tmp['MoId'] = obj['m']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            tech = obj['t']
-                                            mod = obj['m']
-                                            ts = obj['l'] 
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Tech'] = obj['t']
-                                            tmp['MoId'] = obj['m']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
+                                    if paramobj['group'] == 'RYTMTs':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tech = jsondata[0]['t']
+                                        mod = jsondata[0]['m']
+                                        ts = jsondata[0]['l']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if tech == obj['t'] and mod == obj['m'] and ts == obj['l']:
+                                                tmp['Tech'] = obj['t']
+                                                tmp['MoId'] = obj['m']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                tech = obj['t']
+                                                mod = obj['m']
+                                                ts = obj['l'] 
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Tech'] = obj['t']
+                                                tmp['MoId'] = obj['m']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
                                 
-                                #ne koristi se jer smo izbrisali variajablu ROUBTBM Rate Of Use By Technology By Mode
-                                if paramobj['group'] == 'RYTCMTs':
-                                    if paramobj['id'] not in DATA[paramobj['group']]:
-                                        DATA[paramobj['group']][paramobj['id']] = {}
-                                    DATA[paramobj['group']][paramobj['id']][case] = []
-                                    tech = jsondata[0]['t']
-                                    comm = jsondata[0]['f']
-                                    mod = jsondata[0]['m']
-                                    ts = jsondata[0]['l']
-                                    tmp = {}
-                                    for obj in jsondata:
-                                        if tech == obj['t'] and comm == obj['f'] and mod == obj['m'] and ts == obj['l']:
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Comm'] = obj['f']
-                                            tmp['MoId'] = obj['m']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                        else:
-                                            tech = obj['t']
-                                            comm = obj['f']
-                                            mod = obj['m']
-                                            ts = obj['l']
-                                            DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                            tmp = {}
-                                            tmp['Tech'] = obj['t']
-                                            tmp['Comm'] = obj['f']
-                                            tmp['MoId'] = obj['m']
-                                            tmp['Ts'] = obj['l']
-                                            tmp[obj['y']] = obj[param]
-                                    DATA[paramobj['group']][paramobj['id']][case].append(tmp)
-                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
-                                    File.writeFile( DATA[paramobj['group']], path)
-                                break
+                                    #ne koristi se jer smo izbrisali variajablu ROUBTBM Rate Of Use By Technology By Mode
+                                    if paramobj['group'] == 'RYTCMTs':
+                                        if paramobj['id'] not in DATA[paramobj['group']]:
+                                            DATA[paramobj['group']][paramobj['id']] = {}
+                                        DATA[paramobj['group']][paramobj['id']][case] = []
+                                        tech = jsondata[0]['t']
+                                        comm = jsondata[0]['f']
+                                        mod = jsondata[0]['m']
+                                        ts = jsondata[0]['l']
+                                        tmp = {}
+                                        for obj in jsondata:
+                                            if tech == obj['t'] and comm == obj['f'] and mod == obj['m'] and ts == obj['l']:
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Comm'] = obj['f']
+                                                tmp['MoId'] = obj['m']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                            else:
+                                                tech = obj['t']
+                                                comm = obj['f']
+                                                mod = obj['m']
+                                                ts = obj['l']
+                                                DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                                tmp = {}
+                                                tmp['Tech'] = obj['t']
+                                                tmp['Comm'] = obj['f']
+                                                tmp['MoId'] = obj['m']
+                                                tmp['Ts'] = obj['l']
+                                                tmp[obj['y']] = obj[param]
+                                        DATA[paramobj['group']][paramobj['id']][case].append(tmp)
+                                        path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                        File.writeFile( DATA[paramobj['group']], path)
+                                    break
 
         except(IOError, IndexError):
             raise IndexError

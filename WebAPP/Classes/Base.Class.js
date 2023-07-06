@@ -276,7 +276,19 @@ export class Base {
                     } else if (response.response[key]['status_code'] == 'warning') {
                         $('.dz-file-preview').removeClass("dz-success").addClass("dz-error")
                         //$(".dz-error-mark svg").css("background", "red"); 
-                        Message.bigBoxWarning("Upload response", response.response[key]['message'], null);
+                        //Message.bigBoxWarning("Upload response", response.response[key]['message'], null);
+                        let casename = response.response[key]['casename'];
+                        Html.apendModel(casename);
+                        Message.bigBoxSuccess("Upload response", response.response[key]['message'], null);
+                        Message.warningOsy(response.response[key]['message_warning'])
+                        value.previewElement.innerHTML = "";
+                        $('#modalrestore').modal('toggle');
+                        if (Base.AWS_SYNC == 1) {
+                            SyncS3.deleteResultsPreSync(casename)
+                                .then(response => {
+                                    SyncS3.uploadSync(casename);
+                                });
+                        }
                     } else if (response.response[key]['status_code'] == 'error') {
                         $('.dz-file-preview').removeClass("dz-success").addClass("dz-error")
                         //$(".dz-error-mark svg").css("background", "red"); 
