@@ -8,7 +8,6 @@ export class Html {
         $.each(cases, function (index, value) {
             Html.apendModel(value, selectedCS)
         });
-
         if (!selectedCS) Message.info("Please select existing or create new model to proceed!");
     }
 

@@ -303,7 +303,7 @@ export class Base {
         });
     }
 
-        static uploadXls = function () {
+    static uploadXls = function () {
             var casename = $("#osy-casename").val().trim();
             //console.log('casename ', casename)
             var MyDropzone = new Dropzone("div#importDropzone", {
