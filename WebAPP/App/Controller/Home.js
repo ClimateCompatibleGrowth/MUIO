@@ -61,7 +61,7 @@ export default class Home {
             return Promise.all(promise);
         })
         .then(data => {
-            let [ casename, cases] = data;
+            let [ casename, cases ] = data;
             let model = new Model(casename, cases);
             this.initPage(model);
         })
@@ -76,14 +76,23 @@ export default class Home {
 
         $("#casePicker").off('click');
         $("#casePicker, #cases").on('click', '.selectCS', function(e) {
+            console.log('model ', model)
         //$(document).delegate(".selectCS","click",function(e){
             e.preventDefault();
             e.stopImmediatePropagation();
             var casename = $(this).attr('data-ps');
             //Html.updateCasePicker(casename);
             //Sidebar.Load(casename, model.genData, model.PARAMETERS);
-            Home.refreshPage(casename);
-            Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
+            Osemosys.getData(casename, 'genData.json')
+            .then(genData => {
+                console.log('genData ', genData["osy-version"])
+                Home.refreshPage(casename);
+                Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
+                if(parseFloat(genData["osy-version"]) < 4.5){
+                    console.log('manje od 4.5')
+                    Message.bigBoxWarning("Warning", "You have selected a model created in a earlier version of this UI. In order to update to the current version click <b>Update model</b> on the configuration page.", 10000);
+                }
+            })
         });
 
         $("#cases").on('click', '.editPS', function(e) {
