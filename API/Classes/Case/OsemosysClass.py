@@ -38,6 +38,8 @@ class Osemosys():
         
         #self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys_preprocessing.txt')
         self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys_preprocessing.v.4.5.txt')
+        #self.osemosysFile = Path(Config.SOLVERs_FOLDER,'model_cloud.txt') 
+        #self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosysUI_EBAC.txt')  
         self.osemosysFileOriginal = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
         
         if platform.system() == 'Windows':

@@ -36,7 +36,6 @@ export class Grid {
             editor.jqxDropDownList({ source: this.daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true  });
         }.bind(this);
 
-
         var ddlTechGroups = function (row, value, editor) {
             // let data = this.daComms.records;
             let data = techGroups;
@@ -209,7 +208,10 @@ export class Grid {
             editable: true,
             selectionmode: 'none',
             enablehover: false,
-            sortable:true,
+            sortable: true,
+            pageable: true,
+            pagesize: 10,
+            pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             showsortcolumnbackground: false,
             columns: [
                 { text: 'techId', datafield: 'TechId', hidden: true },
@@ -326,6 +328,9 @@ export class Grid {
             enablehover: false,
             sortable:true,
             showsortcolumnbackground: false,
+            pageable: true,
+            pagesize: 10,
+            pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
                 { text: 'CommId', datafield: 'CommId', hidden: true },
                 { text: 'Commodity name', datafield: 'Comm', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
@@ -395,6 +400,7 @@ export class Grid {
             enablehover: false,
             sortable:true,
             showsortcolumnbackground: false,
+            
             columns: [
                 { text: 'EmisId', datafield: 'EmisId', hidden: true },
                 { text: 'Emission name', datafield: 'Emis', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },

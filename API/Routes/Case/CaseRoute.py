@@ -401,6 +401,8 @@ def run():
         return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
+    except(IndexError):
+        return jsonify('No existing cases!'), 404
 
 
 ####################################################################################OBSOLETE AND SyncS3###################################################

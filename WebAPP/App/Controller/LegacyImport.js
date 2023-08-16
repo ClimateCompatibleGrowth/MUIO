@@ -128,6 +128,7 @@ export default class LegacyImport {
             }
             Osemosys.importTemplate(POSTDATA)
             .then(response => {
+                console.log('response ', response)
                 if (response.status_code == "success") {
                     Message.loaderEnd();
                     //console.log('response ', response)
@@ -138,6 +139,7 @@ export default class LegacyImport {
                 }
             })
             .catch(error => {
+                console.log('error ', error)
                 Message.loaderEnd();
                 Message.bigBoxDanger('Error message', error, null);
             })

@@ -202,6 +202,17 @@ class ImportTemplate():
         ]
         return defaultObj
 
+    def refR(self, xlsObj):
+        outObj = {}
+        for obj in xlsObj:
+            if obj['REGION'] not in outObj:
+                outObj[obj['REGION']] = {}
+            region = obj['REGION']
+            val = obj['VALUE']
+            #trenutno imamo samojedan trgion pa koristimo RE1
+            outObj['RE1'] = val
+        return outObj
+    
     def refRT(self, xlsObj):
         outObj = {}
         for obj in xlsObj:
@@ -502,7 +513,12 @@ class ImportTemplate():
                     techgroupObj[tech['TECHNOLOGY']] = []
                 if 'TECHGROUP' in tech:
                     if tech['TECHGROUP'] is not None:
-                        techgroupObj[tech['TECHNOLOGY']].append(tgId[tech['TECHGROUP']])
+                        #techgroupObj[tech['TECHNOLOGY']].append(tgId[tech['TECHGROUP']])
+                        #######################################################################3
+                        # tg_list = tech['TECHGROUP'].split(",")
+                        # for tg in tg_list:
+                        #     techgroupObj[tech['TECHNOLOGY']].append(tgId[tg])
+                        techgroupObj[tech['TECHNOLOGY']] = [tgId[x.strip()] for x in tech['TECHGROUP'].split(',')]
 
 
             for tech in techs:
@@ -581,7 +597,7 @@ class ImportTemplate():
 
 
                 for key, array in self.PARAMETERS.items():
-                    if key != 'R':
+                    if key != 'R__':
                         print(key + ' PARAM')
                         #procitaj json file koji odgovara xls objektu i updatuj podatke
                         path = Path(Config.DATA_STORAGE,casename, key +'.json')
@@ -608,6 +624,10 @@ class ImportTemplate():
                                 xls = df_sheet_all[sheet_name]
                                 xlsData = xls.to_json(orient='records', indent=2)
                                 xlsArray = json.loads(xlsData)
+
+                                if key == 'R':
+                                    xlsObj = self.refR(xlsArray)
+                                    jsonData[a['id']]['SC_0'][0]['value'] = xlsObj['RE1']
 
                                 if key == 'RT':
                                     xlsObj = self.refRT(xlsArray)
@@ -767,6 +787,16 @@ class ImportTemplate():
 
             return response
         except(IOError, IndexError):
-            raise IndexError
+            #raise IndexError
+            response = {
+                "message": IOError,
+                "status_code": "error",
+                "output": IndexError
+            }  
         except OSError:
-            raise OSError
+            #raise OSError
+            response = {
+                "message": IOError,
+                "status_code": "error",
+                "output": IndexError
+            }  

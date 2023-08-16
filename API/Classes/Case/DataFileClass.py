@@ -24,7 +24,7 @@ class DataFile(Osemosys):
                     tmp = r[id][sc['ScId']]['value']
             self.f.write('{} {} {}'.format('RE1', tmp, '\n'))
             self.f.write('{} {}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
+
 
     def gen_RCn(self):
         rcn = self.RCn()
@@ -37,7 +37,6 @@ class DataFile(Osemosys):
                 rcnString += '{} '.format(tmp)
         self.f.write('{}{}{}'.format('RE1 ', rcnString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RY(self):
         ry = self.RY(File.readFile(self.ryPath))
@@ -52,7 +51,6 @@ class DataFile(Osemosys):
                 ryString += '{} '.format(tmp)
             self.f.write('{}{}{}'.format('RE1 ', ryString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RT(self):
         rt = self.RT(File.readFile(self.rtPath))
@@ -67,7 +65,6 @@ class DataFile(Osemosys):
                 rtString += '{} '.format(tmp)
             self.f.write('{}{}{}'.format('RE1 ', rtString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RE(self):
         re = self.RE(File.readFile(self.rePath))
@@ -82,7 +79,6 @@ class DataFile(Osemosys):
                 reString += '{} '.format(tmp)
             self.f.write('{}{}{}'.format('RE1 ', reString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYCn(self):
         rycn = self.RYCn(File.readFile(self.rycnPath))
@@ -99,7 +95,6 @@ class DataFile(Osemosys):
                     rycnString += '{} '.format(tmp)
                 self.f.write('{} {}{}'.format(self.conMap[conId], rycnString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYTs(self):
         ryts = self.RYTs(File.readFile(self.rytsPath))
@@ -108,120 +103,178 @@ class DataFile(Osemosys):
             self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
             for timesliceId in self.timesliceIDs:
                 rytsString = ''
+                defaultValueFlag = False
                 for yearId in self.yearIDs:
                     for sc in self.scOrder:
-                        if ryts[id][sc['ScId']][yearId][timesliceId] is not None and sc['Active'] == True:
-                            tmp = ryts[id][sc['ScId']][yearId][timesliceId]
+                        rytsValue = ryts[id][sc['ScId']][yearId][timesliceId]
+                        if rytsValue is not None and sc['Active'] == True:
+                            if rytsValue != self.defaultValue[id]:
+                                defaultValueFlag = True
+                            tmp = rytsValue
                     rytsString += '{} '.format(tmp)
-                self.f.write('{} {}{}'.format(timesliceId, rytsString, '\n'))
+                if defaultValueFlag:                        
+                    self.f.write('{} {}{}'.format(timesliceId, rytsString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYT(self):
         ryt = self.RYT(File.readFile(self.rytPath))
+
         for id, param in self.PARAM['RYT'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
-            self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
-            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+            regionHeader = True
             for techId in self.techIDs:
                 rytString = ''
+                defaultValueFlag = False
                 for yearId in self.yearIDs:
                     for sc in self.scOrder:
-                        if ryt[id][sc['ScId']][yearId][techId] is not None and sc['Active'] == True:
-                            tmp = ryt[id][sc['ScId']][yearId][techId]
+                        rytValue = ryt[id][sc['ScId']][yearId][techId]
+                        if rytValue is not None and sc['Active'] == True:
+                            if rytValue != self.defaultValue[id]:
+                                defaultValueFlag = True
+                            tmp = rytValue
+                    #if defaultValueFlag:
                     rytString += '{} '.format(tmp)
-                self.f.write('{} {}{}'.format(self.techMap[techId], rytString, '\n'))
+                if defaultValueFlag:
+                    if regionHeader:
+                        regionHeader = False   
+                        self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+                        self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                    self.f.write('{} {}{}'.format(self.techMap[techId], rytString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYTCn(self):
         rytcn = self.RYTCn(File.readFile(self.rytcnPath))
         for id, param in self.PARAM['RYTCn'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
             for conId in self.conIDs:
+                
                 if self.keys_exists(self.constraintTechIDs, id, conId):
                     for constraintTechId in self.constraintTechIDs[id][conId]:
-                        self.f.write('{}{}'.format('[RE1,'+ self.techMap[constraintTechId] +',*,*]:', '\n'))
-                        self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                        regionHeader = True
+                        defaultValueFlag = False
+                        # self.f.write('{}{}'.format('[RE1,'+ self.techMap[constraintTechId] +',*,*]:', '\n'))
+                        # self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                         rytcnString = ''
                         for yearId in self.yearIDs:
                             for sc in self.scOrder:
-                                if rytcn[id][sc['ScId']][yearId][constraintTechId][conId] is not None and sc['Active'] == True:
-                                    tmp = rytcn[id][sc['ScId']][yearId][constraintTechId][conId]
+                                rytcnValue = rytcn[id][sc['ScId']][yearId][constraintTechId][conId]
+                                if rytcnValue is not None and sc['Active'] == True:
+                                    if rytcnValue != self.defaultValue[id]:
+                                        defaultValueFlag = True
+                                    tmp = rytcnValue
                             rytcnString += '{} '.format(tmp)
-                        self.f.write('{} {}{}'.format(self.conMap[conId], rytcnString, '\n'))
+                        if defaultValueFlag:
+                            if regionHeader:
+                                regionHeader = False   
+                                self.f.write('{}{}'.format('[RE1,'+ self.techMap[constraintTechId] +',*,*]:', '\n'))
+                                self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                            self.f.write('{} {}{}'.format(self.conMap[conId], rytcnString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYTM(self):
         rytm = self.RYTM(File.readFile(self.rytmPath))
         for id, param in self.PARAM['RYTM'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
+            
             for techId in self.techIDs:
-                self.f.write('{} {}'.format('[RE1,'+ self.techMap[techId] +',*,*]:', '\n'))
-                self.f.write('{}{}{}'.format(self.years, ':=', '\n'))
+                regionHeader = True
+                # self.f.write('{} {}'.format('[RE1,'+ self.techMap[techId] +',*,*]:', '\n'))
+                # self.f.write('{}{}{}'.format(self.years, ':=', '\n'))
                 for mod in self.modIds:
                     rytmString = ''
+                    defaultValueFlag = False
                     for yearId in self.yearIDs:
                         for sc in self.scOrder:
-                            if rytm[id][sc['ScId']][yearId][techId][mod] is not None and sc['Active'] == True:
-                                tmp = rytm[id][sc['ScId']][yearId][techId][mod]
+                            rytmValue = rytm[id][sc['ScId']][yearId][techId][mod]
+                            if rytmValue is not None and sc['Active'] == True:
+                                if rytmValue != self.defaultValue[id]:
+                                    defaultValueFlag = True
+                                tmp = rytmValue
                         rytmString += '{} '.format(tmp)
-                    self.f.write('{} {}{}'.format(mod, rytmString, '\n'))
+                    if defaultValueFlag:
+                        if regionHeader:
+                            regionHeader = False   
+                            self.f.write('{} {}'.format('[RE1,'+ self.techMap[techId] +',*,*]:', '\n'))
+                            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                        self.f.write('{} {}{}'.format(mod, rytmString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYC(self):
         ryc = self.RYC(File.readFile(self.rycPath))
         for id, param in self.PARAM['RYC'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
-            self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
-            self.f.write('{}{}{}'.format(self.years, ':=', '\n'))
+            # self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+            # self.f.write('{}{}{}'.format(self.years, ':=', '\n'))
+            regionHeader = True
             for commId in self.commIDs:
                 rycString = ''
+                defaultValueFlag = False
                 for yearId in self.yearIDs:
                     for sc in self.scOrder:
-                        if ryc[id][sc['ScId']][yearId][commId] is not None and sc['Active'] == True:
-                            tmp = ryc[id][sc['ScId']][yearId][commId]
+                        rycValue = ryc[id][sc['ScId']][yearId][commId]
+                        if rycValue is not None and sc['Active'] == True:
+                            if rycValue != self.defaultValue[id]:
+                                defaultValueFlag = True
+                            tmp = rycValue
                     rycString += '{} '.format(tmp)
-                self.f.write('{} {}{}'.format(self.commMap[commId], rycString, '\n'))
+                if defaultValueFlag:
+                    if regionHeader:
+                        regionHeader = False   
+                        self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+                        self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                    self.f.write('{} {}{}'.format(self.commMap[commId], rycString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYE(self):
         rye = self.RYE(File.readFile(self.ryePath))
         for id, param in self.PARAM['RYE'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
-            self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
-            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+            regionHeader = True
+            # self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+            # self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
             for emiId in self.emiIDs:
                 ryeString = ''
+                defaultValueFlag = False
                 for yearId in self.yearIDs:
                     for sc in self.scOrder:
-                        if rye[id][sc['ScId']][yearId][emiId] is not None and sc['Active'] == True:
-                            tmp = rye[id][sc['ScId']][yearId][emiId]
+                        ryeValue = rye[id][sc['ScId']][yearId][emiId]
+                        if ryeValue is not None and sc['Active'] == True:
+                            if ryeValue != self.defaultValue[id]:
+                                defaultValueFlag = True
+                            tmp = ryeValue
                     ryeString += '{} '.format(tmp)
-                self.f.write('{} {}{}'.format(self.emiMap[emiId], ryeString, '\n'))
+                if defaultValueFlag:
+                    if regionHeader:
+                        regionHeader = False   
+                        self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+                        self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                    self.f.write('{} {}{}'.format(self.emiMap[emiId], ryeString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYTC(self):
         rytc = self.RYTC(File.readFile(self.rytcPath))
         for id, param in self.PARAM['RYTC'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
             for inputCapTechId in self.inputCapTechIds[id]:
+                regionHeader = True
                 for inputCapCommId in self.inputCapCommIds[id][inputCapTechId]:
-                    self.f.write('{}{}'.format('[RE1,'+ self.techMap[inputCapTechId] + ',*,*]:', '\n'))
-                    self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                     rytcString = ''
+                    defaultValueFlag = False
                     for yearId in self.yearIDs:
                         for sc in self.scOrder:
-                            if rytc[id][sc['ScId']][yearId][inputCapTechId][inputCapCommId] is not None and sc['Active'] == True:
-                                tmp = rytc[id][sc['ScId']][yearId][inputCapTechId][inputCapCommId]
+                            rytcValue = rytc[id][sc['ScId']][yearId][inputCapTechId][inputCapCommId]
+                            if rytcValue is not None and sc['Active'] == True:
+                                if rytcValue != self.defaultValue[id]:
+                                    defaultValueFlag = True
+                                tmp = rytcValue
                         rytcString += '{} '.format(tmp)
-                    self.f.write('{} {}{}'.format(self.commMap[inputCapCommId], rytcString, '\n'))
+                    if defaultValueFlag:
+                        if regionHeader:
+                            regionHeader = False   
+                            self.f.write('{}{}'.format('[RE1,'+ self.techMap[inputCapTechId] + ',*,*]:', '\n'))
+                            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                        self.f.write('{} {}{}'.format(self.commMap[inputCapCommId], rytcString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYTCM(self):
         rytcm = self.RYTCM(File.readFile(self.rytcmPath))
@@ -229,36 +282,52 @@ class DataFile(Osemosys):
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
             for activityTechId in self.activityTechIDs[id]:
                 for activityCommId in self.activityCommIDs[id][activityTechId]:
-                    self.f.write('{}{}'.format('[RE1,'+ self.techMap[activityTechId] + ','+ self.commMap[activityCommId] +',*,*]:', '\n'))
-                    self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                    regionHeader = True
+                    # self.f.write('{}{}'.format('[RE1,'+ self.techMap[activityTechId] + ','+ self.commMap[activityCommId] +',*,*]:', '\n'))
+                    # self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                     for mod in self.modIds:
                         rytcString = ''
+                        defaultValueFlag = False
                         for yearId in self.yearIDs:
                             for sc in self.scOrder:
-                                if rytcm[id][sc['ScId']][yearId][activityTechId][activityCommId][mod] is not None and sc['Active'] == True:
-                                    tmp = rytcm[id][sc['ScId']][yearId][activityTechId][activityCommId][mod]
+                                rytcmValue = rytcm[id][sc['ScId']][yearId][activityTechId][activityCommId][mod]
+                                if rytcmValue is not None and sc['Active'] == True:
+                                    if rytcmValue != self.defaultValue[id]:
+                                        defaultValueFlag = True
+                                    tmp = rytcmValue
                             rytcString += '{} '.format(tmp)
-                        self.f.write('{} {}{}'.format(mod, rytcString, '\n'))
+                        if defaultValueFlag:
+                            if regionHeader:
+                                regionHeader = False   
+                                self.f.write('{}{}'.format('[RE1,'+ self.techMap[activityTechId] + ','+ self.commMap[activityCommId] +',*,*]:', '\n'))
+                                self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                            self.f.write('{} {}{}'.format(mod, rytcString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYTE(self):
         ryte = self.RYTE(File.readFile(self.rytePath))
         for id, param in self.PARAM['RYTE'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
             for emissionTechId in self.emissionTechIDs[id]:
+                regionHeader = True
                 for activityEmissionId in self.activityEmissionIDs[id][emissionTechId]:
-                    self.f.write('{}{}'.format('[RE1,'+ self.techMap[emissionTechId] +  ','+ self.emiMap[activityEmissionId] + ',*,*]:', '\n'))
-                    self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                    defaultValueFlag = False
                     ryteString = ''
                     for yearId in self.yearIDs:
                         for sc in self.scOrder:
-                            if ryte[id][sc['ScId']][yearId][emissionTechId][activityEmissionId] is not None and sc['Active'] == True:
-                                tmp = ryte[id][sc['ScId']][yearId][emissionTechId][activityEmissionId]
+                            ryteValue = ryte[id][sc['ScId']][yearId][emissionTechId][activityEmissionId]
+                            if ryteValue is not None and sc['Active'] == True:
+                                if ryteValue != self.defaultValue[id]:
+                                    defaultValueFlag = True
+                                tmp = ryteValue
                         ryteString += '{} '.format(tmp)
-                    self.f.write('{} {}{}'.format(1, ryteString, '\n'))
+                    if defaultValueFlag:
+                        if regionHeader:
+                            regionHeader = False   
+                            self.f.write('{}{}'.format('[RE1,'+ self.techMap[emissionTechId] +  ','+ self.emiMap[activityEmissionId] + ',*,*]:', '\n'))
+                            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                        self.f.write('{} {}{}'.format(1, ryteString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYTEM(self):
         rytem = self.RYTEM(File.readFile(self.rytemPath))
@@ -266,54 +335,81 @@ class DataFile(Osemosys):
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
             for emissionTechId in self.emissionTechIDs[id]:
                 for activityEmissionId in self.activityEmissionIDs[id][emissionTechId]:
-                    self.f.write('{}{}'.format('[RE1,'+ self.techMap[emissionTechId] +  ','+ self.emiMap[activityEmissionId] + ',*,*]:', '\n'))
-                    self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                    regionHeader = True
+                    # self.f.write('{}{}'.format('[RE1,'+ self.techMap[emissionTechId] +  ','+ self.emiMap[activityEmissionId] + ',*,*]:', '\n'))
+                    # self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                     for mod in self.modIds:
                         ryteString = ''
+                        defaultValueFlag = False
                         for yearId in self.yearIDs:
                             for sc in self.scOrder:
-                                if rytem[id][sc['ScId']][yearId][emissionTechId][activityEmissionId][mod] is not None and sc['Active'] == True:
-                                    tmp = rytem[id][sc['ScId']][yearId][emissionTechId][activityEmissionId][mod]
+                                rytemValue = rytem[id][sc['ScId']][yearId][emissionTechId][activityEmissionId][mod]
+                                if rytemValue is not None and sc['Active'] == True:
+                                    if rytemValue != self.defaultValue[id]:
+                                        defaultValueFlag = True
+                                    tmp = rytemValue
                             ryteString += '{} '.format(tmp)
-                        self.f.write('{} {}{}'.format(mod, ryteString, '\n'))
+                        if defaultValueFlag:
+                            if regionHeader:
+                                regionHeader = False   
+                                self.f.write('{}{}'.format('[RE1,'+ self.techMap[emissionTechId] +  ','+ self.emiMap[activityEmissionId] + ',*,*]:', '\n'))
+                                self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                            self.f.write('{} {}{}'.format(mod, ryteString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYTTs(self):
         rytts = self.RYTTs(File.readFile(self.ryttsPath))
         for id, param in self.PARAM['RYTTs'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
             for techId in self.techIDs:
-                self.f.write('{} {}'.format('[RE1,'+ self.techMap[techId] +',*,*]:', '\n'))
-                self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                regionHeader = True
+                # self.f.write('{} {}'.format('[RE1,'+ self.techMap[techId] +',*,*]:', '\n'))
+                # self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                 for timesliceId in self.timesliceIDs:
                     ryttsString = ''
+                    defaultValueFlag = False
                     for yearId in self.yearIDs:
                         for sc in self.scOrder:
-                            if rytts[id][sc['ScId']][yearId][techId][timesliceId] is not None and sc['Active'] == True:
-                                tmp = rytts[id][sc['ScId']][yearId][techId][timesliceId]
+                            ryttsValue =  rytts[id][sc['ScId']][yearId][techId][timesliceId]
+                            if ryttsValue is not None and sc['Active'] == True:
+                                if ryttsValue != self.defaultValue[id]:
+                                    defaultValueFlag = True
+                                tmp = ryttsValue
                         ryttsString += '{} '.format(tmp)
-                    self.f.write('{} {}{}'.format(timesliceId, ryttsString, '\n'))
+                    if defaultValueFlag:
+                        if regionHeader:
+                            regionHeader = False   
+                            self.f.write('{} {}'.format('[RE1,'+ self.techMap[techId] +',*,*]:', '\n'))
+                            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                        self.f.write('{} {}{}'.format(timesliceId, ryttsString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def gen_RYCTs(self):
         rycts = self.RYCTs(File.readFile(self.ryctsPath))
         for id, param in self.PARAM['RYCTs'].items():
             self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
             for commId in self.commIDs:
-                self.f.write('{} {}'.format('[RE1,'+ self.commMap[commId] +',*,*]:', '\n'))
-                self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                regionHeader = True
+                # self.f.write('{} {}'.format('[RE1,'+ self.commMap[commId] +',*,*]:', '\n'))
+                # self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                 for timesliceId in self.timesliceIDs:
                     ryctsString = ''
+                    defaultValueFlag = False
                     for yearId in self.yearIDs:
                         for sc in self.scOrder:
-                            if rycts[id][sc['ScId']][yearId][commId][timesliceId] is not None and sc['Active'] == True:
-                                tmp = rycts[id][sc['ScId']][yearId][commId][timesliceId]
+                            ryctsValue = rycts[id][sc['ScId']][yearId][commId][timesliceId]
+                            if ryctsValue is not None and sc['Active'] == True:
+                                if ryctsValue != self.defaultValue[id]:
+                                    defaultValueFlag = True
+                                tmp = ryctsValue
                         ryctsString += '{} '.format(tmp)
-                    self.f.write('{} {}{}'.format(timesliceId, ryctsString, '\n'))
+                    if defaultValueFlag:
+                        if regionHeader:
+                            regionHeader = False   
+                            self.f.write('{} {}'.format('[RE1,'+ self.commMap[commId] +',*,*]:', '\n'))
+                            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                        self.f.write('{} {}{}'.format(timesliceId, ryctsString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
-        self.f.write('{}{}'.format('', '\n'))
 
     def generateDatafile( self, caserunname ):
         try:
