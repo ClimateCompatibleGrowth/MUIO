@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -29,11 +29,6 @@
 // inputmask: custom edit height in Firefox (TFS 307664, 395028)
 .wj-control.wj-inputmask {
     display: inline-flex;
-
-    
-    .wj-input {
-        width: 100%; // WJM-20593
-    }
 
     .wj-input-group {
         display: flex;

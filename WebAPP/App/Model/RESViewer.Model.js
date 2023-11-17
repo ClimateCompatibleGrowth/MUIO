@@ -1,167 +1,163 @@
 import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export class Model {
-    
-    constructor (casename, genData, RYTCMdata, techSelect= null) {
 
-        //let techsCount = genData['osy-tech'].length;
-        let years = genData['osy-years'];
-        let scenarios = genData['osy-scenarios'];
+    constructor (casename, genData, settings, techSelect=null) {
 
-        //console.log('MOMDELS Start')
-        //console.log('RYTCMdata.IAR.SC_0; ', RYTCMdata.IAR.SC_0.length)
+        let TechIdByName = DataModel.TechIdByName(genData);
+        // let CommNames = DataModel.CommName(genData); 
+        let resData = DataModel.RESData(genData);
+        let techData = DataModel.getTechData(genData);
+        let commData = DataModel.getCommData(genData);
 
-        //let ActivityTechs = DataModel.activityTechs(genData['osy-tech']);
-        let allActivityTechs = DataModel.getAllActivityTechs(genData['osy-tech'])
-        let ActivityComms = DataModel.activityComms(genData);
-        let TechNames = DataModel.TechName(genData);
-        let CommNames = DataModel.CommName(genData);
-
-        //console.log('allActivityTechs ', allActivityTechs) 
-
-        // let TechUnits = DataModel.getTechUnits(genData);
-        // let CommUnits = DataModel.getCommUnits(genData);
-
-        // console.log('TechNames ', TechNames);
-        // console.log('TechUnits ', TechUnits);
-        // console.log('CommUnits ', CommUnits);
-
-        let index = 0;CommNames
+        let index = 0;
         let labelIndex = {};
         let color = [];
         let label = [];
-
-        $.each(ActivityComms, function (IO, obj) {
-            $.each(obj, function (tech, array) {
-                if (typeof labelIndex[tech] === "undefined" ){
-                    if (techSelect == null){
-                        labelIndex[tech] = index;
-                        label.push(TechNames[tech]);
-                        index++;
-                        color.push('#3a3f51');
-                    }else{
-                        if(techSelect.includes(tech)){
-                            labelIndex[tech] = index;
-                            label.push(TechNames[tech]);
-                            index++;
-                            color.push('#3a3f51');
-                        }
-                    }
-
-                }
-                // $.each(array, function (id, objComm) {
-                //     if (typeof labelIndex[objComm.CommId] === "undefined" ){
-                //         labelIndex[objComm.CommId] = index;
-                //         label.push(CommNames[objComm.CommId])
-                //         index++;
-                //         color.push('#71a06a')
-                //     }
-                // });
-            });
-        });
-
-        //console.log('label ', label) 
-
-
         let source = [];
         let target = [];
         let value = [];
+        let colorLink = [];
         let labelLink = [];
+        let selectedTechs = [];
 
-        let techCount = label.length;
+        $.each(resData.Techs, function (id, obj) {
+            labelIndex[obj.TechId] = index;
+            if(settings.Desc){
+                label.push(obj.Tech+'-'+obj.TechDesc);
+            }
+            else{
+                label.push(obj.Tech);
+            }
+            
+            index++;
+            if(obj.TechId == 'DS'){
+                color.push('#b32d00');
+            }
+            else if(obj.TechId == 'DT'){
+                color.push('#0099cc');
+            }
+            else if (techSelect != null){
+                if(techSelect.includes(obj.TechId)){
+                    color.push('#71a06a');
+                }
+                else{
+                    color.push('#f0ad4e');
+                }
+            }
+            else{
+                color.push('#71a06a');
+            }
+            selectedTechs.push(obj.TechId);
+        });
 
-        let IAR = RYTCMdata.IAR.SC_0;
-        let OAR = RYTCMdata.OAR.SC_0;
 
-        $.each(OAR, function (idOAR, objOAR) {
-            $.each(IAR, function (idIAR, objIAR) {
-                if(objOAR.CommId == objIAR.CommId && objOAR.MoId == 1 && objIAR.MoId == 1){
-                    if (techSelect == null){
-                        source.push(labelIndex[objOAR.TechId]);
-                        target.push(labelIndex[objIAR.TechId]);
-                        // labelLink.push(CommNames[objIAR.CommId] + ' Unit:' +CommUnits[objIAR.CommId] + '/' + TechUnits[objIAR.TechId]['ActUnitId']);
-                        labelLink.push(CommNames[objIAR.CommId]);
-    
-                       // labelLink[sc][year].push(CommUnits[objData.CommId] + '/' + TechUnits[objData.TechId]['ActUnitId']);
-                        value.push(1);
-                    }else{
-                        if(techSelect.includes(objOAR.TechId) || techSelect.includes(objIAR.TechId)){
-                            source.push(labelIndex[objOAR.TechId]);
-                            target.push(labelIndex[objIAR.TechId]);
-                            // labelLink.push(CommNames[objIAR.CommId] + ' Unit:' +CommUnits[objIAR.CommId] + '/' + TechUnits[objIAR.TechId]['ActUnitId']);
-                            labelLink.push(CommNames[objIAR.CommId]);
-        
-                        // labelLink[sc][year].push(CommUnits[objData.CommId] + '/' + TechUnits[objData.TechId]['ActUnitId']);
+        //let osyScheme= ['#b3d9ff','#ecc6c6','#d1d1e0','#d1e0e0','#ffecb3','#ffb3b3','#e0e0d1','#ecc6d9','#ffd9b3','#ccffff','#f2d9e6','#d6e0f5','#ffffcc','#e5e5cc', '#f2d9d9', '#ffecb3','#ebebe0','#e6e6e6', '#ccf5ff'];
+        //let osyScheme= ['#1B2B32', '#37646F', '#a0a8ac', '#71a06a', '#B22E2F', '#cccccc', '#999966', '#cc9900'];
+        let osyScheme= ['#1B2B3270', '#37646F70', '#a0a8ac70', '#71a06a70', '#B22E2F70', '#cccccc70', '#99996670', '#cc990070']  
+
+        let colorId = 0;
+        $.each(commData, function (id, obj) {
+            if(settings.Colors){
+                if(typeof osyScheme[colorId] === 'undefined') {
+                    colorId = 0
+                }   
+                obj.Color = osyScheme[colorId];
+                colorId++;
+            }
+            else{
+                obj.Color = '#e1e3ea';
+            }
+        });
+
+        if(techSelect != null){
+            selectedTechs = techSelect;
+        }
+        let dispayedTechs = [];
+        let dispayedComms = [];
+
+        $.each(resData.Data.OAR, function (idOAR, objOAR) {
+            $.each(objOAR, function (id, CommId) {
+                $.each(resData.Data.IAR, function (idIAR, objIAR) {
+                    if(objIAR.includes(CommId)){
+                        if (techSelect == null || techSelect.includes(idOAR) || techSelect.includes(idIAR)){
+                            if (!(dispayedTechs.includes(idOAR))){
+                                dispayedTechs.push(idOAR);
+                            }
+                            if (!(dispayedTechs.includes(idIAR))){
+                                dispayedTechs.push(idIAR);
+                            }
+                            if (!(dispayedComms.includes(CommId))){
+                                dispayedComms.push(CommId);
+                            }
+                            source.push(labelIndex[idOAR]);
+                            target.push(labelIndex[idIAR]);
+                            //labelLink.push(CommNames[CommId]);
+                            if(settings.Desc){
+                                labelLink.push(commData[CommId].Comm + '-' + commData[CommId].Desc );
+                            }
+                            else{
+                                labelLink.push(commData[CommId].Comm );
+                            }
+                            colorLink.push(commData[CommId].Color);
                             value.push(1);
                         }
                     }
-
-                }
+                });
             });
         });
 
-        //('source ', source) 
+        $.each(resData.Data.IAR, function (techId, commArr) {
+            $.each(commArr, function (id, CommId) { 
+                if(resData.Singles.IAR.includes(CommId)){
+                    if (techSelect == null || techSelect.includes('DS') || techSelect.includes(techId)){
+                        source.push(labelIndex['DS']);
+                        target.push(labelIndex[techId]);
+                        //labelLink.push(CommNames[CommId]);
+                        //labelLink.push(commData[CommId].Comm + '-' + commData[CommId].Desc );
+                        if(settings.Desc){
+                            labelLink.push(commData[CommId].Comm + '-' + commData[CommId].Desc );
+                        }
+                        else{
+                            labelLink.push(commData[CommId].Comm );
+                        }
+                        colorLink.push(commData[CommId].Color);
+                        value.push(1);
+                    }
 
-        // $.each(RYTCMdata, function (IO, obj) {
-        //     $.each(obj, function (sc, array) {
-        //         if (!source[sc]){source[sc] = {};}
-        //         if (!target[sc]){target[sc] = {};}
-        //         if (!value[sc]){value[sc] = {};}
-        //         if (!labelLink[sc]){labelLink[sc] = {};}
-        //         $.each(array, function (id, objData) {
-        //             if(objData.MoId == 1){
+                }
+            }); 
+        });
 
-        //                 $.each(years, function (idY, year) {
-        //                     if (!source[sc][year]){source[sc][year] = [];}
-        //                     if (!target[sc][year]){target[sc][year] = [];}
-        //                     if (!value[sc][year]){value[sc][year] = [];}
-        //                     if (!labelLink[sc][year]){labelLink[sc][year] = [];}
-    
-        //                     if(IO == 'IAR'){
-        //                         source[sc][year].push(labelIndex[objData.CommId]);
-        //                         target[sc][year].push(labelIndex[objData.TechId]);
-        //                         labelLink[sc][year].push(CommUnits[objData.CommId] + '/' + TechUnits[objData.TechId]['ActUnitId']);
-        //                         if(objData[year] != 0 && objData[year] != null){
-        //                             value[sc][year].push(objData[year]);
-        //                             //value[sc][year].push(1);
-        //                         }else{
-        //                             value[sc][year].push(1);
-        //                         }
-                                
-        //                     }
-        //                     if(IO == 'OAR'){
-        //                         source[sc][year].push(labelIndex[objData.TechId]);
-        //                         target[sc][year].push(labelIndex[objData.CommId]);
-        //                         labelLink[sc][year].push(CommUnits[objData.CommId] + '/' + TechUnits[objData.TechId]['ActUnitId']);
-        //                         if(objData[year] != 0 && objData[year] != null){
-        //                             value[sc][year].push(objData[year]);
-        //                             //value[sc][year].push(1);
-        //                         }else{
-        //                             value[sc][year].push(1);
-        //                         }
-                                
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     });
-        // });
+        $.each(resData.Data.OAR, function (techId, commArr) {
+            $.each(commArr, function (id, CommId) {
+                if(resData.Singles.OAR.includes(CommId)){
+                    if (techSelect == null || techSelect.includes('DT') || techSelect.includes(techId)){
+                        source.push(labelIndex[techId]);
+                        target.push(labelIndex['DT']);   
+                        //labelLink.push(CommNames[CommId]);
+                        //labelLink.push(commData[CommId].Comm + '-' + commData[CommId].Desc );
+                        if(settings.Desc){
+                            labelLink.push(commData[CommId].Comm + '-' + commData[CommId].Desc );
+                        }
+                        else{
+                            labelLink.push(commData[CommId].Comm );
+                        }
+                        colorLink.push(commData[CommId].Color);
+                        value.push(1);
+                    }
+                }
+            }); 
+        });
 
-        //var label = Object.keys(labelIndex);
+        let labelCount = source.length;
+        this.selectedTechs = selectedTechs;
+        this.dispayedTechs = dispayedTechs;
+        this.dispayedComms = dispayedComms;
 
-
-        // console.log('labelIndex ', labelIndex);
-        // console.log('label ', label);
-        // console.log('color ', color);
-        // console.log('source ', source);
-        // console.log('target ', target);
-        // console.log('value ', value);
-        // console.log('labelLink ', labelLink);
-        // console.log('scenarios ', scenarios);
-
-        this.casename = casename; 
-        this.techCount = techCount;
-        this.allActivityTechs = allActivityTechs;
+        this.casename = casename;
+        this.labelCount = labelCount;
+        this.RES = resData;
 
         this.label = label;
         this.color = color;
@@ -171,8 +167,13 @@ export class Model {
         this.target = target;
         this.value = value;
         this.labelLink = labelLink;
+        this.colorLink = colorLink;
 
         this.genData = genData;
-        this.RYTCMdata = RYTCMdata;
+        this.TechIdByName = TechIdByName;
+        this.techData = techData;
+        this.commData = commData;
+        this.settings = settings;
+        this.pageId = 'RES'
     }
 }

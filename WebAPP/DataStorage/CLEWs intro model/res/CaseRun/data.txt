@@ -15,7 +15,7 @@ set UDC := CO_wfpmn ;
 #Parameters#
 ####################
 #
-param ResultsPath := "..\..\..\..\WebAPP\DataStorage\CLEWs intro model\res\CaseRun\csv" ; 
+param ResultsPath := "..\..\..\..\WebAPP\DataStorage\CLEWs intro model_copy\res\CaseRun\csv" ; 
 
 param TradeRoute  default 0 := 
 ; 

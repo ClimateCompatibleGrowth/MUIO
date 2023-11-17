@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -62,7 +62,6 @@ declare module wijmo.input {
         _delKey: boolean;
         _rptUp: wijmo._ClickRepeater;
         _rptDn: wijmo._ClickRepeater;
-        _fromKb: boolean;
         /**
          * Gets or sets the template used to instantiate {@link InputNumber} controls.
          */
@@ -217,7 +216,7 @@ declare module wijmo.input {
         private _setSelStartDigits;
         private _increment;
         protected _updateBtn(): void;
-        protected _setText(text: string, truncate?: boolean): void;
+        protected _setText(text: string): void;
         protected _keypress(e: KeyboardEvent): void;
         protected _keydown(e: KeyboardEvent): void;
         protected _input(): void;
@@ -624,7 +623,7 @@ declare module wijmo.input {
         _pathChecked: Binding;
         _html: boolean;
         _shGroups: boolean;
-        private _checkedItems;
+        _checkedItems: any[] | null;
         _itemRole: string;
         _caseSensitive: boolean;
         _vThreshold: number;
@@ -953,7 +952,6 @@ declare module wijmo.input {
         _getChild(index: number): HTMLElement;
         _getElementIndex(index: number): number;
         private _setItemChecked;
-        private _checkedItemsUpdate;
         private _cvCollectionChanged;
         private _cvCurrentChanged;
         protected _populateList(): void;
@@ -978,9 +976,6 @@ declare module wijmo.input {
         private _findNext;
         private _getCheckbox;
         _initFromSelect(hostElement: HTMLElement): void;
-        _setIsDisabled(value: boolean): void;
-        _setTabOrder(value: number): void;
-        _updateTabIndex(): void;
     }
     /**
      * Provides arguments for the {@link ListBox.formatItem} event.
@@ -1198,8 +1193,6 @@ declare module wijmo.input {
         dispose(): void;
         _applyFilter(): void;
         _updateCheckAllCheckbox(): void;
-        _setIsDisabled(value: boolean): void;
-        _setTabOrder(value: number): void;
     }
 }
 declare module wijmo.input {
@@ -1748,7 +1741,6 @@ declare module wijmo.input {
         _mthMode(): boolean;
         _rngMode(): boolean;
         private _navigate;
-        _setTabOrder(value: number): void;
     }
 }
 declare module wijmo.input {
@@ -2966,7 +2958,7 @@ declare module wijmo.input {
         protected _selectAll(): void;
         _closeOnChange(): void;
         private _tryFocus;
-        _clamp(value: Date): Date;
+        protected _clamp(value: Date): Date;
         protected _getText(): string;
         protected _commitText(noFocus?: boolean): void;
         protected _fromDateTime(value: Date): Date;
@@ -3346,7 +3338,6 @@ declare module wijmo.input {
         onLostFocus(e?: wijmo.EventArgs): void;
         onIsDroppedDownChanging(e: wijmo.CancelEventArgs): boolean;
         onIsDroppedDownChanged(e?: wijmo.EventArgs): void;
-        protected _setIsDisabled(value: boolean): void;
         protected _updateBtn(): void;
         protected _hasItems(): boolean;
         private _updateAria;
@@ -3819,8 +3810,6 @@ declare module wijmo.input {
         private _hoverEnter;
         private _hoverOver;
         private _hoverLeave;
-        _setIsDisabled(value: boolean): void;
-        _setTabOrder(value: number): void;
     }
 }
 declare module wijmo.input {

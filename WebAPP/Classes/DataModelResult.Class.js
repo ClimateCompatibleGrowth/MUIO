@@ -27,6 +27,48 @@ export class DataModelResult{
         return VarName;
     }
 
+    static getVarialblesObject(VARIABLES){
+        let vars = [];
+        $.each(VARIABLES, function (group, array) {
+            if (group != 'RT'){
+                $.each(array, function (id, obj) {
+                    //VarName[group][obj.id] = obj.value;
+                    let tmp = {};
+                    tmp.value = obj.id;
+                    tmp.name = obj.value;
+    
+                    vars.push(tmp)
+                });
+            }  
+        });
+        return vars;
+    }
+
+    static getViews(VIEWS){
+        $.each(VIEWS, function (group, array) {
+            let tmp = {};
+            tmp['osy-viewId'] = 'null';
+            tmp['osy-viewname'] = 'Default view';
+            array.unshift(tmp)
+        });
+        return VIEWS;
+    }
+
+    static getAllViews(VIEWS){
+        let views = [];
+        let tmp = {};
+        tmp['osy-viewId'] = 'null';
+        tmp['osy-viewname'] = 'Default view';
+        views.push(tmp)
+        $.each(VIEWS, function (variable, array) {
+            $.each(array, function (id, obj) {
+                obj['osy-varId'] = variable;
+                views.push(obj);
+            });
+        });
+        return views;
+    }
+
     static getTechData(genData){
         let techData = {};
         $.each(genData['osy-tech'], function (id, obj) {

@@ -1,7 +1,7 @@
 :root {
     --main-color: #3a3f51; 
     --second-color: #71a06a;
-    --second-darker-color: #567c50;
+    --second-darker-color: #4b6d46;
     --main-lighter-color: #555c77;
     --main-darker-color: #20232d;
     --main-font-color: #3a3f51;
@@ -12,18 +12,17 @@
     padding: 0px 0px;
     position: relative;
 } */
-html {
+/* html {
     overflow: scroll;
     overflow-x: hidden;
 }
 ::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
-}
-/* Optional: show position indicator in red */
+    background: transparent!important; 
+} 
+
 ::-webkit-scrollbar-thumb {
-    background: #d9d9d9 !important;
-}
+    background: var(--second-color) !important;
+} */
 
 .page-footer {
     height: 22px;
@@ -34,11 +33,21 @@ html {
     z-index: 901;
 }
 
+label.select {
+    border-radius: 0px !important;
+}
+
 /* .page-title {
     margin: 8px 10px 13px!important;
     font-size: 18px!important;
 } */
 
+.m-0{
+    margin: 0 4 0 0!important;
+}
+.p-0{
+    padding: 0 0 0 0!important;
+}
 .alert {
     margin-bottom: 2px;
 }
@@ -81,7 +90,7 @@ html {
 }
 
 .info{
-    color: #5bc0de;
+    color: #5bc0de!important;
 }
 .danger{
     color: #d9534f!important;
@@ -90,10 +99,10 @@ html {
     color: #5cb85c!important;
 }
 .warning{
-    color: #f0ad4e;
+    color: #f0ad4e!important;
 }
 .primary{
-    color: #5bc0de;
+    color: #279bbe!important;
 }
 .default{
     color: #777;
@@ -104,6 +113,17 @@ html {
 .osy-green{
     color: var(--second-darker-color)!important;
 }
+
+.osy-main-color{
+    color: var(--main-color)!important;
+}
+.osy-second-color{
+    color: var(--second-color)!important;
+}
+.osy-second-color-d{
+    color: var(--second-darker-color)!important;
+}
+
 .white{
     color: whitesmoke;
 }
@@ -516,6 +536,13 @@ svg[id^="mermaid-"] {
 }
 
 
+
+.alert-osy-second-color {
+    border-color: var(--second-color);
+    border-width: 2px;
+    color: var(--second-color);
+}
+
 .alert-success-osy {
     border-color: #3c763d;
     border-width: 2px;
@@ -566,17 +593,150 @@ svg[id^="mermaid-"] {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-user agent stylesheet
+
 li {
     display: list-item;
     text-align: -webkit-match-parent;
 }
 .dropdown-menu {
-
     min-width: 280px!important;
+}
 
+.dropdown-menu li{
+    padding: 0px !important;
+    display: list-item!important;
+    text-align: -webkit-match-parent!important;
+}
+
+.dropdown-menu li>a{
+    line-height: 1 !important;
+}
+
+.dropdown-menu li>a:hover{
+  background-color: var(--second-color)!important;
+}
+
+.project-context-res {
+    display: inline-block;
+    padding: 0px 13px 0;
+    position: relative;
 }
 
 .darkGrey{
     color: var(main-darker-color)!important;
 }
+
+
+.wj-content {
+    display: inline-block;
+    /* border: 1px solid  rgba(0,0,0,.2); */
+    border: 1px solid  var(main-darker-color);
+    border-radius: 0px!important; 
+    /* overflow: hidden; */
+}
+
+.wj-control .wj-input-group .wj-form-control {
+    min-height: 2.3em!important;
+}
+
+.wj-control {
+    color: var(--main-color);
+}
+
+.wj-state-selected, .wj-state-last-selected {
+    background: var(--second-color);
+    color: #fff;
+}
+
+.wj-vars{
+    min-width: 290px!important;
+    max-height: 730px!important;
+    height:730px!important;
+}
+.wj-labeled-input{
+    padding: 0px 0px 10px 0px!important;
+    margin:0px!important;
+}
+.wj-labeled-input>label{
+    color: #666!important;
+}
+.wj-labeled-input>label::after{
+    border: 1px solid var(--second-color)!important;
+    background-color: #fff!important;
+    color:var(--second-color)!important;
+}
+
+.wj-pivotpanel .wj-flexgrid .wj-cell input {
+    border: 1px solid var(--second-color)!important;
+    background-color: #fff!important;
+    color:var(--second-color)!important;
+}
+
+/* .wj-pivotpanel .wj-flexgrid .wj-cell label input[type=checkbox] {
+    border: 1px solid var(--second-color)!important;
+    background-color: #fff!important;
+    color:var(--second-color)!important;
+} */
+
+/* chart pivot */
+.wj-flexchart {
+    height: 470px;
+    padding: 15px 10px;
+    background: #fff;
+    border: 1px solid #e4e4e4; 
+    /* background: 0 0; */
+}
+.wj-pivotpanel {
+    height: 500px!important;
+    /* background: 0 0!important; */
+    border: 1px solid #e4e4e4; 
+    background: #fff;
+}
+
+/*wijmo solution for green check boxes*/
+.wj-pivotpanel .wj-flexgrid .wj-cell label input[type='checkbox'] {
+    border: 1px solid var(--second-color) !important;
+    background-color: #fff !important;
+    color: var(--second-color) !important;
+  }
+  
+  .wj-pivotpanel .wj-flexgrid .wj-cell label input[type='checkbox'] {
+      -webkit-appearance: none;
+      padding: 7px;
+      border-radius: 0px;
+      /* background-color: #fafafa;
+      border: 1px solid #cacece;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+      display: inline-block;*/
+      position: relative; 
+  }
+  
+  
+  /* .wj-pivotpanel .wj-flexgrid .wj-cell label input[type='checkbox']:active, .wj-pivotpanel .wj-flexgrid .wj-cell label input[type='checkbox']:checked:active {
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+  } */
+/*   
+  .wj-pivotpanel .wj-flexgrid .wj-cell label input[type='checkbox']:checked {
+      background-color: #e9ecee;
+      border: 1px solid #adb8c0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+      color: #99a1a7;
+  } */
+  
+  .wj-pivotpanel .wj-flexgrid .wj-cell label input[type='checkbox']:checked:after {
+      content: '\2714';
+      font-size: 14px;
+      position: absolute;
+      top: -2px;
+      left: 2px;
+      color: #99a1a7;
+  }
+
+  .sankey-link-colors {
+    /* fill-opacity: 0.5 !important; */
+  }
+
+  .sankey-link:hover {
+    fill-opacity: 0.8 !important;
+  }
+

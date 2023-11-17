@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -175,9 +175,8 @@ declare module wijmo.xlsx {
          * }</pre>
          *
          * @param data ArrayBuffer or base-64 string that contains the xlsx file content.
-         * @param includeStyles Indicates whether styles should be imported from xlsx file. The default value is **true**.
          */
-        load(data: string | ArrayBuffer, includeStyles?: boolean): void;
+        load(data: string | ArrayBuffer): void;
         /**
          * Loads from ArrayBuffer or base-64 string or data url asynchronously.
          * This method works with JSZip version 3.* only.
@@ -202,9 +201,8 @@ declare module wijmo.xlsx {
          *      console.log('The reason of load failure is ' + reason);
          * });
          * </pre>
-         * @param includeStyles Indicates whether styles should be imported from xlsx file. The default value is **true**.
          */
-        loadAsync(data: string | ArrayBuffer, onLoaded: (workbook: Workbook) => void, onError?: (reason?: any) => any, includeStyles?: boolean): void;
+        loadAsync(data: string | ArrayBuffer, onLoaded: (workbook: Workbook) => void, onError?: (reason?: any) => any): void;
         _serialize(): IWorkbook;
         _deserialize(workbookOM: IWorkbook): void;
         _addWorkSheet(workSheet: WorkSheet, sheetIndex?: number): void;
@@ -1899,8 +1897,8 @@ declare module wijmo.xlsx {
         private static _dxfs;
         private static _tables;
         private static _notes;
-        static load(data: string | ArrayBuffer, includeStyles?: boolean): IWorkbook;
-        static loadAsync(data: string | ArrayBuffer, includeStyles?: boolean): any;
+        static load(data: string | ArrayBuffer): IWorkbook;
+        static loadAsync(data: string | ArrayBuffer): any;
         static save(workbook: IWorkbook): any;
         static saveAsync(workbook: IWorkbook, cs: _ICancellationSource, onError?: (reason?: any) => any, onProgress?: (value: number) => void): _SyncPromise;
         private static _loadImpl;
@@ -1976,7 +1974,7 @@ declare module wijmo.xlsx {
         private static _parseBorder;
         private static _applyDefaultBorder;
         private static _resolveStyleInheritance;
-        static _parsePixelToCharWidth(pixels: any): number;
+        private static _parsePixelToCharWidth;
         private static _parseCharWidthToPixel;
         private static _parseCharCountToCharWidth;
         private static _numAlpha;

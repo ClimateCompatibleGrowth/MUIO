@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -825,17 +825,6 @@ declare module wijmo.viewer {
     }
 }
 declare module wijmo.viewer {
-    function _statusJsonReviver(k: string, v: any): any;
-    function _pageSettingsJsonReviver(k: string, v: any): any;
-    function _appendQueryString(url: string, queries: Object): string;
-    function _joinUrl(...data: (string | string[])[]): string;
-    function _joinStringUrl(data: string[]): string[];
-    function _prepareStringUrl(data: string): string[];
-}
-declare module wijmo.viewer {
-    function _parseReportExecutionInfo(json: string): _IReportExecutionInfo;
-}
-declare module wijmo.viewer {
     enum _TouchEventType {
         Start = 0,
         Move = 1,
@@ -1083,6 +1072,23 @@ declare module wijmo.viewer {
         private _globalize;
         refresh(fullUpdate?: boolean): void;
     }
+}
+declare module wijmo.viewer {
+    /**
+     * Saves the Blob object as a file.
+     * @param blob The Blob object to save.
+     * @param fileName The name with which the file is saved.
+    */
+    function _saveBlob(blob: Blob, fileName: string): void;
+    function _statusJsonReviver(k: string, v: any): any;
+    function _pageSettingsJsonReviver(k: string, v: any): any;
+    function _appendQueryString(url: string, queries: Object): string;
+    function _joinUrl(...data: (string | string[])[]): string;
+    function _joinStringUrl(data: string[]): string[];
+    function _prepareStringUrl(data: string): string[];
+}
+declare module wijmo.viewer {
+    function _parseReportExecutionInfo(json: string): _IReportExecutionInfo;
 }
 declare module wijmo.viewer {
     interface _IHttpRequest {
@@ -2103,7 +2109,6 @@ declare module wijmo.viewer {
         private _prohibitAddHistory;
         private _initialScroll;
         private _pageMoving;
-        private _devicePixelRatio;
         static _zoomValuesFormatter: (value: number) => string;
         static _zoomValuesParser: (text: string) => number;
         static _defaultZoomValues: {
@@ -2215,9 +2220,7 @@ declare module wijmo.viewer {
          */
         thresholdWidth: number;
         _innerPaginated: boolean;
-        protected _setTabOrder(value: number): void;
-        protected _setIsDisabled(value: boolean): void;
-        private _updateInnerElementsTabIndex;
+        isDisabled: boolean;
         invalidate(fullUpdate?: boolean): void;
         /**
          * Reloads the document.

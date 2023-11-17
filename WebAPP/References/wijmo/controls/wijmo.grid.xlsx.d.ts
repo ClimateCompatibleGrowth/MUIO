@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -221,8 +221,9 @@ declare module wijmo.grid.xlsx {
         private _styleCache;
         constructor(panel: wijmo.grid.GridPanel, rng: wijmo.grid.CellRange, cell: HTMLDivElement, patternCell: HTMLDivElement, cellsCache: _CellsCache, styleCache: _StyleCache, xlsxCell: wijmo.xlsx.IWorkbookCell);
         /**
-         * If {@link IFlexGridXlsxOptions.includeStyles} is set to true then contains a
+             * If IFlexGridXlsxOptions.includeCellStyles is set to true then contains a
          * reference to the element that represents the formatted grid cell; otherwise, a null value.
+         *
          */
         readonly cell: HTMLElement;
         /**
@@ -235,7 +236,7 @@ declare module wijmo.grid.xlsx {
         /**
          * Returns a cell with a custom formatting applied (formatItem event, cell templates).
          * This method is useful when export of custom formatting is disabled
-         * ({@link IFlexGridXlsxOptions.includeStyles}=false), but you need
+         * (IFlexGridXlsxOptions.includeCellStyles=false), but you need
          * to export a custom content and/or style for a certain cells.
          */
         getFormattedCell(): HTMLElement;
@@ -291,25 +292,17 @@ declare module wijmo.grid.xlsx {
      */
     interface IFlexGridXlsxOptions {
         /**
-         * Import only.
-         *
-         * Specifies the index of a sheet to import.
-         *
-         * The default value for this option is **0**.
+         * The index of the sheet in the workbook.  It indicates to import which sheet.
          */
         sheetIndex?: number;
         /**
-         * When importing, specifies the name of a sheet to import.
-         * The **sheetName** takes priority over the **sheetIndex** option if both options are set.
-         *
-         * When exporting, sets the name of the exported sheet.
-         *
-         * The default value for this option is **undefined**.
+         * The name of the sheet.
+         * It indicates to import which sheet for importing.  If the sheetIndex and sheetName are both setting, the priority of sheetName is higher than sheetIndex.
+         * It sets the name of worksheet for exporting.
          */
         sheetName?: string;
         /**
          * Export only.
-         *
          * Indicates whether the sheet is visible.
          *
          * **Caveat:** This option must be used with care. In case where you generate an
@@ -317,49 +310,26 @@ declare module wijmo.grid.xlsx {
          * The only scenario where this option can be set to false is where you use multiple
          * export actions to assemble a multi-sheet workbook using a custom code.
          *
-         * The default value for this option is **true**.
+         * The default value for this option is true.
          */
         sheetVisible?: boolean;
         /**
          * Indicates whether to include column headers as first rows in the generated xlsx file.
-         *
-         * The default value for this option is **true**.
          */
         includeColumnHeaders?: boolean;
         /**
          * Indicates whether to include column headers as first rows in the generated xlsx file.
-         *
-         * The default value for this option is **false**.
          */
         includeRowHeaders?: boolean;
         /**
-         * Export only.
-         *
          * Indicates whether cells styling should be included in the generated xlsx file.
-         * This option has been deprecated. Please use {@link IFlexGridXlsxOptions.includeStyles} option instead.
-         *
-         * The default value for this option is **true**.
          */
         includeCellStyles?: boolean;
         /**
-         * When importing, indicates whether styles should be imported from xlsx file into a {@link Workbook} instance.
-         *
-         * When exporting, indicates whether cells styling should be included in the generated xlsx file.
-         *
-         * The default value for this option is **true**.
-         */
-        includeStyles?: boolean;
-        /**
-         * Export only.
-         *
          * Index or name of the active sheet in the xlsx file.
-         *
-         * The default value for this option is **undefined** which means that the active sheet is not set.
          */
-        activeWorksheet?: string | number;
+        activeWorksheet?: any;
         /**
-         * Export only.
-         *
          * A callback to indicate which columns of FlexGrid need be included or omitted during exporting.
          *
          * For example:
@@ -374,20 +344,16 @@ declare module wijmo.grid.xlsx {
          */
         includeColumns?: (column: wijmo.grid.Column) => boolean;
         /**
-         * Export only.
-         *
          * An optional callback which is called for every exported cell and allows to perform transformations
          * of exported cell value and style.
-         * The callback is called irrespectively of the {@link IFlexGridXlsxOptions.includeStyles} option value.
+         * The callback is called irrespectively of the 'includeCellStyles' property value.
          * It has a single parameter of the {@link XlsxFormatItemEventArgs} type that
          * provides both information about the source grid cell and an {@link IWorkbookCell} object
          * defining its representation in the exported file, which can be customized in the callback.
          */
         formatItem?: (args: XlsxFormatItemEventArgs) => void;
         /**
-         * Export only.
-         *
-         * When turned on, decreases the export time by activating the cell styles caching if {@link IFlexGridXlsxOptions.includeStyles} option is enabled.
+         * When turned on, decreases the export time by activating the cell styles caching if {@link IFlexGridXlsxOptions.includeCellStyles} property is enabled.
          * In typical scenarios it allows to decrease the export time by several times.
          *
          * The combination of cell's inline style specific properties, own CSS classes and CSS classes of row containing the cell is used as
@@ -398,37 +364,11 @@ declare module wijmo.grid.xlsx {
          * Also, when pseudo classes like :first-child and :nth-child are used to style the cells and rows, the cell styles can be determined
          * incorrectly.
          *
-         * The default value for this option is **true**.
+         * The default value is <b>true</b>.
          */
         quickCellStyles?: boolean;
-        /**
-         * Export only.
-         *
-         * Defines the conversion behavior for HTML entities such as "&quot;", "&lt;", "&gt;" and "&amp;" when exporting.
-         *
-         * The default value is {@link HtmlEntityConversion.Auto}.
-         */
-        convertHtmlEntities?: HtmlEntityConversion;
     }
     type _CellsCache = HTMLDivElement[][];
-    /**
-     * Defines the conversion behavior for HTML entities such as "&quot;", "&lt;", "&gt;" and "&amp;" when exporting.
-     */
-    enum HtmlEntityConversion {
-        /**
-         * The behavior depends on the value of the column's {@link Column.isContentHtml} property to which the exported cell belongs.
-         * If the property value is **true**, the HTML entities will be converted to the characters they represent, otherwise they will be left unchanged.
-         */
-        Auto = 0,
-        /**
-         * No conversion of HTML entities is performed.
-         */
-        No = 1,
-        /**
-         * Always convert HTML entities to the characters they represent.
-         */
-        Yes = 2
-    }
 }
 declare module wijmo.grid.xlsx {
 }

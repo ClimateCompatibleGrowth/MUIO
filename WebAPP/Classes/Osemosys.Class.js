@@ -232,6 +232,7 @@ export class Osemosys {
                     resolve(result);
                 },
                 error: function(xhr, status, error) {
+                    console.log("xhr, status, error ", xhr, status, error )
                     if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
                     reject(error);
                 }
@@ -296,7 +297,7 @@ export class Osemosys {
         return fetch('../../DataStorage/'+casename+'/'+dataJson, {cache: "no-store"}) 
             .then((response) => {
                 if (response.ok) {
-                    //console.log('response ', response)
+                    //console.log('response1 ', response)
                     //console.log('data ', response.json())
                 return response;
                 }
@@ -339,12 +340,13 @@ export class Osemosys {
 
         return fetch('../../DataStorage/'+casename+'/view/' +dataJson, {cache: "no-store"})
             .then((response) => {
-            if (response.ok) {
-            return response;
-            }
-            throw new Error('No casename selecetd');
+                if (response.ok) {
+                    //console.log('response1 ', response)
+                    return response;
+                }
+                throw new Error('No casename selecetd');
             })
-            .then(response => response.json())
+            .then(response =>  response.json())
             .catch(error => null);
     }
 

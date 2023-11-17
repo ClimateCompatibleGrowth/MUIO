@@ -105,6 +105,14 @@ export class DataModel{
         return techNames;
     }
 
+    static TechIdByName(genData){
+        let techNames = {};
+        $.each(genData['osy-tech'], function (id, obj) {
+            techNames[obj.Tech] = obj.TechId;
+        });
+        return techNames;
+    }
+
     static TechGroupName(genData){
         let techGroupNames = {};
         $.each(genData['osy-techGroups'], function (id, obj) {
@@ -285,7 +293,7 @@ export class DataModel{
         return mods;
     }
 
-    /////////////////////////////////////////////////IAR OAR EAR INCR ITCR
+    /////////////////////////////////////////////////IAR OAR EAR
     static activityTechs(techs){
         let ActivityTechs = {};
         ActivityTechs['IAR'] = [];
@@ -417,6 +425,125 @@ export class DataModel{
         return ActivityComms;
     }
 
+    //////////////////////////////////////////////////RES DATA
+    static RESData(genData){
+        let techs = genData['osy-tech'];
+        let comms = genData['osy-comm'];
+
+        let RES = {};
+        RES.Techs = [];
+        RES.Data = {};
+        RES.Data['IAR'] = {};
+        RES.Data['OAR'] = {};
+
+        let arrays = {};
+        arrays['IAR'] = [];
+        arrays['OAR'] = [];
+
+        RES.Techs.push({'TechId': 'DS', 'Tech': 'DummySource', 'TechDesc': 'DummySource', '$checked': true});
+        RES.Techs.push({'TechId': 'DT', 'Tech': 'DummyTarget', 'TechDesc': 'DummyTarget', '$checked': true});
+
+        $.each(techs, function (idT, objT) {
+            //dio za tehnlogije
+            if (objT.IAR.length != 0 || objT.OAR.length != 0){
+                RES.Techs.push({'TechId': objT.TechId, 'Tech': objT.Tech, 'TechDesc': objT.Desc, '$checked': true});
+            }
+            if (objT.IAR.length != 0 ) {
+                RES.Data['IAR'][objT.TechId] = [];
+                $.each(comms, function (idC, objC) {
+                    if(objT.IAR.includes(objC.CommId)){
+                        RES.Data['IAR'][objT.TechId].push(objC.CommId);
+                        if(!arrays.IAR.includes(objC.CommId)){
+                            arrays.IAR.push(objC.CommId);
+                        }
+                    }
+                });
+            }
+            if ( objT.OAR.length != 0) {
+                RES.Data['OAR'][objT.TechId] = [];
+                $.each(comms, function (idC, objC) {
+                    if(objT.OAR.includes(objC.CommId)){  
+                        RES.Data['OAR'][objT.TechId].push(objC.CommId);
+                        if(!arrays.OAR.includes(objC.CommId)){
+                            arrays.OAR.push(objC.CommId);
+                        }
+                    }
+                });
+            }
+        });
+
+        //SINGLES
+        RES.Singles = {};
+        RES.Singles['IAR'] = [];
+        RES.Singles['OAR'] = [];
+       // RES.Data['IAR']['DS'] = [];
+        //RES.Data['OAR']['DT'] = [];
+        $.each(arrays.IAR, function (id, iarComm) {
+            if(!arrays.OAR.includes(iarComm)){
+                //RES.Data['IAR']['DS'].push(iarComm);
+                RES.Singles['IAR'].push(iarComm)
+            }
+        });
+        $.each(arrays.OAR, function (id, oarComm) {
+            if(!arrays.IAR.includes(oarComm)){
+                //RES.Data['OAR']['DT'].push(oarComm);
+                RES.Singles['OAR'].push(oarComm)
+            }
+        });
+        return RES;
+    }
+
+    // static activityCommsArray(genData){
+    //     let ActivityComms = {};
+
+    //     let techs = genData['osy-tech'];
+    //     let comms = genData['osy-comm'];
+
+    //     ActivityComms['IAR'] = [];
+    //     ActivityComms['OAR'] = [];
+    //     $.each(techs, function (idT, objT) {
+    //         if (objT.IAR.length != 0 ) {  
+    //             $.each(comms, function (idC, objC) {
+    //                 if(objT.IAR.includes(objC.CommId)){
+    //                     if(!ActivityComms.IAR.includes(objC.CommId)){
+    //                         ActivityComms['IAR'].push(objC.CommId);
+    //                     }
+                        
+    //                 }
+    //             });
+    //         }
+    //         if ( objT.OAR.length != 0) {  
+    //             $.each(comms, function (idC, objC) {
+    //                 if(objT.OAR.includes(objC.CommId)){
+    //                     if(!ActivityComms.OAR.includes(objC.CommId)){
+    //                         ActivityComms['OAR'].push(objC.CommId);
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     });
+    //     return ActivityComms;
+    // }
+
+    // static RESSingles(genData){
+    //     let activityCommsarray = DataModel.activityCommsArray(genData);
+    //     let Singles = {};
+    //     Singles['IAR'] = [];
+    //     Singles['OAR'] = [];
+    //     $.each(activityCommsarray.IAR, function (id, iarComm) {
+    //         if(!activityCommsarray.OAR.includes(iarComm)){
+    //             Singles['IAR'].push(iarComm)
+    //         }
+    //     });
+    //     $.each(activityCommsarray.OAR, function (id, oarComm) {
+    //         if(!activityCommsarray.IAR.includes(oarComm)){
+    //             Singles['OAR'].push(oarComm)
+    //         }
+    //     });
+    //     return Singles;
+    // }
+
+    //////////////////////////////////////////INCR ITCR
     static inputCapTechs(techs){
         let ActivityTechs = {};
         ActivityTechs['INCR'] = [];
@@ -525,13 +652,9 @@ export class DataModel{
         $.each(scenarios, function (i, objSc) {
             csbysc[objSc.ScenarioId] = [];
             if (caseruns.length != 0) {
-                //console.log('caseruns ', caseruns)
-                //console.log('objSc.ScenarioId ', objSc.ScenarioId)
                 $.each(caseruns, function (j, objCs) {
                     $.each(objCs.Scenarios, function (k, objCsSc) {
-                        //console.log('objCsSc ', objCsSc)
                         if(objCsSc.Active == true && objSc.ScenarioId == objCsSc.ScenarioId){
-                            //console.log('objSc.ScenarioId ', objSc.ScenarioId)
                             csbysc[objSc.ScenarioId].push(objCs.Case)
                         }
                     });
@@ -540,106 +663,7 @@ export class DataModel{
         });
         return csbysc;
     }
-    // static activityTechsComms(techs){
-    //     let ActivityTechs = {};
-    //     ActivityTechs['IAR'] = [];
-    //     ActivityTechs['OAR'] = [];
-    //     $.each(techs, function (id, obj) {
-    //         if (obj.IAR.length != 0 ) {
-    //             ActivityTechs['IAR'].push(obj)
-    //         }
-    //         if ( obj.OAR.length != 0) {
-    //             ActivityTechs['OAR'].push(obj)
-    //         }
-    //     });
-    //     return ActivityTechs;
-    // }
 
-    // static activityComms(genData){
-    //     let ActivityComms = {};
-    //     ActivityComms['IAR'] = {};
-    //     ActivityComms['OAR'] = {};
-    //     let techs = genData['osy-tech'];
-    //     let comms = genData['osy-comm'];
-
-    //     $.each(techs, function (idT, objT) {
-    //         if (objT.IAR.length != 0 ) {
-    //             ActivityComms['IAR'][objT.TechId] = [];
-    //             $.each(comms, function (idC, objC) {
-    //                 if(objT.IAR.includes(objC.CommId)){
-    //                     ActivityComms['IAR'][objT.TechId].push(objC);
-    //                 }
-    //             });
-    //         }
-    //         if ( objT.OAR.length != 0) {
-    //             ActivityComms['OAR'][objT.TechId] = [];
-    //             $.each(comms, function (idC, objC) {
-    //                 if(objT.OAR.includes(objC.CommId)){
-                      
-    //                     ActivityComms['OAR'][objT.TechId].push(objC);
-    //                 }
-    //             });
-    //         }
-    //     });
-    //     return ActivityComms;
-    // }
-
-    // static activityTechsEmis(techs){
-    //     let ActivityEmis = []
-    //     $.each(techs, function (id, obj) {
-    //         if (obj.EAR.length != 0 ) {
-    //             ActivityEmis.push(obj);
-    //         }
-    //     });
-    //     return ActivityEmis;
-    // }
-
-    // static activityEmis(genData){
-    //     let ActivityEmis = {};
-    //     ActivityEmis = {};
-    //     let techs = genData['osy-tech'];
-    //     let emis = genData['osy-emis'];
-
-    //     $.each(techs, function (idT, objT) {
-    //         if (objT.EAR.length != 0 ) {
-    //             ActivityEmis[objT.TechId] = [];
-    //             $.each(emis, function (idC, objE) {
-    //                 if(objT.EAR.includes(objE.EmisId)){
-    //                     ActivityEmis[objT.TechId].push(objE);
-    //                 }
-    //             });
-    //         }
-    //     });
-    //     return ActivityEmis;
-    // }
-
-    // static constraintsMC(constraints){
-    //     let constraintsMC = []
-    //     $.each(constraints, function (id, obj) {
-    //         if (obj.CM.length != 0 ) {
-    //             constraintsMC.push(obj);
-    //         }
-    //     });
-    //     return constraintsMC;
-    // }
-
-    // static constraintTechs(genData){
-    //     let ConstraintTechs = {};
-    //     let cons = genData['osy-constraints'];
-    //     let techs = genData['osy-tech'];
-
-    //     $.each(cons, function (id, con) {
-    //         if (con.CM.length != 0 ) {
-    //             ConstraintTechs[con.ConId] = [];
-    //             $.each(techs, function (idT, obj) {
-    //                 if(con.CM.includes(obj.TechId)){
-    //                     ConstraintTechs[con.ConId].push(obj);
-    //                 }
-    //             });
-    //         }
-    //     });
-    //     return ConstraintTechs;
-    // }
     ////////////////////////////////////////////////////////JSON data structures
     static R(Rdata){
         let R = {};

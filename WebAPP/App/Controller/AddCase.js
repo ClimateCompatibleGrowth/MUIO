@@ -35,12 +35,36 @@ export default class AddCase {
                 Message.danger(error);
             });
     }
+    static refreshPage(casename) {
+        Base.setSession(casename)
+            .then(response => {
+                Message.clearMessages();
+                const promise = [];
+                let genData = Osemosys.getData(casename, 'genData.json');
+                promise.push(genData);
+                const resData = Osemosys.getResultData(casename, 'resData.json');
+                promise.push(resData);
+                const PARAMETERS = Osemosys.getParamFile();
+                promise.push(PARAMETERS);
+                return Promise.all(promise);
+            })
+            .then(data => {
+                let [genData, resData, PARAMETERS] = data;
+                let model = new Model(genData, resData, PARAMETERS, "AddCase");
+                AddCase.initPage(model);
+            })
+            .catch(error => {
+                console.log(' error ', error)
+                Message.bigBoxDanger(error);
+            })
+    }
 
     static initPage(model) {
         Message.clearMessages();
         //$('a[href="#tabComms"]').click();
         //Navbar.initPage(model.casename, model.pageId);
-
+console.log('model ', model)
+        
         Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);
 
@@ -66,28 +90,7 @@ export default class AddCase {
         this.initEvents(model);
     }
 
-    static refreshPage(casename) {
-        Base.setSession(casename)
-            .then(response => {
-                Message.clearMessages();
-                const promise = [];
-                let genData = Osemosys.getData(casename, 'genData.json');
-                promise.push(genData);
-                const resData = Osemosys.getResultData(casename, 'resData.json');
-                promise.push(resData);
-                const PARAMETERS = Osemosys.getParamFile();
-                promise.push(PARAMETERS);
-                return Promise.all(promise);
-            })
-            .then(data => {
-                let [genData, resData, PARAMETERS] = data;
-                let model = new Model(genData, resData, PARAMETERS, "AddCase");
-                AddCase.initPage(model);
-            })
-            .catch(error => {
-                Message.bigBoxDanger(error);
-            })
-    }
+
 
     static initEvents(model) {
 
@@ -171,11 +174,11 @@ export default class AddCase {
         $("#osy-new").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            //$( "#wid-id-8" ).tabs({ active: 'tabComms' });
-            //$("#wid-id-8").tabs("option", "active", 0);
             AddCase.refreshPage(null);
             //Sidebar.Load(null, null)
             Sidebar.Reload(null);
+
+            $divTech.jqxGrid({ pagesizeoptions:['10', '25', '50', '100', '250', '500', '750', '1000']}); 
             $("#osy-new").hide();
             $('#osy-update').hide();
             $('#osy-save').show();
@@ -342,7 +345,6 @@ export default class AddCase {
                 model.techNames[techId] = value;
             }
         });
-
 
         $("#osy-addTechGroup").off('click');
         $("#osy-addTechGroup").on("click", function (event) {

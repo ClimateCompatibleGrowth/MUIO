@@ -126,6 +126,19 @@ export const DEF = {
             </article>
         `
     },
+    RES: {
+        title: `Reference Energy System`,
+        definition:
+            `
+        <blockquote>
+            <p>
+            The Reference Energy System (RES) is a network representation of all of the technical activities required to supply various forms of energy to end-use activities.
+            </p>
+            <small>Acknowledgements <cite title="Source Title">https://plotly.com/</cite></small>
+        </blockquote>
+
+        `
+    },
     R: {
         DR: {
             title: `Region parameters`,

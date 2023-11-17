@@ -43,7 +43,7 @@ export default class Pivot {
                 let model = new Model(casename, genData, resData, VARIABLES, DATA, VIEWS);
                 //console.log('model ', model)
                 this.initPage(model);
-                this.initEvents(model);
+                // this.initEvents(model);
             })
             .catch(error => {
                 if (error.status_code == 'CaseError') {
@@ -77,6 +77,7 @@ export default class Pivot {
                 
                 let [casename, genData, resData, VARIABLES, VIEWS, DATA] = data;
                 let model = new Model(casename, genData, resData, VARIABLES, DATA, VIEWS);
+                model.refreshPage = true;
                 this.initPage(model);
                 this.initEvents(model);
             })
@@ -95,33 +96,115 @@ export default class Pivot {
     }
 
     static initPage(model) {
-
         Message.clearMessages();
-        //Navbar.initPage(model.casename);
-        Html.title(model.casename, model.VARNAMES[model.group][model.param], 'pivot');
-        Html.ddlParamsAll(model.VARIABLES, model.param);
-        Html.ddlViews(model.VIEWS[model.param]);
+        Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group);
+
+        console.log('model ', model)
+        // add Grid-based layout for the PivotPanel
+        // wijmo.olap.PivotPanel.controlTemplate = 
+        // `<div>  
+        //     <div class="field-list-label">  
+        //         <label wj-part="g-flds"></label>  
+        //     </div>  
+        //     <div class="field-list pad">  
+        //         <div wj-part="d-fields"></div>  
+        //     </div>  
+        //     <div class="drag-areas-label">  
+        //         <label wj-part="g-drag"></label>  
+        //     </div>  
+        //     <table>
+        //         <tbody>
+        //             <tr>
+        //                 <td width="50%">
+        //                     <div class="filter-list pad">  
+        //                     <label>  
+        //                         <span class="wj-glyph wj-glyph-filter"></span>   
+        //                         <span wj-part="g-flt"></span>  
+        //                     </label>  
+        //                     <div wj-part="d-filters"></div>  
+        //                     </div>  
+        //                 </td>
+        //                 <td width="50%" style="border-left-style: solid;">
+        //                     <div class="column-list pad bdr-left">  
+        //                         <label>  
+        //                             <span class="wj-glyph">⫴</span>   
+        //                             <span wj-part="g-cols"></span>  
+        //                         </label>  
+        //                         <div wj-part="d-cols"></div>  
+        //                     </div> 
+        //                 </td>
+        //             </tr>
+        //             <tr style="border-top-style: solid;">
+        //                 <td width="50%">
+        //                     <div class="row-list pad bdr-top">  
+        //                         <label>  
+        //                             <span class="wj-glyph">≡</span>   
+        //                             <span wj-part="g-rows"></span>  
+        //                         </label>  
+        //                         <div wj-part="d-rows"></div>  
+        //                     </div>  
+        //                 </td>
+        //                 <td width="50%" style="border-left-style: solid;">
+        //                     <div class="values-list pad bdr-left bdr-top">  
+        //                         <label>  
+        //                             <span class="wj-glyph">Σ</span>   
+        //                             <span wj-part="g-vals"></span>  
+        //                         </label>  
+        //                         <div wj-part="d-vals"></div>  
+        //                     </div> 
+        //                 </td>
+        //             </tr> 
+        //         </tbody>
+        //     </table>
+        //     <div wj-part="d-prog" class="progress-bar"></div>  
+        //     <div class="control-area" style="display:none">  
+        //         <label>  
+        //             <input wj-part="chk-defer" type="checkbox">   
+        //             <span wj-part="g-defer">Defer Updates</span>  
+        //         </label>  
+        //         <button wj-part="btn-update" class="wj-btn wj-state-disabled" type="button" disabled>
+        //             Update  
+        //         </button>  
+        //     </div>  
+        // </div>`;
+
+        if(model.refreshPage){
+            
+            wijmo.olap.PivotPanel.disposeAll('#pivotPanel');
+            wijmo.olap.PivotGrid.disposeAll('#pivotGrid');
+            wijmo.olap.PivotChart.disposeAll('#pivotChart');
+            wijmo.input.ComboBox.disposeAll('#cmbChartType');
+            wijmo.input.ComboBox.disposeAll('#cmbStackedChart');
+            wijmo.input.ComboBox.disposeAll('#cmbViews');
+            wijmo.input.AutoComplete.disposeAll('#cmbParams');
+        }
 
         
+
+
+
         let app = {};
-        app.chartTypes = [
-            { name: 'Column', value: wijmo.olap.PivotChartType.Column },
-            { name: 'Bar', value: wijmo.olap.PivotChartType.Bar },
-            { name: 'Scatter', value: wijmo.olap.PivotChartType.Scatter },
-            { name: 'Line', value: wijmo.olap.PivotChartType.Line },
-            { name: 'Area', value: wijmo.olap.PivotChartType.Area },
-            { name: 'Pie', value: wijmo.olap.PivotChartType.Pie },
-        ];
+        app.engine = new wijmo.olap.PivotEngine({
+            itemsSource: model.pivotData,
+            rowFields: ['Case', 'Year'],
+            valueFields: ['Value'],
+            columnFields: ['Tech'],
+            showRowTotals: 'None',
+            showColumnTotals:'None'
+        });
 
-        app.panel = new wijmo.olap.PivotPanel('#pivotPanel');
 
-        var ng = app.panel.engine;
+        //wijmo.olap.PivotEngine.invalidate()
+        app.engine.fields.getField('Unit').isContentHtml = true;
+        model.DEFAULTVIEW = app.engine.viewDefinition;
 
+        app.panel = new wijmo.olap.PivotPanel('#pivotPanel',{
+            itemsSource: app.engine,
+        });
 
         //New fieled formats
-        let _oldEditField = ng.editField;
-
-        ng.editField = function(fld) {
+        let _oldEditField = app.engine.editField;
+        app.engine.editField = function(fld) {
             _oldEditField.call(this, fld);
             if(fld.dataType !== wijmo.DataType.Number) {
                 return;
@@ -145,175 +228,81 @@ export default class Pivot {
         ///////////end field formats
 
         app.pivotGrid = new wijmo.olap.PivotGrid('#pivotGrid', {
-            itemsSource: app.panel,
+            itemsSource: app.engine,
             collapsibleSubtotals: true,
-            showSelectedHeaders: 'All',
-            
+            showSelectedHeaders: 'All',    
         });
 
         app.pivotChart = new wijmo.olap.PivotChart('#pivotChart', {
             //header: 'Country GDP',
-            itemsSource: app.panel,
-            
+            itemsSource: app.engine,
             showTitle: false,
             legendPosition: 4,
-            // showLegend: 'Auto',
-            // 
-            // stacking: 0,        
-
-            //rotated: false
-            //palette: wijmo.olap.Palettes['dark']
-   
+            stacking: "Stacked"
         });
 
         //app.pivotChart.dataLabel.position = 'Top';
+        // app.pivotChart.flexChart.palette = wijmo.chart.Palettes.midnight
+        app.pivotChart.flexChart.palette = model.ColorSchemes.osyScheme;
 
-        //app.pivotChart.palette = wijmo.olap.Palettes.
+        app.cmbParams = new wijmo.input.AutoComplete('#cmbParams', {
+            itemsSource: model.VARIABLEOBJECT,
+            dropDownCssClass: 'wj-vars',
+            displayMemberPath: 'name',
+            selectedValuePath: 'value',
+            selectedValue: 'ANC',
+            selectedIndexChanged: function (s, e) {  
+                if(s.selectedValue != null && model.TriggerUpdate){
+                    Pivot.updateParam(s.selectedValue, app, model);
+                }     
+                
+            }
+        });
 
         app.cmbChartType = new wijmo.input.ComboBox('#cmbChartType', {
-            itemsSource: app.chartTypes,
+            itemsSource: model.ChartTypes,
             displayMemberPath: 'name',
             selectedValuePath: 'value',
             selectedIndexChanged: function (s, e) {      
                 if(s.selectedValue == 1){
                     app.pivotChart.rotated = 1;
-                    //app.pivotChart.stacking= 1;
                 }
                 app.pivotChart.chartType = s.selectedValue;
-                app.pivotChart.palette = wijmo.chart.Palettes.dark;
             }
         });
 
         app.cmbStackedChart  = new wijmo.input.ComboBox('#cmbStackedChart', {
-            itemsSource: 'None,Stacked,Stacked100pc'.split(','),
+            itemsSource: 'Stacked,Stacked100pc,None'.split(','),
             selectedIndexChanged: function(s, e) {
+                console.log(s, e)
                 app.pivotChart.stacking = s.text;
             }
         });
 
-        //legend
-            // allow users to customize the chart legend
-        app.cmbShowLegend =  new wijmo.input.ComboBox('#showLegend', {
-            textChanged: function (s, e) {
-                //app.pivotChart.showLegend = s.text;
-                if(s.text == 'Show legend'){
-                    app.pivotChart.showLegend = 'Auto';
-                }else{
-                    app.pivotChart.showLegend = 'Never';
-                }
-            },
-            // itemsSource: 'Auto,Always,Never'.split(',')
-            itemsSource: 'Show legend, Hide legend'.split(',')
+        app.cmbViews = new wijmo.input.ComboBox('#cmbViews', {
+            itemsSource: model.VIEWS,
+            displayMemberPath: 'osy-viewname',
+            selectedValuePath: 'osy-viewId',
+            selectedIndexChanged: function (s, e) {   
+                if(model.TriggerUpdate){
+                    Pivot.updateView(s.selectedValue, app, model)
+                }   
+            }
         });
 
-        ng.itemsSource = model.pivotData
-        // ng.palette = app.pivotChart.Pallettes.dark;
-        //ng.rowFields.push('Case', 'Tech', 'Comm', 'MoId', 'Ts');
+        this.initEvents(model, app);
+    }
 
-    
-        // ng.fields.push( { binding: 'Case', header: 'Case'});
-        // ng.fields.push( { binding: 'Tech', header: 'Tech' });
-        // ng.fields.push( { binding: 'Comm', header: 'Comm' });
-        // ng.fields.push( { binding: 'Emi', header: 'Emi' });
-        // ng.fields.push( { binding: 'MoId', header: 'MoId' });
-        // ng.fields.push( { binding: 'Value', header: 'Value', format: 'n4' });
+    static initEvents(model, app) {
 
-        ng.columnFields.push('Case', 'Tech');
-        ng.rowFields.push('Year');
-        ng.valueFields.push( 'Value');
-        ng.showRowTotals = 'None';
-        ng.showColumnTotals = 'None';
-
-        ng.fields.getField('Unit').isContentHtml = true;
-
-        model.DEFAULTVIEW = ng.viewDefinition;
-
-        // toggle showRowTotals
-        document.getElementById('showRowTotals').addEventListener('click', function (e) {
-            ng.showRowTotals = e.target.checked ?
-                wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
-        });
-
-        document.getElementById('showColumnTotals').addEventListener('click', function (e) {
-            ng.showColumnTotals = e.target.checked ?
-                wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
-        });
-
-
-
-        $("#osy-params").off('change');
-        $('#osy-params').on('change', function () {
-            Message.clearMessages();
-            model.group = model.VARGROUPS[this.value]['group'];
-            model.param = this.value;
-
-                        //fetch('../../DataStorage/'+model.casename+'/view/' + model.group+'.json', {cache: "no-store"})
-
-            Osemosys.getResultData(model.casename, model.group+'.json')
-            .then(DATA => {
-
-
-                console.log(model.param, model.VARNAMES[model.group][model.param])
-                console.log('Data ', DATA)
-
-                if (model.param in DATA){
-                    Html.title(model.casename, model.VARNAMES[model.group][model.param], 'pivot');
-                    Html.ddlViews(model.VIEWS[model.param]);
-                    let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
-                    model.pivotData = pivotData;
-    
-                    ng.itemsSource = model.pivotData
-                    //remove title chart
-                    app.pivotChart.header = '';
-    
-                    if (model.param == 'D' || model.param == 'T'){
-                        ng.columnFields.push('Case', 'Comm');
-                        ng.rowFields.push('Year');
-                        ng.valueFields.push('Value');
-                    }
-                    else if(model.param == 'AE' ){
-                        ng.columnFields.push('Case', 'Emi');
-                        ng.rowFields.push('Year');
-                        ng.valueFields.push('Value');
-                    }
-                    else{
-                        ng.columnFields.push('Case', 'Tech');
-                        ng.rowFields.push('Year');
-                        ng.valueFields.push('Value');
-                    }
-                }
-                else{
-                    Message.dangerOsy("Results do not contain values for variable <b>"+model.VARNAMES[model.group][model.param] + "</b> please rerun the model.")
-                }
-
-            })
-            .catch(error => {
-                Message.danger(error.message);
-            });            
-        });
-
-            // NOTE: requires jszip, wijmo.xlsx, and wijmo.grid.xlsx
-        $("#xlsExport").off('click');
-        $('#xlsExport').on('click', function () {
-            // create book with current view
-            // let book = wjGridXlsx.FlexGridXlsxConverter.saveAsync(app.pivotGrid, {
-            //     includeColumnHeaders: true,
-            //     includeRowHeaders: true
-            // });
-            var book = wijmo.grid.xlsx.FlexGridXlsxConverter.save(app.pivotGrid, {
-                includeColumnHeaders: true,
-                includeRowHeaders: true
-            });
-            book.sheets[0].name = 'PivotGrid';
-            // save the book
-            // book.saveAsync('PivotGrid.xlsx');
-            book.save('PivotGrid.xlsx');
-        });
-
-            // export the chart to an image
-        $("#pngExport").off('click');
-        $('#pngExport').on('click', function () {
-            app.pivotChart.saveImageToFile('FlexChart.png');
+        $("#casePicker").off('click');
+        $("#casePicker").on('click', '.selectCS', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var casename = $(this).attr('data-ps');
+            Pivot.refreshPage(casename);
+            Html.updateCasePicker(casename);
+            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
         });
 
         $("#createView").jqxValidator({
@@ -348,52 +337,46 @@ export default class Pivot {
             let param = model.param;
             let viewId = DefaultObj.getId('VIEW');
 
+            app.engine.fields.getField('Unit').isContentHtml = true;
+
             let POSTDATA = {
                 "osy-viewId": viewId,
                 "osy-viewname": viewname,
                 "osy-viewdesc": desc,
-                "osy-viewdef": ng.viewDefinition
+                "osy-viewdef": app.engine.viewDefinition
             }
 
             Osemosys.saveView(model.casename, POSTDATA, param)
-                .then(response => {
-
-                    Message.clearMessages();
-                    Message.bigBoxSuccess('Model message', response.message, 3000);
-                    model.VIEWS[model.param].push(POSTDATA);
-                    Html.ddlViews(model.VIEWS[model.param]);
-                    $('#createView').modal('toggle');
-                
-                })
-                .catch(error => {
-                    Message.bigBoxDanger('Error message', error, null);
-                })
+            .then(response => {
+                Message.clearMessages();
+                Message.bigBoxSuccess('Model message', response.message, 3000);
+                model.VIEWS[model.param].push(POSTDATA);
+                Html.ddlViews(model.VIEWS[model.param]);
+                $('#createView').modal('toggle');
+            })
+            .catch(error => {
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
         $("#deleteView").off('click');
         $("#deleteView").on('click', function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            //console.log('model.VIEW ', model.VIEW)
-            //update model
-            if ( model.VIEW != 'null' &&   model.VIEW != null){
+            if ( model.VIEW != 'null' &&  model.VIEW != null){
                 $.each(model.VIEWS[model.param], function (id, obj) {
-                    //console.log('obj ', obj)
                     if(obj['osy-viewId'] == model.VIEW){
                         model.VIEWS[model.param].splice(id, 1)
                         return false;
                     }
                 });
                 Html.ddlViews(model.VIEWS[model.param]);
-           
-
-            Osemosys.updateViews(model.casename, model.VIEWS[model.param], model.param)
+                Osemosys.updateViews(model.casename, model.VIEWS[model.param], model.param)
                 .then(response => {
-                    ng.viewDefinition = model.DEFAULTVIEW;
+                    app.engine.viewDefinition = model.DEFAULTVIEW;
                     app.pivotChart.header = '';
                     Message.clearMessages();
-                    Message.smallBoxInfo('Model message', response.message, 3000);
-                
+                    Message.smallBoxInfo('Model message', response.message, 3000);   
                 })
                 .catch(error => {
                     Message.bigBoxDanger('Error message', error, null);
@@ -403,182 +386,39 @@ export default class Pivot {
             }
         });
 
-        // $("#loadView").off('click');
-        // $("#loadView").on('click', function (event) {
-        //     if ( model.VIEW == 'null'){
-        //         ng.viewDefinition = model.DEFAULTVIEW;
-        //         app.pivotChart.header = '';
-        //     }else{
-        //         $.each(model.VIEWS[model.param], function (id, obj) {
-        //             if(obj['osy-viewId'] == model.VIEW){
-        //                 ng.viewDefinition = obj['osy-viewdef'];
-        //                 app.pivotChart.header = obj['osy-viewname']
-        //             }
-        //         });
-        //     }
-
-        // });
-
-        $("#osy-views").off('change');
-        $('#osy-views').on('change', function () {
-            model.VIEW = this.value;
-            if ( model.VIEW == 'null'){
-                ng.viewDefinition = model.DEFAULTVIEW;
-                app.pivotChart.header = '';
-            }else{
-                $.each(model.VIEWS[model.param], function (id, obj) {
-                    if(obj['osy-viewId'] == model.VIEW){
-                        ng.viewDefinition = obj['osy-viewdef'];
-                        app.pivotChart.header = obj['osy-viewname']
-                        //break;
-                    }
-                });
-            }
+        // NOTE: requires jszip, wijmo.xlsx, and wijmo.grid.xlsx
+        $("#xlsExport").off('click');
+        $('#xlsExport').on('click', function () {
+            var book = wijmo.grid.xlsx.FlexGridXlsxConverter.save(app.pivotGrid, {
+                includeColumnHeaders: true,
+                includeRowHeaders: true
+            });
+            book.sheets[0].name = 'PivotGrid';
+            book.save('PivotGrid.xlsx');
         });
-    }
-
-    static initEvents(model) {
-
-        // let $divGrid = $('#osy-gridPivot');
-        // let $divChart = $('#osy-chartPivot');
-
-        $("#casePicker").off('click');
-        $("#casePicker").on('click', '.selectCS', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var casename = $(this).attr('data-ps');
-            Pivot.refreshPage(casename);
-            Html.updateCasePicker(casename);
-            Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
+        
+        $("#pngExport").off('click');
+        $('#pngExport').on('click', function () {
+            app.pivotChart.saveImageToFile('FlexChart.png');
         });
 
-        $("#btnGridParam").off('click');
-        $("#btnGridParam").on('click', function (e) {
-            e.preventDefault();
-            var myPivotGridRows = $('#osy-pivotGrid').jqxPivotGrid('getPivotRows');
-            var myPivotGridCells = $('#osy-pivotGrid').jqxPivotGrid('getPivotCells');
+        $("#showRowTotals").off('click');
+        $("#showRowTotals").click(function (e) {
+            app.engine.showRowTotals = e.target.checked ?
+                wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
+        });
+        
+        $("#showColumnTotals").off('click');
+        $("#showColumnTotals").click(function (e) {
+            app.engine.showColumnTotals = e.target.checked ?
+                wijmo.olap.ShowTotals.Subtotals : wijmo.olap.ShowTotals.None;
         });
 
-
-
-        //////////////////////////////////////////////////////////
-        // $("#osy-ryt").off('change');
-        // $('#osy-ryt').on('change', function () {
-        //     Message.clearMessages();
-        //     //console.log('model.RYTCdata ',model.RYTCdata[this.value])
-        //     if (model.RYTCdata[this.value][model.case].length === 0) {
-        //         MessageSelect.activity(RYTC.refreshPage.bind(Pivot), model.casename);
-        //         Message.warning(`There is no data definded for ${model.VARNAMES[this.value]} for model ${model.casename}!`);
-        //     } else {
-        //         Html.title(model.casename, model.VARNAMES[this.value], GROUPNAMES[model.group]);
-        //         model.param = this.value;
-
-        //         // model.srcGrid.root = this.value;
-        //         model.srcGrid.localdata = model.gridData[this.value][model.case];
-        //         $divGrid.jqxGrid('updatebounddata');
-                
-        //         Html.ddlTechsArray(model.techs[model.param][model.case])
-
-        //         var configChart = $divChart.jqxChart('getInstance');
-        //         var tech = $("#osy-techs").val();
-        //         // var comm = $("#osy-comms").val();
-        //         configChart.source.records = model.chartData[this.value][model.case][tech];
-        //         configChart.update();
-        //         // /$('#definition').html(`${DEF[model.group][model.param].definition}`);
-        //     }
-        // });
-
-        // $('#osy-cases').on('change', function () {
-        //     model.case = this.value;
-        //     model.srcGrid.localdata = model.gridData[model.param][this.value];
-        //     $divGrid.jqxGrid('updatebounddata');
-
-        //     var tech = $("#osy-techs").val();
-        //     var configChart = $divChart.jqxChart('getInstance');
-        //     //console.log(model.param,this.value,model.tech)
-        //     configChart.source.records = model.chartData[model.param][this.value][model.tech];
-        //     configChart.update();
-        // });
-
-        // $("#osy-techs").off('change');
-        // $('#osy-techs').on('change', function () {
-        //     model.tech = this.value;
-        //     var configChart = $divChart.jqxChart('getInstance');
-        //     configChart.source.records = model.chartData[model.param][model.case][this.value];
-        //     configChart.update();
-        // });
-
-        // $(".switchChart").off('click');
-        // $(".switchChart").on('click', function (e) {
-        //     e.preventDefault();
-        //     var configChart = $divChart.jqxChart('getInstance');
-        //     var chartType = $(this).attr('data-chartType');
-        //     configChart.seriesGroups[0].type = chartType;
-        //     if (chartType == 'column') {
-        //         configChart.seriesGroups[0].labels.angle = 90;
-        //     } else {
-        //         configChart.seriesGroups[0].labels.angle = 0;
-        //     }
-        //     configChart.update();
-        //     // $('button a').switchClass( "green", "grey" );
-        //     // $('#'+chartType).switchClass( "grey", "green" );
-        // });
-
-        // $(".toggleLabels").off('click');
-        // $(".toggleLabels").on('click', function (e) {
-        //     e.preventDefault();
-        //     var configChart = $divChart.jqxChart('getInstance');
-        //     if (configChart.seriesGroups[0].type == 'column') {
-        //         configChart.seriesGroups[0].labels.angle = 90;
-        //     } else {
-        //         configChart.seriesGroups[0].labels.angle = 0;
-        //     }
-        //     configChart.seriesGroups[0].labels.visible = !configChart.seriesGroups[0].labels.visible;
-        //     configChart.update();
-        // });
-
-        // $("#exportPng").off('click');
-        // $("#exportPng").on('click', function () {
-        //     $("#osy-chartPivot").jqxChart('saveAsPNG', 'Pivot.png', 'https://www.jqwidgets.com/export_server/export.php');
-        // });
-
-        // let res = true;
-        // $("#resizeColumns").off('click');
-        // $("#resizeColumns").on('click', function () {
-        //     if (res) {
-        //         // $divGrid.jqxGrid('autoresizecolumn', 'Sc');
-        //         $divGrid.jqxGrid('autoresizecolumn', 'Tech');
-        //         $divGrid.jqxGrid('autoresizecolumn', 'Comm');
-        //     }
-        //     else {
-        //         $divGrid.jqxGrid('autoresizecolumns');
-        //     }
-        //     res = !res;
-        // });
-
-        // $("#xlsAll").off('click');
-        // $("#xlsAll").on('click', function (e) {
-        //     e.preventDefault();
-        //     $("#osy-gridPivot").jqxGrid('exportdata', 'xls', 'Pivot');
-        // });
-
-        // $("#decUp").off('click');
-        // $("#decUp").on('click', function (e) {
-        //     e.preventDefault();
-        //     e.stopImmediatePropagation();
-        //     model.d++;
-        //     model.decimal = 'd' + parseInt(model.d);
-        //     $divGrid.jqxGrid('refresh');
-        // });
-
-        // $("#decDown").off('click');
-        // $("#decDown").on('click', function (e) {
-        //     e.preventDefault();
-        //     e.stopImmediatePropagation();
-        //     model.d--;
-        //     model.decimal = 'd' + parseInt(model.d);
-        //     $divGrid.jqxGrid('refresh');
-        // });
+        $("#hideLegend").off('click');
+        $("#hideLegend").click(function (e) {
+            app.pivotChart.showLegend = e.target.checked ?
+                'Never' : 'Auto';
+        });
 
         $("#showLog").off('click');
         $("#showLog").click(function (e) {
@@ -586,5 +426,90 @@ export default class Pivot {
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
+    }
+
+    static updateParam(param, app, model, view=null){
+        Message.clearMessages();
+        model.group = model.VARGROUPS[param]['group'];
+        model.param = param;
+
+        Osemosys.getResultData(model.casename, model.group+'.json')
+        .then(DATA => {
+            if (model.param in DATA){
+                // Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group);
+                let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
+                model.pivotData = pivotData;
+                app.engine.itemsSource = model.pivotData;
+                if (model.param == 'D' || model.param == 'T'){
+                    app.engine.columnFields.push( 'Comm');
+                    app.engine.rowFields.push('Case','Year');
+                    app.engine.valueFields.push('Value');
+                }
+                else if(model.param == 'AE' ){
+                    app.engine.columnFields.push('Emi');
+                    app.engine.rowFields.push('Case','Year');
+                    app.engine.valueFields.push('Value');
+                }
+                else{
+                    app.engine.columnFields.push('Tech');
+                    app.engine.rowFields.push('Case', 'Year');
+                    app.engine.valueFields.push('Value');
+                }
+
+                //update defaul model
+                model.DEFAULTVIEW = JSON.parse(JSON.stringify(app.engine.viewDefinition));
+                //model.DEFAULTVIEW = app.engine.viewDefinition;
+                app.pivotChart.header = ''; 
+
+                if(view != null){
+                    Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' - '+view['osy-viewname'] +' view');
+                    app.engine.viewDefinition = view['osy-viewdef'];
+                    app.pivotChart.header = view['osy-viewname'];
+                }
+                else{
+                    console.log('cmbViews.selectedValue', app.cmbViews.selectedValue)
+                    model.TriggerUpdate = false;
+                    app.cmbViews.selectedValue = 'null';
+                    model.VIEW = 'null';
+                    model.TriggerUpdate = true;
+                    Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' - Default view');
+                }
+                app.engine.fields.getField('Unit').isContentHtml = true;
+            }
+            else{
+                Message.dangerOsy("Results do not contain values for variable <b>"+model.VARNAMES[model.group][model.param] + "</b> please rerun the model.")
+            }
+
+        })
+        .catch(error => {
+            Message.danger(error.message);
+        }); 
+    }
+
+    static updateView(viewId, app, model){
+        model.VIEW = viewId;
+        if(model.VIEW == 'null'){
+            app.engine.viewDefinition = model.DEFAULTVIEW;
+            app.pivotChart.header = '';
+            Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' Default view');
+        }
+        else{
+            $.each(model.VIEWS, function (id, obj) {
+                if(obj['osy-viewId'] == model.VIEW){
+                    let param = obj['osy-varId'];
+                    if(param != model.param){
+                        model.TriggerUpdate = false;
+                        app.cmbParams.selectedValue = param;
+                        model.TriggerUpdate = true;
+                        Pivot.updateParam(param, app, model, obj);
+                    }
+                    else{
+                        app.engine.viewDefinition = obj['osy-viewdef'];
+                        app.pivotChart.header = obj['osy-viewname'];
+                        Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' - '+obj['osy-viewname'] +' view');
+                    }          
+                }
+            });
+        }
     }
 }

@@ -220,7 +220,7 @@ export class Html {
 
     static title(casename, title, group, scCount) {
         $("#osy-case").html(casename);
-        $("#osy-title").html('<i class="fa fa-home fa-lg"></i>' + title + ' <small>[' + group + ']</small>');
+        $("#osy-title").html('<i class="fa fa-home fa-lg"></i>' + title + ' <small>' + group + '</small>');
     }
 
     static lblScenario(label) {
@@ -425,6 +425,7 @@ export class Html {
             }
         });
     }
+
     static ddlCases(cases, cs) {
         var container = $('#osy-cases');
         container.empty();
@@ -606,7 +607,8 @@ export class Html {
         $.each(scs, function (sc, flag) {
             if (flag.ScenarioId == 'SC_0') {
                 var sc0 =
-                    `<div class="sortable-item" id=` + flag.ScenarioId + `>` + flag.Scenario + `
+                    `<div class="sortable-item" id=` + flag.ScenarioId + `><i class="fa fa-lock danger" aria-hidden="true"></i>` + flag.Scenario + `
+                    
                     <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked disabled/></span>
                 </div>`;
                 $("#osy-sc0").html(sc0);
@@ -615,14 +617,14 @@ export class Html {
                 if (flag.Active) {
                     var sortableElement =
                         `<div class="sortable-item" id=` + flag.ScenarioId + `>
-                        <i class="fa fa-sort fa-lg danger" aria-hidden="true"></i>` + flag.Scenario + `
+                        <i class="fa fa-sort osy-main-color" aria-hidden="true"></i>` + flag.Scenario + `
                         <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked/></span>
                     </div>`;
                     sortableList = sortableList + sortableElement;
                 } else {
                     var sortableElement =
                         `<div class="sortable-item" id=` + flag.ScenarioId + `>
-                        <i class="fa fa-sort fa-lg danger" aria-hidden="true"></i>` + flag.Scenario + `
+                        <i class="fa fa-sort osy-main-color" aria-hidden="true"></i>` + flag.Scenario + `
                         <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" /></span>
                     </div>`;
                     sortableList = sortableList + sortableElement;
@@ -683,6 +685,76 @@ export class Html {
                 opacity: 0.5,
             });
         }
+
+    }
+
+    static ResStats(model){
+        //console.log('model res html ', model)
+        $('#totalTechs').html(`<i class="fa fa-cog"></i>&nbsp;${model.genData['osy-tech'].length}`);
+        let html = '';
+        $('#activityTechsCount').html(`<i class="fa fa-connectdevelop warning"></i>&nbsp;${model.RES.Techs.length-2}`)
+        model.RES.Techs.forEach((item) => {
+            if(!['DS', 'DT'].includes(item.TechId)){
+                html += `<li><a><small><b>${item.Tech}</b> - ${item.TechDesc}</small></a> <p class="divider"></p></li>`;
+            }
+        });
+        document.querySelector('#activityTechs').innerHTML = html;
+
+
+        let selectedTechsHtml = '';
+        model.selectedTechs.forEach((item) => {
+            if(!['DS', 'DT'].includes(item)){
+                selectedTechsHtml += `<li><a><small><b>${model.techData[item].Tech}</b> - ${model.techData[item].Desc}</small></a> <p class="divider"></p></li>`;
+            }
+
+        });
+        document.querySelector('#selectedTechs').innerHTML = selectedTechsHtml;
+
+
+        
+        $('#iarTechsCount').html(`<i class="fa fa-sign-in osy-second-color"></i>&nbsp;${ Object.keys(model.RES.Data.IAR).length}`)
+        let iarTechsHtml = '';
+        $.each(model.RES.Data.IAR, function (TechId, obj) {
+            iarTechsHtml += `<li><a><small><b>${model.techData[TechId].Tech}</b> - ${model.techData[TechId].Desc}</small></a> <p class="divider"></p></li>`;
+        });
+        document.querySelector('#iarTechs').innerHTML = iarTechsHtml;
+
+
+        $('#oarTechsCount').html(`<i class="fa fa-sign-out danger"></i>&nbsp;${Object.keys(model.RES.Data.OAR).length}`)
+        let oarTechsHtml = '';
+        $.each(model.RES.Data.OAR, function (TechId, obj) {
+            oarTechsHtml += `<li><a><small><b>${model.techData[TechId].Tech}</b> - ${model.techData[TechId].Desc}</small></a> <p class="divider"></p></li>`;
+        });
+        document.querySelector('#oarTechs').innerHTML = oarTechsHtml;
+
+        $('#selectedTechsCount').html(`<i class="fa fa-hand-pointer-o primary"></i>&nbsp;${model.selectedTechs.length}`);
+        $('#dispalyedTechs').html(`<i class="fa fa-sitemap"></i>&nbsp;${model.dispayedTechs.length}`)
+
+        $('#dispalyedCommsCount').html(`<i class="fa fa-cube"></i>&nbsp;${model.dispayedComms.length}`);
+        let dispalyedComms = '';
+        model.dispayedComms.forEach((item) => {
+            dispalyedComms += `<li><a><small><b>${model.commData[item].Comm}</b> - ${model.commData[item].Desc}</small></a> <p class="divider"></p></li>`;
+        });
+        document.querySelector('#dispalyedComms').innerHTML = dispalyedComms;
+
+        if(model.settings.Colors){
+            let commLegend = '';
+            model.dispayedComms.forEach((item) => {
+                let lg = '';
+                if(model.settings.Desc){
+                    lg = model.commData[item].Comm + '-' + model.commData[item].Desc;
+                }
+                else{
+                    lg = model.commData[item].Comm;
+                }
+               //${obj.Color.slice(0,-2)}
+                commLegend += `<span><i class="fa fa-stop" aria-hidden="true" style="color:${model.commData[item].Color}"></i><small>${lg}</small>&nbsp;&nbsp;</span>`;
+            });
+            document.querySelector('#commLegend').innerHTML = commLegend;
+        }else{
+            $('#commLegend').empty();
+        }
+
 
     }
 }

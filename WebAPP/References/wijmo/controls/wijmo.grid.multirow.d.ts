@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -10,14 +10,6 @@
     * wijmo.com/products/wijmo-5/license/
     *
     */
-declare module wijmo.grid.multirow {
-    /**
-     * Handles the grid's selection.
-     */
-    class _MultiRowSelectionHandler extends wijmo.grid._SelectionHandler {
-        _getNextColumnCell(r: number, c: number, move: wijmo.grid.SelMove, pageSize?: number): any;
-    }
-}
 declare module wijmo.grid.multirow {
     /**
      * Extends the {@link Row} class to provide additional information for multi-row records.
@@ -434,7 +426,6 @@ declare module wijmo.grid.multirow {
         onCollapsedHeadersChanged(e?: wijmo.EventArgs): void;
         allowPinning: boolean;
         onSelectionChanging(e: wijmo.grid.CellRangeEventArgs): boolean;
-        protected _createSelHdl(): wijmo.grid._SelectionHandler;
         _getDeleteColumnIndex(): number;
         _getQuickAutoSize(): boolean;
         _addBoundRow(items: any[], index: number): void;
@@ -492,9 +483,8 @@ declare module wijmo.grid.multirow {
          */
         updateNewRowTemplate(): void;
         _keydown(e: KeyboardEvent): void;
-        _beginningEdit(s: MultiRow, e: wijmo.grid.CellRangeEventArgs): void;
-        _rowEditStarting(s: wijmo.grid.FlexGrid, e: wijmo.grid.CellRangeEventArgs): void;
         _rowEditEnded(s: MultiRow, e: wijmo.grid.CellRangeEventArgs): void;
+        _beginningEdit(s: MultiRow, e: wijmo.grid.CellRangeEventArgs): void;
         _copyNewDataItem(): void;
         _removeNewRowTemplate(): void;
     }

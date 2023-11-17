@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -123,7 +123,6 @@ declare module wijmo.chart.radar {
          * Gets or sets a value that determines whether and how the series objects are stacked.
          */
         stacking: wijmo.chart.Stacking;
-        onRendered(e: wijmo.chart.RenderEventArgs): void;
         _getChartType(): wijmo.chart.ChartType;
         _getPlotter(series: FlexRadarSeries): wijmo.chart._IPlotter;
         _convertPoint(radius: any, angle: any): Point;
@@ -143,8 +142,7 @@ declare module wijmo.chart.radar {
         _height: number;
         private __actualMin;
         private __actualMax;
-        _render(e: wijmo.chart.IRenderEngine): void;
-        _renderLabels(e: wijmo.chart.IRenderEngine): void;
+        _render(engine: wijmo.chart.IRenderEngine): void;
         _getHeight(engine: wijmo.chart.IRenderEngine, maxw: number): number;
         _getActualRange(): number;
         _updateActualLimits(dataType: wijmo.DataType, dataMin: number, dataMax: number, labels?: string[], values?: number[]): void;

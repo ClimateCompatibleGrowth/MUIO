@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -52,8 +52,7 @@ declare module wijmo.grid.transposed {
      *
      * The list of disabled properties includes the following:
      * {@link FlexGrid.allowAddNew}, {@link FlexGrid.allowDelete},
-     * {@link FlexGrid.allowSorting}, {@link Column.cellTemplate},
-     * {@link Column.editor}, {@link FlexGridFilter},
+     * {@link FlexGrid.allowSorting}, {@link FlexGridFilter},
      * {@link Selector}.
      */
     class TransposedGrid extends wijmo.grid.FlexGrid {

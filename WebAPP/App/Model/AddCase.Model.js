@@ -3,6 +3,7 @@ import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export class Model {
   constructor(genData, resData, PARAMETERS, pageId) {
+    
     if (genData) {
       this.casename = genData['osy-casename'];
       this.PARAMETERS = PARAMETERS;

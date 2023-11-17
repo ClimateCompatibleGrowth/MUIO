@@ -154,18 +154,19 @@ def resultsExists():
     try:
         casename = request.json['casename']
         if casename != None:
-            resPath = Path(Config.DATA_STORAGE, casename, 'view', 'RYTTs.json')
-
+            resPath = Path(Config.DATA_STORAGE, casename, 'view', 'RYT.json')
             dataPath = Path(Config.DATA_STORAGE,casename,'view','resData.json')
             data = File.readFile(dataPath)
-
             if os.path.isfile(resPath) and data['osy-cases']:
-            #if data['osy-cases']:
-                response = True      
+                RYTTs = File.readFile(resPath)
+                if data['osy-cases'] and RYTTs["ANC"]:
+                    response = True      
+                else:
+                    response = False 
             else:
-                response = False 
+                response = False
         else:
-            response = None
+            response = False
         #response = True
         return jsonify(response), 200
     except(IOError):

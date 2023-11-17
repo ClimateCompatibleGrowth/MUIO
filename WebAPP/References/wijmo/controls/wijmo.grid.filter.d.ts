@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -779,7 +779,6 @@ declare module wijmo.grid.filter {
         private _filterValues;
         private _cbSelectAllClicked;
         private _updateSelectAllCheck;
-        private _adjustWidths;
     }
 }
 declare module wijmo.grid.filter {

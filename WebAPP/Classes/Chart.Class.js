@@ -119,6 +119,17 @@ export class Chart {
 
     static RESChart($div, model){
 
+        let linkData = {
+            arrowlen: 20,
+            source: model.source,
+            target: model.target,
+            value:  model.value,
+            label:  model.labelLink,
+        }
+        if(model.settings.Colors){
+            linkData.color = model.colorLink;
+        }
+
         var data = [{
             type: "sankey",
             arrangement: "fixed",
@@ -126,34 +137,50 @@ export class Chart {
             valueformat: ".0f",
             valuesuffix: "",
             node: {
-              pad: 15,
-              thickness: 30,
-              line: {
-                color: "red",
-                width: 0.5
-              },
+                pad: 20,
+                thickness: 20,
+                line: { color: "#555c77", width: 2 },
                 label: model.label,
                 color: model.color
             },
-          
-            link: {
-                source: model.source,
-                target: model.target,
-                value:  model.value,
-                label:  model.labelLink
-            }
-        }];
-          
-        //var data = [data]
-        
+            link: linkData
+            // link: {
+            //     arrowlen: 20,
+            //     source: model.source,
+            //     target: model.target,
+            //     value:  model.value,
+            //     label:  model.labelLink,
+            //     color: model.colorLink
+            // }
+        }];        
         var layout = {
             title: "",
             showlegend: true,
             //width: 1118,
             height: model.height,
+            //autozise: true,
             font: {
                 size: 12
-            }
+            },
+            // annotations:[
+            //     {
+            //         x: c[1,0],
+            //         y: 0.5,
+            //         xshift: c[25, -25],
+            //         text: c["Text 1", "Text 2"],
+            //         font: {
+            //           size: 14
+            //         },
+            //         showarrow: true,
+            //         textangle: [90, -90]
+            //     },
+            //     {
+            //         x:1,
+            //         y:1,
+            //         text:'11',
+            //         showarrow:true
+            //     }
+            // ]
         }
         
         Plotly.react($div, data, layout)

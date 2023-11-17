@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -147,7 +147,6 @@ declare module wijmo.react {
         static readonly _propsParent: string;
         static readonly _typeSiblingIdProp: string;
         static _siblingDirId: number;
-        static _reactMajorVersion: number;
         private _objPropHash;
         private _isMounted;
         private _mountedCBs;
@@ -161,7 +160,6 @@ declare module wijmo.react {
         protected _siblingId: string;
         protected _hostRef: (ref: any) => any;
         protected _hostRefValue: HTMLElement;
-        private _appliedClassName;
         constructor(props: any, controlType: any, meta?: any);
         render(): any;
         componentDidMount(): any;
@@ -219,33 +217,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartTrendLine extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            sampleCount?: any;
-            order?: any;
-            fitType?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -265,33 +236,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartMovingAverage extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            sampleCount?: any;
-            period?: any;
-            type?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -311,34 +255,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartYFunctionSeries extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            sampleCount?: any;
-            min?: any;
-            max?: any;
-            func?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -358,36 +274,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartParametricFunctionSeries extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            sampleCount?: any;
-            min?: any;
-            max?: any;
-            func?: any;
-            xFunc?: any;
-            yFunc?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -407,40 +293,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartWaterfall extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            relativeData?: any;
-            start?: any;
-            startLabel?: any;
-            showTotal?: any;
-            totalLabel?: any;
-            showIntermediateTotal?: any;
-            intermediateTotalPositions?: any;
-            intermediateTotalLabels?: any;
-            connectorLines?: any;
-            styles?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -460,39 +312,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartBoxWhisker extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            quartileCalculation?: any;
-            groupWidth?: any;
-            gapWidth?: any;
-            showMeanLine?: any;
-            meanLineStyle?: any;
-            showMeanMarker?: any;
-            meanMarkerStyle?: any;
-            showInnerPoints?: any;
-            showOutliers?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -510,36 +329,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartErrorBar extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            chartType?: any;
-            errorBarStyle?: any;
-            value?: any;
-            errorAmount?: any;
-            endStyle?: any;
-            direction?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -557,34 +346,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartBreakEven extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            fixedCost?: any;
-            variableCost?: any;
-            salesPrice?: any;
-            styles?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -610,16 +371,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartAnimation extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            animationMode?: any;
-            easing?: any;
-            duration?: any;
-            axisAnimation?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentInCtor: boolean;
         constructor(props: any);
     }
@@ -645,12 +396,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartAnnotationLayer extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentInCtor: boolean;
         constructor(props: any);
     }
@@ -671,32 +416,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartAnnotation extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            type?: any;
-            attachment?: any;
-            position?: any;
-            point?: any;
-            seriesIndex?: any;
-            pointIndex?: any;
-            offset?: any;
-            style?: any;
-            isVisible?: any;
-            tooltip?: any;
-            text?: any;
-            content?: any;
-            name?: any;
-            width?: any;
-            height?: any;
-            start?: any;
-            end?: any;
-            radius?: any;
-            length?: any;
-            href?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
         protected _createControl(): any;
@@ -718,37 +437,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartFibonacci extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            high?: any;
-            low?: any;
-            labelPosition?: any;
-            levels?: any;
-            minX?: any;
-            maxX?: any;
-            uptrend?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -766,34 +454,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartFibonacciArcs extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            start?: any;
-            end?: any;
-            labelPosition?: any;
-            levels?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -811,34 +471,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartFibonacciFans extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            start?: any;
-            end?: any;
-            labelPosition?: any;
-            levels?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -856,34 +488,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartFibonacciTimeZones extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            startX?: any;
-            endX?: any;
-            labelPosition?: any;
-            levels?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -901,31 +505,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartAtr extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            period?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -943,32 +522,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartCci extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            period?: any;
-            constant?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -986,31 +539,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartRsi extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            period?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -1028,31 +556,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartWilliamsR extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            period?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -1070,34 +573,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartMacd extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            fastPeriod?: any;
-            slowPeriod?: any;
-            smoothingPeriod?: any;
-            styles?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -1115,33 +590,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartMacdHistogram extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            fastPeriod?: any;
-            slowPeriod?: any;
-            smoothingPeriod?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -1159,34 +607,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartStochastic extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            dPeriod?: any;
-            kPeriod?: any;
-            smoothingPeriod?: any;
-            styles?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -1204,32 +624,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartBollingerBands extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            period?: any;
-            multiplier?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -1247,33 +641,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartEnvelopes extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            period?: any;
-            size?: any;
-            type?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -1323,45 +690,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FinancialChart extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            renderEngine?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            binding?: any;
-            footer?: any;
-            header?: any;
-            selectionMode?: any;
-            palette?: any;
-            plotMargin?: any;
-            footerStyle?: any;
-            headerStyle?: any;
-            tooltipContent?: any;
-            itemsSource?: any;
-            bindingX?: any;
-            interpolateNulls?: any;
-            legendToggle?: any;
-            symbolSize?: any;
-            options?: any;
-            selection?: any;
-            itemFormatter?: any;
-            labelContent?: any;
-            chartType?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            rendering?: any;
-            rendered?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            seriesVisibilityChanged?: any;
-            selectionChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         componentDidMount(): any;
         componentDidUpdate(prevProps: any): void;
@@ -1383,31 +711,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FinancialChartSeries extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            chartType?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -1429,46 +732,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class Sunburst extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            binding?: any;
-            footer?: any;
-            header?: any;
-            selectionMode?: any;
-            palette?: any;
-            plotMargin?: any;
-            footerStyle?: any;
-            headerStyle?: any;
-            tooltipContent?: any;
-            itemsSource?: any;
-            bindingName?: any;
-            innerRadius?: any;
-            isAnimated?: any;
-            offset?: any;
-            reversed?: any;
-            startAngle?: any;
-            selectedIndex?: any;
-            selectedItemPosition?: any;
-            selectedItemOffset?: any;
-            itemFormatter?: any;
-            labelContent?: any;
-            childItemsPath?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            rendering?: any;
-            rendered?: any;
-            selectionChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         componentDidMount(): any;
         componentDidUpdate(prevProps: any): void;
@@ -1484,39 +747,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class TreeMap extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            binding?: any;
-            footer?: any;
-            header?: any;
-            selectionMode?: any;
-            palette?: any;
-            plotMargin?: any;
-            footerStyle?: any;
-            headerStyle?: any;
-            tooltipContent?: any;
-            itemsSource?: any;
-            bindingName?: any;
-            maxDepth?: any;
-            type?: any;
-            labelContent?: any;
-            childItemsPath?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            rendering?: any;
-            rendered?: any;
-            selectionChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         componentDidMount(): any;
         componentDidUpdate(prevProps: any): void;
@@ -1541,20 +771,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartRangeSelector extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isVisible?: any;
-            min?: any;
-            max?: any;
-            orientation?: any;
-            seamless?: any;
-            minScale?: any;
-            maxScale?: any;
-            initialized?: any;
-            rangeChanged?: any;
-            [key: string]: any;
-        };
         _parentInCtor: boolean;
         constructor(props: any);
     }
@@ -1573,19 +789,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartGestures extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            mouseAction?: any;
-            interactiveAxes?: any;
-            enable?: any;
-            scaleX?: any;
-            scaleY?: any;
-            posX?: any;
-            posY?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentInCtor: boolean;
         constructor(props: any);
     }
@@ -1610,49 +813,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexRadar extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            renderEngine?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            binding?: any;
-            footer?: any;
-            header?: any;
-            selectionMode?: any;
-            palette?: any;
-            plotMargin?: any;
-            footerStyle?: any;
-            headerStyle?: any;
-            tooltipContent?: any;
-            itemsSource?: any;
-            bindingX?: any;
-            interpolateNulls?: any;
-            legendToggle?: any;
-            symbolSize?: any;
-            options?: any;
-            selection?: any;
-            itemFormatter?: any;
-            labelContent?: any;
-            chartType?: any;
-            startAngle?: any;
-            totalAngle?: any;
-            reversed?: any;
-            stacking?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            rendering?: any;
-            rendered?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            seriesVisibilityChanged?: any;
-            selectionChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         componentDidMount(): any;
         componentDidUpdate(prevProps: any): void;
@@ -1673,38 +833,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexRadarAxis extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisLine?: any;
-            format?: any;
-            labels?: any;
-            majorGrid?: any;
-            majorTickMarks?: any;
-            majorUnit?: any;
-            max?: any;
-            min?: any;
-            position?: any;
-            reversed?: any;
-            title?: any;
-            labelAngle?: any;
-            minorGrid?: any;
-            minorTickMarks?: any;
-            minorUnit?: any;
-            origin?: any;
-            logBase?: any;
-            plotArea?: any;
-            labelAlign?: any;
-            name?: any;
-            overlappingLabels?: any;
-            labelPadding?: any;
-            itemFormatter?: any;
-            itemsSource?: any;
-            binding?: any;
-            initialized?: any;
-            rangeChanged?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -1724,31 +852,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexRadarSeries extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            chartType?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -1816,47 +919,6 @@ declare module wijmo.react {
      * data items that the chart should display.
      */
     class FlexChart extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            renderEngine?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            binding?: any;
-            footer?: any;
-            header?: any;
-            selectionMode?: any;
-            palette?: any;
-            plotMargin?: any;
-            footerStyle?: any;
-            headerStyle?: any;
-            tooltipContent?: any;
-            itemsSource?: any;
-            bindingX?: any;
-            interpolateNulls?: any;
-            legendToggle?: any;
-            symbolSize?: any;
-            options?: any;
-            selection?: any;
-            itemFormatter?: any;
-            labelContent?: any;
-            chartType?: any;
-            rotated?: any;
-            stacking?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            rendering?: any;
-            rendered?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            seriesVisibilityChanged?: any;
-            selectionChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         componentDidMount(): any;
         componentDidUpdate(prevProps: any): void;
@@ -1878,49 +940,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexPie extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            binding?: any;
-            footer?: any;
-            header?: any;
-            selectionMode?: any;
-            palette?: any;
-            plotMargin?: any;
-            footerStyle?: any;
-            headerStyle?: any;
-            tooltipContent?: any;
-            itemsSource?: any;
-            bindingName?: any;
-            innerRadius?: any;
-            isAnimated?: any;
-            offset?: any;
-            reversed?: any;
-            startAngle?: any;
-            selectedIndex?: any;
-            selectedItemPosition?: any;
-            selectedItemOffset?: any;
-            itemFormatter?: any;
-            labelContent?: any;
-            titles?: any;
-            chartsPerLine?: any;
-            innerText?: any;
-            innerTextStyle?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            rendering?: any;
-            rendered?: any;
-            selectionChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         componentDidMount(): any;
         componentDidUpdate(prevProps: any): void;
@@ -1943,38 +962,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartAxis extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisLine?: any;
-            format?: any;
-            labels?: any;
-            majorGrid?: any;
-            majorTickMarks?: any;
-            majorUnit?: any;
-            max?: any;
-            min?: any;
-            position?: any;
-            reversed?: any;
-            title?: any;
-            labelAngle?: any;
-            minorGrid?: any;
-            minorTickMarks?: any;
-            minorUnit?: any;
-            origin?: any;
-            logBase?: any;
-            plotArea?: any;
-            labelAlign?: any;
-            name?: any;
-            overlappingLabels?: any;
-            labelPadding?: any;
-            itemFormatter?: any;
-            itemsSource?: any;
-            binding?: any;
-            initialized?: any;
-            rangeChanged?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -1997,17 +984,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartLegend extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            orientation?: any;
-            position?: any;
-            title?: any;
-            titleAlign?: any;
-            maxSize?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _parentInCtor: boolean;
         constructor(props: any);
@@ -2025,18 +1001,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartDataLabel extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            content?: any;
-            border?: any;
-            offset?: any;
-            connectingLine?: any;
-            position?: any;
-            initialized?: any;
-            rendering?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -2053,18 +1017,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexPieDataLabel extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            content?: any;
-            border?: any;
-            offset?: any;
-            connectingLine?: any;
-            position?: any;
-            initialized?: any;
-            rendering?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -2084,31 +1036,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartSeries extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            axisX?: any;
-            axisY?: any;
-            binding?: any;
-            bindingX?: any;
-            cssClass?: any;
-            name?: any;
-            style?: any;
-            altStyle?: any;
-            symbolMarker?: any;
-            symbolSize?: any;
-            symbolStyle?: any;
-            visibility?: any;
-            itemsSource?: any;
-            interpolateNulls?: any;
-            tooltipContent?: any;
-            itemFormatter?: any;
-            chartType?: any;
-            initialized?: any;
-            rendering?: any;
-            rendered?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -2128,24 +1055,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartLineMarker extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isVisible?: any;
-            seriesIndex?: any;
-            horizontalPosition?: any;
-            content?: any;
-            verticalPosition?: any;
-            alignment?: any;
-            lines?: any;
-            interaction?: any;
-            dragLines?: any;
-            dragThreshold?: any;
-            dragContent?: any;
-            initialized?: any;
-            positionChanged?: any;
-            [key: string]: any;
-        };
         _parentInCtor: boolean;
         constructor(props: any);
     }
@@ -2162,14 +1071,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartDataPoint extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            x?: any;
-            y?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -2188,18 +1089,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexChartPlotArea extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            column?: any;
-            height?: any;
-            name?: any;
-            row?: any;
-            style?: any;
-            width?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -2247,40 +1136,6 @@ declare module wijmo.react {
      * current value.
      */
     class LinearGauge extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            min?: any;
-            max?: any;
-            origin?: any;
-            isReadOnly?: any;
-            handleWheel?: any;
-            step?: any;
-            format?: any;
-            thickness?: any;
-            hasShadow?: any;
-            isAnimated?: any;
-            showText?: any;
-            showTicks?: any;
-            showTickText?: any;
-            showRanges?: any;
-            stackRanges?: any;
-            thumbSize?: any;
-            tickSpacing?: any;
-            getText?: any;
-            direction?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            valueChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -2323,43 +1178,6 @@ declare module wijmo.react {
      * current value.
      */
     class BulletGraph extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            min?: any;
-            max?: any;
-            origin?: any;
-            isReadOnly?: any;
-            handleWheel?: any;
-            step?: any;
-            format?: any;
-            thickness?: any;
-            hasShadow?: any;
-            isAnimated?: any;
-            showText?: any;
-            showTicks?: any;
-            showTickText?: any;
-            showRanges?: any;
-            stackRanges?: any;
-            thumbSize?: any;
-            tickSpacing?: any;
-            getText?: any;
-            direction?: any;
-            target?: any;
-            good?: any;
-            bad?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            valueChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -2402,45 +1220,6 @@ declare module wijmo.react {
      * current value.
      */
     class RadialGauge extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            min?: any;
-            max?: any;
-            origin?: any;
-            isReadOnly?: any;
-            handleWheel?: any;
-            step?: any;
-            format?: any;
-            thickness?: any;
-            hasShadow?: any;
-            isAnimated?: any;
-            showText?: any;
-            showTicks?: any;
-            showTickText?: any;
-            showRanges?: any;
-            stackRanges?: any;
-            thumbSize?: any;
-            tickSpacing?: any;
-            getText?: any;
-            autoScale?: any;
-            startAngle?: any;
-            sweepAngle?: any;
-            needleShape?: any;
-            needleLength?: any;
-            needleElement?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            valueChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -2459,17 +1238,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class Range extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            color?: any;
-            min?: any;
-            max?: any;
-            name?: any;
-            thickness?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -2496,17 +1264,6 @@ declare module wijmo.react {
      * <b>provider</b> (FlexGrid control, owner of the row).
      */
     class FlexGridDetail extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            maxHeight?: any;
-            keyActionEnter?: any;
-            detailVisibilityMode?: any;
-            rowHasDetail?: any;
-            isAnimated?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentInCtor: boolean;
         private _renderedCells;
         private _template;
@@ -2537,20 +1294,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexGridFilter extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            showFilterIcons?: any;
-            showSortButtons?: any;
-            defaultFilterType?: any;
-            filterColumns?: any;
-            initialized?: any;
-            editingFilter?: any;
-            filterChanging?: any;
-            filterChanged?: any;
-            filterApplied?: any;
-            [key: string]: any;
-        };
         _parentInCtor: boolean;
         constructor(props: any);
     }
@@ -2568,26 +1311,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class GroupPanel extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            hideGroupedColumns?: any;
-            showDragGlyphs?: any;
-            maxGroups?: any;
-            placeholder?: any;
-            filter?: any;
-            groupDescriptionCreator?: any;
-            grid?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
 }
@@ -2604,25 +1327,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexGridSearch extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            text?: any;
-            delay?: any;
-            searchAllColumns?: any;
-            placeholder?: any;
-            cssMatch?: any;
-            grid?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
 }
@@ -2671,128 +1375,6 @@ declare module wijmo.react {
      * generating the columns.
      */
     class FlexGrid extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            newRowAtTop?: any;
-            allowAddNew?: any;
-            allowDelete?: any;
-            allowDragging?: any;
-            allowMerging?: any;
-            allowResizing?: any;
-            allowSorting?: any;
-            allowPinning?: any;
-            autoScroll?: any;
-            autoRowHeights?: any;
-            autoSizeMode?: any;
-            autoGenerateColumns?: any;
-            autoSearch?: any;
-            caseSensitiveSearch?: any;
-            quickAutoSize?: any;
-            bigCheckboxes?: any;
-            childItemsPath?: any;
-            groupHeaderFormat?: any;
-            headersVisibility?: any;
-            showSelectedHeaders?: any;
-            showMarquee?: any;
-            showPlaceholders?: any;
-            itemFormatter?: any;
-            isReadOnly?: any;
-            imeEnabled?: any;
-            mergeManager?: any;
-            selectionMode?: any;
-            showGroups?: any;
-            showSort?: any;
-            showDropDown?: any;
-            showAlternatingRows?: any;
-            showErrors?: any;
-            alternatingRowStep?: any;
-            itemValidator?: any;
-            validateEdits?: any;
-            treeIndent?: any;
-            itemsSource?: any;
-            autoClipboard?: any;
-            expandSelectionOnCopyPaste?: any;
-            frozenRows?: any;
-            frozenColumns?: any;
-            cloneFrozenCells?: any;
-            deferResizing?: any;
-            sortRowIndex?: any;
-            editColumnIndex?: any;
-            stickyHeaders?: any;
-            preserveSelectedState?: any;
-            preserveOutlineState?: any;
-            preserveWhiteSpace?: any;
-            keyActionTab?: any;
-            keyActionEnter?: any;
-            rowHeaderPath?: any;
-            virtualizationThreshold?: any;
-            anchorCursor?: any;
-            lazyRender?: any;
-            refreshOnEdit?: any;
-            copyHeaders?: any;
-            columnGroups?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            beginningEdit?: any;
-            cellEditEnded?: any;
-            cellEditEnding?: any;
-            prepareCellForEdit?: any;
-            formatItem?: any;
-            resizingColumn?: any;
-            resizedColumn?: any;
-            autoSizingColumn?: any;
-            autoSizedColumn?: any;
-            draggingColumn?: any;
-            draggingColumnOver?: any;
-            draggedColumn?: any;
-            sortingColumn?: any;
-            sortedColumn?: any;
-            pinningColumn?: any;
-            pinnedColumn?: any;
-            resizingRow?: any;
-            resizedRow?: any;
-            autoSizingRow?: any;
-            autoSizedRow?: any;
-            draggingRow?: any;
-            draggingRowOver?: any;
-            draggedRow?: any;
-            deletingRow?: any;
-            deletedRow?: any;
-            loadingRows?: any;
-            loadedRows?: any;
-            rowEditStarting?: any;
-            rowEditStarted?: any;
-            rowEditEnding?: any;
-            rowEditEnded?: any;
-            rowAdded?: any;
-            groupCollapsedChanging?: any;
-            groupCollapsedChanged?: any;
-            columnGroupCollapsedChanging?: any;
-            columnGroupCollapsedChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            selectionChanging?: any;
-            selectionChanged?: any;
-            scrollPositionChanged?: any;
-            updatingView?: any;
-            updatedView?: any;
-            updatingLayout?: any;
-            updatedLayout?: any;
-            pasting?: any;
-            pasted?: any;
-            pastingCell?: any;
-            pastedCell?: any;
-            copying?: any;
-            copied?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         protected _createControl(): any;
     }
@@ -2812,46 +1394,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexGridColumn extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            name?: any;
-            dataMap?: any;
-            dataType?: any;
-            binding?: any;
-            sortMemberPath?: any;
-            format?: any;
-            cellTemplate?: any;
-            header?: any;
-            width?: any;
-            maxLength?: any;
-            minWidth?: any;
-            maxWidth?: any;
-            align?: any;
-            allowDragging?: any;
-            allowSorting?: any;
-            allowResizing?: any;
-            allowMerging?: any;
-            aggregate?: any;
-            isReadOnly?: any;
-            cssClass?: any;
-            cssClassAll?: any;
-            isContentHtml?: any;
-            isSelected?: any;
-            visible?: any;
-            wordWrap?: any;
-            multiLine?: any;
-            mask?: any;
-            inputType?: any;
-            isRequired?: any;
-            showDropDown?: any;
-            dataMapEditor?: any;
-            dropDownCssClass?: any;
-            quickAutoSize?: any;
-            editor?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
         protected _initParent(): void;
@@ -2876,48 +1418,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexGridColumnGroup extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            name?: any;
-            dataMap?: any;
-            dataType?: any;
-            binding?: any;
-            sortMemberPath?: any;
-            format?: any;
-            cellTemplate?: any;
-            header?: any;
-            width?: any;
-            maxLength?: any;
-            minWidth?: any;
-            maxWidth?: any;
-            align?: any;
-            allowDragging?: any;
-            allowSorting?: any;
-            allowResizing?: any;
-            allowMerging?: any;
-            aggregate?: any;
-            isReadOnly?: any;
-            cssClass?: any;
-            cssClassAll?: any;
-            isContentHtml?: any;
-            isSelected?: any;
-            visible?: any;
-            wordWrap?: any;
-            multiLine?: any;
-            mask?: any;
-            inputType?: any;
-            isRequired?: any;
-            showDropDown?: any;
-            dataMapEditor?: any;
-            dropDownCssClass?: any;
-            quickAutoSize?: any;
-            editor?: any;
-            collapseTo?: any;
-            isCollapsed?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -3312,139 +1812,8 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class MultiRow extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            newRowAtTop?: any;
-            allowAddNew?: any;
-            allowDelete?: any;
-            allowDragging?: any;
-            allowMerging?: any;
-            allowResizing?: any;
-            allowSorting?: any;
-            allowPinning?: any;
-            autoScroll?: any;
-            autoRowHeights?: any;
-            autoSizeMode?: any;
-            autoGenerateColumns?: any;
-            autoSearch?: any;
-            caseSensitiveSearch?: any;
-            quickAutoSize?: any;
-            bigCheckboxes?: any;
-            childItemsPath?: any;
-            groupHeaderFormat?: any;
-            headersVisibility?: any;
-            showSelectedHeaders?: any;
-            showMarquee?: any;
-            showPlaceholders?: any;
-            itemFormatter?: any;
-            isReadOnly?: any;
-            imeEnabled?: any;
-            mergeManager?: any;
-            selectionMode?: any;
-            showGroups?: any;
-            showSort?: any;
-            showDropDown?: any;
-            showAlternatingRows?: any;
-            showErrors?: any;
-            alternatingRowStep?: any;
-            itemValidator?: any;
-            validateEdits?: any;
-            treeIndent?: any;
-            itemsSource?: any;
-            autoClipboard?: any;
-            expandSelectionOnCopyPaste?: any;
-            frozenRows?: any;
-            frozenColumns?: any;
-            cloneFrozenCells?: any;
-            deferResizing?: any;
-            sortRowIndex?: any;
-            editColumnIndex?: any;
-            stickyHeaders?: any;
-            preserveSelectedState?: any;
-            preserveOutlineState?: any;
-            preserveWhiteSpace?: any;
-            keyActionTab?: any;
-            keyActionEnter?: any;
-            rowHeaderPath?: any;
-            virtualizationThreshold?: any;
-            anchorCursor?: any;
-            lazyRender?: any;
-            refreshOnEdit?: any;
-            copyHeaders?: any;
-            columnGroups?: any;
-            layoutDefinition?: any;
-            headerLayoutDefinition?: any;
-            centerHeadersVertically?: any;
-            collapsedHeaders?: any;
-            showHeaderCollapseButton?: any;
-            multiRowGroupHeaders?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            beginningEdit?: any;
-            cellEditEnded?: any;
-            cellEditEnding?: any;
-            prepareCellForEdit?: any;
-            formatItem?: any;
-            resizingColumn?: any;
-            resizedColumn?: any;
-            autoSizingColumn?: any;
-            autoSizedColumn?: any;
-            draggingColumn?: any;
-            draggingColumnOver?: any;
-            draggedColumn?: any;
-            sortingColumn?: any;
-            sortedColumn?: any;
-            pinningColumn?: any;
-            pinnedColumn?: any;
-            resizingRow?: any;
-            resizedRow?: any;
-            autoSizingRow?: any;
-            autoSizedRow?: any;
-            draggingRow?: any;
-            draggingRowOver?: any;
-            draggedRow?: any;
-            deletingRow?: any;
-            deletedRow?: any;
-            loadingRows?: any;
-            loadedRows?: any;
-            rowEditStarting?: any;
-            rowEditStarted?: any;
-            rowEditEnding?: any;
-            rowEditEnded?: any;
-            rowAdded?: any;
-            groupCollapsedChanging?: any;
-            groupCollapsedChanged?: any;
-            columnGroupCollapsedChanging?: any;
-            columnGroupCollapsedChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            selectionChanging?: any;
-            selectionChanged?: any;
-            scrollPositionChanged?: any;
-            updatingView?: any;
-            updatedView?: any;
-            updatingLayout?: any;
-            updatedLayout?: any;
-            pasting?: any;
-            pasted?: any;
-            pastingCell?: any;
-            pastedCell?: any;
-            copying?: any;
-            copied?: any;
-            collapsedHeadersChanging?: any;
-            collapsedHeadersChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         protected _createControl(): any;
-        protected _onBeforeWillUnmount(e?: wijmo.EventArgs): void;
     }
     /**
      * React component for the {@link wijmo.grid.multirow.MultiRowCell} class.
@@ -3462,48 +1831,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class MultiRowCell extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            name?: any;
-            dataMap?: any;
-            dataType?: any;
-            binding?: any;
-            sortMemberPath?: any;
-            format?: any;
-            cellTemplate?: any;
-            header?: any;
-            width?: any;
-            maxLength?: any;
-            minWidth?: any;
-            maxWidth?: any;
-            align?: any;
-            allowDragging?: any;
-            allowSorting?: any;
-            allowResizing?: any;
-            allowMerging?: any;
-            aggregate?: any;
-            isReadOnly?: any;
-            cssClass?: any;
-            cssClassAll?: any;
-            isContentHtml?: any;
-            isSelected?: any;
-            visible?: any;
-            wordWrap?: any;
-            multiLine?: any;
-            mask?: any;
-            inputType?: any;
-            isRequired?: any;
-            showDropDown?: any;
-            dataMapEditor?: any;
-            dropDownCssClass?: any;
-            quickAutoSize?: any;
-            editor?: any;
-            colspan?: any;
-            rowspan?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -3523,48 +1850,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class MultiRowCellGroup extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            name?: any;
-            dataMap?: any;
-            dataType?: any;
-            binding?: any;
-            sortMemberPath?: any;
-            format?: any;
-            cellTemplate?: any;
-            header?: any;
-            width?: any;
-            maxLength?: any;
-            minWidth?: any;
-            maxWidth?: any;
-            align?: any;
-            allowDragging?: any;
-            allowSorting?: any;
-            allowResizing?: any;
-            allowMerging?: any;
-            aggregate?: any;
-            isReadOnly?: any;
-            cssClass?: any;
-            cssClassAll?: any;
-            isContentHtml?: any;
-            isSelected?: any;
-            visible?: any;
-            wordWrap?: any;
-            multiLine?: any;
-            mask?: any;
-            inputType?: any;
-            isRequired?: any;
-            showDropDown?: any;
-            dataMapEditor?: any;
-            dropDownCssClass?: any;
-            quickAutoSize?: any;
-            editor?: any;
-            colspan?: any;
-            rowspan?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }
@@ -3872,148 +2157,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexSheet extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            newRowAtTop?: any;
-            allowAddNew?: any;
-            allowDelete?: any;
-            allowDragging?: any;
-            allowMerging?: any;
-            allowResizing?: any;
-            allowSorting?: any;
-            allowPinning?: any;
-            autoScroll?: any;
-            autoRowHeights?: any;
-            autoSizeMode?: any;
-            autoGenerateColumns?: any;
-            autoSearch?: any;
-            caseSensitiveSearch?: any;
-            quickAutoSize?: any;
-            bigCheckboxes?: any;
-            childItemsPath?: any;
-            groupHeaderFormat?: any;
-            headersVisibility?: any;
-            showSelectedHeaders?: any;
-            showMarquee?: any;
-            showPlaceholders?: any;
-            itemFormatter?: any;
-            isReadOnly?: any;
-            imeEnabled?: any;
-            mergeManager?: any;
-            selectionMode?: any;
-            showGroups?: any;
-            showSort?: any;
-            showDropDown?: any;
-            showAlternatingRows?: any;
-            showErrors?: any;
-            alternatingRowStep?: any;
-            itemValidator?: any;
-            validateEdits?: any;
-            treeIndent?: any;
-            itemsSource?: any;
-            autoClipboard?: any;
-            expandSelectionOnCopyPaste?: any;
-            frozenRows?: any;
-            frozenColumns?: any;
-            cloneFrozenCells?: any;
-            deferResizing?: any;
-            sortRowIndex?: any;
-            editColumnIndex?: any;
-            stickyHeaders?: any;
-            preserveSelectedState?: any;
-            preserveOutlineState?: any;
-            preserveWhiteSpace?: any;
-            keyActionTab?: any;
-            keyActionEnter?: any;
-            rowHeaderPath?: any;
-            virtualizationThreshold?: any;
-            anchorCursor?: any;
-            lazyRender?: any;
-            refreshOnEdit?: any;
-            copyHeaders?: any;
-            columnGroups?: any;
-            allowAutoFill?: any;
-            isTabHolderVisible?: any;
-            showFilterIcons?: any;
-            enableDragDrop?: any;
-            enableFormulas?: any;
-            selectedSheetIndex?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            beginningEdit?: any;
-            cellEditEnded?: any;
-            cellEditEnding?: any;
-            prepareCellForEdit?: any;
-            formatItem?: any;
-            resizingColumn?: any;
-            resizedColumn?: any;
-            autoSizingColumn?: any;
-            autoSizedColumn?: any;
-            draggingColumn?: any;
-            draggingColumnOver?: any;
-            draggedColumn?: any;
-            sortingColumn?: any;
-            sortedColumn?: any;
-            pinningColumn?: any;
-            pinnedColumn?: any;
-            resizingRow?: any;
-            resizedRow?: any;
-            autoSizingRow?: any;
-            autoSizedRow?: any;
-            draggingRow?: any;
-            draggingRowOver?: any;
-            draggedRow?: any;
-            deletingRow?: any;
-            deletedRow?: any;
-            loadingRows?: any;
-            loadedRows?: any;
-            rowEditStarting?: any;
-            rowEditStarted?: any;
-            rowEditEnding?: any;
-            rowEditEnded?: any;
-            rowAdded?: any;
-            groupCollapsedChanging?: any;
-            groupCollapsedChanged?: any;
-            columnGroupCollapsedChanging?: any;
-            columnGroupCollapsedChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            selectionChanging?: any;
-            selectionChanged?: any;
-            scrollPositionChanged?: any;
-            updatingView?: any;
-            updatedView?: any;
-            updatingLayout?: any;
-            updatedLayout?: any;
-            pasting?: any;
-            pasted?: any;
-            pastingCell?: any;
-            pastedCell?: any;
-            copying?: any;
-            copied?: any;
-            draggingRowColumn?: any;
-            droppingRowColumn?: any;
-            beginDroppingRowColumn?: any;
-            endDroppingRowColumn?: any;
-            loaded?: any;
-            unknownFunction?: any;
-            sheetCleared?: any;
-            prepareChangingRow?: any;
-            prepareChangingColumn?: any;
-            rowChanged?: any;
-            columnChanged?: any;
-            autoFilling?: any;
-            autoFilled?: any;
-            selectedSheetChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -4029,18 +2172,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class Sheet extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            name?: any;
-            itemsSource?: any;
-            visible?: any;
-            rowCount?: any;
-            columnCount?: any;
-            initialized?: any;
-            nameChanged?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _parentInCtor: boolean;
         constructor(props: any);
@@ -4062,130 +2193,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class TransposedGrid extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            autoGenerateRows?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            newRowAtTop?: any;
-            allowAddNew?: any;
-            allowDelete?: any;
-            allowDragging?: any;
-            allowMerging?: any;
-            allowResizing?: any;
-            allowSorting?: any;
-            allowPinning?: any;
-            autoScroll?: any;
-            autoRowHeights?: any;
-            autoSizeMode?: any;
-            autoGenerateColumns?: any;
-            autoSearch?: any;
-            caseSensitiveSearch?: any;
-            quickAutoSize?: any;
-            bigCheckboxes?: any;
-            childItemsPath?: any;
-            groupHeaderFormat?: any;
-            headersVisibility?: any;
-            showSelectedHeaders?: any;
-            showMarquee?: any;
-            showPlaceholders?: any;
-            itemFormatter?: any;
-            isReadOnly?: any;
-            imeEnabled?: any;
-            mergeManager?: any;
-            selectionMode?: any;
-            showGroups?: any;
-            showSort?: any;
-            showDropDown?: any;
-            showAlternatingRows?: any;
-            showErrors?: any;
-            alternatingRowStep?: any;
-            itemValidator?: any;
-            validateEdits?: any;
-            treeIndent?: any;
-            itemsSource?: any;
-            autoClipboard?: any;
-            expandSelectionOnCopyPaste?: any;
-            frozenRows?: any;
-            frozenColumns?: any;
-            cloneFrozenCells?: any;
-            deferResizing?: any;
-            sortRowIndex?: any;
-            editColumnIndex?: any;
-            stickyHeaders?: any;
-            preserveSelectedState?: any;
-            preserveOutlineState?: any;
-            preserveWhiteSpace?: any;
-            keyActionTab?: any;
-            keyActionEnter?: any;
-            rowHeaderPath?: any;
-            virtualizationThreshold?: any;
-            anchorCursor?: any;
-            lazyRender?: any;
-            refreshOnEdit?: any;
-            copyHeaders?: any;
-            columnGroups?: any;
-            rowGroups?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            beginningEdit?: any;
-            cellEditEnded?: any;
-            cellEditEnding?: any;
-            prepareCellForEdit?: any;
-            formatItem?: any;
-            resizingColumn?: any;
-            resizedColumn?: any;
-            autoSizingColumn?: any;
-            autoSizedColumn?: any;
-            draggingColumn?: any;
-            draggingColumnOver?: any;
-            draggedColumn?: any;
-            sortingColumn?: any;
-            sortedColumn?: any;
-            pinningColumn?: any;
-            pinnedColumn?: any;
-            resizingRow?: any;
-            resizedRow?: any;
-            autoSizingRow?: any;
-            autoSizedRow?: any;
-            draggingRow?: any;
-            draggingRowOver?: any;
-            draggedRow?: any;
-            deletingRow?: any;
-            deletedRow?: any;
-            loadingRows?: any;
-            loadedRows?: any;
-            rowEditStarting?: any;
-            rowEditStarted?: any;
-            rowEditEnding?: any;
-            rowEditEnded?: any;
-            rowAdded?: any;
-            groupCollapsedChanging?: any;
-            groupCollapsedChanged?: any;
-            columnGroupCollapsedChanging?: any;
-            columnGroupCollapsedChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            selectionChanging?: any;
-            selectionChanged?: any;
-            scrollPositionChanged?: any;
-            updatingView?: any;
-            updatedView?: any;
-            updatingLayout?: any;
-            updatedLayout?: any;
-            pasting?: any;
-            pasted?: any;
-            pastingCell?: any;
-            pastedCell?: any;
-            copying?: any;
-            copied?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -4201,46 +2208,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class TransposedGridRow extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            name?: any;
-            dataMap?: any;
-            dataType?: any;
-            binding?: any;
-            sortMemberPath?: any;
-            format?: any;
-            cellTemplate?: any;
-            header?: any;
-            width?: any;
-            maxLength?: any;
-            minWidth?: any;
-            maxWidth?: any;
-            align?: any;
-            allowDragging?: any;
-            allowSorting?: any;
-            allowResizing?: any;
-            allowMerging?: any;
-            aggregate?: any;
-            isReadOnly?: any;
-            cssClass?: any;
-            cssClassAll?: any;
-            isContentHtml?: any;
-            isSelected?: any;
-            visible?: any;
-            wordWrap?: any;
-            multiLine?: any;
-            mask?: any;
-            inputType?: any;
-            isRequired?: any;
-            showDropDown?: any;
-            dataMapEditor?: any;
-            dropDownCssClass?: any;
-            quickAutoSize?: any;
-            editor?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
         protected _initParent(): void;
@@ -4259,129 +2226,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class TransposedMultiRow extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            newRowAtTop?: any;
-            allowAddNew?: any;
-            allowDelete?: any;
-            allowDragging?: any;
-            allowMerging?: any;
-            allowResizing?: any;
-            allowSorting?: any;
-            allowPinning?: any;
-            autoScroll?: any;
-            autoRowHeights?: any;
-            autoSizeMode?: any;
-            autoGenerateColumns?: any;
-            autoSearch?: any;
-            caseSensitiveSearch?: any;
-            quickAutoSize?: any;
-            bigCheckboxes?: any;
-            childItemsPath?: any;
-            groupHeaderFormat?: any;
-            headersVisibility?: any;
-            showSelectedHeaders?: any;
-            showMarquee?: any;
-            showPlaceholders?: any;
-            itemFormatter?: any;
-            isReadOnly?: any;
-            imeEnabled?: any;
-            mergeManager?: any;
-            selectionMode?: any;
-            showGroups?: any;
-            showSort?: any;
-            showDropDown?: any;
-            showAlternatingRows?: any;
-            showErrors?: any;
-            alternatingRowStep?: any;
-            itemValidator?: any;
-            validateEdits?: any;
-            treeIndent?: any;
-            itemsSource?: any;
-            autoClipboard?: any;
-            expandSelectionOnCopyPaste?: any;
-            frozenRows?: any;
-            frozenColumns?: any;
-            cloneFrozenCells?: any;
-            deferResizing?: any;
-            sortRowIndex?: any;
-            editColumnIndex?: any;
-            stickyHeaders?: any;
-            preserveSelectedState?: any;
-            preserveOutlineState?: any;
-            preserveWhiteSpace?: any;
-            keyActionTab?: any;
-            keyActionEnter?: any;
-            rowHeaderPath?: any;
-            virtualizationThreshold?: any;
-            anchorCursor?: any;
-            lazyRender?: any;
-            refreshOnEdit?: any;
-            copyHeaders?: any;
-            columnGroups?: any;
-            layoutDefinition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            beginningEdit?: any;
-            cellEditEnded?: any;
-            cellEditEnding?: any;
-            prepareCellForEdit?: any;
-            formatItem?: any;
-            resizingColumn?: any;
-            resizedColumn?: any;
-            autoSizingColumn?: any;
-            autoSizedColumn?: any;
-            draggingColumn?: any;
-            draggingColumnOver?: any;
-            draggedColumn?: any;
-            sortingColumn?: any;
-            sortedColumn?: any;
-            pinningColumn?: any;
-            pinnedColumn?: any;
-            resizingRow?: any;
-            resizedRow?: any;
-            autoSizingRow?: any;
-            autoSizedRow?: any;
-            draggingRow?: any;
-            draggingRowOver?: any;
-            draggedRow?: any;
-            deletingRow?: any;
-            deletedRow?: any;
-            loadingRows?: any;
-            loadedRows?: any;
-            rowEditStarting?: any;
-            rowEditStarted?: any;
-            rowEditEnding?: any;
-            rowEditEnded?: any;
-            rowAdded?: any;
-            groupCollapsedChanging?: any;
-            groupCollapsedChanged?: any;
-            columnGroupCollapsedChanging?: any;
-            columnGroupCollapsedChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            selectionChanging?: any;
-            selectionChanged?: any;
-            scrollPositionChanged?: any;
-            updatingView?: any;
-            updatedView?: any;
-            updatingLayout?: any;
-            updatedLayout?: any;
-            pasting?: any;
-            pasted?: any;
-            pastingCell?: any;
-            pastedCell?: any;
-            copying?: any;
-            copied?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
 }
@@ -4454,15 +2298,6 @@ declare module wijmo.react {
      * ```
      */
     class ImmutabilityProvider extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            itemsSource?: any;
-            initialized?: any;
-            dataChanged?: any;
-            cloningItem?: any;
-            [key: string]: any;
-        };
         _parentInCtor: boolean;
         constructor(props: any);
     }
@@ -4486,38 +2321,6 @@ declare module wijmo.react {
      * <b>itemIndex</b> (zero-based index of the list item).
      */
     class ListBox extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isContentHtml?: any;
-            maxHeight?: any;
-            selectedValuePath?: any;
-            itemFormatter?: any;
-            displayMemberPath?: any;
-            checkedMemberPath?: any;
-            caseSensitiveSearch?: any;
-            itemsSource?: any;
-            virtualizationThreshold?: any;
-            showGroups?: any;
-            selectedIndex?: any;
-            selectedItem?: any;
-            selectedValue?: any;
-            checkedItems?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            formatItem?: any;
-            itemsChanged?: any;
-            itemChecked?: any;
-            selectedIndexChanged?: any;
-            checkedItemsChanged?: any;
-            [key: string]: any;
-        };
         wjItemTemplate: ItemTemplateRender;
         constructor(props: any);
         componentDidMount(): any;
@@ -4532,36 +2335,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class MultiSelectListBox extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            itemsSource?: any;
-            displayMemberPath?: any;
-            selectedIndex?: any;
-            isContentHtml?: any;
-            showGroups?: any;
-            checkOnFilter?: any;
-            showFilterInput?: any;
-            filterInputPlaceholder?: any;
-            showSelectAllCheckbox?: any;
-            selectAllLabel?: any;
-            delay?: any;
-            caseSensitiveSearch?: any;
-            checkedMemberPath?: any;
-            virtualizationThreshold?: any;
-            checkedItems?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            selectedIndexChanged?: any;
-            checkedItemsChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -4580,53 +2353,6 @@ declare module wijmo.react {
      * <b>itemIndex</b> (zero-based index of the list item).
      */
     class ComboBox extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            displayMemberPath?: any;
-            selectedValuePath?: any;
-            headerPath?: any;
-            isContentHtml?: any;
-            isEditable?: any;
-            handleWheel?: any;
-            maxDropDownHeight?: any;
-            maxDropDownWidth?: any;
-            itemFormatter?: any;
-            showGroups?: any;
-            trimText?: any;
-            caseSensitiveSearch?: any;
-            virtualizationThreshold?: any;
-            itemsSource?: any;
-            text?: any;
-            selectedIndex?: any;
-            selectedItem?: any;
-            selectedValue?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            itemsSourceChanged?: any;
-            formatItem?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            selectedIndexChanged?: any;
-            [key: string]: any;
-        };
         wjItemTemplate: ItemTemplateRender;
         constructor(props: any);
         componentDidMount(): any;
@@ -4641,60 +2367,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class AutoComplete extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            displayMemberPath?: any;
-            selectedValuePath?: any;
-            headerPath?: any;
-            isContentHtml?: any;
-            isEditable?: any;
-            handleWheel?: any;
-            maxDropDownHeight?: any;
-            maxDropDownWidth?: any;
-            itemFormatter?: any;
-            showGroups?: any;
-            trimText?: any;
-            caseSensitiveSearch?: any;
-            virtualizationThreshold?: any;
-            delay?: any;
-            maxItems?: any;
-            minLength?: any;
-            cssMatch?: any;
-            itemsSourceFunction?: any;
-            searchMemberPath?: any;
-            beginsWithSearch?: any;
-            itemsSource?: any;
-            text?: any;
-            selectedIndex?: any;
-            selectedItem?: any;
-            selectedValue?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            itemsSourceChanged?: any;
-            formatItem?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            selectedIndexChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -4707,50 +2379,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class Calendar extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            monthView?: any;
-            showHeader?: any;
-            itemFormatter?: any;
-            itemValidator?: any;
-            firstDayOfWeek?: any;
-            max?: any;
-            min?: any;
-            formatYearMonth?: any;
-            formatDayHeaders?: any;
-            formatDays?: any;
-            formatYear?: any;
-            formatMonths?: any;
-            selectionMode?: any;
-            isReadOnly?: any;
-            handleWheel?: any;
-            repeatButtons?: any;
-            showYearPicker?: any;
-            value?: any;
-            displayMonth?: any;
-            monthCount?: any;
-            showMonthPicker?: any;
-            weeksBefore?: any;
-            weeksAfter?: any;
-            rangeEnd?: any;
-            rangeMin?: any;
-            rangeMax?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            rangeChanged?: any;
-            formatItem?: any;
-            valueChanged?: any;
-            displayMonthChanged?: any;
-            rangeEndChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -4763,24 +2391,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class ColorPicker extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            showAlphaChannel?: any;
-            showColorString?: any;
-            palette?: any;
-            value?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            valueChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -4793,29 +2403,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class InputMask extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            mask?: any;
-            overwriteMode?: any;
-            isRequired?: any;
-            isReadOnly?: any;
-            promptChar?: any;
-            placeholder?: any;
-            inputType?: any;
-            rawValue?: any;
-            value?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            valueChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -4828,37 +2415,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class InputColor extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            showAlphaChannel?: any;
-            showColorString?: any;
-            value?: any;
-            text?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            valueChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -4877,65 +2433,6 @@ declare module wijmo.react {
      * <b>itemIndex</b> (zero-based index of the list item).
      */
     class MultiSelect extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            displayMemberPath?: any;
-            selectedValuePath?: any;
-            headerPath?: any;
-            isContentHtml?: any;
-            isEditable?: any;
-            handleWheel?: any;
-            maxDropDownHeight?: any;
-            maxDropDownWidth?: any;
-            itemFormatter?: any;
-            showGroups?: any;
-            trimText?: any;
-            caseSensitiveSearch?: any;
-            virtualizationThreshold?: any;
-            checkedMemberPath?: any;
-            maxHeaderItems?: any;
-            headerFormat?: any;
-            headerFormatter?: any;
-            showSelectAllCheckbox?: any;
-            selectAllLabel?: any;
-            showFilterInput?: any;
-            filterInputPlaceholder?: any;
-            checkOnFilter?: any;
-            delay?: any;
-            itemsSource?: any;
-            checkedItems?: any;
-            text?: any;
-            selectedIndex?: any;
-            selectedItem?: any;
-            selectedValue?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            itemsSourceChanged?: any;
-            formatItem?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            selectedIndexChanged?: any;
-            checkedItemsChanged?: any;
-            [key: string]: any;
-        };
         wjItemTemplate: ItemTemplateRender;
         constructor(props: any);
         componentDidMount(): any;
@@ -4950,64 +2447,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class MultiAutoComplete extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            displayMemberPath?: any;
-            selectedValuePath?: any;
-            headerPath?: any;
-            isContentHtml?: any;
-            isEditable?: any;
-            handleWheel?: any;
-            maxDropDownHeight?: any;
-            maxDropDownWidth?: any;
-            itemFormatter?: any;
-            showGroups?: any;
-            trimText?: any;
-            caseSensitiveSearch?: any;
-            virtualizationThreshold?: any;
-            delay?: any;
-            maxItems?: any;
-            minLength?: any;
-            cssMatch?: any;
-            itemsSourceFunction?: any;
-            searchMemberPath?: any;
-            beginsWithSearch?: any;
-            maxSelectedItems?: any;
-            selectedItems?: any;
-            itemsSource?: any;
-            selectedMemberPath?: any;
-            text?: any;
-            selectedIndex?: any;
-            selectedItem?: any;
-            selectedValue?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            itemsSourceChanged?: any;
-            formatItem?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            selectedIndexChanged?: any;
-            selectedItemsChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5020,34 +2459,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class InputNumber extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            showSpinner?: any;
-            repeatButtons?: any;
-            max?: any;
-            min?: any;
-            step?: any;
-            isRequired?: any;
-            placeholder?: any;
-            inputType?: any;
-            format?: any;
-            isReadOnly?: any;
-            handleWheel?: any;
-            value?: any;
-            text?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            valueChanged?: any;
-            textChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5060,59 +2471,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class InputDate extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            selectionMode?: any;
-            format?: any;
-            mask?: any;
-            max?: any;
-            min?: any;
-            repeatButtons?: any;
-            showYearPicker?: any;
-            itemValidator?: any;
-            itemFormatter?: any;
-            monthCount?: any;
-            handleWheel?: any;
-            showMonthPicker?: any;
-            showHeader?: any;
-            weeksBefore?: any;
-            weeksAfter?: any;
-            rangeMin?: any;
-            rangeMax?: any;
-            separator?: any;
-            alwaysShowCalendar?: any;
-            predefinedRanges?: any;
-            closeOnSelection?: any;
-            text?: any;
-            value?: any;
-            rangeEnd?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            rangeChanged?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            valueChanged?: any;
-            rangeEndChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5125,60 +2483,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class InputTime extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            displayMemberPath?: any;
-            selectedValuePath?: any;
-            headerPath?: any;
-            isContentHtml?: any;
-            isEditable?: any;
-            handleWheel?: any;
-            maxDropDownHeight?: any;
-            maxDropDownWidth?: any;
-            itemFormatter?: any;
-            showGroups?: any;
-            trimText?: any;
-            caseSensitiveSearch?: any;
-            virtualizationThreshold?: any;
-            max?: any;
-            min?: any;
-            step?: any;
-            format?: any;
-            mask?: any;
-            itemsSource?: any;
-            text?: any;
-            selectedIndex?: any;
-            selectedItem?: any;
-            selectedValue?: any;
-            value?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            itemsSourceChanged?: any;
-            formatItem?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            selectedIndexChanged?: any;
-            valueChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5191,63 +2495,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class InputDateTime extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            selectionMode?: any;
-            format?: any;
-            mask?: any;
-            max?: any;
-            min?: any;
-            repeatButtons?: any;
-            showYearPicker?: any;
-            itemValidator?: any;
-            itemFormatter?: any;
-            monthCount?: any;
-            handleWheel?: any;
-            showMonthPicker?: any;
-            showHeader?: any;
-            weeksBefore?: any;
-            weeksAfter?: any;
-            rangeMin?: any;
-            rangeMax?: any;
-            separator?: any;
-            alwaysShowCalendar?: any;
-            predefinedRanges?: any;
-            closeOnSelection?: any;
-            timeMax?: any;
-            timeMin?: any;
-            timeStep?: any;
-            timeFormat?: any;
-            text?: any;
-            value?: any;
-            rangeEnd?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            rangeChanged?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            valueChanged?: any;
-            rangeEndChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5260,59 +2507,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class InputDateRange extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            selectionMode?: any;
-            format?: any;
-            mask?: any;
-            max?: any;
-            min?: any;
-            repeatButtons?: any;
-            showYearPicker?: any;
-            itemValidator?: any;
-            itemFormatter?: any;
-            monthCount?: any;
-            handleWheel?: any;
-            showMonthPicker?: any;
-            showHeader?: any;
-            weeksBefore?: any;
-            weeksAfter?: any;
-            rangeMin?: any;
-            rangeMax?: any;
-            separator?: any;
-            alwaysShowCalendar?: any;
-            predefinedRanges?: any;
-            closeOnSelection?: any;
-            text?: any;
-            value?: any;
-            rangeEnd?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            rangeChanged?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            valueChanged?: any;
-            rangeEndChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5339,62 +2533,6 @@ declare module wijmo.react {
      * Value of the property can be id attribute of HTMLElement, reference or array of HTMLElement/ReactComponent.
      */
     class Menu extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isDroppedDown?: any;
-            showDropDownButton?: any;
-            autoExpandSelection?: any;
-            placeholder?: any;
-            dropDownCssClass?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            isRequired?: any;
-            inputType?: any;
-            clickAction?: any;
-            displayMemberPath?: any;
-            selectedValuePath?: any;
-            headerPath?: any;
-            isContentHtml?: any;
-            isEditable?: any;
-            handleWheel?: any;
-            maxDropDownHeight?: any;
-            maxDropDownWidth?: any;
-            itemFormatter?: any;
-            showGroups?: any;
-            trimText?: any;
-            caseSensitiveSearch?: any;
-            virtualizationThreshold?: any;
-            header?: any;
-            commandParameterPath?: any;
-            commandPath?: any;
-            subItemsPath?: any;
-            openOnHover?: any;
-            closeOnLeave?: any;
-            isButton?: any;
-            itemsSource?: any;
-            text?: any;
-            selectedIndex?: any;
-            selectedItem?: any;
-            selectedValue?: any;
-            value?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isDroppedDownChanging?: any;
-            itemsSourceChanged?: any;
-            formatItem?: any;
-            isDroppedDownChanged?: any;
-            textChanged?: any;
-            selectedIndexChanged?: any;
-            itemClicked?: any;
-            [key: string]: any;
-        };
         wjItemTemplate: ItemTemplateRender;
         private _definedHeader;
         private _value;
@@ -5426,15 +2564,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class MenuItem extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            value?: any;
-            cmd?: any;
-            cmdParam?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         contentRoot: HTMLElement;
@@ -5459,12 +2588,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class MenuSeparator extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         contentRoot: HTMLElement;
@@ -5495,48 +2618,7 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class Popup extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            owner?: any;
-            showTrigger?: any;
-            hideTrigger?: any;
-            fadeIn?: any;
-            fadeOut?: any;
-            isDraggable?: any;
-            isResizable?: any;
-            dialogResultEnter?: any;
-            dialogResultSubmit?: any;
-            modal?: any;
-            removeOnHide?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            showing?: any;
-            shown?: any;
-            hiding?: any;
-            hidden?: any;
-            resizing?: any;
-            sizeChanging?: any;
-            sizeChanged?: any;
-            resized?: any;
-            dragging?: any;
-            positionChanging?: any;
-            positionChanged?: any;
-            dragged?: any;
-            [key: string]: any;
-        };
-        private _sEl;
-        private _pEl;
-        private _v17;
         constructor(props: any);
-        componentDidMount(): void;
-        componentWillUnmount(): void;
         _renderImpl(): any;
     }
     /**
@@ -5549,23 +2631,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class CollectionViewNavigator extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            cv?: any;
-            byPage?: any;
-            headerFormat?: any;
-            repeatButtons?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
 }
@@ -5582,136 +2647,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class PivotGrid extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            newRowAtTop?: any;
-            allowAddNew?: any;
-            allowDelete?: any;
-            allowDragging?: any;
-            allowMerging?: any;
-            allowResizing?: any;
-            allowSorting?: any;
-            allowPinning?: any;
-            autoScroll?: any;
-            autoRowHeights?: any;
-            autoSizeMode?: any;
-            autoGenerateColumns?: any;
-            autoSearch?: any;
-            caseSensitiveSearch?: any;
-            quickAutoSize?: any;
-            bigCheckboxes?: any;
-            childItemsPath?: any;
-            groupHeaderFormat?: any;
-            headersVisibility?: any;
-            showSelectedHeaders?: any;
-            showMarquee?: any;
-            showPlaceholders?: any;
-            itemFormatter?: any;
-            isReadOnly?: any;
-            imeEnabled?: any;
-            mergeManager?: any;
-            selectionMode?: any;
-            showGroups?: any;
-            showSort?: any;
-            showDropDown?: any;
-            showAlternatingRows?: any;
-            showErrors?: any;
-            alternatingRowStep?: any;
-            itemValidator?: any;
-            validateEdits?: any;
-            treeIndent?: any;
-            itemsSource?: any;
-            autoClipboard?: any;
-            expandSelectionOnCopyPaste?: any;
-            frozenRows?: any;
-            frozenColumns?: any;
-            cloneFrozenCells?: any;
-            deferResizing?: any;
-            sortRowIndex?: any;
-            editColumnIndex?: any;
-            stickyHeaders?: any;
-            preserveSelectedState?: any;
-            preserveOutlineState?: any;
-            preserveWhiteSpace?: any;
-            keyActionTab?: any;
-            keyActionEnter?: any;
-            rowHeaderPath?: any;
-            virtualizationThreshold?: any;
-            anchorCursor?: any;
-            lazyRender?: any;
-            refreshOnEdit?: any;
-            copyHeaders?: any;
-            columnGroups?: any;
-            showDetailOnDoubleClick?: any;
-            customContextMenu?: any;
-            collapsibleSubtotals?: any;
-            centerHeadersVertically?: any;
-            showColumnFieldHeaders?: any;
-            showRowFieldHeaders?: any;
-            showValueFieldHeaders?: any;
-            outlineMode?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            beginningEdit?: any;
-            cellEditEnded?: any;
-            cellEditEnding?: any;
-            prepareCellForEdit?: any;
-            formatItem?: any;
-            resizingColumn?: any;
-            resizedColumn?: any;
-            autoSizingColumn?: any;
-            autoSizedColumn?: any;
-            draggingColumn?: any;
-            draggingColumnOver?: any;
-            draggedColumn?: any;
-            sortingColumn?: any;
-            sortedColumn?: any;
-            pinningColumn?: any;
-            pinnedColumn?: any;
-            resizingRow?: any;
-            resizedRow?: any;
-            autoSizingRow?: any;
-            autoSizedRow?: any;
-            draggingRow?: any;
-            draggingRowOver?: any;
-            draggedRow?: any;
-            deletingRow?: any;
-            deletedRow?: any;
-            loadingRows?: any;
-            loadedRows?: any;
-            rowEditStarting?: any;
-            rowEditStarted?: any;
-            rowEditEnding?: any;
-            rowEditEnded?: any;
-            rowAdded?: any;
-            groupCollapsedChanging?: any;
-            groupCollapsedChanged?: any;
-            columnGroupCollapsedChanging?: any;
-            columnGroupCollapsedChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            selectionChanging?: any;
-            selectionChanged?: any;
-            scrollPositionChanged?: any;
-            updatingView?: any;
-            updatedView?: any;
-            updatingLayout?: any;
-            updatedLayout?: any;
-            pasting?: any;
-            pasted?: any;
-            pastingCell?: any;
-            pastedCell?: any;
-            copying?: any;
-            copied?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5724,33 +2659,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class PivotChart extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            chartType?: any;
-            showHierarchicalAxes?: any;
-            showTotals?: any;
-            showTitle?: any;
-            showLegend?: any;
-            legendPosition?: any;
-            stacking?: any;
-            maxSeries?: any;
-            maxPoints?: any;
-            itemsSource?: any;
-            header?: any;
-            footer?: any;
-            headerStyle?: any;
-            footerStyle?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5763,29 +2671,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class PivotPanel extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            autoGenerateFields?: any;
-            viewDefinition?: any;
-            engine?: any;
-            itemsSource?: any;
-            showFieldIcons?: any;
-            restrictDragging?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            itemsSourceChanged?: any;
-            viewDefinitionChanged?: any;
-            updatingView?: any;
-            updatedView?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5798,24 +2683,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class Slicer extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            field?: any;
-            showHeader?: any;
-            header?: any;
-            showCheckboxes?: any;
-            multiSelect?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
 }
@@ -5832,38 +2699,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class ReportViewer extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            serviceUrl?: any;
-            filePath?: any;
-            fullScreen?: any;
-            zoomFactor?: any;
-            zoomMode?: any;
-            mouseMode?: any;
-            viewMode?: any;
-            requestHeaders?: any;
-            parameters?: any;
-            paginated?: any;
-            reportName?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            pageIndexChanged?: any;
-            queryLoadingData?: any;
-            beforeSendRequest?: any;
-            fullScreenChanged?: any;
-            zoomFactorChanged?: any;
-            zoomModeChanged?: any;
-            mouseModeChanged?: any;
-            viewModeChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5876,35 +2711,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class PdfViewer extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            serviceUrl?: any;
-            filePath?: any;
-            fullScreen?: any;
-            zoomFactor?: any;
-            zoomMode?: any;
-            mouseMode?: any;
-            viewMode?: any;
-            requestHeaders?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            pageIndexChanged?: any;
-            queryLoadingData?: any;
-            beforeSendRequest?: any;
-            fullScreenChanged?: any;
-            zoomFactorChanged?: any;
-            zoomModeChanged?: any;
-            mouseModeChanged?: any;
-            viewModeChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
 }
@@ -5921,57 +2727,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class TreeView extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            childItemsPath?: any;
-            displayMemberPath?: any;
-            imageMemberPath?: any;
-            checkedMemberPath?: any;
-            isContentHtml?: any;
-            showCheckboxes?: any;
-            autoCollapse?: any;
-            isAnimated?: any;
-            isReadOnly?: any;
-            allowDragging?: any;
-            checkOnClick?: any;
-            expandOnClick?: any;
-            collapseOnClick?: any;
-            expandOnLoad?: any;
-            lazyLoadFunction?: any;
-            itemsSource?: any;
-            selectedItem?: any;
-            selectedNode?: any;
-            checkedItems?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            itemsSourceChanged?: any;
-            loadingItems?: any;
-            loadedItems?: any;
-            itemClicked?: any;
-            isCollapsedChanging?: any;
-            isCollapsedChanged?: any;
-            isCheckedChanging?: any;
-            isCheckedChanged?: any;
-            formatItem?: any;
-            dragStart?: any;
-            dragOver?: any;
-            drop?: any;
-            dragEnd?: any;
-            nodeEditStarting?: any;
-            nodeEditStarted?: any;
-            nodeEditEnding?: any;
-            nodeEditEnded?: any;
-            selectedItemChanged?: any;
-            checkedItemsChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -5987,24 +2742,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class TabPanel extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isAnimated?: any;
-            autoSwitch?: any;
-            selectedIndex?: any;
-            selectedTab?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            selectedIndexChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         protected _createControl(): any;
         componentDidMount(): void;
@@ -6022,14 +2759,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class Tab extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            isVisible?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
         protected _createControl(): any;
@@ -6048,27 +2777,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class Accordion extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            isAnimated?: any;
-            autoSwitch?: any;
-            selectedIndex?: any;
-            selectedPane?: any;
-            showIcons?: any;
-            allowCollapseAll?: any;
-            allowExpandMany?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            selectedIndexChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         protected _createControl(): any;
         componentDidMount(): void;
@@ -6086,15 +2794,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class AccordionPane extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            isVisible?: any;
-            isCollapsed?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
         protected _createControl(): any;
@@ -6114,33 +2813,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeCodabar extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            autoWidth?: any;
-            autoWidthZoom?: any;
-            showLabel?: any;
-            checkDigit?: any;
-            labelPosition?: any;
-            nwRatio?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6153,29 +2825,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeEan8 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6188,32 +2837,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeEan13 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            addOn?: any;
-            addOnHeight?: any;
-            addOnLabelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6226,35 +2849,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeCode39 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            autoWidth?: any;
-            autoWidthZoom?: any;
-            showLabel?: any;
-            checkDigit?: any;
-            fullAscii?: any;
-            labelPosition?: any;
-            nwRatio?: any;
-            labelWithStartAndStopCharacter?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6267,32 +2861,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeCode128 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            autoWidth?: any;
-            autoWidthZoom?: any;
-            showLabel?: any;
-            codeSet?: any;
-            labelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6305,31 +2873,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeGs1_128 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            autoWidth?: any;
-            autoWidthZoom?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6342,32 +2885,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeUpcA extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            addOn?: any;
-            labelPosition?: any;
-            addOnHeight?: any;
-            addOnLabelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6380,32 +2897,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeUpcE0 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            addOn?: any;
-            labelPosition?: any;
-            addOnHeight?: any;
-            addOnLabelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6418,32 +2909,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeUpcE1 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            addOn?: any;
-            labelPosition?: any;
-            addOnHeight?: any;
-            addOnLabelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6456,35 +2921,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeQrCode extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            charCode?: any;
-            charset?: any;
-            model?: any;
-            version?: any;
-            errorCorrectionLevel?: any;
-            mask?: any;
-            connection?: any;
-            connectionIndex?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
 }
@@ -6501,34 +2937,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeGs1DataBarOmnidirectional extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            linkage?: any;
-            linkageVersion?: any;
-            linkageHeight?: any;
-            hideLinkageText?: any;
-            hideAiText?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6541,34 +2949,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeGs1DataBarTruncated extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            linkage?: any;
-            linkageVersion?: any;
-            linkageHeight?: any;
-            hideLinkageText?: any;
-            hideAiText?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6581,35 +2961,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeGs1DataBarStacked extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            linkage?: any;
-            linkageVersion?: any;
-            linkageHeight?: any;
-            hideLinkageText?: any;
-            hideAiText?: any;
-            ratio?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6622,35 +2973,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeGs1DataBarStackedOmnidirectional extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            linkage?: any;
-            linkageVersion?: any;
-            linkageHeight?: any;
-            hideLinkageText?: any;
-            hideAiText?: any;
-            ratio?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6663,34 +2985,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeGs1DataBarLimited extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            linkage?: any;
-            linkageVersion?: any;
-            linkageHeight?: any;
-            hideLinkageText?: any;
-            hideAiText?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6703,36 +2997,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeGs1DataBarExpanded extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            linkage?: any;
-            linkageVersion?: any;
-            linkageHeight?: any;
-            hideLinkageText?: any;
-            hideAiText?: any;
-            autoWidth?: any;
-            autoWidthZoom?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6745,37 +3009,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeGs1DataBarExpandedStacked extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            linkage?: any;
-            linkageVersion?: any;
-            linkageHeight?: any;
-            hideLinkageText?: any;
-            hideAiText?: any;
-            autoWidth?: any;
-            autoWidthZoom?: any;
-            rowCount?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6788,33 +3021,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodePdf417 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            autoWidth?: any;
-            autoWidthZoom?: any;
-            errorCorrectionLevel?: any;
-            columns?: any;
-            rows?: any;
-            compact?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6827,33 +3033,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeMicroPdf417 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            dimensions?: any;
-            compactionMode?: any;
-            structuredAppend?: any;
-            segmentIndex?: any;
-            fileId?: any;
-            optionalFields?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
 }
@@ -6870,29 +3049,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeDataMatrixEcc000 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            version?: any;
-            symbolSize?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6905,32 +3061,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeDataMatrixEcc200 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            symbolSize?: any;
-            encodingMode?: any;
-            structuredAppend?: any;
-            structureNumber?: any;
-            fileIdentifier?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6943,31 +3073,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeCode49 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            grouping?: any;
-            groupIndex?: any;
-            labelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -6980,33 +3085,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeCode93 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            autoWidth?: any;
-            autoWidthZoom?: any;
-            showLabel?: any;
-            checkDigit?: any;
-            fullAscii?: any;
-            labelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -7019,31 +3097,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeItf14 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            nwRatio?: any;
-            bearerBar?: any;
-            labelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -7056,34 +3109,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeInterleaved2of5 extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            autoWidth?: any;
-            autoWidthZoom?: any;
-            showLabel?: any;
-            nwRatio?: any;
-            bearerBar?: any;
-            labelPosition?: any;
-            checkCharacter?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
     /**
@@ -7096,29 +3121,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class BarcodeJapanesePostal extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            value?: any;
-            quietZone?: any;
-            renderType?: any;
-            color?: any;
-            backgroundColor?: any;
-            hideExtraChecksum?: any;
-            font?: any;
-            showLabel?: any;
-            labelPosition?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            isValidChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
     }
 }
@@ -7142,36 +3144,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class FlexMap extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            isDisabled?: any;
-            tabOrder?: any;
-            binding?: any;
-            footer?: any;
-            header?: any;
-            selectionMode?: any;
-            palette?: any;
-            plotMargin?: any;
-            footerStyle?: any;
-            headerStyle?: any;
-            tooltipContent?: any;
-            itemsSource?: any;
-            center?: any;
-            zoom?: any;
-            initialized?: any;
-            gotFocus?: any;
-            lostFocus?: any;
-            refreshing?: any;
-            refreshed?: any;
-            invalidInput?: any;
-            rendering?: any;
-            rendered?: any;
-            selectionChanged?: any;
-            itemsSourceChanging?: any;
-            itemsSourceChanged?: any;
-            [key: string]: any;
-        };
         constructor(props: any);
         componentDidMount(): any;
         componentDidUpdate(prevProps: any): void;
@@ -7193,20 +3165,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class ScatterMapLayer extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            style?: any;
-            itemsSource?: any;
-            url?: any;
-            symbolSize?: any;
-            symbolMinSize?: any;
-            symbolMaxSize?: any;
-            binding?: any;
-            initialized?: any;
-            itemsSourceChanged?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -7227,17 +3185,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class GeoMapLayer extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            style?: any;
-            itemsSource?: any;
-            url?: any;
-            itemFormatter?: any;
-            initialized?: any;
-            itemsSourceChanged?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -7258,16 +3205,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class GeoGridLayer extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            style?: any;
-            itemsSource?: any;
-            url?: any;
-            initialized?: any;
-            itemsSourceChanged?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         _siblingId: string;
         constructor(props: any);
@@ -7288,17 +3225,6 @@ declare module wijmo.react {
      * The signature of the handler function is the same as any other Wijmo event handlers.
      */
     class ColorScale extends ComponentBase {
-        props: {
-            template?: any;
-            children?: any;
-            scale?: any;
-            binding?: any;
-            colorUnknown?: any;
-            colors?: any;
-            format?: any;
-            initialized?: any;
-            [key: string]: any;
-        };
         _parentProp: string;
         constructor(props: any);
     }

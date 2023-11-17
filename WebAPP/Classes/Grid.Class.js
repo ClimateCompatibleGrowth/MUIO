@@ -18,6 +18,15 @@ export class Grid {
         this.srcEmi = JqxSources.srcEmi(emissions);
         this.srcUnits = JqxSources.srcUnit(JSON.stringify(UNITS));
 
+        // console.log('techs ', techs)
+        // console.log('commodities ', commodities)
+        // console.log('techGroups ', techGroups)
+        // console.log('emissions ', emissions)
+        // console.log('commNames ', commNames)
+        // console.log('emiNames ', emiNames)
+        // console.log('techGroupNames ', techGroupNames)
+        // console.log('UNITS ', UNITS)
+
         this.daTechs = new $.jqx.dataAdapter(this.srcTechs);
 
         this.daTechGroups = new $.jqx.dataAdapter(this.srcTechGroups, {
@@ -82,6 +91,8 @@ export class Grid {
             });
         }.bind(this);
 
+
+       
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
             // set the editor's current value. The callback is called each time the editor is displayed.
             var items = editor.jqxDropDownList('getItems');
@@ -102,6 +113,9 @@ export class Grid {
             }
         }.bind(this)
 
+
+       
+
         var getEditorValue = function (row, cellvalue, editor) {
             return editor.val();
         }
@@ -109,6 +123,7 @@ export class Grid {
         var validation_1 = function (cell, value) {
             var validationResult = true;
             var rows = $('#osy-gridTech').jqxGrid('getrows');
+            console.log('rows ', rows)
             for (var i = 0; i < rows.length; i++) {
                 if (rows[i].Tech.trim() == value.trim() && i != cell.row) {
                     validationResult = false;
@@ -139,6 +154,7 @@ export class Grid {
         }
 
         var cellsrendererTechGroups = function (row, columnfield, value, defaulthtml, columnproperties) {
+  
             let valueNames = [];
             if (Array.isArray(value)) {
                 var values = value;
@@ -199,6 +215,37 @@ export class Grid {
             //$("#filmPicture1").jqxTooltip({ content: '<b>Title:</b> <i>The Amazing Spider-man</i><br /><b>Year:</b> 2012', position: 'mouse', name: 'movieTooltip'});
         }
 
+        console.log('rdatTechsows ', this.daTechs)
+        // $("#osy-gridTech").jqxGrid({
+        //     width: '100%',
+        //     autoheight: true,
+        //     columnsheight: 20,
+        //     theme: this.theme(),
+        //     source: this.daTechs,
+        //     editable: true,
+        //     selectionmode: 'none',
+        //     enablehover: false,
+        //     sortable: true,
+        //     pageable: true,
+        //     pagesize: 10,
+        //     pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
+        //     showsortcolumnbackground: false,
+        //     columns: [
+        //         { text: 'techId', datafield: 'TechId', hidden: true },
+        //         { text: 'Technology', datafield: 'Tech', width: '10%', align: 'center', cellsalign: 'left', validation: validation_1 },
+        //         { text: 'Description', datafield: 'Desc', width: '10%', align: 'center', cellsalign: 'left' },
+        //         { text: 'Technology group', datafield: 'TG', width: '7%',  cellsrenderer: cellsrendererTechGroups, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlTechGroups, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+        //         { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
+        //         { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
+        //         { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+        //         { text: 'Output Activity Ratio', datafield: 'OAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+        //         { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+        //         { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+        //         { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
+        //         { text: '', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false },
+        //     ]
+        // });
+
         $("#osy-gridTech").jqxGrid({
             width: '100%',
             autoheight: true,
@@ -207,12 +254,13 @@ export class Grid {
             source: this.daTechs,
             editable: true,
             selectionmode: 'none',
+            showsortcolumnbackground: false,
             enablehover: false,
             sortable: true,
             pageable: true,
             pagesize: 10,
-            pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
-            showsortcolumnbackground: false,
+            //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
+            
             columns: [
                 { text: 'techId', datafield: 'TechId', hidden: true },
                 { text: 'Technology', datafield: 'Tech', width: '10%', align: 'center', cellsalign: 'left', validation: validation_1 },
@@ -227,7 +275,8 @@ export class Grid {
                 { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: '', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false },
             ]
-        });
+   
+        })
     }
 
     static techGroupGrid(groups) {

@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -985,12 +985,10 @@ declare module wijmo {
      * Gets an array containing the names and types of items in an array.
      *
      * @param arr Array containing data items.
-     * @param limit Number of the array items to scan (1000 by default). Zero or negative value causes
-     *  the function to scan all items.
      * @return An array containing objects with the binding and type of each
      * primitive property in the items found in the input array.
      */
-    function getTypes(arr: any[], limit?: number): IBindingInfo[];
+    function getTypes(arr: any[]): IBindingInfo[];
     /**
      * Changes the type of a value.
      *
@@ -1382,9 +1380,9 @@ declare module wijmo {
     /**
      * Saves content to a file.
      *
-     * @param content A string or a Blob object to be saved to a file.
+     * @param content String to be saved to a file.
      * @param fileName Name of the file to save, including extension.
-     * @param type Optional file MIME type, used if the **content** argument is a string.
+     * @param type Optional file MIME type.
      *
      * The {@link saveFile} method can be used to create text files
      * (txt, csv, html) as well as image files.
@@ -1401,13 +1399,12 @@ declare module wijmo {
      *
      * ```typescript
      * import { saveFile } from '@grapecity/wijmo';
-     *
-     * canvas.toBlob(blob => {
-     *    saveFile(blob, 'image.jpg');
-     * }, 'image/jpeg');
+     * let dataUrl = canvas.toDataURL('image/jpg', 0.95),
+     *     match = dataUrl.match(/^data:([^,]+),(.*)$/i);
+     * saveFile(match[2], 'canvas.jpg', match[1]);
      * ```
      */
-    function saveFile(content: string | Blob, fileName: string, type?: string): void;
+    function saveFile(content: string, fileName: string, type?: string): void;
     /**
      * Gets an element from a query selector.
      *
@@ -2378,7 +2375,7 @@ declare module wijmo {
         private static _expandFormat;
         private static _zeroPad;
         private static _h12;
-        static _shiftDecimal(val: any, shift: any, calcPrec?: number): any;
+        static _shiftDecimal(val: any, shift: any): any;
     }
     function _updateCulture(c: any): void;
     function _addCultureInfo(member: string, info: any): void;
@@ -3720,7 +3717,7 @@ declare module wijmo {
         protected _orgAtts: NamedNodeMap;
         protected _listeners: any[];
         protected _pristine: boolean;
-        _focus: boolean;
+        protected _focus: boolean;
         protected _updating: number;
         protected _fullUpdate: boolean;
         protected _toInv: any;
@@ -3883,25 +3880,11 @@ declare module wijmo {
          */
         readonly isTouching: boolean;
         /**
-         * Gets or sets a value of the **tabindex** attribute associated with the control.
-         *
-         * **tabindex** attribute value can be defined statically for a Wijmo control by specifying it
-         * on the control's host HTML element. But this value can't be changed later during application
-         * lifecycle, because Wijmo controls have complex structure, and the control may need to propagate
-         * this attribute value to its internal element to work properly.
-         *
-         * Because of this, to read or change control's **tabindex** dynamically, you should do it using
-         * this property.
-         */
-        tabOrder: number;
-        protected _setTabOrder(value: number): void;
-        /**
          * Gets or sets a value that determines whether the control is disabled.
          *
          * Disabled controls cannot get mouse or keyboard events.
          */
         isDisabled: boolean;
-        protected _setIsDisabled(value: boolean): void;
         /**
          * Initializes the control by copying the properties from a given object.
          *
@@ -4024,7 +4007,6 @@ declare module wijmo {
         private _updateWme;
         _hasPendingUpdates(): boolean;
         protected _handleResize(): void;
-        _resizeObserverCallback(entries: any[]): void;
         _handleFocusBlur(): void;
         protected _updateFocusState(): void;
         protected _updateState(): void;

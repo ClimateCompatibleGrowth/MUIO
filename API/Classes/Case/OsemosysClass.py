@@ -72,6 +72,12 @@ class Osemosys():
             d[k] = tmp
         self.PARAM = d
 
+        a=[]
+        for k, l in self.VARIABLES.items():
+            for de in l:
+                a.append(de['name'])
+        self.VARS = a
+
     def getParamDefaultValues(self):
         d = {}
         for k, l in self.PARAMETERS.items():
@@ -122,6 +128,10 @@ class Osemosys():
         techIds = [ tech['TechId'] for tech in self.genData["osy-tech"]]
         return techIds
 
+    def getTechNames(self):
+        techIds = [ tech['Tech'] for tech in self.genData["osy-tech"]]
+        return techIds
+
     def getTechs(self):
         techs = [ {tech['TechId']:tech['Tech']} for tech in self.genData["osy-tech"]]
         return techs
@@ -134,6 +144,10 @@ class Osemosys():
         emiIds = [ tech['EmisId'] for tech in self.genData["osy-emis"]]
         return emiIds
 
+    def getEmiNames(self):
+        emiIds = [ tech['Emis'] for tech in self.genData["osy-emis"]]
+        return emiIds
+    
     def getEmis(self):
         emis = [ {tech['EmisId']: tech['Emis']} for tech in self.genData["osy-emis"]]
         return emis
@@ -144,6 +158,10 @@ class Osemosys():
 
     def getCommIds(self):
         commIds = [ tech['CommId'] for tech in self.genData["osy-comm"]]
+        return commIds
+    
+    def getCommNames(self):
+        commIds = [ tech['Comm'] for tech in self.genData["osy-comm"]]
         return commIds
 
     def getComms(self):

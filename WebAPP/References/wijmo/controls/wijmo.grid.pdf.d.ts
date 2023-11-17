@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -353,7 +353,6 @@ declare module wijmo.grid.pdf {
         private _p;
         private _rng;
         private _data;
-        private _tagContent;
         private _canvas;
         private _cell;
         private _clientRect;
@@ -429,20 +428,6 @@ declare module wijmo.grid.pdf {
          * to export custom content for certain cells.
          */
         getFormattedCell(): HTMLElement;
-        /**
-         * Gets or sets a reference to a marked structure content of the cell.
-         *
-         * If user produces Tagged PDF and draws the cell content manually, then he can mark the cell content and return a reference to the structure content via this property.
-         * The returned item will be incorporated into the document's structure tree.
-         *
-         * For example:
-         * <pre>
-         * args.tagContent = args.canvas.beginTagContent(wijmo.pdf.PdfTagType.P);
-         * args.canvas.drawText('Some text', x, y);
-         * args.canvas.endTagContent();
-         * </pre>
-         */
-        tagContent: wijmo.pdf.IPdfTagContent | wijmo.pdf.IPdfTag;
         /**
          * Gets an object that represents the style of the cell being rendered.
          * If IFlexGridDrawSettings.customCellContent is set to true then the style is inferred
@@ -564,28 +549,18 @@ declare module wijmo.grid.pdf {
         constructor(gr: FlexGridRenderer, panel: _IGridPanel, range: RowRange, borderWidth: number);
         readonly gr: FlexGridRenderer;
         readonly renderSize: wijmo.Size;
-        private _getRangeWidth;
-        private _getRangeHeight;
+        getRangeWidth(leftCol: number, rightCol: number): number;
+        getRangeHeight(topRow: number, bottomRow: number): number;
         getCellsCount(): number;
-        render(doc: wijmo.pdf.PdfDocument, x: number, y: number, cellRendered: () => void, tableSection: TrStructCache): void;
-    }
-    class TrStructCache {
-        private doc;
-        private tableSection;
-        private _trh;
-        private _trb;
-        private _trf;
-        constructor(doc: wijmo.pdf.PdfDocument, tableSection: wijmo.pdf.IPdfTag);
-        readonly el: wijmo.pdf.IPdfTag;
-        getTR(row: number, cellType: _CellType): wijmo.pdf.IPdfTag;
+        render(doc: wijmo.pdf.PdfDocument, x: number, y: number, cellRendered?: () => void): void;
     }
     class _CellRenderer {
         private _pr;
         private _area;
         private _borderWidth;
-        private readonly InvisiblePen;
+        static _drawBackground(area: wijmo.pdf.PdfPageArea, clientRect: wijmo.Rect, brush: wijmo.pdf.PdfBrush | wijmo.Color | string): void;
         constructor(panelRenderer: PanelSectionRenderer, area: wijmo.pdf.PdfPageArea, borderWidth: number);
-        renderCell(value: string, row: _IRow, column: _IColumn, rng: _CellRangeExt, r: wijmo.Rect): wijmo.pdf.IPdfTagContent | wijmo.pdf.IPdfTag;
+        renderCell(value: string, row: _IRow, column: _IColumn, rng: _CellRangeExt, r: wijmo.Rect): void;
         private _renderCell;
         private _isBooleanCellAndValue;
         private _isBoolean;

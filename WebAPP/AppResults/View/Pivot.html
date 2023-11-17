@@ -41,38 +41,24 @@
 								</button>
 							</div>
 							<div class="btn-group pull-right">
-								<a data-toggle="modal" id='' href="#createView"
-									class="btn  btn-white btn-default hidden-mobile">
-									<i class="fa fa-lg fa-fw fa-plus-square-o fa-lg default"></i>
+								<a data-toggle="modal" id='' href="#createView"	class="btn  btn-white btn-default hidden-mobile">
+									<i class="fa fa-lg fa-fw fa-plus-circle fa-lg osy-second-color"></i>
 									Create view
-									<!-- <span class="btn-label">
-                                        <span class="fa fa-lg fa-fw fa-plus-square-o fa-lg primary"></span>
-                                    </span>Create view -->
 								</a>
 							</div>
-							<!-- <div class="btn-group pull-right">
-								<button type="button" id="loadView" class="btn btn-labeled btn-default ">
-                                    <span class="btn-label">
-                                        <span class="fa fa-lg fa-fw fa-line-chart success"></span>
-                                    </span>Load View
-                                </button>
-							</div> -->
 							<div class="btn-group pull-right">
-								<button type="button" id="deleteView" class="btn btn-white btn-default ">
-                                    <!-- <span class="btn-label">
-                                        <span class="fa fa-lg fa-fw fa-ban danger"></span>
-                                    </span>Delete view -->
-					
-                                        <i class="fa fa-lg fa-fw fa-ban fa-lg default"></i>
+								<button type="button" id="deleteView" class="btn btn-white btn-default ">					
+                                    <i class="fa fa-lg fa-fw fa-ban fa-lg osy-second-color"></i>
                                     Delete view
                                 </button>
 							</div>
-
 							<div class="btn-group pull-right">
-								<select id="osy-views" name="osy-views" class="form-control inline"></select>
+								<!-- <select id="osy-views" name="osy-views" class="form-control inline"></select> -->
+								<div id="cmbViews"></div>
 							</div>
 							<div class="btn-group">
-								<select id="osy-params" name="osy-params" class="form-control inline"></select>
+								<!-- <select id="osy-params" name="osy-params" class="form-control inline"></select> -->
+								<div id="cmbParams" style="width: 290px;"></div>
 							</div>
 						</div>
 					</div>
@@ -88,18 +74,26 @@
 	<div class="col-md-2">
 		<div id="pivotPanel"></div>
 	</div>
-	<div class="col-md-10">
-		<div id="cmbChartType"></div>
-		<div id="cmbStackedChart"></div>
-		<div id="showLegend"></div>
-		<label>
-			Show Row Totals:
-			<input id="showRowTotals" type="checkbox">
-		</label>
-		<label>
-			Show Column Totals:
-			<input id="showColumnTotals" type="checkbox">
-		</label>
+	<div class="col-md-10" id="pivotControls">
+		<div id="cmbChartType" style="width: 150px;"></div>
+		<div id="cmbStackedChart" style="width: 150px;"></div>
+		<!-- <div id="showLegend" style="width: 150px;"></div> -->
+
+		<div class="wj-labeled-input pull-right">
+			<input id="hideLegend" type="checkbox" />
+			<label for="hideLegend">Hide Legend</label>
+		</div>
+
+		<div class="wj-labeled-input pull-right">
+			<input id="showRowTotals" type="checkbox" />
+			<label for="showRowTotals">Show Row Totals</label>
+		</div>
+
+		<div class="wj-labeled-input pull-right">
+			<input id="showColumnTotals" type="checkbox" />
+			<label for="showColumnTotals">Show Column Totals</label>
+		</div>
+
 		<div id="pivotChart"></div>
 	</div>
 </div>
@@ -115,25 +109,14 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					&times;
-				</button> -->
+				</button>
 				<h4 class="modal-title">
-					Create view
+					<i class="fa fa-eye osy-second-color" aria-hidden="true" ></i>Create view
 				</h4>
-				<div class="btn-group pull-right">
-					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
-						<i class="fa fa-times" aria-hidden="true"></i> Cancel
-					</button>
-				</div>
-				<div class="btn-group pull-right">
-					<button type="button" class="btn btn-info btn-sm" id='btnSaveView'>
-						<i class="fa fa-save"></i> Save
-					</button>
-				</div>
-
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" style="padding-top: 0px;">
 				<div class="smart-form">
 
 					<fieldset>
@@ -141,7 +124,7 @@
 							<section class="col col-md-12">
 								<label class="label">View name</label>
 								<label class="input">
-									<input type="text" placeholder="viewname" name="osy-viewname" id="osy-viewname">
+									<input type="text" placeholder="View name" name="osy-viewname" id="osy-viewname">
 								</label>
 								<div class="note">
 									<strong>!@#$%^&*()</strong> are not allowed in model name!
@@ -158,8 +141,18 @@
 								</div>
 							</section>
 						</div>
+						<div class="btn-group pull-right">
+							<button type="button" class="btn btn-white btn-default btn-sm" data-dismiss="modal">
+								<i class="fa fa-times fa-lg danger" aria-hidden="true"></i> Cancel
+							</button>
+						</div>
+						<div class="btn-group pull-right">
+							<button type="button" class="btn tn-white btn-default btn-sm" id='btnSaveView'>
+								<i class="fa fa-save fa-lg osy-second-color"></i> Save
+							</button>
+						</div>
 					</fieldset>
-					<footer></footer>
+
 				</div>
 			</div>
 		</div>

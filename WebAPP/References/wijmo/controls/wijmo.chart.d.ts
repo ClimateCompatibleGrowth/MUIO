@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -1022,7 +1022,7 @@ declare module wijmo.chart {
          * Saves the chart to an image file.
          *
          * NOTE: This method does not work in IE browsers. If you require IE support,
-         * add the *wijmo.chart.render* module to the page.
+         * add the <code>flex-chart.render</code> module to the page.
          *
          * @param filename The filename for the exported image file including extension.
          * Supported types are PNG, JPEG and SVG.

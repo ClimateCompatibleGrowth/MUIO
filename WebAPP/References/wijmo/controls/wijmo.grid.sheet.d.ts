@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -154,7 +154,6 @@ declare module wijmo.grid.sheet {
      */
     class Table {
         _owner: FlexSheet;
-        _attached: boolean;
         private _sheet;
         private _name;
         private _columns;
@@ -256,11 +255,10 @@ declare module wijmo.grid.sheet {
         _updateCell(rowIndex: number, colIndex: number, cell: HTMLElement): void;
         _updateTableRange(topRowChange: number, bottomRowChage: number, leftColChange: number, rightColChange: number): void;
         _setTableRange(range: wijmo.grid.CellRange, columns?: TableColumn[]): void;
-        _updateColumnName(tblColIndex: number, columnName: string, updateCell?: boolean): void;
+        _updateColumnName(columnIndex: number, columnName: string): void;
         _updateColumnTotalRowContent(column: TableColumn, columnIndex?: number): void;
         _attachSheet(sheet: Sheet): void;
         _detachSheet(): void;
-        private readonly _flex;
         private _pushTableColumns;
         private _generateColumns;
         _getTableCellAppliedStyles(cellRowIndex: number, cellColIndex: number): ITableSectionStyle;
@@ -568,8 +566,6 @@ declare module wijmo.grid.sheet {
         private _count;
         private _isAdding;
         private _delSubActions;
-        private _headerRowAtTop;
-        private _headerRowIndex;
         _affectedFormulas: any;
         _affectedDefinedNameVals: any;
         _deletedTables: Table[];
@@ -764,8 +760,7 @@ declare module wijmo.grid.sheet {
         clearSort(): void;
         private _getSortItem;
         _cloneSortList(sortList: ColumnSortDescription[]): ColumnSortDescription[];
-        _updateSortDescriptions(colIndex: number, count: number, isAdd?: boolean): void;
-        _handleColumnMoving(from: number, to: number): void;
+        _updateSortSortDescription(colIndex: number, count: number, isAdd?: boolean): void;
         private _isEmpty;
     }
     /**
@@ -830,7 +825,6 @@ declare module wijmo.grid.sheet {
         private _isDragging;
         private _draggingColumn;
         private _draggingRow;
-        private _draggingSingleRow;
         private _draggingMarker;
         private _draggingTooltip;
         private _draggingCells;
@@ -851,7 +845,6 @@ declare module wijmo.grid.sheet {
         _enableMulSel: boolean;
         _isClicking: boolean;
         _isCopying: boolean;
-        _isDeletingRows: boolean;
         _isUndoing: boolean;
         _reservedContent: any;
         _lastVisibleFrozenRow: number;
@@ -927,15 +920,7 @@ declare module wijmo.grid.sheet {
          */
         showFilterIcons: boolean;
         /**
-         * Gets or sets the number of digits after the decimal point to round to when calculating formulas.
-         *
-         * Negative value means that no rounding is performed.
-         *
-         * The default value for this property is **14**.
-         */
-        calculationPrecision: number;
-        /**
-         * Gets an array the {@link DefinedName} objects representing named ranges/expressions
+             * Gets an array the {@link DefinedName} objects representing named ranges/expressions
          * defined in the <b>FlexSheet</b>.
          */
         readonly definedNames: wijmo.collections.ObservableArray<DefinedName>;
@@ -1458,7 +1443,6 @@ declare module wijmo.grid.sheet {
         getBuiltInTableStyle(styleName: string): TableStyle;
         onSortingColumn(e: wijmo.grid.CellRangeEventArgs): boolean;
         _getCvIndex(index: number): number;
-        _headerRowAtTop(): boolean;
         _getDataRowsOffset(): number;
         protected _bindGrid(full: boolean): void;
         private _init;
@@ -1555,8 +1539,6 @@ declare module wijmo.grid.sheet {
         _validateSheetName(sheetName: string): boolean;
         _checkExistDefinedName(name: string, sheetName: string, ignoreIndex?: number): boolean;
         private _updateDefinedNameWithSheetRefUpdating;
-        _sheetNameChanged(oldName: string, newName: string): void;
-        _updateFormulasTableColumn(table: Table, col: number, oldColName: string, newColName: string): void;
         _updateFormulasWithNameUpdating(oldName: string, newName: string, isTable?: boolean): void;
         _getDefinedNameIndexByName(name: string): number;
         private _updateTablesForUpdatingRow;
@@ -1988,21 +1970,11 @@ declare module wijmo.grid.sheet {
      */
     interface IFlexSheetXlsxOptions {
         /**
-         * Export only.
-         *
-         * Defines the conversion behavior for HTML entities such as "&quot;", "&lt;", "&gt;" and "&amp;" when exporting.
-         *
-         * The default value is {@link wijmo.grid.xlsx.HtmlEntityConversion.Auto}.
-         */
-        convertHtmlEntities?: wijmo.grid.xlsx.HtmlEntityConversion;
-        /**
-         * Export only.
-         *
          * Indicates whether export the calculated value for formula cells.
          */
         includeFormulaValues?: boolean;
     }
-    function _isFormula(val: any): val is string;
+    function _isFormula(val: any): boolean;
     function _isEditingCell(g: wijmo.grid.FlexGrid, r: number, c: number): boolean;
     enum AutoFillOperation {
         CopyFormat = 1,
@@ -2332,6 +2304,7 @@ declare module wijmo.grid.sheet {
         private _tables;
         _sortList: ColumnSortDescription[];
         private _filterSetting;
+        _showDefaultHeader: boolean;
         _dataView: any[];
         _ownerHeaderRowRemoved: boolean;
         /**
@@ -2381,7 +2354,7 @@ declare module wijmo.grid.sheet {
          * Gets the collection of the {@link Table} objects on this Sheet.
          * It allows to insert/remove {@link Table} on this Sheet via the tables collection.
          */
-        readonly tables: wijmo.collections.ObservableArray<Table>;
+        readonly tables: wijmo.collections.ObservableArray;
         _styledCells: _StyledCellsDict;
         readonly _mergedRanges: wijmo.grid.CellRange[];
         /**
@@ -2438,7 +2411,6 @@ declare module wijmo.grid.sheet {
         _setRowSettings(): void;
         _addTable(range: wijmo.grid.CellRange, tableName?: string, tableStyle?: TableStyle, columns?: TableColumn[], options?: ITableOptions): Table;
         _addSelection(val: wijmo.grid.CellRange): void;
-        private readonly _flex;
         private _compareRows;
         private _createGrid;
         private _clearGrid;
@@ -2732,9 +2704,6 @@ declare module wijmo.grid.sheet {
 }
 declare module wijmo.grid.sheet {
     class _Expression {
-        static Precision: number;
-        private static PowOf10;
-        static round(v: number): number;
         private _token;
         _evaluatedValue: any;
         _inGroup: boolean;

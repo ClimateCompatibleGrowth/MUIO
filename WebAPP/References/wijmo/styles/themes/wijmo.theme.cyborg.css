@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -419,10 +419,6 @@
 
 .wj-control.wj-inputmask {
   display: inline-flex;
-}
-
-.wj-control.wj-inputmask .wj-input {
-  width: 100%;
 }
 
 .wj-control.wj-inputmask .wj-input-group {
@@ -1486,11 +1482,11 @@
 }
 
 .wj-flexgrid .wj-colheaders .wj-header.wj-colgroup.wj-align-right {
-  justify-content: flex-end;
+  justify-content: safe flex-end;
 }
 
 .wj-flexgrid .wj-colheaders .wj-header.wj-colgroup.wj-align-center {
-  justify-content: center;
+  justify-content: safe center;
 }
 
 .wj-flexgrid .wj-colheaders .wj-header.wj-big-header:after {
@@ -1629,8 +1625,6 @@
 }
 
 .wj-flexgrid .wj-cell label {
-  display: inline-block;
-  max-width: 100%;
   margin: 0;
   font-weight: inherit;
   line-height: 1em;
@@ -2034,7 +2028,6 @@
   transform: scale(20);
   cursor: pointer;
   content: '\2605';
-  height: 100%;
 }
 
 .wj-flexgrid .wj-cell.wj-cell-maker.wj-radio-map label:hover {

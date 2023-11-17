@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -39,10 +39,10 @@
             display: flex;
             align-items: center; // vertical alignment
             &.wj-align-right {
-                justify-content: flex-end;
+                justify-content: safe flex-end; // 'safe' ensures content start remains visible
             }
             &.wj-align-center {
-                justify-content: center;
+                justify-content: safe center; // 'safe' ensures content start remains visible
             }
         }
         &.wj-big-header:after { // headers before zero-width columns
@@ -183,8 +183,6 @@
 
         // fix for C1WEB-27716 (auto-size rows and boolean cells)
         label {
-            display: inline-block; // WJM-20982
-            max-width: 100%;
             margin: 0;
             font-weight: inherit;
             line-height: 1em; // WJM-19514

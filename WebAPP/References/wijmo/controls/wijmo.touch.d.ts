@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -108,7 +108,6 @@ declare module wijmo.touch {
         _imgCustom: HTMLElement;
         _imgOffset: wijmo.Point;
         static _instance: DragDropTouch;
-        private _isDragging;
         private static _THRESHOLD;
         private static _OPACITY;
         private static _DBLCLICK;

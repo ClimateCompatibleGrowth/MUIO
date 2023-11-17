@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -115,9 +115,6 @@ declare module wijmo.nav {
         private _keydown;
         private _getTabIndex;
         private _getNextIndex;
-        _setIsDisabled(value: boolean): void;
-        _setTabOrder(value: number): void;
-        _updateTabIndex(): void;
     }
     /**
      * Represents a tab within a {@link TabPanel} control.
@@ -272,15 +269,10 @@ declare module wijmo.nav {
         _populateControl(): void;
         _validateSelection(): void;
         private _updateContent;
-        private _updatePanesTabIndex;
-        protected _setTabOrder(value: number): void;
         private _click;
         private _keydown;
         private _getPaneIndex;
         private _getNextIndex;
-        private _getIndexOfPane;
-        private _getNextActiveIndex;
-        _togglePane(pane: AccordionPane, collapse: boolean): void;
     }
     /**
      * Represents a pane in an {@link Accordion} control.
@@ -320,10 +312,6 @@ declare module wijmo.nav {
          * Gets or sets a value that determines whether this {@link AccordionPane} is visible.
          */
         isVisible: boolean;
-        /**
-         * Gets or sets a value that determines whether this {@link AccordionPane} is expanded or collapsed.
-         */
-        isCollapsed: boolean;
         _setParts(header: HTMLElement, content: HTMLElement): void;
         _setAccordion(accordion: Accordion): void;
     }
@@ -1361,8 +1349,6 @@ declare module wijmo.nav {
          */
         refresh(fullUpdate?: boolean): void;
         _updateFocus(oldNode: TreeNode): void;
-        private _updateTabIndex;
-        protected _setTabOrder(value: number): void;
         _raiseCheckedItemsChanged(): void;
         _reload(): void;
         _createNode(dataItem: any): TreeNode;

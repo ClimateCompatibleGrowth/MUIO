@@ -11,6 +11,7 @@ export class Message {
         $("#osy-success-transparent").empty();
         $("#osy-danger-transparent").empty();
         $("#osy-info-transparent").empty();
+        $("#osy-default-transparent").empty();
     }
 
     static warning(message) {
@@ -216,6 +217,14 @@ export class Message {
             init_f(Value);
             //alert(ButtonPress + " " + Value);
         });
+    }
+
+    static resMessage(message) {
+        $("#res-message").html(
+            `<div class="alert alert-osy-second-color fade in">
+                <button class="close" data-dismiss="alert">×</button>
+                 <i style="color:grey">`+ message + `
+            </div>`);
     }
 
     static loaderStart(msg){

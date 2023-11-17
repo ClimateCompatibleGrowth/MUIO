@@ -1,6 +1,6 @@
 /*!
     *
-    * Wijmo Library 5.20213.834
+    * Wijmo Library 5.20212.812
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -10,14 +10,6 @@
     * wijmo.com/products/wijmo-5/license/
     *
     */
-declare module wijmo.grid {
-    type _BrowserVer = {
-        full: string;
-        major: number;
-        minor: number;
-    };
-    function _getSafariVer(): _BrowserVer;
-}
 declare module wijmo.grid {
     /**
      * Specifies constants that define the type of editor used with data-mapped columns.
@@ -678,7 +670,7 @@ declare module wijmo.grid {
      * Handles the grid's selection.
      */
     class _SelectionHandler {
-        protected _g: FlexGrid;
+        private _g;
         private _sel;
         private _xSel;
         private _e;
@@ -718,10 +710,7 @@ declare module wijmo.grid {
          * @param extend Whether to extend the current selection or start a new one.
          */
         moveSelection(rowMove: SelMove, colMove: SelMove, extend: boolean): void;
-        _getNextColumnCell(r: number, c: number, move: SelMove, pageSize?: number): any;
-        _getNextRowCell(r: number, c: number, move: SelMove, pageSize?: number): any;
         _setSelectionMode(value: SelectionMode): void;
-        _adjustSelection(range: CellRange, mode: SelectionMode, force?: boolean): void;
         _expandSelection(): void;
         _deselectRange(rng: CellRange): boolean;
         private _expandSelectedRows;
@@ -1140,7 +1129,7 @@ declare module wijmo.grid {
         private _agg;
         private _quickSize;
         private _descById;
-        _edt: _CustomEditor;
+        private _edt;
         _tpl: string | ICellTemplateFunction;
         _szStar: string;
         _hash: string;
@@ -4345,10 +4334,7 @@ declare module wijmo.grid {
          * Raises the {@link updatedView} event.
          */
         onUpdatedView(e?: wijmo.EventArgs): void;
-        protected _createSelHdl(): _SelectionHandler;
         _getTabIndex(): number;
-        protected _setTabOrder(value: number): void;
-        private _updateTabIndex;
         _autoRowHeights(): void;
         _getShowErrors(): boolean;
         _getHasValidation(): boolean;
@@ -4470,7 +4456,6 @@ declare module wijmo.grid {
         protected _top: boolean;
         protected _keydownBnd: any;
         protected _committing: boolean;
-        private _pasting;
         /**
          * Initializes a new instance of the {@link _AddNewHandler} class.
          *
@@ -4492,12 +4477,7 @@ declare module wijmo.grid {
         _detach(): void;
         _keydown(e: KeyboardEvent): void;
         _beginningEdit(s: FlexGrid, e: CellRangeEventArgs): void;
-        _pastingData(s: FlexGrid, e: CellRangeEventArgs): void;
-        _pastedData(s: FlexGrid, e: CellRangeEventArgs): void;
-        _rowEditStarting(s: FlexGrid, e: CellRangeEventArgs): void;
-        _rowEditEnding(s: FlexGrid, e: CellRangeEventArgs): void;
         _rowEditEnded(s: FlexGrid, e: CellRangeEventArgs): void;
-        private _handleEditStarting;
     }
     /**
      * Represents a row template used to add items to the source collection.
@@ -4819,6 +4799,7 @@ declare module wijmo.grid {
         _isInputDateTime: boolean;
         _isInputMask: boolean;
         _updateFocusBnd: any;
+        _keypressBnd: any;
         _keydownBnd: any;
         _cmpstartBnd: any;
         _mousedownBnd: any;
@@ -4861,22 +4842,20 @@ declare module wijmo.grid {
          * Disposes of this {@link _CustomEditor}, disconnecting it from the original column.
          */
         dispose(): void;
-        private _connect;
-        private _disconnect;
-        private _prepareCellForEdit;
-        private _cellEditEnding;
-        private _cellEditEnded;
-        private _cmpstart;
-        private _keydown;
-        private _checkColumn;
-        private _mousedown;
-        private _activateEditor;
-        private _showEditor;
-        private _hideEditor;
-        private _updateFocus;
-        private _initImeEditInput;
-        private static _setSelectionRange;
-        private _imeEditor;
+        _connect(): void;
+        _disconnect(): void;
+        _prepareCellForEdit(s: FlexGrid, e: CellRangeEventArgs): void;
+        _cellEditEnding(s: FlexGrid, e: CellEditEndingEventArgs): void;
+        _cellEditEnded(s: FlexGrid, e: CellRangeEventArgs): void;
+        _cmpstart(e: any): void;
+        _keypress(e: KeyboardEvent): void;
+        _keydown(e: KeyboardEvent): void;
+        _checkColumn(target: EventTarget): boolean;
+        _mousedown(e: MouseEvent): void;
+        _activateEditor(e: any): boolean;
+        _showEditor(): void;
+        _hideEditor(): void;
+        _updateFocus(): void;
     }
 }
 declare module wijmo.grid {

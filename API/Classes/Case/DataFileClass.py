@@ -25,7 +25,6 @@ class DataFile(Osemosys):
             self.f.write('{} {} {}'.format('RE1', tmp, '\n'))
             self.f.write('{} {}'.format(';', '\n'))
 
-
     def gen_RCn(self):
         rcn = self.RCn()
         self.f.write('{} {} {} {} {} {}'.format('param', 'UDCTag','default', -1, ':','\n'))
@@ -757,58 +756,37 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
-    def generateCSVfromCBC(self, data_file, results_file, base_folder=os.getcwd()):
-
-        pd.set_option('mode.chained_assignment', None)
+    def preprocessData(self, data_infile, data_outfile):
 
         lines = []
+        with open(data_infile, 'r') as f1:
+            for line in f1:
+                if not line.startswith(('set MODEper','set MODEx', 'end;')):
+                    lines.append(line)
+
+        with open(data_outfile, 'w') as f2:
+            f2.writelines(lines)
 
         parsing = False
+
+        year_list = self.getYears()
+        fuel_list = self.getCommNames()
+        tech_list = self.getTechNames()
+        emi_list = self.getEmiNames()
 
         data_all = []
         data_out = []
         data_inp = []
-        output_table = []
-        input_table = []
-        storage_to = []
-        storage_from = []
-        emi_table = []
+        data_emi = []
 
-        with open(data_file, 'r') as f:
+
+        start_year = year_list[0]
+
+        with open(data_infile, 'r') as f:
             for line in f:
-                if line.startswith('set YEAR'):
-                    start_year = line.split(' ')[3]
-                    year_list = line.split(' ')[3:-1]
-                    #print(year_list)
-                if line.startswith('set COMMODITY'): # Extracts list of COMMODITIES from data file. Some models use FUEL instead.
-                    fuel_list = line.split(' ')[3:-1]
-                    #print(fuel_list)
-                if line.startswith('set FUEL'): # Extracts list of FUELS from data file. Some models use COMMODITIES instead.
-                    fuel_list = line.split(' ')[3:-1]
-                    #print(fuel_list)
-                if line.startswith('set TECHNOLOGY'):
-                    tech_list = line.split(' ')[3:-1]
-                    #print(tech_list)
-                if line.startswith('set STORAGE'):
-                    storage_list = line.split(' ')[3:-1]
-                    #print(storage_list)
-                if line.startswith('set MODE_OF_OPERATION'):
-                    mode_list = line.split(' ')[3:-1]
-                    #print(mode_list)
-                if line.startswith('set TIMESLICE'):
-                    ts_list = line.split(' ')[3:-1]
-                    #print(ts_list)
-                if line.startswith('set REGION'):
-                    line = line.rstrip(' ;\n')
-                    region_list = line.split(' ')[3:]
-                    #print(region_list)
-                if line.startswith('set EMISSION'):
-                    emission_list = line.split(' ')[3:-1]
-                    #print(emission_list)
-
+                line = line.rstrip().replace('\t', ' ')
                 if line.startswith(";"):
-                        parsing = False
-
+                    parsing = False
                 if parsing:
                     if line.startswith('['):
                         fuel = line.split(',')[2]
@@ -819,628 +797,31 @@ class DataFile(Osemosys):
                     else:
                         values = line.rstrip().split(' ')[1:]
                         mode = line.split(' ')[0]
+                        if param_current =='OutputActivityRatio':
+                            data_out.append(tuple([fuel, tech, mode]))
+                            data_all.append(tuple([tech, mode]))
 
-                        if param_current=='OutputActivityRatio':
-                            #data_out.append(tuple([fuel,tech,mode]))
-                            #data_all.append(tuple([tech,mode]))
-                            for i in range(0,len(years)):
-                                output_table.append(tuple([tech,fuel,mode,years[i],values[i]]))
+                        if param_current =='InputActivityRatio':
+                            data_inp.append(tuple([fuel, tech, mode]))
+                            data_all.append(tuple([tech, mode]))
 
-                        if param_current=='InputActivityRatio':
-                            #data_inp.append(tuple([fuel,tech,mode]))
-                            #data_all.append(tuple([tech,mode]))
-                            for i in range(0,len(years)):
-                                input_table.append(tuple([tech,fuel,mode,years[i],values[i]]))
+                        if param_current =='EmissionActivityRatio':
+                            data_emi.append(tuple([fuel, tech, mode]))
+                            data_all.append(tuple([tech, mode]))
 
-                        if param_current == 'TechnologyToStorage' or param_current == 'TechnologyFromStorage':
-                            if not line.startswith(mode_list[0]):
-                                storage = line.split(' ')[0]
-                                values = line.rstrip().split(' ')[1:]
-                                for i in range(0,len(mode_list)):
-                                    if values[i] != '0':
-                                        if param_current == 'TechnologyToStorage':
-                                            storage_to.append(tuple([storage,tech,mode_list[i]]))
-                                            data_all.append(tuple([tech,mode_list[i]]))
-                                        if param_current == 'TechnologyFromStorage':
-                                            storage_from.append(tuple([storage,tech,mode_list[i]]))
-                                            data_all.append(tuple([tech,mode_list[i]]))
-                        
-                        if param_current == 'EmissionActivityRatio':
-                            for i in range(0,len(years)):
-                                emi_table.append(tuple([tech,fuel,mode,years[i],values[i]]))
-
-                if line.startswith(('param OutputActivityRatio','param InputActivityRatio','param TechnologyToStorage','param TechnologyFromStorage', 'param EmissionActivityRatio')):
+                if line.startswith(('param OutputActivityRatio','param InputActivityRatio', 'param EmissionActivityRatio')):
                     param_current = line.split(' ')[1]
                     parsing = True
-
-        try:
-            os.makedirs(os.path.join(base_folder, 'csv'))
-        except FileExistsError:
-            pass
-
-        #Read CBC output file
-        
-        cols = {'NewCapacity':['r','t','y'],
-                'AccumulatedNewCapacity':['r','t','y'],
-                'TotalCapacityAnnual':['r','t','y'],
-                'CapitalInvestment':['r','t','y'],
-                'AnnualVariableOperatingCost':['r','t','y'],
-                'AnnualFixedOperatingCost':['r','t','y'],
-                'SalvageValue':['r','t','y'],
-                'DiscountedSalvageValue':['r','t','y'],
-                'TotalTechnologyAnnualActivity':['r','t','y'],
-                'RateOfActivity':['r','l','t','m','y'],
-                'RateOfTotalActivity':['r','t','l','y'],
-                'Demand':['r','l','f','y'],
-                'TotalAnnualTechnologyActivityByMode':['r','t','m','y'],
-                'TotalTechnologyModelPeriodActivity':['r','t'],
-                'ProductionByTechnology':['r','l','t','f','y'],
-                'ProductionByTechnologyAnnual':['r','t','f','y'],
-                'AnnualTechnologyEmissionByMode':['r','t','e','m','y'],
-                'EmissionByActivityChange':['r','t','e','m','y'],
-                'AnnualTechnologyEmission':['r','t','e','y'],
-                'AnnualEmissions':['r','e','y'],
-                'DiscountedTechnologyEmissionsPenalty':['r','t','y'],
-                'RateOfProductionByTechnology':['r','l','t','f','y'],
-                'RateOfUseByTechnology':['r','l','t','f','y'],
-                'UseByTechnology':['r','l','t','f','y'],
-                'UseByTechnologyAnnual':['r','t','f','y'],
-                #'RateOfProductionByTechnologyByMode':['r','l','t','m','f','y'],
-                #'RateOfUseByTechnologyByMode':['r','l','t','m','f','y'],
-                'TechnologyActivityChangeByMode':['r','t','m','y'],
-                'TechnologyActivityChangeByModeCostTotal':['r','t','m','y'],
-                'InputToNewCapacity':['r','t','f','y'],
-                'InputToTotalCapacity':['r','t','f','y'],
-                'DiscountedCapitalInvestment':['r','t','y'],
-                'DiscountedOperatingCost':['r','t','y'],
-                'TotalDiscountedCostByTechnology':['r','t','y'],
-                'NewStorageCapacity':['r','s','y'],
-                'SalvageValueStorage':['r','s','y'],
-                'NumberOfNewTechnologyUnits':['r','t','y'],
-                'Trade':['r','rr','l','f','y']
-                }
-        
-        params = []
-        
-        df = pd.read_csv(results_file, sep='\t')
-
-        df.columns = ['temp']
-        df['temp'] = df['temp'].str.lstrip(' *\n\t')
-        
-        if len(df) > 0:
-            df[['temp','value']] = df['temp'].str.split(')', expand=True)
-            df = df.applymap(lambda x: x.strip() if isinstance(x,str) else x)
-            #error when moved to ython 3.11, Columns must have smae length as key
-            # df['value'] = df['value'].str.split(' ', expand=True)
-            df['value'] = df['value'].str.split(' ', expand=True)[0]
-            df[['parameter','id']] = df['temp'].str.split('(', expand=True)
-            df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]
-            df = df.drop('temp', axis=1)
-            df['value'] = df['value'].astype(float).round(4)
-
-            params = df.parameter.unique()
-            all_params = {}
-
-            for each in params:
-                result_cols = []
-                df_p = df[df.parameter == each]
-                df_p[cols[each]] = df_p['id'].str.split(',',expand=True)
-                result_cols = cols[each].copy()
-                result_cols.append('value')
-                df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
-                all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
-                df_p = df_p.rename(columns={'value':each})
-                # df_p.to_csv(os.path.join(base_folder, 'csv', str(each) + '.csv'), index=None) # Print data for each parameter to a CSV file
-        
-        
-        results_list = ['TotalTechnologyModelPeriodActivity',
-                        'AnnualEmissions',
-                        'NewStorageCapacity',
-                        'SalvageValueStorage',
-                        'AccumulatedNewCapacity',
-                        'CapitalInvestment',
-                        'AnnualFixedOperatingCost',
-                        'AnnualVariableOperatingCost',
-                        'DiscountedSalvageValue',
-                        'DiscountedTechnologyEmissionsPenalty',
-                        'NewCapacity',
-                        'NumberOfNewTechnologyUnits',
-                        'SalvageValue',
-                        'TotalCapacityAnnual',
-                        'TotalTechnologyAnnualActivity',
-                        'TotalAnnualTechnologyActivityByMode',
-                        'InputToNewCapacity',
-                        'InputToTotalCapacity',
-                        'ProductionByTechnologyAnnual',
-                        'UseByTechnologyAnnual',
-                        'AnnualTechnologyEmission',
-                        'RateOfTotalActivity',
-                        'Demand',
-                        'Trade',
-                        'AnnualTechnologyEmissionByMode',
-                        'EmissionByActivityChange',
-                        'ProductionByTechnology',
-                        'RateOfProductionByTechnology',
-                        'RateOfUseByTechnology',
-                        'UseByTechnology',
-                        'RateOfActivity'
-                        #'RateOfProductionByTechnologyByMode',
-                        #'RateOfUseByTechnologyByMode'
-                        ]
-        
-        year_split = []
-        parsing = False
-
-        with open(data_file, 'r') as f:
-            for line in f:
-                if line.startswith(";"):
-                    parsing = False
-                if parsing:
-                    if line.startswith(start_year):
-                        years = line.rstrip().split(' ')[0:]
-                        years = [i.strip(':=') for i in years]
-                        years = list(filter(None, years))
-                    elif not line.startswith(start_year):
-                        time_slice = line.rstrip().split(' ')[0]
-                        values = line.rstrip().split(' ')[1:]
-                        for i in range(0,len(years)):
-                            year_split.append(tuple([time_slice,years[i],values[i]]))
-                if line.startswith('param YearSplit'):
-                    parsing = True
-
-        df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
-        if len(df) > 0:
-            df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
-            df_activity_total = all_params['TotalAnnualTechnologyActivityByMode'].rename(columns={'value':'TotalAnnualTechnologyActivityByMode'})
-
-        ####################################################################################
-
-        df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
-        df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
-        df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
-        df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
-        
-        df_input = pd.DataFrame(input_table, columns=['t','f','m','y','InputActivityRatio'])
-        df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
-        df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
-        df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
-        
-        df_emi = pd.DataFrame(emi_table, columns=['t','e','m','y','EmissionActivityRatio'])
-        df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
-        #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
-        
-        ##################################################################################
-        
-        index_dict = {'r': region_list,
-                    'rr': region_list,
-                    'l': ts_list,
-                    't': tech_list,
-                    'f': fuel_list,
-                    'm': mode_list,
-                    'e': emission_list,
-                    'y': year_list,
-                    's': storage_list}
-        
-        def sort_df(df):
-            if 'y' in df.columns:
-                sorted_df = df.sort_values(by=['y'])
-            else:
-                sorted_df = df.copy()
-            return sorted_df
-        
-        def tuple_to_dict(data_table):
-            
-            tuple_list = [[col1, col2, col3, col4, col5] 
-                        for (col1, col2, col3, col4, col5) 
-                        in data_table]
-            df = pd.DataFrame(tuple_list,
-                            columns=['t','f','m','y','value']) 
-            df = df[['t','f','m','y']].drop_duplicates()
-            return df
-        
-        df_all = pd.concat([tuple_to_dict(input_table),
-                            tuple_to_dict(output_table)])
-        combo_cols = list(df_all.columns)    
-
-        for each_result in results_list:
-            iter_list = []
-            df_combinations = pd.DataFrame()
-            cols_in_df = []
-            cols_notin_df = []
-            if any(x in combo_cols for x in cols[each_result]):
-                cols_in_df = [v for v in cols[each_result]
-                            if v in combo_cols]
-                cols_notin_df = [v for v in cols[each_result]
-                                if v not in combo_cols]
-                
-            df_combinations = df_all[cols_in_df].drop_duplicates()
-                            
-            for each_index in cols_notin_df:
-                iter_list.append(index_dict[each_index])
-            
-            df_combinations_2 = pd.DataFrame(product(*iter_list),
-                                            columns=cols_notin_df)
-            
-            df_combinations['key'] = 1
-            df_combinations_2['key'] = 1
-            #In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
-            df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', 1)
-            
-            #df_combinations = pd.DataFrame(product(*iter_list),
-            #                                   columns=cols[each_result])
-            if any(substring in each_result for substring in ['Production', 'Output']):
-                col_keep = []
-                for each_col in df_output.columns:
-                    if each_col in df_combinations:
-                        col_keep.append(each_col)
-                df_output_result = df_output[col_keep]
-                df_output_result.drop_duplicates(inplace=True)
-                df_combinations = pd.merge(df_output_result,
-                                        df_combinations,
-                                        how='left',
-                                        on=col_keep)
-                df_combinations.drop_duplicates(inplace=True)
-                
-            if any(substring in each_result for substring in ['Use', 'Input']):
-                col_keep = []
-                for each_col in df_input.columns:
-                    if each_col in df_combinations:
-                        col_keep.append(each_col)
-                df_input_result = df_input[col_keep]
-                df_input_result.drop_duplicates(inplace=True)
-                df_combinations = pd.merge(df_input_result,
-                                        df_combinations,
-                                        how='left',
-                                        on=col_keep)
-                df_combinations.drop_duplicates(inplace=True)
-            
-            if 'Activity' in each_result:
-                col_keep = []
-                for each_col in df_input.columns:
-                    if each_col in df_combinations:
-                        col_keep.append(each_col)
-                
-                if len(df) > 0:
-                    df_input_output = pd.concat([df_input,
-                                                df_output],
-                                                sort=True)
-                    df_input_output = df_input_output[col_keep]
-                    df_input_output.drop_duplicates(inplace=True)
-                    df_combinations = pd.merge(df_input_output,
-                                            df_combinations,
-                                            how='left',
-                                            on=col_keep)
-                    df_combinations.drop_duplicates(inplace=True)
-                
-            if 'e' in cols[each_result]:
-                col_keep = []
-                for each_col in df_emi.columns:
-                    if each_col in df_combinations:
-                        col_keep.append(each_col)
-                
-                df_emi_result = df_emi[col_keep]
-                df_emi_result.drop_duplicates(inplace=True)
-                df_combinations = pd.merge(df_emi_result,
-                                        df_combinations,
-                                        how='left',
-                                        on=col_keep)
-                df_combinations.drop_duplicates(inplace=True)
-            
-            # If result parameter in CBC results file, merge results from all_params.
-            # Else, enter '0' for all rows.
-            
-            if each_result in params:
-                df_combinations = pd.merge(df_combinations,
-                                        all_params[each_result],
-                                        how='left',
-                                        on=cols[each_result])
-                df_combinations.rename(columns={'value':each_result},
-                                    inplace=True)
-                df_combinations.fillna(0,
-                                    inplace=True)
-            
-            else:
-                df_combinations[each_result] = 0
-            
-            # For final dataframes, reorder columns based on original cols dictionary 
-            
-            df_combinations = df_combinations.sort_values(by=cols[each_result])
-            
-            final_cols = []
-            final_cols = cols[each_result].copy()
-            final_cols.append(each_result)
-            df_combinations = df_combinations[final_cols]
-            
-            
-            df_combinations.to_csv(os.path.join(base_folder, 'csv', each_result+'.csv'), index=None)
-            
-        ####################################################################################
-        
-        if len(df) > 0:
-            #df_prod = pd.merge(df_out_ys, df_activity, on=['t','m','l','y'])
-            df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
-            region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
-            df_prod['r'] = str(region[0])
-            df_prod['RateOfActivity'].fillna(0, inplace=True)
-            #df_prod.to_csv(os.path.join(base_folder, 'output_table.csv'), index=None)
-            
-            df_prod['ProductionByTechnologyAnnual'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
-            df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-            df_prod = df_prod.groupby(['r','t','f','y'])['ProductionByTechnologyAnnual'].sum().reset_index()
-            df_prod['ProductionByTechnologyAnnual'] = df_prod['ProductionByTechnologyAnnual'].astype(float).round(4)
-            df_prod = df_prod.sort_values(by=['r','t','f','y'])
-            df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyAnnual.csv'), index=None)
-            all_params['ProductionByTechnologyAnnual'] = df_prod.rename(columns={'ProductionByTechnologyAnnual':'value'})
-
-            ####################################################################################
-
-            #df_use = pd.merge(df_in_ys, df_activity, on=['t','m','l','y'])
-            df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
-            region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
-            df_use['r'] = str(region[0])
-            df_use['RateOfActivity'].fillna(0, inplace=True)
-            #df_use.to_csv(os.path.join(base_folder, 'input_table.csv'), index=None)
-
-            df_use['UseByTechnologyAnnual'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
-            df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-            df_use = df_use.groupby(['r','t','f','y'])['UseByTechnologyAnnual'].sum().reset_index()
-            df_use['UseByTechnologyAnnual'] = df_use['UseByTechnologyAnnual'].astype(float).round(4)
-            df_use = df_use.sort_values(by=['r','t','f','y'])
-            df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyAnnual.csv'), index=None)
-            all_params['UseByTechnologyAnnual'] = df_use.rename(columns={'UseByTechnologyAnnual':'value'})
-
-            ###################################################################################
-            
-            df_emi = pd.merge(df_emi, df_activity_total, how='left', on=['t','m','y'])
-            region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
-            df_emi['r'] = str(region[0])
-            df_emi['TotalAnnualTechnologyActivityByMode'].fillna(0, inplace=True)
-
-            #04042023 Annual Emisssions not sumed by technologies v.k.
-            # df_emi['AnnualEmissions'] = df_emi['EmissionActivityRatio']*df_emi['TotalAnnualTechnologyActivityByMode']
-            # df_emi = df_emi.drop(['EmissionActivityRatio','TotalAnnualTechnologyActivityByMode'], axis=1)
-            # df_emi = df_emi.groupby(['r','t','e','y'])['AnnualEmissions'].sum().reset_index()
-            # df_emi['AnnualEmissions'] = df_emi['AnnualEmissions'].astype(float).round(4)
-            # df_emi = df_emi.sort_values(by=['r','t','e','y'])
-            # df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
-            # all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
-
-            ## 26052023 This variable is calculated in solver, added equation in model file for AnnuallEmisssions V.K.
-            # df_emi['AnnualEmissions'] = df_emi['EmissionActivityRatio']*df_emi['TotalAnnualTechnologyActivityByMode']
-            # df_emi = df_emi.drop(['EmissionActivityRatio','TotalAnnualTechnologyActivityByMode'], axis=1)
-            # df_emi = df_emi.groupby(['r','e','y'])['AnnualEmissions'].sum().reset_index()
-            # df_emi['AnnualEmissions'] = df_emi['AnnualEmissions'].astype(float).round(4)
-            # df_emi = df_emi.sort_values(by=['r','e','y'])
-            # df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
-            # all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
-    
-    def preprocessData(self, data_infile, data_outfile):
-
-        lines = []
-
-        with open(data_infile, 'r') as f1:
-            for line in f1:
-                if not line.startswith(('set MODEper','set MODEx', 'end;')):
-                    lines.append(line)
-
-        with open(data_outfile, 'w') as f2:
-            f2.writelines(lines)
-
-        parsing = False
-        parsing_year = False
-        parsing_tech = False
-        parsing_fuel = False
-        parsing_mode = False
-        parsing_storage = False
-        parsing_emission = False
-
-        otoole = False
-
-        year_list = []
-        fuel_list = []
-        tech_list = []
-        storage_list = []
-        mode_list = []
-        emission_list = []
-
-        data_all = []
-        data_out = []
-        data_inp = []
-        output_table = []
-        storage_to = []
-        storage_from = []
-        emission_table = []
-
-        params_to_check = ['OutputActivityRatio', 
-                        'InputActivityRatio', 
-                        'TechnologyToStorage', 
-                        'TechnologyFromStorage', 
-                        'EmissionActivityRatio']
-
-        with open(data_infile, 'r') as f:
-            for line in f:
-                line = line.rstrip().replace('\t', ' ')
-                if line.startswith('# Model file written by *otoole*'):
-                    otoole = True
-                if parsing_year:
-                    year_list += [line.strip()] if line.strip() not in ['', ';'] else []
-                if parsing_fuel:
-                    fuel_list += [line.strip()] if line.strip() not in ['', ';'] else []
-                if parsing_tech:
-                    tech_list += [line.strip()] if line.strip() not in ['', ';'] else []
-                if parsing_storage:
-                    storage_list += [line.strip()] if line.strip() not in ['', ';'] else []
-                if parsing_mode:
-                    mode_list += [line.strip()] if line.strip() not in ['', ';'] else []
-                if parsing_emission:
-                    emission_list += [line.strip()] if line.strip() not in ['', ';'] else []
-
-                if line.startswith('set YEAR'):
-                    if len(line.split('=')[1]) > 1:
-                        year_list = line.split(' ')[3:-1]
-                    else:
-                        parsing_year = True
-                if line.startswith('set COMMODITY'):  # Extracts list of COMMODITIES from data file. Some models use FUEL instead.
-                    if len(line.split('=')[1]) > 1:
-                        fuel_list = line.split(' ')[3:-1]
-                    else:
-                        parsing_fuel = True
-                if line.startswith('set FUEL'):  # Extracts list of FUELS from data file. Some models use COMMODITIES instead.
-                    if len(line.split('=')[1]) > 1:
-                        fuel_list = line.split(' ')[3:-1]
-                    else:
-                        parsing_fuel = True
-                if line.startswith('set TECHNOLOGY'):
-                    if len(line.split('=')[1]) > 1:
-                        tech_list = line.split(' ')[3:-1]
-                    else:
-                        parsing_tech = True
-                if line.startswith('set STORAGE'):
-                    if len(line.split('=')[1]) > 1:
-                        storage_list = line.split(' ')[3:-1]
-                    else:
-                        parsing_storage = True
-                if line.startswith('set MODE_OF_OPERATION'):
-                    if len(line.split('=')[1]) > 1:
-                        mode_list = line.split(' ')[3:-1]
-                    else:
-                        parsing_mode = True
-                if line.startswith('set EMISSION'):
-                    if len(line.split('=')[1]) > 1:
-                        emission_list = line.split(' ')[3:-1]
-                    else:
-                        parsing_emission = True
-
-                if line.startswith(";"):
-                    parsing_year = False
-                    parsing_tech = False
-                    parsing_fuel = False
-                    parsing_mode = False
-                    parsing_storage = False
-                    parsing_emission = False
-
-        start_year = year_list[0]
-
-        if not otoole:
-            with open(data_infile, 'r') as f:
-                for line in f:
-                    line = line.rstrip().replace('\t', ' ')
-                    if line.startswith(";"):
-                        parsing = False
-
-                    if parsing:
-                        if line.startswith('['):
-                            fuel = line.split(',')[2]
-                            tech = line.split(',')[1]
-                        elif line.startswith(start_year):
-                            years = line.rstrip(':= ;\n').split(' ')[0:]
-                            years = [i.strip(':=') for i in years]
-                        else:
-                            values = line.rstrip().split(' ')[1:]
-                            mode = line.split(' ')[0]
-
-                            if param_current =='OutputActivityRatio':
-                                data_out.append(tuple([fuel, tech, mode]))
-                                data_all.append(tuple([tech, mode]))
-                                for i in range(0,len(years)):
-                                    output_table.append(tuple([tech, fuel, mode, years[i], values[i]]))
-
-                            if param_current =='InputActivityRatio':
-                                data_inp.append(tuple([fuel, tech, mode]))
-                                data_all.append(tuple([tech, mode]))
-
-                            if param_current == 'TechnologyToStorage' or param_current == 'TechnologyFromStorage':
-                                if not line.startswith(mode_list[0]):
-                                    storage = line.split(' ')[0]
-                                    values = line.rstrip().split(' ')[1:]
-                                    for i in range(0, len(mode_list)):
-                                        if values[i] != '0':
-                                            if param_current == 'TechnologyToStorage':
-                                                storage_to.append(tuple([storage, tech, mode_list[i]]))
-                                                data_all.append(tuple([tech, mode_list[i]]))
-                                            if param_current == 'TechnologyFromStorage':
-                                                storage_from.append(tuple([storage, tech, mode_list[i]]))
-                                                data_all.append(tuple([tech, mode_list[i]]))
-
-                    if line.startswith(('param OutputActivityRatio',
-                                        'param InputActivityRatio',
-                                        'param TechnologyToStorage',
-                                        'param TechnologyFromStorage')):
-                        param_current = line.split(' ')[1]
-                        parsing = True
-
-        if otoole:
-            with open(data_infile, 'r') as f:
-                for line in f:
-                    details = line.split(' ')
-                    if line.startswith(";"):
-                        parsing = False
-                    if parsing:
-                        if len(details) > 1:
-                            if param_current == 'OutputActivityRatio':
-                                tech = details[1].strip()
-                                fuel = details[2].strip()
-                                mode = details[3].strip()
-                                year = details[4].strip()
-                                value = details[5].strip()
-
-                                if float(value) != 0.0:
-                                    data_out.append(tuple([fuel, tech, mode]))
-                                    output_table.append(tuple([tech, fuel, mode, year, value]))
-                                    data_all.append(tuple([tech, mode]))
-
-                            if param_current == 'InputActivityRatio':
-                                tech = details[1].strip()
-                                fuel = details[2].strip()
-                                mode = details[3].strip()
-                                value = details[5].strip()
-                                if float(value) != 0.0:
-                                    data_inp.append(tuple([fuel, tech, mode]))
-                                    data_all.append(tuple([tech, mode]))
-
-                            if param_current == 'TechnologyToStorage':
-                                tech = details[1].strip()
-                                storage = details[2].strip()
-                                mode = details[3].strip()
-                                value = details[4].strip()
-                                if float(value) > 0.0:
-                                    storage_to.append(tuple([storage, tech, mode]))
-                                    data_all.append(tuple([storage, mode]))
-
-                            if param_current == 'TechnologyFromStorage':
-                                tech = details[1].strip()
-                                storage = details[2].strip()
-                                mode = details[3].strip()
-                                value = details[4].strip()
-                                if float(value) > 0.0:
-                                    storage_from.append(tuple([storage, tech, mode]))
-                                    data_all.append(tuple([storage, mode]))
-
-                            if param_current == 'EmissionActivityRatio':
-                                tech = details[1].strip()
-                                emission = details[2].strip()
-                                mode = details[3].strip()
-                                value = details[5].strip()
-                                if float(value) != 0.0:
-                                    emission_table.append(tuple([emission, tech, mode]))
-                                    data_all.append(tuple([tech, mode]))
-
-                    if any(param in line for param in params_to_check):
-                        param_current = details[-2]
-                        parsing = True
 
         data_out = list(set(data_out))
         data_inp = list(set(data_inp))
         data_all = list(set(data_all))
-        storage_to = list(set(storage_to))
-        storage_from = list(set(storage_from))
-        emission_table = list(set(emission_table))
+        data_emi = list(set(data_emi))
 
         dict_out = defaultdict(list)
         dict_inp = defaultdict(list)
         dict_all = defaultdict(list)
-        dict_stt = defaultdict(list)
-        dict_stf = defaultdict(list)
+        dict_emi = defaultdict(list)
 
         for fuel, tech, mode in data_out:
             dict_out[fuel].append((mode, tech))
@@ -1448,20 +829,19 @@ class DataFile(Osemosys):
         for fuel, tech, mode in data_inp:
             dict_inp[fuel].append((mode, tech))
 
+        for tech, emi, mode in data_emi:
+            dict_emi[emi].append((mode, tech))
+
         for tech, mode in data_all:
             if mode not in dict_all[tech]:
                 dict_all[tech].append(mode)
 
-        for storage, tech, mode in storage_to:
-            dict_stt[storage].append((mode, tech))
 
-        for storage, tech, mode in storage_from:
-            dict_stf[storage].append((mode, tech))
-
-        def file_output_function(if_dict, str_dict, set_list, set_name, extra_char):
+        #function for appending values in data file
+        def file_output_function(dict, set_list, set_name, extra_char):
             for each in set_list:
-                if each in if_dict.keys():
-                    line = set_name + str(each) + ']:=' + str(str_dict[each]) + extra_char
+                if each in dict.keys():
+                    line = set_name + str(each) + ']:=' + str(dict[each]) + extra_char
                     if set_list == tech_list:
                         line = line.replace(',', '').replace(':=[', ':= ').replace(']*', '').replace("'", "")
                     else:
@@ -1472,17 +852,12 @@ class DataFile(Osemosys):
 
         # Append lines at the end of the data file
         with open(data_outfile, 'w') as file_out:  # 'a' to open in 'append' mode
-
             file_out.writelines(lines)
-
-            file_output_function(dict_out, dict_out, fuel_list, 'set MODExTECHNOLOGYperFUELout[', '')
-            file_output_function(dict_inp, dict_inp, fuel_list, 'set MODExTECHNOLOGYperFUELin[', '')
-            file_output_function(dict_all, dict_all, tech_list, 'set MODEperTECHNOLOGY[', '*')
-
-            if '' not in storage_list:
-                file_output_function(dict_stt, dict_stt, storage_list, 'set MODExTECHNOLOGYperSTORAGEto[', '')
-                file_output_function(dict_stf, dict_stf, storage_list, 'set MODExTECHNOLOGYperSTORAGEfrom[', '')
-
+            file_output_function(dict_out, fuel_list, 'set MODExTECHNOLOGYperFUELout[', '')
+            file_output_function(dict_inp, fuel_list, 'set MODExTECHNOLOGYperFUELin[', '')
+            file_output_function(dict_emi, emi_list, 'set MODExTECHNOLOGYperEMISSION[', '')
+            #da li se ovaj mod po tech treba puniti i za emissijske tehnologije i sta to znaci u model file
+            file_output_function(dict_all, tech_list, 'set MODEperTECHNOLOGY[', '*')
             file_out.write('end;')
 
     def run( self, solver, caserunname ):
@@ -1557,7 +932,6 @@ class DataFile(Osemosys):
                 
             #CBC or GLPK return error
             if cbc_out.returncode != 0 or glpk_out.returncode != 0:
-            
                 response = {
                     "cbc_message": cbc_out.stdout,
                     "cbc_stdmsg": cbc_out.stderr,
@@ -1567,14 +941,6 @@ class DataFile(Osemosys):
                     "status_code": "error"
                 }
             else:
-                self.generateCSVfromCBC(self.dataFile, self.resFile, self.resPath)
-                print("CSV DONE! --- %s seconds ---" % (time.time() - start_time))
-                txtOut = txtOut + ("csv files extraction time {:0.2f} s;{}".format(time.time() - start_time, '\n'))
-                self.generateResultsViewer(caserunname)
-                print("PIVOT TABLE DONE! --- %s seconds ---" % (time.time() - start_time))
-                txtOut = txtOut + ("Pivot data preparation time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
-
-
                 msg = cbc_out.stdout.splitlines()
 
                 statusFlag = "warning"
@@ -1600,6 +966,14 @@ class DataFile(Osemosys):
                     customMsg = customMsg + times[0]
                     statusFlag = "error"
 
+                if statusFlag == "success":
+                    self.generateCSVfromCBC(self.dataFile, self.resFile, self.resPath)
+                    print("CSV DONE! --- %s seconds ---" % (time.time() - start_time))
+                    txtOut = txtOut + ("csv files extraction time {:0.2f} s;{}".format(time.time() - start_time, '\n'))
+                    self.generateResultsViewer(caserunname)
+                    print("PIVOT TABLE DONE! --- %s seconds ---" % (time.time() - start_time))
+                    txtOut = txtOut + ("Pivot data preparation time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
+
 
                 print("MESSAGES DONE! --- %s seconds ---" % (time.time() - start_time))
                 txtOut = txtOut + ("Message preparation time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
@@ -1614,6 +988,312 @@ class DataFile(Osemosys):
                 }           
             return response
             # urllib.request.urlretrieve(self.dataFile, dataFile)
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+    
+    def generateCSVfromCBC(self, data_file, results_file, base_folder=os.getcwd()):
+        try:
+            #pd.options.mode.chained_assignment = None
+
+            parsing = False
+            output_table = []
+            input_table = []
+            emi_table = []
+            year_split = []
+
+            year_list = self.getYears()
+            fuel_list = self.getCommNames()
+            tech_list = self.getTechNames()
+            emission_list = self.getEmiNames()
+            ts_list = self.getTimeslices()
+            mode_list = self.getMods()
+            region_list = ['RE1']
+            start_year = year_list[0]
+
+            with open(data_file, 'r') as f:
+                for line in f:
+                    if line.startswith(";"):
+                        parsing = False
+                    if parsing:
+                        if line.startswith('['):
+                            fuel = line.split(',')[2]
+                            tech = line.split(',')[1]                        
+                        elif not line.startswith(start_year):
+                            values = line.rstrip().split(' ')[1:]
+                            mode = line.split(' ')[0] #mode ili time_slice
+                            time_slice = line.rstrip().split(' ')[0]
+   
+                            if param_current=='OutputActivityRatio':
+                                for i in range(0,len(year_list)):
+                                    output_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+
+                            if param_current=='InputActivityRatio':
+                                for i in range(0,len(year_list)):
+                                    input_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+                            
+                            if param_current == 'EmissionActivityRatio':
+                                for i in range(0,len(year_list)):
+                                    emi_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+                        
+                            if param_current == 'YearSplit':
+                                for i in range(0,len(year_list)):
+                                    year_split.append(tuple([time_slice,year_list[i],values[i]]))
+
+                    if line.startswith(('param OutputActivityRatio','param InputActivityRatio','param TechnologyToStorage','param TechnologyFromStorage', 'param EmissionActivityRatio', 'param YearSplit')):
+                        param_current = line.split(' ')[1]
+                        parsing = True
+
+            try:
+                os.makedirs(os.path.join(base_folder, 'csv'))
+            except FileExistsError:
+                pass
+            
+            #parsanje result.txt
+            params = []
+            
+            df = pd.read_csv(results_file, sep='\t')
+
+            df.columns = ['temp']
+            df['temp'] = df['temp'].str.lstrip(' *\n\t')
+            
+            if len(df) > 0:
+                df[['temp','value']] = df['temp'].str.split(')', expand=True)
+                df = df.applymap(lambda x: x.strip() if isinstance(x,str) else x)
+                #error when moved to ython 3.11, Columns must have smae length as key
+                # df['value'] = df['value'].str.split(' ', expand=True)
+                df['value'] = df['value'].str.split(' ', expand=True)[0]
+                df[['parameter','id']] = df['temp'].str.split('(', expand=True)
+                df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]
+                df = df.drop('temp', axis=1)
+                df['value'] = df['value'].astype(float).round(4)
+
+                #variables that are output form solver 18
+                params = df.parameter.unique()
+                all_params = {}
+
+                for each in params:
+                    result_cols = []
+                    df_p = df[df.parameter == each]
+                    df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
+                    result_cols = Config.VARIABLES_C[each].copy()
+                    result_cols.append('value')
+                    df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
+                    all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
+                    df_p = df_p.rename(columns={'value':each})
+            
+            #year split data frame
+            df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
+
+            if len(df) > 0:
+                df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
+                #df_activity_total = all_params['TotalAnnualTechnologyActivityByMode'].rename(columns={'value':'TotalAnnualTechnologyActivityByMode'})
+
+            ####################################################################################
+
+            df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
+            df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
+            df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
+            df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
+            
+            df_input = pd.DataFrame(input_table, columns=['t','f','m','y','InputActivityRatio'])
+            df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
+            df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
+            df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
+            
+            df_emi = pd.DataFrame(emi_table, columns=['t','e','m','y','EmissionActivityRatio'])
+            df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
+            #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
+            
+            ##################################################################################
+            
+            index_dict = {'r': region_list,
+                        'rr': region_list,
+                        'l': ts_list,
+                        't': tech_list,
+                        'f': fuel_list,
+                        'm': mode_list,
+                        'e': emission_list,
+                        'y': year_list}
+            
+            def sort_df(df):
+                if 'y' in df.columns:
+                    sorted_df = df.sort_values(by=['y'])
+                else:
+                    sorted_df = df.copy()
+                return sorted_df
+            
+            def tuple_to_dict(data_table):
+                
+                tuple_list = [[col1, col2, col3, col4, col5] 
+                            for (col1, col2, col3, col4, col5) 
+                            in data_table]
+                df = pd.DataFrame(tuple_list, columns=['t','f','m','y','value']) 
+
+                df = df[['t','f','m','y']].drop_duplicates()
+                return df
+            
+            df_all = pd.concat([tuple_to_dict(input_table), tuple_to_dict(output_table)])
+            combo_cols = list(df_all.columns)    
+
+            print("combo_cols ", combo_cols)
+
+            # for each_result in results_list:
+            for each_result in self.VARS:
+                iter_list = []
+                df_combinations = pd.DataFrame()
+                cols_in_df = []
+                cols_notin_df = []
+
+                if any(x in combo_cols for x in Config.VARIABLES_C[each_result]):
+                    cols_in_df = [v for v in Config.VARIABLES_C[each_result] if v in combo_cols]
+                    cols_notin_df = [v for v in Config.VARIABLES_C[each_result] if v not in combo_cols]
+                    
+                df_combinations = df_all[cols_in_df].drop_duplicates()
+
+                print("cols_notin_df ", cols_notin_df)    
+                for each_index in cols_notin_df:
+                    print("index_dict[each_index] ", index_dict[each_index])  
+                    iter_list.append(index_dict[each_index])
+                
+                # print("iter_list ", iter_list)
+                df_combinations_2 = pd.DataFrame(product(*iter_list), columns=cols_notin_df)
+                print("df_combinations ", df_combinations)
+                print("df_combinations_2 ", df_combinations_2)
+
+                df_combinations['key'] = 1
+                df_combinations_2['key'] = 1
+                #In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
+                #df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', 1)
+                #fixed by adding axis 0 is for columns 1 is for index vk 06.10.2023
+                df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', axis=1)
+                print("df_combinations merged ", df_combinations)
+
+                #df_combinations = pd.DataFrame(product(*iter_list),  columns=cols[each_result])
+                if any(substring in each_result for substring in ['Production', 'Output']):
+                    col_keep = []
+                    for each_col in df_output.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                            
+                    df_output_result = df_output[col_keep]
+                    df_output_result.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_output_result, df_combinations, how='left', on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
+                    
+                if any(substring in each_result for substring in ['Use', 'Input']):
+                    col_keep = []
+
+                    for each_col in df_input.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+
+                    df_input_result = df_input[col_keep]
+                    df_input_result.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_input_result, df_combinations, how='left', on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
+                
+                if 'Activity' in each_result:
+                    col_keep = []
+                    for each_col in df_input.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                    
+                    if len(df) > 0:
+                        df_input_output = pd.concat([df_input, df_output], sort=True)
+                        df_input_output = df_input_output[col_keep]
+                        df_input_output.drop_duplicates(inplace=True)
+                        df_combinations = pd.merge(df_input_output, df_combinations, how='left', on=col_keep)
+                        df_combinations.drop_duplicates(inplace=True)
+                    
+                if 'e' in Config.VARIABLES_C[each_result]:
+                    col_keep = []
+                    for each_col in df_emi.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                    
+                    df_emi_result = df_emi[col_keep]
+                    df_emi_result.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_emi_result, df_combinations, how='left', on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
+                
+                # If result parameter in CBC results file, merge results from all_params.
+                # Else, enter '0' for all rows.
+                
+                if each_result in params:
+                    df_combinations = pd.merge(df_combinations, all_params[each_result], how='left', on=Config.VARIABLES_C[each_result])
+                    df_combinations.rename(columns={'value':each_result}, inplace=True)
+                    df_combinations.fillna(0, inplace=True)
+                
+                else:
+                    df_combinations[each_result] = 0
+                
+                # For final dataframes, reorder columns based on original Config.VARIABLES_C dictionary          
+                df_combinations = df_combinations.sort_values(by=Config.VARIABLES_C[each_result])
+                
+                final_cols = []
+                final_cols = Config.VARIABLES_C[each_result].copy()
+                final_cols.append(each_result)
+                df_combinations = df_combinations[final_cols]
+                
+                
+                df_combinations.to_csv(os.path.join(base_folder, 'csv', each_result+'.csv'), index=None)
+            
+            ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
+            ########################################ProductionByTechnologyAnnual############################################
+            
+            if len(df) > 0:
+                df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
+                df_prod['r'] = str(region[0])
+                df_prod['RateOfActivity'].fillna(0, inplace=True)
+
+                df_prod['ProductionByTechnology'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
+                df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_prod['ProductionByTechnology'] = df_prod['ProductionByTechnology'].astype(float).round(4)
+                df_prod = df_prod.sort_values(by=['r','l','t','f','y'])
+                df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnology.csv'), index=None)
+
+
+                # df_prodAn = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                # region = [x for x in list(df_prodAn.r.unique()) if str(x) != 'nan']
+                # df_prodAn['r'] = str(region[0])
+                # df_prodAn['RateOfActivity'].fillna(0, inplace=True)
+
+                # df_prodAn['ProductionByTechnologyAnnual'] = df_prodAn['OutputActivityRatio']*df_prodAn['YearSplit']*df_prodAn['RateOfActivity']
+                # df_prodAn = df_prodAn.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                # df_prodAn = df_prodAn.groupby(['r','t','f','y'])['ProductionByTechnologyAnnual'].sum().reset_index()
+                # df_prodAn['ProductionByTechnologyAnnual'] = df_prodAn['ProductionByTechnologyAnnual'].astype(float).round(4)
+                # df_prodAn = df_prodAn.sort_values(by=['r','t','f','y'])
+                # df_prodAn.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyAnnual.csv'), index=None)
+
+
+  
+
+                ######################################UseByTechnologyAnnual##############################################
+
+                df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
+                df_use['r'] = str(region[0])
+                df_use['RateOfActivity'].fillna(0, inplace=True)
+
+                
+                df_use['UseByTechnology'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+                #df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_use['UseByTechnology'] = df_use['UseByTechnology'].astype(float).round(4)
+                df_use = df_use.sort_values(by=['r','l','t','f','y'])
+                df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnology.csv'), index=None)
+
+                # df_use['UseByTechnologyAnnual'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+                # df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                # df_use = df_use.groupby(['r','t','f','y'])['UseByTechnologyAnnual'].sum().reset_index()
+                # df_use['UseByTechnologyAnnual'] = df_use['UseByTechnologyAnnual'].astype(float).round(4)
+                # df_use = df_use.sort_values(by=['r','t','f','y'])
+                # df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyAnnual.csv'), index=None)
+
+
+
         except(IOError, IndexError):
             raise IndexError
         except OSError:
@@ -1951,4 +1631,737 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
+
+    ###############################################################################################BKP
+    def preprocessData_BKP(self, data_infile, data_outfile):
+
+        lines = []
+
+        with open(data_infile, 'r') as f1:
+            for line in f1:
+                if not line.startswith(('set MODEper','set MODEx', 'end;')):
+                    lines.append(line)
+
+        with open(data_outfile, 'w') as f2:
+            f2.writelines(lines)
+
+        parsing = False
+        parsing_year = False
+        parsing_tech = False
+        parsing_fuel = False
+        parsing_mode = False
+        parsing_storage = False
+        parsing_emission = False
+
+        otoole = False
+
+        year_list = []
+        fuel_list = []
+        tech_list = []
+        storage_list = []
+        mode_list = []
+        emission_list = []
+
+        data_all = []
+        data_out = []
+        data_inp = []
+        output_table = []
+        storage_to = []
+        storage_from = []
+        emission_table = []
+
+        params_to_check = ['OutputActivityRatio', 
+                        'InputActivityRatio', 
+                        'TechnologyToStorage', 
+                        'TechnologyFromStorage', 
+                        'EmissionActivityRatio']
+
+        with open(data_infile, 'r') as f:
+            for line in f:
+                line = line.rstrip().replace('\t', ' ')
+                if line.startswith('# Model file written by *otoole*'):
+                    otoole = True
+                if parsing_year:
+                    year_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_fuel:
+                    fuel_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_tech:
+                    tech_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_storage:
+                    storage_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_mode:
+                    mode_list += [line.strip()] if line.strip() not in ['', ';'] else []
+                if parsing_emission:
+                    emission_list += [line.strip()] if line.strip() not in ['', ';'] else []
+
+                if line.startswith('set YEAR'):
+                    if len(line.split('=')[1]) > 1:
+                        year_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_year = True
+                if line.startswith('set COMMODITY'):  # Extracts list of COMMODITIES from data file. Some models use FUEL instead.
+                    if len(line.split('=')[1]) > 1:
+                        fuel_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_fuel = True
+                if line.startswith('set FUEL'):  # Extracts list of FUELS from data file. Some models use COMMODITIES instead.
+                    if len(line.split('=')[1]) > 1:
+                        fuel_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_fuel = True
+                if line.startswith('set TECHNOLOGY'):
+                    if len(line.split('=')[1]) > 1:
+                        tech_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_tech = True
+                if line.startswith('set STORAGE'):
+                    if len(line.split('=')[1]) > 1:
+                        storage_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_storage = True
+                if line.startswith('set MODE_OF_OPERATION'):
+                    if len(line.split('=')[1]) > 1:
+                        mode_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_mode = True
+                if line.startswith('set EMISSION'):
+                    if len(line.split('=')[1]) > 1:
+                        emission_list = line.split(' ')[3:-1]
+                    else:
+                        parsing_emission = True
+
+                if line.startswith(";"):
+                    parsing_year = False
+                    parsing_tech = False
+                    parsing_fuel = False
+                    parsing_mode = False
+                    parsing_storage = False
+                    parsing_emission = False
+
+        start_year = year_list[0]
+
+        if not otoole:
+            with open(data_infile, 'r') as f:
+                for line in f:
+                    line = line.rstrip().replace('\t', ' ')
+                    if line.startswith(";"):
+                        parsing = False
+
+                    if parsing:
+                        if line.startswith('['):
+                            fuel = line.split(',')[2]
+                            tech = line.split(',')[1]
+                        elif line.startswith(start_year):
+                            years = line.rstrip(':= ;\n').split(' ')[0:]
+                            years = [i.strip(':=') for i in years]
+                        else:
+                            values = line.rstrip().split(' ')[1:]
+                            mode = line.split(' ')[0]
+
+                            if param_current =='OutputActivityRatio':
+                                data_out.append(tuple([fuel, tech, mode]))
+                                data_all.append(tuple([tech, mode]))
+                                for i in range(0,len(years)):
+                                    output_table.append(tuple([tech, fuel, mode, years[i], values[i]]))
+
+                            if param_current =='InputActivityRatio':
+                                data_inp.append(tuple([fuel, tech, mode]))
+                                data_all.append(tuple([tech, mode]))
+
+                            if param_current == 'TechnologyToStorage' or param_current == 'TechnologyFromStorage':
+                                if not line.startswith(mode_list[0]):
+                                    storage = line.split(' ')[0]
+                                    values = line.rstrip().split(' ')[1:]
+                                    for i in range(0, len(mode_list)):
+                                        if values[i] != '0':
+                                            if param_current == 'TechnologyToStorage':
+                                                storage_to.append(tuple([storage, tech, mode_list[i]]))
+                                                data_all.append(tuple([tech, mode_list[i]]))
+                                            if param_current == 'TechnologyFromStorage':
+                                                storage_from.append(tuple([storage, tech, mode_list[i]]))
+                                                data_all.append(tuple([tech, mode_list[i]]))
+
+                    if line.startswith(('param OutputActivityRatio',
+                                        'param InputActivityRatio',
+                                        'param TechnologyToStorage',
+                                        'param TechnologyFromStorage')):
+                        param_current = line.split(' ')[1]
+                        parsing = True
+
+        if otoole:
+            with open(data_infile, 'r') as f:
+                for line in f:
+                    details = line.split(' ')
+                    if line.startswith(";"):
+                        parsing = False
+                    if parsing:
+                        if len(details) > 1:
+                            if param_current == 'OutputActivityRatio':
+                                tech = details[1].strip()
+                                fuel = details[2].strip()
+                                mode = details[3].strip()
+                                year = details[4].strip()
+                                value = details[5].strip()
+
+                                if float(value) != 0.0:
+                                    data_out.append(tuple([fuel, tech, mode]))
+                                    output_table.append(tuple([tech, fuel, mode, year, value]))
+                                    data_all.append(tuple([tech, mode]))
+
+                            if param_current == 'InputActivityRatio':
+                                tech = details[1].strip()
+                                fuel = details[2].strip()
+                                mode = details[3].strip()
+                                value = details[5].strip()
+                                if float(value) != 0.0:
+                                    data_inp.append(tuple([fuel, tech, mode]))
+                                    data_all.append(tuple([tech, mode]))
+
+                            if param_current == 'TechnologyToStorage':
+                                tech = details[1].strip()
+                                storage = details[2].strip()
+                                mode = details[3].strip()
+                                value = details[4].strip()
+                                if float(value) > 0.0:
+                                    storage_to.append(tuple([storage, tech, mode]))
+                                    data_all.append(tuple([storage, mode]))
+
+                            if param_current == 'TechnologyFromStorage':
+                                tech = details[1].strip()
+                                storage = details[2].strip()
+                                mode = details[3].strip()
+                                value = details[4].strip()
+                                if float(value) > 0.0:
+                                    storage_from.append(tuple([storage, tech, mode]))
+                                    data_all.append(tuple([storage, mode]))
+
+                            if param_current == 'EmissionActivityRatio':
+                                tech = details[1].strip()
+                                emission = details[2].strip()
+                                mode = details[3].strip()
+                                value = details[5].strip()
+                                if float(value) != 0.0:
+                                    emission_table.append(tuple([emission, tech, mode]))
+                                    data_all.append(tuple([tech, mode]))
+
+                    if any(param in line for param in params_to_check):
+                        param_current = details[-2]
+                        parsing = True
+
+        data_out = list(set(data_out))
+        data_inp = list(set(data_inp))
+        data_all = list(set(data_all))
+        storage_to = list(set(storage_to))
+        storage_from = list(set(storage_from))
+        emission_table = list(set(emission_table))
+
+        dict_out = defaultdict(list)
+        dict_inp = defaultdict(list)
+        dict_all = defaultdict(list)
+        dict_stt = defaultdict(list)
+        dict_stf = defaultdict(list)
+
+        for fuel, tech, mode in data_out:
+            dict_out[fuel].append((mode, tech))
+
+        for fuel, tech, mode in data_inp:
+            dict_inp[fuel].append((mode, tech))
+
+        for tech, mode in data_all:
+            if mode not in dict_all[tech]:
+                dict_all[tech].append(mode)
+
+        for storage, tech, mode in storage_to:
+            dict_stt[storage].append((mode, tech))
+
+        for storage, tech, mode in storage_from:
+            dict_stf[storage].append((mode, tech))
+
+        def file_output_function(if_dict, str_dict, set_list, set_name, extra_char):
+            for each in set_list:
+                if each in if_dict.keys():
+                    line = set_name + str(each) + ']:=' + str(str_dict[each]) + extra_char
+                    if set_list == tech_list:
+                        line = line.replace(',', '').replace(':=[', ':= ').replace(']*', '').replace("'", "")
+                    else:
+                        line = line.replace('),', ')').replace('[(', ' (').replace(')]', ')').replace("'", "")
+                else:
+                    line = set_name + str(each) + ']:='
+                file_out.write(line + ';' + '\n')
+
+        # Append lines at the end of the data file
+        with open(data_outfile, 'w') as file_out:  # 'a' to open in 'append' mode
+
+            file_out.writelines(lines)
+
+            file_output_function(dict_out, dict_out, fuel_list, 'set MODExTECHNOLOGYperFUELout[', '')
+            file_output_function(dict_inp, dict_inp, fuel_list, 'set MODExTECHNOLOGYperFUELin[', '')
+            file_output_function(dict_all, dict_all, tech_list, 'set MODEperTECHNOLOGY[', '*')
+
+            if '' not in storage_list:
+                file_output_function(dict_stt, dict_stt, storage_list, 'set MODExTECHNOLOGYperSTORAGEto[', '')
+                file_output_function(dict_stf, dict_stf, storage_list, 'set MODExTECHNOLOGYperSTORAGEfrom[', '')
+
+            file_out.write('end;')
+
+    def generateCSVfromCBC_BKP(self, data_file, results_file, base_folder=os.getcwd()):
+        try:
+            pd.set_option('mode.chained_assignment', None)
+
+            lines = []
+
+            parsing = False
+
+            data_all = []
+            data_out = []
+            data_inp = []
+            output_table = []
+            input_table = []
+            storage_to = []
+            storage_from = []
+            emi_table = []
+
+            with open(data_file, 'r') as f:
+                for line in f:
+                    if line.startswith('set YEAR'):
+                        start_year = line.split(' ')[3]
+                        year_list = line.split(' ')[3:-1]
+                        #print(year_list)
+                    if line.startswith('set COMMODITY'): # Extracts list of COMMODITIES from data file. Some models use FUEL instead.
+                        fuel_list = line.split(' ')[3:-1]
+                        #print(fuel_list)
+                    if line.startswith('set FUEL'): # Extracts list of FUELS from data file. Some models use COMMODITIES instead.
+                        fuel_list = line.split(' ')[3:-1]
+                        #print(fuel_list)
+                    if line.startswith('set TECHNOLOGY'):
+                        tech_list = line.split(' ')[3:-1]
+                        #print(tech_list)
+                    if line.startswith('set STORAGE'):
+                        storage_list = line.split(' ')[3:-1]
+                        #print(storage_list)
+                    if line.startswith('set MODE_OF_OPERATION'):
+                        mode_list = line.split(' ')[3:-1]
+                        #print(mode_list)
+                    if line.startswith('set TIMESLICE'):
+                        ts_list = line.split(' ')[3:-1]
+                        #print(ts_list)
+                    if line.startswith('set REGION'):
+                        line = line.rstrip(' ;\n')
+                        region_list = line.split(' ')[3:]
+                        #print(region_list)
+                    if line.startswith('set EMISSION'):
+                        emission_list = line.split(' ')[3:-1]
+                        #print(emission_list)
+
+                    if line.startswith(";"):
+                            parsing = False
+
+                    if parsing:
+                        if line.startswith('['):
+                            fuel = line.split(',')[2]
+                            tech = line.split(',')[1]
+                        elif line.startswith(start_year):
+                            years = line.rstrip(':= ;\n').split(' ')[0:]
+                            years = [i.strip(':=') for i in years]
+                        else:
+                            values = line.rstrip().split(' ')[1:]
+                            mode = line.split(' ')[0]
+
+                            if param_current=='OutputActivityRatio':
+                                #data_out.append(tuple([fuel,tech,mode]))
+                                #data_all.append(tuple([tech,mode]))
+                                for i in range(0,len(years)):
+                                    output_table.append(tuple([tech,fuel,mode,years[i],values[i]]))
+
+                            if param_current=='InputActivityRatio':
+                                #data_inp.append(tuple([fuel,tech,mode]))
+                                #data_all.append(tuple([tech,mode]))
+                                for i in range(0,len(years)):
+                                    input_table.append(tuple([tech,fuel,mode,years[i],values[i]]))
+
+                            if param_current == 'TechnologyToStorage' or param_current == 'TechnologyFromStorage':
+                                if not line.startswith(mode_list[0]):
+                                    storage = line.split(' ')[0]
+                                    values = line.rstrip().split(' ')[1:]
+                                    for i in range(0,len(mode_list)):
+                                        if values[i] != '0':
+                                            if param_current == 'TechnologyToStorage':
+                                                storage_to.append(tuple([storage,tech,mode_list[i]]))
+                                                data_all.append(tuple([tech,mode_list[i]]))
+                                            if param_current == 'TechnologyFromStorage':
+                                                storage_from.append(tuple([storage,tech,mode_list[i]]))
+                                                data_all.append(tuple([tech,mode_list[i]]))
+                            
+                            if param_current == 'EmissionActivityRatio':
+                                for i in range(0,len(years)):
+                                    emi_table.append(tuple([tech,fuel,mode,years[i],values[i]]))
+
+                    if line.startswith(('param OutputActivityRatio','param InputActivityRatio','param TechnologyToStorage','param TechnologyFromStorage', 'param EmissionActivityRatio')):
+                        param_current = line.split(' ')[1]
+                        parsing = True
+
+            try:
+                os.makedirs(os.path.join(base_folder, 'csv'))
+            except FileExistsError:
+                pass
+
+            #Read CBC output file
+            
+            cols = {'NewCapacity':['r','t','y'],
+                    'AccumulatedNewCapacity':['r','t','y'],
+                    'TotalCapacityAnnual':['r','t','y'],
+                    'CapitalInvestment':['r','t','y'],
+                    'AnnualVariableOperatingCost':['r','t','y'],
+                    'AnnualFixedOperatingCost':['r','t','y'],
+                    'SalvageValue':['r','t','y'],
+                    'DiscountedSalvageValue':['r','t','y'],
+                    'TotalTechnologyAnnualActivity':['r','t','y'],
+                    'RateOfActivity':['r','l','t','m','y'],
+                    'RateOfTotalActivity':['r','t','l','y'],
+                    'Demand':['r','l','f','y'],
+                    'TotalAnnualTechnologyActivityByMode':['r','t','m','y'],
+                    'TotalTechnologyModelPeriodActivity':['r','t'],
+                    'ProductionByTechnology':['r','l','t','f','y'],
+                    'ProductionByTechnologyAnnual':['r','t','f','y'],
+                    'AnnualTechnologyEmissionByMode':['r','t','e','m','y'],
+                    'EmissionByActivityChange':['r','t','e','m','y'],
+                    'AnnualTechnologyEmission':['r','t','e','y'],
+                    'AnnualEmissions':['r','e','y'],
+                    'DiscountedTechnologyEmissionsPenalty':['r','t','y'],
+                    'RateOfProductionByTechnology':['r','l','t','f','y'],
+                    'RateOfUseByTechnology':['r','l','t','f','y'],
+                    'UseByTechnology':['r','l','t','f','y'],
+                    'UseByTechnologyAnnual':['r','t','f','y'],
+                    #'RateOfProductionByTechnologyByMode':['r','l','t','m','f','y'],
+                    #'RateOfUseByTechnologyByMode':['r','l','t','m','f','y'],
+                    'TechnologyActivityChangeByMode':['r','t','m','y'],
+                    'TechnologyActivityChangeByModeCostTotal':['r','t','m','y'],
+                    'InputToNewCapacity':['r','t','f','y'],
+                    'InputToTotalCapacity':['r','t','f','y'],
+                    'DiscountedCapitalInvestment':['r','t','y'],
+                    'DiscountedOperatingCost':['r','t','y'],
+                    'TotalDiscountedCostByTechnology':['r','t','y'],
+                    'NewStorageCapacity':['r','s','y'],
+                    'SalvageValueStorage':['r','s','y'],
+                    'NumberOfNewTechnologyUnits':['r','t','y'],
+                    'Trade':['r','rr','l','f','y']
+                    }
+            
+            params = []
+            
+            df = pd.read_csv(results_file, sep='\t')
+
+            df.columns = ['temp']
+            df['temp'] = df['temp'].str.lstrip(' *\n\t')
+            
+            if len(df) > 0:
+                df[['temp','value']] = df['temp'].str.split(')', expand=True)
+                df = df.applymap(lambda x: x.strip() if isinstance(x,str) else x)
+                #error when moved to ython 3.11, Columns must have smae length as key
+                # df['value'] = df['value'].str.split(' ', expand=True)
+                df['value'] = df['value'].str.split(' ', expand=True)[0]
+                df[['parameter','id']] = df['temp'].str.split('(', expand=True)
+                df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]
+                df = df.drop('temp', axis=1)
+                df['value'] = df['value'].astype(float).round(4)
+
+                params = df.parameter.unique()
+                all_params = {}
+
+                for each in params:
+                    result_cols = []
+                    df_p = df[df.parameter == each]
+                    df_p[cols[each]] = df_p['id'].str.split(',',expand=True)
+                    result_cols = cols[each].copy()
+                    result_cols.append('value')
+                    df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
+                    all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
+                    df_p = df_p.rename(columns={'value':each})
+                    # df_p.to_csv(os.path.join(base_folder, 'csv', str(each) + '.csv'), index=None) # Print data for each parameter to a CSV file
+            
+            
+            results_list = ['TotalTechnologyModelPeriodActivity',
+                            'AnnualEmissions',
+                            'NewStorageCapacity',
+                            'SalvageValueStorage',
+                            'AccumulatedNewCapacity',
+                            'CapitalInvestment',
+                            'AnnualFixedOperatingCost',
+                            'AnnualVariableOperatingCost',
+                            'DiscountedSalvageValue',
+                            'DiscountedTechnologyEmissionsPenalty',
+                            'NewCapacity',
+                            'NumberOfNewTechnologyUnits',
+                            'SalvageValue',
+                            'TotalCapacityAnnual',
+                            'TotalTechnologyAnnualActivity',
+                            'TotalAnnualTechnologyActivityByMode',
+                            'InputToNewCapacity',
+                            'InputToTotalCapacity',
+                            'ProductionByTechnologyAnnual',
+                            'UseByTechnologyAnnual',
+                            'AnnualTechnologyEmission',
+                            'RateOfTotalActivity',
+                            'Demand',
+                            'Trade',
+                            'AnnualTechnologyEmissionByMode',
+                            'EmissionByActivityChange',
+                            'ProductionByTechnology',
+                            'RateOfProductionByTechnology',
+                            'RateOfUseByTechnology',
+                            'UseByTechnology',
+                            'RateOfActivity'
+                            #'RateOfProductionByTechnologyByMode',
+                            #'RateOfUseByTechnologyByMode'
+                            ]
+            
+            year_split = []
+            parsing = False
+
+            with open(data_file, 'r') as f:
+                for line in f:
+                    if line.startswith(";"):
+                        parsing = False
+                    if parsing:
+                        if line.startswith(start_year):
+                            years = line.rstrip().split(' ')[0:]
+                            years = [i.strip(':=') for i in years]
+                            years = list(filter(None, years))
+                        elif not line.startswith(start_year):
+                            time_slice = line.rstrip().split(' ')[0]
+                            values = line.rstrip().split(' ')[1:]
+                            for i in range(0,len(years)):
+                                year_split.append(tuple([time_slice,years[i],values[i]]))
+                    if line.startswith('param YearSplit'):
+                        parsing = True
+
+            df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
+            if len(df) > 0:
+                df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
+                df_activity_total = all_params['TotalAnnualTechnologyActivityByMode'].rename(columns={'value':'TotalAnnualTechnologyActivityByMode'})
+
+            ####################################################################################
+
+            df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
+            df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
+            df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
+            df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
+            
+            df_input = pd.DataFrame(input_table, columns=['t','f','m','y','InputActivityRatio'])
+            df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
+            df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
+            df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
+            
+            df_emi = pd.DataFrame(emi_table, columns=['t','e','m','y','EmissionActivityRatio'])
+            df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
+            #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
+            
+            ##################################################################################
+            
+            index_dict = {'r': region_list,
+                        'rr': region_list,
+                        'l': ts_list,
+                        't': tech_list,
+                        'f': fuel_list,
+                        'm': mode_list,
+                        'e': emission_list,
+                        'y': year_list,
+                        's': storage_list}
+            
+            def sort_df(df):
+                if 'y' in df.columns:
+                    sorted_df = df.sort_values(by=['y'])
+                else:
+                    sorted_df = df.copy()
+                return sorted_df
+            
+            def tuple_to_dict(data_table):
+                
+                tuple_list = [[col1, col2, col3, col4, col5] 
+                            for (col1, col2, col3, col4, col5) 
+                            in data_table]
+                df = pd.DataFrame(tuple_list,
+                                columns=['t','f','m','y','value']) 
+                df = df[['t','f','m','y']].drop_duplicates()
+                return df
+            
+            df_all = pd.concat([tuple_to_dict(input_table),
+                                tuple_to_dict(output_table)])
+            combo_cols = list(df_all.columns)    
+
+            for each_result in results_list:
+                iter_list = []
+                df_combinations = pd.DataFrame()
+                cols_in_df = []
+                cols_notin_df = []
+                if any(x in combo_cols for x in cols[each_result]):
+                    cols_in_df = [v for v in cols[each_result]
+                                if v in combo_cols]
+                    cols_notin_df = [v for v in cols[each_result]
+                                    if v not in combo_cols]
+                    
+                df_combinations = df_all[cols_in_df].drop_duplicates()
+                                
+                for each_index in cols_notin_df:
+                    iter_list.append(index_dict[each_index])
+                
+                df_combinations_2 = pd.DataFrame(product(*iter_list),
+                                                columns=cols_notin_df)
+                
+                df_combinations['key'] = 1
+                df_combinations_2['key'] = 1
+                #In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
+                df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', 1)
+                
+                #df_combinations = pd.DataFrame(product(*iter_list),
+                #                                   columns=cols[each_result])
+                if any(substring in each_result for substring in ['Production', 'Output']):
+                    col_keep = []
+                    for each_col in df_output.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                    df_output_result = df_output[col_keep]
+                    df_output_result.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_output_result,
+                                            df_combinations,
+                                            how='left',
+                                            on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
+                    
+                if any(substring in each_result for substring in ['Use', 'Input']):
+                    col_keep = []
+                    for each_col in df_input.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                    df_input_result = df_input[col_keep]
+                    df_input_result.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_input_result,
+                                            df_combinations,
+                                            how='left',
+                                            on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
+                
+                if 'Activity' in each_result:
+                    col_keep = []
+                    for each_col in df_input.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                    
+                    if len(df) > 0:
+                        df_input_output = pd.concat([df_input,
+                                                    df_output],
+                                                    sort=True)
+                        df_input_output = df_input_output[col_keep]
+                        df_input_output.drop_duplicates(inplace=True)
+                        df_combinations = pd.merge(df_input_output,
+                                                df_combinations,
+                                                how='left',
+                                                on=col_keep)
+                        df_combinations.drop_duplicates(inplace=True)
+                    
+                if 'e' in cols[each_result]:
+                    col_keep = []
+                    for each_col in df_emi.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                    
+                    df_emi_result = df_emi[col_keep]
+                    df_emi_result.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_emi_result,
+                                            df_combinations,
+                                            how='left',
+                                            on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
+                
+                # If result parameter in CBC results file, merge results from all_params.
+                # Else, enter '0' for all rows.
+                
+                if each_result in params:
+                    df_combinations = pd.merge(df_combinations,
+                                            all_params[each_result],
+                                            how='left',
+                                            on=cols[each_result])
+                    df_combinations.rename(columns={'value':each_result},
+                                        inplace=True)
+                    df_combinations.fillna(0,
+                                        inplace=True)
+                
+                else:
+                    df_combinations[each_result] = 0
+                
+                # For final dataframes, reorder columns based on original cols dictionary 
+                
+                df_combinations = df_combinations.sort_values(by=cols[each_result])
+                
+                final_cols = []
+                final_cols = cols[each_result].copy()
+                final_cols.append(each_result)
+                df_combinations = df_combinations[final_cols]
+                
+                
+                df_combinations.to_csv(os.path.join(base_folder, 'csv', each_result+'.csv'), index=None)
+                
+            ####################################################################################
+            
+            if len(df) > 0:
+                #df_prod = pd.merge(df_out_ys, df_activity, on=['t','m','l','y'])
+                df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
+                df_prod['r'] = str(region[0])
+                df_prod['RateOfActivity'].fillna(0, inplace=True)
+                #df_prod.to_csv(os.path.join(base_folder, 'output_table.csv'), index=None)
+                
+                df_prod['ProductionByTechnologyAnnual'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
+                df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_prod = df_prod.groupby(['r','t','f','y'])['ProductionByTechnologyAnnual'].sum().reset_index()
+                df_prod['ProductionByTechnologyAnnual'] = df_prod['ProductionByTechnologyAnnual'].astype(float).round(4)
+                df_prod = df_prod.sort_values(by=['r','t','f','y'])
+                df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyAnnual.csv'), index=None)
+                all_params['ProductionByTechnologyAnnual'] = df_prod.rename(columns={'ProductionByTechnologyAnnual':'value'})
+
+                ####################################################################################
+
+                #df_use = pd.merge(df_in_ys, df_activity, on=['t','m','l','y'])
+                df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
+                df_use['r'] = str(region[0])
+                df_use['RateOfActivity'].fillna(0, inplace=True)
+                #df_use.to_csv(os.path.join(base_folder, 'input_table.csv'), index=None)
+
+                df_use['UseByTechnologyAnnual'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+                df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_use = df_use.groupby(['r','t','f','y'])['UseByTechnologyAnnual'].sum().reset_index()
+                df_use['UseByTechnologyAnnual'] = df_use['UseByTechnologyAnnual'].astype(float).round(4)
+                df_use = df_use.sort_values(by=['r','t','f','y'])
+                df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyAnnual.csv'), index=None)
+                all_params['UseByTechnologyAnnual'] = df_use.rename(columns={'UseByTechnologyAnnual':'value'})
+
+                ###################################################################################
+                
+                df_emi = pd.merge(df_emi, df_activity_total, how='left', on=['t','m','y'])
+                region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
+                df_emi['r'] = str(region[0])
+                df_emi['TotalAnnualTechnologyActivityByMode'].fillna(0, inplace=True)
+
+                #04042023 Annual Emisssions not sumed by technologies v.k.
+                # df_emi['AnnualEmissions'] = df_emi['EmissionActivityRatio']*df_emi['TotalAnnualTechnologyActivityByMode']
+                # df_emi = df_emi.drop(['EmissionActivityRatio','TotalAnnualTechnologyActivityByMode'], axis=1)
+                # df_emi = df_emi.groupby(['r','t','e','y'])['AnnualEmissions'].sum().reset_index()
+                # df_emi['AnnualEmissions'] = df_emi['AnnualEmissions'].astype(float).round(4)
+                # df_emi = df_emi.sort_values(by=['r','t','e','y'])
+                # df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
+                # all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
+
+                ## 26052023 This variable is calculated in solver, added equation in model file for AnnuallEmisssions V.K.
+                # df_emi['AnnualEmissions'] = df_emi['EmissionActivityRatio']*df_emi['TotalAnnualTechnologyActivityByMode']
+                # df_emi = df_emi.drop(['EmissionActivityRatio','TotalAnnualTechnologyActivityByMode'], axis=1)
+                # df_emi = df_emi.groupby(['r','e','y'])['AnnualEmissions'].sum().reset_index()
+                # df_emi['AnnualEmissions'] = df_emi['AnnualEmissions'].astype(float).round(4)
+                # df_emi = df_emi.sort_values(by=['r','e','y'])
+                # df_emi.to_csv(os.path.join(base_folder, 'csv', 'AnnualEmissions.csv'), index=None)
+                # all_params['AnnualEmissions'] = df_emi.rename(columns={'AnnualEmissions':'value'})
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
     
