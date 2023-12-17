@@ -18,24 +18,25 @@
 				<fieldset>
 					<div class="form-inline">
 						<div class="btn-toolbar">
-							<div class="btn-group">
-								<select id="osy-ryt" name="osy-ryt" class="form-control inline"></select>
+							<div class="btn-group custom-select">
+								<select id="osy-ryt" name="osy-ryt" class="form-control"></select>	
 							</div>
+
 							<div  class="btn-group">
 								<a data-toggle="dropdown" class="dropdown-toggle btn btn-white btn-default btn-block pull-left" href="#">
 									<i class="ace-icon fa  fa-line-chart fa-lg"></i>
 									<span class="badge badge-important bg-color-blue" id="scCount"></span>
 								</a>
-								<ul class="dropdown-menu dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+								<ul class="dropdown-menu dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close" style="padding: 10px;">
 									<li class="dropdown-header">
 										<i class="ace-icon fa fa-info-circle fa-lg primary"></i>
 										 Scenarios
 									</li>
-									<div class="btn-group" id='scCommand' style="display: none; padding: 20px;">
-										<select id="osy-scenarios" name="osy-scenarios" class="form-control pull-left"></select>
-										<button id="osy-openScData" class="btn btn-white btn-default" data-toggle="tooltip" data-placement="top" title="Open scenario data!"> <i class="fa fa-folder-open-o fa-lg info"></i></button>
-										<button id="osy-hideScData" class="btn btn-white btn-default" data-toggle="tooltip" data-placement="top" title="Hide scenario!"> <i class="fa fa-chain-broken fa-lg warning"></i></button>
-										<button id="osy-removeScData" class="btn tn-white btn-default" title="Remove scenario and data!">  <i class="fa fa-times fa-lg danger"></i></button>
+									<div class="btn-group" id='scCommand' style="display: none">
+										<select id="osy-scenarios" name="osy-scenarios" class="form-control pull-left custom-select"></select>
+										<button id="osy-openScData" class="btn btn-white btn-default" data-toggle="tooltip" data-placement="top" title="Open scenario data!"><i class="fa fa-folder-open-o fa-lg"></i></button>
+										<button id="osy-hideScData" class="btn btn-white btn-default" data-toggle="tooltip" data-placement="top" title="Hide empty scenario data!"> <i class="fa fa-chain-broken fa-lg"></i></button>
+										<button id="osy-removeScData" class="btn tn-white btn-default" title="Remove scenario and data!">  <i class="fa fa-trash fa-lg danger"></i></button>
 									</div>
 								</ul>
 							</div>

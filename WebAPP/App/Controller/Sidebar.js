@@ -34,6 +34,8 @@ export class Sidebar {
         $('.dynamicRoutesRES').hide();
         $('.dynamicResults').hide();
 
+        console.log('model menu ', model)
+
         if (model.menu) {
 
             //Routes.addRoutes(model.PARAMETERS);

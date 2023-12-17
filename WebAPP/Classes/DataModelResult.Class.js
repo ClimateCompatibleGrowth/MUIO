@@ -227,7 +227,14 @@ export class DataModelResult{
                     }
                     chunk['Year'] = year;
                     
-                    chunk['Value'] = obj[year];
+                    if(year in obj){
+                        chunk['Value'] = obj[year];
+                    }
+                    else{
+                        console.log('Value ', obj[year])
+                        chunk['Value'] = null;
+                    }
+                    
 
                     let rule = paramById[group][param]['unitRule'];
                     const data = {...dataT, ...dataC, ...dataE};

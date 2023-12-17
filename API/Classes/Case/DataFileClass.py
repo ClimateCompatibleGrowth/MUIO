@@ -993,6 +993,8 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
     
+
+
     def generateCSVfromCBC(self, data_file, results_file, base_folder=os.getcwd()):
         try:
             #pd.options.mode.chained_assignment = None
@@ -1004,12 +1006,6 @@ class DataFile(Osemosys):
             year_split = []
 
             year_list = self.getYears()
-            fuel_list = self.getCommNames()
-            tech_list = self.getTechNames()
-            emission_list = self.getEmiNames()
-            ts_list = self.getTimeslices()
-            mode_list = self.getMods()
-            region_list = ['RE1']
             start_year = year_list[0]
 
             with open(data_file, 'r') as f:
@@ -1050,11 +1046,11 @@ class DataFile(Osemosys):
             except FileExistsError:
                 pass
             
+            print('output_table ', output_table)
             #parsanje result.txt
             params = []
             
             df = pd.read_csv(results_file, sep='\t')
-
             df.columns = ['temp']
             df['temp'] = df['temp'].str.lstrip(' *\n\t')
             
@@ -1075,22 +1071,28 @@ class DataFile(Osemosys):
 
                 for each in params:
                     result_cols = []
+
                     df_p = df[df.parameter == each]
+
                     df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
+                    #df_p.loc[:, Config.VARIABLES_C[each]] = df_p.loc[:,('id')].str.split(',',expand=True)
+
                     result_cols = Config.VARIABLES_C[each].copy()
                     result_cols.append('value')
+                    #result_cols.append(each)
                     df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
                     all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
-                    df_p = df_p.rename(columns={'value':each})
-            
+
+                    #napravi csv
+                    all_params[each] = all_params[each].rename(columns={'value':each})
+                    all_params[each].to_csv(os.path.join(base_folder, 'csv', each+'.csv'), index=None)
+
+            ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
+            ################################################################################################################
+
             #year split data frame
             df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
-
-            if len(df) > 0:
-                df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
-                #df_activity_total = all_params['TotalAnnualTechnologyActivityByMode'].rename(columns={'value':'TotalAnnualTechnologyActivityByMode'})
-
-            ####################################################################################
+            df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
 
             df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
             df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
@@ -1105,142 +1107,6 @@ class DataFile(Osemosys):
             df_emi = pd.DataFrame(emi_table, columns=['t','e','m','y','EmissionActivityRatio'])
             df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
             #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
-            
-            ##################################################################################
-            
-            index_dict = {'r': region_list,
-                        'rr': region_list,
-                        'l': ts_list,
-                        't': tech_list,
-                        'f': fuel_list,
-                        'm': mode_list,
-                        'e': emission_list,
-                        'y': year_list}
-            
-            def sort_df(df):
-                if 'y' in df.columns:
-                    sorted_df = df.sort_values(by=['y'])
-                else:
-                    sorted_df = df.copy()
-                return sorted_df
-            
-            def tuple_to_dict(data_table):
-                
-                tuple_list = [[col1, col2, col3, col4, col5] 
-                            for (col1, col2, col3, col4, col5) 
-                            in data_table]
-                df = pd.DataFrame(tuple_list, columns=['t','f','m','y','value']) 
-
-                df = df[['t','f','m','y']].drop_duplicates()
-                return df
-            
-            df_all = pd.concat([tuple_to_dict(input_table), tuple_to_dict(output_table)])
-            combo_cols = list(df_all.columns)    
-
-            print("combo_cols ", combo_cols)
-
-            # for each_result in results_list:
-            for each_result in self.VARS:
-                iter_list = []
-                df_combinations = pd.DataFrame()
-                cols_in_df = []
-                cols_notin_df = []
-
-                if any(x in combo_cols for x in Config.VARIABLES_C[each_result]):
-                    cols_in_df = [v for v in Config.VARIABLES_C[each_result] if v in combo_cols]
-                    cols_notin_df = [v for v in Config.VARIABLES_C[each_result] if v not in combo_cols]
-                    
-                df_combinations = df_all[cols_in_df].drop_duplicates()
-
-                print("cols_notin_df ", cols_notin_df)    
-                for each_index in cols_notin_df:
-                    print("index_dict[each_index] ", index_dict[each_index])  
-                    iter_list.append(index_dict[each_index])
-                
-                # print("iter_list ", iter_list)
-                df_combinations_2 = pd.DataFrame(product(*iter_list), columns=cols_notin_df)
-                print("df_combinations ", df_combinations)
-                print("df_combinations_2 ", df_combinations_2)
-
-                df_combinations['key'] = 1
-                df_combinations_2['key'] = 1
-                #In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
-                #df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', 1)
-                #fixed by adding axis 0 is for columns 1 is for index vk 06.10.2023
-                df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', axis=1)
-                print("df_combinations merged ", df_combinations)
-
-                #df_combinations = pd.DataFrame(product(*iter_list),  columns=cols[each_result])
-                if any(substring in each_result for substring in ['Production', 'Output']):
-                    col_keep = []
-                    for each_col in df_output.columns:
-                        if each_col in df_combinations:
-                            col_keep.append(each_col)
-                            
-                    df_output_result = df_output[col_keep]
-                    df_output_result.drop_duplicates(inplace=True)
-                    df_combinations = pd.merge(df_output_result, df_combinations, how='left', on=col_keep)
-                    df_combinations.drop_duplicates(inplace=True)
-                    
-                if any(substring in each_result for substring in ['Use', 'Input']):
-                    col_keep = []
-
-                    for each_col in df_input.columns:
-                        if each_col in df_combinations:
-                            col_keep.append(each_col)
-
-                    df_input_result = df_input[col_keep]
-                    df_input_result.drop_duplicates(inplace=True)
-                    df_combinations = pd.merge(df_input_result, df_combinations, how='left', on=col_keep)
-                    df_combinations.drop_duplicates(inplace=True)
-                
-                if 'Activity' in each_result:
-                    col_keep = []
-                    for each_col in df_input.columns:
-                        if each_col in df_combinations:
-                            col_keep.append(each_col)
-                    
-                    if len(df) > 0:
-                        df_input_output = pd.concat([df_input, df_output], sort=True)
-                        df_input_output = df_input_output[col_keep]
-                        df_input_output.drop_duplicates(inplace=True)
-                        df_combinations = pd.merge(df_input_output, df_combinations, how='left', on=col_keep)
-                        df_combinations.drop_duplicates(inplace=True)
-                    
-                if 'e' in Config.VARIABLES_C[each_result]:
-                    col_keep = []
-                    for each_col in df_emi.columns:
-                        if each_col in df_combinations:
-                            col_keep.append(each_col)
-                    
-                    df_emi_result = df_emi[col_keep]
-                    df_emi_result.drop_duplicates(inplace=True)
-                    df_combinations = pd.merge(df_emi_result, df_combinations, how='left', on=col_keep)
-                    df_combinations.drop_duplicates(inplace=True)
-                
-                # If result parameter in CBC results file, merge results from all_params.
-                # Else, enter '0' for all rows.
-                
-                if each_result in params:
-                    df_combinations = pd.merge(df_combinations, all_params[each_result], how='left', on=Config.VARIABLES_C[each_result])
-                    df_combinations.rename(columns={'value':each_result}, inplace=True)
-                    df_combinations.fillna(0, inplace=True)
-                
-                else:
-                    df_combinations[each_result] = 0
-                
-                # For final dataframes, reorder columns based on original Config.VARIABLES_C dictionary          
-                df_combinations = df_combinations.sort_values(by=Config.VARIABLES_C[each_result])
-                
-                final_cols = []
-                final_cols = Config.VARIABLES_C[each_result].copy()
-                final_cols.append(each_result)
-                df_combinations = df_combinations[final_cols]
-                
-                
-                df_combinations.to_csv(os.path.join(base_folder, 'csv', each_result+'.csv'), index=None)
-            
-            ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
             ########################################ProductionByTechnologyAnnual############################################
             
             if len(df) > 0:
@@ -1255,50 +1121,28 @@ class DataFile(Osemosys):
                 df_prod = df_prod.sort_values(by=['r','l','t','f','y'])
                 df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnology.csv'), index=None)
 
-
-                # df_prodAn = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
-                # region = [x for x in list(df_prodAn.r.unique()) if str(x) != 'nan']
-                # df_prodAn['r'] = str(region[0])
-                # df_prodAn['RateOfActivity'].fillna(0, inplace=True)
-
-                # df_prodAn['ProductionByTechnologyAnnual'] = df_prodAn['OutputActivityRatio']*df_prodAn['YearSplit']*df_prodAn['RateOfActivity']
-                # df_prodAn = df_prodAn.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                # df_prodAn = df_prodAn.groupby(['r','t','f','y'])['ProductionByTechnologyAnnual'].sum().reset_index()
-                # df_prodAn['ProductionByTechnologyAnnual'] = df_prodAn['ProductionByTechnologyAnnual'].astype(float).round(4)
-                # df_prodAn = df_prodAn.sort_values(by=['r','t','f','y'])
-                # df_prodAn.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyAnnual.csv'), index=None)
-
-
-  
-
                 ######################################UseByTechnologyAnnual##############################################
 
                 df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
                 df_use['r'] = str(region[0])
                 df_use['RateOfActivity'].fillna(0, inplace=True)
-
-                
+       
                 df_use['UseByTechnology'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
-                #df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
                 df_use['UseByTechnology'] = df_use['UseByTechnology'].astype(float).round(4)
                 df_use = df_use.sort_values(by=['r','l','t','f','y'])
                 df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnology.csv'), index=None)
-
-                # df_use['UseByTechnologyAnnual'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
-                # df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                # df_use = df_use.groupby(['r','t','f','y'])['UseByTechnologyAnnual'].sum().reset_index()
-                # df_use['UseByTechnologyAnnual'] = df_use['UseByTechnologyAnnual'].astype(float).round(4)
-                # df_use = df_use.sort_values(by=['r','t','f','y'])
-                # df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyAnnual.csv'), index=None)
-
-
 
         except(IOError, IndexError):
             raise IndexError
         except OSError:
             raise OSError
     
+
+
+
+        
+
     def generateResultsViewer(self, caserunname):
         try:
             csvFolderPath = Path(Config.DATA_STORAGE,self.case,'res',caserunname, 'csv')
@@ -1633,6 +1477,315 @@ class DataFile(Osemosys):
 
 
     ###############################################################################################BKP
+    ##izmjene da bi se napunili csv za InputToNewCapacity i InputToTotalCapacity
+    def generateCSVfromCBC09122023(self, data_file, results_file, base_folder=os.getcwd()):
+        try:
+            #pd.options.mode.chained_assignment = None
+
+            parsing = False
+            output_table = []
+            input_table = []
+            emi_table = []
+            year_split = []
+
+            year_list = self.getYears()
+            fuel_list = self.getCommNames()
+            tech_list = self.getTechNames()
+            emission_list = self.getEmiNames()
+            ts_list = self.getTimeslices()
+            mode_list = self.getMods()
+            region_list = ['RE1']
+            start_year = year_list[0]
+
+            with open(data_file, 'r') as f:
+                for line in f:
+                    if line.startswith(";"):
+                        parsing = False
+                    if parsing:
+                        if line.startswith('['):
+                            fuel = line.split(',')[2]
+                            tech = line.split(',')[1]                        
+                        elif not line.startswith(start_year):
+                            values = line.rstrip().split(' ')[1:]
+                            mode = line.split(' ')[0] #mode ili time_slice
+                            time_slice = line.rstrip().split(' ')[0]
+   
+                            if param_current=='OutputActivityRatio':
+                                for i in range(0,len(year_list)):
+                                    output_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+
+                            if param_current=='InputActivityRatio':
+                                for i in range(0,len(year_list)):
+                                    input_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+                            
+                            if param_current == 'EmissionActivityRatio':
+                                for i in range(0,len(year_list)):
+                                    emi_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+                        
+                            if param_current == 'YearSplit':
+                                for i in range(0,len(year_list)):
+                                    year_split.append(tuple([time_slice,year_list[i],values[i]]))
+
+                    if line.startswith(('param OutputActivityRatio','param InputActivityRatio','param TechnologyToStorage','param TechnologyFromStorage', 'param EmissionActivityRatio', 'param YearSplit')):
+                        param_current = line.split(' ')[1]
+                        parsing = True
+
+            try:
+                os.makedirs(os.path.join(base_folder, 'csv'))
+            except FileExistsError:
+                pass
+            
+            #parsanje result.txt
+            params = []
+            
+            df = pd.read_csv(results_file, sep='\t')
+
+            df.columns = ['temp']
+            df['temp'] = df['temp'].str.lstrip(' *\n\t')
+            
+            if len(df) > 0:
+                df[['temp','value']] = df['temp'].str.split(')', expand=True)
+                df = df.applymap(lambda x: x.strip() if isinstance(x,str) else x)
+                #error when moved to ython 3.11, Columns must have smae length as key
+                # df['value'] = df['value'].str.split(' ', expand=True)
+                df['value'] = df['value'].str.split(' ', expand=True)[0]
+                df[['parameter','id']] = df['temp'].str.split('(', expand=True)
+                df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]
+                df = df.drop('temp', axis=1)
+                df['value'] = df['value'].astype(float).round(4)
+
+                #variables that are output form solver 18
+                params = df.parameter.unique()
+                all_params = {}
+
+    
+                for each in params:
+                    result_cols = []
+                    df_p = df[df.parameter == each]
+                    df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
+                    result_cols = Config.VARIABLES_C[each].copy()
+                    result_cols.append('value')
+                    df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
+                    all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
+                    df_p = df_p.rename(columns={'value':each})
+            
+            
+            #year split data frame
+            df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
+
+            if len(df) > 0:
+                df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
+                #df_activity_total = all_params['TotalAnnualTechnologyActivityByMode'].rename(columns={'value':'TotalAnnualTechnologyActivityByMode'})
+
+            ####################################################################################
+
+            df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
+            df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
+            df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
+            df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
+            
+            df_input = pd.DataFrame(input_table, columns=['t','f','m','y','InputActivityRatio'])
+            df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
+            df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
+            df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
+            
+            df_emi = pd.DataFrame(emi_table, columns=['t','e','m','y','EmissionActivityRatio'])
+            df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
+            #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
+            
+            ##################################################################################
+            
+            index_dict = {'r': region_list,
+                        'rr': region_list,
+                        'l': ts_list,
+                        't': tech_list,
+                        'f': fuel_list,
+                        'm': mode_list,
+                        'e': emission_list,
+                        'y': year_list}
+            
+            def sort_df(df):
+                if 'y' in df.columns:
+                    sorted_df = df.sort_values(by=['y'])
+                else:
+                    sorted_df = df.copy()
+                return sorted_df
+            
+            def tuple_to_dict(data_table):
+                tuple_list = [[col1, col2, col3, col4, col5] for (col1, col2, col3, col4, col5) in data_table]
+                df = pd.DataFrame(tuple_list, columns=['t','f','m','y','value']) 
+                df = df[['t','f','m','y']].drop_duplicates()
+                return df
+            
+            df_all = pd.concat([tuple_to_dict(input_table), tuple_to_dict(output_table)])
+
+            combo_cols = list(df_all.columns)    
+
+            # for each_result in results_list:
+            for each_result in self.VARS:
+                iter_list = []
+                df_combinations = pd.DataFrame()
+                cols_in_df = []
+                cols_notin_df = []
+
+                if any(x in combo_cols for x in Config.VARIABLES_C[each_result]):
+                    cols_in_df = [v for v in Config.VARIABLES_C[each_result] if v in combo_cols]
+                    cols_notin_df = [v for v in Config.VARIABLES_C[each_result] if v not in combo_cols]
+                    
+                df_combinations = df_all[cols_in_df].drop_duplicates()
+   
+                for each_index in cols_notin_df:
+                    print("index_dict[each_index] ", index_dict[each_index])  
+                    iter_list.append(index_dict[each_index])
+                
+                # print("iter_list ", iter_list)
+                df_combinations_2 = pd.DataFrame(product(*iter_list), columns=cols_notin_df)
+
+                df_combinations['key'] = 1
+                df_combinations_2['key'] = 1
+                #In a future version of pandas all arguments of DataFrame.drop except for the argument 'labels' will be keyword-only.
+                #df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', 1)
+                #fixed by adding axis 0 is for columns 1 is for index vk 06.10.2023
+                df_combinations = pd.merge(df_combinations, df_combinations_2, on='key').drop('key', axis=1)
+
+                #df_combinations = pd.DataFrame(product(*iter_list),  columns=cols[each_result])
+                
+                ##08122023 VK InputToNewCapacity InputToTotalCapacityi zbrisali smo Output da bi ova dva parametra isli direktno iz results.txt
+                #if any(substring in each_result for substring in ['Production', 'Output']):
+                if any(substring in each_result for substring in ['Production']):
+                    col_keep = []
+                    for each_col in df_output.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                            
+                    df_output_result = df_output[col_keep]
+                    df_output_result.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_output_result, df_combinations, how='left', on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
+                     
+                ##08122023 VK InputToNewCapacity InputToTotalCapacity izbrisali smo Input da bi ova dva parametra isli direktno iz results.txt
+                # if any(substring in each_result for substring in ['Use', 'Input']):
+                if any(substring in each_result for substring in ['Use']):
+                    col_keep = []
+
+                    for each_col in df_input.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+
+                    df_input_result = df_input[col_keep]
+                    df_input_result.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_input_result, df_combinations, how='left', on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
+                
+                if 'Activity' in each_result:
+                    col_keep = []
+                    for each_col in df_input.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                    
+                    if len(df) > 0:
+                        df_input_output = pd.concat([df_input, df_output], sort=True)
+                        df_input_output = df_input_output[col_keep]
+                        df_input_output.drop_duplicates(inplace=True)
+                        df_combinations = pd.merge(df_input_output, df_combinations, how='left', on=col_keep)
+                        df_combinations.drop_duplicates(inplace=True)
+                    
+                if 'e' in Config.VARIABLES_C[each_result]:
+                    col_keep = []
+                    for each_col in df_emi.columns:
+                        if each_col in df_combinations:
+                            col_keep.append(each_col)
+                    
+                    df_emi_result = df_emi[col_keep]
+                    df_emi_result.drop_duplicates(inplace=True)
+                    df_combinations = pd.merge(df_emi_result, df_combinations, how='left', on=col_keep)
+                    df_combinations.drop_duplicates(inplace=True)
+                
+                # If result parameter in CBC results file, merge results from all_params.
+                # Else, enter '0' for all rows.
+                
+                if each_result in params:
+                    df_combinations = pd.merge(df_combinations, all_params[each_result], how='left', on=Config.VARIABLES_C[each_result])
+                    df_combinations.rename(columns={'value':each_result}, inplace=True)
+                    df_combinations.fillna(0, inplace=True)
+                
+                else:
+                    df_combinations[each_result] = 0
+                
+                # For final dataframes, reorder columns based on original Config.VARIABLES_C dictionary          
+                df_combinations = df_combinations.sort_values(by=Config.VARIABLES_C[each_result])
+                
+                final_cols = []
+                final_cols = Config.VARIABLES_C[each_result].copy()
+                final_cols.append(each_result)
+                df_combinations = df_combinations[final_cols]
+                
+                
+                df_combinations.to_csv(os.path.join(base_folder, 'csv', each_result+'.csv'), index=None)
+
+            ##08122023 VK InputToNewCapacity InputToTotalCapacity
+            # df_InputToNewCapacity = all_params['InputToNewCapacity'].rename(columns={'value':'InputToNewCapacity'})
+            # df_InputToTotalCapacity = all_params['InputToTotalCapacity'].rename(columns={'value':'InputToTotalCapacity'})
+            # df_InputToNewCapacity.to_csv(os.path.join(base_folder, 'csv', 'InputToNewCapacity.csv'), index=None)
+            # df_InputToTotalCapacity.to_csv(os.path.join(base_folder, 'csv', 'InputToTotalCapacity.csv'), index=None)
+            
+            ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
+            ########################################ProductionByTechnologyAnnual############################################
+            
+            if len(df) > 0:
+                df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
+                df_prod['r'] = str(region[0])
+                df_prod['RateOfActivity'].fillna(0, inplace=True)
+
+                df_prod['ProductionByTechnology'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
+                df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_prod['ProductionByTechnology'] = df_prod['ProductionByTechnology'].astype(float).round(4)
+                df_prod = df_prod.sort_values(by=['r','l','t','f','y'])
+                df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnology.csv'), index=None)
+
+
+                # df_prodAn = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                # _region = [x for x in list(df_prodAn.r.unique()) if str(x) != 'nan']
+                # df_prodAn['r'] = str(region[0])
+                # df_prodAn['RateOfActivity'].fillna(0, inplace=True)
+
+                # df_prodAn['ProductionByTechnologyAnnual'] = df_prodAn['OutputActivityRatio']*df_prodAn['YearSplit']*df_prodAn['RateOfActivity']
+                # df_prodAn = df_prodAn.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                # df_prodAn = df_prodAn.groupby(['r','t','f','y'])['ProductionByTechnologyAnnual'].sum().reset_index()
+                # df_prodAn['ProductionByTechnologyAnnual'] = df_prodAn['ProductionByTechnologyAnnual'].astype(float).round(4)
+                # df_prodAn = df_prodAn.sort_values(by=['r','t','f','y'])
+                # df_prodAn.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyAnnual.csv'), index=None)
+
+
+  
+
+                ######################################UseByTechnologyAnnual##############################################
+
+                df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
+                df_use['r'] = str(region[0])
+                df_use['RateOfActivity'].fillna(0, inplace=True)
+
+                
+                df_use['UseByTechnology'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+                #df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_use['UseByTechnology'] = df_use['UseByTechnology'].astype(float).round(4)
+                df_use = df_use.sort_values(by=['r','l','t','f','y'])
+                df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnology.csv'), index=None)
+
+                # df_use['UseByTechnologyAnnual'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+                # df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                # df_use = df_use.groupby(['r','t','f','y'])['UseByTechnologyAnnual'].sum().reset_index()
+                # df_use['UseByTechnologyAnnual'] = df_use['UseByTechnologyAnnual'].astype(float).round(4)
+                # df_use = df_use.sort_values(by=['r','t','f','y'])
+                # df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyAnnual.csv'), index=None)
+
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+
     def preprocessData_BKP(self, data_infile, data_outfile):
 
         lines = []

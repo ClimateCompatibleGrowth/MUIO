@@ -107,10 +107,22 @@ export class Model {
             });
         });
 
+        //singles
         $.each(resData.Data.IAR, function (techId, commArr) {
             $.each(commArr, function (id, CommId) { 
                 if(resData.Singles.IAR.includes(CommId)){
                     if (techSelect == null || techSelect.includes('DS') || techSelect.includes(techId)){
+
+                        if (!(dispayedTechs.includes(techId))){
+                            dispayedTechs.push(techId);
+                        }
+                        if (!(dispayedTechs.includes(techId))){
+                            dispayedTechs.push(techId);
+                        }
+                        if (!(dispayedComms.includes(CommId))){
+                            dispayedComms.push(CommId);
+                        }
+
                         source.push(labelIndex['DS']);
                         target.push(labelIndex[techId]);
                         //labelLink.push(CommNames[CommId]);
@@ -133,6 +145,18 @@ export class Model {
             $.each(commArr, function (id, CommId) {
                 if(resData.Singles.OAR.includes(CommId)){
                     if (techSelect == null || techSelect.includes('DT') || techSelect.includes(techId)){
+
+                        if (!(dispayedTechs.includes(techId))){
+                            dispayedTechs.push(techId);
+                        }
+                        if (!(dispayedTechs.includes(techId))){
+                            dispayedTechs.push(techId);
+                        }
+                        if (!(dispayedComms.includes(CommId))){
+                            dispayedComms.push(CommId);
+                        }
+
+
                         source.push(labelIndex[techId]);
                         target.push(labelIndex['DT']);   
                         //labelLink.push(CommNames[CommId]);

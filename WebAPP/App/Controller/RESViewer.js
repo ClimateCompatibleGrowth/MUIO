@@ -141,13 +141,13 @@ export default class RESViewer {
         }else if(model.labelCount > 425 ){
             model.height = 6000;
         }
-        $('#labelCount').html(model.labelCount + ' - ' +  model.height)
+        //$('#labelCount').html(model.labelCount + ' - ' +  model.height)
         //console.log('tech count, height' , model.labelCount, model.height)
     }
     
     static initPage(model) {
 
-        //console.log('model ', model)
+        console.log('model ', model)
         Message.clearMessages();
         let $div = 'osy-RESViewer';
 
@@ -202,14 +202,52 @@ export default class RESViewer {
         $("#renderSankey").off('click');
         $("#renderSankey").on('click', function (e) {  
             Message.loaderStart('Preparing RES...'); 
+            console.log('model.selectedTechs ', model.selectedTechs);
+            console.log('model.selectedTechs.length ', model.selectedTechs.length);
+
+            if(model.selectedTechs.length >=2){
+                $('#undoSankey').show();
+            }
             let settings = {};
             settings.Colors = $("#useColors").is(":checked");
             settings.Desc = $("#useDesc").is(":checked");
+            //console.log('model.selectedTechs ', model.selectedTechs)
+      
+            let modelNew = new Model(model.casename, model.genData, settings, model.selectedTechs);
+
+            //console.log('modelNew ', modelNew)
+            Html.ResStats(modelNew);
+            RESViewer.sankeySize(modelNew);
+            Chart.RESChart($div, modelNew);
+            Message.loaderEnd();
+        });
+
+        $("#undoSankey").off('click');
+        $("#undoSankey").on('click', function (e) {  
+            Message.loaderStart('Undo RES...'); 
+
+            let settings = {};
+            settings.Colors = $("#useColors").is(":checked");
+            settings.Desc = $("#useDesc").is(":checked");
+
+            model.selectedTechs.pop();
+
             console.log('model.selectedTechs ', model.selectedTechs)
       
             let modelNew = new Model(model.casename, model.genData, settings, model.selectedTechs);
 
-            console.log('modelNew ', modelNew)
+            //update drop down liste tehnologija
+            $.each(modelNew.RES.Techs, function (id, obj) {
+                if(model.selectedTechs.includes(obj.TechId)){ 
+                    obj.$checked = true;
+                }
+                else{
+                    obj.$checked = false;
+                }
+            });
+
+            model.cmbTechs.itemsSource = modelNew.RES.Techs;
+
             Html.ResStats(modelNew);
             RESViewer.sankeySize(modelNew);
             Chart.RESChart($div, modelNew);
@@ -246,7 +284,17 @@ export default class RESViewer {
             let msg;
             if ('source' in msgData && 'target' in msgData){
                 msg = `<i class="fa fa-cube fa-2x osy-second-color-d"></i><b>COMMODITY:</b> ${msgData.label} <br /> <i class="fa fa-sign-in fa-lg osy-second-color"></i><b>SOURCE TECHNOLOGY:</b> ${msgData.source.label} <br /> <i class="fa fa-sign-out fa-lg danger"></i><b>TARGET TECHNOLOGY:</b> ${msgData.target.label} <br />`
-            }else{
+            }
+            else{
+                //Technology click
+
+                console.log('msgData ', msgData)
+                if(msgData.label == 'DummySource' || msgData.label == 'DummyTarget'){
+                    msg = `<i class="fa fa-cog fa-lg osy-second-color-d"></i> <b>TECHNOLOGY:</b> ${msgData.label} is dummy technology.`;
+                    Message.resMessage(msg);
+                    Message.loaderEnd();
+                    return false;
+                }
                 let sourceData = [];
                 let targetData = [];
                 if (msgData.sourceLinks !== undefined || msgData.sourceLinks.length != 0) {
@@ -281,6 +329,10 @@ export default class RESViewer {
                 if(!model.selectedTechs.includes(techId)){ 
                     model.selectedTechs.push(techId);
                 }
+                if(model.selectedTechs.length >=2){
+                    $('#undoSankey').show();
+                }
+
                 let settings = {};
                 settings.Colors = $("#useColors").is(":checked");
                 settings.Desc = $("#useDesc").is(":checked");
@@ -314,7 +366,7 @@ export default class RESViewer {
         let value = element.getBoundingClientRect().width / element.offsetWidth;
         let indexofArr = 9;
         document.querySelector('#zoomIn').addEventListener('click',()=>{
-        console.log('value of index zoomin is',indexofArr)
+        //console.log('value of index zoomin is',indexofArr)
         if(indexofArr < zoomArr.length-1){
             indexofArr += 1;
             value = zoomArr[indexofArr];
@@ -323,7 +375,7 @@ export default class RESViewer {
         })
 
         document.querySelector('#zoomOut').addEventListener('click',()=>{
-        console.log('value of index  zoom out is',indexofArr)
+        //console.log('value of index  zoom out is',indexofArr)
         if(indexofArr > 0){
             indexofArr -= 1;
             value = zoomArr[indexofArr];

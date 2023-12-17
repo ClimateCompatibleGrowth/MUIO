@@ -51,6 +51,7 @@ export default class RYT {
 
 
     static initPage(model) {
+        console.log('model ', model)
         Message.clearMessages();
         //Navbar.initPage(model.casename);
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);

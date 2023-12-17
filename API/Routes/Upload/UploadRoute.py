@@ -104,7 +104,7 @@ class Download(Thread):
 
     def run(self):
         print("wait few seconds for download to finish")
-        time.sleep(10)
+        time.sleep(20)
         #print(self.request)
         #remove zipped file
         os.remove(self.zippedFile)

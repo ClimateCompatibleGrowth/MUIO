@@ -38,12 +38,9 @@ export default class Pivot {
                 }
             })
             .then(data => {      
-                let [casename, genData, resData, VARIABLES, VIEWS, DATA] = data;
-                
+                let [casename, genData, resData, VARIABLES, VIEWS, DATA] = data;         
                 let model = new Model(casename, genData, resData, VARIABLES, DATA, VIEWS);
-                //console.log('model ', model)
                 this.initPage(model);
-                // this.initEvents(model);
             })
             .catch(error => {
                 if (error.status_code == 'CaseError') {
@@ -168,8 +165,59 @@ export default class Pivot {
         //     </div>  
         // </div>`;
 
-        if(model.refreshPage){
+        // let oldFun = wjChart._SvgRenderEngine.prototype._setText;
+        wijmo.chart._SvgRenderEngine.prototype._setText = function (svgTextElement, textString) {
+            // Clear the existing content of the SVG text element
+            svgTextElement.textContent = '';
+        
+            // Create a temporary div element to parse and render the HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = textString;
+            // Iterate through child nodes of the temporary div
+            for (const node of tempDiv.childNodes) {
+                if (
+                    node.nodeType === Node.ELEMENT_NODE &&
+                    node.tagName.toLowerCase() != 'sup' &&
+                    node.childNodes.length > 0
+                ) {
+                    this._setText(svgTextElement, node.innerHTML);
+                }
+                if (node.nodeType === Node.TEXT_NODE) {
+                    // If it's a text node, create a new tspan element
+                    const tspan = document.createElementNS(
+                    'http://www.w3.org/2000/svg',
+                    'tspan'
+                    );
+                    tspan.textContent = node.textContent;
+                    svgTextElement.appendChild(tspan);
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    // If it's an element, handle specific cases (e.g., superscript)
+                    if (node.tagName.toLowerCase() === 'sup') {
+                    const tspanSup = document.createElementNS(
+                        'http://www.w3.org/2000/svg',
+                        'tspan'
+                    );
+                    tspanSup.setAttribute('baseline-shift', 'super');
+                    tspanSup.textContent = node.textContent;
             
+                    // Create a new tspan for the entire superscript
+                    const tspan = document.createElementNS(
+                        'http://www.w3.org/2000/svg',
+                        'tspan'
+                    );
+                    tspan.appendChild(tspanSup);
+                    svgTextElement.appendChild(tspan);
+                    } else {
+                    // For other elements, clone and append them directly to the SVG text element
+                    const clonedNode = node.cloneNode(true);
+                    svgTextElement.appendChild(clonedNode);
+                    }
+                }
+            }
+        };
+
+        //kada mjenjamo case, assertation problem sa wijmo kontrolama
+        if(model.refreshPage){      
             wijmo.olap.PivotPanel.disposeAll('#pivotPanel');
             wijmo.olap.PivotGrid.disposeAll('#pivotGrid');
             wijmo.olap.PivotChart.disposeAll('#pivotChart');
@@ -179,27 +227,30 @@ export default class Pivot {
             wijmo.input.AutoComplete.disposeAll('#cmbParams');
         }
 
-        
-
-
+        function parseHtmlData(data){
+            let props = ['Unit'];
+            //console.log('item[prop] ', item[prop] )
+            data.forEach(item => props.forEach(prop => item[prop] = wijmo.toPlainText(item[prop])))
+        }
 
         let app = {};
         app.engine = new wijmo.olap.PivotEngine({
+            //itemsSourceChanged: (s,e) => parseHtmlData(s.collectionView.sourceCollection),
             itemsSource: model.pivotData,
             rowFields: ['Case', 'Year'],
             valueFields: ['Value'],
             columnFields: ['Tech'],
             showRowTotals: 'None',
-            showColumnTotals:'None'
-        });
+            showColumnTotals:'None',
 
+        });
 
         //wijmo.olap.PivotEngine.invalidate()
         app.engine.fields.getField('Unit').isContentHtml = true;
         model.DEFAULTVIEW = app.engine.viewDefinition;
 
         app.panel = new wijmo.olap.PivotPanel('#pivotPanel',{
-            itemsSource: app.engine,
+            itemsSource: app.engine
         });
 
         //New fieled formats
@@ -244,6 +295,11 @@ export default class Pivot {
         //app.pivotChart.dataLabel.position = 'Top';
         // app.pivotChart.flexChart.palette = wijmo.chart.Palettes.midnight
         app.pivotChart.flexChart.palette = model.ColorSchemes.osyScheme;
+
+        // app.pivotChart.flexChart.axisX.itemFormatter = function (engine, label) {
+        //     label.text = wijmo.toPlainText(label.text);
+        //     return label;
+        // };
 
         app.cmbParams = new wijmo.input.AutoComplete('#cmbParams', {
             itemsSource: model.VARIABLEOBJECT,
@@ -433,11 +489,17 @@ export default class Pivot {
         model.group = model.VARGROUPS[param]['group'];
         model.param = param;
 
+        console.log('param,  model, ', param,  model,)
         Osemosys.getResultData(model.casename, model.group+'.json')
         .then(DATA => {
-            if (model.param in DATA){
+
+            console.log('DATA ', DATA, DATA !== null)
+            if (DATA !== null && model.param in DATA){
                 // Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group);
                 let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
+
+                console.log(' pivotData ', pivotData)
+
                 model.pivotData = pivotData;
                 app.engine.itemsSource = model.pivotData;
                 if (model.param == 'D' || model.param == 'T'){
@@ -477,7 +539,7 @@ export default class Pivot {
                 app.engine.fields.getField('Unit').isContentHtml = true;
             }
             else{
-                Message.dangerOsy("Results do not contain values for variable <b>"+model.VARNAMES[model.group][model.param] + "</b> please rerun the model.")
+                Message.dangerOsy("Results do not contain values for variable <b>"+model.VARNAMES[model.group][model.param] + "</b> please check input data and rerun the model.")
             }
 
         })

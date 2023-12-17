@@ -650,8 +650,8 @@ li {
 
 .wj-vars{
     min-width: 290px!important;
-    max-height: 730px!important;
-    height:730px!important;
+    max-height: 600px!important;
+    height:600px!important;
 }
 .wj-labeled-input{
     padding: 0px 0px 10px 0px!important;
@@ -739,4 +739,3 @@ li {
   .sankey-link:hover {
     fill-opacity: 0.8 !important;
   }
-
