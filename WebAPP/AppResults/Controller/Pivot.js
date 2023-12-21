@@ -406,8 +406,10 @@ export default class Pivot {
             .then(response => {
                 Message.clearMessages();
                 Message.bigBoxSuccess('Model message', response.message, 3000);
-                model.VIEWS[model.param].push(POSTDATA);
-                Html.ddlViews(model.VIEWS[model.param]);
+                model.VIEWS.push(POSTDATA);
+                // Html.ddlViews(model.VIEWS[model.param]);
+                //Html.ddlViews(model.VIEWS);
+                app.cmbViews.itemsSource = model.VIEWS;
                 $('#createView').modal('toggle');
             })
             .catch(error => {
@@ -420,14 +422,22 @@ export default class Pivot {
             event.preventDefault();
             event.stopImmediatePropagation();
             if ( model.VIEW != 'null' &&  model.VIEW != null){
-                $.each(model.VIEWS[model.param], function (id, obj) {
+
+                let viewUpdate = [];
+                $.each(model.VIEWS, function (id, obj) {
+                
                     if(obj['osy-viewId'] == model.VIEW){
-                        model.VIEWS[model.param].splice(id, 1)
+                        model.VIEWS.splice(id, 1)
                         return false;
                     }
+                    if(obj['osy-varId'] == model.param){
+                        viewUpdate.push(obj);
+                    }
                 });
-                Html.ddlViews(model.VIEWS[model.param]);
-                Osemosys.updateViews(model.casename, model.VIEWS[model.param], model.param)
+                // Html.ddlViews(model.VIEWS[model.param]);
+                app.cmbViews.itemsSource = model.VIEWS;
+                app.cmbViews.selectedValue = 'null';
+                Osemosys.updateViews(model.casename, viewUpdate, model.param)
                 .then(response => {
                     app.engine.viewDefinition = model.DEFAULTVIEW;
                     app.pivotChart.header = '';
@@ -486,20 +496,18 @@ export default class Pivot {
 
     static updateParam(param, app, model, view=null){
         Message.clearMessages();
+        Message.loaderStart('Preparing pivot data...')
         model.group = model.VARGROUPS[param]['group'];
         model.param = param;
 
-        console.log('param,  model, ', param,  model,)
+        // console.log('model.param ', model.param)
+        // console.log('model.group ', model.group)
+        // console.log('param,  model, ', param,  model,)
         Osemosys.getResultData(model.casename, model.group+'.json')
         .then(DATA => {
-
-            console.log('DATA ', DATA, DATA !== null)
-            if (DATA !== null && model.param in DATA){
-                // Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group);
+            console.log('DATA ', DATA)
+            if (DATA !== null && model.param in DATA && Object.getOwnPropertyNames(DATA[model.param]).length != 0){
                 let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
-
-                console.log(' pivotData ', pivotData)
-
                 model.pivotData = pivotData;
                 app.engine.itemsSource = model.pivotData;
                 if (model.param == 'D' || model.param == 'T'){
@@ -529,7 +537,6 @@ export default class Pivot {
                     app.pivotChart.header = view['osy-viewname'];
                 }
                 else{
-                    console.log('cmbViews.selectedValue', app.cmbViews.selectedValue)
                     model.TriggerUpdate = false;
                     app.cmbViews.selectedValue = 'null';
                     model.VIEW = 'null';
@@ -537,9 +544,11 @@ export default class Pivot {
                     Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' - Default view');
                 }
                 app.engine.fields.getField('Unit').isContentHtml = true;
+                Message.loaderEnd();
             }
             else{
                 Message.dangerOsy("Results do not contain values for variable <b>"+model.VARNAMES[model.group][model.param] + "</b> please check input data and rerun the model.")
+                Message.loaderEnd();
             }
 
         })
@@ -559,17 +568,23 @@ export default class Pivot {
             $.each(model.VIEWS, function (id, obj) {
                 if(obj['osy-viewId'] == model.VIEW){
                     let param = obj['osy-varId'];
-                    if(param != model.param){
-                        model.TriggerUpdate = false;
-                        app.cmbParams.selectedValue = param;
-                        model.TriggerUpdate = true;
-                        Pivot.updateParam(param, app, model, obj);
+                    if (model.VAR_IDS.includes(param)){
+                        if(param != model.param){
+                            model.TriggerUpdate = false;
+                            app.cmbParams.selectedValue = param;
+                            model.TriggerUpdate = true;
+                            Pivot.updateParam(param, app, model, obj);
+                        }
+                        else{
+                            app.engine.viewDefinition = obj['osy-viewdef'];
+                            app.pivotChart.header = obj['osy-viewname'];
+                            Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' - '+obj['osy-viewname'] +' view');
+                        } 
                     }
                     else{
-                        app.engine.viewDefinition = obj['osy-viewdef'];
-                        app.pivotChart.header = obj['osy-viewname'];
-                        Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' - '+obj['osy-viewname'] +' view');
-                    }          
+                        model.param = param;
+                        Message.dangerOsy("Selected view is not longer suported. Please delete view and create new with existing variables.")
+                    }
                 }
             });
         }

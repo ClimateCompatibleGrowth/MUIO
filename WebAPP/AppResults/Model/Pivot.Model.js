@@ -11,6 +11,7 @@ export class Model {
         let VARNAMES = DataModel.AllParamName(VARIABLES);
         let pivotData = DataModelResult.getPivot(DATA, genData, VARIABLES, group, param);
         //let VIEWS = DataModelResult.getViews(VIEW['osy-views']);
+
         let VIEWS = DataModelResult.getAllViews(VIEW['osy-views']);
 
         let ChartTypes = [
@@ -52,7 +53,7 @@ export class Model {
         scheme27: ['#FF6800', '#A0A700', '#FF8D00', '#678900', '#0069A5'] ,
         osyScheme: ['#1B2B32', '#37646F', '#a0a8ac', '#71a06a', '#B22E2F', '#cccccc', '#999966', '#cc9900'] };
 
-
+        var VAR_IDS = VARIABLEOBJECT.map(function (el) { return el.value; });
 
 
         this.casename = casename;
@@ -65,6 +66,7 @@ export class Model {
         this.VARGROUPS = VARGROUPS;
         this.VARNAMES = VARNAMES;
         this.VARIABLEOBJECT = VARIABLEOBJECT;
+        this.VAR_IDS = VAR_IDS;
         this.VIEWS = VIEWS
         this.VIEW = null;
         this.DEFAULTVIEW = null;

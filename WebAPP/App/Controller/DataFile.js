@@ -44,7 +44,7 @@ export default class DataFile {
         Html.renderCases(model.cases);
         //potrebno je napraviti render svih scenarija (mozda je dodan novi scenario u medjuvremenu), on mora biti dodan u listu scenarija po case run samo sto nece biti aktivan
         // Html.renderScOrder(model.scBycs[model.cs]);
-        console.log('model.scenarios ',model.scenarios)
+        //console.log('model.scenarios ',model.scenarios)
         Html.renderScOrder(model.scenarios);
         if (model.casename == null) {
             Message.info("Please select model or create new Model!");
@@ -107,9 +107,9 @@ export default class DataFile {
 
         $("#osy-btnScOrder").off('click');
         $("#osy-btnScOrder").on('click', function (event) {
-            console.log('model, ', model)
-            console.log('model.scenarios ',model.scenarios);
-            console.log('model.scBycs[model.cs] ',model.scBycs)
+            // console.log('model, ', model)
+            // console.log('model.scenarios ',model.scenarios);
+            // console.log('model.scBycs[model.cs] ',model.scBycs)
             if(model.cs in  model.scBycs){
                 Html.renderScOrder( model.scBycs[model.cs]);
             }else{

@@ -674,8 +674,9 @@ class DataFile(Osemosys):
                     if path.is_file():
                         jsonFile = File.readFile(path)
                         for obj in array:
-                            if caserunname in jsonFile[obj['id']]:
-                                del jsonFile[obj['id']][caserunname]
+                            if obj['id'] in jsonFile:
+                                if caserunname in jsonFile[obj['id']]:
+                                    del jsonFile[obj['id']][caserunname]
 
                         File.writeFile(jsonFile, path)
                     
@@ -993,8 +994,6 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
     
-
-
     def generateCSVfromCBC(self, data_file, results_file, base_folder=os.getcwd()):
         try:
             #pd.options.mode.chained_assignment = None
@@ -1046,7 +1045,7 @@ class DataFile(Osemosys):
             except FileExistsError:
                 pass
             
-            print('output_table ', output_table)
+            #print('output_table ', output_table)
             #parsanje result.txt
             params = []
             
@@ -1087,29 +1086,32 @@ class DataFile(Osemosys):
                     all_params[each] = all_params[each].rename(columns={'value':each})
                     all_params[each].to_csv(os.path.join(base_folder, 'csv', each+'.csv'), index=None)
 
-            ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
-            ################################################################################################################
+                ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
+                ################################################################################################################
 
-            #year split data frame
-            df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
-            df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
+                #year split data frame
+                df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
+                df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
 
-            df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
-            df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
-            df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
-            df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
+                df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
+                df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
+                df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
+                df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
+                
+                df_input = pd.DataFrame(input_table, columns=['t','f','m','y','InputActivityRatio'])
+                df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
+                df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
+                df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
+                
+                df_emi = pd.DataFrame(emi_table, columns=['t','e','m','y','EmissionActivityRatio'])
+                df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
+                #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
+   
             
-            df_input = pd.DataFrame(input_table, columns=['t','f','m','y','InputActivityRatio'])
-            df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
-            df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
-            df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
             
-            df_emi = pd.DataFrame(emi_table, columns=['t','e','m','y','EmissionActivityRatio'])
-            df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
-            #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
-            ########################################ProductionByTechnologyAnnual############################################
-            
-            if len(df) > 0:
+
+
+                ########################################ProductionByTechnology############################################
                 df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
                 df_prod['r'] = str(region[0])
@@ -1121,7 +1123,21 @@ class DataFile(Osemosys):
                 df_prod = df_prod.sort_values(by=['r','l','t','f','y'])
                 df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnology.csv'), index=None)
 
-                ######################################UseByTechnologyAnnual##############################################
+                ########################################RateOfProductionByTechnology############################################
+                df_ropbt = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_ropbt.r.unique()) if str(x) != 'nan']
+                df_ropbt['r'] = str(region[0])
+                df_ropbt['RateOfActivity'].fillna(0, inplace=True)
+
+                df_ropbt['RateOfProductionByTechnology'] = df_ropbt['OutputActivityRatio']*df_ropbt['RateOfActivity']
+                df_ropbt = df_ropbt.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_ropbt['RateOfProductionByTechnology'] = df_ropbt['RateOfProductionByTechnology'].astype(float).round(4)
+                df_ropbt = df_ropbt.sort_values(by=['r','l','t','f','y'])
+                df_ropbt.to_csv(os.path.join(base_folder, 'csv', 'RateOfProductionByTechnology.csv'), index=None)
+
+
+
+                ######################################UseByTechnology##############################################
 
                 df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
@@ -1129,20 +1145,29 @@ class DataFile(Osemosys):
                 df_use['RateOfActivity'].fillna(0, inplace=True)
        
                 df_use['UseByTechnology'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+                df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
                 df_use['UseByTechnology'] = df_use['UseByTechnology'].astype(float).round(4)
                 df_use = df_use.sort_values(by=['r','l','t','f','y'])
                 df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnology.csv'), index=None)
+
+                ######################################RateOfUseByTechnology##############################################
+
+                df_roubt = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_roubt.r.unique()) if str(x) != 'nan']
+                df_roubt['r'] = str(region[0])
+                df_roubt['RateOfActivity'].fillna(0, inplace=True)
+       
+                df_roubt['RateOfUseByTechnology'] = df_roubt['InputActivityRatio']*df_roubt['RateOfActivity']
+                df_roubt = df_roubt.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_roubt['RateOfUseByTechnology'] = df_roubt['RateOfUseByTechnology'].astype(float).round(4)
+                df_roubt = df_roubt.sort_values(by=['r','l','t','f','y'])
+                df_roubt.to_csv(os.path.join(base_folder, 'csv', 'RateOfUseByTechnology.csv'), index=None)
 
         except(IOError, IndexError):
             raise IndexError
         except OSError:
             raise OSError
     
-
-
-
-        
-
     def generateResultsViewer(self, caserunname):
         try:
             csvFolderPath = Path(Config.DATA_STORAGE,self.case,'res',caserunname, 'csv')
@@ -1383,6 +1408,7 @@ class DataFile(Osemosys):
                                     if paramobj['group'] == 'RYTCTs':
                                         if paramobj['id'] not in DATA[paramobj['group']]:
                                             DATA[paramobj['group']][paramobj['id']] = {}
+
                                         DATA[paramobj['group']][paramobj['id']][case] = []
                                         tech = jsondata[0]['t']
                                         comm = jsondata[0]['f']
@@ -1474,7 +1500,6 @@ class DataFile(Osemosys):
             raise IndexError
         except OSError:
             raise OSError
-
 
     ###############################################################################################BKP
     ##izmjene da bi se napunili csv za InputToNewCapacity i InputToTotalCapacity
@@ -1635,7 +1660,7 @@ class DataFile(Osemosys):
                 df_combinations = df_all[cols_in_df].drop_duplicates()
    
                 for each_index in cols_notin_df:
-                    print("index_dict[each_index] ", index_dict[each_index])  
+                    #print("index_dict[each_index] ", index_dict[each_index])  
                     iter_list.append(index_dict[each_index])
                 
                 # print("iter_list ", iter_list)

@@ -34,7 +34,7 @@ export class Sidebar {
         $('.dynamicRoutesRES').hide();
         $('.dynamicResults').hide();
 
-        console.log('model menu ', model)
+        //console.log('model menu ', model)
 
         if (model.menu) {
 

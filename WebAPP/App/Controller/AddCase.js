@@ -63,7 +63,7 @@ export default class AddCase {
         Message.clearMessages();
         //$('a[href="#tabComms"]').click();
         //Navbar.initPage(model.casename, model.pageId);
-console.log('model ', model)
+        //console.log('model ', model)
         
         Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);

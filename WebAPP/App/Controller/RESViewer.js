@@ -283,14 +283,20 @@ export default class RESViewer {
             let msgData = data.points[0];
             let msg;
             if ('source' in msgData && 'target' in msgData){
-                msg = `<i class="fa fa-cube fa-2x osy-second-color-d"></i><b>COMMODITY:</b> ${msgData.label} <br /> <i class="fa fa-sign-in fa-lg osy-second-color"></i><b>SOURCE TECHNOLOGY:</b> ${msgData.source.label} <br /> <i class="fa fa-sign-out fa-lg danger"></i><b>TARGET TECHNOLOGY:</b> ${msgData.target.label} <br />`
+                msg = `<i class="fa fa-cube fa-lg osy-second-color-d"></i><b>COMMODITY:</b> ${msgData.label} <br /> <i class="fa fa-sign-in fa-lg osy-second-color"></i><b>SOURCE TECHNOLOGY:</b> ${msgData.source.label} <br /> <i class="fa fa-sign-out fa-lg danger"></i><b>TARGET TECHNOLOGY:</b> ${msgData.target.label} <br />`
             }
             else{
                 //Technology click
 
                 console.log('msgData ', msgData)
-                if(msgData.label == 'DummySource' || msgData.label == 'DummyTarget'){
-                    msg = `<i class="fa fa-cog fa-lg osy-second-color-d"></i> <b>TECHNOLOGY:</b> ${msgData.label} is dummy technology.`;
+                if(msgData.label == 'Missing technology' ){
+                    msg = `<i class="fa fa-cog fa-lg osy-second-color-d"></i> <b>WARNING:</b> Your model is missing source technology!`;
+                    Message.resMessage(msg);
+                    Message.loaderEnd();
+                    return false;
+                }
+                if( msgData.label == 'Final demand'){
+                    msg = `<i class="fa fa-cog fa-lg osy-second-color-d"></i> <b>Final demand</b>`;
                     Message.resMessage(msg);
                     Message.loaderEnd();
                     return false;
@@ -313,7 +319,7 @@ export default class RESViewer {
                     }
                 }
                 if (sourceData.length != 0 && targetData.length != 0 ) {
-                    msg = `<i class="fa fa-cog fa-2x osy-second-color-d"></i> <b>TECHNOLOGY:</b> ${msgData.label} <br /> <i class="fa fa-sign-in fa-lg osy-second-color"></i> <b>INPUT COMMODITY:</b> ${targetData} <br /> <i class="fa fa-sign-out fa-lg danger"></i>  <b>OUTPUT COMMODITY:</b> ${sourceData} <br />`;
+                    msg = `<i class="fa fa-cog fa-lg osy-second-color-d"></i> <b>TECHNOLOGY:</b> ${msgData.label} <br /> <i class="fa fa-sign-in fa-lg osy-second-color"></i> <b>INPUT COMMODITY:</b> ${targetData} <br /> <i class="fa fa-sign-out fa-lg danger"></i>  <b>OUTPUT COMMODITY:</b> ${sourceData} <br />`;
                 }
                 else if(sourceData.length != 0 && targetData.length == 0 ){
                     msg = `<i class="fa fa-cog fa-lg osy-second-color-d"></i> <b>TECHNOLOGY:</b> ${msgData.label} <br /> <i class="fa fa-sign-out fa-lg danger"></i> <b>OUTPUT COMMODITY:</b> ${sourceData} <br />`;

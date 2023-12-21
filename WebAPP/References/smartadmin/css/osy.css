@@ -8,6 +8,9 @@
     --white-font-color: #fff;
   }
 
+
+
+
 /* #content {
     padding: 0px 0px;
     position: relative;
@@ -599,7 +602,9 @@ li {
     text-align: -webkit-match-parent;
 }
 .dropdown-menu {
-    min-width: 280px!important;
+    min-width: 320px!important;
+    z-index: 2000!important;
+    padding: 20px!important;
 }
 
 .dropdown-menu li{
@@ -614,6 +619,11 @@ li {
 
 .dropdown-menu li>a:hover{
   background-color: var(--second-color)!important;
+}
+
+.dropdown-header{
+    border-bottom: 2px solid var(--second-color); 
+    margin-bottom: 20px;
 }
 
 .project-context-res {
@@ -739,3 +749,5 @@ li {
   .sankey-link:hover {
     fill-opacity: 0.8 !important;
   }
+
+

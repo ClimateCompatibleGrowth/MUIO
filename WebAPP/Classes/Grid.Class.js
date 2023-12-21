@@ -123,7 +123,7 @@ export class Grid {
         var validation_1 = function (cell, value) {
             var validationResult = true;
             var rows = $('#osy-gridTech').jqxGrid('getrows');
-            console.log('rows ', rows)
+            //console.log('rows ', rows)
             for (var i = 0; i < rows.length; i++) {
                 if (rows[i].Tech.trim() == value.trim() && i != cell.row) {
                     validationResult = false;
@@ -215,7 +215,7 @@ export class Grid {
             //$("#filmPicture1").jqxTooltip({ content: '<b>Title:</b> <i>The Amazing Spider-man</i><br /><b>Year:</b> 2012', position: 'mouse', name: 'movieTooltip'});
         }
 
-        console.log('rdatTechsows ', this.daTechs)
+        //console.log('rdatTechsows ', this.daTechs)
         // $("#osy-gridTech").jqxGrid({
         //     width: '100%',
         //     autoheight: true,

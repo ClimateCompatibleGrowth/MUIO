@@ -440,8 +440,8 @@ export class DataModel{
         arrays['IAR'] = [];
         arrays['OAR'] = [];
 
-        RES.Techs.push({'TechId': 'DS', 'Tech': 'DummySource', 'TechDesc': 'DummySource', '$checked': true});
-        RES.Techs.push({'TechId': 'DT', 'Tech': 'DummyTarget', 'TechDesc': 'DummyTarget', '$checked': true});
+        RES.Techs.push({'TechId': 'DS', 'Tech': 'Missing technology', 'TechDesc': 'Missing Source Technology', '$checked': true});
+        RES.Techs.push({'TechId': 'DT', 'Tech': 'Final demand', 'TechDesc': 'Final demand', '$checked': true});
 
         $.each(techs, function (idT, objT) {
             //dio za tehnlogije

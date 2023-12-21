@@ -62,8 +62,10 @@ export class DataModelResult{
         views.push(tmp)
         $.each(VIEWS, function (variable, array) {
             $.each(array, function (id, obj) {
-                obj['osy-varId'] = variable;
-                views.push(obj);
+                if(obj['osy-viewId'] != "null"){
+                    obj['osy-varId'] = variable;
+                    views.push(obj);
+                }
             });
         });
         return views;
@@ -231,6 +233,7 @@ export class DataModelResult{
                         chunk['Value'] = obj[year];
                     }
                     else{
+                        // console.log('Value ', obj[year], ' cs ', cs,  ' year ', year , ' param ', param)
                         console.log('Value ', obj[year])
                         chunk['Value'] = null;
                     }
