@@ -1111,57 +1111,57 @@ class DataFile(Osemosys):
             
 
 
-                ########################################ProductionByTechnology############################################
+                ########################################ProductionByTechnologyByMode############################################
                 df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
                 df_prod['r'] = str(region[0])
                 df_prod['RateOfActivity'].fillna(0, inplace=True)
 
-                df_prod['ProductionByTechnology'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
+                df_prod['ProductionByTechnologyByMode'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
                 df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                df_prod['ProductionByTechnology'] = df_prod['ProductionByTechnology'].astype(float).round(4)
+                df_prod['ProductionByTechnologyByMode'] = df_prod['ProductionByTechnologyByMode'].astype(float).round(4)
                 df_prod = df_prod.sort_values(by=['r','l','t','f','y'])
-                df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnology.csv'), index=None)
+                df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyByMode.csv'), index=None)
 
-                ########################################RateOfProductionByTechnology############################################
+                ########################################RateOfProductionByTechnologyByMode############################################
                 df_ropbt = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_ropbt.r.unique()) if str(x) != 'nan']
                 df_ropbt['r'] = str(region[0])
                 df_ropbt['RateOfActivity'].fillna(0, inplace=True)
 
-                df_ropbt['RateOfProductionByTechnology'] = df_ropbt['OutputActivityRatio']*df_ropbt['RateOfActivity']
+                df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['OutputActivityRatio']*df_ropbt['RateOfActivity']
                 df_ropbt = df_ropbt.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                df_ropbt['RateOfProductionByTechnology'] = df_ropbt['RateOfProductionByTechnology'].astype(float).round(4)
+                df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['RateOfProductionByTechnologyByMode'].astype(float).round(4)
                 df_ropbt = df_ropbt.sort_values(by=['r','l','t','f','y'])
-                df_ropbt.to_csv(os.path.join(base_folder, 'csv', 'RateOfProductionByTechnology.csv'), index=None)
+                df_ropbt.to_csv(os.path.join(base_folder, 'csv', 'RateOfProductionByTechnologyByMode.csv'), index=None)
 
 
 
-                ######################################UseByTechnology##############################################
+                ######################################UseByTechnologyByMode##############################################
 
                 df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
                 df_use['r'] = str(region[0])
                 df_use['RateOfActivity'].fillna(0, inplace=True)
        
-                df_use['UseByTechnology'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+                df_use['UseByTechnologyByMode'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
                 df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                df_use['UseByTechnology'] = df_use['UseByTechnology'].astype(float).round(4)
+                df_use['UseByTechnologyByMode'] = df_use['UseByTechnologyByMode'].astype(float).round(4)
                 df_use = df_use.sort_values(by=['r','l','t','f','y'])
-                df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnology.csv'), index=None)
+                df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyByMode.csv'), index=None)
 
-                ######################################RateOfUseByTechnology##############################################
+                ######################################RateOfUseByTechnologyByMode##############################################
 
                 df_roubt = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_roubt.r.unique()) if str(x) != 'nan']
                 df_roubt['r'] = str(region[0])
                 df_roubt['RateOfActivity'].fillna(0, inplace=True)
        
-                df_roubt['RateOfUseByTechnology'] = df_roubt['InputActivityRatio']*df_roubt['RateOfActivity']
+                df_roubt['RateOfUseByTechnologyByMode'] = df_roubt['InputActivityRatio']*df_roubt['RateOfActivity']
                 df_roubt = df_roubt.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                df_roubt['RateOfUseByTechnology'] = df_roubt['RateOfUseByTechnology'].astype(float).round(4)
+                df_roubt['RateOfUseByTechnologyByMode'] = df_roubt['RateOfUseByTechnologyByMode'].astype(float).round(4)
                 df_roubt = df_roubt.sort_values(by=['r','l','t','f','y'])
-                df_roubt.to_csv(os.path.join(base_folder, 'csv', 'RateOfUseByTechnology.csv'), index=None)
+                df_roubt.to_csv(os.path.join(base_folder, 'csv', 'RateOfUseByTechnologyByMode.csv'), index=None)
 
         except(IOError, IndexError):
             raise IndexError
@@ -1434,6 +1434,7 @@ class DataFile(Osemosys):
                                         path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                         File.writeFile( DATA[paramobj['group']], path)
 
+                                    # ne postoje vise varijable za ovaj dio Production By tecnology, Use By technology
                                     if paramobj['group'] == 'RYTMTs':
                                         if paramobj['id'] not in DATA[paramobj['group']]:
                                             DATA[paramobj['group']][paramobj['id']] = {}
@@ -1463,6 +1464,7 @@ class DataFile(Osemosys):
                                         File.writeFile( DATA[paramobj['group']], path)
                                 
                                     #ne koristi se jer smo izbrisali variajablu ROUBTBM Rate Of Use By Technology By Mode
+                                    #ponovo koristimo jer korisitmo Production By Technology by Mode, Use By Technology By Mode (isto i sa Rate of...)
                                     if paramobj['group'] == 'RYTCMTs':
                                         if paramobj['id'] not in DATA[paramobj['group']]:
                                             DATA[paramobj['group']][paramobj['id']] = {}
