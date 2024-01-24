@@ -2,13 +2,17 @@ import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export class Model {
 
-    constructor (casename, genData, settings, techSelect=null) {
+    constructor (casename, genData, DemandComms, settings, techSelect=null) {
 
         let TechIdByName = DataModel.TechIdByName(genData);
         // let CommNames = DataModel.CommName(genData); 
-        let resData = DataModel.RESData(genData);
+        // let DemandComms = DataModel.getDemandComms(RYCdata, genData['osy-years']);
+        let resData = DataModel.RESData(genData, DemandComms);
         let techData = DataModel.getTechData(genData);
         let commData = DataModel.getCommData(genData);
+        
+
+        console.log('DemandComms ', DemandComms)
 
         let index = 0;
         let labelIndex = {};
@@ -31,10 +35,10 @@ export class Model {
             }
             
             index++;
-            if(obj.TechId == 'DS'){
+            if(obj.TechId == 'DS' || obj.TechId == 'DT'){
                 color.push('#b32d00');
             }
-            else if(obj.TechId == 'DT'){
+            else if(obj.TechId == 'FD'){
                 color.push('#0099cc');
             }
             else if (techSelect != null){
@@ -116,9 +120,9 @@ export class Model {
                         if (!(dispayedTechs.includes(techId))){
                             dispayedTechs.push(techId);
                         }
-                        if (!(dispayedTechs.includes(techId))){
-                            dispayedTechs.push(techId);
-                        }
+                        // if (!(dispayedTechs.includes(techId))){
+                        //     dispayedTechs.push(techId);
+                        // }
                         if (!(dispayedComms.includes(CommId))){
                             dispayedComms.push(CommId);
                         }
@@ -149,9 +153,9 @@ export class Model {
                         if (!(dispayedTechs.includes(techId))){
                             dispayedTechs.push(techId);
                         }
-                        if (!(dispayedTechs.includes(techId))){
-                            dispayedTechs.push(techId);
-                        }
+                        // if (!(dispayedTechs.includes(techId))){
+                        //     dispayedTechs.push(techId);
+                        // }
                         if (!(dispayedComms.includes(CommId))){
                             dispayedComms.push(CommId);
                         }
@@ -171,8 +175,38 @@ export class Model {
                         value.push(1);
                     }
                 }
+                if(resData.Singles.FD.includes(CommId)){
+                    if (techSelect == null || techSelect.includes('FD') || techSelect.includes(techId)){
+
+                        if (!(dispayedTechs.includes(techId))){
+                            dispayedTechs.push(techId);
+                        }
+                        // if (!(dispayedTechs.includes(techId))){
+                        //     dispayedTechs.push(techId);
+                        // }
+                        if (!(dispayedComms.includes(CommId))){
+                            dispayedComms.push(CommId);
+                        }
+
+
+                        source.push(labelIndex[techId]);
+                        target.push(labelIndex['FD']);   
+                        //labelLink.push(CommNames[CommId]);
+                        //labelLink.push(commData[CommId].Comm + '-' + commData[CommId].Desc );
+                        if(settings.Desc){
+                            labelLink.push(commData[CommId].Comm + '-' + commData[CommId].Desc );
+                        }
+                        else{
+                            labelLink.push(commData[CommId].Comm );
+                        }
+                        colorLink.push(commData[CommId].Color);
+                        value.push(1);
+                    }
+                }
             }); 
         });
+
+
 
         let labelCount = source.length;
         this.selectedTechs = selectedTechs;
@@ -194,6 +228,7 @@ export class Model {
         this.colorLink = colorLink;
 
         this.genData = genData;
+        this.DemandComms = DemandComms;
         this.TechIdByName = TechIdByName;
         this.techData = techData;
         this.commData = commData;

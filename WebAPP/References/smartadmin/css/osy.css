@@ -750,4 +750,21 @@ li {
     fill-opacity: 0.8 !important;
   }
 
+  .no-gutter {
+    margin-right: 1px;
+    margin-left: 1px;
+  }
+  
+  .no-gutter > [class*="col-"] {
+    padding-right: 1px;
+    padding-left: 1px;
+  }
+
+  .pl-1 {
+    padding-left: 1px!important;
+  }
+  .pr-1 {
+    padding-right: 1px!important;
+  }
+
 

@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, send_file, session
 from pathlib import Path
-import shutil
+import shutil, datetime, time
 from Classes.Case.DataFileClass import DataFile
 from Classes.Base import Config
 
@@ -210,3 +210,22 @@ def run():
         return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
+    
+@datafile_api.route("/batchRun", methods=['POST'])
+def batchRun():
+    try:
+        start = time.time()
+        modelname = request.json['modelname']
+        cases = request.json['cases']
+
+        if modelname != None:
+            txtFile = DataFile(modelname)
+            for caserun in cases:
+                txtFile.generateDatafile(caserun)
+
+            response = txtFile.batchRun( 'CBC', cases) 
+        end = time.time()  
+        response['time'] = end-start 
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('Error!'), 404

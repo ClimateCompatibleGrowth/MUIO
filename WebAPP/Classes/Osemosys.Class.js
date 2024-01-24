@@ -240,6 +240,30 @@ export class Osemosys {
         });
     }
 
+    static batchRun(modelname, cases, solver="cbc") {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "batchRun",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "modelname": modelname, 'cases': cases, "solver": solver  }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    console.log("xhr, status, error ", xhr, status, error )
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
     static readDataFile(casename, caserunname) {
         return new Promise((resolve, reject) => {
             $.ajax({

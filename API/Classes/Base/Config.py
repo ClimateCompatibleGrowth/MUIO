@@ -155,3 +155,10 @@ VARIABLES_C = {
         'NumberOfNewTechnologyUnits':['r','t','y'],
         'Trade':['r','rr','l','f','y']
     }
+
+PARAMETERS_C = {
+        'OutputActivityRatio':['r','f','t','y','m'],
+        'InputActivityRatio':['r','f''t','y','m'],
+        'EmissionActivityRatio':['r','e''t','y','m']
+
+    }

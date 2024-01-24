@@ -9,7 +9,7 @@ class File:
             data = json.loads(f.read())
             #cirilica u json file
             #data = json.load(open(path, encoding='utf-8-sig'))
-            f.close
+            f.close()
             return data
         except( IndexError):
             raise IndexError
@@ -29,7 +29,7 @@ class File:
             #f.write(json.dumps(data, ensure_ascii=True,  indent=4, sort_keys=False))
             #usjon
             f.write(json.dumps(data))
-            f.close
+            f.close()
         # except(IOError, IndexError):
         #     return('File not found or file is empty')
         #ovako prosljedjujemo exception u prethodnom slucaju vracamo response u funkciju koja poziva writeFile
@@ -48,7 +48,7 @@ class File:
             f = open(path, mode="w")
             #usjon
             f.write(json.dumps(data))
-            f.close
+            f.close()
         except(IOError, IndexError):
             raise IndexError
         except OSError:
@@ -59,7 +59,7 @@ class File:
         try:
             f = open(path, mode="r")
             data = json.loads(f.read())
-            f.close
+            f.close()
             return data
         except( IndexError):
             raise IndexError

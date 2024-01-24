@@ -1,13 +1,14 @@
 from pathlib import Path
 import pandas as pd
-import json, shutil, os, time, subprocess
+import json, shutil, os, time, subprocess, datetime, threading, multiprocessing
 from collections import defaultdict
-import subprocess
+import subprocess, concurrent.futures
 from itertools import product
 
 from Classes.Base import Config
 from Classes.Case.OsemosysClass import Osemosys
 from Classes.Base.FileClass import File
+from Classes.Base.CustomThreadClass import CustomThread
 
 
 class DataFile(Osemosys):
@@ -472,46 +473,52 @@ class DataFile(Osemosys):
             path = '"{}"'.format(self.resPath)
 
             dataFilePath = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data.txt')
+
+
             # self.f = open(self.dataFile, mode="w", encoding='utf-8')
-            self.f = open(dataFilePath, mode="w", encoding='utf-8')
+            #self.f = open(dataFilePath, mode="w", encoding='utf-8')
+
+            with open(dataFilePath, "w", encoding="utf-8") as self.f:
 
 
-            #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
-            self.f.write('####################\n#Sets#\n####################\n')
-            self.f.write('{} {}'.format('#', '\n'))
-            self.f.write('{} {} {} {}{}{}'.format('set', 'EMISSION',':=', self.emis, ';', '\n'))
-            self.f.write('{} {} {} {}{}{}'.format('set', 'REGION',':=', 'RE1', ';', '\n'))
-            self.f.write('{} {} {} {}{}{}'.format('set', 'MODE_OF_OPERATION',':=', self.mods, ';', '\n'))
-            self.f.write('{} {} {} {}{}{}'.format('set', 'COMMODITY',':=', self.comms, ';', '\n'))
-            self.f.write('{} {} {} {}{}{}'.format('set', 'STORAGE',':=','', ';', '\n'))
-            self.f.write('{} {} {} {}{}{}'.format('set', 'TECHNOLOGY',':=', self.techs, ';', '\n'))
-            self.f.write('{} {} {} {}{}{}'.format('set', 'YEAR',':=', self.years, ';', '\n'))
-            self.f.write('{} {} {} {}{}{}'.format('set', 'TIMESLICE',':=', self.timeslices, ';', '\n'))
-            self.f.write('{} {} {} {}{}{}'.format('set', 'UDC',':=', self.cons, ';', '\n'))
+                #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
+                self.f.write('####################\n#Sets#\n####################\n')
+                self.f.write('{} {}'.format('#', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'EMISSION',':=', self.emis, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'REGION',':=', 'RE1', ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'MODE_OF_OPERATION',':=', self.mods, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'COMMODITY',':=', self.comms, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'STORAGE',':=','', ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'TECHNOLOGY',':=', self.techs, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'YEAR',':=', self.years, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'TIMESLICE',':=', self.timeslices, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'UDC',':=', self.cons, ';', '\n'))
 
-            self.f.write('####################\n#Parameters#\n####################\n')
+                self.f.write('####################\n#Parameters#\n####################\n')
 
-            #path
-            self.f.write('{}{}'.format('#', '\n'))
-            self.f.write('{} {} {} {} {} {}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
-            self.f.write('{}{}'.format('', '\n'))
-            
-            #trade route hard code
-            self.f.write('{} {} {} {} {} {}'.format('param', 'TradeRoute ','default', '0', ':=','\n'))
-            self.f.write('{} {}'.format(';', '\n'))
-            self.f.write('{} {}'.format('', '\n'))
+                #path
+                self.f.write('{}{}'.format('#', '\n'))
+                self.f.write('{} {} {} {} {} {}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
+                self.f.write('{}{}'.format('', '\n'))
+                
+                #trade route hard code
+                self.f.write('{} {} {} {} {} {}'.format('param', 'TradeRoute ','default', '0', ':=','\n'))
+                self.f.write('{} {}'.format(';', '\n'))
+                self.f.write('{} {}'.format('', '\n'))
 
-            self.gen_RCn()
-            #dznamicaly call function depending on defined params
-            for group, array in self.PARAM.items():
-                if array:
-                    func_name = Config.GEN_F[group]
-                    func = getattr(self,func_name) 
-                    func() 
+                self.gen_RCn()
+                #dznamicaly call function depending on defined params
+                for group, array in self.PARAM.items():
+                    if array:
+                        func_name = Config.GEN_F[group]
+                        func = getattr(self,func_name) 
+                        func() 
 
-            self.f.write('{}{}'.format('#', '\n'))
-            self.f.write('{}'.format('end;'))
-            self.f.close
+                self.f.write('{}{}'.format('#', '\n'))
+                self.f.write('{}'.format('end;'))
+            # self.f.close
+
+            # return True
 
             # if not os.path.exists(Path(Config.DATA_STORAGE,self.case,'res', 'csv')):
             #     resName = Path(Config.DATA_STORAGE,self.case,'res', 'csv')
@@ -861,8 +868,118 @@ class DataFile(Osemosys):
             file_output_function(dict_all, tech_list, 'set MODEperTECHNOLOGY[', '*')
             file_out.write('end;')
 
-    def run( self, solver, caserunname ):
+    #def threadBatchRun():
+
+
+    def batchRun(self, solver, cases):
         try:
+            batchlog=""
+            msg=""
+            status = "Success"
+            results = []
+
+            ##################################Sequential code
+            for caserun in cases:
+                runout =self.run(solver, caserun)
+                msg+="Case: {0}{1}{2}".format( runout["caserun"], runout["timer"],  '\n')
+                # batchlog+="GLPK status {0}{1}{2}GLPK log {3}{4}{5}{6}CBC log {7}{8}{9}{10}{11}".format(runout["status_code"], runout["timer"],'\n',runout["glpk_message"],'\n',runout["glpk_stdmsg"],'\n',runout["cbc_message"],'\n',runout["cbc_stdmsg"],'\n', '\n\n')
+                batchlog+="{0}{1}{2}{3}{4}{5}{6}{7}{8}".format(runout["glpk_message"],'\n',runout["glpk_stdmsg"],'\n',runout["cbc_message"],'\n',runout["cbc_stdmsg"],'\n', '\n')
+                batchlog+="------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ {0}".format('\n')
+                if runout["status_code"] != 'success':
+                    status = "Error"
+
+            ##################################Multiprocessing
+            # m = multiprocessing.Manager()
+            # lock = m.Lock()
+            # with concurrent.futures.ProcessPoolExecutor() as executor:
+            #     results = [executor.submit(self.run, solver, caserun, lock  ) for caserun in cases]
+            #     #runout = [result.result() for result in results]
+
+            #     # for caserun in cases:
+            #     #     # lock[caserun] = threading.Lock() 
+            #     #     #lock = threading.Lock() 
+            #     #     t = executor.submit(self.run, solver, caserun)
+            #     #     results.append(t)
+
+            # for ft in concurrent.futures.as_completed(results):
+            #     runout = ft.result()
+            #     msg+="Case: {0}{1}{2}".format( runout["caserun"], runout["timer"],  '\n')
+            #     # batchlog+="GLPK status {0}{1}{2}GLPK log {3}{4}{5}{6}CBC log {7}{8}{9}{10}{11}".format(runout["status_code"], runout["timer"],'\n',runout["glpk_message"],'\n',runout["glpk_stdmsg"],'\n',runout["cbc_message"],'\n',runout["cbc_stdmsg"],'\n', '\n\n')
+            #     batchlog+="{0}{1}{2}{3}{4}{5}{6}{7}{8}".format(runout["glpk_message"],'\n',runout["glpk_stdmsg"],'\n',runout["cbc_message"],'\n',runout["cbc_stdmsg"],'\n', '\n')
+            #     batchlog+="------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ {0}".format('\n')
+            #     if runout["status_code"] != 'success':
+            #         status = "Error"
+            
+
+            #####################################Threading
+            # with concurrent.futures.ThreadPoolExecutor() as executor:
+            #     results = [executor.submit(self.run, solver, caserun  ) for caserun in cases]
+
+            #     # for caserun in cases:
+            #     #     # lock[caserun] = threading.Lock() 
+            #     #     #lock = threading.Lock() 
+            #     #     t = executor.submit(self.run, solver, caserun)
+            #     #     results.append(t)
+
+            # for f in concurrent.futures.as_completed(results):
+            #     runout = f.result()
+            #     msg+="Case: {0}{1}{2}".format( runout["caserun"], runout["timer"],  '\n')
+            #     # batchlog+="GLPK status {0}{1}{2}GLPK log {3}{4}{5}{6}CBC log {7}{8}{9}{10}{11}".format(runout["status_code"], runout["timer"],'\n',runout["glpk_message"],'\n',runout["glpk_stdmsg"],'\n',runout["cbc_message"],'\n',runout["cbc_stdmsg"],'\n', '\n\n')
+            #     batchlog+="{0}{1}{2}{3}{4}{5}{6}{7}{8}".format(runout["glpk_message"],'\n',runout["glpk_stdmsg"],'\n',runout["cbc_message"],'\n',runout["cbc_stdmsg"],'\n', '\n')
+            #     batchlog+="------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ {0}".format('\n')
+            #     if runout["status_code"] != 'success':
+            #         status = "Error"
+
+
+
+
+            ##########################################CUSOM THREAD IMPLEMENATATION
+            # for caserun in cases:
+            #     # batchlog+="Run dor case {0}, started at {1}{2}".format(caserun,dt, '\n')
+            #     batchlog+="Case: {0}{1}".format(caserun, '\n')
+            #     batchlog+="------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ {0}".format('\n')
+            #     #df = self.generateDatafile(caserun)
+            #     #runout = self.run(solver, caserun)
+
+
+            #     # thread = CustomThread(target=self.run, args=(solver, caserun ) )
+            #     # thread.start()
+            #     # threads.append(thread)
+
+
+
+            # # for thread in threads:
+            #     #runout = thread.join()
+            #     #runout = threads[caserun].join()
+
+            #     msg+="Case: {0}{1}{2}".format(caserun, runout["timer"], '\n')
+            #     # batchlog+="GLPK status {0}{1}{2}GLPK log {3}{4}{5}{6}CBC log {7}{8}{9}{10}{11}".format(runout["status_code"], runout["timer"],'\n',runout["glpk_message"],'\n',runout["glpk_stdmsg"],'\n',runout["cbc_message"],'\n',runout["cbc_stdmsg"],'\n', '\n\n')
+            #     batchlog+="{0}{1}{2}{3}{4}{5}{6}{7}{8}".format(runout["glpk_message"],'\n',runout["glpk_stdmsg"],'\n',runout["cbc_message"],'\n',runout["cbc_stdmsg"],'\n', '\n')
+            #     batchlog+="------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ {0}".format('\n')
+            #     if runout["status_code"] != 'success':
+            #         status = "Error"
+            response = {
+                "log": batchlog,
+                "msg": msg,
+                "status": status
+            }           
+            return response
+
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+
+    def run( self, solver, caserun, lock=None ):
+        try:
+            caserunname = caserun
+            if lock is not None:
+                # self.caserunname = caserunname
+                # lock = {}
+                # lock[caserunname] = threading.Lock() 
+                lock.acquire()
+                caserunname = caserun
+
             start_time = time.time()
             txtOut = ""
             self.dataFile = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data.txt')
@@ -872,6 +989,7 @@ class DataFile(Osemosys):
             self.logFileTxt = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'logfile.txt')
             self.lpFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'lp.lp')
             self.resPath = Path(Config.DATA_STORAGE,self.case, 'res',caserunname)
+            
 
             modelfile = '"{}"'.format(self.osemosysFile.resolve())
             modelfile_original = '"{}"'.format(self.osemosysFileOriginal.resolve())
@@ -899,16 +1017,19 @@ class DataFile(Osemosys):
                 #subprocess.run('preprocess_data.py' + datafile + dataFile_processed)
 
                 self.preprocessData(self.dataFile, self.dataFile_processed)
-                print("PREPROCESSING DONE! --- %s seconds ---" % (time.time() - start_time))
+                print("PREPROCESSING DONE! --- %s seconds --- %s" % (time.time() - start_time, caserunname))
                 txtOut = txtOut + ("Preprocessing time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
 
                 #return output to variable preprocessed data file
                 glpk_out = subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
                 
+                #glpk_out = subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                
+
                 #original data file without preprocessing
                 #glpk_out = subprocess.run('glpsol --check -m ' + modelfile_original +' -d ' + datafile +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
                 
-                print("CREATINON OF LP FILE DONE! --- %s seconds ---" % (time.time() - start_time))
+                print("CREATINON OF LP FILE DONE! --- %s seconds --- %s" % (time.time() - start_time, caserunname))
                 txtOut = txtOut + ("Creation of LP file time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
 
 
@@ -922,10 +1043,10 @@ class DataFile(Osemosys):
                 #     proc.kill()
                 #     outs, errs = proc.communicate()
 
-                cbc_out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                cbc_out = subprocess.run('cbc ' + lpfile +' solve  -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
 
 
-                print("SOLUTION DONE! --- %s seconds ---" % (time.time() - start_time))
+                print("SOLUTION DONE! --- %s seconds --- %s" % (time.time() - start_time, caserunname))
                 txtOut = txtOut + ("Solution time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
                 ####output to lg file .log i .txt with errors
                 # out = subprocess.run('cbc ' + lpfile +' solve -solu '  + resultfile +'>'+ logfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
@@ -939,7 +1060,8 @@ class DataFile(Osemosys):
                     "glpk_message": glpk_out.stdout,
                     "glpk_stdmsg": glpk_out.stderr,
                     "timer": "Error occured either during cration of LP file or solution! Please check CBC and GLPK logs.",
-                    "status_code": "error"
+                    "status_code": "error",
+                    "caserun": caserunname
                 }
             else:
                 msg = cbc_out.stdout.splitlines()
@@ -969,14 +1091,14 @@ class DataFile(Osemosys):
 
                 if statusFlag == "success":
                     self.generateCSVfromCBC(self.dataFile, self.resFile, self.resPath)
-                    print("CSV DONE! --- %s seconds ---" % (time.time() - start_time))
+                    print("CSV DONE! --- %s seconds --- %s" % (time.time() - start_time, caserunname))
                     txtOut = txtOut + ("csv files extraction time {:0.2f} s;{}".format(time.time() - start_time, '\n'))
                     self.generateResultsViewer(caserunname)
-                    print("PIVOT TABLE DONE! --- %s seconds ---" % (time.time() - start_time))
+                    print("PIVOT TABLE DONE! --- %s seconds --- %s" % (time.time() - start_time, caserunname))
                     txtOut = txtOut + ("Pivot data preparation time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
 
 
-                print("MESSAGES DONE! --- %s seconds ---" % (time.time() - start_time))
+                print("MESSAGES DONE! --- %s seconds --- %s" % (time.time() - start_time, caserunname))
                 txtOut = txtOut + ("Message preparation time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
 
                 response = {
@@ -985,8 +1107,14 @@ class DataFile(Osemosys):
                     "glpk_message": glpk_out.stdout,
                     "glpk_stdmsg": glpk_out.stderr,
                     "timer": customMsg,
-                    "status_code": statusFlag
-                }           
+                    "status_code": statusFlag,
+                    "caserun": caserunname
+                } 
+
+           
+            if lock is not None:
+                lock.release()
+
             return response
             # urllib.request.urlretrieve(self.dataFile, dataFile)
         except(IOError, IndexError):
@@ -996,6 +1124,7 @@ class DataFile(Osemosys):
     
     def generateCSVfromCBC(self, data_file, results_file, base_folder=os.getcwd()):
         try:
+            #pd.options.mode.chained_assignment = None
             #pd.options.mode.chained_assignment = None
 
             parsing = False
@@ -1071,10 +1200,12 @@ class DataFile(Osemosys):
                 for each in params:
                     result_cols = []
 
-                    df_p = df[df.parameter == each]
+                    # radi problem izmjena da dataframe bez copije 20240118 vk
+                    # df_p = df[df.parameter == each]
+                    # df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
 
+                    df_p = df[df.parameter == each].copy()
                     df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
-                    #df_p.loc[:, Config.VARIABLES_C[each]] = df_p.loc[:,('id')].str.split(',',expand=True)
 
                     result_cols = Config.VARIABLES_C[each].copy()
                     result_cols.append('value')
@@ -1107,10 +1238,6 @@ class DataFile(Osemosys):
                 df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
                 #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
    
-            
-            
-
-
                 ########################################ProductionByTechnologyByMode############################################
                 df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
@@ -1134,8 +1261,6 @@ class DataFile(Osemosys):
                 df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['RateOfProductionByTechnologyByMode'].astype(float).round(4)
                 df_ropbt = df_ropbt.sort_values(by=['r','l','t','f','y'])
                 df_ropbt.to_csv(os.path.join(base_folder, 'csv', 'RateOfProductionByTechnologyByMode.csv'), index=None)
-
-
 
                 ######################################UseByTechnologyByMode##############################################
 
@@ -1171,6 +1296,309 @@ class DataFile(Osemosys):
     def generateResultsViewer(self, caserunname):
         try:
             csvFolderPath = Path(Config.DATA_STORAGE,self.case,'res',caserunname, 'csv')
+
+            #CSV
+            csvs = [f.name for f in os.scandir(csvFolderPath) ]
+
+            paramByName = {}
+            for group, array in self.VARIABLES.items():
+                for obj in array:
+                    o = {}
+                    o['id'] = obj['id']
+                    o['group'] = group
+                    paramByName[obj['name']] = o
+
+            DATA = {}
+            for csv in csvs:
+                #read csv file
+                csv_path = Path(Config.DATA_STORAGE,self.case,'res', caserunname, 'csv', csv)
+                if csv_path.is_file():
+                    df = pd.read_csv(csv_path)
+                    data = df.to_json(orient='records', indent=2)
+                    jsondata = json.loads(data)
+
+                    if len(jsondata) != 0:
+                        for param, paramobj in paramByName.items():
+
+                            if param in jsondata[0]:
+
+                                viewGroupPath = Path(Config.DATA_STORAGE,self.case,'view', paramobj['group']+ '.json')
+                                if viewGroupPath.is_file():
+                                    viewData = File.readFile(viewGroupPath)
+                                else:
+                                    viewData = {}
+
+                                if paramobj['id'] not in viewData:
+                                    viewData[paramobj['id']] = {}
+                                if caserunname not in viewData[paramobj['id']]:
+                                    viewData[paramobj['id']][caserunname] = []
+
+                                if paramobj['group'] == 'RT':
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        tmp[ obj['t']] =obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+
+                                if paramobj['group'] == 'RYT':
+                                    tech = jsondata[0]['t']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if tech == obj['t']:
+                                            tmp['Tech'] = obj['t']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            tech = obj['t']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Tech'] = obj['t']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)  
+
+                                if paramobj['group'] == 'RYE':
+                                    emi = jsondata[0]['e']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if emi == obj['e']:
+                                            tmp['Emi'] = obj['e']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            emi = obj['e']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Emi'] = obj['e']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)  
+
+                                if paramobj['group'] == 'RYTM':
+                                    tech = jsondata[0]['t']
+                                    mod = jsondata[0]['m']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if tech == obj['t'] and mod == obj['m']:
+                                            tmp['Tech'] = obj['t']
+                                            tmp['MoId'] = obj['m']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            tech = obj['t']
+                                            mod = obj['m']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Tech'] = obj['t']
+                                            tmp['MoId'] = obj['m']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+
+                                if paramobj['group'] == 'RYTC':
+                                    tech = jsondata[0]['t']
+                                    comm = jsondata[0]['f']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if tech == obj['t'] and comm == obj['f']:
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Comm'] = obj['f']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            tech = obj['t']
+                                            comm = obj['f']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Comm'] = obj['f']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+
+                                if paramobj['group'] == 'RYTE':
+                                    tech = jsondata[0]['t']
+                                    emi = jsondata[0]['e']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if tech == obj['t'] and emi == obj['e']:
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Emi'] = obj['e']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            tech = obj['t']
+                                            emi = obj['e']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Emi'] = obj['e']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+
+                                if paramobj['group'] == 'RYTTs':
+                                    tech = jsondata[0]['t']
+                                    ts = jsondata[0]['l']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if tech == obj['t'] and ts == obj['l']:
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            tech = obj['t']
+                                            ts = obj['l']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+
+                                if paramobj['group'] == 'RYCTs':
+                                    comm = jsondata[0]['f']
+                                    ts = jsondata[0]['l']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if comm == obj['f'] and ts == obj['l']:
+                                            tmp['Comm'] = obj['f']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            comm = obj['f']
+                                            ts = obj['l']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Comm'] = obj['f']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+
+                                if paramobj['group'] == 'RYTEM':
+                                    tech = jsondata[0]['t']
+                                    emi = jsondata[0]['e']
+                                    mod = jsondata[0]['m']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if tech == obj['t'] and emi == obj['e'] and mod == obj['m']:
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Emi'] = obj['e']
+                                            tmp['MoId'] = obj['m']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            tech = obj['t']
+                                            emi = obj['e']
+                                            mod = obj['m']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Emi'] = obj['e']
+                                            tmp['MoId'] = obj['m']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+
+                                if paramobj['group'] == 'RYTCTs':
+                                    tech = jsondata[0]['t']
+                                    comm = jsondata[0]['f']
+                                    ts = jsondata[0]['l']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if tech == obj['t'] and comm == obj['f'] and ts == obj['l']:
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Comm'] = obj['f']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            tech = obj['t']
+                                            comm = obj['f']
+                                            ts = obj['l']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Comm'] = obj['f']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+
+                                # ne postoje vise varijable za ovaj dio Production By tecnology, Use By technology
+                                if paramobj['group'] == 'RYTMTs':
+                                    tech = jsondata[0]['t']
+                                    mod = jsondata[0]['m']
+                                    ts = jsondata[0]['l']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if tech == obj['t'] and mod == obj['m'] and ts == obj['l']:
+                                            tmp['Tech'] = obj['t']
+                                            tmp['MoId'] = obj['m']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            tech = obj['t']
+                                            mod = obj['m']
+                                            ts = obj['l'] 
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Tech'] = obj['t']
+                                            tmp['MoId'] = obj['m']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+                            
+                                # ne koristi se jer smo izbrisali variajablu ROUBTBM Rate Of Use By Technology By Mode
+                                #ponovo koristimo jer korisitmo Production By Technology by Mode, Use By Technology By Mode (isto i sa Rate of...)
+                                if paramobj['group'] == 'RYTCMTs':
+                                    tech = jsondata[0]['t']
+                                    comm = jsondata[0]['f']
+                                    mod = jsondata[0]['m']
+                                    ts = jsondata[0]['l']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if tech == obj['t'] and comm == obj['f'] and mod == obj['m'] and ts == obj['l']:
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Comm'] = obj['f']
+                                            tmp['MoId'] = obj['m']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            tech = obj['t']
+                                            comm = obj['f']
+                                            mod = obj['m']
+                                            ts = obj['l']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Tech'] = obj['t']
+                                            tmp['Comm'] = obj['f']
+                                            tmp['MoId'] = obj['m']
+                                            tmp['Ts'] = obj['l']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
+                                
+                                break
+
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+
+
+    ###############################################################################################BKP
+    def generateResultsViewer_AllCases20240118(self, caserunname):
+        try:
+            csvFolderPath = Path(Config.DATA_STORAGE,self.case,'res',caserunname, 'csv')
             #viewFolderPath = Path(Config.DATA_STORAGE,self.case,'view')
 
             #CSV
@@ -1191,6 +1619,7 @@ class DataFile(Osemosys):
             DATA = {}
             #updateje sve caserunove
             for case in cases:
+
                 for csv in csvs:
 
                     #read csv file
@@ -1216,7 +1645,7 @@ class DataFile(Osemosys):
                                         DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                         path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                         File.writeFile( DATA[paramobj['group']], path)
- 
+    
                                     if paramobj['group'] == 'RYT':
                                         if paramobj['id'] not in DATA[paramobj['group']]:
                                             DATA[paramobj['group']][paramobj['id']] = {}
@@ -1280,7 +1709,7 @@ class DataFile(Osemosys):
                                         DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                         path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                         File.writeFile( DATA[paramobj['group']], path)
- 
+    
                                     if paramobj['group'] == 'RYTC':
                                         if paramobj['id'] not in DATA[paramobj['group']]:
                                             DATA[paramobj['group']][paramobj['id']] = {}
@@ -1328,7 +1757,7 @@ class DataFile(Osemosys):
                                         DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                         path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                         File.writeFile( DATA[paramobj['group']], path)
-  
+    
                                     if paramobj['group'] == 'RYTTs':
                                         if paramobj['id'] not in DATA[paramobj['group']]:
                                             DATA[paramobj['group']][paramobj['id']] = {}
@@ -1352,7 +1781,7 @@ class DataFile(Osemosys):
                                         DATA[paramobj['group']][paramobj['id']][case].append(tmp)
                                         path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                         File.writeFile( DATA[paramobj['group']], path)
-  
+    
                                     if paramobj['group'] == 'RYCTs':
                                         if paramobj['id'] not in DATA[paramobj['group']]:
                                             DATA[paramobj['group']][paramobj['id']] = {}
@@ -1503,7 +1932,6 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
-    ###############################################################################################BKP
     ##izmjene da bi se napunili csv za InputToNewCapacity i InputToTotalCapacity
     def generateCSVfromCBC09122023(self, data_file, results_file, base_folder=os.getcwd()):
         try:

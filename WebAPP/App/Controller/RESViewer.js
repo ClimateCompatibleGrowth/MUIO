@@ -6,6 +6,7 @@ import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { DEF } from "../../Classes/Definition.Class.js";
 import { MessageSelect } from "./MessageSelect.js";
 import { Chart } from "../../Classes/Chart.Class.js";
+import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export default class RESViewer {
     static onLoad() {
@@ -18,6 +19,8 @@ export default class RESViewer {
                     promise.push(casename);
                     const genData = Osemosys.getData(casename, 'genData.json');
                     promise.push(genData);
+                    const RYCdata = Osemosys.getData(casename, 'RYC.json');
+                    promise.push(RYCdata);
                     return Promise.all(promise);
                 } else {
                     MessageSelect.init(RESViewer.refreshPage.bind(RESViewer));
@@ -27,8 +30,9 @@ export default class RESViewer {
                 let settings = {};
                 settings.Colors = false;
                 settings.Desc = false;
-                let [casename, genData] = data;
-                let model = new Model(casename, genData, settings);
+                let [casename, genData, RYCdata] = data;
+                let DemandComms = DataModel.getDemandComms(RYCdata, genData['osy-years']);
+                let model = new Model(casename, genData, DemandComms, settings);
                 this.initPage(model);
                 this.initEvents(model);
             })
@@ -45,15 +49,18 @@ export default class RESViewer {
                 promise.push(casename);
                 const genData = Osemosys.getData(casename, 'genData.json');
                 promise.push(genData);
+                const RYCdata = Osemosys.getData(casename, 'RYC.json');
+                promise.push(RYCdata);
                 return Promise.all(promise);
             })
             .then(data => {
-                let [casename, genData] = data;
+                let [casename, genData, RYCdata] = data;
                 let settings = {};
                 settings.Colors = $("#useColors").is(":checked");
                 settings.Desc = $("#useDesc").is(":checked");
 
-                let modelNew = new Model(casename, genData, settings);
+                let DemandComms = DataModel.getDemandComms(RYCdata, genData['osy-years']);
+                let model = new Model(casename, genData, DemandComms, settings);
                 modelNew.cmbTechs = model.cmbTechs;
                 this.initPage(modelNew);
                 this.initEvents(modelNew);
@@ -147,7 +154,7 @@ export default class RESViewer {
     
     static initPage(model) {
 
-        console.log('model ', model)
+        console.log('model js ', model)
         Message.clearMessages();
         let $div = 'osy-RESViewer';
 
@@ -213,7 +220,7 @@ export default class RESViewer {
             settings.Desc = $("#useDesc").is(":checked");
             //console.log('model.selectedTechs ', model.selectedTechs)
       
-            let modelNew = new Model(model.casename, model.genData, settings, model.selectedTechs);
+            let modelNew = new Model(model.casename, model.genData, model.DemandComms, settings, model.selectedTechs);
 
             //console.log('modelNew ', modelNew)
             Html.ResStats(modelNew);
@@ -234,7 +241,7 @@ export default class RESViewer {
 
             console.log('model.selectedTechs ', model.selectedTechs)
       
-            let modelNew = new Model(model.casename, model.genData, settings, model.selectedTechs);
+            let modelNew = new Model(model.casename, model.genData, model.DemandComms, settings, model.selectedTechs);
 
             //update drop down liste tehnologija
             $.each(modelNew.RES.Techs, function (id, obj) {
@@ -260,7 +267,7 @@ export default class RESViewer {
             let settings = {};
             settings.Colors = $("#useColors").is(":checked");
             settings.Desc = $("#useDesc").is(":checked");
-            let modelNew = new Model(model.casename, model.genData, settings);
+            let modelNew = new Model(model.casename, model.genData, model.DemandComms, settings);
             model.cmbTechs.itemsSource = modelNew.RES.Techs;
             Html.ResStats(modelNew);
             RESViewer.sankeySize(modelNew);
@@ -289,8 +296,14 @@ export default class RESViewer {
                 //Technology click
 
                 console.log('msgData ', msgData)
-                if(msgData.label == 'Missing technology' ){
+                if(msgData.label == 'Missing Source Technology' ){
                     msg = `<i class="fa fa-cog fa-lg osy-second-color-d"></i> <b>WARNING:</b> Your model is missing source technology!`;
+                    Message.resMessage(msg);
+                    Message.loaderEnd();
+                    return false;
+                }
+                if(msgData.label == 'Missing Target Technology' ){
+                    msg = `<i class="fa fa-cog fa-lg osy-second-color-d"></i> <b>WARNING:</b> Your model is missing target technology!`;
                     Message.resMessage(msg);
                     Message.loaderEnd();
                     return false;
@@ -343,7 +356,7 @@ export default class RESViewer {
                 settings.Colors = $("#useColors").is(":checked");
                 settings.Desc = $("#useDesc").is(":checked");
     
-                let modelNew = new Model(model.casename, model.genData, settings, model.selectedTechs);
+                let modelNew = new Model(model.casename, model.genData, model.DemandComms, settings, model.selectedTechs);
             
     
                 $.each(modelNew.RES.Techs, function (id, obj) {

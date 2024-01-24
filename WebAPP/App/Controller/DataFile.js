@@ -39,6 +39,7 @@ export default class DataFile {
 
     static initPage(model) {
         Message.clearMessages();
+        console.log('model ', model)
         //Navbar.initPage(model.casename, model.pageId);
         Html.title(model.casename, model.title, "");
         Html.renderCases(model.cases);
@@ -229,6 +230,7 @@ export default class DataFile {
             Html.title(model.casename, model.title, "");
             Html.renderScOrder(model.scenarios);
             model.cs = '';
+            Message.clearMessages();
             $("#osy-casename").val(null);
             $("#osy-desc").val(null);
             $('#tabs a[href="#tabCases"]').tab('show');
@@ -244,6 +246,10 @@ export default class DataFile {
             $(".lpOutput").hide();
             $(".DataFile").hide();
             $(".Results").hide();
+
+            $(".batchOutput").hide(); 
+            $("#osy-batchRun").hide();        
+            $('.checkbox').prop('checked', false);
         });
 
         $("#osy-caseRun").off('validationSuccess');
@@ -293,6 +299,7 @@ export default class DataFile {
             if (update) {
                 Osemosys.updateCaseRun(model.casename, caserunname, oldcaserunname, caseData)
                 .then(response => {
+                    Message.clearMessages();
                     if (response.status_code == 'success') {
                         model.cs = caserunname;
                         $.each(model.cases, function (id, cs) {
@@ -310,6 +317,9 @@ export default class DataFile {
                         $(".runOutput").hide();
                         $(".lpOutput").hide();
                         $(".Results").hide();
+                        $(".batchOutput").hide(); 
+                        $("#osy-batchRun").hide();        
+                        $('.checkbox').prop('checked', false);
                         Message.smallBoxInfo('Generate message', response.message, 3000);
                     }
                     if (response.status_code == 'exist') {
@@ -322,6 +332,7 @@ export default class DataFile {
             } else {
                 Osemosys.createCaseRun(model.casename, caserunname, caseData)
                 .then(response => {
+                    Message.clearMessages();
                     if (response.status_code == 'success') {
                         $('#osy-generateDataFile').show();
                         model.cs = caserunname;
@@ -330,6 +341,10 @@ export default class DataFile {
                         $("#osy-createCaseRun").hide();
                         $("#osy-updateCaseRun").show();
                         $("#osy-newCaseRun").show();
+
+                        $(".batchOutput").hide(); 
+                        $("#osy-batchRun").hide();        
+                        $('.checkbox').prop('checked', false);
                         Html.renderCases(model.cases);
                         Html.title(model.casename, model.title, caserunname);
                         Message.smallBoxInfo('Generate message', response.message, 3000);
@@ -350,45 +365,46 @@ export default class DataFile {
             Pace.restart();
             Message.loaderStart('Generating data file!')
             Osemosys.generateDataFile(model.casename, model.cs)
-                .then(response => {
-                    if (response.status_code == "success") {
-                        const promise = [];
-                        let DataFile = Osemosys.readDataFile(model.casename, model.cs);
-                        promise.push(DataFile);
-                        promise.push(response.message);
-                        return Promise.all(promise);
-                    }
-                })
-                .then(response => {
-                    let [DataFile, message] = response;
-                    $(".DataFile").show();
-                    $("#osy-runOutput").empty();
-                    $("#osy-lpOutput").empty();
-                    $(".runOutput").hide();
-                    $(".lpOutput").hide();
-                    $(".Results").hide();
-                    Html.renderDataFile(DataFile, model)
-                    ///////////////////////////////////////////////////////////////////
-                    //$("#osy-downloadDataFile").show();
-                    //ne moramo updateovati S3 sa data file
-                    // if (Base.AWS_SYNC == 1){
-                    //     Base.updateSync(model.casename, "data.txt");
-                    // }
-                    if (Base.HEROKU == 0) {
-                        $("#osy-run").show();
-                        //$("#osy-solver").show();
-                    }
-                    //Message.clearMessages();
-                    //Message.bigBoxSuccess('Generate message', message, 3000);
-                    Message.loaderEnd();
-                    Message.smallBoxInfo('Generate message', message, 3000);
-                })
-                .catch(error => {
-                    Message.loaderEnd();
-                    Message.bigBoxDanger('Error message', error, null);
-                })
+            .then(response => {
+                if (response.status_code == "success") {
+                    const promise = [];
+                    let DataFile = Osemosys.readDataFile(model.casename, model.cs);
+                    promise.push(DataFile);
+                    promise.push(response.message);
+                    return Promise.all(promise);
+                }
+            })
+            .then(response => {
+                let [DataFile, message] = response;
+                $(".DataFile").show();
+                $("#osy-runOutput").empty();
+                $("#osy-lpOutput").empty();
+                $(".runOutput").hide();
+                $(".lpOutput").hide();
+                $(".Results").hide();
+                $(".batchOutput").hide();
+                Html.renderDataFile(DataFile, model)
+                ///////////////////////////////////////////////////////////////////
+                //$("#osy-downloadDataFile").show();
+                //ne moramo updateovati S3 sa data file
+                // if (Base.AWS_SYNC == 1){
+                //     Base.updateSync(model.casename, "data.txt");
+                // }
+                if (Base.HEROKU == 0) {
+                    $("#osy-run").show();
+                    //$("#osy-solver").show();
+                }
+                //Message.clearMessages();
+                //Message.bigBoxSuccess('Generate message', message, 3000);
+                Message.loaderEnd();
+                Message.smallBoxInfo('Generate message', message, 3000);
+            })
+            .catch(error => {
+                Message.loaderEnd();
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
-        //$( "#osy-generateDataFile" ).trigger( "click" );
+
 
         $("#osy-run").off('click');
         $("#osy-run").on('click', function (event) {
@@ -399,11 +415,14 @@ export default class DataFile {
             let solver = 'cbc';
             Osemosys.run(model.casename, solver, model.cs)
             .then(response => {
+                Message.clearMessages();
                 if (response.status_code == "success") {
                     Message.loaderEnd();
                     $(".runOutput").show();
                     $(".lpOutput").show();
                     $(".Results").show();
+                    $(".batchOutput").hide();
+                    $("#osy-batchOutput").empty();
                     $("#osy-runOutput").empty();
                     $("#osy-runOutput").html('<pre class="log-output">' + response.cbc_message, response.cbc_stdmsg+ '</pre>');
                     $("#osy-lpOutput").empty();
@@ -422,6 +441,8 @@ export default class DataFile {
                     $(".runOutput").show();
                     $(".lpOutput").show();
                     $(".Results").show();
+                    $(".batchOutput").hide();
+                    $("#osy-batchOutput").empty();
                     $("#osy-runOutput").empty();
                     $("#osy-runOutput").html('<pre class="log-output">' + response.cbc_message, response.cbc_stdmsg+ '</pre>');
                     $("#osy-lpOutput").empty();
@@ -439,6 +460,8 @@ export default class DataFile {
                     $(".runOutput").show();
                     $(".lpOutput").show();
                     $(".Results").show();
+                    $(".batchOutput").hide();
+                    $("#osy-batchOutput").empty();
                     $("#osy-runOutput").empty();
                     $("#osy-runOutput").html('<pre class="log-output">' + response.cbc_message, response.cbc_stdmsg+ '</pre>');
                     $("#osy-lpOutput").empty();
@@ -468,6 +491,7 @@ export default class DataFile {
             e.preventDefault();
             e.stopImmediatePropagation();
             Html.renderScOrder( model.scBycs[model.cs]);
+            Message.clearMessages();
             //console.log('model, ', model)
             var caserunanme = $(this).attr('data-ps');
             model.cs = caserunanme;
@@ -485,7 +509,10 @@ export default class DataFile {
             $("#osy-run").hide();
 
             $(".runOutput").hide();
-            $(".lpOutput").hide();            
+            $(".lpOutput").hide();   
+            $(".batchOutput").hide(); 
+            $("#osy-batchRun").hide();        
+            $('.checkbox').prop('checked', false);
 
             Osemosys.readDataFile(model.casename, model.cs)
             .then(response => {
@@ -564,6 +591,10 @@ export default class DataFile {
                                     $(".lpOutput").hide();
                                     $(".DataFile").hide();
                                     $(".Results").hide(); 
+
+                                    $(".batchOutput").hide(); 
+                                    $("#osy-batchRun").hide();        
+                                    $('.checkbox').prop('checked', false);
                                 }
                                 //remove case from view json files
                                 //sync with s3
@@ -604,6 +635,70 @@ export default class DataFile {
             });
             //e.preventDefault();
             e.stopImmediatePropagation();
+        });
+
+        //$(".Cases").off('click');
+        $('#osy-Cases').on('click', '.checkbox', function(e){
+            // var val = $(this).val();
+            // $('input[value!='+val+'].checkboxgroup').attr('checked',false);
+            let batchRunCases = [];
+            $("input:checkbox[name=type]:checked").each(function(){
+                batchRunCases.push($(this).val());
+            });
+            console.log('batchRunCases ', batchRunCases)
+            if(batchRunCases.length>1){
+                $('#osy-batchRun').show();
+            }
+            else{
+                $('#osy-batchRun').hide();
+            }
+          });
+
+        $("#osy-batchRun").off('click');
+        $("#osy-batchRun").on('click', function (event) {
+            console.log('BATCH RUN')
+            Pace.restart();
+            Message.loaderStart('BATCH RUN! Plese wait...');
+
+            let batchRunCases = [];
+            $("input:checkbox[name=type]:checked").each(function(){
+                batchRunCases.push($(this).val());
+            });
+
+            Osemosys.batchRun(model.casename, batchRunCases)
+            //Osemosys.generateDataFile(model.casename, batchRunCases[0])  
+            .then(response => {
+                Message.loaderEnd();
+                //Message.smallBoxInfo('Generate message', response.message, 3000);
+                // console.log('response ', response.log);
+                // Message.bigBoxDefault("BATCH RUN!", response.log)
+                $(".runOutput").hide();
+                $(".lpOutput").hide();
+                $(".Results").hide();
+                $("#osy-runOutput").empty();
+                $("#osy-lpOutput").empty();
+
+                Sidebar.Reload(model.casename);
+                Message.clearMessages();
+                
+                if(response.status == 'Success'){
+                    Message.successOsy('<pre>' + response.msg + '</pre>');
+                    //Message.successOsy('<pre>Run finished in ' + response.time + ' \n' + response.msg + '</pre>');
+                }
+                else{
+                    Message.dangerOsy('<pre>' + response.msg + '</pre>');
+                }
+                
+
+                $(".batchOutput").show();
+                $("#osy-batchOutput").empty();
+                $("#osy-batchOutput").html('<pre class="log-output">' + response.log+ '</pre>');
+
+            })
+            .catch(error => {
+                Message.bigBoxDanger(error) 
+            })
+            
         });
 
         Message.loaderEnd();

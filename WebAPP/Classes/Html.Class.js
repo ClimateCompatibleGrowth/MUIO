@@ -97,20 +97,27 @@ export class Html {
                     <div class="col-md-2 selectCS pointer" data-ps="${value.Case}" >
                         <b>
                             <span  data-toggle="tooltip" data-placement="top" title="Select Model">
-                                <span class="glyphicon glyphicon-cube osy-green fa-1.5x icon-btn"></span><span >${value.Case}</span>
+                                <span class="fa fa-cube osy-green fa-1.5x icon-btn"></span><span >${value.Case}</span>
                             </span>
                         </b>   
                     </div>
+                    <div class="col-md-1">
+                    <div class="wj-labeled-input pull-right">
+                        <input id="chb${value.Case}" name="type" value="${value.Case}" type="checkbox" class="checkbox" />
+                        <label for="chb${value.Case}"></label>
+                    </div>
+                </div>
                     <div class="col-md-6 selectCS pointer" data-ps="${value.Case}" >
                         <span  data-ps="${value.Desc}" data-toggle="tooltip" data-placement="top" title="Runtime">
                         <small><i>${value.Desc} [${dt}]</i></small>
                         </span>  
                     </div>
-                    <div class="col-md-3 selectCS pointer" data-ps="${value.Case}" >
+                    <div class="col-md-2 selectCS pointer" data-ps="${value.Case}" >
                         <span data-ps="${scs}" data-toggle="tooltip" data-placement="top" title="Runtime">
                         <small>${scs}</small>
                         </span>  
                     </div>
+
                     <div class="col-md-1">
                         <span class="deleteCase pull-right" data-ps="${value.Case}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
                             <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
@@ -694,7 +701,7 @@ export class Html {
         let html = '';
         $('#activityTechsCount').html(`<i class="fa fa-connectdevelop warning"></i>&nbsp;${model.RES.Techs.length-2}`)
         model.RES.Techs.forEach((item) => {
-            if(!['DS', 'DT'].includes(item.TechId)){
+            if(!['DS', 'DT', 'FD'].includes(item.TechId)){
                 html += `<li><a><small><b>${item.Tech}</b> - ${item.TechDesc}</small></a> <p class="divider"></p></li>`;
             }
         });
@@ -703,7 +710,7 @@ export class Html {
 
         let selectedTechsHtml = '';
         model.selectedTechs.forEach((item) => {
-            if(!['DS', 'DT'].includes(item)){
+            if(!['DS', 'DT', 'FD'].includes(item)){
                 selectedTechsHtml += `<li><a><small><b>${model.techData[item].Tech}</b> - ${model.techData[item].Desc}</small></a> <p class="divider"></p></li>`;
             }
 

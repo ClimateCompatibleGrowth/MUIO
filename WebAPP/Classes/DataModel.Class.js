@@ -426,7 +426,38 @@ export class DataModel{
     }
 
     //////////////////////////////////////////////////RES DATA
-    static RESData(genData){
+    static getDemandComms(RYCdata, years){
+        let demandComms = [];
+        //console.log('years ', years)
+        $.each(RYCdata, function (param, obj) {
+           
+            if(param == 'AAD' || param == 'SAD'){
+                $.each(obj, function (sc, array) {
+                    //console.log('param ', param, ' sc ', sc)
+                    $.each(array, function (id, objC) {
+                        $.each(years, function (i, year) {
+      
+                            //console.log(i, year)
+                            //console.log('objC[year] ',objC[year])
+                            if(objC[year] != 0 && objC[year]!=null){
+                                // if(param =='SAD'){
+                                //     console.log(objC.CommId, year)
+                                //     console.log('objC[year] ',objC[year])
+                                // }
+                                if(!demandComms.includes(objC.CommId)){
+                                    demandComms.push(objC.CommId);
+                                }
+                                return;
+                            }
+                        });
+                    });
+                });
+            }
+        });
+        return demandComms;
+    }
+
+    static RESData(genData, demandComms){
         let techs = genData['osy-tech'];
         let comms = genData['osy-comm'];
 
@@ -440,8 +471,9 @@ export class DataModel{
         arrays['IAR'] = [];
         arrays['OAR'] = [];
 
-        RES.Techs.push({'TechId': 'DS', 'Tech': 'Missing technology', 'TechDesc': 'Missing Source Technology', '$checked': true});
-        RES.Techs.push({'TechId': 'DT', 'Tech': 'Final demand', 'TechDesc': 'Final demand', '$checked': true});
+        RES.Techs.push({'TechId': 'DS', 'Tech': 'Missing Source Technology', 'TechDesc': 'Missing Source Technology', '$checked': true});
+        RES.Techs.push({'TechId': 'DT', 'Tech': 'Missing Target Technology', 'TechDesc': 'Missing Target Technology', '$checked': true});
+        RES.Techs.push({'TechId': 'FD', 'Tech': 'Final demand', 'TechDesc': 'Final demand', '$checked': true});
 
         $.each(techs, function (idT, objT) {
             //dio za tehnlogije
@@ -476,6 +508,7 @@ export class DataModel{
         RES.Singles = {};
         RES.Singles['IAR'] = [];
         RES.Singles['OAR'] = [];
+        RES.Singles['FD'] = [];
        // RES.Data['IAR']['DS'] = [];
         //RES.Data['OAR']['DT'] = [];
         $.each(arrays.IAR, function (id, iarComm) {
@@ -484,10 +517,25 @@ export class DataModel{
                 RES.Singles['IAR'].push(iarComm)
             }
         });
+
+
+        RES.Singles['FD'] = demandComms;
         $.each(arrays.OAR, function (id, oarComm) {
             if(!arrays.IAR.includes(oarComm)){
                 //RES.Data['OAR']['DT'].push(oarComm);
-                RES.Singles['OAR'].push(oarComm)
+
+                //ako Singles nisu u FD onda idu u Singles OAR
+                //Ako Sinlges jesu u FD onda idu u FD, pored toga svi koji su u FD treba da ostanu tu
+                // if(demandComms.includes(oarComm)){
+                //     RES.Singles['FD'].push(oarComm)
+                // }
+                // else{
+                //     RES.Singles['OAR'].push(oarComm)
+                // }
+
+                if(!demandComms.includes(oarComm)){
+                    RES.Singles['OAR'].push(oarComm);
+                }
             }
         });
         return RES;

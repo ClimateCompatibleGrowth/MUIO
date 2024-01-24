@@ -500,8 +500,8 @@ export default class Pivot {
         model.group = model.VARGROUPS[param]['group'];
         model.param = param;
 
-        // console.log('model.param ', model.param)
-        // console.log('model.group ', model.group)
+        console.log('model.param ', model.param)
+        console.log('model.group ', model.group)
         // console.log('param,  model, ', param,  model,)
         Osemosys.getResultData(model.casename, model.group+'.json')
         .then(DATA => {
