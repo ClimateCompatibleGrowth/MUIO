@@ -25,7 +25,7 @@
                     <div>
                         <div class="widget-body">
                             <div class="smart-form">
-                                <fieldset>
+                                <fieldset style="padding-top: 2px;">
                                     <div class="row">
                                         <section class="col-md-12">
               
@@ -41,7 +41,7 @@
                                         <section class="col-md-12">
                                             <label class="label">Case description</label>
                                             <label class="textarea">
-                                                <textarea rows="2" class="custom-scroll" name="osy-desc"
+                                                <textarea rows="4" class="custom-scroll" name="osy-desc"
                                                     id="osy-desc"></textarea>
                                             </label>
                                             <div class="note">
@@ -328,6 +328,32 @@
   
                         </fieldset>
                     
+                <footer></footer>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="osy-validation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-wide">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+                <h4 class="modal-title">
+                    <i class="fa  fa-info-circle fa-lg osy-second-color" aria-hidden="true"></i> Validation output - caserun: <span id="valCasrunname"></span>
+                </h4>
+            </div>
+            <div class="modal-body" style="padding-top: 0px;">
+					<fieldset style="padding-top: 15px;">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div id='valOutput'></div>
+                            </div>
+                        </div>
+                    </fieldset>
                 <footer></footer>
             </div>
         </div>

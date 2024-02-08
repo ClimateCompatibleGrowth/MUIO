@@ -30,6 +30,7 @@ param AvailabilityFactor{r in REGION, t in TECHNOLOGY, y in YEAR};
 param CapacityFactor{r in REGION, t in TECHNOLOGY, l in TIMESLICE, y in YEAR};
 param CapacityOfOneTechnologyUnit{r in REGION, t in TECHNOLOGY, y in YEAR};
 param CapacityToActivityUnit{r in REGION, t in TECHNOLOGY};
+param DiscountRateIdv{r in REGION, t in TECHNOLOGY};
 param CapitalCost{r in REGION, t in TECHNOLOGY, y in YEAR};
 param CapitalCostStorage{r in REGION, s in STORAGE, y in YEAR};
 param DiscountRate{r in REGION};

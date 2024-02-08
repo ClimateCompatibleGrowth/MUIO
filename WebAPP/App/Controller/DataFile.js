@@ -485,14 +485,14 @@ export default class DataFile {
             })
         });
 
-        $("#osy-Cases").off('click');
+        //$("#osy-Cases").off('click');
         $("#osy-Cases").on('click', '.selectCS', function (e) {
             //$(document).delegate(".selectCS","click",function(e){
             e.preventDefault();
             e.stopImmediatePropagation();
             Html.renderScOrder( model.scBycs[model.cs]);
             Message.clearMessages();
-            //console.log('model, ', model)
+            console.log('select, ', model)
             var caserunanme = $(this).attr('data-ps');
             model.cs = caserunanme;
             Html.renderScOrder( model.scBycs[model.cs]);
@@ -544,6 +544,36 @@ export default class DataFile {
                 Message.danger(error);
             });
             Message.smallBoxInfo("Case selection", caserunanme + " is selected!", 3000);
+        });
+
+
+        //$("#osy-Cases").off('click');
+        $("#osy-Cases").on('click', '.validateInputs', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            Message.clearMessages();
+            var caserunanme = $(this).attr('data-ps');
+            console.log('caserunanme ', caserunanme)
+            Osemosys.validateInputs(model.casename, caserunanme)
+            .then(response => {
+                console.log('response ', response)
+                if (response.status_code == "success") {
+                    $('#osy-validation').modal('toggle');
+                    $("#valCasrunname").text(caserunanme)
+                    $("#valOutput").html('<pre class="log-output">' + response.msg+ '</pre>')
+                }
+                if (response.status_code == "warning") {
+                    $('#osy-validation').modal('toggle');
+                    $("#valOutput").html('<pre class="log-output">' + response.msg+ '</pre>');
+                }
+                if (response.status_code == "error") {
+                    //Message.warningOsy(response.msg);
+                    Message.smallBoxWarning('Data file warning', response.msg, 8000)
+                }
+            })
+            .catch(error => {
+                Message.danger(error);
+            });
         });
 
         //$(document).delegate(".deleteCase", "click", function (e) {

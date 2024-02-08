@@ -143,6 +143,21 @@ def readDataFile():
         return jsonify(response), 200
     except(IOError):
         return jsonify('No existing cases!'), 404
+    
+@datafile_api.route("/validateInputs", methods=['POST'])
+def validateInputs():
+    try:
+        casename = request.json['casename']
+        caserunname = request.json['caserunname']
+        if casename != None:
+            df = DataFile(casename)
+            validation = df.validateInputs(caserunname)
+            response = validation    
+        else:  
+            response = None     
+        return jsonify(response), 200
+    except(IOError):
+        return jsonify('No existing cases!'), 404
 
 @datafile_api.route("/downloadDataFile", methods=['GET'])
 def downloadDataFile():

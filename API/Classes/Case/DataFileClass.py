@@ -1,19 +1,15 @@
 from pathlib import Path
 import pandas as pd
-import json, shutil, os, time, subprocess, datetime, threading, multiprocessing
+import json, shutil, os, time, subprocess
 from collections import defaultdict
-import subprocess, concurrent.futures
 from itertools import product
 
 from Classes.Base import Config
 from Classes.Case.OsemosysClass import Osemosys
 from Classes.Base.FileClass import File
 from Classes.Base.CustomThreadClass import CustomThread
-
-
 class DataFile(Osemosys):
     # def __init__(self, case):
-        
     #     Osemosys.__init__(self, case)
 
     def gen_R(self):
@@ -103,17 +99,17 @@ class DataFile(Osemosys):
             self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
             for timesliceId in self.timesliceIDs:
                 rytsString = ''
-                defaultValueFlag = False
+                #defaultValueFlag = False
                 for yearId in self.yearIDs:
                     for sc in self.scOrder:
                         rytsValue = ryts[id][sc['ScId']][yearId][timesliceId]
                         if rytsValue is not None and sc['Active'] == True:
-                            if rytsValue != self.defaultValue[id]:
-                                defaultValueFlag = True
+                            # if rytsValue != self.defaultValue[id]:
+                            #     defaultValueFlag = True
                             tmp = rytsValue
                     rytsString += '{} '.format(tmp)
-                if defaultValueFlag:                        
-                    self.f.write('{} {}{}'.format(timesliceId, rytsString, '\n'))
+                #if defaultValueFlag:                        
+                self.f.write('{} {}{}'.format(timesliceId, rytsString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
 
     def gen_RYT(self):
@@ -479,8 +475,6 @@ class DataFile(Osemosys):
             #self.f = open(dataFilePath, mode="w", encoding='utf-8')
 
             with open(dataFilePath, "w", encoding="utf-8") as self.f:
-
-
                 #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
                 self.f.write('####################\n#Sets#\n####################\n')
                 self.f.write('{} {}'.format('#', '\n'))
@@ -493,7 +487,6 @@ class DataFile(Osemosys):
                 self.f.write('{} {} {} {}{}{}'.format('set', 'YEAR',':=', self.years, ';', '\n'))
                 self.f.write('{} {} {} {}{}{}'.format('set', 'TIMESLICE',':=', self.timeslices, ';', '\n'))
                 self.f.write('{} {} {} {}{}{}'.format('set', 'UDC',':=', self.cons, ';', '\n'))
-
                 self.f.write('####################\n#Parameters#\n####################\n')
 
                 #path
@@ -517,9 +510,6 @@ class DataFile(Osemosys):
                 self.f.write('{}{}'.format('#', '\n'))
                 self.f.write('{}'.format('end;'))
             # self.f.close
-
-            # return True
-
             # if not os.path.exists(Path(Config.DATA_STORAGE,self.case,'res', 'csv')):
             #     resName = Path(Config.DATA_STORAGE,self.case,'res', 'csv')
             #     os.makedirs(resName, mode=0o777, exist_ok=False)
@@ -764,6 +754,495 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
+    def validateInputs(self, caserunname):
+        try:
+            self.defaultValue = self.getParamDefaultValues()
+            data = {}
+            start_year = self.getYears()[0]
+            msg = ""
+
+            dataFilePath = Path(Config.DATA_STORAGE, self.case, 'res',caserunname,'data.txt')
+            if dataFilePath.is_file():
+                with open(dataFilePath, 'r') as f:
+
+                    parsing = False
+                    for line in f:
+                        line = line.rstrip().replace('\t', ' ')
+                        if line.startswith(";"):
+                            parsing = False
+
+                        if parsing:
+                            if line.startswith('['):
+
+                                element = line.split(',')
+                                region = element[0][1:]
+                                tech = element[1]
+                                fuel_emi = element[2]
+                    
+                            elif line.startswith(start_year):
+                                years = line.rstrip(':= ;\n').split(' ')[0:]
+                                years = [i.strip(':=') for i in years]
+                            
+                            else:
+                                values = line.rstrip().split(' ')[1:]
+
+                                if param_current in ('DiscountRate'):
+                                    region = line.split(' ')[0]
+                                    dr = line.split(' ')[1]
+                                    data[param_current].append(tuple([region, dr]))
+
+                                if param_current in ('CapacityToActivityUnit', 'TotalTechnologyModelPeriodActivityLowerLimit', 'TotalTechnologyModelPeriodActivityUpperLimit', 'DiscountRateIdv'):
+                                    if firstRow:
+                                        techs = line.rstrip(':= ;\n').split(' ')[0:]
+                                        firstRow=False
+                                    else:
+                                        region = line.split(' ')[0]
+                                        for i, tech in enumerate(techs):
+                                            data[param_current].append(tuple([region, tech, values[i]]))
+
+                                if param_current in ('OutputActivityRatio','InputActivityRatio','EmissionActivityRatio'):
+                                    mode = line.split(' ')[0]
+                                    for i, year in enumerate(years):
+                                        data[param_current].append(tuple([region, fuel_emi, tech, year, mode, values[i]]))
+
+                                if param_current in ('CapacityFactor', 'SpecifiedDemandProfile'):
+                                    timeslice = line.split(' ')[0]
+                                    for i, year in enumerate(years):
+                                        data[param_current].append(tuple([region, tech, year, timeslice, values[i]]))
+
+                                if param_current in ('YearSplit'):
+                                    timeslice = line.split(' ')[0]
+                                    for i, year in enumerate(years):
+                                        data[param_current].append(tuple([region, year, timeslice, values[i]]))
+
+                                if param_current in ('TotalAnnualMaxCapacityInvestment','TotalAnnualMinCapacityInvestment','TotalTechnologyAnnualActivityUpperLimit', 'TotalTechnologyAnnualActivityLowerLimit', 'TotalAnnualMaxCapacity', 'ResidualCapacity', 'AvailabilityFactor'):
+                                    tech = line.split(' ')[0]
+                                    for i, year in enumerate(years):
+                                        data[param_current].append(tuple([region, tech, year, values[i]]))   
+
+                        if line.startswith(
+                            
+                            ('param DiscountRate',
+                            'param OutputActivityRatio',
+                            'param InputActivityRatio', 
+                            'param EmissionActivityRatio',
+                            'param TotalAnnualMaxCapacityInvestment',
+                            'param TotalAnnualMinCapacityInvestment',
+                            'param TotalTechnologyAnnualActivityUpperLimit',
+                            'param TotalTechnologyAnnualActivityLowerLimit',
+                            'param TotalAnnualMaxCapacity',
+                            'param ResidualCapacity',
+                            'param AvailabilityFactor',
+
+                            'param CapacityToActivityUnit',
+                            'param DiscountRateIdv',
+                            'param TotalTechnologyModelPeriodActivityLowerLimit',
+                            'param TotalTechnologyModelPeriodActivityUpperLimit',
+                            'param CapacityFactor',
+                            'param YearSplit',
+
+                            'param SpecifiedDemandProfile'
+                            )):
+                            
+                            param_current = line.split(' ')[1]
+                            params = Config.PARAMETERS_C[param_current].copy()
+                            params.append(param_current)
+                            data[param_current] = []
+                            data[param_current].append(tuple(params))
+                            parsing = True
+                            if line.startswith(('param CapacityToActivityUnit'))  or line.startswith(('param DiscountRateIdv')) or line.startswith(('param TotalTechnologyModelPeriodActivityLowerLimit')) or line.startswith(('param TotalTechnologyModelPeriodActivityUpperLimit')):
+                                firstRow=True 
+
+                        if line.startswith(
+                            ('param DiscountRate',
+                            'param OutputActivityRatio',
+                            'param InputActivityRatio', 
+                            'param EmissionActivityRatio',
+                            'param TotalAnnualMaxCapacityInvestment',
+                            'param TotalAnnualMinCapacityInvestment',
+                            'param TotalTechnologyAnnualActivityUpperLimit',
+                            'param TotalTechnologyAnnualActivityLowerLimit',
+                            'param TotalAnnualMaxCapacity',
+                            'param ResidualCapacity',
+                            'param AvailabilityFactor',
+
+                            'param CapacityToActivityUnit',
+                            'param DiscountRateIdv',
+                            'param TotalTechnologyModelPeriodActivityLowerLimit',
+
+                            'param CapacityFactor',
+                            'param YearSplit',
+                            'param SpecifiedDemandProfile'
+                            )):
+                            param_current = line.split(' ')[1]
+                            params = Config.PARAMETERS_C[param_current].copy()
+                            params.append(param_current)
+                            data[param_current] = []
+                            data[param_current].append(tuple(params))
+                            parsing = True
+                            if line.startswith(('param CapacityToActivityUnit')) or line.startswith(('param DiscountRateIdv')) or line.startswith(('param TotalTechnologyModelPeriodActivityLowerLimit')):
+                                firstRow=True
+            else:
+                response = {
+                    "msg": 'Data file is not created for this case run!',
+                    "status_code": 'error'
+                }   
+                return response
+
+
+            ############################################### Create dataframes from data file
+            df_IAR = pd.DataFrame(data['InputActivityRatio'])
+            headers = df_IAR.iloc[0]
+            df_IAR = pd.DataFrame(df_IAR.values[1:], columns=headers )
+            df_IAR['InputActivityRatio'] = df_IAR['InputActivityRatio'].astype(float)
+
+            df_TAMaxCI = pd.DataFrame(data['TotalAnnualMaxCapacityInvestment'])
+            headers = df_TAMaxCI.iloc[0]
+            df_TAMaxCI = pd.DataFrame(df_TAMaxCI.values[1:], columns=headers )
+            df_TAMaxCI['TotalAnnualMaxCapacityInvestment'] = df_TAMaxCI['TotalAnnualMaxCapacityInvestment'].astype(float)
+
+            df_TAMinCI = pd.DataFrame(data['TotalAnnualMinCapacityInvestment'])
+            headers = df_TAMinCI.iloc[0]
+            df_TAMinCI = pd.DataFrame(df_TAMinCI.values[1:], columns=headers )
+            df_TAMinCI['TotalAnnualMinCapacityInvestment'] = df_TAMinCI['TotalAnnualMinCapacityInvestment'].astype(float)
+
+            df_TAAUL = pd.DataFrame(data['TotalTechnologyAnnualActivityUpperLimit'])
+            headers = df_TAAUL.iloc[0]
+            df_TAAUL = pd.DataFrame(df_TAAUL.values[1:], columns=headers )
+            df_TAAUL['TotalTechnologyAnnualActivityUpperLimit'] = df_TAAUL['TotalTechnologyAnnualActivityUpperLimit'].astype(float)
+
+            df_TAALL = pd.DataFrame(data['TotalTechnologyAnnualActivityLowerLimit'])
+            headers = df_TAALL.iloc[0]
+            df_TAALL = pd.DataFrame(df_TAALL.values[1:], columns=headers )
+            df_TAALL['TotalTechnologyAnnualActivityLowerLimit'] = df_TAALL['TotalTechnologyAnnualActivityLowerLimit'].astype(float)
+
+            df_TAMaxC = pd.DataFrame(data['TotalAnnualMaxCapacity'])
+            headers = df_TAMaxC.iloc[0]
+            df_TAMaxC = pd.DataFrame(df_TAMaxC.values[1:], columns=headers )
+            df_TAMaxC['TotalAnnualMaxCapacity'] = df_TAMaxC['TotalAnnualMaxCapacity'].astype(float)
+
+            df_RC = pd.DataFrame(data['ResidualCapacity'])
+            headers = df_RC.iloc[0]
+            df_RC = pd.DataFrame(df_RC.values[1:], columns=headers )
+            df_RC['ResidualCapacity'] = df_RC['ResidualCapacity'].astype(float)
+
+            df_AF = pd.DataFrame(data['AvailabilityFactor'])
+            headers = df_AF.iloc[0]
+            df_AF = pd.DataFrame(df_AF.values[1:], columns=headers )
+            df_AF['AvailabilityFactor'] = df_AF['AvailabilityFactor'].astype(float)
+
+            df_CTAU = pd.DataFrame(data['CapacityToActivityUnit'])
+            headers = df_CTAU.iloc[0]
+            df_CTAU = pd.DataFrame(df_CTAU.values[1:], columns=headers )
+            df_CTAU['CapacityToActivityUnit'] = df_CTAU['CapacityToActivityUnit'].astype(float)
+
+            df_TMPALL = pd.DataFrame(data['TotalTechnologyModelPeriodActivityLowerLimit'])
+            headers = df_TMPALL.iloc[0]
+            df_TMPALL = pd.DataFrame(df_TMPALL.values[1:], columns=headers )
+            df_TMPALL['TotalTechnologyModelPeriodActivityLowerLimit'] = df_TMPALL['TotalTechnologyModelPeriodActivityLowerLimit'].astype(float)
+
+
+            df_TMPAUL = pd.DataFrame(data['TotalTechnologyModelPeriodActivityUpperLimit'])
+            headers = df_TMPAUL.iloc[0]
+            df_TMPAUL = pd.DataFrame(df_TMPAUL.values[1:], columns=headers )
+            df_TMPAUL['TotalTechnologyModelPeriodActivityUpperLimit'] = df_TMPAUL['TotalTechnologyModelPeriodActivityUpperLimit'].astype(float)
+
+            df_CF = pd.DataFrame(data['CapacityFactor'])
+            headers = df_CF.iloc[0]
+            df_CF = pd.DataFrame(df_CF.values[1:], columns=headers )
+            df_CF['CapacityFactor'] = df_CF['CapacityFactor'].astype(float)
+
+            df_YS = pd.DataFrame(data['YearSplit'])
+            headers = df_YS.iloc[0]
+            df_YS = pd.DataFrame(df_YS.values[1:], columns=headers )
+            df_YS['YearSplit'] = df_YS['YearSplit'].astype(float)
+
+            df_SDP = pd.DataFrame(data['SpecifiedDemandProfile'])
+            headers = df_SDP.iloc[0]
+            df_SDP = pd.DataFrame(df_SDP.values[1:], columns=headers )
+            df_SDP['SpecifiedDemandProfile'] = df_SDP['SpecifiedDemandProfile'].astype(float)
+
+            df_DRI = pd.DataFrame(data['DiscountRateIdv'])
+            headers = df_DRI.iloc[0]
+            df_DRI = pd.DataFrame(df_DRI.values[1:], columns=headers )
+            df_DRI['DiscountRateIdv'] = df_DRI['DiscountRateIdv'].astype(float)
+
+            df_DR = pd.DataFrame(data['DiscountRate'])
+            headers = df_DR.iloc[0]
+            df_DR = pd.DataFrame(df_DR.values[1:], columns=headers )
+            df_DR['DiscountRate'] = df_DR['DiscountRate'].astype(float)
+
+            ########################################################################################## df za provjeru 1
+            df_merge1 = df_DRI.merge(df_DR, on=['r'])
+
+            ########################################################################################## df za provjeru 3
+            df_merge3 = df_TAMaxCI.merge(df_TAMinCI, on=['r','t','y'])
+
+            ########################################################################################## df za provjeru 4
+            df_merge4 = df_TAAUL.merge(df_TAALL, on=['r','t','y'])
+
+            ########################################################################################## df za provjeru 5
+            df_merge5 = df_TAMaxC.merge(df_RC, on=['r','t','y'],how='outer')
+            df_merge5['ResidualCapacity'] = df_merge5['ResidualCapacity'].fillna(0)
+            df_merge5['TotalAnnualMaxCapacity'] = df_merge5['TotalAnnualMaxCapacity'].fillna(self.defaultValue['TAMaxC'])
+
+            ########################################################################################## df za provjeru 6
+            df_merge6 = df_merge5.merge(df_TAMinCI, on=['r','t','y'], how='outer')
+            df_merge6['TotalAnnualMinCapacityInvestment'] = df_merge6['TotalAnnualMinCapacityInvestment'].fillna(self.defaultValue['TAMinCI'])
+
+            ########################################################################################## df za provjeru 7
+            df_merge71 = df_TAALL.merge( df_TAMaxC, how='left', on=['r','t','y']).merge(df_AF, how='left', on=['r','t','y']).merge(df_CTAU, how='left', on=['r','t'])
+            df_merge72 = df_CF.merge(df_YS, on=['r','y','l'], how='left')
+
+            df_merge71['TotalTechnologyAnnualActivityLowerLimit'] = df_merge71['TotalTechnologyAnnualActivityLowerLimit'].fillna(value=self.defaultValue['TAL'])
+            df_merge71['TotalAnnualMaxCapacity'] = df_merge71['TotalAnnualMaxCapacity'].fillna(value=self.defaultValue['TAMaxC'])
+            df_merge71['AvailabilityFactor'] = df_merge71['AvailabilityFactor'].fillna(value=self.defaultValue['AF'])
+            df_merge71['CapacityToActivityUnit'] = df_merge71['CapacityToActivityUnit'].fillna(value=self.defaultValue['CAU'])
+
+            df_merge72['CapacityFactor*YearSplit'] = df_merge72['CapacityFactor'] * df_merge72['YearSplit']
+            #df_merge52['Sum'] = df_merge52.groupby(['r','t','y'])['YearSplit'].transform('sum')
+            df_merge72 = df_merge72.groupby(['r','t','y'])['CapacityFactor*YearSplit'].sum().reset_index().rename(columns={'CapacityFactor*YearSplit':'Sum'})
+            df_merge7 = df_merge71.merge(df_merge72, on=['r','y','t'], how='left')
+            df_YStmp = df_YS.groupby(['r','y'])['YearSplit'].sum().reset_index().rename(columns={'YearSplit':'Sum'})
+
+            # df_merge7 = df_merge7.set_index(['r','y']).fillna(df_YStmp.set_index(['r','y'])).reset_index()
+            df_merge7 = pd.merge(df_merge7, df_YStmp, on=['r','y'],  suffixes=("", "_y"), how="left")
+            df_merge7['Sum'].fillna(df_merge7['Sum_y'], inplace=True)
+
+            df_merge7.drop(columns=['Sum_y'],axis=1, inplace=True)
+
+            ################################################################################################ df za provjeru 8
+            df_TAALL = df_TAALL.groupby(['r','t'])['TotalTechnologyAnnualActivityLowerLimit'].sum().reset_index().rename(columns={'TotalTechnologyAnnualActivityLowerLimit':'Sum_TotalTechnologyAnnualActivityLowerLimit'})
+            df_merge8 = df_TMPAUL.merge(df_TAALL, on=['r','t'], how='left')
+            df_merge8['TotalTechnologyModelPeriodActivityUpperLimit'] = df_merge8['TotalTechnologyModelPeriodActivityUpperLimit'].fillna(self.defaultValue['TMPAU'])
+            df_merge8 = df_merge8[df_merge8['Sum_TotalTechnologyAnnualActivityLowerLimit'].notna()]
+
+
+            ################################################################################################ df za provjeru 10
+
+
+            ########################################################################################### C H E C K S ###############################################################################
+
+            ########################################################################################### C H E C K 1
+            print("CHECK 1. Identifying technologies where Discount Rate idv is different from global Discount Rate  for (r, t)")
+            msg+="CHECK 1. Identifying technologies where Discount Rate idv is different from global Discount Rate  for (r, t)\n"
+            df_check1 = df_merge1[
+                (df_merge1['DiscountRateIdv'] != df_merge1['DiscountRate'])
+            ]
+            if not df_check1.empty:
+                print("CHECK 1: Error")
+                print(df_check1)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 1: Error\n"
+                msg+=df_check1.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 1: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 1: Success\n\n"
+
+            ########################################################################################### C H E C K 2
+            print("CHECK 2. Check if YearSplits sums to 1 for y in YEAR")
+            msg+="CHECK 2. Check if YearSplits sums to 1 for y in YEAR\n"
+            df_YS = df_YS.groupby(['r','y'])['YearSplit'].sum().reset_index()
+            df_check2 = df_YS[(df_YS["YearSplit"] != 1)]
+            if not df_check2.empty:
+                print("CHECK 2: Error")
+                print(df_check2)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 2: Error\n"
+                msg+=df_check2.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 2: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 2: Success\n\n"
+
+            ########################################################################################### C H E C K 3
+            print("CHECK 3. Checking if MinCapacityInvestment bounds are greater the MaxCapacityInvestment bounds for (r, t, y)")
+            msg+="CHECK 3. Checking if MinCapacityInvestment bounds are greater the MaxCapacityInvestment bounds for (r, t, y)\n"
+            df_check3 = df_merge3[
+                (df_merge3['TotalAnnualMaxCapacityInvestment'] != -1) &
+                (df_merge3['TotalAnnualMinCapacityInvestment'] != 0) &
+                (df_merge3['TotalAnnualMaxCapacityInvestment'] < df_merge3['TotalAnnualMinCapacityInvestment'])
+            ]
+            if not df_check3.empty:
+                print("CHECK 3: Error")
+                print(df_check3)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 3: Error\n"
+                msg+=df_check3.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 3: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 3: Success\n\n"
+
+            ########################################################################################### C H E C K 4
+            print("CHECK 4. Checking if TotalTechnologyAnnualActivityLowerLimit bounds are greater than TotalTechnologyAnnualActivityUpperLimit bounds for (r, t, y)")
+            msg+="CHECK 4. Checking if TotalTechnologyAnnualActivityLowerLimit bounds are greater than TotalTechnologyAnnualActivityUpperLimit bounds for (r, t, y)\n"
+            df_check4 = df_merge4[
+                (df_merge4['TotalTechnologyAnnualActivityUpperLimit'] != -1) &
+                (df_merge4['TotalTechnologyAnnualActivityLowerLimit'] != 0) &
+                (df_merge4['TotalTechnologyAnnualActivityUpperLimit'] < df_merge4['TotalTechnologyAnnualActivityLowerLimit'])
+            ]
+            if not df_check4.empty:
+                print("CHECK 4: Error")
+                print(df_check4)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 4: Error\n"
+                msg+=df_check4.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 4: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 4: Success\n\n"
+
+            ########################################################################################### C H E C K 5
+            print("CHECK 5. Checking if ResidualCapacity is greater than TotalAnnualMaxCapacity for (r, t, y)")
+            msg+="CHECK 5. Checking if ResidualCapacity is greater than TotalAnnualMaxCapacity for (r, t, y)\n"
+            df_check5 = df_merge5[
+                (df_merge5['TotalAnnualMaxCapacity'] != -1) & 
+                (df_merge5['ResidualCapacity'] != 0) & 
+                (df_merge5['TotalAnnualMaxCapacity'] < df_merge5['ResidualCapacity'])
+                ]
+            if not df_check5.empty:
+                print("CHECK 5: Error")
+                print(df_check5)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 5: Error\n"
+                msg+=df_check5.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 5: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 5: Success\n\n"
+
+            ########################################################################################### C H E C K 6
+            print("CHECK 6. Checking if ResidualCapacity plus TotalAnnualMinCapacityInvestment is greater than TotalAnnualMaxCapacity for (r, t, y)")
+            msg+="CHECK 6. Checking if ResidualCapacity plus TotalAnnualMinCapacityInvestment is greater than TotalAnnualMaxCapacity for (r, t, y)\n"
+            df_check6 = df_merge6[
+                (df_merge6['TotalAnnualMaxCapacity'] != -1) &
+                (df_merge6['ResidualCapacity'] != 0) &
+                (df_merge6['TotalAnnualMaxCapacity'] < df_merge6['ResidualCapacity'] + df_merge6['TotalAnnualMinCapacityInvestment'])
+            ]
+            if not df_check6.empty:
+                print("CHECK 6: Error")
+                print(df_check6)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 6: Error\n"
+                msg+=df_check6.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 6: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 6: Success\n\n"
+
+            ########################################################################################### C H E C K 7
+            print("CHECK 7. Checking if there is sufficient available capacity to meet TotalTechnologyAnnualActivityLowerLimit for (r, t, y)")
+            msg+="CHECK 7. Checking if there is sufficient available capacity to meet TotalTechnologyAnnualActivityLowerLimit for (r, t, y)\n"
+            df_check7 = df_merge7[
+                (df_merge7['TotalAnnualMaxCapacity'] != 0) &
+                (df_merge7['TotalAnnualMaxCapacity'] != -1) &
+                (df_merge7['TotalTechnologyAnnualActivityLowerLimit'] != 0) &
+                (df_merge7['AvailabilityFactor'] != 0) &
+                (df_merge7['CapacityToActivityUnit'] != 0) &
+                (df_merge7['Sum'] * df_merge7['TotalAnnualMaxCapacity'] * df_merge7['AvailabilityFactor'] * df_merge7['CapacityToActivityUnit'] < df_merge7['TotalTechnologyAnnualActivityLowerLimit'])
+            ]
+            if not df_check7.empty:
+                print("CHECK 7: Error")
+                print(df_check7)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 7: Error\n"
+                msg+=df_check7.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 7: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 7: Success\n\n"
+
+            ########################################################################################### C H E C K 8
+            print("CHECK 8. Checking if TotalTechnologyModelPeriodActivityUpperLimit is less than accumulative TotalTechnologyAnnualActivityLowerLimit for (r, t)")
+            msg+="CHECK 8. Checking if TotalTechnologyModelPeriodActivityUpperLimit is less than accumulative TotalTechnologyAnnualActivityLowerLimit for (r, t)\n"
+            df_check8 = df_merge8[
+                (df_merge8['TotalTechnologyModelPeriodActivityUpperLimit'] != -1) &
+                (df_merge8['TotalTechnologyModelPeriodActivityUpperLimit'] < df_merge8['Sum_TotalTechnologyAnnualActivityLowerLimit'])
+            ]
+            if not df_check8.empty:
+                print("CHECK 8: Error")
+                print(df_check8)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 8: Error\n"
+                msg+=df_check8.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 8: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 8: Success\n\n"
+
+            ########################################################################################### C H E C K 9
+            print("CHECK 9. Checking if Specified Demand Profile sums to 1 for (f, y)")
+            msg+="CHECK 9. Checking if Specified Demand Profile sums to 1 for (f, y)\n"
+            df_SDP = df_SDP.groupby(['r','f','y'])['SpecifiedDemandProfile'].sum().reset_index()
+            df_check9 = df_SDP[(df_SDP["SpecifiedDemandProfile"] > 1.001) | (df_SDP["SpecifiedDemandProfile"] < 0.999)]
+
+            if not df_check9.empty:
+                print("CHECK 9: Error")
+                print(df_check9)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 9: Error\n"
+                msg+=df_check9.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 9: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 9: Success\n\n"
+
+            ########################################################################################### C H E C K 10
+            print("CHECK 10. Checking if ResidualCapacity plus cumulative TotalAnnualMinCapacityInvestment is greater than TotalAnnualMaxCapacity for (r, t, y)")
+            msg+="CHECK 10. Checking if ResidualCapacity plus cumulative TotalAnnualMinCapacityInvestment is greater than TotalAnnualMaxCapacity for (r, t, y)\n"
+            df_merge101 = df_TAMinCI.merge(df_RC, on=['r','t','y'],  how='outer')
+            df_merge101['TotalAnnualMinCapacityInvestment'] = df_merge101['TotalAnnualMinCapacityInvestment'].fillna(value=0)
+            df_merge101['ResidualCapacity'] = df_merge101['ResidualCapacity'].fillna(value=0)
+
+            tech_current = ''
+            merge102 = []
+            for index, row in df_merge101.iterrows():
+                tmp = {}
+                if tech_current != row['t']:
+                    Sum = 0
+                tmp['r'] = row['r']
+                tmp['t'] = row['t']
+                Sum += row['TotalAnnualMinCapacityInvestment'] #+ row['ResidualCapacity']
+                tmp['y'] = row['y']
+                tmp['Sum'] = Sum
+                merge102.append(tmp)
+                tech_current = row['t']
+
+            df_merge102 = pd.DataFrame(merge102)
+            df_merge10 = df_merge101.merge(df_merge102, on=['r','t','y'],  how='outer').merge(df_TAMaxC, on=['r','t','y'],  how='outer')
+            df_merge10['TotalAnnualMaxCapacity'] = df_merge10['TotalAnnualMaxCapacity'].fillna(value=999999)
+            df_merge10['TotalAnnualMinCapacityInvestment'] = df_merge10['TotalAnnualMinCapacityInvestment'].fillna(value=0)
+            df_merge10['ResidualCapacity'] = df_merge10['ResidualCapacity'].fillna(value=0)
+            df_merge10['Sum'] = df_merge10['Sum'].fillna(value=0)
+
+            df_check10 = df_merge10[
+                (df_merge10['TotalAnnualMaxCapacity'] != -1) & 
+                (df_merge10['TotalAnnualMaxCapacity'] < df_merge10['Sum'] + df_merge10['ResidualCapacity'])
+            ]
+            if not df_check10.empty:
+                print("CHECK 10: Error")
+                print(df_check10)
+                msg+="<i class='fa fa-exclamation-triangle danger' aria-hidden='true'></i>CHECK 10: Error\n"
+                msg+=df_check10.to_string()
+                msg+="\n\n"
+            else:
+                print("CHECK 10: Success")
+                msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 10: Success\n\n"
+
+            #print('msg \n', msg)
+
+
+
+
+            response = {
+                "msg": msg,
+                "status_code": 'success'
+            }   
+            return response
+        except(IOError, KeyError):
+            response = {
+                "msg": 'Some of the params are missing in data file (data file creted before 4.9 ver). Please generate data file again and run check',
+                "status_code": 'error'
+            } 
+            return response  
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+        
     def preprocessData(self, data_infile, data_outfile):
 
         lines = []
@@ -867,9 +1346,6 @@ class DataFile(Osemosys):
             #da li se ovaj mod po tech treba puniti i za emissijske tehnologije i sta to znaci u model file
             file_output_function(dict_all, tech_list, 'set MODEperTECHNOLOGY[', '*')
             file_out.write('end;')
-
-    #def threadBatchRun():
-
 
     def batchRun(self, solver, cases):
         try:
@@ -1179,8 +1655,13 @@ class DataFile(Osemosys):
             params = []
             
             df = pd.read_csv(results_file, sep='\t')
+            #print(df.head())
+            #print(df.columns)
             df.columns = ['temp']
+            #print(df.columns)
+
             df['temp'] = df['temp'].str.lstrip(' *\n\t')
+            print(df['temp'])
             
             if len(df) > 0:
                 df[['temp','value']] = df['temp'].str.split(')', expand=True)
@@ -1332,6 +1813,14 @@ class DataFile(Osemosys):
                                     viewData[paramobj['id']] = {}
                                 if caserunname not in viewData[paramobj['id']]:
                                     viewData[paramobj['id']][caserunname] = []
+
+                                if paramobj['group'] == 'R':
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        tmp[ obj['t']] =obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)
 
                                 if paramobj['group'] == 'RT':
                                     tmp = {}
@@ -1595,7 +2084,7 @@ class DataFile(Osemosys):
             raise OSError
 
 
-    ###############################################################################################BKP
+    ############################################################################################### OBSOLETE METHODS 
     def generateResultsViewer_AllCases20240118(self, caserunname):
         try:
             csvFolderPath = Path(Config.DATA_STORAGE,self.case,'res',caserunname, 'csv')

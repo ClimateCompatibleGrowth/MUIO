@@ -603,7 +603,7 @@ li {
 }
 .dropdown-menu {
     min-width: 320px!important;
-    z-index: 2000!important;
+    z-index: 9000!important;
     padding: 20px!important;
 }
 
@@ -766,5 +766,10 @@ li {
   .pr-1 {
     padding-right: 1px!important;
   }
+
+.modal-dialog-wide {
+    width: 1100px;
+    margin: 30px auto;
+}
 
 

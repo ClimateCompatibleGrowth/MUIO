@@ -236,6 +236,7 @@ export default class RYTCM {
         $("#osy-removeScData").on('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
+            Message.loaderStart('Removing scenario data...');
             var sc = $("#osy-scenarios").val();
             // var comm = $("#osy-commNames").val();
             // var tech = $("#osy-techNames").val();
@@ -261,6 +262,7 @@ export default class RYTCM {
             Html.lblScenario( model.scenariosCount);
             Grid.applyGridFilter($divGrid, model.years);
             Message.smallBoxInfo('Info', 'Scenario data removed!', 2000);
+            Message.loaderEnd();
         });
 
         let pasteEvent = false;

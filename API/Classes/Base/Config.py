@@ -156,9 +156,25 @@ VARIABLES_C = {
         'Trade':['r','rr','l','f','y']
     }
 
+#needed for validation of inputs
 PARAMETERS_C = {
+        'DiscountRate': ['r'],
         'OutputActivityRatio':['r','f','t','y','m'],
-        'InputActivityRatio':['r','f''t','y','m'],
-        'EmissionActivityRatio':['r','e''t','y','m']
+        'InputActivityRatio':['r','f','t','y','m'],
+        'EmissionActivityRatio':['r','e''t','y','m'],
+        'TotalAnnualMaxCapacityInvestment':['r','t','y'],
+        'TotalAnnualMinCapacityInvestment':['r','t','y'],
+        'TotalTechnologyAnnualActivityUpperLimit':['r','t','y'],
+        'TotalTechnologyAnnualActivityLowerLimit':['r','t','y'],
+        'TotalAnnualMaxCapacity':['r','t','y'],
+        'ResidualCapacity': ['r','t','y'],
+        'AvailabilityFactor': ['r','t','y'],
 
+        'CapacityToActivityUnit': ['r','t'],
+        'DiscountRateIdv': ['r','t'],
+        'TotalTechnologyModelPeriodActivityLowerLimit': ['r','t'],
+        'TotalTechnologyModelPeriodActivityUpperLimit': ['r','t'],
+        'CapacityFactor': ['r','t', 'y', 'l'],
+        'YearSplit': ['r','y', 'l'],
+        'SpecifiedDemandProfile': ['r','f','y','l']
     }

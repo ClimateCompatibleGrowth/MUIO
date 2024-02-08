@@ -287,6 +287,29 @@ export class Osemosys {
         });
     }
 
+    static validateInputs(casename, caserunname) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url:Base.apiUrl() + "validateInputs",
+                async: true,  
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({ "casename": casename, 'caserunname': caserunname }),
+                contentType: 'application/json; charset=utf-8',
+                // credentials: 'include',
+                // xhrFields: { withCredentials: true},
+                // crossDomain: true,
+                success: function (result) {             
+                    resolve(result);
+                },
+                error: function(xhr, status, error) {
+                    if(error == 'UNKNOWN'){ error =  xhr.responseJSON.message }
+                    reject(error);
+                }
+            });
+        });
+    }
+
     static resultsExists(casename) {
         return new Promise((resolve, reject) => {
             $.ajax({

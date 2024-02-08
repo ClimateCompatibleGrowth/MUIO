@@ -122,6 +122,9 @@ export class Html {
                         <span class="deleteCase pull-right" data-ps="${value.Case}"'+'data-toggle="tooltip" data-placement="top" title="Delete Model">
                             <span  class="glyphicon glyphicon-trash danger icon-btn"></span>
                         </span>
+                        <span class="validateInputs pull-right" data-ps="${value.Case}"'+'data-toggle="tooltip" data-placement="top" title="Validate inputs">
+                            <span class="glyphicon glyphicon-step-forward osy-green icon-btn" aria-hidden="true"></span>&nbsp; &nbsp; 
+                        </span>
                     </div>
                 </div>
 

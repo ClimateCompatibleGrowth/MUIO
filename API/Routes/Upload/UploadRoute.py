@@ -254,15 +254,18 @@ def uploadCase():
                                         "status_code": "success",
                                         "casename": casename
                                     })
-                                elif name == '4.0': 
+                                elif name == '4.0' or name == '4.5': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                    #u 4.5 ver dodani paramteri i varijable
+                                    # u 4.9 versiji dodano param DiscountRateIdv
                                     msg.append({
                                         "message_warning": "You have restored a model created in a earlier version of this UI. In order to update to the current version click <b>Update model</b> on the configuration page.",
                                         "message": "Model " + casename +" have been uploaded!",
                                         "status_code": "warning",
                                         "casename": casename
                                     })
-                                elif name == '4.5': 
+
+                                elif name == '4.9': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
