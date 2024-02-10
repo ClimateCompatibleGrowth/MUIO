@@ -249,7 +249,7 @@ export class Grid {
         $("#osy-gridTech").jqxGrid({
             width: '100%',
             autoheight: true,
-            columnsheight: 20,
+            // columnsheight: 20,
             theme: this.theme(),
             source: this.daTechs,
             editable: true,
@@ -273,7 +273,7 @@ export class Grid {
                 { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
                 { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: '', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTech" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add technology</span>', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false },
             ]
    
         })
@@ -312,7 +312,7 @@ export class Grid {
         $("#osy-gridTechGroup").jqxGrid({
             width: '100%',
             autoheight: true,
-            columnsheight: 20,
+            // columnsheight: 20,
             theme: this.theme(),
             source: daTechGroup,
             editable: true,
@@ -324,7 +324,7 @@ export class Grid {
                 { text: 'TechGroupId', datafield: 'TechGroupId', hidden: true },
                 { text: 'Technology group name', datafield: 'TechGroup', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left' },
-                { text: '', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTechGroup" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add group</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
             ]
         });
     }
@@ -363,13 +363,13 @@ export class Grid {
             if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteComm" data-id=' + row + ' ><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteComm" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
         }
 
         $("#osy-gridComm").jqxGrid({
             width: '100%',
             autoheight: true,
-            columnsheight: 20,
+            // columnsheight: 20,
             theme: this.theme(),
             source: daComms,
             editable: true,
@@ -385,7 +385,7 @@ export class Grid {
                 { text: 'Commodity name', datafield: 'Comm', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left' },
                 { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center' },
-                { text: '', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addComm" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add commodity</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
             ]
         });
     }
@@ -441,7 +441,7 @@ export class Grid {
         $("#osy-gridEmis").jqxGrid({
             width: '100%',
             autoheight: true,
-            columnsheight: 20,
+            // columnsheight: 20,
             theme: this.theme(),
             source: daEmi,
             editable: true,
@@ -455,7 +455,7 @@ export class Grid {
                 { text: 'Emission name', datafield: 'Emis', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left' },
                 { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center' },
-                { text: '', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addEmis" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add emission</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
             ]
         });
     }
@@ -493,7 +493,7 @@ export class Grid {
         $("#osy-gridScenario").jqxGrid({
             width: '100%',
             autoheight: true,
-            columnsheight: 20,
+            // columnsheight: 20,
             theme: this.theme(),
             source: daScenario,
             editable: true,
@@ -505,7 +505,7 @@ export class Grid {
                 { text: 'ScenarioId', datafield: 'ScenarioId', hidden: true },
                 { text: 'Scenario name', datafield: 'Scenario', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left' },
-                { text: '', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addScenario" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add scenario</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
             ]
         });
     }
@@ -617,7 +617,7 @@ export class Grid {
         $("#osy-gridConstraint").jqxGrid({
             width: '100%',
             autoheight: true,
-            columnsheight: 20,
+            // columnsheight: 20,
             theme: this.theme(),
             source: this.daConstraint,
             editable: true,
@@ -631,7 +631,7 @@ export class Grid {
                 { text: 'Description', datafield: 'Desc', width: '40%', align: 'center', cellsalign: 'left' },
                 { text: 'Tag', datafield: 'Tag', displayfield: 'TagName', width: '10%', columntype: 'dropdownlist', createeditor: ddlTags, align: 'center', cellsalign: 'center' },
                 { text: 'Technology', datafield: 'CM', width: '20%', columntype: 'dropdownlist', cellsrenderer: cellsrendererTechs, createeditor: ddlTechs, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: '', datafield: 'Delete', width: '10%', editable: false, cellsrenderer: cellsrendererbutton },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addConstraint" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add constraint</span>', datafield: 'Delete', width: '10%', editable: false, cellsrenderer: cellsrendererbutton },
             ]
         });
     }

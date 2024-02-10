@@ -3,7 +3,7 @@ import { DataModel } from "../../Classes/DataModel.Class.js";
 
 export class Model {
   constructor(genData, resData, PARAMETERS, pageId) {
-    
+   
     if (genData) {
       this.casename = genData['osy-casename'];
       this.PARAMETERS = PARAMETERS;
@@ -12,6 +12,9 @@ export class Model {
       this.commNames = DataModel.CommName(genData);
       this.emiNames = DataModel.EmiName(genData);
       this.caserunByScenario = DataModel.getCaserunByScenario(genData, resData);
+
+      console.log(this.caserunByScenario)
+
       this.title = "Model configuration";
       this.desc = genData['osy-desc'];
       this.date = genData['osy-date'];

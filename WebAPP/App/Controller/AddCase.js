@@ -50,7 +50,9 @@ export default class AddCase {
             })
             .then(data => {
                 let [genData, resData, PARAMETERS] = data;
+                
                 let model = new Model(genData, resData, PARAMETERS, "AddCase");
+                console.log('data ', data)
                 AddCase.initPage(model);
             })
             .catch(error => {
@@ -401,8 +403,12 @@ export default class AddCase {
         });
 
         //COMMODITIES GRID AND EVENTS
-        $("#osy-addComm").off('click');
-        $("#osy-addComm").on("click", function (event) {
+        // $("#osy-addComm").off('click');
+        // $("#osy-addComm").on("click", function (event) {
+
+            $(document).undelegate("#osy-addComm", "click");
+            $(document).delegate("#osy-addComm", "click", function (event) {
+            console.log('add comm')
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultComm = DefaultObj.defaultComm();
