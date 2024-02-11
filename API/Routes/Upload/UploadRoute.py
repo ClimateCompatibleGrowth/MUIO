@@ -93,8 +93,29 @@ def upload_dir(s3, localDir, awsInitDir, bucketName, tag, prefix='\\'):
             # S3.resource.meta.client.upload_file(FullfileName, bucketName, awsPath)
             s3.resource.meta.client.upload_file(FullfileName, bucketName, awsPath)
 
-        
-
+def updateTimeslices(casename):
+    genDataPath = Path(Config.DATA_STORAGE, casename, 'genData.json')
+    genData = File.readParamFile(genDataPath)
+    ns = int(genData["osy-ns"])
+    nd = int(genData["osy-dt"])
+    genData["osy-ts"] = []
+    for season in range(ns):
+        for day in range(nd):
+            chunk = {}
+            s = str(season + 1)
+            d = str(day + 1)
+            chunk['TsId'] = "S"+s+d
+            chunk['Ts'] = "S"+s+d
+            chunk['Desc'] = "Default year split"
+            genData["osy-ts"].append(chunk)
+    File.writeFile( genData, genDataPath)
+    #rename json files with timeslices
+    RYTsPath = Path(Config.DATA_STORAGE, casename, 'RYTs.json')
+    RYTsPath.write_text(RYTsPath.read_text().replace('YearSplit', 'TsId'))
+    RYTTsPath = Path(Config.DATA_STORAGE, casename, 'RYTTs.json')
+    RYTTsPath.write_text(RYTTsPath.read_text().replace('Timeslice', 'TsId'))
+    RYCTsPath = Path(Config.DATA_STORAGE, casename, 'RYCTs.json')
+    RYCTsPath.write_text(RYCTsPath.read_text().replace('Timeslice', 'TsId'))
 ##############################################################Multithreading example#########################3
 class Download(Thread):
     def __init__(self, request, zippedFile):
@@ -193,6 +214,7 @@ def uploadCase():
                                 data = json.loads(zf.read(zippedfile).decode('ISO-8859-1'))
                                 #name = data['else-version']
                                 name = data.get('osy-version', None)
+
                                 if name == '1.0' or name == '2.0':
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
 
@@ -229,6 +251,10 @@ def uploadCase():
                                     }
                                     File.writeFile( viewData, viewDataPath)
 
+                                    #update for dynamic timeslicec
+                                    updateTimeslices(casename)
+
+                                    
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
                                         "status_code": "success",
@@ -240,14 +266,13 @@ def uploadCase():
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
                                     genDataPath = Path(Config.DATA_STORAGE, casename, 'genData.json')
                                     genData = File.readParamFile(genDataPath)
-                                    # genData["osy-techGroups"] = [{"TechGroup": "TG_0", "TechGroupId": "TG_0", "Desc": "Default technology group"}]
-                                    # for dic in genData["osy-tech"]:
-                                    #     dic["TG"] =["TG_0"]
                                     genData["osy-techGroups"] = []
                                     for dic in genData["osy-tech"]:
                                         dic["TG"] =[]
-
                                     File.writeFile( genData, genDataPath)
+                 
+                                    #update for dynamic timeslicec
+                                    updateTimeslices(casename)
 
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
@@ -256,6 +281,9 @@ def uploadCase():
                                     })
                                 elif name == '4.0' or name == '4.5': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                    # potrebno updatevoati YearSplit u verziji 5.0 su dinamicki
+                                    #update for dynamic timeslicec
+                                    updateTimeslices(casename)
                                     #u 4.5 ver dodani paramteri i varijable
                                     # u 4.9 versiji dodano param DiscountRateIdv
                                     msg.append({
@@ -267,6 +295,18 @@ def uploadCase():
 
                                 elif name == '4.9': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                    # potrebno updatevoati YearSplit u verziji 5.0 su dinamicki
+                                    #update for dynamic timeslicec
+                                    updateTimeslices(casename)
+
+                                    msg.append({
+                                            "message": "Model " + casename +" have been uploaded!",
+                                            "status_code": "success",
+                                            "casename": casename
+                                        })
+
+                                elif name == '5.0': 
+                                    zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
                                         "status_code": "success",
@@ -274,7 +314,7 @@ def uploadCase():
                                     })
                                 else:
                                     msg.append({
-                                        "message": "Model " + casename +" is not valid OSEMOSYS ver 1.0, 2.0, 3.0, 4.0 model!",
+                                        "message": "Model " + casename +" is not valid OSEMOSYS ver 1.0, 2.0, 3.0, 4.0 or 5.0 model!",
                                         "status_code": "error"
                                     })
                             else:

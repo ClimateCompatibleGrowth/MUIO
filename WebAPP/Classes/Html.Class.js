@@ -251,14 +251,15 @@ export class Html {
             }
         });
 
-        $("#osy-date").datepicker().datepicker("setDate", model.date);
+        //$("#osy-date").datepicker().datepicker("setDate", model.date);
         $("#osy-casename").val(model.casename);
         $("#osy-desc").val(model.desc);
-        $("#osy-ns").val(model.ns);
-        $("#osy-dt").val(model.dt);
+        // $("#osy-ns").val(model.ns);
+        // $("#osy-dt").val(model.dt);
         $("#osy-mo").val(model.mo);
 
         $("#commCount").text(model.commCount);
+        $("#tsCount").text(model.tsCount);
         $("#techGroupCount").text(model.techGroupCount);
         $("#techCount").text(model.techCount);
         $("#emisCount").text(model.emisCount);

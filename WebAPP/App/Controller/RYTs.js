@@ -106,7 +106,7 @@ export default class RYTs {
 
             let rytsData = $divGrid.jqxGrid('getboundrows');
             let param = $("#osy-ryt").val();
-            let data = JSON.parse(JSON.stringify(rytsData, ['ScId', 'YearSplit'].concat(model.years)));
+            let data = JSON.parse(JSON.stringify(rytsData, ['ScId', 'TsId'].concat(model.years)));
 
             let saveData = {};
             $.each(data, function (id, obj) {
@@ -209,13 +209,13 @@ export default class RYTs {
                 var year = event.args.datafield;
                 var rowBoundIndex = args.rowindex;
                 var value = args.newvalue;
-                var YearSplit = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'YearSplit');
+                var TsId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TsId');
                 var scId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $("#osy-ryt").val();
 
                 //update model grid
                 $.each(model.gridData[param], function (id, obj) {
-                    if (obj.YearSplit == YearSplit && obj.ScId == scId) {
+                    if (obj.TsId == TsId && obj.ScId == scId) {
                         if (value) {
                             obj[year] = value;
                         } else {
@@ -231,7 +231,7 @@ export default class RYTs {
         $("#resizeColumns").click(function () {
             if (res) {
                 $divGrid.jqxGrid('autoresizecolumn', 'Sc');
-                $divGrid.jqxGrid('autoresizecolumn', 'YearSplit');
+                $divGrid.jqxGrid('autoresizecolumn', 'Ts');
             }
             else {
                 $divGrid.jqxGrid('autoresizecolumns');
@@ -242,7 +242,7 @@ export default class RYTs {
         $("#xlsAll").click(function (e) {
             e.preventDefault();
             let rytData = $divGrid.jqxGrid('getdisplayrows');
-            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Timeslice'].concat(model.years)));
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Ts'].concat(model.years)));
             Base.prepareCSV(model.casename, data)
             .then(response =>{
                 Message.smallBoxInfo('Case study message', response.message, 3000);

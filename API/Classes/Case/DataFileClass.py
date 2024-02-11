@@ -109,7 +109,7 @@ class DataFile(Osemosys):
                             tmp = rytsValue
                     rytsString += '{} '.format(tmp)
                 #if defaultValueFlag:                        
-                self.f.write('{} {}{}'.format(timesliceId, rytsString, '\n'))
+                self.f.write('{} {}{}'.format(self.tsMap[timesliceId], rytsString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
 
     def gen_RYT(self):
@@ -377,7 +377,7 @@ class DataFile(Osemosys):
                             regionHeader = False   
                             self.f.write('{} {}'.format('[RE1,'+ self.techMap[techId] +',*,*]:', '\n'))
                             self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
-                        self.f.write('{} {}{}'.format(timesliceId, ryttsString, '\n'))
+                        self.f.write('{} {}{}'.format(self.tsMap[timesliceId], ryttsString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
 
     def gen_RYCTs(self):
@@ -404,7 +404,7 @@ class DataFile(Osemosys):
                             regionHeader = False   
                             self.f.write('{} {}'.format('[RE1,'+ self.commMap[commId] +',*,*]:', '\n'))
                             self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
-                        self.f.write('{} {}{}'.format(timesliceId, ryctsString, '\n'))
+                        self.f.write('{} {}{}'.format(self.tsMap[timesliceId], ryctsString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
 
     def generateDatafile( self, caserunname ):
@@ -418,11 +418,13 @@ class DataFile(Osemosys):
 
             self.emiMap = self.getEmisMap()
             self.techMap = self.getTechsMap()
+            self.tsMap = self.getTsMap()
             self.commMap = self.getCommsMap()
             self.conMap = self.getConsMap()
             
             self.yearIDs = self.getYears()
-            self.timesliceIDs = self.getTimeslices()
+            # self.timesliceIDs = self.getTimeslices()
+            self.timesliceIDs = self.getTsIds()
             self.modIds = self.getMods()
 
             self.activityTechIDs = self.getActivityTechIds()
@@ -1186,7 +1188,6 @@ class DataFile(Osemosys):
             df_merge101 = df_TAMinCI.merge(df_RC, on=['r','t','y'],  how='outer')
             df_merge101['TotalAnnualMinCapacityInvestment'] = df_merge101['TotalAnnualMinCapacityInvestment'].fillna(value=0)
             df_merge101['ResidualCapacity'] = df_merge101['ResidualCapacity'].fillna(value=0)
-
             tech_current = ''
             merge102 = []
             for index, row in df_merge101.iterrows():
@@ -1201,7 +1202,11 @@ class DataFile(Osemosys):
                 merge102.append(tmp)
                 tech_current = row['t']
 
-            df_merge102 = pd.DataFrame(merge102)
+            if not merge102:
+                df_merge102 = pd.DataFrame(columns=['r', 't', 'y', 'Sum'])
+            else:
+                df_merge102 = pd.DataFrame(merge102)
+
             df_merge10 = df_merge101.merge(df_merge102, on=['r','t','y'],  how='outer').merge(df_TAMaxC, on=['r','t','y'],  how='outer')
             df_merge10['TotalAnnualMaxCapacity'] = df_merge10['TotalAnnualMaxCapacity'].fillna(value=999999)
             df_merge10['TotalAnnualMinCapacityInvestment'] = df_merge10['TotalAnnualMinCapacityInvestment'].fillna(value=0)
@@ -1223,9 +1228,6 @@ class DataFile(Osemosys):
                 msg+="<i class='fa fa-check-square-o success' aria-hidden='true'></i>CHECK 10: Success\n\n"
 
             #print('msg \n', msg)
-
-
-
 
             response = {
                 "msg": msg,

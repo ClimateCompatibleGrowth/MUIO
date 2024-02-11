@@ -58,6 +58,21 @@ export class JqxSources {
         return srcTechGroup;
     }
 
+    
+    static srcTs(timeslices) {
+        var srcTs = {
+            localdata: timeslices,
+            datatype: "json",
+            datafields:
+                [
+                    { name: 'TsId', type: 'string' },
+                    { name: 'Ts', type: 'string' },
+                    { name: 'Desc', type: 'string' }
+                ],
+        }
+        return srcTs;
+    }
+
     static srcComm(commodities) {
         var srcComm = {
             localdata: commodities,

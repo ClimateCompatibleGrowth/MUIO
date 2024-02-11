@@ -131,6 +131,14 @@ export class DataModel{
         return techNames;
     }
 
+    static getTsData(genData){
+        let tsNames = {};
+        $.each(genData['osy-ts'], function (id, obj) {
+            tsNames[obj['TsId']] = obj;
+        });
+        return tsNames;
+    }
+
     static getScData(genData){
         let ScNames = {};
         $.each(genData['osy-scenarios'], function (id, obj) {
@@ -216,6 +224,14 @@ export class DataModel{
         return commNames;
     }
 
+    static TsName(genData){
+        let tsNames = {};
+        $.each(genData['osy-ts'], function (id, obj) {
+            tsNames[obj['TsId']] = obj['Ts'];
+        });
+        return tsNames;
+    }
+
     static EmiName(genData){
         let emiNames = {};
         $.each(genData['osy-emis'], function (id, obj) {
@@ -270,18 +286,18 @@ export class DataModel{
         return ParamName;
     }
 
-    static Timeslices(genData){
-        let ts = [];
-        let ns = parseInt(genData['osy-ns'])
-        let nd = parseInt(genData['osy-dt'])
+    // static Timeslices(genData){
+    //     let ts = [];
+    //     let ns = parseInt(genData['osy-ns'])
+    //     let nd = parseInt(genData['osy-dt'])
 
-        for (let i = 1; i <= ns; i++) {
-            for (let j = 1; j <= nd; j++) {
-                ts.push('S'+i.toString()+j.toString())
-            }
-        }
-        return ts;
-    }
+    //     for (let i = 1; i <= ns; i++) {
+    //         for (let j = 1; j <= nd; j++) {
+    //             ts.push('S'+i.toString()+j.toString())
+    //         }
+    //     }
+    //     return ts;
+    // }
 
     static Mods(genData){
         let mods = [];
@@ -1355,16 +1371,19 @@ export class DataModel{
 
         //let scName = this.ScName(genData);
         let scData = this.getScData(genData);
+        let tsData = this.getTsData(genData);
         let cloneData = JSON.parse(JSON.stringify(RYTsdata));
         let RYTsgrid = {};
 
+        console.log('tsData ',tsData)
         $.each(cloneData, function (param, paramObj) {
             RYTsgrid[param] = [];
             $.each(paramObj, function (sc, array) {
                 $.each(array, function (id, obj) {
                     obj['ScId'] = sc;
-                    // obj['Sc'] = scName[sc];
                     obj['Sc'] = scData[sc]['Scenario'];
+                    obj['TsId'] = obj.TsId;
+                    obj['Ts'] = tsData[obj.TsId]['Ts'];
                     obj['ScDesc'] = scData[sc]['Desc'];
                     RYTsgrid[param].push(obj);
                 }); 
@@ -1811,6 +1830,7 @@ export class DataModel{
         // let techName = this.TechName(genData);
         // let scName = this.ScName(genData);
         let techData = this.getTechData(genData);
+        let tsData = this.getTsData(genData);
         let scData = this.getScData(genData);
         let cloneData = JSON.parse(JSON.stringify(RYTTsdata));
         let RYTTsgrid = {};
@@ -1820,11 +1840,11 @@ export class DataModel{
             $.each(obj, function (sc, array) {
                 $.each(array, function (id, obj) {
                     obj['ScId'] = sc;
-                    // obj['Sc'] = scName[sc];
-                    // obj['Tech'] = techName[obj['TechId']];
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    //obj['TsId'] = obj.TsId;
+                    obj['Ts'] = tsData[obj.TsId]['Ts'];
                     obj['Tech'] = techData[obj.TechId]['Tech'];
                     obj['TechDesc'] = techData[obj.TechId]['Desc'];
-                    obj['Sc'] = scData[sc]['Scenario'];
                     obj['ScDesc'] = scData[sc]['Desc'];
                     RYTTsgrid[param].push(obj);
                 });
@@ -1882,6 +1902,7 @@ export class DataModel{
         // let scName = this.ScName(genData);
         let commData = this.getCommData(genData);
         let scData = this.getScData(genData);
+        let tsData = this.getTsData(genData);
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
         let cloneData = JSON.parse(JSON.stringify(RYCTsdata));
@@ -1899,6 +1920,7 @@ export class DataModel{
                     obj['ScId'] = sc;
                     obj['Sc'] = scData[sc]['Scenario'];
                     obj['ScDesc'] = scData[sc]['Desc'];
+                    obj['Ts'] = tsData[obj.TsId]['Ts'];
                     let rule = paramById['RYCTs'][param]['unitRule'];
                     let data = unitData['RYCTs'][param][obj.CommId];
                     obj['UnitId'] = jsonLogic.apply(rule, data);

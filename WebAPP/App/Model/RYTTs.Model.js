@@ -15,7 +15,7 @@ export class Model {
             let scenarios = genData['osy-scenarios'];
 
             let RYTTsgrid = DataModel.RYTTsgrid(genData, RYTTsdata);
-            let timeslices = DataModel.Timeslices(genData);
+            // let timeslices = DataModel.Timeslices(genData);
             let scClass = {};
 
             $.each(scenarios, function (id, obj) {
@@ -28,7 +28,8 @@ export class Model {
             datafields.push({ name: 'Tech', type: 'string' });
             datafields.push({ name: 'ScDesc', type: 'string' });
             datafields.push({ name: 'TechDesc', type: 'string' });
-            datafields.push({ name: 'Timeslice', type: 'string' });
+            datafields.push({ name: 'TsId', type: 'string' });
+            datafields.push({ name: 'Ts', type: 'string' });
 
             let validation = function (cell, value) {
                 if (value < 0) {
@@ -75,7 +76,7 @@ export class Model {
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', filterable: false });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' })
-            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned: true, editable: false, align: 'center', filterable: false })
+            columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center', filterable: false })
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
@@ -106,7 +107,7 @@ export class Model {
             this.casename = casename;
             this.years = years;
             this.techs = techs;
-            this.timeslices = timeslices;
+            //this.timeslices = timeslices;
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.datafields = datafields;

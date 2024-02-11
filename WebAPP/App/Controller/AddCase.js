@@ -50,9 +50,7 @@ export default class AddCase {
             })
             .then(data => {
                 let [genData, resData, PARAMETERS] = data;
-                
                 let model = new Model(genData, resData, PARAMETERS, "AddCase");
-                console.log('data ', data)
                 AddCase.initPage(model);
             })
             .catch(error => {
@@ -70,6 +68,7 @@ export default class AddCase {
         Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);
 
+        Grid.tsGrid(model.timeslices);
         Grid.commGrid(model.commodities);
         Grid.techsGrid(model.techs, model.commodities, model.techGroups, model.emissions, model.commNames, model.emiNames, model.techGroupNames);
       
@@ -96,10 +95,11 @@ export default class AddCase {
 
     static initEvents(model) {
 
-        //console.log('model ', model)
+        console.log('model ', model)
         let $divTech = $("#osy-gridTech");
         let $divTechGroup = $("#osy-gridTechGroup");
         let $divComm = $("#osy-gridComm");
+        let $divTs = $("#osy-gridTs");
         let $divEmi = $("#osy-gridEmis");
         let $divScenario = $("#osy-gridScenario");
         let $divConstraint = $("#osy-gridConstraint");
@@ -144,32 +144,32 @@ export default class AddCase {
                         return dr < 1 || isNaN(dr) ? false : true;
                     }
                 },
-                { input: '#osy-ns', message: "Number of seasons is required field!", action: 'keyup', rule: 'required' },
-                {
-                    input: '#osy-ns', message: "Number of seasons should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
-                        var dr = $("#osy-ns").val();
-                        return dr < 0 || isNaN(dr) ? false : true;
-                    }
-                },
-                { input: '#osy-dt', message: "Day type is required field!", action: 'keyup', rule: 'required' },
-                {
-                    input: '#osy-dt', message: "Day type should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
-                        var dr = $("#osy-dt").val();
-                        return dr < 0 || isNaN(dr) ? false : true;
-                    }
-                },
-                { input: '#osy-date', message: "Date is required field!", action: 'change', rule: 'required' },
-                {
-                    input: '#osy-years', message: 'Select at least one year', action: 'change', hintRender: render, rule: function () {
-                        var elements = $('#osy-years').find('input[type=checkbox]');
-                        var check = false;
-                        var result = $.grep(elements, function (element, index) {
-                            if (element.checked == true)
-                                check = true;
-                        });
-                        return (check);
-                    }
-                }
+                // { input: '#osy-ns', message: "Number of seasons is required field!", action: 'keyup', rule: 'required' },
+                // {
+                //     input: '#osy-ns', message: "Number of seasons should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
+                //         var dr = $("#osy-ns").val();
+                //         return dr < 0 || isNaN(dr) ? false : true;
+                //     }
+                // },
+                // { input: '#osy-dt', message: "Day type is required field!", action: 'keyup', rule: 'required' },
+                // {
+                //     input: '#osy-dt', message: "Day type should be zero or positive value!", action: 'keyup', rule: function (input, commit) {
+                //         var dr = $("#osy-dt").val();
+                //         return dr < 0 || isNaN(dr) ? false : true;
+                //     }
+                // },
+                // { input: '#osy-date', message: "Date is required field!", action: 'change', rule: 'required' },
+                // {
+                //     input: '#osy-years', message: 'Select at least one year', action: 'change', hintRender: render, rule: function () {
+                //         var elements = $('#osy-years').find('input[type=checkbox]');
+                //         var check = false;
+                //         var result = $.grep(elements, function (element, index) {
+                //             if (element.checked == true)
+                //                 check = true;
+                //         });
+                //         return (check);
+                //     }
+                // }
             ]
         });
 
@@ -208,11 +208,16 @@ export default class AddCase {
 
             var casename = $("#osy-casename").val().trim();
             var desc = $("#osy-desc").val().trim();
-            var date = $("#osy-date").val();
+            
+            const timeElapsed = Date.now();
+            const today = new Date(timeElapsed);
+            let date = today.toDateString();
+
+            //var date = $("#osy-date").val();
             var currency = $("#osy-currency").val();
             var mo = $("#osy-mo").val().trim();
-            var ns = $("#osy-ns").val().trim();
-            var dt = $("#osy-dt").val().trim();
+            // var ns = $("#osy-ns").val().trim();
+            // var dt = $("#osy-dt").val().trim();
 
             var years = new Array();
             $.each($('input[type="checkbox"]:checked'), function (key, value) {
@@ -220,17 +225,18 @@ export default class AddCase {
             });
 
             let POSTDATA = {
-                "osy-version": "4.9",
+                "osy-version": "5.0",
                 "osy-casename": casename,
                 "osy-desc": desc,
                 "osy-date": date,
                 "osy-currency": currency,
-                "osy-ns": ns,
-                "osy-dt": dt,
+                // "osy-ns": ns,
+                // "osy-dt": dt,
                 "osy-mo": mo,
                 "osy-tech": model.techs,
                 "osy-techGroups": model.techGroups,
                 "osy-comm": model.commodities,
+                "osy-ts": model.timeslices,
                 "osy-emis": model.emissions,
                 "osy-scenarios": model.scenarios,
                 "osy-constraints": model.constraints,
@@ -279,8 +285,8 @@ export default class AddCase {
         });
 
         //TECHNOLOGIES GRID AND EVENTS
-        $("#osy-addTech").off('click');
-        $("#osy-addTech").on("click", function (event) {
+        $('#osy-caseForm').undelegate("#osy-addTech", "click");
+        $('#osy-caseForm').delegate("#osy-addTech", "click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultTech = DefaultObj.defaultTech();
@@ -297,8 +303,8 @@ export default class AddCase {
             $("#techCount").text(model.techCount);
         });
 
-        $(document).undelegate(".deleteTech", "click");
-        $(document).delegate(".deleteTech", "click", function (e) {
+        $('#osy-caseForm').undelegate(".deleteTech", "click");
+        $('#osy-caseForm').delegate(".deleteTech", "click", function (e) {
             //$(".deleteTech").on("click", function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
@@ -348,8 +354,8 @@ export default class AddCase {
             }
         });
 
-        $("#osy-addTechGroup").off('click');
-        $("#osy-addTechGroup").on("click", function (event) {
+        $('#osy-caseForm').undelegate("#osy-addTechGroup", "click");
+        $('#osy-caseForm').delegate("#osy-addTechGroup", "click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultTechGroup = DefaultObj.defaultTechGroup();
@@ -366,8 +372,8 @@ export default class AddCase {
             $("#techGroupCount").text(model.techGroupCount);
         });
 
-        $(document).undelegate(".deleteTechGroup", "click");
-        $(document).delegate(".deleteTechGroup", "click", function (e) {
+        $('#osy-caseForm').undelegate(".deleteTechGroup", "click");
+        $('#osy-caseForm').delegate(".deleteTechGroup", "click", function (e) {
             //$(".deleteTech").on("click", function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
@@ -402,13 +408,59 @@ export default class AddCase {
             }
         });
 
-        //COMMODITIES GRID AND EVENTS
-        // $("#osy-addComm").off('click');
-        // $("#osy-addComm").on("click", function (event) {
+        //TIMESLICES GRID AND EVENTS
+        $('#osy-caseForm').undelegate("#osy-addTs", "click");
+        $('#osy-caseForm').delegate("#osy-addTs", "click", function (event) {
+            console.log('add timeslice')
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultTs = DefaultObj.defaultTs();
+            console.log('defaultTs ',defaultTs)
+            model.timeslices.push(JSON.parse(JSON.stringify(defaultTs[0], ['TsId', 'Ts', 'Desc'])));
 
-            $(document).undelegate("#osy-addComm", "click");
-            $(document).delegate("#osy-addComm", "click", function (event) {
-            console.log('add comm')
+            //update commnames
+            model.tsNames[defaultTs[0]['TsId']] = defaultTs[0]['Ts'];
+            //add row
+            $divTs.jqxGrid('addrow', null, defaultTs);
+            model.tsCount++;
+            $("#tsCount").text(model.tsCount);
+        });
+
+        $('#osy-caseForm').undelegate(".deleteTs", "click");
+        $('#osy-caseForm').delegate(".deleteTs", "click", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            if (id != 0) {
+                var tsId = $divTs.jqxGrid('getcellvalue', id, 'TsId');
+                var rowid = $divTs.jqxGrid('getrowid', id);
+                $divTs.jqxGrid('deleterow', rowid);
+                model.timeslices.splice(id, 1);
+                //update techNames
+                delete model.tsNames[tsId];
+                //update count
+                model.tsCount--;
+                $("#tsCount").text(model.tsCount);
+            }
+        });  
+
+        $divTs.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue.trim();
+            model.timeslices[rowBoundIndex][column] = value;
+
+            if (column == 'Timeslice') {
+                var tsId = $divTs.jqxGrid('getcellvalue', rowBoundIndex, 'TsId');
+                model.tsNames[tsId] = value;
+            }
+        });
+
+        //COMMODITIES GRID AND EVENTS
+        $('#osy-caseForm').undelegate("#osy-addComm", "click");
+        $('#osy-caseForm').delegate("#osy-addComm", "click", function (event) {
+
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultComm = DefaultObj.defaultComm();
@@ -422,8 +474,8 @@ export default class AddCase {
             $("#commCount").text(model.commCount);
         });
 
-        $(document).undelegate(".deleteComm", "click");
-        $(document).delegate(".deleteComm", "click", function (e) {
+        $('#osy-caseForm').undelegate(".deleteComm", "click");
+        $('#osy-caseForm').delegate(".deleteComm", "click", function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
@@ -461,8 +513,8 @@ export default class AddCase {
         });
 
         //EMISSIONS GRID AND EVENTS
-        $("#osy-addEmis").off('click');
-        $("#osy-addEmis").on("click", function (event) {
+        $('#osy-caseForm').undelegate("#osy-addEmis", "click");
+        $('#osy-caseForm').delegate("#osy-addEmis", "click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultEmi = DefaultObj.defaultEmi();
@@ -476,8 +528,8 @@ export default class AddCase {
             $divEmi.jqxGrid('refresh');
         });
 
-        $(document).undelegate(".deleteEmis", "click");
-        $(document).delegate(".deleteEmis", "click", function (e) {
+        $('#osy-caseForm').undelegate(".deleteEmis", "click");
+        $('#osy-caseForm').delegate(".deleteEmis", "click", function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
@@ -516,8 +568,8 @@ export default class AddCase {
         });
 
         //SCENARIOS GRID AND EVENTS
-        $("#osy-addScenario").off('click');
-        $("#osy-addScenario").on("click", function (event) {
+        $('#osy-caseForm').undelegate("#osy-addScenario", "click");
+        $('#osy-caseForm').delegate("#osy-addScenario", "click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultSc = DefaultObj.defaultScenario();
@@ -530,8 +582,8 @@ export default class AddCase {
             $divScenario.jqxGrid('refresh');
         });
 
-        $(document).undelegate(".deleteScenario", "click");
-        $(document).delegate(".deleteScenario", "click", function (e) {
+        $('#osy-caseForm').undelegate(".deleteScenario", "click");
+        $('#osy-caseForm').delegate(".deleteScenario", "click", function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
@@ -570,8 +622,8 @@ export default class AddCase {
         });
 
         //CONSTRAINTS GRID AND EVENTS
-        $("#osy-addConstraint").off('click');
-        $("#osy-addConstraint").on("click", function (event) {
+        $('#osy-caseForm').undelegate("#osy-addConstraint", "click");
+        $('#osy-caseForm').delegate("#osy-addConstraint", "click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultConstraint = DefaultObj.defaultConstraint();
@@ -584,8 +636,8 @@ export default class AddCase {
             //$divConstraint.jqxGrid('refresh');
         });
 
-        $(document).undelegate(".deleteConstraint", "click");
-        $(document).delegate(".deleteConstraint", "click", function (e) {
+        $('#osy-caseForm').undelegate(".deleteConstraint", "click");
+        $('#osy-caseForm').delegate(".deleteConstraint", "click", function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
@@ -644,16 +696,15 @@ export default class AddCase {
             //update tech grid to update IAR OAR EAR with new added or removed comms and emis
             if (id == 'Techs') {
                 //Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
-                //$divTech.jqxGrid('clear');
-                $divTech.jqxGrid('updatebounddata');
+                $("#osy-gridTech" ).ready(function() {
+                    $divTech.jqxGrid('updatebounddata');
+                });   
             }
             else if (id == 'Constraints') {
-                //Grid.constraintGrid(model.techs, model.constraints, model.techNames);
-                $divConstraint.jqxGrid('updatebounddata');
+                $("#osy-gridConstraint" ).ready(function() {
+                    $divConstraint.jqxGrid('updatebounddata');
+                });
             }
-            // else if (id == 'Techs'){
-            //     $divTech.jqxGrid('updatebounddata');
-            // }
         });
 
         //YEARS EVENTS

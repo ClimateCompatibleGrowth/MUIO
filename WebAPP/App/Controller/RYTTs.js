@@ -115,7 +115,7 @@ export default class RYTTs {
 
             let param = $("#osy-ryt").val();
             let rytData = $divGrid.jqxGrid('getboundrows');
-            let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'TechId', 'Timeslice'].concat(model.years)));
+            let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'TechId', 'TsId'].concat(model.years)));
             let saveData = {};
 
             $.each(data, function (id, obj) {
@@ -256,7 +256,7 @@ export default class RYTTs {
                 var value = args.newvalue;
 
                 var techId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
-                var timeslice = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'Timeslice');
+                var tsId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TsId');
                 var ScId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
 
 
@@ -283,7 +283,7 @@ export default class RYTTs {
                 //update chart model
 
                 $.each(model.gridData[model.param], function (id, obj) {
-                    if (obj.TechId == techId && obj.Timeslice == timeslice && obj.ScId == ScId) {
+                    if (obj.TechId == techId && obj.TsId == tsId && obj.ScId == ScId) {
                         if (value) {
                             obj[year] = value;
                         } else {
@@ -300,7 +300,7 @@ export default class RYTTs {
             if (res) {
                 $divGrid.jqxGrid('autoresizecolumn', 'Sc');
                 $divGrid.jqxGrid('autoresizecolumn', 'Tech');
-                $divGrid.jqxGrid('autoresizecolumn', 'Timeslice');
+                $divGrid.jqxGrid('autoresizecolumn', 'Ts');
             }
             else {
                 $divGrid.jqxGrid('autoresizecolumns');
@@ -313,7 +313,7 @@ export default class RYTTs {
             e.preventDefault();
 
             let rytData = $divGrid.jqxGrid('getdisplayrows');
-            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Tech', 'Timeslice'].concat(model.years)));
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Tech', 'Ts'].concat(model.years)));
 
             Base.prepareCSV(model.casename, data)
             .then(response =>{

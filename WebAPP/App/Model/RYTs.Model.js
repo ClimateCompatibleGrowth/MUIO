@@ -14,11 +14,9 @@ export class Model {
             let years = genData['osy-years'];
             let scenarios = genData['osy-scenarios'];
 
-            let timeslices = DataModel.Timeslices(genData);
+            //let timeslices = DataModel.Timeslices(genData);
             let RYTsgrid = DataModel.RYTsgrid(genData, RYTsdata);
             //let RYTschart = DataModel.RYTschart(genData, RYTsdata);
-
-            console.log('RYTsgrid ', RYTsgrid)
 
             let scClass = {};
 
@@ -31,12 +29,13 @@ export class Model {
 
             datafields.push({ name: 'ScId', type: 'string' });
             datafields.push({ name: 'Sc', type: 'string' });
-            datafields.push({ name: 'YearSplit', type: 'string' });
+            datafields.push({ name: 'TsId', type: 'string' });
+            datafields.push({ name: 'Ts', type: 'string' });
             datafields.push({ name: 'ScDesc', type: 'string' });
 
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true });
-            columns.push({ text: 'Timeslice', datafield: 'YearSplit', pinned: true, editable: false, align: 'center', cellclassname: cellclass, enabletooltips: true })
+            columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center', cellclassname: cellclass, enabletooltips: true })
 
             let validation = function (cell, value) {
                 if (value < 0) {
@@ -142,7 +141,7 @@ export class Model {
 
             this.casename = casename;
             this.years = years;
-            this.timeslices = timeslices;
+            //this.timeslices = timeslices;
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.datafields = datafields;

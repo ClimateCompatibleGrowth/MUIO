@@ -294,41 +294,69 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
+    # def update_RYTs(self):
+    #     try:
+    #         rytsJson = File.readFile(self.rytsPath) 
+    #         RYTssource = self.RYTs(rytsJson)
+    #         years = self.genDataUpdate['osy-years']
+    #         scenarios = self.genDataUpdate['osy-scenarios']
+
+    #         seasons = int(self.genDataUpdate['osy-ns'])
+    #         days = int(self.genDataUpdate['osy-dt'])
+            
+    #         RYTsdata = {}
+    #         for ryt in self.PARAMETERS['RYTs']:
+    #             RYTsdata[ryt['id']] = {}
+    #             for sc in scenarios:
+    #                 RYTsdata[ryt['id']][sc['ScenarioId']] = []  
+
+    #                 for season in range(seasons):
+    #                     for day in range(days):
+    #                         chunk = {}
+    #                         s = str(season + 1)
+    #                         d = str(day + 1)
+    #                         chunk['YearSplit'] = "S"+s+d
+    #                         for year in years:
+    #                             if self.keys_exists(RYTssource, ryt['id'], sc['ScenarioId'], year, "S"+s+d):
+    #                                 chunk[year] = RYTssource[ryt['id']][sc['ScenarioId']][year]["S"+s+d]
+    #                             elif sc['ScenarioId'] == 'SC_0':
+    #                                 chunk[year] = ryt['default']
+    #                             else:
+    #                                 chunk[year] = None
+    #                         RYTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+    #         File.writeFile( RYTsdata, self.rytsPath)
+    #     except(IOError):
+    #         raise IOError
+
     def update_RYTs(self):
         try:
             rytsJson = File.readFile(self.rytsPath) 
             RYTssource = self.RYTs(rytsJson)
             years = self.genDataUpdate['osy-years']
             scenarios = self.genDataUpdate['osy-scenarios']
-
-            seasons = int(self.genDataUpdate['osy-ns'])
-            days = int(self.genDataUpdate['osy-dt'])
-            
+            timeslices = self.genDataUpdate['osy-ts']            
             RYTsdata = {}
             for ryt in self.PARAMETERS['RYTs']:
                 RYTsdata[ryt['id']] = {}
                 for sc in scenarios:
                     RYTsdata[ryt['id']][sc['ScenarioId']] = []  
-
-                    for season in range(seasons):
-                        for day in range(days):
-                            chunk = {}
-                            s = str(season + 1)
-                            d = str(day + 1)
-                            chunk['YearSplit'] = "S"+s+d
-                            for year in years:
-                                if self.keys_exists(RYTssource, ryt['id'], sc['ScenarioId'], year, "S"+s+d):
-                                    chunk[year] = RYTssource[ryt['id']][sc['ScenarioId']][year]["S"+s+d]
-                                elif sc['ScenarioId'] == 'SC_0':
-                                    chunk[year] = ryt['default']
-                                else:
-                                    chunk[year] = None
-                            RYTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
+                    for ts in timeslices:
+                        chunk = {}
+                        chunk['TsId'] = ts['TsId']
+                        for year in years:
+                            if self.keys_exists(RYTssource, ryt['id'], sc['ScenarioId'], year, ts['TsId']):
+                                chunk[year] = RYTssource[ryt['id']][sc['ScenarioId']][year][ts['TsId']]
+                            elif sc['ScenarioId'] == 'SC_0':
+                                chunk[year] = ryt['default']
+                            else:
+                                chunk[year] = None
+                        RYTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYTsdata, self.rytsPath)
         except(IOError):
             raise IOError
-
+        
     def update_RYTC(self):
         try:
             rytcJson = File.readFile(self.rytcPath) 
@@ -477,6 +505,43 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
+    # def update_RYTTs(self):
+    #     try:
+    #         ryttsJson = File.readFile(self.ryttsPath) 
+    #         RYTTssource = self.RYTTs(ryttsJson)
+
+    #         years = self.genDataUpdate['osy-years']
+    #         techs = self.genDataUpdate['osy-tech']
+    #         scenarios = self.genDataUpdate['osy-scenarios']
+    #         ns = int(self.genDataUpdate['osy-ns'])
+    #         nd = int(self.genDataUpdate['osy-dt'])
+
+    #         RYTTsdata = {}
+    #         for ryt in self.PARAMETERS['RYTTs']:
+    #             RYTTsdata[ryt['id']] = {}
+    #             for sc in scenarios:
+    #                 RYTTsdata[ryt['id']][sc['ScenarioId']] = []  
+    #                 for tech in techs:
+    #                     for season in range(ns):
+    #                         for day in range(nd):
+    #                             chunk = {}
+    #                             chunk['TechId'] = tech['TechId']
+    #                             s = str(season + 1)
+    #                             d = str(day + 1)
+    #                             chunk['Timeslice'] = "S"+s+d
+    #                             for year in years:
+    #                                 if self.keys_exists(RYTTssource, ryt['id'], sc['ScenarioId'], year, tech['TechId'], "S"+s+d):
+    #                                     chunk[year] = RYTTssource[ryt['id']][sc['ScenarioId']][year][tech['TechId']]["S"+s+d]
+    #                                 elif sc['ScenarioId'] == 'SC_0':
+    #                                     chunk[year] = ryt['default']
+    #                                 else:
+    #                                     chunk[year] = None
+    #                             RYTTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+    #         File.writeFile( RYTTsdata, self.ryttsPath)
+    #     except(IOError):
+    #         raise IOError
+
     def update_RYTTs(self):
         try:
             ryttsJson = File.readFile(self.ryttsPath) 
@@ -485,8 +550,7 @@ class UpdateCase(Osemosys):
             years = self.genDataUpdate['osy-years']
             techs = self.genDataUpdate['osy-tech']
             scenarios = self.genDataUpdate['osy-scenarios']
-            ns = int(self.genDataUpdate['osy-ns'])
-            nd = int(self.genDataUpdate['osy-dt'])
+            timeslices = self.genDataUpdate['osy-ts']
 
             RYTTsdata = {}
             for ryt in self.PARAMETERS['RYTTs']:
@@ -494,25 +558,59 @@ class UpdateCase(Osemosys):
                 for sc in scenarios:
                     RYTTsdata[ryt['id']][sc['ScenarioId']] = []  
                     for tech in techs:
-                        for season in range(ns):
-                            for day in range(nd):
-                                chunk = {}
-                                chunk['TechId'] = tech['TechId']
-                                s = str(season + 1)
-                                d = str(day + 1)
-                                chunk['Timeslice'] = "S"+s+d
-                                for year in years:
-                                    if self.keys_exists(RYTTssource, ryt['id'], sc['ScenarioId'], year, tech['TechId'], "S"+s+d):
-                                        chunk[year] = RYTTssource[ryt['id']][sc['ScenarioId']][year][tech['TechId']]["S"+s+d]
-                                    elif sc['ScenarioId'] == 'SC_0':
-                                        chunk[year] = ryt['default']
-                                    else:
-                                        chunk[year] = None
-                                RYTTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
+                        for ts in timeslices:
+                            chunk = {}
+                            chunk['TechId'] = tech['TechId']
+                            chunk['TsId'] = ts['TsId']
+                            for year in years:
+                                if self.keys_exists(RYTTssource, ryt['id'], sc['ScenarioId'], year, tech['TechId'], ts['TsId']):
+                                    chunk[year] = RYTTssource[ryt['id']][sc['ScenarioId']][year][tech['TechId']][ts['TsId']]
+                                elif sc['ScenarioId'] == 'SC_0':
+                                    chunk[year] = ryt['default']
+                                else:
+                                    chunk[year] = None
+                            RYTTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYTTsdata, self.ryttsPath)
         except(IOError):
             raise IOError
+        
+    # def update_RYCTs(self):
+    #     try:
+    #         ryctsJson = File.readFile(self.ryctsPath) 
+    #         RYCTssource = self.RYCTs(ryctsJson)
+
+    #         years = self.genDataUpdate['osy-years']
+    #         comms = self.genDataUpdate['osy-comm']
+    #         scenarios = self.genDataUpdate['osy-scenarios']
+    #         ns = int(self.genDataUpdate['osy-ns'])
+    #         nd = int(self.genDataUpdate['osy-dt'])
+
+    #         RYCTsdata = {}
+    #         for ryt in self.PARAMETERS['RYCTs']:
+    #             RYCTsdata[ryt['id']] = {}
+    #             for sc in scenarios:
+    #                 RYCTsdata[ryt['id']][sc['ScenarioId']] = []  
+    #                 for comm in comms:
+    #                     for season in range(ns):
+    #                         for day in range(nd):
+    #                             chunk = {}
+    #                             chunk['CommId'] = comm['CommId']
+    #                             s = str(season + 1)
+    #                             d = str(day + 1)
+    #                             chunk['Timeslice'] = "S"+s+d
+    #                             for year in years:
+    #                                 if self.keys_exists(RYCTssource, ryt['id'], sc['ScenarioId'], year, comm['CommId'], "S"+s+d):
+    #                                     chunk[year] = RYCTssource[ryt['id']][sc['ScenarioId']][year][comm['CommId']]["S"+s+d]
+    #                                 elif sc['ScenarioId'] == 'SC_0':
+    #                                     chunk[year] = ryt['default']
+    #                                 else:
+    #                                     chunk[year] = None
+    #                             RYCTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+    #         File.writeFile( RYCTsdata, self.ryctsPath)
+    #     except(IOError):
+    #         raise IOError
 
     def update_RYCTs(self):
         try:
@@ -522,8 +620,8 @@ class UpdateCase(Osemosys):
             years = self.genDataUpdate['osy-years']
             comms = self.genDataUpdate['osy-comm']
             scenarios = self.genDataUpdate['osy-scenarios']
-            ns = int(self.genDataUpdate['osy-ns'])
-            nd = int(self.genDataUpdate['osy-dt'])
+            timeslices = self.genDataUpdate['osy-ts']
+
 
             RYCTsdata = {}
             for ryt in self.PARAMETERS['RYCTs']:
@@ -531,26 +629,22 @@ class UpdateCase(Osemosys):
                 for sc in scenarios:
                     RYCTsdata[ryt['id']][sc['ScenarioId']] = []  
                     for comm in comms:
-                        for season in range(ns):
-                            for day in range(nd):
-                                chunk = {}
-                                chunk['CommId'] = comm['CommId']
-                                s = str(season + 1)
-                                d = str(day + 1)
-                                chunk['Timeslice'] = "S"+s+d
-                                for year in years:
-                                    if self.keys_exists(RYCTssource, ryt['id'], sc['ScenarioId'], year, comm['CommId'], "S"+s+d):
-                                        chunk[year] = RYCTssource[ryt['id']][sc['ScenarioId']][year][comm['CommId']]["S"+s+d]
-                                    elif sc['ScenarioId'] == 'SC_0':
-                                        chunk[year] = ryt['default']
-                                    else:
-                                        chunk[year] = None
-                                RYCTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
+                        for ts in timeslices:
+                            chunk = {}
+                            chunk['CommId'] = comm['CommId']
+                            chunk['TsId'] = ts['TsId']
+                            for year in years:
+                                if self.keys_exists(RYCTssource, ryt['id'], sc['ScenarioId'], year, comm['CommId'], ts['TsId']):
+                                    chunk[year] = RYCTssource[ryt['id']][sc['ScenarioId']][year][comm['CommId']][ts['TsId']]
+                                elif sc['ScenarioId'] == 'SC_0':
+                                    chunk[year] = ryt['default']
+                                else:
+                                    chunk[year] = None
+                            RYCTsdata[ryt['id']][sc['ScenarioId']].append(chunk)
 
             File.writeFile( RYCTsdata, self.ryctsPath)
         except(IOError):
             raise IOError
-
     def updateCase(self):
         try:
             for group, array in self.PARAMETERS.items():

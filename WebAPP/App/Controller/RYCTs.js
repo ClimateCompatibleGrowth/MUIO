@@ -101,7 +101,7 @@ export default class RYCTs {
             event.stopImmediatePropagation();
             let param = $("#osy-ryt").val();
             let rytData = $divGrid.jqxGrid('getboundrows');
-            let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'CommId', 'Timeslice'].concat(model.years)));
+            let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'CommId', 'Ts'].concat(model.years)));
             let saveData = {};
             $.each(data, function (id, obj) {
                 if (!saveData[obj.ScId]) { saveData[obj.ScId] = []; }
@@ -203,13 +203,13 @@ export default class RYCTs {
                 var value = args.newvalue;
 
                 var commId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'CommId');
-                var timeslice = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'Timeslice');
+                var tsId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TsId');
                 var ScId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
                 let param = $("#osy-ryt").val();
 
                 //update grid model
                 $.each(model.gridData[param], function (id, obj) {
-                    if (obj.TechId == commId && obj.Timeslice == timeslice && obj.ScId == ScId) {
+                    if (obj.TechId == commId && obj.TsId == tsId && obj.ScId == ScId) {
                         if (value) {
                             obj[year] = value;
                         } else {
@@ -224,7 +224,7 @@ export default class RYCTs {
         $("#xlsAll").click(function (e) {
             e.preventDefault();
             let rytData = $divGrid.jqxGrid('getdisplayrows');
-            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Comm', 'Timeslice'].concat(model.years)));
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Comm', 'Ts'].concat(model.years)));
             Base.prepareCSV(model.casename, data)
             .then(response =>{
                 Message.smallBoxInfo('Case study message', response.message, 3000);
@@ -242,7 +242,7 @@ export default class RYCTs {
             if (res) {
                 $divGrid.jqxGrid('autoresizecolumn', 'Sc');
                 $divGrid.jqxGrid('autoresizecolumn', 'Comm');
-                $divGrid.jqxGrid('autoresizecolumn', 'Timeslice');
+                $divGrid.jqxGrid('autoresizecolumn', 'Ts');
             }
             else {
                 $divGrid.jqxGrid('autoresizecolumns');

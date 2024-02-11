@@ -10,6 +10,60 @@ export class Grid {
         return theme
     }
 
+    static tsGrid(timeslices) {
+
+        let srcTs = JqxSources.srcTs(timeslices);
+        var daTs = new $.jqx.dataAdapter(srcTs);
+
+
+        var validation_1 = function (cell, value) {
+            var validationResult = true;
+            var rows = $('#osy-gridTs').jqxGrid('getrows');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].Ts.trim() == value.trim() && i != cell.row) {
+                    validationResult = false;
+                    break;
+                }
+            };
+
+            if (validationResult == false) {
+                Message.smallBoxWarning("Input message", "Year split name should be unique!", 3000);
+                return { result: false, message: "" };
+            }
+            return true;
+        }
+
+        var cellsrendererbutton = function (row, column, value) {
+            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
+            if (row == 0) {
+                return '';
+            }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTs" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+        }
+
+        $("#osy-gridTs").jqxGrid({
+            width: '100%',
+            autoheight: true,
+            // columnsheight: 20,
+            theme: this.theme(),
+            source: daTs,
+            editable: true,
+            selectionmode: 'none',
+            enablehover: false,
+            sortable:true,
+            showsortcolumnbackground: false,
+            pageable: true,
+            pagesize: 10,
+            //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
+            columns: [
+                { text: 'TsId', datafield: 'TsId', hidden: true },
+                { text: 'Year split name', datafield: 'Ts', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTs" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add year split</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+            ]
+        });
+    }
+
     static techsGrid(techs, commodities, techGroups, emissions, commNames, emiNames, techGroupNames) {
 
         this.srcTechs = JqxSources.srcTech(techs);
@@ -264,16 +318,16 @@ export class Grid {
             columns: [
                 { text: 'techId', datafield: 'TechId', hidden: true },
                 { text: 'Technology', datafield: 'Tech', width: '10%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '10%', align: 'center', cellsalign: 'left' },
-                { text: 'Technology group', datafield: 'TG', width: '7%',  cellsrenderer: cellsrendererTechGroups, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlTechGroups, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
-                { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
-                { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: 'Output Activity Ratio', datafield: 'OAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTech" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add technology</span>', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: 'Description', datafield: 'Desc', width: '10%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: 'Technology group', datafield: 'TG', width: '7%',  cellsrenderer: cellsrendererTechGroups, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlTechGroups, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
+                { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center',sortable: false },
+                { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center',sortable: false },
+                { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
+                { text: 'Output Activity Ratio', datafield: 'OAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
+                { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue ,sortable: false},
+                { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
+                { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTech" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add technology</span>', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
    
         })
@@ -323,8 +377,8 @@ export class Grid {
             columns: [
                 { text: 'TechGroupId', datafield: 'TechGroupId', hidden: true },
                 { text: 'Technology group name', datafield: 'TechGroup', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left' },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTechGroup" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add group</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left', sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTechGroup" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add group</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false },
             ]
         });
     }
@@ -379,13 +433,13 @@ export class Grid {
             showsortcolumnbackground: false,
             pageable: true,
             pagesize: 10,
-            pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
+            //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
                 { text: 'CommId', datafield: 'CommId', hidden: true },
                 { text: 'Commodity name', datafield: 'Comm', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left' },
-                { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center' },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addComm" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add commodity</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addComm" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add commodity</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
         });
     }
@@ -453,9 +507,9 @@ export class Grid {
             columns: [
                 { text: 'EmisId', datafield: 'EmisId', hidden: true },
                 { text: 'Emission name', datafield: 'Emis', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left' },
-                { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center' },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addEmis" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add emission</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addEmis" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add emission</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false },
             ]
         });
     }
@@ -504,8 +558,8 @@ export class Grid {
             columns: [
                 { text: 'ScenarioId', datafield: 'ScenarioId', hidden: true },
                 { text: 'Scenario name', datafield: 'Scenario', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left' },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addScenario" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add scenario</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addScenario" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add scenario</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
         });
     }
@@ -628,10 +682,10 @@ export class Grid {
             columns: [
                 { text: 'ConId', datafield: 'ConId', hidden: true },
                 { text: 'Constraint name', datafield: 'Con', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '40%', align: 'center', cellsalign: 'left' },
-                { text: 'Tag', datafield: 'Tag', displayfield: 'TagName', width: '10%', columntype: 'dropdownlist', createeditor: ddlTags, align: 'center', cellsalign: 'center' },
-                { text: 'Technology', datafield: 'CM', width: '20%', columntype: 'dropdownlist', cellsrenderer: cellsrendererTechs, createeditor: ddlTechs, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addConstraint" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add constraint</span>', datafield: 'Delete', width: '10%', editable: false, cellsrenderer: cellsrendererbutton },
+                { text: 'Description', datafield: 'Desc', width: '40%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: 'Tag', datafield: 'Tag', displayfield: 'TagName', width: '10%', columntype: 'dropdownlist', createeditor: ddlTags, align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Technology', datafield: 'CM', width: '20%', columntype: 'dropdownlist', cellsrenderer: cellsrendererTechs, createeditor: ddlTechs, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue, sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addConstraint" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add constraint</span>', datafield: 'Delete', width: '10%', editable: false, cellsrenderer: cellsrendererbutton, sortable: false },
             ]
         });
     }

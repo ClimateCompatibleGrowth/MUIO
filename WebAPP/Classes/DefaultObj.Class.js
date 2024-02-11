@@ -6,6 +6,23 @@ export class DefaultObj{
         return type+'_' + Math.random().toString(36).substr(2, 5);
     }
 
+    static defaultTs(first=false){
+        let id;
+        if(first){
+            id = 'TS_0';
+        }else{
+            id = this.getId('TS');
+        }
+        let defaultTs = [
+            {
+                "TsId": id,
+                "Ts":id,
+                "Desc": "Default year split"
+            }
+        ];
+        return defaultTs;
+    }
+
     static defaultTech(first=false){
         let id;
         if(first){

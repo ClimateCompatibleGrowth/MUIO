@@ -110,16 +110,20 @@ class Osemosys():
         years = self.genData['osy-years']
         return years
 
-    def getTimeslices(self):
-        seasons = int(self.genData['osy-ns'])
-        days = int(self.genData['osy-dt'])
-        timeslice = []
-        for season in range(seasons):
-            for day in range(days):
-                s = str(season + 1)
-                d = str(day + 1)
-                timeslice.append("S"+s+d)
-        return timeslice 
+    # def getTimeslices(self):
+    #     seasons = int(self.genData['osy-ns'])
+    #     days = int(self.genData['osy-dt'])
+    #     timeslice = []
+    #     for season in range(seasons):
+    #         for day in range(days):
+    #             s = str(season + 1)
+    #             d = str(day + 1)
+    #             timeslice.append("S"+s+d)
+    #     return timeslice 
+
+    def getTsIds(self):
+        tsIds = [ ts['TsId'] for ts in self.genData["osy-ts"]]
+        return tsIds
 
     def getMods(self):
         mo = int(self.genData['osy-mo'])+1
@@ -143,6 +147,10 @@ class Osemosys():
     def getTechsMap(self):
         techs = {tech['TechId']: tech['Tech'] for tech in self.genData["osy-tech"] }
         return techs
+    
+    def getTsMap(self):
+        timeslices = {tech['TsId']: tech['Ts'] for tech in self.genData["osy-ts"] }
+        return timeslices
 
     def getEmiIds(self):
         emiIds = [ tech['EmisId'] for tech in self.genData["osy-emis"]]
@@ -429,10 +437,10 @@ class Osemosys():
                 RYTs[param][sc] = {}
                 for obj in array:
                     for year, val in obj.items():
-                        if (year != 'YearSplit'):
+                        if (year != 'TsId'):
                             if year not in RYTs[param][sc]:
                                 RYTs[param][sc][year] = {}
-                            RYTs[param][sc][year][obj['YearSplit']] = val
+                            RYTs[param][sc][year][obj['TsId']] = val
         return RYTs
 
     def RYTC(self, RYTCdata):
@@ -511,12 +519,12 @@ class Osemosys():
                 RYTTs[param][sc] = {}
                 for obj in array:
                     for year, val in obj.items():
-                        if (year != 'TechId' and year != 'Timeslice'):
+                        if (year != 'TechId' and year != 'TsId'):
                             if year not in RYTTs[param][sc]:
                                 RYTTs[param][sc][year] = {}
                             if obj['TechId'] not in RYTTs[param][sc][year]:
                                 RYTTs[param][sc][year][obj['TechId']] = {}
-                            RYTTs[param][sc][year][obj['TechId']][obj['Timeslice']] = val
+                            RYTTs[param][sc][year][obj['TechId']][obj['TsId']] = val
         return RYTTs
 
     def RYCTs(self, RYCTsdata):
@@ -527,12 +535,12 @@ class Osemosys():
                 RYCTs[param][sc] = {}
                 for obj in array:
                     for year, val in obj.items():
-                        if (year != 'CommId' and year != 'Timeslice'):
+                        if (year != 'CommId' and year != 'TsId'):
                             if year not in RYCTs[param][sc]:
                                 RYCTs[param][sc][year] = {} 
                             if obj['CommId'] not in RYCTs[param][sc][year]:
                                 RYCTs[param][sc][year][obj['CommId']] = {}
-                            RYCTs[param][sc][year][obj['CommId']][obj['Timeslice']] = val
+                            RYCTs[param][sc][year][obj['CommId']][obj['TsId']] = val
         return RYCTs
 
     def viewDataByTech(self):

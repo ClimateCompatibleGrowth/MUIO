@@ -12,7 +12,7 @@ export class Model {
 
             let PARAMNAMES = DataModel.ParamName(PARAMETERS[group]);
             let RYCTsgrid = DataModel.RYCTsgrid(genData, RYCTsdata, PARAMETERS);
-            let timeslices = DataModel.Timeslices(genData);
+            //let timeslices = DataModel.Timeslices(genData);
 
             let years = genData['osy-years'];
             let comms = genData['osy-comm'];
@@ -25,6 +25,8 @@ export class Model {
 
             datafields.push({ name: 'ScId', type: 'string' });
             datafields.push({ name: 'Sc', type: 'string' });
+            datafields.push({ name: 'TsId', type: 'string' });
+            datafields.push({ name: 'Ts', type: 'string' });
             datafields.push({ name: 'CommId', type: 'string' });
             datafields.push({ name: 'Comm', type: 'string' });
             datafields.push({ name: 'Timeslice', type: 'string' });
@@ -75,7 +77,7 @@ export class Model {
 
             columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 75, maxWidth: 150, filterable: false });
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center',minWidth: 75, maxWidth: 150 });
-            columns.push({ text: 'Timeslice', datafield: 'Timeslice', pinned: true, editable: false, align: 'center',minWidth: 55, maxWidth: 90, filterable: false });
+            columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center',minWidth: 55, maxWidth: 90, filterable: false });
             columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass,minWidth: 55, maxWidth: 90, filterable: false });
             
             $.each(years, function (id, year) {
@@ -103,7 +105,7 @@ export class Model {
             this.casename = casename;
             this.years = years;
             this.comms = comms;
-            this.timeslices = timeslices;
+            //this.timeslices = timeslices;
             this.scenarios = scenarios;
             this.scenariosCount = scenarios.length;
             this.datafields = datafields;
