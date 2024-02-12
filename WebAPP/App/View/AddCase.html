@@ -103,7 +103,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="tabYears">
                         <article class="col-sm-6 col-md-6 col-lg-6">
-                            <div class="smart-form well" style="margin-bottom: 20px;">
+                            <div class="smart-form " >
                                 <fieldset>
                                     <div class="row ">
                                         <section class="col col-6">
@@ -116,6 +116,19 @@
                                                 <strong>!@#$%^&*()</strong> are not allowed in model name!
                                             </div>
                                         </section>
+                                        <section class="col col-3">
+                                            <label class="label">Currency</label>
+                                            <label class="select">
+                                                <select id="osy-currency" class="input-sm" name="osy-currency"></select>
+                                            </label>
+                                        </section>
+                                        <section class="col col-3">
+                                            <label class="label">Modes of operation</label>
+                                            <label class="input">
+                                                <input type="text" placeholder="Modes of operation" class="input-sm"
+                                                    name="osy-mo" id="osy-mo" value=1>
+                                            </label>
+                                        </section>
                                         <!-- <section class="col col-6">
                                             <label style="margin-top:7px">Select a date</label>
                                             <div class="input-group">
@@ -126,14 +139,9 @@
                                             </div>
                                         </section> -->
                                     </div>
-                                    <div class="row ">
-                                        <section class="col col-6">
-                                            <label class="label">Currency</label>
-                                            <label class="select">
-                                                <select id="osy-currency" class="input-sm" name="osy-currency"></select>
-                                            </label>
-                                        </section>
-                                        <!-- <section class="col col-3">
+                                     <!--<div class="row ">
+         
+                                        <section class="col col-3">
                                             <label class="label">No.seasons</label>
                                             <label class="input">
                                                 <input type="text" placeholder="Number of seasons" class="input-sm"
@@ -146,20 +154,14 @@
                                                 <input type="text" placeholder="Day types" class="input-sm"
                                                     name="osy-dt" id="osy-dt">
                                             </label>
-                                        </section> -->
-                                        <section class="col col-6">
-                                            <label class="label">Modes</label>
-                                            <label class="input">
-                                                <input type="text" placeholder="Modes of operation" class="input-sm"
-                                                    name="osy-mo" id="osy-mo" value=1>
-                                            </label>
                                         </section>
-                                    </div>
+          
+                                    </div> -->
                                     <div class="row ">
                                         <section class="col col-6">
                                             <label class="label">Model description</label>
                                             <label class="textarea">
-                                                <textarea rows="2" class="custom-scroll" name="osy-desc"
+                                                <textarea rows="3" class="custom-scroll" name="osy-desc"
                                                     id="osy-desc"></textarea>
                                             </label>
                                             <div class="note">
@@ -171,8 +173,8 @@
                                 </fieldset>
                             </div>
                         </article>
-                        <article class="col-sm-6 col-md-6 col-lg-6 well">
-                            <div class="row" style="padding: 10px;">
+                        <article class="col-sm-6 col-md-6 col-lg-6 well" style=" margin-bottom: 20px;">
+                            <div class="row" style="padding: 10px; ">
                                 <button id="osy-checkAll" class="btn btn btn-white btn-default pull-right">
                                     <i class="fa fa-calendar-check-o"></i> Check all
                                 </button>

@@ -567,8 +567,8 @@ class Osemosys():
                                         byTech['EmisId'] = None
                                     if 'ConId' not in obj:
                                         byTech['ConId'] = None
-                                    if 'Timeslice' not in obj:
-                                        byTech['Timeslice'] = None
+                                    if 'TsId' not in obj:
+                                        byTech['TsId'] = None
                                     if 'MoId' not in obj:
                                         byTech['MoId'] = None
                                     for k,v in obj2.items():
@@ -601,8 +601,8 @@ class Osemosys():
                                         byComm['EmisId'] = None
                                     if 'ConId' not in obj:
                                         byComm['ConId'] = None
-                                    if 'Timeslice' not in obj:
-                                        byComm['Timeslice'] = None
+                                    if 'TsId' not in obj:
+                                        byComm['TsId'] = None
                                     if 'MoId' not in obj:
                                         byComm['MoId'] = None
                                     for k,v in obj2.items():
@@ -635,8 +635,8 @@ class Osemosys():
                                         byEmi['CommId'] = None
                                     if 'ConId' not in obj:
                                         byEmi['ConId'] = None
-                                    if 'Timeslice' not in obj:
-                                        byEmi['Timeslice'] = None
+                                    if 'TsId' not in obj:
+                                        byEmi['TsId'] = None
                                     if 'MoId' not in obj:
                                         byEmi['MoId'] = None
                                     for k,v in obj2.items():
@@ -698,7 +698,7 @@ class Osemosys():
                 if ((obj['TechId'] == TechId if TechId is not None else True) and 
                     (obj['CommId'] == CommId if CommId is not None else True) and 
                     (obj['EmisId'] == EmisId if EmisId is not None else True) and
-                    (obj['Timeslice'] == Timeslice if Timeslice is not None else True)):
+                    (obj['TsId'] == Timeslice if Timeslice is not None else True)):
                     obj[year] = value
             File.writeFile( jsonData, jsonPath)
         except(IOError):

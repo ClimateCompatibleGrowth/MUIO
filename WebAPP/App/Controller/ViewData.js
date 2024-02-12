@@ -237,7 +237,7 @@ export default class ViewData {
                 var ParamId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'param');
                 var CommId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'CommId');
                 var EmisId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'EmisId');
-                var Timeslice = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'Timeslice');
+                var TsId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TsId');
                 var TechId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
                 let dataType = $('input[type=radio][name=bytype]:checked').val();
 
@@ -258,7 +258,7 @@ export default class ViewData {
                         obj.param === ParamId &&
                         obj.CommId === CommId &&
                         obj.EmisId === EmisId &&
-                        obj.Timeslice === Timeslice) {
+                        obj.TsId === TsId) {
                         if (value) {
                             obj[year] = value;
                         } else {
@@ -267,7 +267,7 @@ export default class ViewData {
                     }
                 });
 
-                Osemosys.updateViewData(model.casename, year, ScId, GroupId, ParamId, TechId, CommId, EmisId, Timeslice, value)
+                Osemosys.updateViewData(model.casename, year, ScId, GroupId, ParamId, TechId, CommId, EmisId, TsId, value)
                     .then(response => {
                         Message.bigBoxSuccess('Model message', response.message, 3000);
                         //sync S3

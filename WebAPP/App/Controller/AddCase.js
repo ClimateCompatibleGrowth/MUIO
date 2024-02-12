@@ -203,9 +203,11 @@ export default class AddCase {
 
         $("#osy-caseForm").off('validationSuccess');
         $("#osy-caseForm").on('validationSuccess', function (event) {
+
             event.preventDefault();
             event.stopImmediatePropagation();
 
+            Message.loaderStart('Saving model data')
             var casename = $("#osy-casename").val().trim();
             var desc = $("#osy-desc").val().trim();
             
@@ -245,6 +247,7 @@ export default class AddCase {
 
             Osemosys.saveCase(POSTDATA)
                 .then(response => {
+                    Message.loaderEnd()
                     if (response.status_code == "created") {
                         $("#osy-new").show();
                         $('#osy-update').show();

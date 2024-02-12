@@ -456,7 +456,7 @@ class DataFile(Osemosys):
 
             self.timeslices = ''
             for timesliceId in self.timesliceIDs:
-                self.timeslices += '{} '.format(timesliceId)
+                self.timeslices += '{} '.format(self.tsMap[timesliceId])
 
             self.mods = ''
             for modId in self.modIds:

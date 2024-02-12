@@ -22,18 +22,6 @@ class ImportTemplate():
             techNames[tech['TechId']] = tech['Tech']
         return techNames
 
-    def getTsById(self, timeslices):
-        tsNames = {}
-        for ts in timeslices:
-            tsNames[ts['TsId']] = ts['Ts']
-        return tsNames
-
-    def getTsByName(self, timeslices):
-        tsNames = {}
-        for ts in timeslices:
-            tsNames[ts['Ts']] = ts['TsId']
-        return tsNames
-    
     def getTechGroupById(self, techGroups):
         techGroupNames = {}
         for tech in techGroups:
@@ -395,7 +383,6 @@ class ImportTemplate():
             techs_data = techs_xls.to_json(orient='records', indent=2)
             comms_data = comms_xls.to_json(orient='records', indent=2)
             emis_data = emis_xls.to_json(orient='records', indent=2)
-            ts_data = ts_xls.to_json(orient='records', indent=2)
 
             iar_data = iar_xls.to_json(orient='records', indent=2)
             oar_data = oar_xls.to_json(orient='records', indent=2)
@@ -404,7 +391,6 @@ class ImportTemplate():
             techsArray = json.loads(techs_data)
             commsArray = json.loads(comms_data)
             emisArray = json.loads(emis_data)
-            tsArray = json.loads(ts_data)
 
             iarArray = json.loads(iar_data)
             oarArray = json.loads(oar_data)
@@ -412,39 +398,22 @@ class ImportTemplate():
 
             yearsArray = years_xls['YEARS'].astype(str).values.tolist()
             mooValue = moo_xls['MODE_OF_OPERATION'].count()
+            tsTmp = ts_xls['TIMESLICE'].astype(str).values.tolist()
 
-            # tsTmp = ts_xls['TIMESLICE'].astype(str).values.tolist()
+            nsArray = []
+            dtArray = []
+            for obj in tsTmp:
+                tmp1 = obj[1:2]
+                tmp2 = obj[-1]
+                nsArray.append(tmp1)
+                dtArray.append(tmp2)
 
-            # nsArray = []
-            # dtArray = []
-            # for obj in tsTmp:
-            #     tmp1 = obj[1:2]
-            #     tmp2 = obj[-1]
-            #     nsArray.append(tmp1)
-            #     dtArray.append(tmp2)
-
-            # ns = max(nsArray)
-            # dt = max(dtArray)
+            ns = max(nsArray)
+            dt = max(dtArray)
 
             print('READ OF XLS DONE!')
             print("--- %s seconds ---" % (time.time() - start_time))
             txtOut = ("Read of xls template done in --- {} seconds ---{}".format(time.time() - start_time, '\n'))
-
-            timeslices = []
-            if not tsArray:
-                timeslices.append(self.defaultTs('TS_0', first=True)[0])
-            else:
-                for obj in tsArray:
-                    timeslice = obj['TIMESLICE']
-                    if obj.get('DESCRIPTION') is not None:
-                        desc = obj['DESCRIPTION']
-                    else:
-                        desc = "Default timeslice"
-                    if obj==0:
-                        timeslices.append(self.defaultTs(timeslice, desc, True)[0])
-                    else:
-                        timeslices.append(self.defaultTs(timeslice, desc)[0])
-
 
             techgroups = []
             if not tgArray:
@@ -470,7 +439,6 @@ class ImportTemplate():
                         desc = obj['DESCRIPTION']
                     else:
                         desc = "Default commodity"
-
                     if obj.get('UNITOFCAPACITY') is not None:
                         unitcap = obj['UNITOFCAPACITY']
                     else:
@@ -587,14 +555,13 @@ class ImportTemplate():
             genData["osy-desc"] = description
             genData["osy-date"] = date
             genData["osy-currency"] = currency
-            # genData["osy-ns"] = ns
-            # genData["osy-dt"] = dt
+            genData["osy-ns"] = ns
+            genData["osy-dt"] = dt
             genData["osy-mo"] = str(mooValue)
 
             genData["osy-tech"] = techs
             genData["osy-techGroups"] = techgroups
             genData["osy-comm"] = comms
-            genData["osy-ts"] = timeslices
 
             genData["osy-emis"] = emis
             genData["osy-scenarios"] = self.defaultScenario(True)
@@ -642,7 +609,6 @@ class ImportTemplate():
                 techName = self.getTechById(techs)
                 commName = self.getCommById(comms)
                 emiName = self.getEmiById(emis)
-                tsName = self.getTsById(timeslices)
 
 
                 for key, array in self.PARAMETERS.items():
@@ -686,6 +652,7 @@ class ImportTemplate():
                                                 t = techName[tech] 
                                                 if t in xlsObj:
                                                     el[tech] = xlsObj[t]
+
 
                                 if key == 'RE':
                                     xlsObj = self.refRE(xlsArray)
@@ -741,10 +708,9 @@ class ImportTemplate():
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             for arr in xlsArray:
-                                                # if arr['TIMESLICE'] == el['YearSplit']:
-                                                if arr['TIMESLICE'] == tsName[el['TsId']]:
+                                                if arr['TIMESLICE'] == el['YearSplit']:
                                                     for yr, val in el.items():
-                                                        if yr != 'TsId':
+                                                        if yr != 'YearSplit':
                                                             if str(arr['YEAR']) == yr:
                                                                 el[yr] = arr['VALUE']
                                                                 break
@@ -801,9 +767,9 @@ class ImportTemplate():
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             for yr, val in el.items():
-                                                if yr != 'TechId' and yr != 'TsId':
+                                                if yr != 'TechId' and yr != 'Timeslice':
                                                     t = techName[el['TechId']] 
-                                                    ts = tsName[el['TsId']]
+                                                    ts = el['Timeslice']
                                                     if t in xlsObj:
                                                         if ts in xlsObj[t]:
                                                             el[yr] = xlsObj[t][ts][yr]
@@ -815,9 +781,9 @@ class ImportTemplate():
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             for yr, val in el.items():
-                                                if yr != 'CommId' and yr != 'TsId':
+                                                if yr != 'CommId' and yr != 'Timeslice':
                                                     c = commName[el['CommId']] 
-                                                    ts = tsName[el['TsId']]
+                                                    ts = el['Timeslice']
                                                     if c in xlsObj:
                                                         if ts in xlsObj[c]:
                                                             el[yr] = xlsObj[c][ts][yr]

@@ -1038,7 +1038,7 @@ export class Grid {
         $divGrid.jqxGrid('applyfilters');
     }
     
-    //Legacy filters
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////Legacy filters
     static applyRYFilter($divGrid, years, sc = null) {
         //$('#jqxLoader').jqxLoader('open');
         //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });

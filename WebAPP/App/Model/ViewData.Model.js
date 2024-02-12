@@ -8,6 +8,7 @@ export class Model {
         this.d = 2;
         this.decimal = 'd' + this.d;
 
+        console.log('viewData ',viewData)
         if (casename) {
 
             let datafields = [];
@@ -20,6 +21,7 @@ export class Model {
             let scenarios = genData['osy-scenarios'];
 
             let TechName = DataModel.TechName(genData);
+            let TsName = DataModel.TsName(genData);
             let CommName = DataModel.CommName(genData);
             let EmiName = DataModel.EmiName(genData);
             let ConName = DataModel.ConName(genData);
@@ -93,6 +95,8 @@ export class Model {
             //grid datafields
             datafields.push({ name: 'ScId', type: 'string' });
             datafields.push({ name: 'Sc', type: 'string' });
+            datafields.push({ name: 'TsId', type: 'string' });
+            datafields.push({ name: 'Ts', type: 'string' });
             datafields.push({ name: 'groupId', type: 'string' });
             datafields.push({ name: 'groupName', type: 'string' });
             datafields.push({ name: 'param', type: 'string' });
@@ -105,7 +109,7 @@ export class Model {
             datafields.push({ name: 'EmisName', type: 'string' });
             datafields.push({ name: 'ConId', type: 'string' });
             datafields.push({ name: 'ConName', type: 'string' });
-            datafields.push({ name: 'Timeslice', type: 'string' });
+            // datafields.push({ name: 'Timeslice', type: 'string' });
 
             datafields.push({ name: 'MoId', type: 'string' });
             datafields.push({ name: 'UnitId', type: 'string' });
@@ -125,7 +129,7 @@ export class Model {
             columns.push({ text: 'EMISSION', datafield: 'EmisName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass });
             columns.push({ text: 'CONSTRAINT', datafield: 'ConId', editable: false, align: 'left', hidden: true });
             columns.push({ text: 'CONSTRAINT', datafield: 'ConName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass })
-            columns.push({ text: 'TIMESLICE', datafield: 'Timeslice', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass });
+            columns.push({ text: 'TIMESLICE', datafield: 'Ts', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass });
             columns.push({ text: 'MoO', datafield: 'MoId', editable: false, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 50, cellclassname: cellclass });
 
             //datafields and columns
@@ -148,12 +152,16 @@ export class Model {
                         obj['groupName'] = GROUPNAMES[obj.groupId];
                         obj['Sc'] = ScName[obj['ScId']];
 
+                        if(obj.TsId != null){
+                            obj['Ts'] = TsName[obj.TsId];
+                        }
 
                         if (obj.Tech == null && obj.EmisId == null) {
                             obj['TechName'] = TechName[obj.TechId];
                             obj['CommName'] = null;
                             obj['EmisName'] = null;
                             obj['ConName'] = null;
+
                             let rule = paramById[obj.groupId][obj.param]['unitRule'];
                             let data = unitData[obj.groupId][obj.param][obj.TechId];
                             obj['UnitId'] = jsonLogic.apply(rule, data);
