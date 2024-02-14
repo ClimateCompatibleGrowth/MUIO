@@ -112,9 +112,9 @@ export class Html {
                         <small><i>${value.Desc} [${dt}]</i></small>
                         </span>  
                     </div>
-                    <div class="col-md-3 selectCS pointer" data-ps="${value.Case}" >
-                        <span data-ps="${scs}" data-toggle="tooltip" data-placement="top" title="Runtime">
-                        <small style="overflow:hidden">${scs}</small>
+                    <div class="col-md-3 selectCS pointer" data-ps="${value.Case}" style="overflow:hidden">
+                        <span  data-toggle="tooltip" data-placement="top" title="Runtime">
+                            <small >${scs}</small>
                         </span>  
                     </div>
 
