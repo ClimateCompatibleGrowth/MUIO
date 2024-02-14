@@ -107,14 +107,14 @@ export class Html {
                         <label for="chb${value.Case}"></label>
                     </div>
                 </div>
-                    <div class="col-md-6 selectCS pointer" data-ps="${value.Case}" >
+                    <div class="col-md-5 selectCS pointer" data-ps="${value.Case}" >
                         <span  data-ps="${value.Desc}" data-toggle="tooltip" data-placement="top" title="Runtime">
                         <small><i>${value.Desc} [${dt}]</i></small>
                         </span>  
                     </div>
-                    <div class="col-md-2 selectCS pointer" data-ps="${value.Case}" >
+                    <div class="col-md-3 selectCS pointer" data-ps="${value.Case}" >
                         <span data-ps="${scs}" data-toggle="tooltip" data-placement="top" title="Runtime">
-                        <small>${scs}</small>
+                        <small style="overflow:hidden">${scs}</small>
                         </span>  
                     </div>
 
