@@ -1253,55 +1253,129 @@ class DataFile(Osemosys):
                 if not line.startswith(('set MODEper','set MODEx', 'end;')):
                     lines.append(line)
 
-        with open(data_outfile, 'w') as f2:
-            f2.writelines(lines)
 
-        parsing = False
 
         year_list = self.getYears()
         fuel_list = self.getCommNames()
         tech_list = self.getTechNames()
         emi_list = self.getEmiNames()
-
-        data_all = []
-        data_out = []
-        data_inp = []
-        data_emi = []
-
-
         start_year = year_list[0]
 
+        data_all = []
+        # data_out = []
+        # data_inp = []
+        # data_emi = []
+        # parsing = False
+        # with open(data_infile, 'r') as f:
+        #     for line in f:
+        #         line = line.rstrip().replace('\t', ' ')
+        #         if line.startswith(";"):
+        #             parsing = False
+        #         if parsing:
+        #             if line.startswith('['):
+        #                 fuel = line.split(',')[2]
+        #                 tech = line.split(',')[1]
+        #             elif line.startswith(start_year):
+        #                 years = line.rstrip(':= ;\n').split(' ')[0:]
+        #                 years = [i.strip(':=') for i in years]
+        #             else:
+        #                 values = line.rstrip().split(' ')[1:]
+        #                 mode = line.split(' ')[0]
+        #                 if param_current =='OutputActivityRatio':
+        #                     data_out.append(tuple([fuel, tech, mode]))
+        #                     data_all.append(tuple([tech, mode]))
+
+        #                 if param_current =='InputActivityRatio':
+        #                     data_inp.append(tuple([fuel, tech, mode]))
+        #                     data_all.append(tuple([tech, mode]))
+
+        #                 if param_current =='EmissionActivityRatio':
+        #                     data_emi.append(tuple([fuel, tech, mode]))
+        #                     data_all.append(tuple([tech, mode]))
+
+        #         if line.startswith(('param OutputActivityRatio','param InputActivityRatio', 'param EmissionActivityRatio')):
+        #             param_current = line.split(' ')[1]
+        #             parsing = True
+
+
+
+        data = {}
         with open(data_infile, 'r') as f:
+            parsing = False
             for line in f:
                 line = line.rstrip().replace('\t', ' ')
                 if line.startswith(";"):
                     parsing = False
                 if parsing:
                     if line.startswith('['):
-                        fuel = line.split(',')[2]
-                        tech = line.split(',')[1]
+                        element = line.split(',')
+                        region = element[0][1:]
+                        tech = element[1]
+                        fuel_emi = element[2]
+            
                     elif line.startswith(start_year):
                         years = line.rstrip(':= ;\n').split(' ')[0:]
                         years = [i.strip(':=') for i in years]
+                    
                     else:
                         values = line.rstrip().split(' ')[1:]
-                        mode = line.split(' ')[0]
-                        if param_current =='OutputActivityRatio':
-                            data_out.append(tuple([fuel, tech, mode]))
+                        if param_current in ('DiscountRate'):
+                            region = line.split(' ')[0]
+                            dr = line.split(' ')[1]
+                            data[param_current].append(tuple([region, dr]))
+                        if param_current in ('OperationalLife', 'DiscountRateIdv'):
+                            if firstRow:
+                                techs = line.rstrip(':= ;\n').split(' ')[0:]
+                                firstRow=False
+                            else:
+                                region = line.split(' ')[0]
+                                for i, tech in enumerate(techs):
+                                    data[param_current].append(tuple([ region, tech, values[i]]))
+                        if param_current in ('OutputActivityRatio','InputActivityRatio','EmissionActivityRatio'):
+                            mode = line.split(' ')[0]
+                            data[param_current].append(tuple([ fuel_emi, tech, mode ]))
                             data_all.append(tuple([tech, mode]))
 
-                        if param_current =='InputActivityRatio':
-                            data_inp.append(tuple([fuel, tech, mode]))
-                            data_all.append(tuple([tech, mode]))
-
-                        if param_current =='EmissionActivityRatio':
-                            data_emi.append(tuple([fuel, tech, mode]))
-                            data_all.append(tuple([tech, mode]))
-
-                if line.startswith(('param OutputActivityRatio','param InputActivityRatio', 'param EmissionActivityRatio')):
+                if line.startswith(
+                    
+                    (
+                    'param OutputActivityRatio',
+                    'param InputActivityRatio', 
+                    'param EmissionActivityRatio',
+                    'param OperationalLife',
+                    'param DiscountRateIdv',
+                    'param DiscountRate'
+                    )):
+                    
                     param_current = line.split(' ')[1]
+                    params = Config.PARAMETERS_C[param_current].copy()
+                    params.append(param_current)
+                    data[param_current] = []
+                    data[param_current].append(tuple(params))
                     parsing = True
+                    if line.startswith(('param OperationalLife'))  or line.startswith(('param DiscountRateIdv')):
+                        firstRow=True 
+                if line.startswith(
+                    (
+                    'param OutputActivityRatio',
+                    'param InputActivityRatio', 
+                    'param EmissionActivityRatio',
+                    'param OperationalLife',
+                    'param DiscountRateIdv',
+                    'param DiscountRate'
+                    )):
+					
+                    param_current = line.split(' ')[1]
+                    data[param_current] = []
+                    parsing = True
+                    if line.startswith(('param OperationalLife')) or line.startswith(('param DiscountRateIdv')):
+                        firstRow=True
 
+
+        data_out = data['OutputActivityRatio']
+        data_inp = data['InputActivityRatio']
+        data_emi = data['EmissionActivityRatio']
+                        
         data_out = list(set(data_out))
         data_inp = list(set(data_inp))
         data_all = list(set(data_all))
@@ -1324,6 +1398,65 @@ class DataFile(Osemosys):
         for tech, mode in data_all:
             if mode not in dict_all[tech]:
                 dict_all[tech].append(mode)
+
+        #################################################### CRF ANNUITY
+        OL_data = data['OperationalLife']
+        DRi_data = data['DiscountRateIdv']
+        DR_data = data['DiscountRate']
+        DR = float(DR_data[0][1])
+
+        OL = {}
+        DRi = {}
+        for r, t, ol in OL_data:
+            OL[t] = int(ol)
+        for r, t, dri in DRi_data:
+            DRi[t] = float(dri)
+        techs_string = ''
+        for tech in tech_list:
+            techs_string += '{} '.format(tech) 
+
+
+
+
+
+        #CRF calc
+        CapitalRecoveryFactor = {}
+        PvAnnuity = {}
+        for tech in tech_list:
+            CapitalRecoveryFactor[tech] = (1 - pow( (1 + DRi[tech]), -1) ) / (1 - pow( (1+DRi[tech]), -OL[tech] ) )
+            PvAnnuity[tech] = (1 - pow((1 + DRi[tech]), -OL[tech])) * (1 + DRi[tech]) / DRi[tech]
+
+
+        lines.append('{} {} {} {} {} {}'.format('param', 'CapitalRecoveryFactor','default', 0, ':','\n'))
+        lines.append('{}{}{}'.format(techs_string, ':=', '\n'))
+        rtString = ''
+        for tech in tech_list:
+            tmp = CapitalRecoveryFactor[tech]
+            rtString += '{} '.format(tmp)
+        lines.append('{}{}{}'.format('RE1 ', rtString, '\n'))
+        lines.append('{}{}'.format(';', '\n'))
+            
+        lines.append('{} {} {} {} {} {}'.format('param', 'PvAnnuity','default', 0, ':','\n'))
+        lines.append('{}{}{}'.format(techs_string, ':=', '\n'))
+        rtString = ''
+        for tech in tech_list:
+            tmp = PvAnnuity[tech]
+            rtString += '{} '.format(tmp)
+        lines.append('{}{}{}'.format('RE1 ', rtString, '\n'))
+        lines.append('{}{}'.format(';', '\n'))
+
+        with open(data_outfile, 'w') as f2:
+            f2.writelines(lines)
+
+
+
+
+        # df_OL = pd.DataFrame(data['OperationalLife'], columns=['r','t','OperationalLife'])
+        # df_OL['OperationalLife'] = df_OL['OperationalLife'].astype(int)
+        # df_DRi = pd.DataFrame(data['DiscountRateIdv'], columns=['r','t','DiscountRateIdv'])
+        # df_DRi['DiscountRateIdv'] = df_DRi['DiscountRateIdv'].astype(float)
+        # df_CRF = pd.merge(df_DRi, df_OL, on=['r', 't'])
+        # df_CRF['CRF'] = (1 - pow( (1+df_CRF['DiscountRateIdv']), -1) ) / (1 - pow( (1+df_CRF['DiscountRateIdv']), -df_CRF['OperationalLife'] ) )
 
 
         #function for appending values in data file
@@ -1605,65 +1738,111 @@ class DataFile(Osemosys):
             #pd.options.mode.chained_assignment = None
             #pd.options.mode.chained_assignment = None
 
-            parsing = False
-            output_table = []
-            input_table = []
-            emi_table = []
-            year_split = []
+            # parsing = False
+            # output_table = []
+            # input_table = []
+            # emi_table = []
+            # year_split = []
 
+            data = {}
             year_list = self.getYears()
+            tech_list = self.getTechNames()
             start_year = year_list[0]
 
             with open(data_file, 'r') as f:
+                parsing = False
                 for line in f:
+                    line = line.rstrip().replace('\t', ' ')
                     if line.startswith(";"):
                         parsing = False
                     if parsing:
                         if line.startswith('['):
-                            fuel = line.split(',')[2]
-                            tech = line.split(',')[1]                        
-                        elif not line.startswith(start_year):
-                            values = line.rstrip().split(' ')[1:]
-                            mode = line.split(' ')[0] #mode ili time_slice
-                            time_slice = line.rstrip().split(' ')[0]
-   
-                            if param_current=='OutputActivityRatio':
-                                for i in range(0,len(year_list)):
-                                    output_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
-
-                            if param_current=='InputActivityRatio':
-                                for i in range(0,len(year_list)):
-                                    input_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
-                            
-                            if param_current == 'EmissionActivityRatio':
-                                for i in range(0,len(year_list)):
-                                    emi_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+                            element = line.split(',')
+                            region = element[0][1:]
+                            tech = element[1]
+                            fuel_emi = element[2]
+                
+                        elif line.startswith(start_year):
+                            years = line.rstrip(':= ;\n').split(' ')[0:]
+                            years = [i.strip(':=') for i in years]
                         
-                            if param_current == 'YearSplit':
-                                for i in range(0,len(year_list)):
-                                    year_split.append(tuple([time_slice,year_list[i],values[i]]))
+                        else:
+                            values = line.rstrip().split(' ')[1:]
+                            if param_current in ('OperationalLife', 'DiscountRateIdv'):
+                                if firstRow:
+                                    techs = line.rstrip(':= ;\n').split(' ')[0:]
+                                    firstRow=False
+                                else:
+                                    region = line.split(' ')[0]
+                                    for i, tech in enumerate(techs):
+                                        data[param_current].append(tuple([ region, tech, values[i]]))
+                            if param_current in ('OutputActivityRatio','InputActivityRatio','EmissionActivityRatio'):
+                                mode = line.split(' ')[0]
+                                for i, year in enumerate(years):
+                                    data[param_current].append(tuple([ region, fuel_emi, tech, year, mode, values[i]]))
+                            if param_current in ('YearSplit'):
+                                timeslice = line.split(' ')[0]
+                                for i, year in enumerate(years):
+                                    data[param_current].append(tuple([ region, year, timeslice, values[i]]))
 
-                    if line.startswith(('param OutputActivityRatio','param InputActivityRatio','param TechnologyToStorage','param TechnologyFromStorage', 'param EmissionActivityRatio', 'param YearSplit')):
+                    if line.startswith(
+                        (
+                        'param OutputActivityRatio',
+                        'param InputActivityRatio', 
+                        'param EmissionActivityRatio',
+                        'param OperationalLife',
+                        'param DiscountRateIdv',
+                        'param YearSplit'
+                        )):
+                        
                         param_current = line.split(' ')[1]
+                        params = Config.PARAMETERS_C[param_current].copy()
+                        params.append(param_current)
+                        data[param_current] = []
+                        data[param_current].append(tuple(params))
                         parsing = True
+                        if line.startswith(('param OperationalLife'))  or line.startswith(('param DiscountRateIdv')):
+                            firstRow=True 
+                    if line.startswith(
+                        (
+                        'param OutputActivityRatio',
+                        'param InputActivityRatio', 
+                        'param EmissionActivityRatio',
+                        'param OperationalLife',
+                        'param DiscountRateIdv',
+                        'param YearSplit'
+                        )):
+						
+                        param_current = line.split(' ')[1]
+                        #ovo sam izbacii da ne bi morali kod kreiranje dataframe raditi ovo:
+                        # df_IAR = pd.DataFrame(data['InputActivityRatio'])
+                        # headers = df_IAR.iloc[0]
+                        # df_IAR = pd.DataFrame(df_IAR.values[1:], columns=headers )
+                        # df_IAR['InputActivityRatio'] = df_IAR['InputActivityRatio'].astype(float)
+                        #ovaj dio treba popraviti i kod validacijskih skripti
+
+                        # params = Config.PARAMETERS_C[param_current].copy()
+                        # params.append(param_current)
+                        data[param_current] = []
+                        #data[param_current].append(tuple(params))
+                        parsing = True
+                        if line.startswith(('param OperationalLife')) or line.startswith(('param DiscountRateIdv')):
+                            firstRow=True
 
             try:
                 os.makedirs(os.path.join(base_folder, 'csv'))
             except FileExistsError:
                 pass
             
-            #print('output_table ', output_table)
+
+
             #parsanje result.txt
             params = []
             
             df = pd.read_csv(results_file, sep='\t')
-            #print(df.head())
-            #print(df.columns)
             df.columns = ['temp']
-            #print(df.columns)
 
             df['temp'] = df['temp'].str.lstrip(' *\n\t')
-            print(df['temp'])
             
             if len(df) > 0:
                 df[['temp','value']] = df['temp'].str.split(')', expand=True)
@@ -1704,20 +1883,20 @@ class DataFile(Osemosys):
                 ################################################################################################################
 
                 #year split data frame
-                df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
+                df_yearsplit = pd.DataFrame(data['YearSplit'], columns=['r','y', 'l','YearSplit'])
                 df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
 
-                df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
+                df_output = pd.DataFrame(data['OutputActivityRatio'], columns=['r','f','t','y','m','OutputActivityRatio'])
                 df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
                 df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
                 df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
                 
-                df_input = pd.DataFrame(input_table, columns=['t','f','m','y','InputActivityRatio'])
+                df_input = pd.DataFrame(data['InputActivityRatio'], columns=['r', 'f','t','y','m','InputActivityRatio'])
                 df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
                 df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
                 df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
                 
-                df_emi = pd.DataFrame(emi_table, columns=['t','e','m','y','EmissionActivityRatio'])
+                df_emi = pd.DataFrame(data['EmissionActivityRatio'], columns=['r', 'e','t','y','m','EmissionActivityRatio'])
                 df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
                 #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
    
@@ -1726,11 +1905,11 @@ class DataFile(Osemosys):
                 region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
                 df_prod['r'] = str(region[0])
                 df_prod['RateOfActivity'].fillna(0, inplace=True)
-
                 df_prod['ProductionByTechnologyByMode'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
                 df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
                 df_prod['ProductionByTechnologyByMode'] = df_prod['ProductionByTechnologyByMode'].astype(float).round(4)
                 df_prod = df_prod.sort_values(by=['r','l','t','f','y'])
+                df_prod = df_prod[df_prod['ProductionByTechnologyByMode']!=0]
                 df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyByMode.csv'), index=None)
 
                 ########################################RateOfProductionByTechnologyByMode############################################
@@ -1743,6 +1922,7 @@ class DataFile(Osemosys):
                 df_ropbt = df_ropbt.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
                 df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['RateOfProductionByTechnologyByMode'].astype(float).round(4)
                 df_ropbt = df_ropbt.sort_values(by=['r','l','t','f','y'])
+                df_ropbt = df_ropbt[df_ropbt['RateOfProductionByTechnologyByMode']!=0]
                 df_ropbt.to_csv(os.path.join(base_folder, 'csv', 'RateOfProductionByTechnologyByMode.csv'), index=None)
 
                 ######################################UseByTechnologyByMode##############################################
@@ -1756,6 +1936,7 @@ class DataFile(Osemosys):
                 df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
                 df_use['UseByTechnologyByMode'] = df_use['UseByTechnologyByMode'].astype(float).round(4)
                 df_use = df_use.sort_values(by=['r','l','t','f','y'])
+                df_use = df_use[df_use['UseByTechnologyByMode']!=0]
                 df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyByMode.csv'), index=None)
 
                 ######################################RateOfUseByTechnologyByMode##############################################
@@ -1769,7 +1950,41 @@ class DataFile(Osemosys):
                 df_roubt = df_roubt.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
                 df_roubt['RateOfUseByTechnologyByMode'] = df_roubt['RateOfUseByTechnologyByMode'].astype(float).round(4)
                 df_roubt = df_roubt.sort_values(by=['r','l','t','f','y'])
+                df_roubt = df_roubt[df_roubt['RateOfUseByTechnologyByMode']!=0]
                 df_roubt.to_csv(os.path.join(base_folder, 'csv', 'RateOfUseByTechnologyByMode.csv'), index=None)
+
+                #########################################AnnualizedInvestmentCost################################################
+                df_OL = pd.DataFrame(data['OperationalLife'], columns=['r','t','OperationalLife'])
+                df_OL['OperationalLife'] = df_OL['OperationalLife'].astype(int)
+                df_DRi = pd.DataFrame(data['DiscountRateIdv'], columns=['r','t','DiscountRateIdv'])
+                df_DRi['DiscountRateIdv'] = df_DRi['DiscountRateIdv'].astype(float)
+                df_CRF = pd.merge(df_DRi, df_OL, on=['r', 't'])
+                df_CRF['CRF'] = (1 - pow( (1+df_CRF['DiscountRateIdv']), -1) ) / (1 - pow( (1+df_CRF['DiscountRateIdv']), -df_CRF['OperationalLife'] ) )
+
+                df_CI = all_params['CapitalInvestment']
+                full_df = pd.DataFrame([(i, s) for i in tech_list for s in year_list], columns=['t', 'y'])
+   
+                df_ACI_temp = pd.merge(df_CI, full_df, on=['t','y'],  how='outer')
+                df_ACI_temp['CapitalInvestment'] = df_ACI_temp['CapitalInvestment'].fillna(0)
+                df_ACI_temp['r'] = df_ACI_temp['r'].fillna('RE1')
+                df_ACI_temp = pd.merge(df_ACI_temp, df_CRF, on=['r', 't'],  how='outer')
+                df_ACI_temp['CIxCRF'] = df_ACI_temp['CapitalInvestment'] * df_ACI_temp['CRF']
+                df_ACI_temp.sort_values(['t','y'], inplace=True)
+                print(df_ACI_temp.head())
+                #print(df_ACI_temp[df_ACI_temp.isna().any(axis=1)])
+
+                print(df_ACI_temp[df_ACI_temp['t']=='LNDCOCIRCO1'])
+                tech_current = ''
+                for index, row in df_ACI_temp.iterrows():
+                    if int(start_year) + row['OperationalLife'] <= int(row['y']) or tech_current != row['t']:
+                        Sum = 0
+                    Sum += row['CIxCRF']
+                    df_ACI_temp.loc[index,'AnnualizedInvestmentCost'] = Sum
+                    tech_current = row['t']
+
+                df_ACI = df_ACI_temp[['r','t','y','AnnualizedInvestmentCost']]
+                df_ACI = df_ACI[df_ACI['AnnualizedInvestmentCost']!=0]
+                df_ACI.to_csv(os.path.join(base_folder, 'csv', 'AnnualizedInvestmentCost.csv'), index=None)
 
         except(IOError, IndexError):
             raise IndexError
@@ -2423,6 +2638,179 @@ class DataFile(Osemosys):
         except OSError:
             raise OSError
 
+    # Dodali u postprocessing Annualized Investment Cost - potrebo dodati nove parametre
+    def generateCSVfromCBC_20240228(self, data_file, results_file, base_folder=os.getcwd()):
+        try:
+            #pd.options.mode.chained_assignment = None
+            #pd.options.mode.chained_assignment = None
+
+            parsing = False
+            output_table = []
+            input_table = []
+            emi_table = []
+            year_split = []
+
+            year_list = self.getYears()
+            start_year = year_list[0]
+
+            with open(data_file, 'r') as f:
+                for line in f:
+                    if line.startswith(";"):
+                        parsing = False
+                    if parsing:
+                        if line.startswith('['):
+                            fuel = line.split(',')[2]
+                            tech = line.split(',')[1]                        
+                        elif not line.startswith(start_year):
+                            values = line.rstrip().split(' ')[1:]
+                            mode = line.split(' ')[0] #mode ili time_slice
+                            time_slice = line.rstrip().split(' ')[0]
+   
+                            if param_current=='OutputActivityRatio':
+                                for i in range(0,len(year_list)):
+                                    output_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+
+                            if param_current=='InputActivityRatio':
+                                for i in range(0,len(year_list)):
+                                    input_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+                            
+                            if param_current == 'EmissionActivityRatio':
+                                for i in range(0,len(year_list)):
+                                    emi_table.append(tuple([tech,fuel,mode,year_list[i],values[i]]))
+                        
+                            if param_current == 'YearSplit':
+                                for i in range(0,len(year_list)):
+                                    year_split.append(tuple([time_slice,year_list[i],values[i]]))
+
+                    if line.startswith(('param OutputActivityRatio','param InputActivityRatio','param TechnologyToStorage','param TechnologyFromStorage', 'param EmissionActivityRatio', 'param YearSplit')):
+                        param_current = line.split(' ')[1]
+                        parsing = True
+
+            try:
+                os.makedirs(os.path.join(base_folder, 'csv'))
+            except FileExistsError:
+                pass
+            
+            #parsanje result.txt
+            params = []
+            
+            df = pd.read_csv(results_file, sep='\t')
+            df.columns = ['temp']
+
+            df['temp'] = df['temp'].str.lstrip(' *\n\t')
+            print(df['temp'])
+            
+            if len(df) > 0:
+                df[['temp','value']] = df['temp'].str.split(')', expand=True)
+                df = df.applymap(lambda x: x.strip() if isinstance(x,str) else x)
+                #error when moved to ython 3.11, Columns must have smae length as key
+                # df['value'] = df['value'].str.split(' ', expand=True)
+                df['value'] = df['value'].str.split(' ', expand=True)[0]
+                df[['parameter','id']] = df['temp'].str.split('(', expand=True)
+                df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]
+                df = df.drop('temp', axis=1)
+                df['value'] = df['value'].astype(float).round(4)
+
+                #variables that are output form solver 18
+                params = df.parameter.unique()
+                all_params = {}
+
+                for each in params:
+                    result_cols = []
+
+                    # radi problem izmjena da dataframe bez copije 20240118 vk
+                    # df_p = df[df.parameter == each]
+                    # df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
+
+                    df_p = df[df.parameter == each].copy()
+                    df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
+
+                    result_cols = Config.VARIABLES_C[each].copy()
+                    result_cols.append('value')
+                    #result_cols.append(each)
+                    df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
+                    all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
+
+                    #napravi csv
+                    all_params[each] = all_params[each].rename(columns={'value':each})
+                    all_params[each].to_csv(os.path.join(base_folder, 'csv', each+'.csv'), index=None)
+
+                ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
+                ################################################################################################################
+
+                #year split data frame
+                df_yearsplit = pd.DataFrame(year_split, columns=['l','y','YearSplit'])
+                df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
+
+                df_output = pd.DataFrame(output_table, columns=['t','f','m','y','OutputActivityRatio'])
+                df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
+                df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
+                df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
+                
+                df_input = pd.DataFrame(input_table, columns=['t','f','m','y','InputActivityRatio'])
+                df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
+                df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
+                df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
+                
+                df_emi = pd.DataFrame(emi_table, columns=['t','e','m','y','EmissionActivityRatio'])
+                df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
+                #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
+   
+                ########################################ProductionByTechnologyByMode############################################
+                df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
+                df_prod['r'] = str(region[0])
+                df_prod['RateOfActivity'].fillna(0, inplace=True)
+
+                df_prod['ProductionByTechnologyByMode'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
+                df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_prod['ProductionByTechnologyByMode'] = df_prod['ProductionByTechnologyByMode'].astype(float).round(4)
+                df_prod = df_prod.sort_values(by=['r','l','t','f','y'])
+                df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyByMode.csv'), index=None)
+
+                ########################################RateOfProductionByTechnologyByMode############################################
+                df_ropbt = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_ropbt.r.unique()) if str(x) != 'nan']
+                df_ropbt['r'] = str(region[0])
+                df_ropbt['RateOfActivity'].fillna(0, inplace=True)
+
+                df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['OutputActivityRatio']*df_ropbt['RateOfActivity']
+                df_ropbt = df_ropbt.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['RateOfProductionByTechnologyByMode'].astype(float).round(4)
+                df_ropbt = df_ropbt.sort_values(by=['r','l','t','f','y'])
+                df_ropbt.to_csv(os.path.join(base_folder, 'csv', 'RateOfProductionByTechnologyByMode.csv'), index=None)
+
+                ######################################UseByTechnologyByMode##############################################
+
+                df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
+                df_use['r'] = str(region[0])
+                df_use['RateOfActivity'].fillna(0, inplace=True)
+       
+                df_use['UseByTechnologyByMode'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+                df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_use['UseByTechnologyByMode'] = df_use['UseByTechnologyByMode'].astype(float).round(4)
+                df_use = df_use.sort_values(by=['r','l','t','f','y'])
+                df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyByMode.csv'), index=None)
+
+                ######################################RateOfUseByTechnologyByMode##############################################
+
+                df_roubt = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
+                region = [x for x in list(df_roubt.r.unique()) if str(x) != 'nan']
+                df_roubt['r'] = str(region[0])
+                df_roubt['RateOfActivity'].fillna(0, inplace=True)
+       
+                df_roubt['RateOfUseByTechnologyByMode'] = df_roubt['InputActivityRatio']*df_roubt['RateOfActivity']
+                df_roubt = df_roubt.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                df_roubt['RateOfUseByTechnologyByMode'] = df_roubt['RateOfUseByTechnologyByMode'].astype(float).round(4)
+                df_roubt = df_roubt.sort_values(by=['r','l','t','f','y'])
+                df_roubt.to_csv(os.path.join(base_folder, 'csv', 'RateOfUseByTechnologyByMode.csv'), index=None)
+
+        except(IOError, IndexError):
+            raise IndexError
+        except OSError:
+            raise OSError
+    
     ##izmjene da bi se napunili csv za InputToNewCapacity i InputToTotalCapacity
     def generateCSVfromCBC09122023(self, data_file, results_file, base_folder=os.getcwd()):
         try:

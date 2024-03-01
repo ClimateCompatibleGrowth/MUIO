@@ -172,6 +172,7 @@ PARAMETERS_C = {
 
         'CapacityToActivityUnit': ['r','t'],
         'DiscountRateIdv': ['r','t'],
+        'OperationalLife': ['r','t'],
         'TotalTechnologyModelPeriodActivityLowerLimit': ['r','t'],
         'TotalTechnologyModelPeriodActivityUpperLimit': ['r','t'],
         'CapacityFactor': ['r','t', 'y', 'l'],
