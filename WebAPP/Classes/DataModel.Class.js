@@ -21,6 +21,7 @@ export class DataModel{
         let techUnits = this.getTechUnits(genData);
         let commUnits = this.getCommUnits(genData);
         let emiUnits = this.getEmiUnits(genData);
+        let stgUnits = this.getStgUnits(genData);
 
         $.each(parameters, function (group, array) {
             unitData[group] = {};
@@ -65,6 +66,18 @@ export class DataModel{
                     unitData[group][obj.id][eObj.EmisId]['milion'] = '10<sup>6</sup>';
                     unitData[group][obj.id][eObj.EmisId]['EmiUnit'] = emiUnits[eObj.EmisId];
                     unitData[group][obj.id][eObj.EmisId]['Currency'] = genData['osy-currency'];
+                });
+                $.each(genData['osy-stg'], function (id, eObj) {
+                    unitData[group][obj.id][eObj.StgId] = {};
+                    unitData[group][obj.id][eObj.StgId]['years'] = 'years';
+                    unitData[group][obj.id][eObj.StgId]['percent'] = '%';
+                    unitData[group][obj.id][eObj.StgId]['divide'] = '/';
+                    unitData[group][obj.id][eObj.StgId]['multiply'] = '*';
+                    unitData[group][obj.id][eObj.StgId]['hundert'] = '100';
+                    unitData[group][obj.id][eObj.StgId]['thousand'] = '10<sup>3</sup>';
+                    unitData[group][obj.id][eObj.StgId]['milion'] = '10<sup>6</sup>';
+                    unitData[group][obj.id][eObj.StgId]['EmiUnit'] = stgUnits[eObj.StgId];
+                    unitData[group][obj.id][eObj.StgId]['Currency'] = genData['osy-currency'];
                 });
                 unitData[group][obj.id]['years'] = 'years';
                 unitData[group][obj.id]['percent'] = '%';
@@ -131,12 +144,59 @@ export class DataModel{
         return techNames;
     }
 
+    static getStgData(genData){
+        let stgNames = {};
+        $.each(genData['osy-stg'], function (id, obj) {
+            stgNames[obj['StgId']] = obj;
+        });
+        return stgNames;
+    }
+
+    static StgName(genData){
+        let stgNames = {};
+        $.each(genData['osy-stg'], function (id, obj) {
+            stgNames[obj.StgId] = obj['Stg'];
+        });
+        return stgNames;
+    }
     static getTsData(genData){
         let tsNames = {};
         $.each(genData['osy-ts'], function (id, obj) {
             tsNames[obj['TsId']] = obj;
         });
         return tsNames;
+    }
+
+    static getSeData(genData){
+        let seNames = {};
+        $.each(genData['osy-se'], function (id, obj) {
+            seNames[obj['SeId']] = obj;
+        });
+        return seNames;
+    }
+
+    static getDtData(genData){
+        let dtNames = {};
+        $.each(genData['osy-dt'], function (id, obj) {
+            dtNames[obj['DtId']] = obj;
+        });
+        return dtNames;
+    }
+
+    static getDtbData(genData){
+        let dtbNames = {};
+        $.each(genData['osy-dtb'], function (id, obj) {
+            dtbNames[obj['DtbId']] = obj;
+        });
+        return dtbNames;
+    }
+
+    static getStgData(genData){
+        let stgNames = {};
+        $.each(genData['osy-stg'], function (id, obj) {
+            stgNames[obj['StgId']] = obj;
+        });
+        return stgNames;
     }
 
     static getScData(genData){
@@ -216,6 +276,14 @@ export class DataModel{
         return EmiUnits;
     }
 
+    static getStgUnits(genData){
+        let StgUnits = {};
+        $.each(genData['osy-stg'], function (id, obj) {
+            StgUnits[obj['StgId']] = obj['UnitId'];
+        });
+        return StgUnits;
+    }
+
     static CommName(genData){
         let commNames = {};
         $.each(genData['osy-comm'], function (id, obj) {
@@ -230,6 +298,39 @@ export class DataModel{
             tsNames[obj['TsId']] = obj['Ts'];
         });
         return tsNames;
+    }
+
+
+    static SeName(genData){
+        let seNames = {};
+        $.each(genData['osy-se'], function (id, obj) {
+            seNames[obj['SeId']] = obj['Se'];
+        });
+        return seNames;
+    }
+
+    static DtName(genData){
+        let dtNames = {};
+        $.each(genData['osy-dt'], function (id, obj) {
+            dtNames[obj['DtId']] = obj['Dt'];
+        });
+        return dtNames;
+    }
+
+    static DtbName(genData){
+        let dtbNames = {};
+        $.each(genData['osy-dtb'], function (id, obj) {
+            dtbNames[obj['DtbId']] = obj['Dtb'];
+        });
+        return dtbNames;
+    }
+
+    static StgName(genData){
+        let stgNames = {};
+        $.each(genData['osy-stg'], function (id, obj) {
+            stgNames[obj['StgId']] = obj['Stg'];
+        });
+        return stgNames;
     }
 
     static EmiName(genData){
@@ -921,6 +1022,75 @@ export class DataModel{
         return RTchart;
     }
 
+    static RS(RSdata){
+        let RS = {};
+        const cloneData = JSON.parse(JSON.stringify(RSdata));
+        $.each(cloneData, function (param, obj1) {
+            RS[param] = {};
+            $.each(obj1, function (sc, array) {
+                RS[param][sc] = {};
+                $.each(array, function (id, obj) { 
+                    RS[param][sc] = obj
+                });
+            });
+        });
+        return RS;
+    }
+
+    static RSgrid(genData, RSdata, PARAMETERS){
+        // let scName = this.ScName(genData);
+        let scData = this.getScData(genData);
+        let paramName = this.ParamName(PARAMETERS['RS']);
+        let unitData = this.getUnitData(genData, PARAMETERS);
+        console.log('unitData ', unitData)
+        let paramById = this.getParamById(PARAMETERS);
+        console.log('paramById ', paramById)
+        const cloneData = JSON.parse(JSON.stringify(RSdata));
+        let RSgrid = {};
+        $.each(cloneData, function (param, paramObj) {
+            RSgrid[param] = [];
+            $.each(paramObj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['ParamId'] = param;
+                    obj['Param'] = paramName[param];
+                    // obj['ScId'] = sc;
+                    // obj['Sc'] = scName[sc];
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
+                    $.each(genData['osy-stg'], function (id, stg) {
+                        let rule = paramById['RS'][param]['unitRule'];
+                        let data = unitData['RS'][param][stg.StgId];
+                        obj[stg.StgId+'_UnitId'] = jsonLogic.apply(rule, data);
+                    });
+                    RSgrid[param].push(obj);
+                }); 
+            });
+        });
+        return RSgrid;
+    }
+
+    static RSchart(genData, RSdata){
+        let stgName = this.StgName(genData);
+        let RSchart = {};
+        let data = this.RS(RSdata);
+        $.each(RSdata, function (param, obj1) {
+            RSchart[param] = [];
+            $.each(genData['osy-stg'], function (idT, stg) {
+                let chunk = {};
+                chunk['StgId'] = stg.StgId;
+                chunk['Stg'] = stgName[stg.StgId];
+                $.each(genData['osy-scenarios'], function (idS, sc) {
+                    if (typeof data[param][sc.ScenarioId][stg.StgId] !== "undefined" ){
+                        chunk[sc.ScenarioId] = data[param][sc.ScenarioId][stg.StgId];
+                    }
+                });
+                RSchart[param].push(chunk);
+            });                
+        });
+        return RSchart;
+    }
+
     static RE(REdata){
         let RE = {};
         const cloneData = JSON.parse(JSON.stringify(REdata));
@@ -1054,6 +1224,76 @@ export class DataModel{
                         }
                     });
                     chartData[tech.TechId].push(chunk);
+                });                
+            });
+            RYTchart[param] = chartData; 
+        });
+        return RYTchart;
+    }
+
+
+
+    static RYS(RYSdata){
+        let RYS = {};
+        const cloneData = JSON.parse(JSON.stringify(RYSdata));
+        $.each(cloneData, function (param, obj1) {
+            RYS[param] = {};
+            $.each(obj1, function (sc, array) {
+                RYS[param][sc] = {};
+                $.each(array, function (id, obj) {
+                    RYS[param][sc][obj.StgId] = obj
+                    delete obj.StgId;
+                    delete obj.Stg;
+                    delete obj.ScId;
+                    delete obj.Sc;
+                });
+            });
+        });
+        return RYS;
+    }
+
+    static RYSgrid(genData, RYSdata, PARAMETERS){
+        let stgData = this.getStgData(genData);
+        let scData = this.getScData(genData);
+        let unitData = this.getUnitData(genData, PARAMETERS);
+        let paramById = this.getParamById(PARAMETERS);
+
+        const cloneData = JSON.parse(JSON.stringify(RYSdata));
+        let RYSgrid = {};
+        $.each(cloneData, function (param, paramObj) {
+            RYSgrid[param] = [];
+            $.each(paramObj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['Stg'] = stgData[obj.StgId]['Stg'];
+                    obj['StgDesc'] = stgData[obj.StgId]['Desc'];
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
+                    let rule = paramById['RYS'][param]['unitRule'];
+                    let data = unitData['RYS'][param][obj.StgId];
+                    obj['UnitId'] = jsonLogic.apply(rule, data);
+                    RYSgrid[param].push(obj);
+                }); 
+            });
+        });
+        return RYSgrid;
+    }
+    static RYSchart(genData, RYSdata){
+        let RYSchart = {};
+        let data = this.RYS(RYSdata);
+        $.each(RYSdata, function (param, obj1) {
+            let chartData = {};
+            $.each(genData['osy-years'], function (idY, year) { 
+                $.each(genData['osy-stg'], function (idT, stg) {
+                    let chunk = {};
+                    chunk['Year'] = year;
+                    if(!chartData[stg.StgId]){ chartData[stg.StgId] = []; }
+                    $.each(genData['osy-scenarios'], function (idS, sc) {
+                        if (typeof data[param][sc.ScenarioId][stg.StgId] !== "undefined" ){
+                            chunk[sc.ScenarioId] = data[param][sc.ScenarioId][stg.StgId][year];
+                        }
+                    });
+                    chartData[stg.StgId].push(chunk);
                 });                
             });
             RYTchart[param] = chartData; 

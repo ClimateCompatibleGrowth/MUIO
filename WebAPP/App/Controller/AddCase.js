@@ -68,8 +68,12 @@ export default class AddCase {
         Html.title(model.casename, model.title, "create & edit");
         Html.genData(model);
 
-        Grid.tsGrid(model.timeslices);
+        Grid.tsGrid(model.timeslices, model.seasons, model.daytypes, model.dailytimebrackets, model.seNames, model.dtNames, model.dtbNames);
+        Grid.seGrid(model.seasons);
+        Grid.dtGrid(model.daytypes);
+        Grid.dtbGrid(model.dailytimebrackets);
         Grid.commGrid(model.commodities);
+        Grid.stgGrid(model.stg, model.techs, model.techNames);
         Grid.techsGrid(model.techs, model.commodities, model.techGroups, model.emissions, model.commNames, model.emiNames, model.techGroupNames);
       
         Grid.techGroupGrid(model.techGroups);
@@ -91,15 +95,17 @@ export default class AddCase {
         this.initEvents(model);
     }
 
-
-
     static initEvents(model) {
 
         console.log('model ', model)
         let $divTech = $("#osy-gridTech");
         let $divTechGroup = $("#osy-gridTechGroup");
+        let $divStg = $("#osy-gridStg");
         let $divComm = $("#osy-gridComm");
         let $divTs = $("#osy-gridTs");
+        let $divSe = $("#osy-gridSe");
+        let $divDt = $("#osy-gridDt");
+        let $divDtb = $("#osy-gridDtb");
         let $divEmi = $("#osy-gridEmis");
         let $divScenario = $("#osy-gridScenario");
         let $divConstraint = $("#osy-gridConstraint");
@@ -203,7 +209,6 @@ export default class AddCase {
 
         $("#osy-caseForm").off('validationSuccess');
         $("#osy-caseForm").on('validationSuccess', function (event) {
-
             event.preventDefault();
             event.stopImmediatePropagation();
 
@@ -218,8 +223,6 @@ export default class AddCase {
             //var date = $("#osy-date").val();
             var currency = $("#osy-currency").val();
             var mo = $("#osy-mo").val().trim();
-            // var ns = $("#osy-ns").val().trim();
-            // var dt = $("#osy-dt").val().trim();
 
             var years = new Array();
             $.each($('input[type="checkbox"]:checked'), function (key, value) {
@@ -232,13 +235,16 @@ export default class AddCase {
                 "osy-desc": desc,
                 "osy-date": date,
                 "osy-currency": currency,
-                // "osy-ns": ns,
-                // "osy-dt": dt,
                 "osy-mo": mo,
                 "osy-tech": model.techs,
+                "osy-stg": model.stg,
                 "osy-techGroups": model.techGroups,
                 "osy-comm": model.commodities,
                 "osy-ts": model.timeslices,
+                "osy-se": model.seasons,
+                "osy-dt": model.daytypes,
+                "osy-dtb": model.dailytimebrackets,
+                
                 "osy-emis": model.emissions,
                 "osy-scenarios": model.scenarios,
                 "osy-constraints": model.constraints,
@@ -246,45 +252,46 @@ export default class AddCase {
             }
 
             Osemosys.saveCase(POSTDATA)
-                .then(response => {
-                    Message.loaderEnd()
-                    if (response.status_code == "created") {
-                        $("#osy-new").show();
-                        $('#osy-update').show();
-                        $('#osy-save').hide();
-                        Message.clearMessages();
-                        Message.bigBoxSuccess('Model message', response.message, 3000);
-                        Html.appendCasePicker(casename, casename);
-                        Sidebar.Reload(casename);
-                        $("#osy-case").html(casename);
-                        if (Base.AWS_SYNC == 1) {
-                            SyncS3.deleteResultsPreSync(casename)
-                                .then(response => {
-                                    SyncS3.uploadSync(casename);
-                                });
-                        }
+            .then(response => {
+                Message.loaderEnd()
+                if (response.status_code == "created") {
+                    $("#osy-new").show();
+                    $('#osy-update').show();
+                    $('#osy-save').hide();
+                    Message.clearMessages();
+                    Message.bigBoxSuccess('Model message', response.message, 3000);
+                    Html.appendCasePicker(casename, casename);
+                    Sidebar.Reload(casename);
+                    $("#osy-case").html(casename);
+                    if (Base.AWS_SYNC == 1) {
+                        SyncS3.deleteResultsPreSync(casename)
+                            .then(response => {
+                                SyncS3.uploadSync(casename);
+                            });
                     }
-                    if (response.status_code == "edited") {
-                        Html.title(casename, 'Model', 'create & edit');
-                        $("#osy-new").show();
-                        Navbar.initPage(casename);
-                        Sidebar.Reload(casename);
-                        Message.bigBoxInfo('Model message', response.message, 3000);
-                        if (Base.AWS_SYNC == 1) {
-                            SyncS3.deleteResultsPreSync(casename)
-                                .then(response => {
-                                    SyncS3.uploadSync(casename);
-                                });
-                        }
+                }
+                if (response.status_code == "edited") {
+                    Html.title(casename, 'Model', 'create & edit');
+                    $("#osy-new").show();
+                    Navbar.initPage(casename);
+                    Sidebar.Reload(casename);
+                    Message.bigBoxInfo('Model message', response.message, 3000);
+                    if (Base.AWS_SYNC == 1) {
+                        SyncS3.deleteResultsPreSync(casename)
+                            .then(response => {
+                                SyncS3.uploadSync(casename);
+                            });
                     }
-                    if (response.status_code == "exist") {
-                        $("#osy-new").show();
-                        Message.bigBoxWarning('Model message', response.message, 3000);
-                    }
-                })
-                .catch(error => {
-                    Message.bigBoxDanger('Error message', error, null);
-                })
+                }
+                if (response.status_code == "exist") {
+                    $("#osy-new").show();
+                    Message.bigBoxWarning('Model message', response.message, 3000);
+                }
+            })
+            .catch(error => {
+                Message.loaderEnd()
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
         //TECHNOLOGIES GRID AND EVENTS
@@ -414,11 +421,11 @@ export default class AddCase {
         //TIMESLICES GRID AND EVENTS
         $('#osy-caseForm').undelegate("#osy-addTs", "click");
         $('#osy-caseForm').delegate("#osy-addTs", "click", function (event) {
-            console.log('add timeslice')
+            //console.log('add timeslice')
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultTs = DefaultObj.defaultTs();
-            console.log('defaultTs ',defaultTs)
+            //console.log('defaultTs ',defaultTs)
             model.timeslices.push(JSON.parse(JSON.stringify(defaultTs[0], ['TsId', 'Ts', 'Desc'])));
 
             //update commnames
@@ -454,16 +461,159 @@ export default class AddCase {
             var value = args.newvalue.trim();
             model.timeslices[rowBoundIndex][column] = value;
 
+            //console.log('columnd ', column)
+
             if (column == 'Timeslice') {
                 var tsId = $divTs.jqxGrid('getcellvalue', rowBoundIndex, 'TsId');
                 model.tsNames[tsId] = value;
             }
         });
 
+        //SESONS GRID AND EVENTS
+        $('#osy-caseForm').undelegate("#osy-addSe", "click");
+        $('#osy-caseForm').delegate("#osy-addSe", "click", function (event) {
+            //console.log('add season')
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultSe = DefaultObj.defaultSe();
+            //console.log('defaultSe ',defaultSe)
+            model.seasons.push(JSON.parse(JSON.stringify(defaultSe[0], ['SeId', 'Se', 'Desc'])));
+
+            //update commnames
+            model.seNames[defaultSe[0]['SeId']] = defaultSe[0]['Se'];
+            //add row
+            $divSe.jqxGrid('addrow', null, defaultSe);
+            model.seCount++;
+            $("#seCount").text(model.seCount);
+        });
+        
+        $('#osy-caseForm').undelegate(".deleteSe", "click");
+        $('#osy-caseForm').delegate(".deleteSe", "click", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            if (id != 0) {
+                var seId = $divSe.jqxGrid('getcellvalue', id, 'SeId');
+                var rowid = $divSe.jqxGrid('getrowid', id);
+                $divSe.jqxGrid('deleterow', rowid);
+                model.seasons.splice(id, 1);
+                //update techNames
+                delete model.seNames[seId];
+                //ovdje trebamo izbaciti season iz timeslice definicije
+                //update count
+                model.seCount--;
+                $("#seCount").text(model.seCount);
+            }
+        });  
+        
+        $divSe.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue.trim();
+            model.seasons[rowBoundIndex][column] = value;
+            if (column == 'Se') {
+                var seId = $divSe.jqxGrid('getcellvalue', rowBoundIndex, 'SeId');
+                console.log('seId ', seId, value)
+                model.seNames[seId] = value;
+            }
+        });
+
+        //DAY TYPE GRID AND EVENTS
+        $('#osy-caseForm').undelegate("#osy-addDt", "click");
+        $('#osy-caseForm').delegate("#osy-addDt", "click", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultDt = DefaultObj.defaultDt();
+            model.daytypes.push(JSON.parse(JSON.stringify(defaultDt[0], ['DtId', 'Dt', 'Desc'])));
+            //update commnames
+            model.dtNames[defaultDt[0]['DtId']] = defaultDt[0]['Dt'];
+            //add row
+            $divDt.jqxGrid('addrow', null, defaultDt);
+            model.dtCount++;
+            $("#dtCount").text(model.dtCount);
+        });
+        
+        $('#osy-caseForm').undelegate(".deleteDt", "click");
+        $('#osy-caseForm').delegate(".deleteDt", "click", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            if (id != 0) {
+                var dtId = $divDt.jqxGrid('getcellvalue', id, 'DtId');
+                var rowid = $divDt.jqxGrid('getrowid', id);
+                $divDt.jqxGrid('deleterow', rowid);
+                model.seasons.splice(id, 1);
+                //update techNames
+                delete model.dtNames[dtId];
+                //ovdje trebamo izbaciti season iz timeslice definicije
+                //update count
+                model.dtCount--;
+                $("#dtCount").text(model.dtCount);
+            }
+        });  
+        
+        $divDt.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue.trim();
+            model.daytypes[rowBoundIndex][column] = value;
+            if (column == 'Dt') {
+                var dtId = $divDt.jqxGrid('getcellvalue', rowBoundIndex, 'DtId');
+                model.dtNames[dtId] = value;
+            }
+        });
+
+        //DAILY TIME BRACKETS GRID AND EVENTS
+        $('#osy-caseForm').undelegate("#osy-addDtb", "click");
+        $('#osy-caseForm').delegate("#osy-addDtb", "click", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultDtb = DefaultObj.defaultDtb();
+            model.dailytimebrackets.push(JSON.parse(JSON.stringify(defaultDtb[0], ['DtbId', 'Dtb', 'Desc'])));
+            //update commnames
+            model.dtbNames[defaultDtb[0]['DtbId']] = defaultDtb[0]['Dtb'];
+            //add row
+            $divDtb.jqxGrid('addrow', null, defaultDtb);
+            model.dtbCount++;
+            $("#dtbCount").text(model.dtbCount);
+        });
+        
+        $('#osy-caseForm').undelegate(".deleteDtb", "click");
+        $('#osy-caseForm').delegate(".deleteDtb", "click", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            if (id != 0) {
+                var dtbId = $divDtb.jqxGrid('getcellvalue', id, 'DtbId');
+                var rowid = $divDtb.jqxGrid('getrowid', id);
+                $divDtb.jqxGrid('deleterow', rowid);
+                model.dailytimebrackets.splice(id, 1);
+                //update techNames
+                delete model.dtbNames[dtbId];
+                //ovdje trebamo izbaciti season iz timeslice definicije
+                //update count
+                model.dtbCount--;
+                $("#dtbCount").text(model.dtbCount);
+            }
+        });  
+        
+        $divDtb.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue.trim();
+            model.dailytimebrackets[rowBoundIndex][column] = value;
+            if (column == 'Dtb') {
+                var dtbId = $divDtb.jqxGrid('getcellvalue', rowBoundIndex, 'DtbId');
+                model.dtbNames[dtbId] = value;
+            }
+        });
+
         //COMMODITIES GRID AND EVENTS
         $('#osy-caseForm').undelegate("#osy-addComm", "click");
         $('#osy-caseForm').delegate("#osy-addComm", "click", function (event) {
-
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultComm = DefaultObj.defaultComm();
@@ -496,6 +646,9 @@ export default class AddCase {
                 $.each(model.techs, function (id, techObj) {
                     techObj['IAR'] = techObj['IAR'].filter(item => item !== commId);
                     techObj['OAR'] = techObj['OAR'].filter(item => item !== commId);
+                    techObj['EAR'] = techObj['EAR'].filter(item => item !== commId);
+                    techObj['INCR'] = techObj['INCR'].filter(item => item !== commId);
+                    techObj['ITCR'] = techObj['ITCR'].filter(item => item !== commId);
                 });
             }
         });
@@ -569,6 +722,55 @@ export default class AddCase {
                 model.emiNames[emisId] = value;
             }
         });
+
+        //STORAGE GRID AND EVENTS
+        $('#osy-caseForm').undelegate("#osy-addStg", "click");
+        $('#osy-caseForm').delegate("#osy-addStg", "click", function (event) {
+            //console.log('add season')
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultStg = DefaultObj.defaultStg();
+            model.stg.push(JSON.parse(JSON.stringify(defaultStg[0], ['StgId', 'Stg', 'Desc',"UnitId", "TTS","TFS", "Operation"])));
+            //update stgames
+            console.log('defaultStg ',defaultStg)
+            model.stgNames[defaultStg[0]['StgId']] = defaultStg[0]['Stg'];
+            //add row
+            $divStg.jqxGrid('addrow', null, defaultStg);
+            model.stgCount++;
+            $("#stgCount").text(model.stgCount);
+        });
+        
+        $('#osy-caseForm').undelegate(".deleteStg", "click");
+        $('#osy-caseForm').delegate(".deleteStg", "click", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var id = $(this).attr('data-id');
+            if (id != 0) {
+                var seId = $divStg.jqxGrid('getcellvalue', id, 'StgId');
+                var rowid = $divStg.jqxGrid('getrowid', id);
+                $divStg.jqxGrid('deleterow', rowid);
+                model.stg.splice(id, 1);
+                //update techNames
+                delete model.stgNames[stgId];
+                //update count
+                model.stgCount--;
+                $("#stgCount").text(model.stgCount);
+            }
+        });  
+        
+        $divStg.on('cellvaluechanged', function (event) {
+            var args = event.args;
+            var column = event.args.datafield;
+            var rowBoundIndex = args.rowindex;
+            var value = args.newvalue.trim();
+            model.stg[rowBoundIndex][column] = value;
+            if (column == 'Stg') {
+                var stgId = $divStg.jqxGrid('getcellvalue', rowBoundIndex, 'StgId');
+                console.log('stgId ', stgId, value)
+                model.stgNames[stgId] = value;
+            }
+        });
+
 
         //SCENARIOS GRID AND EVENTS
         $('#osy-caseForm').undelegate("#osy-addScenario", "click");
@@ -696,6 +898,7 @@ export default class AddCase {
         $(".nav-tabs li a").off('click');
         $('.nav-tabs li a').on("click", function (event, ui) {
             var id = $(this).attr('id');
+            console.log('tab id ', id)
             //update tech grid to update IAR OAR EAR with new added or removed comms and emis
             if (id == 'Techs') {
                 //Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);
@@ -706,6 +909,16 @@ export default class AddCase {
             else if (id == 'Constraints') {
                 $("#osy-gridConstraint" ).ready(function() {
                     $divConstraint.jqxGrid('updatebounddata');
+                });
+            }
+            else if (id == 'Ts') {
+                $("#osy-gridTs" ).ready(function() {
+                    $divTs.jqxGrid('updatebounddata');
+                });
+            }
+            else if (id == 'Storage') {
+                $("#osy-gridStg" ).ready(function() {
+                    $divStg.jqxGrid('updatebounddata');
                 });
             }
         });

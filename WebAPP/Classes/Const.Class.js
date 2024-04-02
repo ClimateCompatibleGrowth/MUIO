@@ -57,15 +57,17 @@ export const GROUPNAMES = {
     "RT": "Region, technology",
     "RY": "Region, year",
     "RE": "Region, emission",
+    "RS": "Region, storage",
     "RYCn": "Region, year, constraint",
     "RYTs": "Region, year, timeslice",
     "RYT": "Region, year, technology",
+    "RYS": "Region, year, storage",
     "RYTCn": "Region, year, technology, constraint",
     "RYTM": "Region, year, technology, mode of operation",
     "RYC": "Region, year, commodity",
     "RYE": "Region, year, emission",
     "RYTC": "Region, year, technology, commodity",
-    "RYTCM": "Region, year, technology, commodity, emission, mode of operation",
+    "RYTCM": "Region, year, technology, commodity, mode of operation",
     "RYTE": "Region, year, technology, emission",
     "RYTEM": "Region, year, technology, emission, mode of operation",
     "RYTTs": "Region, year, technology, timeslice",
@@ -77,8 +79,8 @@ export const RESULTGROUPNAMES = {
     "RYT"    :"Region, year, technology",
     "RYE"    :"Region, year, emission",
     "RYTM"  :"Region, year, technology, mode of operation",
-    "RYTC" :"Region, year, technology, commodity",
-    "RYTE"  :"Region, year, technology, emission",
+    "RYTC"  :"Region, year, technology, commodity",
+    "RYTE"      :"Region, year, technology, emission",
     "RYTTs"  :"Region, year, technology",
     "RYCTs"  :"Region, year, commodity, timeslice",
     "RYTEM"  :"Region, year, technology, emission, mode of operation",
@@ -90,11 +92,13 @@ export const PARAMORDER = [
     "R"     ,  
     "RT"    ,     
     "RY"    ,     
-    "RE"    , 
+    "RE"    ,
+    "RS"    ,  
     "RYCn"  ,   
     "RYTCn" , 
     "RYTs"  ,     
     "RYT"   , 
+    "RYS"   ,
     "RYTM"  ,  
     "RYTC"  ,  
     "RYTCM" , 
@@ -220,6 +224,14 @@ export const TAGS =
     {id:1, name:"Equality"},
     {id:0, name:"Inequality"},
 ];
+
+// export const STORAGE_OPERATIONS = 
+// [
+//     {id:1, name:"Yearly"},
+//     {id:0, name:"Daily"},
+// ];
+export const STORAGE_OPERATIONS = 
+["Yearly","Daily"];
 
 
 

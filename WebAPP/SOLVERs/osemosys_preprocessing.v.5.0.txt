@@ -134,7 +134,8 @@ var InputToNewCapacity{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} 
 var InputToTotalCapacity{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
 var NewCapacity{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
 var NewStorageCapacity{r in REGION, s in STORAGE, y in YEAR} >= 0;
-var NumberOfNewTechnologyUnits{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
+#var NumberOfNewTechnologyUnits{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
+var NumberOfNewTechnologyUnits{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0,integer;
 var ProductionByTechnology{r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
 var ProductionByTechnologyAnnual{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
 var RateOfActivity{r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODEperTECHNOLOGY[t], y in YEAR} >= 0;
@@ -261,23 +262,27 @@ s.t. CAb1_PlannedMaintenance{r in REGION, t in TECHNOLOGY, y in YEAR}: sum{l in 
 # s.t. E8_AnnualEmissionsLimit{r in REGION, e in EMISSION, y in YEAR}: sum{l in TIMESLICE, (m,t) in MODExTECHNOLOGYperEMISSION[e]} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{(m,t) in MODExTECHNOLOGYperEMISSION[e]} EmissionByActivityChange[r, t, e, m, y] + AnnualExogenousEmission [r, e, y] <= AnnualEmissionLimit [r, e, y];
 
 # TN Changes 2024 01
-s.t. E8_AnnualEmissionsLimit{r in REGION, e in EMISSION, y in YEAR}: sum{l in TIMESLICE, (m,t) in MODExTECHNOLOGYperEMISSION[e]} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{(m,t) in MODExTECHNOLOGYperEMISSIONChange[e]} EmissionByActivityChange[r, t, e, m, y] + AnnualExogenousEmission [r, e, y] <= AnnualEmissionLimit [r, e, y];
+#s.t. E8_AnnualEmissionsLimit{r in REGION, e in EMISSION, y in YEAR}: sum{l in TIMESLICE, (m,t) in MODExTECHNOLOGYperEMISSION[e]} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{(m,t) in MODExTECHNOLOGYperEMISSIONChange[e]} EmissionByActivityChange[r, t, e, m, y] + AnnualExogenousEmission [r, e, y] <= AnnualEmissionLimit [r, e, y];
 
+#vk 20242303 exogenous emission removed
+s.t. E8_AnnualEmissionsLimit{r in REGION, e in EMISSION, y in YEAR}: sum{l in TIMESLICE, (m,t) in MODExTECHNOLOGYperEMISSION[e]} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{(m,t) in MODExTECHNOLOGYperEMISSIONChange[e]} EmissionByActivityChange[r, t, e, m, y] <= AnnualEmissionLimit [r, e, y];
 
 
 # Original
 # s.t. E9_ModelPeriodEmissionsLimit{r in REGION, e in EMISSION}: sum{(m,t) in MODExTECHNOLOGYperEMISSION[e], y in YEAR, l in TIMESLICE} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{(m,t) in MODExTECHNOLOGYperEMISSION[e], y in YEAR} EmissionByActivityChange[r, t, e, m, y] + ModelPeriodExogenousEmission [r, e] <= ModelPeriodEmissionLimit [r, e];
 
 # TN Changes 2024 01
-s.t. E9_ModelPeriodEmissionsLimit{r in REGION, e in EMISSION}: sum{(m,t) in MODExTECHNOLOGYperEMISSION[e], y in YEAR, l in TIMESLICE} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{(m,t) in MODExTECHNOLOGYperEMISSIONChange[e], y in YEAR} EmissionByActivityChange[r, t, e, m, y] + ModelPeriodExogenousEmission [r, e] <= ModelPeriodEmissionLimit [r, e];
+#s.t. E9_ModelPeriodEmissionsLimit{r in REGION, e in EMISSION}: sum{(m,t) in MODExTECHNOLOGYperEMISSION[e], y in YEAR, l in TIMESLICE} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{(m,t) in MODExTECHNOLOGYperEMISSIONChange[e], y in YEAR} EmissionByActivityChange[r, t, e, m, y] + ModelPeriodExogenousEmission [r, e] <= ModelPeriodEmissionLimit [r, e];
 
+#vk 20242303 exogenous emission removed
+s.t. E9_ModelPeriodEmissionsLimit{r in REGION, e in EMISSION}: sum{(m,t) in MODExTECHNOLOGYperEMISSION[e], y in YEAR, l in TIMESLICE} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{(m,t) in MODExTECHNOLOGYperEMISSIONChange[e], y in YEAR} EmissionByActivityChange[r, t, e, m, y] <= ModelPeriodEmissionLimit [r, e];
 
 
 s.t. EBa11_EnergyBalanceEachTS5{r in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR}: sum{(m,t) in MODExTECHNOLOGYperFUELout[f]} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y]*YearSplit[l,y] >= SpecifiedAnnualDemand[r,f,y]*SpecifiedDemandProfile[r,f,l,y] + sum{(m,t) in MODExTECHNOLOGYperFUELin[f]} RateOfActivity[r,l,t,m,y]*InputActivityRatio[r,t,f,m,y]*YearSplit[l,y] + sum{rr in REGION} Trade[r,rr,l,f,y]*TradeRoute[r,rr,f,y];
 s.t. EBa9_EnergyBalanceEachTS3{r in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR}: SpecifiedAnnualDemand[r,f,y]*SpecifiedDemandProfile[r,f,l,y] = Demand[r,l,f,y];
 s.t. EBb4_EnergyBalanceEachYear4{r in REGION, f in COMMODITY, y in YEAR}: sum{(m,t) in MODExTECHNOLOGYperFUELout[f], l in TIMESLICE} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y]*YearSplit[l,y] >= sum{(m,t) in MODExTECHNOLOGYperFUELin[f], l in TIMESLICE} RateOfActivity[r,l,t,m,y]*InputActivityRatio[r,t,f,m,y]*YearSplit[l,y] + sum{l in TIMESLICE, rr in REGION} Trade[r,rr,l,f,y]*TradeRoute[r,rr,f,y] + AccumulatedAnnualDemand[r,f,y];
 #s.t. RE1_FuelProductionByTechnologyAnnual{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR}: sum{m in MODEperTECHNOLOGY[t], l in TIMESLICE} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y] * YearSplit[l,y] = ProductionByTechnologyAnnual[r,t,f,y];
-s.t. RE4_EnergyConstraint{r in REGION, y in YEAR}:REMinProductionTarget[r,y]*sum{l in TIMESLICE, f in COMMODITY} sum{(m,t) in MODExTECHNOLOGYperFUELout[f]} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y]*RETagFuel[r,f,y] <= sum{f in COMMODITY, (m,t) in MODExTECHNOLOGYperFUELout[f], l in TIMESLICE} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y] * YearSplit[l,y]*RETagTechnology[r,t,y];
+#s.t. RE4_EnergyConstraint{r in REGION, y in YEAR}:REMinProductionTarget[r,y]*sum{l in TIMESLICE, f in COMMODITY} sum{(m,t) in MODExTECHNOLOGYperFUELout[f]} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y]*RETagFuel[r,f,y] <= sum{f in COMMODITY, (m,t) in MODExTECHNOLOGYperFUELout[f], l in TIMESLICE} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y] * YearSplit[l,y]*RETagTechnology[r,t,y];
 #s.t. RE5_FuelUseByTechnologyAnnual{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR}: sum{m in MODEperTECHNOLOGY[t], l in TIMESLICE} RateOfActivity[r,l,t,m,y]*InputActivityRatio[r,t,f,m,y]*YearSplit[l,y] = UseByTechnologyAnnual[r,t,f,y];
 s.t. RM3_ReserveMargin_Constraint{r in REGION, l in TIMESLICE, y in YEAR}: sum{f in COMMODITY, (m,t) in MODExTECHNOLOGYperFUELout[f]} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y] * ReserveMarginTagFuel[r,f,y] * ReserveMargin[r,y]<= sum {t in TECHNOLOGY} ((sum{yy in YEAR: y-yy < OperationalLife[r,t] && y-yy>=0} NewCapacity[r,t,yy])+ ResidualCapacity[r,t,y]) * ReserveMarginTagTechnology[r,t,y] * CapacityToActivityUnit[r,t];
 s.t. SV1_SalvageValueAtEndOfPeriod1{r in REGION, t in TECHNOLOGY, y in YEAR: (y + OperationalLife[r,t]-1) > (max{yy in YEAR} max(yy)) && DiscountRate[r]=0}: SalvageValue[r,t,y] = CapitalCost[r,t,y]*NewCapacity[r,t,y]*CapitalRecoveryFactor[r,t] * PvAnnuity[r,t]*(1-(((1+DiscountRate[r])^(max{yy in YEAR} max(yy) - y+1)-1)/((1+DiscountRate[r])^OperationalLife[r,t]-1)));
@@ -318,86 +323,11 @@ sum{t in TECHNOLOGY}UDCMultiplierTotalCapacity[r,t,u,y]*TotalCapacityAnnual[r,t,
 sum{t in TECHNOLOGY}UDCMultiplierNewCapacity[r,t,u,y]*NewCapacity[r,t,y] +
 sum{t in TECHNOLOGY}UDCMultiplierActivity[r,t,u,y]*TotalTechnologyAnnualActivity[r,t,y] = UDCConstant[r,u,y];
 
-
-
 #
 #####################
 #
 solve;
 #
 #####################
-#
-################
-#    Output    #
-################
-#
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/AccumulatedNewCapacity.csv" : r, t, y, AccumulatedNewCapacity[r, t, y];
-#table tout {r in REGION, e in EMISSION, y in YEAR} OUT "CSV" "res/csv/AnnualEmissions.csv" : r, e, y, AnnualEmissions[r, e, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/AnnualFixedOperatingCost.csv" : r, t, y, AnnualFixedOperatingCost[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, e in EMISSION, y in YEAR} OUT "CSV" "res/csv/AnnualTechnologyEmission.csv" : r, t, e, y, AnnualTechnologyEmission[r, t, e, y];
-#table tout {r in REGION, t in TECHNOLOGY, e in EMISSION, m in MODE_OF_OPERATION, y in YEAR} OUT "CSV" "res/csv/AnnualTechnologyEmissionByMode.csv" : r, t, e, m, y, AnnualTechnologyEmissionByMode[r, t, e, m, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/AnnualVariableOperatingCost.csv" : r, t, y, AnnualVariableOperatingCost[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/CapitalInvestment.csv" : r, t, y, CapitalInvestment[r, t, y];
-#table tout {r in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/Demand.csv" : r, l, f, y, Demand[r, l, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/DiscountedSalvageValue.csv" : r, t, y, DiscountedSalvageValue[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/DiscountedTechnologyEmissionsPenalty.csv" : r, t, y, DiscountedTechnologyEmissionsPenalty[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/InputToNewCapacity.csv" : r, t, f, y, InputToNewCapacity[r, t, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/InputToTotalCapacity.csv" : r, t, f, y, InputToTotalCapacity[r, t, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/NewCapacity.csv" : r, t, y, NewCapacity[r, t, y];
-#table tout {r in REGION, s in STORAGE, y in YEAR} OUT "CSV" "res/csv/NewStorageCapacity.csv" : r, s, y, NewStorageCapacity[r, s, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/NumberOfNewTechnologyUnits.csv" : r, t, y, NumberOfNewTechnologyUnits[r, t, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/ProductionByTechnology.csv" : r, l, t, f, y, ProductionByTechnology[r, l, t, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/ProductionByTechnologyAnnual.csv" : r, t, f, y, ProductionByTechnologyAnnual[r, t, f, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, y in YEAR} OUT "CSV" "res/csv/RateOfActivity.csv" : r, l, t, m, y, RateOfActivity[r, l, t, m, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/RateOfProductionByTechnology.csv" : r, l, t, f, y, RateOfProductionByTechnology[r, l, t, f, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/RateOfProductionByTechnologyByMode.csv" : r, l, t, m, f, y, RateOfProductionByTechnologyByMode[r, l, t, m, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, l in TIMESLICE, y in YEAR} OUT "CSV" "res/csv/RateOfTotalActivity.csv" : r, t, l, y, RateOfTotalActivity[r, t, l, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/RateOfUseByTechnology.csv" : r, l, t, f, y, RateOfUseByTechnology[r, l, t, f, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/RateOfUseByTechnologyByMode.csv" : r, l, t, m, f, y, RateOfUseByTechnologyByMode[r, l, t, m, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/SalvageValue.csv" : r, t, y, SalvageValue[r, t, y];
-#table tout {r in REGION, s in STORAGE, y in YEAR} OUT "CSV" "res/csv/SalvageValueStorage.csv" : r, s, y, SalvageValueStorage[r, s, y];
-#table tout {r in REGION, t in TECHNOLOGY, m in MODE_OF_OPERATION, y in YEAR} OUT "CSV" "res/csv/TotalAnnualTechnologyActivityByMode.csv" : r, t, m, y, TotalAnnualTechnologyActivityByMode[r, t, m, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/TotalCapacityAnnual.csv" : r, t, y, TotalCapacityAnnual[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" "res/csv/TotalTechnologyAnnualActivity.csv" : r, t, y, TotalTechnologyAnnualActivity[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY} OUT "CSV" "res/csv/TotalTechnologyModelPeriodActivity.csv" : r, t, TotalTechnologyModelPeriodActivity[r, t];
-#table tout {r in REGION, rr in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/Trade.csv" : r, rr, l, f, y, Trade[r, rr, l, f, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" "res/csv/UseByTechnology.csv" : r, l, t, f, y, UseByTechnology[r, l, t, f, y];
-
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/AccumulatedNewCapacity.csv" : r, t, y, AccumulatedNewCapacity[r, t, y];
-#table tout {r in REGION, e in EMISSION, y in YEAR} OUT "CSV" ResultsPath & "/AnnualEmissions.csv" : r, e, y, AnnualEmissions[r, e, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/AnnualFixedOperatingCost.csv" : r, t, y, AnnualFixedOperatingCost[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, e in EMISSION, y in YEAR} OUT "CSV" ResultsPath & "/AnnualTechnologyEmission.csv" : r, t, e, y, AnnualTechnologyEmission[r, t, e, y];
-#table tout {r in REGION, t in TECHNOLOGY, e in EMISSION, m in MODE_OF_OPERATION, y in YEAR} OUT "CSV" ResultsPath & "/AnnualTechnologyEmissionByMode.csv" : r, t, e, m, y, AnnualTechnologyEmissionByMode[r, t, e, m, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/AnnualVariableOperatingCost.csv" : r, t, y, AnnualVariableOperatingCost[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/CapitalInvestment.csv" : r, t, y, CapitalInvestment[r, t, y];
-#table tout {r in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/Demand.csv" : r, l, f, y, Demand[r, l, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/DiscountedSalvageValue.csv" : r, t, y, DiscountedSalvageValue[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/DiscountedTechnologyEmissionsPenalty.csv" : r, t, y, DiscountedTechnologyEmissionsPenalty[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/InputToNewCapacity.csv" : r, t, f, y, InputToNewCapacity[r, t, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/InputToTotalCapacity.csv" : r, t, f, y, InputToTotalCapacity[r, t, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/NewCapacity.csv" : r, t, y, NewCapacity[r, t, y];
-#table tout {r in REGION, s in STORAGE, y in YEAR} OUT "CSV" ResultsPath & "/NewStorageCapacity.csv" : r, s, y, NewStorageCapacity[r, s, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/NumberOfNewTechnologyUnits.csv" : r, t, y, NumberOfNewTechnologyUnits[r, t, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/ProductionByTechnology.csv" : r, l, t, f, y, ProductionByTechnology[r, l, t, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/ProductionByTechnologyAnnual.csv" : r, t, f, y, ProductionByTechnologyAnnual[r, t, f, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, y in YEAR} OUT "CSV" ResultsPath & "/RateOfActivity.csv" : r, l, t, m, y, RateOfActivity[r, l, t, m, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/RateOfProductionByTechnology.csv" : r, l, t, f, y, RateOfProductionByTechnology[r, l, t, f, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/RateOfProductionByTechnologyByMode.csv" : r, l, t, m, f, y, RateOfProductionByTechnologyByMode[r, l, t, m, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, l in TIMESLICE, y in YEAR} OUT "CSV" ResultsPath & "/RateOfTotalActivity.csv" : r, t, l, y, RateOfTotalActivity[r, t, l, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/RateOfUseByTechnology.csv" : r, l, t, f, y, RateOfUseByTechnology[r, l, t, f, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/RateOfUseByTechnologyByMode.csv" : r, l, t, m, f, y, RateOfUseByTechnologyByMode[r, l, t, m, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/SalvageValue.csv" : r, t, y, SalvageValue[r, t, y];
-#table tout {r in REGION, s in STORAGE, y in YEAR} OUT "CSV" ResultsPath & "/SalvageValueStorage.csv" : r, s, y, SalvageValueStorage[r, s, y];
-#table tout {r in REGION, t in TECHNOLOGY, m in MODE_OF_OPERATION, y in YEAR} OUT "CSV" ResultsPath & "/TotalAnnualTechnologyActivityByMode.csv" : r, t, m, y, TotalAnnualTechnologyActivityByMode[r, t, m, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/TotalCapacityAnnual.csv" : r, t, y, TotalCapacityAnnual[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/TotalTechnologyAnnualActivity.csv" : r, t, y, TotalTechnologyAnnualActivity[r, t, y];
-#table tout {r in REGION, t in TECHNOLOGY} OUT "CSV" ResultsPath & "/TotalTechnologyModelPeriodActivity.csv" : r, t, TotalTechnologyModelPeriodActivity[r, t];
-#table tout {r in REGION, rr in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/Trade.csv" : r, rr, l, f, y, Trade[r, rr, l, f, y];
-#table tout {r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/UseByTechnology.csv" : r, l, t, f, y, UseByTechnology[r, l, t, f, y];
-#table tout {r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} OUT "CSV" ResultsPath & "/UseByTechnologyAnnual.csv" : r, t, f, y, UseByTechnologyAnnual[r, t, f, y];
-
-#table tout {r in REGION, t in TECHNOLOGY, y in YEAR} OUT "CSV" ResultsPath & "/DPATHTEST.csv" : r, t, y, AccumulatedNewCapacity[r, t, y];
-
-#table tout {r in REGION, t in TECHNOLOGY, e in EMISSION, m in MODE_OF_OPERATION, y in YEAR} OUT "CSV" ResultsPath & "/EmissionByActivityChange.csv" : r, t, e, m, y, EmissionByActivityChange[r,t,e,m,y];
 #
 end;

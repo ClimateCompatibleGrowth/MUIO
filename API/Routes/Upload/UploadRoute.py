@@ -98,6 +98,50 @@ def updateTimeslices(casename):
     genData = File.readParamFile(genDataPath)
     ns = int(genData["osy-ns"])
     nd = int(genData["osy-dt"])
+    genData["osy-se"] = []
+    genData["osy-se"].append({"SeId": "SE_0", "Se": "SE_0", "Desc": "Default season"})
+
+    genData["osy-dt"] = []
+    genData["osy-dt"].append({"DtId": "DT_0", "Dt": "DT_0", "Desc": "Default day type"})
+
+    genData["osy-dtb"] = []
+    genData["osy-dtb"].append({"DtbId": "DTB_0", "Dtb": "DTB_0", "Desc": "Default dialy time bracket"})
+
+    genData["osy-ts"] = []
+    for season in range(ns):
+        for day in range(nd):
+            chunk = {}
+            s = str(season + 1)
+            d = str(day + 1)
+            chunk['TsId'] = "S"+s+d
+            chunk['Ts'] = "S"+s+d
+            chunk["SE"] = ["SE_0"]
+            chunk["DT"] = ["DT_0"]
+            chunk["DTB"] = ["DTB_0"]
+            chunk['Desc'] = "Default year split"
+            genData["osy-ts"].append(chunk)
+    File.writeFile( genData, genDataPath)
+    #rename json files with timeslices
+    RYTsPath = Path(Config.DATA_STORAGE, casename, 'RYTs.json')
+    RYTsPath.write_text(RYTsPath.read_text().replace('YearSplit', 'TsId'))
+    RYTTsPath = Path(Config.DATA_STORAGE, casename, 'RYTTs.json')
+    RYTTsPath.write_text(RYTTsPath.read_text().replace('Timeslice', 'TsId'))
+    RYCTsPath = Path(Config.DATA_STORAGE, casename, 'RYCTs.json')
+    RYCTsPath.write_text(RYCTsPath.read_text().replace('Timeslice', 'TsId'))
+
+def updateStorageSet(casename):
+    genDataPath = Path(Config.DATA_STORAGE, casename, 'genData.json')
+    genData = File.readParamFile(genDataPath)
+
+    genData["osy-stg"] = []
+
+    File.writeFile( genData, genDataPath)
+
+def updateTimeslices_OnlyTs(casename):
+    genDataPath = Path(Config.DATA_STORAGE, casename, 'genData.json')
+    genData = File.readParamFile(genDataPath)
+    ns = int(genData["osy-ns"])
+    nd = int(genData["osy-dt"])
     genData["osy-ts"] = []
     for season in range(ns):
         for day in range(nd):
@@ -253,7 +297,7 @@ def uploadCase():
 
                                     #update for dynamic timeslicec
                                     updateTimeslices(casename)
-
+                                    updateStorageSet(casename)
                                     
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
@@ -273,17 +317,19 @@ def uploadCase():
                  
                                     #update for dynamic timeslicec
                                     updateTimeslices(casename)
+                                    updateStorageSet(casename)
 
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
                                         "status_code": "success",
                                         "casename": casename
                                     })
-                                elif name == '4.0' or name == '4.5': 
+                                elif name == '4.0' or name == '4.5' or name == '4.9': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
                                     # potrebno updatevoati YearSplit u verziji 5.0 su dinamicki
                                     #update for dynamic timeslicec
                                     updateTimeslices(casename)
+                                    updateStorageSet(casename)
                                     #u 4.5 ver dodani paramteri i varijable
                                     # u 4.9 versiji dodano param DiscountRateIdv
                                     msg.append({
@@ -293,17 +339,17 @@ def uploadCase():
                                         "casename": casename
                                     })
 
-                                elif name == '4.9': 
-                                    zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
-                                    # potrebno updatevoati YearSplit u verziji 5.0 su dinamicki
-                                    #update for dynamic timeslicec
-                                    updateTimeslices(casename)
+                                # elif name == '4.9': 
+                                #     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                #     # potrebno updatevoati YearSplit u verziji 5.0 su dinamicki
+                                #     #update for dynamic timeslicec
+                                #     updateTimeslices(casename)
 
-                                    msg.append({
-                                            "message": "Model " + casename +" have been uploaded!",
-                                            "status_code": "success",
-                                            "casename": casename
-                                        })
+                                #     msg.append({
+                                #             "message": "Model " + casename +" have been uploaded!",
+                                #             "status_code": "success",
+                                #             "casename": casename
+                                #         })
 
                                 elif name == '5.0': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))

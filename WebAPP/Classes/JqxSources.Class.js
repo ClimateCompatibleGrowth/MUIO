@@ -58,7 +58,48 @@ export class JqxSources {
         return srcTechGroup;
     }
 
-    
+    static srcSe(seasons) {
+        var srcSe = {
+            localdata: seasons,
+            datatype: "json",
+            datafields:
+                [
+                    { name: 'SeId', type: 'string' },
+                    { name: 'Se', type: 'string' },
+                    { name: 'Desc', type: 'string' }
+                ],
+        }
+        return srcSe;
+    }
+
+    static srcDt(daytypes) {
+        var srcDt = {
+            localdata: daytypes,
+            datatype: "json",
+            datafields:
+                [
+                    { name: 'DtId', type: 'string' },
+                    { name: 'Dt', type: 'string' },
+                    { name: 'Desc', type: 'string' }
+                ],
+        }
+        return srcDt;
+    }
+
+    static srcDtb(dailytimebrackets) {
+        var srcDtb = {
+            localdata: dailytimebrackets,
+            datatype: "json",
+            datafields:
+                [
+                    { name: 'DtbId', type: 'string' },
+                    { name: 'Dtb', type: 'string' },
+                    { name: 'Desc', type: 'string' }
+                ],
+        }
+        return srcDtb;
+    }
+
     static srcTs(timeslices) {
         var srcTs = {
             localdata: timeslices,
@@ -67,7 +108,10 @@ export class JqxSources {
                 [
                     { name: 'TsId', type: 'string' },
                     { name: 'Ts', type: 'string' },
-                    { name: 'Desc', type: 'string' }
+                    { name: 'Desc', type: 'string' },
+                    { name: 'SE', type: 'array' },
+                    { name: 'DT', type: 'array' },
+                    { name: 'DTB', type: 'array' },
                 ],
         }
         return srcTs;
@@ -128,6 +172,37 @@ export class JqxSources {
                 ],
         };
         return srcTags;
+    }
+
+    static srcStorageOperations(operations) {
+        var srcTags = {
+            localdata: operations,
+            datatype: "json",
+            datafields:
+                [
+                    { name: 'id', type: 'number' },
+                    { name: 'name', type: 'string' },
+                ],
+        };
+        return srcTags;
+    }
+
+    static srcStorage(storages) {
+        var srcStorage = {
+            localdata: storages,
+            datatype: "json",
+            datafields:
+                [
+                    { name: 'StgId', type: 'string' },
+                    { name: 'Stg', type: 'string' },
+                    { name: 'Desc', type: 'string' },
+                    { name: 'TTS', type: 'string' },
+                    { name: 'TFS', type: 'string' },
+                    { name: 'UnitId', type: 'string' },
+                    { name: 'Operation', type: 'string' }
+                ],
+        }
+        return srcStorage;
     }
 
     static srcScenario(scenarios) {

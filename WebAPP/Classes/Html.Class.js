@@ -260,6 +260,10 @@ export class Html {
 
         $("#commCount").text(model.commCount);
         $("#tsCount").text(model.tsCount);
+        $("#seCount").text(model.seCount);
+        $("#stgCount").text(model.stgCount);
+        $("#dtCount").text(model.dtCount);
+        $("#dtbCount").text(model.dtbCount);
         $("#techGroupCount").text(model.techGroupCount);
         $("#techCount").text(model.techCount);
         $("#emisCount").text(model.emisCount);

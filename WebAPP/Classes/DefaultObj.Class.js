@@ -5,6 +5,56 @@ export class DefaultObj{
         // after the decimal.
         return type+'_' + Math.random().toString(36).substr(2, 5);
     }
+    static defaultSe(first=false){
+        let id;
+        if(first){
+            id = 'SE_0';
+        }else{
+            id = this.getId('SE');
+        }
+        let defaultSe = [
+            {
+                "SeId": id,
+                "Se":id,
+                "Desc": "Default season"
+            }
+        ];
+        return defaultSe;
+    }
+
+    static defaultDt(first=false){
+        let id;
+        if(first){
+            id = 'DT_0';
+        }else{
+            id = this.getId('DT');
+        }
+        let defaultDt = [
+            {
+                "DtId": id,
+                "Dt":id,
+                "Desc": "Default day type"
+            }
+        ];
+        return defaultDt;
+    }
+
+    static defaultDtb(first=false){
+        let id;
+        if(first){
+            id = 'DTB_0';
+        }else{
+            id = this.getId('DTB');
+        }
+        let defaultDtb = [
+            {
+                "DtbId": id,
+                "Dtb":id,
+                "Desc": "Default dialy time bracket"
+            }
+        ];
+        return defaultDtb;
+    }
 
     static defaultTs(first=false){
         let id;
@@ -13,11 +63,15 @@ export class DefaultObj{
         }else{
             id = this.getId('TS');
         }
+        let emptyArray = [];
         let defaultTs = [
             {
                 "TsId": id,
                 "Ts":id,
-                "Desc": "Default year split"
+                "Desc": "Default year split",
+                "SE": ["SE_0"],
+                "DT": ["DT_0"],
+                "DTB": ["DTB_0"]
             }
         ];
         return defaultTs;
@@ -117,7 +171,26 @@ export class DefaultObj{
         ];
         return defaultUnit;
     }
-
+    static defaultStg(first=false){
+        let id;
+        if(first){
+            id = 'STG_0';
+        }else{
+            id = this.getId('STG');
+        }
+        let defaultObj = [
+            {
+                "StgId": id,
+                "Stg":id,
+                "Desc": "Default storage",
+                "UnitId": "MW",
+                "TTS": "",
+                "TFS": "",
+                "Operation": "Yearly"
+            }
+        ];
+        return defaultObj;
+    }
     static defaultScenario(first=false){
         let id;
         if(first){

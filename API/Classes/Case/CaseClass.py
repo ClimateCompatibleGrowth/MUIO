@@ -12,22 +12,6 @@ class Case:
             if array:
                 self.jsonPath[group] = Path(Config.DATA_STORAGE, case, group+".json")
 
-        # self.Rpath = Path(Config.DATA_STORAGE, case, "R.json")
-        # self.RYpath = Path(Config.DATA_STORAGE, case, "RY.json")
-        # self.RTpath = Path(Config.DATA_STORAGE, case, "RT.json")
-        # self.REpath = Path(Config.DATA_STORAGE, case, "RE.json")
-        # self.RYTpath = Path(Config.DATA_STORAGE, case, "RYT.json")
-        # self.RYTMpath = Path(Config.DATA_STORAGE, case, "RYTM.json")
-        # self.RYTCpath = Path(Config.DATA_STORAGE, case, "RYTC.json")
-        # self.RYTCMpath = Path(Config.DATA_STORAGE, case, "RYTCM.json")
-        # self.RYTspath = Path(Config.DATA_STORAGE, case, "RYTs.json")
-        # self.RYCpath = Path(Config.DATA_STORAGE, case, "RYC.json")
-        # self.RYEpath = Path(Config.DATA_STORAGE, case, "RYE.json")
-        # self.RYTTspath = Path(Config.DATA_STORAGE, case, "RYTTs.json")
-        # self.RYCTspath = Path(Config.DATA_STORAGE, case, "RYCTs.json")
-        # self.RYTEpath = Path(Config.DATA_STORAGE, case, "RYTE.json")
-        # self.RYTEMpath = Path(Config.DATA_STORAGE, case, "RYTEM.json")
-
     def default_R(self):
         try:
             scenarios = self.genData['osy-scenarios']
@@ -110,6 +94,27 @@ class Case:
         except(IOError):
             raise IOError
 
+    def default_RS(self):
+        try:
+            stgs = self.genData['osy-stg']
+            scenarios = self.genData['osy-scenarios']
+            RSdata = {}
+            for rs in self.PARAMETERS['RS']:
+                RSdata[rs['id']] = {}
+                for sc in scenarios:
+                    RSdata[rs['id']][sc['ScenarioId']] = []
+                    chunk = {}
+                    for stg in stgs:
+                        if sc['ScenarioId'] == 'SC_0':
+                            chunk[stg['StgId']] = rs['default']
+                        else:
+                            chunk[stg['StgId']] = None
+                    RSdata[rs['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RSdata, self.jsonPath['RS'])
+        except(IOError):
+            raise IOError
+        
     def default_RYCn(self):
         try:
             years = self.genData['osy-years']
@@ -212,6 +217,31 @@ class Case:
         except(IOError):
             raise IOError
 
+    def default_RYS(self):
+        try:
+            years = self.genData['osy-years']
+            stgs = self.genData['osy-stg']
+            scenarios = self.genData['osy-scenarios']
+            
+            RYSdata = {}
+            for rys in self.PARAMETERS['RYS']:
+                RYSdata[rys['id']] = {}
+                for sc in scenarios:
+                    RYSdata[rys['id']][sc['ScenarioId']] = []
+                    for stg in stgs:
+                        chunk = {}
+                        chunk['StgId'] = stg['StgId']
+                        for year in years:
+                            if sc['ScenarioId'] == 'SC_0':
+                                chunk[year] = rys['default']
+                            else:
+                                chunk[year] = None
+                        RYSdata[rys['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYSdata, self.jsonPath['RYS'])
+        except(IOError):
+            raise IOError
+        
     def default_RYTCn(self):
         try:
             years = self.genData['osy-years']

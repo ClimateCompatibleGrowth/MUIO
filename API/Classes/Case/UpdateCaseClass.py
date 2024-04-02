@@ -1,11 +1,14 @@
+import os
 from Classes.Base import Config
 from Classes.Base.FileClass import File
 from Classes.Case.OsemosysClass import Osemosys
+from Classes.Case.CaseClass import Case
 
 class UpdateCase(Osemosys):
     def __init__(self, case, genData):
         Osemosys.__init__(self, case)
         self.genDataUpdate =  genData
+        self.case = case
 
     def update_R(self):
         try:
@@ -109,6 +112,35 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
+    def update_RS(self):
+        try:
+            if os.path.isfile(self.rsPath):
+                rsJson = File.readFile(self.rsPath) 
+                RSsource = self.RS(rsJson)
+                stgs = self.genDataUpdate['osy-stg']
+                scenarios = self.genDataUpdate['osy-scenarios']
+
+                RSdata = {}
+                for rs in self.PARAMETERS['RS']:
+                    RSdata[rs['id']] = {}
+                    for sc in scenarios:
+                        RSdata[rs['id']][sc['ScenarioId']] = []
+                        chunk = {}
+                        for stg in stgs:
+                            if self.keys_exists(RSsource, rs['id'], sc['ScenarioId'], stg['StgId']):
+                                chunk[stg['StgId']] = RSsource[rs['id']][sc['ScenarioId']][stg['StgId']]
+                            elif sc['ScenarioId'] == 'SC_0':
+                                chunk[stg['StgId']] = rs['default']
+                            else:
+                                chunk[stg['StgId']] = None
+                        RSdata[rs['id']][sc['ScenarioId']].append(chunk)
+                File.writeFile( RSdata, self.rsPath)
+            else:
+                case = Case(self.case, self.genDataUpdate)
+                case.default_RS()
+        except(IOError):
+            raise IOError
+        
     def update_RYCn(self):
         try:
             rycnJson = File.readFile(self.rycnPath) 
@@ -167,6 +199,40 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
+    def update_RYS(self):
+        try:
+            if os.path.isfile(self.rysPath):
+                rysJson = File.readFile(self.rysPath) 
+                RYSsource = self.RYS(rysJson)
+                years = self.genDataUpdate['osy-years']
+                stgs = self.genDataUpdate['osy-stg']
+                scenarios = self.genDataUpdate['osy-scenarios']
+                
+                RYSdata = {}
+                for rys in self.PARAMETERS['RYS']:
+                    RYSdata[rys['id']] = {}
+                    for sc in scenarios:
+                        RYSdata[rys['id']][sc['ScenarioId']] = []
+                        for stg in stgs:
+                            chunk = {}
+                            chunk['StgId'] = stg['StgId']
+                            for year in years:
+                                if self.keys_exists(RYSsource, rys['id'], sc['ScenarioId'], year, stg['StgId']):
+                                    chunk[year] = RYSsource[rys['id']][sc['ScenarioId']][year][stg['StgId']]
+
+                                elif  sc['ScenarioId'] == 'SC_0':
+                                    chunk[year] = rys['default']
+                                else:
+                                    chunk[year] = None
+                            RYSdata[rys['id']][sc['ScenarioId']].append(chunk)
+
+                File.writeFile( RYSdata, self.rysPath)
+            else:
+                case = Case(self.case, self.genDataUpdate)
+                case.default_RYS()
+        except(IOError):
+            raise IOError
+        
     def update_RYTCn(self):
         try:
             rytcnJson = File.readFile(self.rytcnPath) 

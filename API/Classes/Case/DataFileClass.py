@@ -76,6 +76,20 @@ class DataFile(Osemosys):
             self.f.write('{}{}{}'.format('RE1 ', reString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
 
+    def gen_RS(self):
+        re = self.RS(File.readFile(self.rsPath))
+        for id, param in self.PARAM['RS'].items():
+            self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':','\n'))
+            self.f.write('{}{}{}'.format(self.stgs, ':=', '\n'))
+            rsString = ''
+            for stgId in self.stgIDs:
+                for sc in self.scOrder:
+                    if re[id][sc['ScId']][stgId] is not None and sc['Active'] == True:
+                        tmp = re[id][sc['ScId']][stgId]
+                rsString += '{} '.format(tmp)
+            self.f.write('{}{}{}'.format('RE1 ', rsString, '\n'))
+            self.f.write('{}{}'.format(';', '\n'))
+
     def gen_RYCn(self):
         rycn = self.RYCn(File.readFile(self.rycnPath))
         for id, param in self.PARAM['RYCn'].items():
@@ -136,6 +150,32 @@ class DataFile(Osemosys):
                         self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
                         self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                     self.f.write('{} {}{}'.format(self.techMap[techId], rytString, '\n'))
+            self.f.write('{}{}'.format(';', '\n'))
+
+    def gen_RYS(self):
+        rys = self.RYS(File.readFile(self.rysPath))
+
+        for id, param in self.PARAM['RYS'].items():
+            self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
+            regionHeader = True
+            for stgId in self.stgIDs:
+                rysString = ''
+                defaultValueFlag = False
+                for yearId in self.yearIDs:
+                    for sc in self.scOrder:
+                        rysValue = rys[id][sc['ScId']][yearId][stgId]
+                        if rysValue is not None and sc['Active'] == True:
+                            if rysValue != self.defaultValue[id]:
+                                defaultValueFlag = True
+                            tmp = rysValue
+                    #if defaultValueFlag:
+                    rysString += '{} '.format(tmp)
+                if defaultValueFlag:
+                    if regionHeader:
+                        regionHeader = False   
+                        self.f.write('{} {}'.format('[RE1,*,*]:', '\n'))
+                        self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                    self.f.write('{} {}{}'.format(self.stgMap[stgId], rysString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
 
     def gen_RYTCn(self):
@@ -411,6 +451,7 @@ class DataFile(Osemosys):
         try:
             self.defaultValue = self.getParamDefaultValues()
             self.emiIDs = self.getEmiIds()
+            self.stgIDs = self.getStgIds()
             self.techIDs = self.getTechIds()
             self.commIDs = self.getCommIds()
             self.conIDs = self.getConIds()
@@ -421,6 +462,7 @@ class DataFile(Osemosys):
             self.tsMap = self.getTsMap()
             self.commMap = self.getCommsMap()
             self.conMap = self.getConsMap()
+            self.stgMap = self.getStgMap()
             
             self.yearIDs = self.getYears()
             # self.timesliceIDs = self.getTimeslices()
@@ -437,6 +479,10 @@ class DataFile(Osemosys):
             self.activityEmissionIDs = self.getActivityEmisionIds()
 
             self.constraintTechIDs = self.getConstraintTechIds()
+
+            self.stgs = ''
+            for stgId in self.stgIDs:
+                self.stgs += '{} '.format(self.stgMap[stgId]) 
 
             self.techs = ''
             for techId in self.techIDs:
@@ -855,35 +901,35 @@ class DataFile(Osemosys):
                             if line.startswith(('param CapacityToActivityUnit'))  or line.startswith(('param DiscountRateIdv')) or line.startswith(('param TotalTechnologyModelPeriodActivityLowerLimit')) or line.startswith(('param TotalTechnologyModelPeriodActivityUpperLimit')):
                                 firstRow=True 
 
-                        if line.startswith(
-                            ('param DiscountRate',
-                            'param OutputActivityRatio',
-                            'param InputActivityRatio', 
-                            'param EmissionActivityRatio',
-                            'param TotalAnnualMaxCapacityInvestment',
-                            'param TotalAnnualMinCapacityInvestment',
-                            'param TotalTechnologyAnnualActivityUpperLimit',
-                            'param TotalTechnologyAnnualActivityLowerLimit',
-                            'param TotalAnnualMaxCapacity',
-                            'param ResidualCapacity',
-                            'param AvailabilityFactor',
+                        # if line.startswith(
+                        #     ('param DiscountRate',
+                        #     'param OutputActivityRatio',
+                        #     'param InputActivityRatio', 
+                        #     'param EmissionActivityRatio',
+                        #     'param TotalAnnualMaxCapacityInvestment',
+                        #     'param TotalAnnualMinCapacityInvestment',
+                        #     'param TotalTechnologyAnnualActivityUpperLimit',
+                        #     'param TotalTechnologyAnnualActivityLowerLimit',
+                        #     'param TotalAnnualMaxCapacity',
+                        #     'param ResidualCapacity',
+                        #     'param AvailabilityFactor',
 
-                            'param CapacityToActivityUnit',
-                            'param DiscountRateIdv',
-                            'param TotalTechnologyModelPeriodActivityLowerLimit',
+                        #     'param CapacityToActivityUnit',
+                        #     'param DiscountRateIdv',
+                        #     'param TotalTechnologyModelPeriodActivityLowerLimit',
 
-                            'param CapacityFactor',
-                            'param YearSplit',
-                            'param SpecifiedDemandProfile'
-                            )):
-                            param_current = line.split(' ')[1]
-                            params = Config.PARAMETERS_C[param_current].copy()
-                            params.append(param_current)
-                            data[param_current] = []
-                            data[param_current].append(tuple(params))
-                            parsing = True
-                            if line.startswith(('param CapacityToActivityUnit')) or line.startswith(('param DiscountRateIdv')) or line.startswith(('param TotalTechnologyModelPeriodActivityLowerLimit')):
-                                firstRow=True
+                        #     'param CapacityFactor',
+                        #     'param YearSplit',
+                        #     'param SpecifiedDemandProfile'
+                        #     )):
+                        #     param_current = line.split(' ')[1]
+                        #     params = Config.PARAMETERS_C[param_current].copy()
+                        #     params.append(param_current)
+                        #     data[param_current] = []
+                        #     data[param_current].append(tuple(params))
+                        #     parsing = True
+                        #     if line.startswith(('param CapacityToActivityUnit')) or line.startswith(('param DiscountRateIdv')) or line.startswith(('param TotalTechnologyModelPeriodActivityLowerLimit')):
+                        #         firstRow=True
             else:
                 response = {
                     "msg": 'Data file is not created for this case run!',
@@ -1336,25 +1382,25 @@ class DataFile(Osemosys):
                             data[param_current].append(tuple([ fuel_emi, tech, mode ]))
                             data_all.append(tuple([tech, mode]))
 
-                if line.startswith(
+                # if line.startswith(
                     
-                    (
-                    'param OutputActivityRatio',
-                    'param InputActivityRatio', 
-                    'param EmissionActivityRatio',
-                    'param OperationalLife',
-                    'param DiscountRateIdv',
-                    'param DiscountRate'
-                    )):
+                #     (
+                #     'param OutputActivityRatio',
+                #     'param InputActivityRatio', 
+                #     'param EmissionActivityRatio',
+                #     'param OperationalLife',
+                #     'param DiscountRateIdv',
+                #     'param DiscountRate'
+                #     )):
                     
-                    param_current = line.split(' ')[1]
-                    params = Config.PARAMETERS_C[param_current].copy()
-                    params.append(param_current)
-                    data[param_current] = []
-                    data[param_current].append(tuple(params))
-                    parsing = True
-                    if line.startswith(('param OperationalLife'))  or line.startswith(('param DiscountRateIdv')):
-                        firstRow=True 
+                #     param_current = line.split(' ')[1]
+                #     params = Config.PARAMETERS_C[param_current].copy()
+                #     params.append(param_current)
+                #     data[param_current] = []
+                #     data[param_current].append(tuple(params))
+                #     parsing = True
+                #     if line.startswith(('param OperationalLife'))  or line.startswith(('param DiscountRateIdv')):
+                #         firstRow=True 
                 if line.startswith(
                     (
                     'param OutputActivityRatio',
@@ -1776,6 +1822,10 @@ class DataFile(Osemosys):
                                     region = line.split(' ')[0]
                                     for i, tech in enumerate(techs):
                                         data[param_current].append(tuple([ region, tech, values[i]]))
+                            if param_current in ('AccumulatedAnnualDemand', 'SpecifiedDemandProfile'):
+                                timeslice = line.split(' ')[0]
+                                for i, year in enumerate(years):
+                                    data[param_current].append(tuple([region, tech, year, timeslice, values[i]]))
                             if param_current in ('OutputActivityRatio','InputActivityRatio','EmissionActivityRatio'):
                                 mode = line.split(' ')[0]
                                 for i, year in enumerate(years):
@@ -1785,24 +1835,24 @@ class DataFile(Osemosys):
                                 for i, year in enumerate(years):
                                     data[param_current].append(tuple([ region, year, timeslice, values[i]]))
 
-                    if line.startswith(
-                        (
-                        'param OutputActivityRatio',
-                        'param InputActivityRatio', 
-                        'param EmissionActivityRatio',
-                        'param OperationalLife',
-                        'param DiscountRateIdv',
-                        'param YearSplit'
-                        )):
+                    # if line.startswith(
+                    #     (
+                    #     'param OutputActivityRatio',
+                    #     'param InputActivityRatio', 
+                    #     'param EmissionActivityRatio',
+                    #     'param OperationalLife',
+                    #     'param DiscountRateIdv',
+                    #     'param YearSplit'
+                    #     )):
                         
-                        param_current = line.split(' ')[1]
-                        params = Config.PARAMETERS_C[param_current].copy()
-                        params.append(param_current)
-                        data[param_current] = []
-                        data[param_current].append(tuple(params))
-                        parsing = True
-                        if line.startswith(('param OperationalLife'))  or line.startswith(('param DiscountRateIdv')):
-                            firstRow=True 
+                    #     param_current = line.split(' ')[1]
+                    #     params = Config.PARAMETERS_C[param_current].copy()
+                    #     params.append(param_current)
+                    #     data[param_current] = []
+                    #     data[param_current].append(tuple(params))
+                    #     parsing = True
+                    #     if line.startswith(('param OperationalLife'))  or line.startswith(('param DiscountRateIdv')):
+                    #         firstRow=True 
                     if line.startswith(
                         (
                         'param OutputActivityRatio',
@@ -1834,8 +1884,6 @@ class DataFile(Osemosys):
             except FileExistsError:
                 pass
             
-
-
             #parsanje result.txt
             params = []
             
@@ -1899,6 +1947,12 @@ class DataFile(Osemosys):
                 df_emi = pd.DataFrame(data['EmissionActivityRatio'], columns=['r', 'e','t','y','m','EmissionActivityRatio'])
                 df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
                 #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
+
+                #########################################Demand#################################################################
+                #SpecifiedAnnualDemand[r,f,y]*SpecifiedDemandProfile[r,f,l,y]+ AccumulatedAnnualDemand[r,f,y]
+                # df_sad = data['SpecifiedAnnualDemand'].rename(columns={'value':'SpecifiedAnnualDemand'})
+                # df_sdp = data['SpecifiedDemandProfile'].rename(columns={'value':'SpecifiedDemandProfile'})
+                # df_aad = data['AccumulatedAnnualDemand'].rename(columns={'value':'AccumulatedAnnualDemand'})
    
                 ########################################ProductionByTechnologyByMode############################################
                 df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
@@ -1926,7 +1980,6 @@ class DataFile(Osemosys):
                 df_ropbt.to_csv(os.path.join(base_folder, 'csv', 'RateOfProductionByTechnologyByMode.csv'), index=None)
 
                 ######################################UseByTechnologyByMode##############################################
-
                 df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
                 df_use['r'] = str(region[0])
@@ -1940,7 +1993,6 @@ class DataFile(Osemosys):
                 df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyByMode.csv'), index=None)
 
                 ######################################RateOfUseByTechnologyByMode##############################################
-
                 df_roubt = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
                 region = [x for x in list(df_roubt.r.unique()) if str(x) != 'nan']
                 df_roubt['r'] = str(region[0])
@@ -1970,10 +2022,6 @@ class DataFile(Osemosys):
                 df_ACI_temp = pd.merge(df_ACI_temp, df_CRF, on=['r', 't'],  how='outer')
                 df_ACI_temp['CIxCRF'] = df_ACI_temp['CapitalInvestment'] * df_ACI_temp['CRF']
                 df_ACI_temp.sort_values(['t','y'], inplace=True)
-                print(df_ACI_temp.head())
-                #print(df_ACI_temp[df_ACI_temp.isna().any(axis=1)])
-
-                print(df_ACI_temp[df_ACI_temp['t']=='LNDCOCIRCO1'])
                 tech_current = ''
                 for index, row in df_ACI_temp.iterrows():
                     if int(start_year) + row['OperationalLife'] <= int(row['y']) or tech_current != row['t']:

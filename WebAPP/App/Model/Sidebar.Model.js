@@ -7,17 +7,22 @@ export class Model {
         this.PARAMETERS = PARAMETERS;
         this.VARIABLES = VARIABLES;
         let techs = genData['osy-tech'];
+        let stgs = genData['osy-stg'];
         let constraints = genData['osy-constraints'];
 
         let menuCondition = {}
-        let menuGroup = ['IAR', 'OAR', 'EAR', 'INCR', 'ITCR', 'CCM', 'CNCM', 'CAM', 'UCC'];
+        let menuGroup = ['IAR', 'OAR', 'EAR', 'INCR', 'ITCR', 'CCM', 'CNCM', 'CAM', 'UCC', 'STG'];
         menuCondition.IAR = false;
         menuCondition.OAR = false;
         menuCondition.INCR = false;
         menuCondition.ITCR = false;
         menuCondition.EAR = false;
         menuCondition.CM = false;
+        menuCondition.STG = false;
 
+        if(stgs.length != 0 && stgs != undefined){
+          menuCondition.STG = true;
+        }
 
         $.each(techs, function (id, obj) {
           if(obj.IAR.length != 0 && obj.OAR.length != 0 && obj.EAR.length != 0 && obj.INCR.length != 0 && obj.ITCR.length != 0){

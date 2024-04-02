@@ -61,6 +61,7 @@ export class Sidebar {
                     //da li ima parametara definisanih za grupu
                     if (model.PARAMETERS[group] !== undefined || model.PARAMETERS[group].length != 0) {
                         if (obj.menu) {
+                            console.log('obj.id ', obj.id)
                             if (obj.id == 'IAR' && model.menuCondition.IAR) {
                                 let res = `
                                 <li  class="">
@@ -160,6 +161,19 @@ export class Sidebar {
                                 </li>`;
                                 $('#dynamicRoutes').append(res);
                             }
+
+                            if (obj.id == 'OLS' && model.menuCondition.STG) {
+                                let res = `
+                                <li  class="">
+                                    <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">
+                
+                                    ${obj.value}
+                                    <span class="badge badge-sm inbox-badge bg-color-${PARAMCOLORS[group]} align-top hidden-mobile pull-right"><small>${group}</small></span>
+                                    </a>
+                                </li>`;
+                                $('#dynamicRoutes').append(res);
+                            }
+
                             else if (!model.menuGroup.includes(obj.id)) {
                                 let res = `
                                 <li  class="">

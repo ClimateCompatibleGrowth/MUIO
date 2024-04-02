@@ -21,8 +21,10 @@ class Osemosys():
         self.ryPath = Path(Config.DATA_STORAGE,case,'RY.json')
         self.rtPath = Path(Config.DATA_STORAGE,case,'RT.json')
         self.rePath = Path(Config.DATA_STORAGE,case,'RE.json')
+        self.rsPath = Path(Config.DATA_STORAGE,case,'RS.json')
         self.rycnPath = Path(Config.DATA_STORAGE,case,'RYCn.json')
         self.rytPath = Path(Config.DATA_STORAGE,case,'RYT.json')
+        self.rysPath = Path(Config.DATA_STORAGE,case,'RYS.json')
         self.rytcnPath = Path(Config.DATA_STORAGE,case,'RYTCn.json')
         self.rytmPath = Path(Config.DATA_STORAGE,case,'RYTM.json')
         self.rytcPath = Path(Config.DATA_STORAGE,case,'RYTC.json')
@@ -169,6 +171,18 @@ class Osemosys():
         emis = {tech['EmisId']: tech['Emis'] for tech in self.genData["osy-emis"] }
         return emis
 
+    def getStgs(self):
+        stgs = [ {stg['StgId']: stg['Stg']} for stg in self.genData["osy-stg"]]
+        return stgs
+    
+    def getStgIds(self):
+        stgIds = [ stg['StgId'] for stg in self.genData["osy-stg"]]
+        return stgIds
+    
+    def getStgMap(self):
+        stgs = {stg['StgId']: stg['Stg'] for stg in self.genData["osy-stg"] }
+        return stgs
+    
     def getCommIds(self):
         commIds = [ tech['CommId'] for tech in self.genData["osy-comm"]]
         return commIds
@@ -341,7 +355,18 @@ class Osemosys():
                     for emi, val in o.items():
                         RE[param][sc][emi] = val
         return RE
-   
+
+    def RS(self, RSdata):
+        RS = {}
+        for param, obj in RSdata.items():
+            RS[param] = {}
+            for sc, array in obj.items():
+                RS[param][sc] = {}
+                for o in array:
+                    for stg, val in o.items():
+                        RS[param][sc][stg] = val
+        return RS
+     
     def RYCn(self, RYCndata):
         RYCn = {}
         for param, obj1 in RYCndata.items():
@@ -370,6 +395,20 @@ class Osemosys():
                             RYT[param][sc][year][o['TechId']] = val
         return RYT
 
+    def RYS(self, RYSdata):
+        RYS = {}
+        for param, obj in RYSdata.items():
+            RYS[param] = {}
+            for sc, array in obj.items():
+                RYS[param][sc] = {}
+                for o in array:
+                    for year, val in o.items():
+                        if (year != 'StgId'):
+                            if year not in RYS[param][sc]:
+                                RYS[param][sc][year] = {}   
+                            RYS[param][sc][year][o['StgId']] = val
+        return RYS
+    
     def RYTCn(self, RYTCndata):
         RYTCn = {}
         for param, obj1 in RYTCndata.items():

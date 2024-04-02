@@ -821,3 +821,6 @@ li {
     color: var(--main-color)!important;
 }
 
+.tabs-left>.tab-content {
+    margin-left: 195px!important;
+}

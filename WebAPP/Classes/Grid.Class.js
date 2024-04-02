@@ -1,4 +1,4 @@
-import { UNITS, TAGS } from './Const.Class.js';
+import { UNITS, TAGS, STORAGE_OPERATIONS } from './Const.Class.js';
 import { Message } from "./Message.Class.js";
 import { JqxSources } from "./JqxSources.Class.js";
 
@@ -10,11 +10,228 @@ export class Grid {
         return theme
     }
 
-    static tsGrid(timeslices) {
+    static seGrid(seasons) {
+
+        let srcSe = JqxSources.srcSe(seasons);
+        var daSe = new $.jqx.dataAdapter(srcSe);
+
+        console.log('daSe ', daSe)
+
+        var validation_1 = function (cell, value) {
+            var validationResult = true;
+            var rows = $('#osy-gridSe').jqxGrid('getrows');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].Se.trim() == value.trim() && i != cell.row) {
+                    validationResult = false;
+                    break;
+                }
+            };
+
+            if (validationResult == false) {
+                Message.smallBoxWarning("Input message", "Season name should be unique!", 3000);
+                return { result: false, message: "" };
+            }
+            return true;
+        }
+
+        var cellsrendererbutton = function (row, column, value) {
+            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
+            if (row == 0) {
+                return '';
+            }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteSe" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+        }
+
+        $("#osy-gridSe").jqxGrid({
+            width: '100%',
+            autoheight: true,
+            // columnsheight: 20,
+            theme: this.theme(),
+            source: daSe,
+            editable: true,
+            selectionmode: 'none',
+            enablehover: false,
+            sortable:false,
+            showsortcolumnbackground: false,
+            pageable: false,
+            pagesize: 10,
+            //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
+            columns: [
+                { text: 'SeId', datafield: 'SeId', hidden: true },
+                { text: 'Season name', datafield: 'Se', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addSe" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add season</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+            ]
+        });
+    }
+
+    static dtGrid(daytypes) {
+
+        let srcDt = JqxSources.srcDt(daytypes);
+        var daDt = new $.jqx.dataAdapter(srcDt);
+
+        var validation_1 = function (cell, value) {
+            var validationResult = true;
+            var rows = $('#osy-gridDt').jqxGrid('getrows');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].Dt.trim() == value.trim() && i != cell.row) {
+                    validationResult = false;
+                    break;
+                }
+            };
+
+            if (validationResult == false) {
+                Message.smallBoxWarning("Input message", "Day type name should be unique!", 3000);
+                return { result: false, message: "" };
+            }
+            return true;
+        }
+
+        var cellsrendererbutton = function (row, column, value) {
+            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
+            if (row == 0) {
+                return '';
+            }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteDt" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+        }
+
+        $("#osy-gridDt").jqxGrid({
+            width: '100%',
+            autoheight: true,
+            // columnsheight: 20,
+            theme: this.theme(),
+            source: daDt,
+            editable: true,
+            selectionmode: 'none',
+            enablehover: false,
+            sortable:false,
+            showsortcolumnbackground: false,
+            pageable: false,
+            pagesize: 10,
+            //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
+            columns: [
+                { text: 'DtId', datafield: 'DtId', hidden: true },
+                { text: 'Day type name', datafield: 'Dt', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addDt" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add day type</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+            ]
+        });
+    }
+
+    static dtbGrid(dailytimebracket) {
+
+        let srcDtb = JqxSources.srcDtb(dailytimebracket);
+        var daDtb = new $.jqx.dataAdapter(srcDtb);
+
+        var validation_1 = function (cell, value) {
+            var validationResult = true;
+            var rows = $('#osy-gridDtb').jqxGrid('getrows');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].Dtb.trim() == value.trim() && i != cell.row) {
+                    validationResult = false;
+                    break;
+                }
+            };
+
+            if (validationResult == false) {
+                Message.smallBoxWarning("Input message", "Daily time bracket name should be unique!", 3000);
+                return { result: false, message: "" };
+            }
+            return true;
+        }
+
+        var cellsrendererbutton = function (row, column, value) {
+            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
+            if (row == 0) {
+                return '';
+            }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteDtb" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+        }
+
+        $("#osy-gridDtb").jqxGrid({
+            width: '100%',
+            autoheight: true,
+            // columnsheight: 20,
+            theme: this.theme(),
+            source: daDtb,
+            editable: true,
+            selectionmode: 'none',
+            enablehover: false,
+            sortable:false,
+            showsortcolumnbackground: false,
+            pageable: false,
+            pagesize: 10,
+            //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
+            columns: [
+                { text: 'DtbId', datafield: 'DtbId', hidden: true },
+                { text: 'Daily time bracket name', datafield: 'Dtb', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addDtb" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add daily time bracket</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+            ]
+        });
+    }
+
+    static tsGrid(timeslices, seasons, daytypes, dailytimebrackets, seNames, dtNames, dtbNames) {
+
+        console.log('daytypes ', daytypes)
+        console.log('dailytimebrackets ', dailytimebrackets)
+        console.log('seasons ', seasons)
+        console.log('timeslices ', timeslices)
 
         let srcTs = JqxSources.srcTs(timeslices);
-        var daTs = new $.jqx.dataAdapter(srcTs);
+        let srcSe = JqxSources.srcSe(seasons);
+        let srcDt = JqxSources.srcDt(daytypes);
+        let srcDtb = JqxSources.srcDtb(dailytimebrackets);
 
+        var daTs = new $.jqx.dataAdapter(srcTs, {
+            autoBind: true
+        });
+        this.daSe = new $.jqx.dataAdapter(srcSe, {
+            autoBind: true
+        });
+
+        this.daDt = new $.jqx.dataAdapter(srcDt, {
+            autoBind: true
+        });
+        this.daDtb = new $.jqx.dataAdapter(srcDtb, {
+            autoBind: true
+        });
+
+        var ddlSeasons = function (row, value, editor) {
+            let data = seasons;
+            editor.jqxDropDownList({
+                source: this.daSe, displayMember: 'Se', valueMember: 'SeId',
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    return tooltipContent
+                }, filterable: true 
+            });
+        }.bind(this);
+
+        var ddlDatypes = function (row, value, editor) {
+            let data = daytypes;
+            editor.jqxDropDownList({
+                source: this.daDt, displayMember: 'Dt', valueMember: 'DtId', 
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    return tooltipContent
+                }, filterable: true 
+            });
+        }.bind(this);
+
+        var ddlDilytimebrackets = function (row, value, editor) {
+            let data = dailytimebrackets;
+            editor.jqxDropDownList({
+                source: this.daDtb, displayMember: 'Dtb', valueMember: 'DtbId', 
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    return tooltipContent
+                }, filterable: true 
+            });
+        }.bind(this);
 
         var validation_1 = function (cell, value) {
             var validationResult = true;
@@ -41,6 +258,72 @@ export class Grid {
             return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTs" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
         }
 
+        var cellsrendererSeasons = function (row, columnfield, value, defaulthtml, columnproperties) {
+            let valueNames = [];
+            console.log('value ', value)
+            console.log('seNames ', seNames)
+            if (Array.isArray(value)) {
+                var values = value;
+            } else {
+                var values = value.split(/,\s*/);
+            }
+            $.each(values, function (id, seId) {
+                console.log('values ', values, seNames[seId])
+                valueNames.push(seNames[seId])
+            });
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+        }.bind(this);
+
+        var cellsrendererDaytypes = function (row, columnfield, value, defaulthtml, columnproperties) {
+            let valueNames = [];
+            if (Array.isArray(value)) {
+                var values = value;
+            } else {
+                var values = value.split(/,\s*/);
+            }
+            $.each(values, function (id, dtId) {
+                valueNames.push(dtNames[dtId])
+            });
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+        }.bind(this);
+
+        var cellsrendererDailytimebrackets = function (row, columnfield, value, defaulthtml, columnproperties) {
+            let valueNames = [];
+            if (Array.isArray(value)) {
+                var values = value;
+            } else {
+                var values = value.split(/,\s*/);
+            }
+            $.each(values, function (id, dtbId) {
+                valueNames.push(dtbNames[dtbId])
+            });
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+        }.bind(this);
+
+        var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
+            // set the editor's current value. The callback is called each time the editor is displayed.
+            var items = editor.jqxDropDownList('getItems');
+            console.log('items ', items)
+            console.log('editor ', editor)
+            editor.jqxDropDownList('uncheckAll');
+            if (Array.isArray(cellvalue)) {
+                var values = cellvalue;
+            } else {
+                var values = cellvalue.split(/,\s*/);
+            }
+            for (var j = 0; j < values.length; j++) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].value === values[j]) {
+                        editor.jqxDropDownList('checkIndex', i);
+                    }
+                }
+            }
+        }.bind(this)
+
+        var getEditorValue = function (row, cellvalue, editor) {
+            return editor.val();
+        }
+
         $("#osy-gridTs").jqxGrid({
             width: '100%',
             autoheight: true,
@@ -57,8 +340,15 @@ export class Grid {
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
                 { text: 'TsId', datafield: 'TsId', hidden: true },
-                { text: 'Year split name', datafield: 'Ts', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: 'SeId', datafield: 'SeId', hidden: true },
+                { text: 'DtId', datafield: 'DtId', hidden: true },
+                { text: 'DtbId', datafield: 'DtbId', hidden: true },
+                { text: 'Year split name', datafield: 'Ts', width: '15%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Description', datafield: 'Desc', width: '30%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: 'Season', datafield: 'SE', width: '15%',cellsrenderer: cellsrendererSeasons, columntype: 'dropdownlist', createeditor: ddlSeasons, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Day type', datafield: 'DT', width: '15%', cellsrenderer: cellsrendererDaytypes, columntype: 'dropdownlist', createeditor: ddlDatypes, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Daily time', datafield: 'DTB', width: '15%', cellsrenderer: cellsrendererDailytimebrackets, columntype: 'dropdownlist', createeditor: ddlDilytimebrackets, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
+
                 { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTs" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add year split</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
         });
@@ -144,9 +434,7 @@ export class Grid {
                 , filterable: true 
             });
         }.bind(this);
-
-
-       
+  
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
             // set the editor's current value. The callback is called each time the editor is displayed.
             var items = editor.jqxDropDownList('getItems');
@@ -166,9 +454,6 @@ export class Grid {
                 }
             }
         }.bind(this)
-
-
-       
 
         var getEditorValue = function (row, cellvalue, editor) {
             return editor.val();
@@ -208,7 +493,6 @@ export class Grid {
         }
 
         var cellsrendererTechGroups = function (row, columnfield, value, defaulthtml, columnproperties) {
-  
             let valueNames = [];
             if (Array.isArray(value)) {
                 var values = value;
@@ -223,6 +507,7 @@ export class Grid {
 
         var cellsrendererComms = function (row, columnfield, value, defaulthtml, columnproperties) {
             let valueNames = [];
+            console.log('value ', value)
             if (Array.isArray(value)) {
                 var values = value;
             } else {
@@ -231,6 +516,8 @@ export class Grid {
             $.each(values, function (id, commId) {
                 valueNames.push(commNames[commId])
             });
+
+            console.log('valueNames ', valueNames)
             return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
         }.bind(this);
 
@@ -510,6 +797,116 @@ export class Grid {
                 { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left',sortable: false },
                 { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
                 { text: '<span style="padding:10px; width:100%; border:none" id="osy-addEmis" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add emission</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false },
+            ]
+        });
+    }
+
+    static stgGrid(storages, techs, techNames) {
+
+        let srcStg = JqxSources.srcStorage(storages);
+        let srcUnits = JqxSources.srcUnit(JSON.stringify(UNITS));
+        this.srcTechs = JqxSources.srcTech(techs);
+
+
+
+        var daStg = new $.jqx.dataAdapter(srcStg);
+        var daUnits = new $.jqx.dataAdapter(srcUnits);
+        // var daStgOperations = new $.jqx.dataAdapter(srcStgOperations);
+        this.daTechs = new $.jqx.dataAdapter(this.srcTechs, {
+            autoBind: true
+        });
+
+
+        var ddlEditor = function (row, value, editor) {
+            editor.jqxDropDownList({ source: daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true });
+        }
+
+        // var ddlStgOperations = function (row, value, editor) {
+        //     editor.jqxDropDownList({ source: daStgOperations, displayMember: 'name', valueMember: 'id' });
+        // }
+        var ddlStgOperations = function (row, value, editor) {
+            editor.jqxDropDownList({ source: STORAGE_OPERATIONS, theme: 'bootstrap'});
+        }
+
+        var ddlTechs = function (row, value, editor) {
+            let data = techs;
+            editor.jqxDropDownList({
+                source: this.daTechs, displayMember: 'Tech', valueMember: 'TechId',
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    return tooltipContent
+                }
+                , filterable: true 
+            });
+        }.bind(this);
+
+        var cellsrendererTechs = function (row, columnfield, value, defaulthtml, columnproperties) {
+            let valueNames = [];
+            if (Array.isArray(value)) {
+                var values = value;
+            } else {
+                var values = value.split(/,\s*/);
+            }
+            $.each(values, function (id, techId) {
+                valueNames.push(techNames[techId])
+            });
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+        }.bind(this);
+
+        var getEditorValue = function (row, cellvalue, editor) {
+            return editor.val();
+        }
+
+        var validation_1 = function (cell, value) {
+            var validationResult = true;
+            var rows = $('#osy-gridStg').jqxGrid('getrows');
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].Stg.trim() == value.trim() && i != cell.row) {
+                    validationResult = false;
+                    break;
+                }
+            };
+            if (validationResult == false) {
+                Message.smallBoxWarning("Input message", "Storage name should be unique!", 3000);
+                return { result: false, message: "" };
+            }
+            return true;
+        }
+
+        var cellsrendererbutton = function (row, column, value) {
+            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
+            if (row == 0) {
+                return '';
+            }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteStg" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+        }
+
+        $("#osy-gridStg").jqxGrid({
+            width: '100%',
+            autoheight: true,
+            // columnsheight: 20,
+            theme: this.theme(),
+            source: daStg,
+            editable: true,
+            selectionmode: 'none',
+            enablehover: false,
+            sortable:true,
+            showsortcolumnbackground: false,
+            pageable: false,
+            pagesize: 10,
+            //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
+            columns: [
+                { text: 'StgId', datafield: 'StgId', hidden: true },
+                { text: 'Storage name', datafield: 'Stg', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Description', datafield: 'Desc', width: '20%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: 'Unit', datafield: 'UnitId', width: '10%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
+                
+                { text: 'Technology to storage', datafield: 'TTS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist', createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Technology from storage', datafield: 'TFS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist', createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
+
+                { text: 'Storage operations', datafield: 'Operation', width: '10%', columntype: 'dropdownlist', createeditor: ddlStgOperations, align: 'center', cellsalign: 'center',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addStg" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add storage</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
         });
     }
@@ -989,6 +1386,54 @@ export class Grid {
         $divGrid.jqxGrid('applyfilters');
     }
     
+    
+    static applyRSFilter($divGrid, stgs, sc = null, param = null) {
+        //$('#jqxLoader').jqxLoader('open');
+        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
+        $divGrid.jqxGrid('clearfilters');
+
+        //filter column 2
+        if (sc !== null && param != null) {
+
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+
+            var filtergroup3 = new $.jqx.filter();
+            filtergroup3.operator = 'and';
+            var filtertype3 = 'stringfilter';
+            var filter_or_operator3 = 0;
+            var filtervalue3 = param;
+            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
+            filtergroup3.addfilter(filter_or_operator3, filter3);
+            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $.each(stgs, function (id, stg) {
+            $divGrid.jqxGrid('addfilter', stg.StgId, filtergroup1);
+        });
+        // // apply the filters.
+        $divGrid.jqxGrid('applyfilters');
+    }
     static applyREFilter($divGrid, emis, sc = null, param = null) {
         //$('#jqxLoader').jqxLoader('open');
         //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
