@@ -42,7 +42,7 @@ os.chmod(DATA_STORAGE, 0o777)
 HEROKU_DEPLOY = 0
 AWS_SYNC = 0
 
-PINNED_COLUMNS = ('Sc', 'Tech', 'Comm', 'Emis', 'Timeslice', 'MoO', 'UnitId')
+PINNED_COLUMNS = ('Sc', 'Tech', 'Comm', 'Emis','Stg', 'Timeslice', 'MoO', 'UnitId')
 
 TECH_GROUPS = ('RYT', 'RYTM', 'RYTC', 'RYTCn', 'RYTCM', 'RYTE', 'RYTEM', 'RYTTs')
 COMM_GROUPS = ('RYC', 'RYTC', 'RYTCM','RYCTs')
@@ -66,7 +66,8 @@ DEFAULT_F ={
     "RYC"  : 'default_RYC',     
     "RYE"  : 'default_RYE',     
     "RYTC" : 'default_RYTC',  
-    "RYTCM": 'default_RYTCM' ,   
+    "RYTCM": 'default_RYTCM' , 
+    "RYTSM": 'default_RYTSM' ,   
     "RYTE" : 'default_RYTE',  
     "RYTEM": 'default_RYTEM' , 
     "RYTM" : 'default_RYTM',     
@@ -89,7 +90,8 @@ UPDATE_F ={
     "RYC"  : 'update_RYC',     
     "RYE"  : 'update_RYE',     
     "RYTC" : 'update_RYTC',  
-    "RYTCM": 'update_RYTCM' ,   
+    "RYTCM": 'update_RYTCM' ,  
+    "RYTSM": 'update_RYTSM' ,   
     "RYTE" : 'update_RYTE',  
     "RYTEM": 'update_RYTEM' , 
     "RYTM" : 'update_RYTM',     
@@ -112,7 +114,8 @@ GEN_F ={
     "RYC"  : 'gen_RYC',     
     "RYE"  : 'gen_RYE',     
     "RYTC" : 'gen_RYTC',  
-    "RYTCM": 'gen_RYTCM' ,   
+    "RYTCM": 'gen_RYTCM' , 
+    "RYTSM": 'gen_RYTSM' ,  
     "RYTE" : 'gen_RYTE',  
     "RYTEM": 'gen_RYTEM' , 
     "RYTM" : 'gen_RYTM',     
@@ -175,7 +178,6 @@ PARAMETERS_C = {
         'TotalAnnualMaxCapacity':['r','t','y'],
         'ResidualCapacity': ['r','t','y'],
         'AvailabilityFactor': ['r','t','y'],
-
         'CapacityToActivityUnit': ['r','t'],
         'DiscountRateIdv': ['r','t'],
         'OperationalLife': ['r','t'],
@@ -185,3 +187,26 @@ PARAMETERS_C = {
         'YearSplit': ['r','y', 'l'],
         'SpecifiedDemandProfile': ['r','f','y','l']
     }
+
+PARAMETERS_C_full = {
+        'DiscountRate': ['r', 'DiscountRate'],
+        'OutputActivityRatio':['r','f','t','y','m','OutputActivityRatio'],
+        'InputActivityRatio':['r','f','t','y','m','InputActivityRatio'],
+        'EmissionActivityRatio':['r','e','t','y','m','EmissionActivityRatio'],
+        'TotalAnnualMaxCapacityInvestment':['r','t','y','TotalAnnualMaxCapacityInvestment'],
+        'TotalAnnualMinCapacityInvestment':['r','t','y','TotalAnnualMinCapacityInvestment'],
+        'TotalTechnologyAnnualActivityUpperLimit':['r','t','y','TotalTechnologyAnnualActivityUpperLimit'],
+        'TotalTechnologyAnnualActivityLowerLimit':['r','t','y','TotalTechnologyAnnualActivityLowerLimit'],
+        'TotalAnnualMaxCapacity':['r','t','y','TotalAnnualMaxCapacity'],
+        'ResidualCapacity': ['r','t','y','ResidualCapacity'],
+        'AvailabilityFactor': ['r','t','y','AvailabilityFactor'],
+        'CapacityToActivityUnit': ['r','t','CapacityToActivityUnit'],
+        'DiscountRateIdv': ['r','t','DiscountRateIdv'],
+        'OperationalLife': ['r','t','OperationalLife'],
+        'TotalTechnologyModelPeriodActivityLowerLimit': ['r','t','TotalTechnologyModelPeriodActivityLowerLimit'],
+        'TotalTechnologyModelPeriodActivityUpperLimit': ['r','t','TotalTechnologyModelPeriodActivityUpperLimit'],
+        'CapacityFactor': ['r','t', 'y', 'l','CapacityFactor'],
+        'YearSplit': ['r','y', 'l','YearSplit'],
+        'SpecifiedDemandProfile': ['r','f','y','l','SpecifiedDemandProfile']
+    }
+

@@ -745,8 +745,8 @@ export default class AddCase {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
-            if (id != 0) {
-                var seId = $divStg.jqxGrid('getcellvalue', id, 'StgId');
+            //if (id != 0) {
+                var stgId = $divStg.jqxGrid('getcellvalue', id, 'StgId');
                 var rowid = $divStg.jqxGrid('getrowid', id);
                 $divStg.jqxGrid('deleterow', rowid);
                 model.stg.splice(id, 1);
@@ -755,7 +755,7 @@ export default class AddCase {
                 //update count
                 model.stgCount--;
                 $("#stgCount").text(model.stgCount);
-            }
+            //}
         });  
         
         $divStg.on('cellvaluechanged', function (event) {

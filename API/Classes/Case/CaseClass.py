@@ -407,6 +407,37 @@ class Case:
         except(IOError):
             raise IOError
 
+    def default_RYTSM(self):
+        try:
+            years = self.genData['osy-years']
+            stgs = self.genData['osy-stg']
+            scenarios = self.genData['osy-scenarios']
+            mo = int(self.genData['osy-mo'])+1
+            
+            RYTSMdata = {}
+            for ryt in self.PARAMETERS['RYTSM']:
+                RYTSMdata[ryt['id']] = {}
+                for sc in scenarios:
+                    RYTSMdata[ryt['id']][sc['ScenarioId']] = []  
+                    for stg in stgs:
+                        if stg[ryt['id']]:
+                            #for tech in stg[ryt['id']]:
+                            for m in range(1, mo):
+                                chunk = {}
+                                chunk['StgId'] = stg['StgId']
+                                chunk['TechId'] = stg[ryt['id']]
+                                chunk['MoId'] = m
+                                for year in years:
+                                    if sc['ScenarioId'] == 'SC_0':
+                                        chunk[year] = ryt['default']
+                                    else:
+                                        chunk[year] = None
+                                RYTSMdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+            File.writeFile( RYTSMdata, self.jsonPath['RYTSM'])
+        except(IOError):
+            raise IOError
+        
     def default_RYTE(self):
         try:
             years = self.genData['osy-years']

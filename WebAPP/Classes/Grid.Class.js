@@ -15,7 +15,7 @@ export class Grid {
         let srcSe = JqxSources.srcSe(seasons);
         var daSe = new $.jqx.dataAdapter(srcSe);
 
-        console.log('daSe ', daSe)
+        //console.log('daSe ', daSe)
 
         var validation_1 = function (cell, value) {
             var validationResult = true;
@@ -173,10 +173,10 @@ export class Grid {
 
     static tsGrid(timeslices, seasons, daytypes, dailytimebrackets, seNames, dtNames, dtbNames) {
 
-        console.log('daytypes ', daytypes)
-        console.log('dailytimebrackets ', dailytimebrackets)
-        console.log('seasons ', seasons)
-        console.log('timeslices ', timeslices)
+        // console.log('daytypes ', daytypes)
+        // console.log('dailytimebrackets ', dailytimebrackets)
+        // console.log('seasons ', seasons)
+        // console.log('timeslices ', timeslices)
 
         let srcTs = JqxSources.srcTs(timeslices);
         let srcSe = JqxSources.srcSe(seasons);
@@ -260,15 +260,12 @@ export class Grid {
 
         var cellsrendererSeasons = function (row, columnfield, value, defaulthtml, columnproperties) {
             let valueNames = [];
-            console.log('value ', value)
-            console.log('seNames ', seNames)
             if (Array.isArray(value)) {
                 var values = value;
             } else {
                 var values = value.split(/,\s*/);
             }
             $.each(values, function (id, seId) {
-                console.log('values ', values, seNames[seId])
                 valueNames.push(seNames[seId])
             });
             return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
@@ -303,8 +300,8 @@ export class Grid {
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
             // set the editor's current value. The callback is called each time the editor is displayed.
             var items = editor.jqxDropDownList('getItems');
-            console.log('items ', items)
-            console.log('editor ', editor)
+            // console.log('items ', items)
+            // console.log('editor ', editor)
             editor.jqxDropDownList('uncheckAll');
             if (Array.isArray(cellvalue)) {
                 var values = cellvalue;
@@ -507,7 +504,7 @@ export class Grid {
 
         var cellsrendererComms = function (row, columnfield, value, defaulthtml, columnproperties) {
             let valueNames = [];
-            console.log('value ', value)
+            // console.log('value ', value)
             if (Array.isArray(value)) {
                 var values = value;
             } else {
@@ -517,7 +514,7 @@ export class Grid {
                 valueNames.push(commNames[commId])
             });
 
-            console.log('valueNames ', valueNames)
+            // console.log('valueNames ', valueNames)
             return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
         }.bind(this);
 
@@ -876,9 +873,9 @@ export class Grid {
 
         var cellsrendererbutton = function (row, column, value) {
             // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
-            if (row == 0) {
-                return '';
-            }
+            // if (row == 0) {
+            //     return '';
+            // }
             return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteStg" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
         }
 

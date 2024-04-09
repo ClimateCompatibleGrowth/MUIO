@@ -56,10 +56,8 @@ CO2EQ CO2 CH4 N2O :=
 RE1 999999 999999 999999 999999 
 ;
 param OperationalLifeStorage default 1 : 
-STG_vsqoj STG_agrr8 :=
-RE1 1 1 
-;
-param CapitalCostStorage default 0 := 
+:=
+RE1 
 ;
 param UDCConstant default 0 := 
 [RE1,*,*]: 
@@ -189,6 +187,10 @@ RSCLND 300 300 300 300 300 300 300 300 300 300 300 300 300 300 300 300
 param ReserveMarginTagTechnology default 0 := 
 ;
 param CapacityOfOneTechnologyUnit default 0 := 
+;
+param CapitalCostStorage default 0 := 
+;
+param ResidualStorageCapacity default 0 := 
 ;
 param VariableCost default 0.0001 := 
 [RE1,MINCOA,*,*]: 
@@ -594,6 +596,10 @@ param OutputActivityRatio default 0 :=
 [RE1,UPSWTRSUR,WTRSUR,*,*]:
 2020 2021 2022 2023 2024 2025 2026 2027 2028 2029 2030 2031 2032 2033 2034 2035 :=
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+;
+param TechnologyToStorage default 0 := 
+;
+param TechnologyFromStorage default 0 := 
 ;
 param CapacityFactor default 1 := 
 [RE1,RSCPRC,*,*]: 

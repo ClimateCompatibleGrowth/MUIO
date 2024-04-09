@@ -495,6 +495,48 @@ class UpdateCase(Osemosys):
         except(IOError):
             raise IOError
 
+    def update_RYTSM(self):
+        try:
+            if os.path.isfile(self.rytsmPath):
+                rytsmJson = File.readFile(self.rytsmPath) 
+                RYTSMsource = self.RYTSM(rytsmJson)
+
+                years = self.genDataUpdate['osy-years']
+                stgs = self.genDataUpdate['osy-stg']
+                scenarios = self.genDataUpdate['osy-scenarios']
+                mo = int(self.genDataUpdate['osy-mo'])+1
+                
+                RYTSMdata = {}
+                for ryt in self.PARAMETERS['RYTSM']:
+                    RYTSMdata[ryt['id']] = {}
+                    for sc in scenarios:
+                        RYTSMdata[ryt['id']][sc['ScenarioId']] = [] 
+                        for stg in stgs:
+                            if stg[ryt['id']]:
+                                #for tech in stg[ryt['id']]:
+                                tech = stg[ryt['id']]
+                                for m in range(1, mo):
+                                    chunk = {}
+                                    chunk['StgId'] = stg['StgId']
+                                    chunk['TechId'] = tech
+                                    chunk['MoId'] = m
+                                    for year in years:
+                                        # if RYTCsource[ryt['id']][year][tech['TechId']][emi]:
+                                        if self.keys_exists(RYTSMsource, ryt['id'], sc['ScenarioId'], year, stg['StgId'], tech, m):
+                                            chunk[year] = RYTSMsource[ryt['id']][sc['ScenarioId']][year][stg['StgId']][tech][m]
+                                        elif sc['ScenarioId'] == 'SC_0':
+                                            chunk[year] = ryt['default']
+                                        else:
+                                            chunk[year] = None
+                                    RYTSMdata[ryt['id']][sc['ScenarioId']].append(chunk)
+
+                File.writeFile( RYTSMdata, self.rytsmPath)
+            else:
+                case = Case(self.case, self.genDataUpdate)
+                case.default_RYTSM()
+        except(IOError):
+            raise IOError
+        
     def update_RYTE(self):
         try:
             ryteJson = File.readFile(self.rytePath) 

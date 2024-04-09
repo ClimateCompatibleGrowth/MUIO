@@ -54,14 +54,14 @@ export class Sidebar {
             </label>`;
             $('#dynamicRoutes').append(res);
 
-            
+            console.log('model sidebar ', model)
 
             $.each(PARAMORDER, function (id, group) {
                 $.each(model.PARAMETERS[group], function (id, obj) {
                     //da li ima parametara definisanih za grupu
                     if (model.PARAMETERS[group] !== undefined || model.PARAMETERS[group].length != 0) {
                         if (obj.menu) {
-                            console.log('obj.id ', obj.id)
+                            // console.log('obj.id ', obj.id)
                             if (obj.id == 'IAR' && model.menuCondition.IAR) {
                                 let res = `
                                 <li  class="">
@@ -162,7 +162,7 @@ export class Sidebar {
                                 $('#dynamicRoutes').append(res);
                             }
 
-                            if (obj.id == 'OLS' && model.menuCondition.STG) {
+                            if (['OLS', 'CCS', 'RSC', 'TTS', 'TFS'].includes(obj.id)&& model.menuCondition.STG) {
                                 let res = `
                                 <li  class="">
                                     <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">

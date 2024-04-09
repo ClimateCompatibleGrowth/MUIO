@@ -29,6 +29,7 @@ class Osemosys():
         self.rytmPath = Path(Config.DATA_STORAGE,case,'RYTM.json')
         self.rytcPath = Path(Config.DATA_STORAGE,case,'RYTC.json')
         self.rytcmPath = Path(Config.DATA_STORAGE,case,'RYTCM.json')
+        self.rytsmPath = Path(Config.DATA_STORAGE,case,'RYTSM.json')
         self.rytsPath = Path(Config.DATA_STORAGE,case,'RYTs.json')
         self.rycPath = Path(Config.DATA_STORAGE,case,'RYC.json')
         self.ryePath = Path(Config.DATA_STORAGE,case,'RYE.json')
@@ -230,6 +231,21 @@ class Osemosys():
         scIds = scenarioBycase[caserunname]
         return scIds
 
+    def getStorageTechIds(self):
+        techIds = {}
+        for param in self.PARAMETERS['RYTSM']:
+            techIds[param['id']] = {}
+            for stg in self.genData["osy-stg"]:
+                if stg[param['id']]: 
+                    techIds[param['id']][stg['StgId']]=[]
+                    techIds[param['id']][stg['StgId']].append(stg[param['id']])
+                    # if techIds[param['id']][stg['StgId']]: 
+                    #     techIds[param['id']][stg['StgId']].append(stg[param['id']])
+                    # else:
+                    #     techIds[param['id']][stg['StgId']]=[]
+                    #     techIds[param['id']][stg['StgId']].append(stg[param['id']])
+        return techIds
+    
     #output actTech['IAR'] = ['Tech_1', 'Tech_2'...]
     def getActivityTechIds(self):
         techIds = {}
@@ -517,6 +533,24 @@ class Osemosys():
                             RYTCM[param][sc][year][obj['TechId']][obj['CommId']][obj['MoId']] = val
         return RYTCM
 
+    def RYTSM(self, RYTSMdata):
+        RYTSM = {}
+        for param, obj1 in RYTSMdata.items():
+            RYTSM[param] = {}
+            for sc, array in obj1.items():
+                RYTSM[param][sc] = {}
+                for obj in array:
+                    for year, val in obj.items():
+                        if (year != 'TechId' and year != 'StgId' and year != 'MoId'):
+                            if year not in RYTSM[param][sc]:
+                                RYTSM[param][sc][year] = {}
+                            if obj['StgId'] not in RYTSM[param][sc][year]:
+                                RYTSM[param][sc][year][obj['StgId']] = {}
+                            if obj['TechId'] not in RYTSM[param][sc][year][obj['StgId']]:
+                                RYTSM[param][sc][year][obj['StgId']][obj['TechId']] = {}
+                            RYTSM[param][sc][year][obj['StgId']][obj['TechId']][obj['MoId']] = val
+        return RYTSM
+    
     def RYTE(self, RYTEdata):
         RYTE = {}
         for param, obj1 in RYTEdata.items():

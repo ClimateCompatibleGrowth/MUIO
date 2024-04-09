@@ -40,6 +40,7 @@ export class Model {
         });
 
 
+        // console.log('gridParamData ', gridParamData)
         var cellsrendererbutton = function (row, column, value) { 
             return '<span style="padding:5px; width:100%;" data-toggle="modal" href="#osy-unitRule" class="btn btn-white btn-default updateRule" data-id='+ row+' ><i class="fa fa-pencil-square-o  fa-lg primary"></i>Update rule</span>';
         }

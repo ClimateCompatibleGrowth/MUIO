@@ -148,7 +148,7 @@ export default class RYS {
             $divGrid.jqxGrid('updatebounddata');
             Grid.applyGridFilter($divGrid, model.years);
             Html.lblScenario( model.scenariosCount);
-            $('#definition').html(`${DEF[model.group][model.param].definition}`);
+            //$('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 
         $("#osy-scenarios").off('click');
@@ -285,7 +285,7 @@ export default class RYS {
 
         $("#showLog").click(function (e) {
             e.preventDefault();
-            $('#definition').html(`${DEF[model.group][model.param].definition}`);
+           // $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });
         Message.loaderEnd();

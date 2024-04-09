@@ -48,6 +48,10 @@ export const UNITDEFINITION = {
     'EmiUnit': {
         name: '[Emission unit]',
         val: {"var":"EmiUnit"}
+    },
+    'StgUnit': {
+        name: '[Storage unit]',
+        val: {"var":"StgUnit"}
     }
 }
 
@@ -68,6 +72,7 @@ export const GROUPNAMES = {
     "RYE": "Region, year, emission",
     "RYTC": "Region, year, technology, commodity",
     "RYTCM": "Region, year, technology, commodity, mode of operation",
+    "RYTSM": "Region, year, storage, technology, mode of operation",
     "RYTE": "Region, year, technology, emission",
     "RYTEM": "Region, year, technology, emission, mode of operation",
     "RYTTs": "Region, year, technology, timeslice",
@@ -102,6 +107,7 @@ export const PARAMORDER = [
     "RYTM"  ,  
     "RYTC"  ,  
     "RYTCM" , 
+    "RYTSM" ,
     "RYTTs" ,    
     "RYC"   ,  
     "RYCTs" ,      

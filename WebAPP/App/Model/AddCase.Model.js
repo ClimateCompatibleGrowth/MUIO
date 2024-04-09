@@ -44,6 +44,8 @@ export class Model {
       this.commCount = genData['osy-comm'].length;
       this.tsCount = genData['osy-ts'].length;
       this.seCount = genData['osy-se'].length;
+      this.dtbCount = genData['osy-dtb'].length;
+      this.dtCount = genData['osy-dt'].length;
       this.emisCount = genData['osy-emis'].length;
       this.scenariosCount = genData['osy-scenarios'].length;
       this.constraintsCount = genData['osy-constraints'].length;

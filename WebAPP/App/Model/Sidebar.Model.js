@@ -11,7 +11,7 @@ export class Model {
         let constraints = genData['osy-constraints'];
 
         let menuCondition = {}
-        let menuGroup = ['IAR', 'OAR', 'EAR', 'INCR', 'ITCR', 'CCM', 'CNCM', 'CAM', 'UCC', 'STG'];
+        let menuGroup = ['IAR', 'OAR', 'EAR', 'INCR', 'ITCR', 'CCM', 'CNCM', 'CAM', 'UCC', 'OLS', 'CCS', 'RSC', 'TTS', 'TFS'];
         menuCondition.IAR = false;
         menuCondition.OAR = false;
         menuCondition.INCR = false;

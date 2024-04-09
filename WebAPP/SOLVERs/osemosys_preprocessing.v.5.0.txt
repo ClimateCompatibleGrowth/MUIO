@@ -31,7 +31,7 @@ param CapacityFactor{r in REGION, t in TECHNOLOGY, l in TIMESLICE, y in YEAR};
 param CapacityOfOneTechnologyUnit{r in REGION, t in TECHNOLOGY, y in YEAR};
 param CapacityToActivityUnit{r in REGION, t in TECHNOLOGY};
 param CapitalCost{r in REGION, t in TECHNOLOGY, y in YEAR};
-param CapitalCostStorage{r in REGION, s in STORAGE, y in YEAR};
+
 param DiscountRate{r in REGION};
 param DiscountRateIdv{r in REGION, t in TECHNOLOGY};
 param EmissionActivityRatio{r in REGION, t in TECHNOLOGY, e in EMISSION, m in MODE_OF_OPERATION, y in YEAR};
@@ -43,7 +43,7 @@ param InputToTotalCapacityRatio{r in REGION, t in TECHNOLOGY, f in COMMODITY, y 
 param ModelPeriodEmissionLimit{r in REGION, e in EMISSION};
 param ModelPeriodExogenousEmission{r in REGION, e in EMISSION};
 param OperationalLife{r in REGION, t in TECHNOLOGY};
-param OperationalLifeStorage{r in REGION, s in STORAGE};
+
 param OutputActivityRatio{r in REGION, t in TECHNOLOGY, f in COMMODITY, m in MODE_OF_OPERATION, y in YEAR};
 param REMinProductionTarget{r in REGION, y in YEAR};
 param RETagFuel{r in REGION, f in COMMODITY, y in YEAR};
@@ -75,6 +75,18 @@ param UDCMultiplierNewCapacity{r in REGION, t in TECHNOLOGY, u in UDC, y in YEAR
 param UDCMultiplierActivity{r in REGION, t in TECHNOLOGY, u in UDC, y in YEAR};
 param UDCConstant{r in REGION, u in UDC, y in YEAR};
 param UDCTag{r in REGION, u in UDC};
+
+
+param OperationalLifeStorage{r in REGION, s in STORAGE};
+
+
+param CapitalCostStorage{r in REGION, s in STORAGE, y in YEAR};
+param ResidualStorageCapacity{r in REGION, s in STORAGE, y in YEAR};
+
+param TechnologyToStorage{r in REGION, t in TECHNOLOGY, s in STORAGE, m in MODE_OF_OPERATION};
+param TechnologyFromStorage{r in REGION, t in TECHNOLOGY, s in STORAGE, m in MODE_OF_OPERATION};
+
+
 
 # TN Added these pieces for Tech Financing Calculations
 param CapitalRecoveryFactor{r in REGION, t in TECHNOLOGY}; 
@@ -115,6 +127,8 @@ param PvAnnuity{r in REGION, t in TECHNOLOGY};
 # TN Added Per Emissions Act Change
 set MODExTECHNOLOGYperEMISSIONChange{e in EMISSION} within MODE_OF_OPERATION cross TECHNOLOGY
     := {m in MODE_OF_OPERATION, t in TECHNOLOGY : exists{r in REGION, y in YEAR} EmissionToActivityChangeRatio[r,t,e,m,y] <> 0};
+
+
 
 ##########################
 #    Model Variables     #
