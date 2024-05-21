@@ -39,7 +39,7 @@ export default class DataFile {
 
     static initPage(model) {
         Message.clearMessages();
-        console.log('model ', model)
+        //console.log('model ', model)
         //Navbar.initPage(model.casename, model.pageId);
         Html.title(model.casename, model.title, "");
         Html.renderCases(model.cases);
@@ -675,7 +675,7 @@ export default class DataFile {
             $("input:checkbox[name=type]:checked").each(function(){
                 batchRunCases.push($(this).val());
             });
-            console.log('batchRunCases ', batchRunCases)
+            //console.log('batchRunCases ', batchRunCases)
             if(batchRunCases.length>1){
                 $('#osy-batchRun').show();
             }
@@ -686,7 +686,7 @@ export default class DataFile {
 
         $("#osy-batchRun").off('click');
         $("#osy-batchRun").on('click', function (event) {
-            console.log('BATCH RUN')
+            //console.log('BATCH RUN')
             Pace.restart();
             Message.loaderStart('BATCH RUN! Plese wait...');
 

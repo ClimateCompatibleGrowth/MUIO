@@ -1,4 +1,4 @@
-import { UNITDEFINITION } from "./Const.Class.js";
+import { UNITDEFINITION, PARAM_TECH_GROUPS, PARAM_COMM_GROUPS, PARAM_EMIS_GROUPS, PARAM_STORAGE_GROUPS } from "./Const.Class.js";
 
 export class DataModel{
 
@@ -28,58 +28,68 @@ export class DataModel{
             $.each(array, function (id, obj) {
                 unitData[group][obj.id] = {};
                 //tech parameters
-                $.each(genData['osy-tech'], function (id, tObj) {
-                    unitData[group][obj.id][tObj.TechId] = {};
-                    unitData[group][obj.id][tObj.TechId]['years'] = 'years';
-                    unitData[group][obj.id][tObj.TechId]['percent'] = '%';
-                    unitData[group][obj.id][tObj.TechId]['divide'] = '/';
-                    unitData[group][obj.id][tObj.TechId]['multiply'] = '*';
-                    unitData[group][obj.id][tObj.TechId]['hundert'] = '100';
-                    unitData[group][obj.id][tObj.TechId]['thousand'] = '10<sup>3</sup>';
-                    unitData[group][obj.id][tObj.TechId]['milion'] = '10<sup>6</sup>';
-                    unitData[group][obj.id][tObj.TechId]['CapUnitId'] = techUnits[tObj.TechId]['CapUnitId'];
-                    unitData[group][obj.id][tObj.TechId]['ActUnitId'] = techUnits[tObj.TechId]['ActUnitId'];
-                    unitData[group][obj.id][tObj.TechId]['Currency'] = genData['osy-currency'];
-                });
-                //comm parameters
-                $.each(genData['osy-comm'], function (id, cObj) {
-                    unitData[group][obj.id][cObj.CommId] = {};
-                    unitData[group][obj.id][cObj.CommId]['years'] = 'years';
-                    unitData[group][obj.id][cObj.CommId]['percent'] = '%';
-                    unitData[group][obj.id][cObj.CommId]['divide'] = '/';
-                    unitData[group][obj.id][cObj.CommId]['multiply'] = '*';
-                    unitData[group][obj.id][cObj.CommId]['hundert'] = '100';
-                    unitData[group][obj.id][cObj.CommId]['thousand'] = '10<sup>3</sup>';
-                    unitData[group][obj.id][cObj.CommId]['milion'] = '10<sup>6</sup>';
-                    unitData[group][obj.id][cObj.CommId]['CommUnit'] = commUnits[cObj.CommId];
-                    unitData[group][obj.id][cObj.CommId]['Currency'] = genData['osy-currency'];
-                });
-                //emi parameters
-                $.each(genData['osy-emis'], function (id, eObj) {
-                    unitData[group][obj.id][eObj.EmisId] = {};
-                    unitData[group][obj.id][eObj.EmisId]['years'] = 'years';
-                    unitData[group][obj.id][eObj.EmisId]['percent'] = '%';
-                    unitData[group][obj.id][eObj.EmisId]['divide'] = '/';
-                    unitData[group][obj.id][eObj.EmisId]['multiply'] = '*';
-                    unitData[group][obj.id][eObj.EmisId]['hundert'] = '100';
-                    unitData[group][obj.id][eObj.EmisId]['thousand'] = '10<sup>3</sup>';
-                    unitData[group][obj.id][eObj.EmisId]['milion'] = '10<sup>6</sup>';
-                    unitData[group][obj.id][eObj.EmisId]['EmiUnit'] = emiUnits[eObj.EmisId];
-                    unitData[group][obj.id][eObj.EmisId]['Currency'] = genData['osy-currency'];
-                });
-                $.each(genData['osy-stg'], function (id, eObj) {
-                    unitData[group][obj.id][eObj.StgId] = {};
-                    unitData[group][obj.id][eObj.StgId]['years'] = 'years';
-                    unitData[group][obj.id][eObj.StgId]['percent'] = '%';
-                    unitData[group][obj.id][eObj.StgId]['divide'] = '/';
-                    unitData[group][obj.id][eObj.StgId]['multiply'] = '*';
-                    unitData[group][obj.id][eObj.StgId]['hundert'] = '100';
-                    unitData[group][obj.id][eObj.StgId]['thousand'] = '10<sup>3</sup>';
-                    unitData[group][obj.id][eObj.StgId]['milion'] = '10<sup>6</sup>';
-                    unitData[group][obj.id][eObj.StgId]['StgUnit'] = stgUnits[eObj.StgId];
-                    unitData[group][obj.id][eObj.StgId]['Currency'] = genData['osy-currency'];
-                });
+                //console.log(group, obj.id)
+                if(PARAM_TECH_GROUPS.includes(group)){
+                    $.each(genData['osy-tech'], function (id, tObj) {
+                        unitData[group][obj.id][tObj.TechId] = {};
+                        unitData[group][obj.id][tObj.TechId]['years'] = 'years';
+                        unitData[group][obj.id][tObj.TechId]['percent'] = '%';
+                        unitData[group][obj.id][tObj.TechId]['divide'] = '/';
+                        unitData[group][obj.id][tObj.TechId]['multiply'] = '*';
+                        unitData[group][obj.id][tObj.TechId]['hundert'] = '100';
+                        unitData[group][obj.id][tObj.TechId]['thousand'] = '10<sup>3</sup>';
+                        unitData[group][obj.id][tObj.TechId]['milion'] = '10<sup>6</sup>';
+                        unitData[group][obj.id][tObj.TechId]['CapUnitId'] = techUnits[tObj.TechId]['CapUnitId'];
+                        unitData[group][obj.id][tObj.TechId]['ActUnitId'] = techUnits[tObj.TechId]['ActUnitId'];
+                        unitData[group][obj.id][tObj.TechId]['Currency'] = genData['osy-currency'];
+                    });
+                }
+                if(PARAM_COMM_GROUPS.includes(group)){
+                    //comm parameters
+                    $.each(genData['osy-comm'], function (id, cObj) {
+                        unitData[group][obj.id][cObj.CommId] = {};
+                        unitData[group][obj.id][cObj.CommId]['years'] = 'years';
+                        unitData[group][obj.id][cObj.CommId]['percent'] = '%';
+                        unitData[group][obj.id][cObj.CommId]['divide'] = '/';
+                        unitData[group][obj.id][cObj.CommId]['multiply'] = '*';
+                        unitData[group][obj.id][cObj.CommId]['hundert'] = '100';
+                        unitData[group][obj.id][cObj.CommId]['thousand'] = '10<sup>3</sup>';
+                        unitData[group][obj.id][cObj.CommId]['milion'] = '10<sup>6</sup>';
+                        unitData[group][obj.id][cObj.CommId]['CommUnit'] = commUnits[cObj.CommId];
+                        unitData[group][obj.id][cObj.CommId]['Currency'] = genData['osy-currency'];
+                    });
+                }
+                if(PARAM_EMIS_GROUPS.includes(group)){
+                    //emi parameters
+                    $.each(genData['osy-emis'], function (id, eObj) {
+                        unitData[group][obj.id][eObj.EmisId] = {};
+                        unitData[group][obj.id][eObj.EmisId]['years'] = 'years';
+                        unitData[group][obj.id][eObj.EmisId]['percent'] = '%';
+                        unitData[group][obj.id][eObj.EmisId]['divide'] = '/';
+                        unitData[group][obj.id][eObj.EmisId]['multiply'] = '*';
+                        unitData[group][obj.id][eObj.EmisId]['hundert'] = '100';
+                        unitData[group][obj.id][eObj.EmisId]['thousand'] = '10<sup>3</sup>';
+                        unitData[group][obj.id][eObj.EmisId]['milion'] = '10<sup>6</sup>';
+                        unitData[group][obj.id][eObj.EmisId]['EmiUnit'] = emiUnits[eObj.EmisId];
+                        unitData[group][obj.id][eObj.EmisId]['Currency'] = genData['osy-currency'];
+                    });
+                }
+                if(PARAM_STORAGE_GROUPS.includes(group)){
+                    $.each(genData['osy-stg'], function (id, eObj) {
+                        unitData[group][obj.id][eObj.StgId] = {};
+                        unitData[group][obj.id][eObj.StgId]['years'] = 'years';
+                        unitData[group][obj.id][eObj.StgId]['percent'] = '%';
+                        unitData[group][obj.id][eObj.StgId]['divide'] = '/';
+                        unitData[group][obj.id][eObj.StgId]['multiply'] = '*';
+                        unitData[group][obj.id][eObj.StgId]['hundert'] = '100';
+                        unitData[group][obj.id][eObj.StgId]['thousand'] = '10<sup>3</sup>';
+                        unitData[group][obj.id][eObj.StgId]['milion'] = '10<sup>6</sup>';
+                        unitData[group][obj.id][eObj.StgId]['StgUnit'] = stgUnits[eObj.StgId];
+                        unitData[group][obj.id][eObj.StgId]['Currency'] = genData['osy-currency'];
+                    });
+                }
                 unitData[group][obj.id]['years'] = 'years';
+                unitData[group][obj.id]['number'] = 'number';
                 unitData[group][obj.id]['percent'] = '%';
                 unitData[group][obj.id]['divide'] = '/';
                 unitData[group][obj.id]['multiply'] = '*';
@@ -1043,9 +1053,9 @@ export class DataModel{
         let scData = this.getScData(genData);
         let paramName = this.ParamName(PARAMETERS['RS']);
         let unitData = this.getUnitData(genData, PARAMETERS);
-        console.log('unitData ', unitData)
+        //console.log('unitData ', unitData)
         let paramById = this.getParamById(PARAMETERS);
-        console.log('paramById ', paramById)
+        //console.log('paramById ', paramById)
         const cloneData = JSON.parse(JSON.stringify(RSdata));
         let RSgrid = {};
         $.each(cloneData, function (param, paramObj) {
@@ -1232,8 +1242,6 @@ export class DataModel{
         return RYTchart;
     }
 
-
-
     static RYS(RYSdata){
         let RYS = {};
         const cloneData = JSON.parse(JSON.stringify(RYSdata));
@@ -1259,7 +1267,7 @@ export class DataModel{
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
 
-        console.log('unitData grid ', unitData)
+        //console.log('unitData grid ', unitData)
 
         const cloneData = JSON.parse(JSON.stringify(RYSdata));
         let RYSgrid = {};
@@ -1274,17 +1282,16 @@ export class DataModel{
                     obj['ScDesc'] = scData[sc]['Desc'];
                     let rule = paramById['RYS'][param]['unitRule'];
                     let data = unitData['RYS'][param][obj.StgId];
-                    console.log('rule ', rule)
-                    console.log('data ', data)
+                    // console.log('rule ', rule)
+                    // console.log('data ', data)
                     obj['UnitId'] = jsonLogic.apply(rule, data);
-                    console.log('obj[UnitId ', obj['UnitId'] )
+                    //console.log('obj[UnitId ', obj['UnitId'] )
                     RYSgrid[param].push(obj);
                 }); 
             });
         });
         return RYSgrid;
     }
-
 
     static RYTM(RYTMdata){
         let RYTM = {};
@@ -1593,14 +1600,12 @@ export class DataModel{
     }
 
     static RYTsgrid(genData, RYTsdata){
-
-        //let scName = this.ScName(genData);
         let scData = this.getScData(genData);
         let tsData = this.getTsData(genData);
         let cloneData = JSON.parse(JSON.stringify(RYTsdata));
         let RYTsgrid = {};
 
-        console.log('tsData ',tsData)
+        //console.log('tsData ',tsData)
         $.each(cloneData, function (param, paramObj) {
             RYTsgrid[param] = [];
             $.each(paramObj, function (sc, array) {
@@ -1615,6 +1620,64 @@ export class DataModel{
             });
         });
         return RYTsgrid;
+    }
+
+    static RYDtbgrid(genData, RYDtbdata){
+        let scData = this.getScData(genData);
+        let dtbData = this.getDtbData(genData);
+        let cloneData = JSON.parse(JSON.stringify(RYDtbdata));
+        let RYDtbgrid = {};
+
+        $.each(cloneData, function (param, paramObj) {
+            RYDtbgrid[param] = [];
+            $.each(paramObj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['DtbId'] = obj.DtbId;
+                    obj['Dtb'] = dtbData[obj.DtbId]['Dtb'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
+                    RYDtbgrid[param].push(obj);
+                }); 
+            });
+        });
+        return RYDtbgrid;
+    }
+
+    static RYSeDtgrid(genData, RYSeDtdata, PARAMETERS){
+     
+        let seData = this.getSeData(genData);
+        let scData = this.getScData(genData);
+        let dtData = this.getDtData(genData);
+        let unitData = this.getUnitData(genData, PARAMETERS);
+        let paramById = this.getParamById(PARAMETERS);
+
+
+        let cloneData = JSON.parse(JSON.stringify(RYSeDtdata));
+        let RYSeDtgrid = {};
+
+        // console.log('unitData ',unitData)
+        // console.log('cloneData ',cloneData)
+        $.each(cloneData, function (param, obj) {
+            RYSeDtgrid[param] = [];
+            $.each(obj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
+                    obj['Se'] = seData[obj.SeId]['Se'];
+                    obj['SeDesc'] = seData[obj.SeId]['Desc'];
+
+                    obj['Dt'] = dtData[obj.DtId]['Dt'];
+                    let rule = paramById['RYSeDt'][param]['unitRule'];
+                    let data = unitData['RYSeDt'][param];
+                    obj['UnitId'] = jsonLogic.apply(rule, data);
+
+                    RYSeDtgrid[param].push(obj);
+                });
+            });
+        });
+        return RYSeDtgrid;
     }
 
     static RYTschart(genData, RYTsdata){
@@ -1800,6 +1863,62 @@ export class DataModel{
         return RYTCMchart;
     }
 
+    static RTSM(RTSMdata){
+        let RTSM = {};
+        const cloneData = JSON.parse(JSON.stringify(RTSMdata));
+        $.each(cloneData, function (param, obj1) {
+            RTSM[param] = {};
+            $.each(obj1, function (sc, array) {
+                RYTSM[param][sc] = {};
+                $.each(array, function (id, obj) {
+                    if(!RTSM[param][sc][obj.TechId]){ RTSM[param][sc][obj.TechId] = {}; }
+                    if(!RTSM[param][sc][obj.TechId][obj.StgId]){ RTSM[param][sc][obj.TechId][obj.StgId] = {}; }
+                        RTSM[param][sc][obj.TechId][obj.StgId][obj.MoId] = obj;
+                        delete obj.TechId;
+                        delete obj.StgId; 
+                        delete obj.MoId;   
+                });
+            });
+        });
+        return RTSM;
+    }
+
+    static RTSMgrid(genData, RTSMdata, PARAMETERS){
+        // let techName = this.TechName(genData);
+        // let commName = this.CommName(genData);
+        // let scName = this.ScName(genData);
+        let techData = this.getTechData(genData);
+        let stgData = this.getStgData(genData);
+        let scData = this.getScData(genData);
+        let unitData = this.getUnitData(genData, PARAMETERS);
+        let paramById = this.getParamById(PARAMETERS);
+        let cloneData = JSON.parse(JSON.stringify(RTSMdata));
+        //console.log('cloneData ', cloneData)
+
+        let RTSMgrid = {};
+        $.each(cloneData, function (param, obj) {
+            RTSMgrid[param] = [];
+            $.each(obj, function (sc, array) {
+                $.each(array, function (id, obj) {
+                    obj['Tech'] = techData[obj.TechId]['Tech'];
+                    obj['TechDesc'] = techData[obj.TechId]['Desc'];
+                    obj['Stg'] = stgData[obj.StgId]['Stg'];
+                    obj['StgDesc'] = stgData[obj.StgId]['Desc'];
+                    obj['ScId'] = sc;
+                    obj['Sc'] = scData[sc]['Scenario'];
+                    obj['ScDesc'] = scData[sc]['Desc'];
+                    let rule = paramById['RTSM'][param]['unitRule'];
+                    let data1 = unitData['RTSM'][param][obj.StgId];
+                    let data2 = unitData['RTSM'][param][obj.TechId];
+                    const data = {...data1, ...data2};
+                    obj['UnitId'] = jsonLogic.apply(rule, data);
+                    RTSMgrid[param].push(obj);
+                });
+            });
+        });
+        return RTSMgrid;
+    }
+
     static RYTSM(RYTSMdata){
         let RYTSM = {};
         const cloneData = JSON.parse(JSON.stringify(RYTSMdata));
@@ -1830,7 +1949,7 @@ export class DataModel{
         let unitData = this.getUnitData(genData, PARAMETERS);
         let paramById = this.getParamById(PARAMETERS);
         let cloneData = JSON.parse(JSON.stringify(RYTSMdata));
-        console.log('cloneData ', cloneData)
+        //console.log('cloneData ', cloneData)
         let RYTSMgrid = {};
         $.each(cloneData, function (param, obj) {
             RYTSMgrid[param] = [];

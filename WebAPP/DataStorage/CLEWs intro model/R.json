@@ -1,1 +1,24 @@
-{"DR": {"SC_0": [{"value": 0.1}], "SC_m8iy6": [{"value": null}], "SC_wp11f": [{"value": null}], "SC_gbalb": [{"value": null}]}}
+{
+    "DR": {
+        "SC_0": [
+            {
+                "value": 0.1
+            }
+        ],
+        "SC_m8iy6": [
+            {
+                "value": null
+            }
+        ],
+        "SC_wp11f": [
+            {
+                "value": null
+            }
+        ],
+        "SC_gbalb": [
+            {
+                "value": null
+            }
+        ]
+    }
+}

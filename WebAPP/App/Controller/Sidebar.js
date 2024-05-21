@@ -11,7 +11,7 @@ export class Sidebar {
             promise.push(genData);
             const PARAMETERS = Osemosys.getParamFile();
             promise.push(PARAMETERS);
-            const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+            const VARIABLES = Osemosys.getParamFile('Variables.json');
             promise.push(VARIABLES);
             const RESULTEXISTS = Osemosys.resultsExists(casename);
             promise.push(RESULTEXISTS);
@@ -54,7 +54,7 @@ export class Sidebar {
             </label>`;
             $('#dynamicRoutes').append(res);
 
-            console.log('model sidebar ', model)
+            //console.log('model sidebar ', model)
 
             $.each(PARAMORDER, function (id, group) {
                 $.each(model.PARAMETERS[group], function (id, obj) {
@@ -162,7 +162,7 @@ export class Sidebar {
                                 $('#dynamicRoutes').append(res);
                             }
 
-                            if (['OLS', 'CCS', 'RSC', 'TTS', 'TFS'].includes(obj.id)&& model.menuCondition.STG) {
+                            if (['OLS', 'SLS', 'CCS', 'RSC', 'MSC', 'TTS', 'TFS', 'DS', 'DIDT' ].includes(obj.id)&& model.menuCondition.STG) {
                                 let res = `
                                 <li  class="">
                                     <a href="#/${group}/${obj.id}" class="menu-items" title="${GROUPNAMES[group]}">

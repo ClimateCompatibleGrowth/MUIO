@@ -115,9 +115,9 @@ def updateTimeslices(casename):
             d = str(day + 1)
             chunk['TsId'] = "S"+s+d
             chunk['Ts'] = "S"+s+d
-            chunk["SE"] = ["SE_0"]
-            chunk["DT"] = ["DT_0"]
-            chunk["DTB"] = ["DTB_0"]
+            chunk["SE"] = "SE_0"
+            chunk["DT"] = "DT_0"
+            chunk["DTB"] = "DTB_0"
             chunk['Desc'] = "Default year split"
             genData["osy-ts"].append(chunk)
     File.writeFile( genData, genDataPath)
@@ -263,7 +263,7 @@ def uploadCase():
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
 
                                     #add res view folders with json default files
-                                    configPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
+                                    configPath = Path(Config.DATA_STORAGE, 'Variables.json')
                                     vars = File.readParamFile(configPath)
                                     viewDef = {}
                                     for group, lists in vars.items():

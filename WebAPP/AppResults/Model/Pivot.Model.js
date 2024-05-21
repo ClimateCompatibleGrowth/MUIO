@@ -6,11 +6,16 @@ export class Model {
     constructor(casename, genData, resData, VARIABLES, DATA, VIEW) {
         let group = 'RYT';
         let param = 'ANC';
+
+        //console.log('VARIABLES ', VARIABLES)
+
         let VARGROUPS = DataModelResult.getVarById(VARIABLES);
         let VARIABLEOBJECT = DataModelResult.getVarialblesObject(VARIABLES);
         let VARNAMES = DataModel.AllParamName(VARIABLES);
         let pivotData = DataModelResult.getPivot(DATA, genData, VARIABLES, group, param);
         //let VIEWS = DataModelResult.getViews(VIEW['osy-views']);
+
+        //console.log('VARGROUPS ', VARGROUPS)
 
         let VIEWS = DataModelResult.getAllViews(VIEW['osy-views']);
 

@@ -6,7 +6,6 @@ import { Model } from "../Model/Config.Model.js";
 import { Grid } from "../../Classes/Grid.Class.js";
 import { Osemosys } from "../../Classes/Osemosys.Class.js";
 import { UNITDEFINITION } from "../../Classes/Const.Class.js";
-import { MessageSelect } from "./MessageSelect.js";
 import { Sidebar } from "./Sidebar.js";
 
 export default class Config {
@@ -19,7 +18,7 @@ export default class Config {
                 promise.push(casename);
                 const PARAMETERS = Osemosys.getParamFile();
                 promise.push(PARAMETERS); 
-                const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+                const VARIABLES = Osemosys.getParamFile('Variables.json');
                 promise.push(VARIABLES);
                 return Promise.all(promise);
             // }else{
@@ -55,7 +54,7 @@ export default class Config {
             promise.push(casename);
             const PARAMETERS = Osemosys.getParamFile();
             promise.push(PARAMETERS); 
-            const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+            const VARIABLES = Osemosys.getParamFile('Variables.json');
             promise.push(VARIABLES);
             return Promise.all(promise);
         })

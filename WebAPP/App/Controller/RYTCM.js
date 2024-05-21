@@ -186,6 +186,7 @@ export default class RYTCM {
                 model.srcGrid.root = this.value;
                 $divGrid.jqxGrid('updatebounddata');
                 model.param =  this.value;
+                Grid.applyGridFilter($divGrid, model.years);
 
                 //update za ddl coms i techs za IAR ili OAR
                 // Html.ddlTechs(model.techs[this.value], model.techs[this.value][0]['TechId']);

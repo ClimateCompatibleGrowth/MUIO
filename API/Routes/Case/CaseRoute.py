@@ -179,7 +179,7 @@ def saveParamFile():
         VarData = request.json['VarData']
 
         paramPath = Path(Config.DATA_STORAGE, 'Parameters.json')
-        varPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
+        varPath = Path(Config.DATA_STORAGE, 'Variables.json')
         File.writeFile( ParamData, paramPath)
         File.writeFile( VarData, varPath)
         response = {
@@ -237,7 +237,7 @@ def saveCase():
         casename = genData['osy-casename']
         case = session.get('osycase', None)
 
-        configPath = Path(Config.DATA_STORAGE, 'ResultParameters.json')
+        configPath = Path(Config.DATA_STORAGE, 'Variables.json')
         vars = File.readParamFile(configPath)
         viewDef = {}
         for group, lists in vars.items():
@@ -390,7 +390,6 @@ def downloadCSV():
         #return send_from_directory(dir, 'export.csv', as_attachment=True)
     except(IOError):
         return jsonify('No existing cases!'), 404
-
 
 @case_api.route("/importTemplate", methods=['POST'])
 def run():

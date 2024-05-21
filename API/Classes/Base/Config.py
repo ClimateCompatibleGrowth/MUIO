@@ -42,7 +42,7 @@ os.chmod(DATA_STORAGE, 0o777)
 HEROKU_DEPLOY = 0
 AWS_SYNC = 0
 
-PINNED_COLUMNS = ('Sc', 'Tech', 'Comm', 'Emis','Stg', 'Timeslice', 'MoO', 'UnitId')
+PINNED_COLUMNS = ('Sc', 'Tech', 'Comm', 'Emis','Stg', 'Ts', 'MoO', 'UnitId', 'Se','Dt', 'Dtb')
 
 TECH_GROUPS = ('RYT', 'RYTM', 'RYTC', 'RYTCn', 'RYTCM', 'RYTE', 'RYTEM', 'RYTTs')
 COMM_GROUPS = ('RYC', 'RYTC', 'RYTCM','RYCTs')
@@ -58,7 +58,9 @@ DEFAULT_F ={
     "RE"   : 'default_RE',  
     "RS"   : 'default_RS', 
     "RYCn" : 'default_RYCn', 
-    "RYTs" : 'default_RYTs',     
+    "RYTs" : 'default_RYTs', 
+    "RYDtb" : 'default_RYDtb',  
+    "RYSeDt" : 'default_RYSeDt',   
     "RYT"  : 'default_RYT',
     "RYS"  : 'default_RYS',
     "RYTCn": 'default_RYTCn',    
@@ -67,7 +69,7 @@ DEFAULT_F ={
     "RYE"  : 'default_RYE',     
     "RYTC" : 'default_RYTC',  
     "RYTCM": 'default_RYTCM' , 
-    "RYTSM": 'default_RYTSM' ,   
+    "RTSM": 'default_RTSM' ,   
     "RYTE" : 'default_RYTE',  
     "RYTEM": 'default_RYTEM' , 
     "RYTM" : 'default_RYTM',     
@@ -82,7 +84,9 @@ UPDATE_F ={
     "RE"   : 'update_RE', 
     "RS"   : 'update_RS',
     "RYCn" : 'update_RYCn',
-    "RYTs" : 'update_RYTs',     
+    "RYTs" : 'update_RYTs', 
+    "RYDtb" : 'update_RYDtb', 
+    "RYSeDt" : 'update_RYSeDt',    
     "RYT"  : 'update_RYT', 
     "RYS"  : 'update_RYS',  
     "RYTCn": 'update_RYTCn',
@@ -91,7 +95,7 @@ UPDATE_F ={
     "RYE"  : 'update_RYE',     
     "RYTC" : 'update_RYTC',  
     "RYTCM": 'update_RYTCM' ,  
-    "RYTSM": 'update_RYTSM' ,   
+    "RTSM": 'update_RTSM' ,   
     "RYTE" : 'update_RYTE',  
     "RYTEM": 'update_RYTEM' , 
     "RYTM" : 'update_RYTM',     
@@ -107,7 +111,9 @@ GEN_F ={
     "RS"   : 'gen_RS',
     "RYCn" : 'gen_RYCn', 
     "RYTCn": 'gen_RYTCn',   
-    "RYTs" : 'gen_RYTs',     
+    "RYTs" : 'gen_RYTs',  
+    "RYDtb" : 'gen_RYDtb',  
+    "RYSeDt" : 'gen_RYSeDt',   
     "RYT"  : 'gen_RYT', 
     "RYS"  : 'gen_RYS', 
     "RYTM" : 'gen_RYTM',     
@@ -115,7 +121,7 @@ GEN_F ={
     "RYE"  : 'gen_RYE',     
     "RYTC" : 'gen_RYTC',  
     "RYTCM": 'gen_RYTCM' , 
-    "RYTSM": 'gen_RYTSM' ,  
+    "RTSM": 'gen_RTSM' ,  
     "RYTE" : 'gen_RYTE',  
     "RYTEM": 'gen_RYTEM' , 
     "RYTM" : 'gen_RYTM',     
@@ -162,7 +168,22 @@ VARIABLES_C = {
         'NewStorageCapacity':['r','s','y'],
         'SalvageValueStorage':['r','s','y'],
         'NumberOfNewTechnologyUnits':['r','t','y'],
-        'Trade':['r','rr','l','f','y']
+        'Trade':['r','rr','l','f','y'],
+        'RateOfNetStorageActivity':['r','s','ls','ld','lh','y'],
+        'NetChargeWithinDay': ['r','s','ls','ld','lh','y'],
+        'NetChargeWithinYear':['r','s','ls','ld','lh','y'],
+        'StorageLevelYearStart': ['r','s','y'],
+        'StorageLevelYearFinish': ['r','s','y'],
+        'StorageLevelSeasonStart':['r','s','ls','y'],
+        'StorageLevelSeasonFinish':['r','s','ls','y'],
+        'StorageLevelDayTypeStart': ['r','s','ls','ld','y'],
+        'StorageLevelDayTypeFinish': ['r','s','ls','ld','y'],
+        'AccumulatedNewStorageCapacity':['r','s','y'],
+        'StorageUpperLimit':['r','s','y'],
+        'CapitalInvestmentStorage':['r','s','y'],
+        'DiscountedCapitalInvestmentStorage':['r','s','y'],
+        'DiscountedSalvageValueStorage':['r','s','y'],
+        'TotalDiscountedStorageCost':['r','s','y']
     }
 
 #needed for validation of inputs

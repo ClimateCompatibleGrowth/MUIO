@@ -20,7 +20,7 @@ export default class Pivot {
                     promise.push(genData);
                     const resData = Osemosys.getResultData(casename, 'resData.json');
                     promise.push(resData);
-                    const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+                    const VARIABLES = Osemosys.getParamFile('Variables.json');
                     promise.push(VARIABLES);
                     const VIEWS = Osemosys.getResultData(casename,'viewDefinitions.json');
                     promise.push(VIEWS);
@@ -62,7 +62,7 @@ export default class Pivot {
                 promise.push(genData);
                 const resData = Osemosys.getResultData(casename, 'resData.json');
                 promise.push(resData);
-                const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+                const VARIABLES = Osemosys.getParamFile('Variables.json');
                 promise.push(VARIABLES);
                 const VIEWS = Osemosys.getResultData(casename, 'viewDefinitions.json');
                 promise.push(VIEWS);
@@ -96,7 +96,7 @@ export default class Pivot {
         Message.clearMessages();
         Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group);
 
-        console.log('model ', model)
+        //console.log('model ', model)
         // add Grid-based layout for the PivotPanel
         // wijmo.olap.PivotPanel.controlTemplate = 
         // `<div>  
@@ -301,7 +301,8 @@ export default class Pivot {
         //     return label;
         // };
 
-        app.cmbParams = new wijmo.input.AutoComplete('#cmbParams', {
+        // app.cmbParams = new wijmo.input.AutoComplete('#cmbParams', {
+        app.cmbParams = new wijmo.input.ComboBox('#cmbParams', {
             itemsSource: model.VARIABLEOBJECT,
             dropDownCssClass: 'wj-vars',
             displayMemberPath: 'name',
@@ -330,7 +331,7 @@ export default class Pivot {
         app.cmbStackedChart  = new wijmo.input.ComboBox('#cmbStackedChart', {
             itemsSource: 'Stacked,Stacked100pc,None'.split(','),
             selectedIndexChanged: function(s, e) {
-                console.log(s, e)
+                //console.log(s, e)
                 app.pivotChart.stacking = s.text;
             }
         });
@@ -500,16 +501,17 @@ export default class Pivot {
         model.group = model.VARGROUPS[param]['group'];
         model.param = param;
 
-        console.log('model.param ', model.param)
-        console.log('model.group ', model.group)
+        // console.log('model.param ', model.param)
+        // console.log('model.group ', model.group)
         // console.log('param,  model, ', param,  model,)
         Osemosys.getResultData(model.casename, model.group+'.json')
         .then(DATA => {
-            console.log('DATA ', DATA)
+            //console.log('DATA ', DATA)
             if (DATA !== null && model.param in DATA && Object.getOwnPropertyNames(DATA[model.param]).length != 0){
                 let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
                 model.pivotData = pivotData;
                 app.engine.itemsSource = model.pivotData;
+
                 if (model.param == 'D' || model.param == 'T'){
                     app.engine.columnFields.push( 'Comm');
                     app.engine.rowFields.push('Case','Year');
@@ -517,6 +519,11 @@ export default class Pivot {
                 }
                 else if(model.param == 'AE' ){
                     app.engine.columnFields.push('Emi');
+                    app.engine.rowFields.push('Case','Year');
+                    app.engine.valueFields.push('Value');
+                }
+                else if(model.group == 'RYS' ){
+                    app.engine.columnFields.push('Stg');
                     app.engine.rowFields.push('Case','Year');
                     app.engine.valueFields.push('Value');
                 }

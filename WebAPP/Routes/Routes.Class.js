@@ -8,7 +8,7 @@ export class Routes {
         .then(PARAMETERS => {
             const promise = [];
             promise.push(PARAMETERS);
-            const VARIABLES = Osemosys.getParamFile('ResultParameters.json');
+            const VARIABLES = Osemosys.getParamFile('Variables.json');
             promise.push(VARIABLES);
             return Promise.all(promise);
         })

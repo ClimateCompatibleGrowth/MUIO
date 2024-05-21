@@ -12,6 +12,71 @@ class DataFile(Osemosys):
     # def __init__(self, case):
     #     Osemosys.__init__(self, case)
 
+    def gen_Conversions(self):
+        self.seasons = ''
+        for seId in self.seIDs:
+            self.seasons += '{} '.format(self.seMap[seId]) 
+
+        self.daytypes = ''
+        for dtId in self.dtIDs:
+            self.daytypes += '{} '.format(self.dtMap[dtId]) 
+
+        self.dailytimebrackets = ''
+        for dtbId in self.dtbIDs:
+            self.dailytimebrackets += '{} '.format(self.dtbMap[dtbId]) 
+
+        timeslices = self.genData["osy-ts"]
+        seasons = self.genData["osy-se"]
+        daytypes = self.genData["osy-dt"]
+        dailytypebrackets = self.genData["osy-dtb"]
+
+        seString = ''
+        dtString = ''
+        dtbString = ''
+        for ts in timeslices:           
+            seString += '{} '.format(ts['Ts'])
+            for se in seasons:
+                if se['SeId'] == ts['SE']:
+                    seString += '{} '.format(1)
+                else:
+                    seString += '{} '.format(0)
+
+            dtString += '{} '.format(ts['Ts'])
+            for dt in daytypes :
+                if dt['DtId'] == ts['DT']:
+                    dtString += '{} '.format(1)
+                else:
+                    dtString += '{} '.format(0)
+
+
+            dtbString += '{} '.format(ts['Ts'])
+            for dtb in dailytypebrackets :
+                if dtb['DtbId'] == ts['DTB']:
+                    dtbString += '{} '.format(1)
+                else:
+                    dtbString += '{} '.format(0)
+
+
+            seString += '{}'.format('\n')
+            dtString += '{}'.format('\n')
+            dtbString += '{}'.format('\n')
+
+        seString += '{}{}'.format(";",'\n')
+        dtString += '{}{}'.format(";",'\n')            
+        dtbString += '{}{}'.format(";",'\n')
+
+        self.f.write('{} {} {} {} {} {}'.format('param', 'Conversionls','default', 0, ':','\n'))
+        self.f.write('{}{}{}'.format(self.seasons, ':=', '\n'))
+        self.f.write('{}{}'.format(seString,'\n'))
+
+        self.f.write('{} {} {} {} {} {}'.format('param', 'Conversionld','default', 0, ':','\n'))
+        self.f.write('{}{}{}'.format(self.daytypes, ':=', '\n'))
+        self.f.write('{}{}'.format(dtString,'\n'))
+
+        self.f.write('{} {} {} {} {} {}'.format('param', 'Conversionlh','default', 0, ':','\n'))
+        self.f.write('{}{}{}'.format(self.dailytimebrackets, ':=', '\n'))
+        self.f.write('{}{}'.format(dtbString,'\n'))
+
     def gen_R(self):
         r = self.R(File.readFile(self.rPath))
         for id, param in self.PARAM['R'].items():
@@ -90,6 +155,37 @@ class DataFile(Osemosys):
             self.f.write('{}{}{}'.format('RE1 ', rsString, '\n'))
             self.f.write('{}{}'.format(';', '\n'))
 
+    def gen_RTSM(self):
+        rtsm = self.RTSM(File.readFile(self.rtsmPath))
+        for id, param in self.PARAM['RTSM'].items():
+            self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
+            for stgId in self.stgIDs:
+                regionHeader = True
+                rytcString = ''
+                defaultValueFlag = False
+                for storageTechId in self.storageTechIDs[id][stgId]:
+         
+                    # self.f.write('{}{}'.format('[RE1,'+ self.techMap[activityTechId] + ','+ self.commMap[activityCommId] +',*,*]:', '\n'))
+                    # self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                    for mod in self.modIds:
+                        
+                        
+                        # for yearId in self.yearIDs:
+                        for sc in self.scOrder:
+                            rtsmValue = rtsm[id][sc['ScId']][stgId][storageTechId][mod]
+                            if rtsmValue is not None and sc['Active'] == True:
+                                if rtsmValue != self.defaultValue[id]:
+                                    defaultValueFlag = True
+                                tmp = rtsmValue
+                        rytcString += '{} '.format(tmp)
+                if defaultValueFlag:
+                    if regionHeader:
+                        regionHeader = False   
+                        self.f.write('{}{}'.format('[RE1,'+ self.techMap[storageTechId]  +',*,*]:', '\n'))
+                        self.f.write('{}{}{}'.format( self.mods, ':=', '\n'))
+                    self.f.write('{} {}{}'.format(self.stgMap[stgId], rytcString, '\n'))
+            self.f.write('{}{}'.format(';', '\n'))
+
     def gen_RYCn(self):
         rycn = self.RYCn(File.readFile(self.rycnPath))
         for id, param in self.PARAM['RYCn'].items():
@@ -124,6 +220,53 @@ class DataFile(Osemosys):
                     rytsString += '{} '.format(tmp)
                 #if defaultValueFlag:                        
                 self.f.write('{} {}{}'.format(self.tsMap[timesliceId], rytsString, '\n'))
+        self.f.write('{}{}'.format(';', '\n'))
+
+    def gen_RYDtb(self):
+        rydtb = self.RYDtb(File.readFile(self.rydtbPath))
+        for id, param in self.PARAM['RYDtb'].items():
+            self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':','\n'))
+            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+            for dtbId in self.dtbIDs:
+                rydtbString = ''
+                #defaultValueFlag = False
+                for yearId in self.yearIDs:
+                    for sc in self.scOrder:
+                        rydtbValue = rydtb[id][sc['ScId']][yearId][dtbId]
+                        if rydtbValue is not None and sc['Active'] == True:
+                            # if rytsValue != self.defaultValue[id]:
+                            #     defaultValueFlag = True
+                            tmp = rydtbValue
+                    rydtbString += '{} '.format(tmp)
+                #if defaultValueFlag:                        
+                self.f.write('{} {}{}'.format(self.dtbMap[dtbId], rydtbString, '\n'))
+        self.f.write('{}{}'.format(';', '\n'))
+
+    def gen_RYSeDt(self):
+        rysedt = self.RYSeDt(File.readFile(self.rysedtPath))
+        for id, param in self.PARAM['RYSeDt'].items():
+            self.f.write('{} {} {} {} {} {}'.format('param', param,'default', self.defaultValue[id], ':=','\n'))
+            for seId in self.seIDs:
+                regionHeader = True
+                # self.f.write('{} {}'.format('[RE1,'+ self.commMap[commId] +',*,*]:', '\n'))
+                # self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                for dtId in self.dtIDs:
+                    rysedtString = ''
+                    defaultValueFlag = False
+                    for yearId in self.yearIDs:
+                        for sc in self.scOrder:
+                            rysedtValue = rysedt[id][sc['ScId']][yearId][seId][dtId]
+                            if rysedtValue is not None and sc['Active'] == True:
+                                if rysedtValue != self.defaultValue[id]:
+                                    defaultValueFlag = True
+                                tmp = rysedtValue
+                        rysedtString += '{} '.format(tmp)
+                    if defaultValueFlag:
+                        if regionHeader:
+                            regionHeader = False   
+                            self.f.write('{} {}'.format('[RE1,'+ self.seMap[seId] +',*,*]:', '\n'))
+                            self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
+                        self.f.write('{} {}{}'.format(self.dtMap[dtId], rysedtString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
 
     def gen_RYT(self):
@@ -492,6 +635,14 @@ class DataFile(Osemosys):
             self.commMap = self.getCommsMap()
             self.conMap = self.getConsMap()
             self.stgMap = self.getStgMap()
+            self.StgByType = self.getStgByType()
+
+            self.seIDs = self.getSeIds()
+            self.seMap = self.getSeMap()
+            self.dtIDs = self.getDtIds()
+            self.dtMap = self.getDtMap()
+            self.dtbIDs = self.getDtbIds()
+            self.dtbMap = self.getDtbMap()
             
             self.yearIDs = self.getYears()
             # self.timesliceIDs = self.getTimeslices()
@@ -515,6 +666,16 @@ class DataFile(Osemosys):
             for stgId in self.stgIDs:
                 self.stgs += '{} '.format(self.stgMap[stgId]) 
 
+            self.yearlyStgs = ''
+            self.dailyStgs = ''
+            for stgType, sbt in self.StgByType.items():
+                if stgType == 'Yearly':
+                    for s in sbt:
+                        self.yearlyStgs += '{} '.format(s) 
+                else:
+                    for s in sbt:
+                        self.dailyStgs += '{} '.format(s)      
+
             self.techs = ''
             for techId in self.techIDs:
                 self.techs += '{} '.format(self.techMap[techId]) 
@@ -534,6 +695,18 @@ class DataFile(Osemosys):
             self.timeslices = ''
             for timesliceId in self.timesliceIDs:
                 self.timeslices += '{} '.format(self.tsMap[timesliceId])
+
+            self.seasons = ''
+            for seId in self.seIDs:
+                self.seasons += '{} '.format(self.seMap[seId]) 
+
+            self.daytypes = ''
+            for dtId in self.dtIDs:
+                self.daytypes += '{} '.format(self.dtMap[dtId]) 
+
+            self.dailytimebrackets = ''
+            for dtbId in self.dtbIDs:
+                self.dailytimebrackets += '{} '.format(self.dtbMap[dtbId]) 
 
             self.mods = ''
             for modId in self.modIds:
@@ -557,27 +730,39 @@ class DataFile(Osemosys):
                 #f.write(json.dumps(data, ensure_ascii=False,  indent=4, sort_keys=False))
                 self.f.write('####################\n#Sets#\n####################\n')
                 self.f.write('{} {}'.format('#', '\n'))
-                self.f.write('{} {} {} {}{}{}'.format('set', 'EMISSION',':=', self.emis, ';', '\n'))
+               
                 self.f.write('{} {} {} {}{}{}'.format('set', 'REGION',':=', 'RE1', ';', '\n'))
-                self.f.write('{} {} {} {}{}{}'.format('set', 'MODE_OF_OPERATION',':=', self.mods, ';', '\n'))
-                self.f.write('{} {} {} {}{}{}'.format('set', 'COMMODITY',':=', self.comms, ';', '\n'))
-                self.f.write('{} {} {} {}{}{}'.format('set', 'STORAGE',':=',self.stgs, ';', '\n'))
                 self.f.write('{} {} {} {}{}{}'.format('set', 'TECHNOLOGY',':=', self.techs, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'COMMODITY',':=', self.comms, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'EMISSION',':=', self.emis, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'STORAGE',':=',self.stgs, ';', '\n'))
                 self.f.write('{} {} {} {}{}{}'.format('set', 'YEAR',':=', self.years, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'SEASON',':=', self.seasons, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'DAYTYPE',':=', self.daytypes, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'DAILYTIMEBRACKET',':=', self.dailytimebrackets, ';', '\n'))
                 self.f.write('{} {} {} {}{}{}'.format('set', 'TIMESLICE',':=', self.timeslices, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'MODE_OF_OPERATION',':=', self.mods, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'STORAGEINTRADAY',':=', self.dailyStgs, ';', '\n'))
+                self.f.write('{} {} {} {}{}{}'.format('set', 'STORAGEINTRAYEAR',':=', self.yearlyStgs, ';', '\n'))
                 self.f.write('{} {} {} {}{}{}'.format('set', 'UDC',':=', self.cons, ';', '\n'))
                 self.f.write('####################\n#Parameters#\n####################\n')
 
                 #path
-                self.f.write('{}{}'.format('#', '\n'))
-                self.f.write('{} {} {} {} {} {}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
-                self.f.write('{}{}'.format('', '\n'))
+                # self.f.write('{}{}'.format('#', '\n'))
+                # self.f.write('{} {} {} {} {} {}'.format('param', 'ResultsPath',':=', path, ';', '\n'))
+                # self.f.write('{}{}'.format('', '\n'))
                 
                 #trade route hard code
                 self.f.write('{} {} {} {} {} {}'.format('param', 'TradeRoute ','default', '0', ':=','\n'))
                 self.f.write('{} {}'.format(';', '\n'))
                 self.f.write('{} {}'.format('', '\n'))
 
+                #hard code to test 
+                # self.f.write('{} {} {} {} {} {}'.format('param', 'DaysInDayType ','default', '0', ':=','\n'))
+                # self.f.write('{} {}'.format(';', '\n'))
+                # self.f.write('{} {}'.format('', '\n'))
+
+                self.gen_Conversions()
                 self.gen_RCn()
                 #dznamicaly call function depending on defined params
                 for group, array in self.PARAM.items():
@@ -745,16 +930,15 @@ class DataFile(Osemosys):
 
             #delete from view folder
             for group, array in self.VARIABLES.items():
-                if group != 'RYS':
-                    path = Path(self.viewFolderPath, group+'.json')
-                    if path.is_file():
-                        jsonFile = File.readFile(path)
-                        for obj in array:
-                            if obj['id'] in jsonFile:
-                                if caserunname in jsonFile[obj['id']]:
-                                    del jsonFile[obj['id']][caserunname]
-
-                        File.writeFile(jsonFile, path)
+                #if group != 'RYS':
+                path = Path(self.viewFolderPath, group+'.json')
+                if path.is_file():
+                    jsonFile = File.readFile(path)
+                    for obj in array:
+                        if obj['id'] in jsonFile:
+                            if caserunname in jsonFile[obj['id']]:
+                                del jsonFile[obj['id']][caserunname]
+                    File.writeFile(jsonFile, path)
                     
             response = {
                 "message": "You have deleted a case run!",
@@ -1399,6 +1583,8 @@ class DataFile(Osemosys):
         fuel_list = self.getCommNames()
         tech_list = self.getTechNames()
         emi_list = self.getEmiNames()
+        stg_list = self.getStgNames()
+
         start_year = year_list[0]
 
         data_all = []
@@ -1434,41 +1620,65 @@ class DataFile(Osemosys):
                                 region = line.split(' ')[0]
                                 for i, tech in enumerate(techs):
                                     data[param_current].append(tuple([ region, tech, values[i]]))
-                        if param_current in ('OutputActivityRatio','InputActivityRatio','EmissionActivityRatio'):
+                        if param_current in ('OutputActivityRatio','InputActivityRatio','EmissionActivityRatio', 'EmissionToActivityChangeRatio'):
                             mode = line.split(' ')[0]
                             data[param_current].append(tuple([ fuel_emi, tech, mode ]))
                             data_all.append(tuple([tech, mode]))
+                        if param_current in ('TechnologyToStorage','TechnologyFromStorage'):
+                            if firstRow:
+                                modes = line.rstrip(':= ;\n').split(' ')[0:]
+                                firstRow=False
+                            else:
+                                stg = line.split(' ')[0]
+                                value = line.split(' ')[1:]
+                                data_all.append(tuple([tech, mode]))
+                                for i, mode in enumerate(modes):
+                                    if(value[i] != '0'):
+                                        data[param_current].append(tuple([ stg, tech, mode]))
+                                    
+                                    
+
 
                 if line.startswith(
                     (
                     'param OutputActivityRatio',
                     'param InputActivityRatio', 
                     'param EmissionActivityRatio',
+                    'param EmissionToActivityChangeRatio',
                     'param OperationalLife',
                     'param DiscountRateIdv',
-                    'param DiscountRate'
+                    'param DiscountRate','param TechnologyToStorage','param TechnologyFromStorage'
                     )):
 					
                     param_current = line.split(' ')[1]
                     data[param_current] = []
                     parsing = True
-                    if line.startswith(('param OperationalLife')) or line.startswith(('param DiscountRateIdv')):
+                    if line.startswith(('param OperationalLife','param DiscountRateIdv','param TechnologyToStorage','param TechnologyFromStorage')):
                         firstRow=True
 
 
         data_out = data['OutputActivityRatio']
         data_inp = data['InputActivityRatio']
         data_emi = data['EmissionActivityRatio']
+        data_emichange = data['EmissionToActivityChangeRatio']
+        data_tts = data['TechnologyToStorage']
+        data_tfs = data['TechnologyFromStorage']
                         
         data_out = list(set(data_out))
         data_inp = list(set(data_inp))
         data_all = list(set(data_all))
         data_emi = list(set(data_emi))
+        data_emichange = list(set(data_emichange))
+        data_tts = list(set(data_tts))
+        data_tfs = list(set(data_tfs))
 
         dict_out = defaultdict(list)
         dict_inp = defaultdict(list)
         dict_all = defaultdict(list)
         dict_emi = defaultdict(list)
+        dict_emichange = defaultdict(list)
+        dict_tts = defaultdict(list)
+        dict_tfs = defaultdict(list)
 
         for fuel, tech, mode in data_out:
             dict_out[fuel].append((mode, tech))
@@ -1476,13 +1686,99 @@ class DataFile(Osemosys):
         for fuel, tech, mode in data_inp:
             dict_inp[fuel].append((mode, tech))
 
-        for tech, emi, mode in data_emi:
+        for emi, tech, mode in data_emi:
             dict_emi[emi].append((mode, tech))
+
+        for emi, tech, mode in data_emichange:
+            dict_emichange[emi].append((mode, tech))
+
+        for stg, tech, mode in data_tts:
+            dict_tts[stg].append((mode, tech))
+
+        for stg, tech, mode in data_tfs:
+            dict_tfs[stg].append((mode, tech))
 
         for tech, mode in data_all:
             if mode not in dict_all[tech]:
                 dict_all[tech].append(mode)
 
+        #################################################### conversions ls/ld/lh
+
+        # self.seIDs = self.getSeIds()
+        # self.seMap = self.getSeMap()
+        # self.dtIDs = self.getDtIds()
+        # self.dtMap = self.getDtMap()
+        # self.dtbIDs = self.getDtbIds()
+        # self.dtbMap = self.getDtbMap()
+
+        # self.seasons = ''
+        # for seId in self.seIDs:
+        #     self.seasons += '{} '.format(self.seMap[seId]) 
+
+        # self.daytypes = ''
+        # for dtId in self.dtIDs:
+        #     self.daytypes += '{} '.format(self.dtMap[dtId]) 
+
+        # self.dailytimebrackets = ''
+        # for dtbId in self.dtbIDs:
+        #     self.dailytimebrackets += '{} '.format(self.dtbMap[dtbId]) 
+
+        # timeslices = self.genData["osy-ts"]
+        # seasons = self.genData["osy-se"]
+        # daytypes = self.genData["osy-dt"]
+        # dailytypebrackets = self.genData["osy-dtb"]
+
+        # seString = ''
+        # dtString = ''
+        # dtbString = ''
+        # for ts in timeslices:           
+        #     seString += '{} '.format(ts['Ts'])
+        #     for se in seasons:
+        #         if se['Se'] == ts['SE'][0]:
+        #             seString += '{} '.format(1)
+        #         else:
+        #             seString += '{} '.format(0)
+
+        #     dtString += '{} '.format(ts['Ts'])
+        #     for dt in daytypes :
+        #         if dt['Dt'] == ts['DT'][0]:
+        #             dtString += '{} '.format(1)
+        #         else:
+        #             dtString += '{} '.format(0)
+
+
+        #     dtbString += '{} '.format(ts['Ts'])
+        #     for dtb in dailytypebrackets :
+        #         if dtb['Dtb'] == ts['DTB'][0]:
+        #             dtbString += '{} '.format(1)
+        #         else:
+        #             dtbString += '{} '.format(0)
+
+
+        #     seString += '{}'.format('\n')
+        #     dtString += '{}'.format('\n')
+        #     dtbString += '{}'.format('\n')
+
+        # seString += '{}{}'.format(";",'\n')
+        # dtString += '{}{}'.format(";",'\n')            
+        # dtbString += '{}{}'.format(";",'\n')
+
+        # lines.append('{} {} {} {} {} {}'.format('param', 'Conversionls','default', 0, ':','\n'))
+        # lines.append('{}{}{}'.format(self.seasons, ':=', '\n'))
+        # lines.append('{}{}'.format(seString,'\n'))
+
+        # lines.append('{} {} {} {} {} {}'.format('param', 'Conversionld','default', 0, ':','\n'))
+        # lines.append('{}{}{}'.format(self.daytypes, ':=', '\n'))
+        # lines.append('{}{}'.format(dtString,'\n'))
+
+        # lines.append('{} {} {} {} {} {}'.format('param', 'Conversionlh','default', 0, ':','\n'))
+        # lines.append('{}{}{}'.format(self.dailytimebrackets, ':=', '\n'))
+        # lines.append('{}{}'.format(dtbString,'\n'))
+
+        #     lines.append('{}{}'.format(seString,'\n'))
+        # lines.append('{}{}'.format(";",'\n'))
+        # lines.append('{}'.format('\n'))
+        
         #################################################### CRF ANNUITY
         OL_data = data['OperationalLife']
         DRi_data = data['DiscountRateIdv']
@@ -1506,7 +1802,6 @@ class DataFile(Osemosys):
             CapitalRecoveryFactor[tech] = (1 - pow( (1 + DRi[tech]), -1) ) / (1 - pow( (1+DRi[tech]), -OL[tech] ) )
             PvAnnuity[tech] = (1 - pow((1 + DRi[tech]), -OL[tech])) * (1 + DRi[tech]) / DRi[tech]
 
-
         lines.append('{} {} {} {} {} {}'.format('param', 'CapitalRecoveryFactor','default', 0, ':','\n'))
         lines.append('{}{}{}'.format(techs_string, ':=', '\n'))
         rtString = ''
@@ -1525,6 +1820,7 @@ class DataFile(Osemosys):
         lines.append('{}{}{}'.format('RE1 ', rtString, '\n'))
         lines.append('{}{}'.format(';', '\n'))
 
+        #ispis linija iz originalnog data file
         with open(data_outfile, 'w') as f2:
             f2.writelines(lines)
 
@@ -1558,6 +1854,9 @@ class DataFile(Osemosys):
             file_output_function(dict_out, fuel_list, 'set MODExTECHNOLOGYperFUELout[', '')
             file_output_function(dict_inp, fuel_list, 'set MODExTECHNOLOGYperFUELin[', '')
             file_output_function(dict_emi, emi_list, 'set MODExTECHNOLOGYperEMISSION[', '')
+            file_output_function(dict_emichange, emi_list, 'set MODExTECHNOLOGYperEMISSIONChange[', '')
+            file_output_function(dict_tts, stg_list, 'set MODExTECHNOLOGYperSTORAGEto[', '')
+            file_output_function(dict_tfs, stg_list, 'set MODExTECHNOLOGYperSTORAGEfrom[', '')
             #da li se ovaj mod po tech treba puniti i za emissijske tehnologije i sta to znaci u model file
             file_output_function(dict_all, tech_list, 'set MODEperTECHNOLOGY[', '*')
             file_out.write('end;')
@@ -2149,6 +2448,23 @@ class DataFile(Osemosys):
                                     viewData[paramobj['id']][caserunname].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                     File.writeFile( viewData, path)  
+
+                                if paramobj['group'] == 'RYS':
+                                    stg = jsondata[0]['s']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if stg == obj['s']:
+                                            tmp['Stg'] = obj['s']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            stg = obj['s']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Stg'] = obj['s']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path) 
 
                                 if paramobj['group'] == 'RYTM':
                                     tech = jsondata[0]['t']

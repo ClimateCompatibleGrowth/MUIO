@@ -65,7 +65,7 @@ export class JqxSources {
             datafields:
                 [
                     { name: 'SeId', type: 'string' },
-                    { name: 'Se', type: 'string' },
+                    { name: 'Se', type: 'number' },
                     { name: 'Desc', type: 'string' }
                 ],
         }
@@ -79,7 +79,7 @@ export class JqxSources {
             datafields:
                 [
                     { name: 'DtId', type: 'string' },
-                    { name: 'Dt', type: 'string' },
+                    { name: 'Dt', type: 'number' },
                     { name: 'Desc', type: 'string' }
                 ],
         }
@@ -93,7 +93,7 @@ export class JqxSources {
             datafields:
                 [
                     { name: 'DtbId', type: 'string' },
-                    { name: 'Dtb', type: 'string' },
+                    { name: 'Dtb', type: 'number' },
                     { name: 'Desc', type: 'string' }
                 ],
         }
@@ -109,9 +109,9 @@ export class JqxSources {
                     { name: 'TsId', type: 'string' },
                     { name: 'Ts', type: 'string' },
                     { name: 'Desc', type: 'string' },
-                    { name: 'SE', type: 'array' },
-                    { name: 'DT', type: 'array' },
-                    { name: 'DTB', type: 'array' },
+                    { name: 'SE', type: 'string' },
+                    { name: 'DT', type: 'string' },
+                    { name: 'DTB', type: 'string' },
                 ],
         }
         return srcTs;

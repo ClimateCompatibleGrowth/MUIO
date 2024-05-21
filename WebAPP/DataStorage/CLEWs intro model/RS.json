@@ -1,1 +1,46 @@
-{"OLS": {"SC_0": [{}], "SC_m8iy6": [{}], "SC_wp11f": [{}], "SC_gbalb": [{}]}}
+{
+    "OLS": {
+        "SC_0": [
+            {
+                "STG_mg92p": 10
+            }
+        ],
+        "SC_m8iy6": [
+            {
+                "STG_mg92p": null
+            }
+        ],
+        "SC_wp11f": [
+            {
+                "STG_mg92p": null
+            }
+        ],
+        "SC_gbalb": [
+            {
+                "STG_mg92p": null
+            }
+        ]
+    },
+    "SLS": {
+        "SC_0": [
+            {
+                "STG_mg92p": 0
+            }
+        ],
+        "SC_m8iy6": [
+            {
+                "STG_mg92p": null
+            }
+        ],
+        "SC_wp11f": [
+            {
+                "STG_mg92p": null
+            }
+        ],
+        "SC_gbalb": [
+            {
+                "STG_mg92p": null
+            }
+        ]
+    }
+}

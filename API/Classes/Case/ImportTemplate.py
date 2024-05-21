@@ -1,10 +1,6 @@
 from pathlib import Path
 import pandas as pd
-import string
-import random
-import json
-import os.path
-import time
+import string, random, json, os.path, time
 
 from Classes.Base import Config
 from Classes.Case.CaseClass import Case
@@ -13,7 +9,7 @@ from Classes.Base.FileClass import File
 class ImportTemplate():
     def __init__(self,template):
         self.PARAMETERS = File.readParamFile(Path(Config.DATA_STORAGE, 'Parameters.json'))
-        self.VARIABLES = File.readParamFile(Path(Config.DATA_STORAGE, 'ResultParameters.json'))
+        self.VARIABLES = File.readParamFile(Path(Config.DATA_STORAGE, 'Variables.json'))
         self.TEMPLATE_PATH = Path(Config.DATA_STORAGE, template)
 
     def getTechById(self, techs):
@@ -76,6 +72,18 @@ class ImportTemplate():
             emiNames[emi['Emis']] = emi['EmisId']
         return emiNames
 
+    def getStgById(self, stgs):
+        stgNames = {}
+        for stg in stgs:
+            stgNames[stg['StgId']] = stg['Stg']
+        return stgNames
+
+    def getStgByName(self, stgs):
+        stgNames = {}
+        for stg in stgs:
+            stgNames[stg['Stg']] = stg['StgId']
+        return stgNames
+
     def getId(self, type):
         st = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(5))
         return type+'_'+st
@@ -127,11 +135,59 @@ class ImportTemplate():
             {
                 "TsId": id,
                 "Ts":name,
-                "Desc": desc
+                "Desc": desc,
+                "SE": "SE_0",
+                "DT": "DT_0",
+                "DTB": "DTB_0"
             }
         ]
         return defaultTs
     
+    def defaultSe(self, name, desc="Default season", first=False):
+        if(first):
+            id = 'SE_0'
+        else:
+            id = self.getId('SE')
+        
+        defaultSe = [
+            {
+                "SeId": id,
+                "Se":name,
+                "Desc": desc
+            }
+        ]
+        return defaultSe
+
+    def defaultDt(self, name, desc="Default day type", first=False):
+        if(first):
+            id = 'DT_0'
+        else:
+            id = self.getId('DT')
+        
+        defaultDt = [
+            {
+                "DtId": id,
+                "Dt":name,
+                "Desc": desc
+            }
+        ]
+        return defaultDt
+
+    def defaultDtb(self, name, desc="Default daily time bracket", first=False):
+        if(first):
+            id = 'DTB_0'
+        else:
+            id = self.getId('DTB')
+        
+        defaultDtb = [
+            {
+                "DtbId": id,
+                "Dtb":name,
+                "Desc": desc
+            }
+        ]
+        return defaultDtb
+     
     def defaultComm(self, name, desc="Default commodity", unit="PJ", first=False):
         if(first):
             id = 'COM_0'
@@ -164,6 +220,25 @@ class ImportTemplate():
         ]
         return defaultEmi
 
+    def defaultStg(self, name, desc="Default storage", unit="MW", first=False):
+        if(first):
+            id = 'STG_0'
+        else:
+            id = self.getId('STG')
+        
+        defaultStg = [
+            {
+                "StgId": id,
+                "Stg":id,
+                "Desc": desc,
+                "UnitId": unit,
+                "TTS": "TEC_0",
+                "TFS": "TEC_0",
+                "Operation": "Yearly"
+            }
+        ]
+        return defaultStg
+    
     def defaultUnit(self):
         id = self.getId('UT')
         defaultUnit = [
@@ -260,6 +335,16 @@ class ImportTemplate():
             outObj[emi] = val
         return outObj
 
+    def refRS(self, xlsObj):
+        outObj = {}
+        for obj in xlsObj:
+            if obj['STORAGE'] not in outObj:
+                outObj[obj['STORAGE']] = {}
+            stg = obj['STORAGE']
+            val = obj['VALUE']
+            outObj[stg] = val
+        return outObj
+    
     def refRY(self, xlsObj):
         outObj = {}
         for obj in xlsObj:
@@ -353,6 +438,22 @@ class ImportTemplate():
             outObj[comm][mod] = obj
         return outObj
 
+    def refRTSM(self, xlsObj):
+        outObj = {}
+        for obj in xlsObj:
+            if obj['TECHNOLOGY'] not in outObj:
+                outObj[obj['TECHNOLOGY']] = {}
+            if obj['STORAGE'] not in outObj[obj['STORAGE']]:
+                outObj[obj['TECHNOLOGY']][obj['STORAGE']] = {}
+            if obj['MODE_OF_OPERATION'] not in outObj[obj['TECHNOLOGY']][obj['STORAGE']]:
+                outObj[obj['TECHNOLOGY']][obj['STORAGE']][obj['MODE_OF_OPERATION']] = {}
+            tech = obj['TECHNOLOGY']
+            stg = obj['STORAGE']
+            mod = obj['MODE_OF_OPERATION']
+            val = obj['VALUE']
+            outObj[tech][stg][mod] = val
+        return outObj
+    
     def importProcess(self, data):
         try:
             start_time = time.time()
@@ -371,9 +472,13 @@ class ImportTemplate():
             techs_xls =  df_sheet_all['TECHNOLOGY']
             comms_xls =  df_sheet_all['FUEL']
             emis_xls =  df_sheet_all['EMISSION']
+            stgs_xls =  df_sheet_all['STORAGE']
             years_xls = df_sheet_all['YEAR']
             moo_xls = df_sheet_all['MODE_OF_OPERATION']
             ts_xls = df_sheet_all['TIMESLICE']
+            se_xls = df_sheet_all['SEASON']
+            dt_xls = df_sheet_all['DAYTYPE']
+            dtb_xls = df_sheet_all['DAILYTIMEBRACKET']
 
             if 'TECHGROUP' in df_sheet_all:
                 tg_xls = df_sheet_all['TECHGROUP']
@@ -388,14 +493,22 @@ class ImportTemplate():
             techs_xls.rename(columns = {'VALUE':'TECHNOLOGY'}, inplace = True)
             comms_xls.rename(columns = {'VALUE':'COMMODITY'}, inplace = True)
             emis_xls.rename(columns = {'VALUE':'EMISSION'}, inplace = True)
+            stgs_xls.rename(columns = {'VALUE':'STORAGE'}, inplace = True)
             years_xls.rename(columns = {'VALUE':'YEARS'}, inplace = True)
             moo_xls.rename(columns = {'VALUE':'MODE_OF_OPERATION'}, inplace = True)
             ts_xls.rename(columns = {'VALUE':'TIMESLICE'}, inplace = True)
+            se_xls.rename(columns = {'VALUE':'SEASON'}, inplace = True)
+            dt_xls.rename(columns = {'VALUE':'DAYTYPE'}, inplace = True)
+            dtb_xls.rename(columns = {'VALUE':'DAILYTIMEBRACKET'}, inplace = True)
 
             techs_data = techs_xls.to_json(orient='records', indent=2)
             comms_data = comms_xls.to_json(orient='records', indent=2)
             emis_data = emis_xls.to_json(orient='records', indent=2)
+            stgs_data = stgs_xls.to_json(orient='records', indent=2)
             ts_data = ts_xls.to_json(orient='records', indent=2)
+            se_data = se_xls.to_json(orient='records', indent=2)
+            dt_data = dt_xls.to_json(orient='records', indent=2)
+            dtb_data = dtb_xls.to_json(orient='records', indent=2)
 
             iar_data = iar_xls.to_json(orient='records', indent=2)
             oar_data = oar_xls.to_json(orient='records', indent=2)
@@ -404,7 +517,11 @@ class ImportTemplate():
             techsArray = json.loads(techs_data)
             commsArray = json.loads(comms_data)
             emisArray = json.loads(emis_data)
+            stgsArray = json.loads(stgs_data)
             tsArray = json.loads(ts_data)
+            seArray = json.loads(se_data)
+            dtArray = json.loads(dt_data)
+            dtbArray = json.loads(dtb_data)
 
             iarArray = json.loads(iar_data)
             oarArray = json.loads(oar_data)
@@ -412,19 +529,6 @@ class ImportTemplate():
 
             yearsArray = years_xls['YEARS'].astype(str).values.tolist()
             mooValue = moo_xls['MODE_OF_OPERATION'].count()
-
-            # tsTmp = ts_xls['TIMESLICE'].astype(str).values.tolist()
-
-            # nsArray = []
-            # dtArray = []
-            # for obj in tsTmp:
-            #     tmp1 = obj[1:2]
-            #     tmp2 = obj[-1]
-            #     nsArray.append(tmp1)
-            #     dtArray.append(tmp2)
-
-            # ns = max(nsArray)
-            # dt = max(dtArray)
 
             print('READ OF XLS DONE!')
             print("--- %s seconds ---" % (time.time() - start_time))
@@ -445,6 +549,50 @@ class ImportTemplate():
                     else:
                         timeslices.append(self.defaultTs(timeslice, desc)[0])
 
+            seasons = []
+            if not seArray:
+                seasons.append(self.defaultSe(1, first=True)[0])
+            else:
+                for obj in seArray:
+                    season = obj['SEASON']
+                    if obj.get('DESCRIPTION') is not None:
+                        desc = obj['DESCRIPTION']
+                    else:
+                        desc = "Default season"
+                    if obj==0:
+                        seasons.append(self.defaultSe(season, desc, True)[0])
+                    else:
+                        seasons.append(self.defaultSe(season, desc)[0])
+
+            daytypes = []
+            if not seArray:
+                daytypes.append(self.defaultDt(1, first=True)[0])
+            else:
+                for obj in dtArray:
+                    daytype = obj['DAYTPE']
+                    if obj.get('DESCRIPTION') is not None:
+                        desc = obj['DESCRIPTION']
+                    else:
+                        desc = "Default day type"
+                    if obj==0:
+                        daytypes.append(self.defaultDt(daytype, desc, True)[0])
+                    else:
+                        daytypes.append(self.defaultDt(daytype, desc)[0])
+
+            dailytimebrackets = []
+            if not dtbArray:
+                dailytimebrackets.append(self.defaultDtb(1, first=True)[0])
+            else:
+                for obj in dtbArray:
+                    dtb = obj['DAILYTIMEBRACKET']
+                    if obj.get('DESCRIPTION') is not None:
+                        desc = obj['DESCRIPTION']
+                    else:
+                        desc = "Default daily tme bracket"
+                    if obj==0:
+                        dailytimebrackets.append(self.defaultDtb(dtb, desc, True)[0])
+                    else:
+                        dailytimebrackets.append(self.defaultDtb(dtb, desc)[0])
 
             techgroups = []
             if not tgArray:
@@ -523,12 +671,35 @@ class ImportTemplate():
                     else:
                         emis.append(self.defaultEmi(emi, desc, unit)[0])
 
+            stgs = []
+            #ako nemamo storage ne treba nam ni ndefault ni
+            # if not stgsArray:
+            #     stgs.append(self.defaultStg('STG_0', first=True)[0])
+            # else:
+            if stgsArray:
+                for obj in stgsArray:
+                    stg = obj['STORAGE']
+                    if obj.get('DESCRIPTION') is not None:
+                        desc = obj['DESCRIPTION']
+                    else:
+                        desc = "Default storage"
+                    if obj.get('UNIT') is not None:
+                        unit = obj['UNIT']
+                    else:
+                        unit = "MW"
+                    if obj==0:
+                        stgs.append(self.defaultStg(stg, desc, unit, True)[0])
+                    else:
+                        stgs.append(self.defaultStg(stg, desc, unit)[0])
+                
 
 
-            #populate IAR and OAR
-            techId = self.getTechByName(techs)
+            # #populate IAR and OAR
+            # stgId = self.getStgByName(stgs)
+            # techId = self.getTechByName(techs)
             commId = self.getCommByName(comms)
             emiId = self.getEmiByName(emis)
+            
             tgId = self.getTechGroupByName(techgroups)
 
             iarObj = {}
@@ -581,22 +752,25 @@ class ImportTemplate():
             print('TECHS COMMS IAR OAR DONE!')
             print("--- %s seconds ---" % (time.time() - start_time))
             txtOut = txtOut + ("Technlogies, commodities, emissions, years, IAR, OAR, EAR done in --- {} seconds ---{}".format(time.time() - start_time, '\n'))
+
             genData = {}
             genData["osy-version"] = version
             genData["osy-casename"] = casename
             genData["osy-desc"] = description
             genData["osy-date"] = date
             genData["osy-currency"] = currency
-            # genData["osy-ns"] = ns
-            # genData["osy-dt"] = dt
             genData["osy-mo"] = str(mooValue)
 
             genData["osy-tech"] = techs
             genData["osy-techGroups"] = techgroups
             genData["osy-comm"] = comms
             genData["osy-ts"] = timeslices
+            genData["osy-se"] = seasons
+            genData["osy-dt"] = daytypes
+            genData["osy-dtb"] = dailytimebrackets
 
             genData["osy-emis"] = emis
+            genData["osy-stg"] = stgs
             genData["osy-scenarios"] = self.defaultScenario(True)
             genData["osy-constraints"] = []
             genData["osy-years"] = yearsArray
@@ -638,12 +812,13 @@ class ImportTemplate():
             print('MODEL STRUCTURE FINISHED!')
             print("--- %s seconds ---" % (time.time() - start_time))
             txtOut = txtOut + ("Model structure finished in --- {} seconds ---{}".format(time.time() - start_time, '\n'))
+            
             if data:
                 techName = self.getTechById(techs)
                 commName = self.getCommById(comms)
                 emiName = self.getEmiById(emis)
                 tsName = self.getTsById(timeslices)
-
+                stgName = self.getStgById(stgs)
 
                 for key, array in self.PARAMETERS.items():
                     if key != 'R__':
@@ -696,6 +871,15 @@ class ImportTemplate():
                                                 if e in xlsObj:
                                                     el[emi] = xlsObj[e]
 
+                                if key == 'RS':
+                                    xlsObj = self.refRS(xlsArray)
+                                    for sc, obj in jsonData[a['id']].items():
+                                        for el in obj:
+                                            for stg, val in el.items():
+                                                e = stgName[stg] 
+                                                if e in xlsObj:
+                                                    el[stg] = xlsObj[e]
+
                                 if key == 'RY':
                                     xlsObj = self.refRY(xlsArray)
                                     for sc, obj in jsonData[a['id']].items():
@@ -736,6 +920,16 @@ class ImportTemplate():
                                                             el[yr] = arr[yr]
                                                     break
                                     #File.writeFile( jsonData, path)
+
+                                if key == 'RYS':
+                                    for sc, obj in jsonData[a['id']].items():
+                                        for el in obj:
+                                            for arr in xlsArray:
+                                                if arr['STORAGE'] == stgName[el['StgID']]:
+                                                    for yr, val in el.items():
+                                                        if yr != 'StgId':
+                                                            el[yr] = arr[yr]
+                                                    break
 
                                 if key == 'RYTs':
                                     for sc, obj in jsonData[a['id']].items():
@@ -782,6 +976,18 @@ class ImportTemplate():
                                                             if m in xlsObj[t][e]:
                                                                 el[yr] = xlsObj[t][e][m][yr]
 
+                                if key == 'RTSM':
+                                    xlsObj = self.refRTSM(xlsArray)
+                                    for sc, obj in jsonData[a['id']].items():
+                                        for el in obj:
+                                            t = techName[el['TechId']] 
+                                            s = emiName[el['StgId']]
+                                            m = el['MoId']
+                                            if t in xlsObj:
+                                                if s in xlsObj[t]:
+                                                    if m in xlsObj[t][s]:
+                                                        el['Value'] = xlsObj[t][s][m]
+
                                 if key == 'RYTM':
                                     xlsObj = self.refRYTM(xlsArray)
 
@@ -808,7 +1014,6 @@ class ImportTemplate():
                                                         if ts in xlsObj[t]:
                                                             el[yr] = xlsObj[t][ts][yr]
                             
-
                                 if key == 'RYCTs':
                                     xlsObj = self.refRYCTs(xlsArray)
 

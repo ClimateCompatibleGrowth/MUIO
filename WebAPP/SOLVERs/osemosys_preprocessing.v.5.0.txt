@@ -2,14 +2,19 @@
 #    Sets     #
 ###############
 #
+set REGION;
+set TECHNOLOGY;
 set COMMODITY;
 set EMISSION;
-set MODE_OF_OPERATION;
-set REGION;
 set STORAGE;
-set TECHNOLOGY;
-set TIMESLICE;
 set YEAR;
+set SEASON;
+set DAYTYPE;
+set DAILYTIMEBRACKET;
+set TIMESLICE;
+set MODE_OF_OPERATION;
+set STORAGEINTRADAY;
+set STORAGEINTRAYEAR;
 set UDC;
 set MODEperTECHNOLOGY{TECHNOLOGY} within MODE_OF_OPERATION;
 set MODExTECHNOLOGYperFUELout{COMMODITY} within MODE_OF_OPERATION cross TECHNOLOGY;
@@ -17,6 +22,7 @@ set MODExTECHNOLOGYperFUELin{COMMODITY} within MODE_OF_OPERATION cross TECHNOLOG
 set MODExTECHNOLOGYperSTORAGEto{STORAGE} within MODE_OF_OPERATION cross TECHNOLOGY;
 set MODExTECHNOLOGYperSTORAGEfrom{STORAGE} within MODE_OF_OPERATION cross TECHNOLOGY;
 set MODExTECHNOLOGYperEMISSION{e in EMISSION} within MODE_OF_OPERATION cross TECHNOLOGY;
+set MODExTECHNOLOGYperEMISSIONChange{e in EMISSION} within MODE_OF_OPERATION cross TECHNOLOGY;
 #
 #####################
 #    Parameters     #
@@ -25,7 +31,7 @@ set MODExTECHNOLOGYperEMISSION{e in EMISSION} within MODE_OF_OPERATION cross TEC
 param ResultsPath, symbolic default 'results';
 param AccumulatedAnnualDemand{r in REGION, f in COMMODITY, y in YEAR};
 param AnnualEmissionLimit{r in REGION, e in EMISSION, y in YEAR};
-param AnnualExogenousEmission{r in REGION, e in EMISSION, y in YEAR};
+#param AnnualExogenousEmission{r in REGION, e in EMISSION, y in YEAR};
 param AvailabilityFactor{r in REGION, t in TECHNOLOGY, y in YEAR};
 param CapacityFactor{r in REGION, t in TECHNOLOGY, l in TIMESLICE, y in YEAR};
 param CapacityOfOneTechnologyUnit{r in REGION, t in TECHNOLOGY, y in YEAR};
@@ -45,9 +51,9 @@ param ModelPeriodExogenousEmission{r in REGION, e in EMISSION};
 param OperationalLife{r in REGION, t in TECHNOLOGY};
 
 param OutputActivityRatio{r in REGION, t in TECHNOLOGY, f in COMMODITY, m in MODE_OF_OPERATION, y in YEAR};
-param REMinProductionTarget{r in REGION, y in YEAR};
-param RETagFuel{r in REGION, f in COMMODITY, y in YEAR};
-param RETagTechnology{r in REGION, t in TECHNOLOGY, y in YEAR};
+#param REMinProductionTarget{r in REGION, y in YEAR};
+#param RETagFuel{r in REGION, f in COMMODITY, y in YEAR};
+#param RETagTechnology{r in REGION, t in TECHNOLOGY, y in YEAR};
 param ReserveMargin{r in REGION, y in YEAR};
 param ReserveMarginTagFuel{r in REGION, f in COMMODITY, y in YEAR};
 param ReserveMarginTagTechnology{r in REGION, t in TECHNOLOGY, y in YEAR};
@@ -76,17 +82,16 @@ param UDCMultiplierActivity{r in REGION, t in TECHNOLOGY, u in UDC, y in YEAR};
 param UDCConstant{r in REGION, u in UDC, y in YEAR};
 param UDCTag{r in REGION, u in UDC};
 
-
+# VK added storage parmas
 param OperationalLifeStorage{r in REGION, s in STORAGE};
-
-
 param CapitalCostStorage{r in REGION, s in STORAGE, y in YEAR};
 param ResidualStorageCapacity{r in REGION, s in STORAGE, y in YEAR};
-
 param TechnologyToStorage{r in REGION, t in TECHNOLOGY, s in STORAGE, m in MODE_OF_OPERATION};
 param TechnologyFromStorage{r in REGION, t in TECHNOLOGY, s in STORAGE, m in MODE_OF_OPERATION};
 
-
+param Conversionls{l in TIMESLICE, ls in SEASON};
+param Conversionld{l in TIMESLICE, ld in DAYTYPE};
+param Conversionlh{l in TIMESLICE, lh in DAILYTIMEBRACKET};
 
 # TN Added these pieces for Tech Financing Calculations
 param CapitalRecoveryFactor{r in REGION, t in TECHNOLOGY}; 
@@ -125,8 +130,8 @@ param PvAnnuity{r in REGION, t in TECHNOLOGY};
 #                                 (exists {e in EMISSION} (m, t) in MODExTECHNOLOGYperEMISSION[e])};
 
 # TN Added Per Emissions Act Change
-set MODExTECHNOLOGYperEMISSIONChange{e in EMISSION} within MODE_OF_OPERATION cross TECHNOLOGY
-    := {m in MODE_OF_OPERATION, t in TECHNOLOGY : exists{r in REGION, y in YEAR} EmissionToActivityChangeRatio[r,t,e,m,y] <> 0};
+#set MODExTECHNOLOGYperEMISSIONChange{e in EMISSION} within MODE_OF_OPERATION cross TECHNOLOGY
+#    := {m in MODE_OF_OPERATION, t in TECHNOLOGY : exists{r in REGION, y in YEAR} EmissionToActivityChangeRatio[r,t,e,m,y] <> 0};
 
 
 
@@ -135,7 +140,7 @@ set MODExTECHNOLOGYperEMISSIONChange{e in EMISSION} within MODE_OF_OPERATION cro
 ##########################
 #
 var AccumulatedNewCapacity{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
-var AnnualEmissions{r in REGION, e in EMISSION, y in YEAR};
+#var AnnualEmissions{r in REGION, e in EMISSION, y in YEAR};
 var AnnualFixedOperatingCost{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
 var AnnualTechnologyEmission{r in REGION, t in TECHNOLOGY, e in EMISSION, y in YEAR};
 var AnnualTechnologyEmissionByMode{r in REGION, t in TECHNOLOGY, e in EMISSION, m in MODE_OF_OPERATION, y in YEAR};
@@ -143,7 +148,7 @@ var AnnualVariableOperatingCost{r in REGION, t in TECHNOLOGY, y in YEAR};
 var CapitalInvestment{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
 var Demand{r in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR} >= 0;
 var DiscountedSalvageValue{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
-var DiscountedTechnologyEmissionsPenalty{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
+#var DiscountedTechnologyEmissionsPenalty{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
 var InputToNewCapacity{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
 var InputToTotalCapacity{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
 var NewCapacity{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
@@ -151,13 +156,13 @@ var NewStorageCapacity{r in REGION, s in STORAGE, y in YEAR} >= 0;
 #var NumberOfNewTechnologyUnits{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
 var NumberOfNewTechnologyUnits{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0,integer;
 var ProductionByTechnology{r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
-var ProductionByTechnologyAnnual{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
+#var ProductionByTechnologyAnnual{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
 var RateOfActivity{r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODEperTECHNOLOGY[t], y in YEAR} >= 0;
-var RateOfProductionByTechnology{r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
-var RateOfProductionByTechnologyByMode{r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, f in COMMODITY, y in YEAR} >= 0;
+#var RateOfProductionByTechnology{r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
+#var RateOfProductionByTechnologyByMode{r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, f in COMMODITY, y in YEAR} >= 0;
 var RateOfTotalActivity{r in REGION, t in TECHNOLOGY, l in TIMESLICE, y in YEAR} >= 0;
-var RateOfUseByTechnology{r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
-var RateOfUseByTechnologyByMode{r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, f in COMMODITY, y in YEAR} >= 0;
+#var RateOfUseByTechnology{r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
+#var RateOfUseByTechnologyByMode{r in REGION, l in TIMESLICE, t in TECHNOLOGY, m in MODE_OF_OPERATION, f in COMMODITY, y in YEAR} >= 0;
 var SalvageValue{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
 var SalvageValueStorage{r in REGION, s in STORAGE, y in YEAR} >= 0;
 var TotalAnnualTechnologyActivityByMode{r in REGION, t in TECHNOLOGY, m in MODE_OF_OPERATION, y in YEAR} >= 0;
@@ -165,8 +170,8 @@ var TotalCapacityAnnual{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
 var TotalTechnologyAnnualActivity{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
 var TotalTechnologyModelPeriodActivity{r in REGION, t in TECHNOLOGY};
 var Trade{r in REGION, rr in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR};
-var UseByTechnology{r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
-var UseByTechnologyAnnual{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
+#var UseByTechnology{r in REGION, l in TIMESLICE, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
+#var UseByTechnologyAnnual{r in REGION, t in TECHNOLOGY, f in COMMODITY, y in YEAR} >= 0;
 var EmissionByActivityChange{r in REGION, t in TECHNOLOGY, e in EMISSION, m in MODE_OF_OPERATION, y in YEAR};
 #
 ######################
@@ -268,7 +273,8 @@ s.t. CAb1_PlannedMaintenance{r in REGION, t in TECHNOLOGY, y in YEAR}: sum{l in 
 # s.t. E6_EmissionsAccounting1{r in REGION, e in EMISSION, y in YEAR}: sum{t in TECHNOLOGY, l in TIMESLICE, m in MODEperTECHNOLOGY[t]: EmissionActivityRatio [r, t, e, m, y] <> 0} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{t in TECHNOLOGY, m in MODEperTECHNOLOGY[t]} EmissionByActivityChange[r, t, e, m, y] = AnnualEmissions [r, e, y];
 
 # TN Changes 2024 01
-# Commented this out as integrating this into E8 is faster.
+#Commented this out as integrating this into E8 is faster.
+#20240514 VK removed AnnualEmissions from variable list
 #s.t. E6_EmissionsAccounting1{r in REGION, e in EMISSION, y in YEAR}: sum{(m, t) in MODExTECHNOLOGYperEMISSION[e], l in TIMESLICE} EmissionActivityRatio [r, t, e, m, y] * RateOfActivity [r, l, t, m, y] * YearSplit [l, y] + sum{(m, t) in MODExTECHNOLOGYperEMISSIONChange[e]} EmissionByActivityChange[r, t, e, m, y] = AnnualEmissions [r, e, y];
 
 

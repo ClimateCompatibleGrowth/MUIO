@@ -1,6 +1,10 @@
 export const CURRENCY = ["AED","AFN","ALL","AMD","ANG","AOA","ARS","AUD","AWG","AZN","BAM","BBD","BDT","BGN","BHD","BIF","BMD","BND","BOB","BOV","BRL","BSD","BTN","BWP","BYR","BZD","CAD","CDF","CHE","CHF","CHW","CLF","CLP","CNY","COP","COU","CRC","CUP","CVE","CYP","CZK","DJF","DKK","DOP","DZD","EEK","EGP","ERN","ETB","EUR","FJD","FKP","GBP","GEL","GHS","GIP","GMD","GNF","GTQ","GYD","HKD","HNL","HRK","HTG","HUF","IDR","ILS","INR","IQD","IRR","ISK","JMD","JOD","JPY","KES","KGS","KHR","KMF","KPW","KRW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LTL","LVL","LYD","MAD","MDL","MGA","MKD","MMK","MNT","MOP","MRO","MTL","MUR","MVR","MWK","MXN","MXV","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PGK","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","RWF","SAR","SBD","SCR","SDG","SEK","SGD","SHP","SKK","SLL","SOS","SRD","STD","SYP","SZL","THB","TJS","TMM","TND","TOP","TRY","TTD","TWD","TZS","UAH","UGX","USD","USN","USS","UYU","UZS","VEB","VND","VUV","WST","XAF","XAG","XAU","XBA","XBB","XBC","XBD","XCD","XDR","XFO","XFU","XOF","XPD","XPF","XPT","XTS","XXX","YER","ZAR","ZMK","ZWD",];
 
 export const UNITDEFINITION = {
+    'number': {
+        name: 'number',
+        val: {"var":"number"}
+    },
     'years': {
         name: 'years',
         val: {"var":"years"}
@@ -55,6 +59,16 @@ export const UNITDEFINITION = {
     }
 }
 
+export const PARAM_TECH_GROUPS = ['RT', 'RYT', 'RYTM', 'RYTC', 'RYTCn', 'RYTCM', 'RYTE', 'RYTEM', 'RYTTs']
+export const PARAM_COMM_GROUPS = ['RYC', 'RYTC', 'RYTCM','RYCTs']
+export const PARAM_EMIS_GROUPS = ['RE', 'RYE', 'RYTE', 'RYTEM']
+export const PARAM_STORAGE_GROUPS = ['RS', 'RYS', 'RTSM', 'RYTEM']
+
+export const VAR_TECH_GROUPS = ['RT', 'RYT', 'RYTM', 'RYTC', 'RYTE', 'RYTEM', 'RYTMTs', 'RYTCMTs']
+export const VAR_COMM_GROUPS = ['RYTC','RYCTs','RYTCMTs']
+export const VAR_EMIS_GROUPS = ['RYTE', 'RYTEM']
+export const VAR_STORAGE_GROUPS = ['RYS']
+
 export const GROUPNAMES = {
     "R": "Region",
     "RCn": "Region, constraint",
@@ -64,6 +78,8 @@ export const GROUPNAMES = {
     "RS": "Region, storage",
     "RYCn": "Region, year, constraint",
     "RYTs": "Region, year, timeslice",
+    "RYDtb": "Region, year, dailytimebracket",
+    "RYSeDt": "Region, year, season, daytype",
     "RYT": "Region, year, technology",
     "RYS": "Region, year, storage",
     "RYTCn": "Region, year, technology, constraint",
@@ -72,7 +88,7 @@ export const GROUPNAMES = {
     "RYE": "Region, year, emission",
     "RYTC": "Region, year, technology, commodity",
     "RYTCM": "Region, year, technology, commodity, mode of operation",
-    "RYTSM": "Region, year, storage, technology, mode of operation",
+    "RTSM": "Region, year, storage, technology, mode of operation",
     "RYTE": "Region, year, technology, emission",
     "RYTEM": "Region, year, technology, emission, mode of operation",
     "RYTTs": "Region, year, technology, timeslice",
@@ -83,6 +99,7 @@ export const RESULTGROUPNAMES = {
     "RT"    :"Region, technology",
     "RYT"    :"Region, year, technology",
     "RYE"    :"Region, year, emission",
+    "RYS"    :"Region, year, storage",
     "RYTM"  :"Region, year, technology, mode of operation",
     "RYTC"  :"Region, year, technology, commodity",
     "RYTE"      :"Region, year, technology, emission",
@@ -97,17 +114,19 @@ export const PARAMORDER = [
     "R"     ,  
     "RT"    ,     
     "RY"    ,     
-    "RE"    ,
-    "RS"    ,  
+    "RE"    , 
     "RYCn"  ,   
     "RYTCn" , 
-    "RYTs"  ,     
+    "RYTs"  , 
+    "RYDtb" ,   
+    "RYSeDt",
     "RYT"   , 
-    "RYS"   ,
     "RYTM"  ,  
     "RYTC"  ,  
     "RYTCM" , 
-    "RYTSM" ,
+    "RS"    , 
+    "RYS"   ,
+    "RTSM" ,
     "RYTTs" ,    
     "RYC"   ,  
     "RYCTs" ,      
@@ -122,6 +141,8 @@ export const PARAMCOLORS = {
     "RE": "yellow",
     "RYCn": "pink",
     "RYTs": "red",
+    "RYDtb": "blue",
+    "RYDtb": "red",
     "RYT": "greenLight",
     "RYTCn": "pink",
     "RYTM": "purple",
@@ -131,6 +152,8 @@ export const PARAMCOLORS = {
     "RYTCM": "blue",
     "RYTE": "greenDark",
     "RYTEM": "orange",
+    "RS": "red"    ,
+    "RTSM": "red",
     "RYTTs": "blue",
     "RYCTs": "greenLight"
 }
@@ -139,6 +162,7 @@ export const RESULTPARAMORDER = [
     "RT"    ,     
     "RYT"    ,     
     "RYE"    , 
+    "RYS"    ,
     "RYTM"  ,   
     "RYTC" , 
     "RYTE"  ,     
@@ -154,6 +178,7 @@ export const RESULTPARAMCOLORS = {
     "RT": "blue",
     "RYT": "blueLight",
     "RYE": "yellow",
+    "RYS": "red",
     "RYTM": "pink",
     "RYTC": "red",
     "RYTE": "greenLight",

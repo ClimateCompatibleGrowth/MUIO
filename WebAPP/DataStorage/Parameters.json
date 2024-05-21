@@ -143,22 +143,6 @@
             }
         }
     ],
-    "RS": [
-        {
-            "id": "OLS",
-            "value": "Operational Life Storage",
-            "default": 1,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "years"
-                    }
-                ]
-            }
-        }
-    ],
     "RYCn": [
         {
             "id": "UCC",
@@ -220,6 +204,44 @@
                     },
                     {
                         "var": "hundert"
+                    }
+                ]
+            }
+        }
+    ],
+    "RYDtb": [
+        {
+            "id": "DS",
+            "value": "Day Split",
+            "default": 1,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
+                    }
+                ]
+            }
+        }
+    ],
+    "RYSeDt": [
+        {
+            "id": "DIDT",
+            "value": "Days In Day Type",
+            "default": 1,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "number"
                     }
                 ]
             }
@@ -418,42 +440,6 @@
             }
         }
     ],
-    "RYS": [
-        {
-            "id": "CCS",
-            "value": "Capital Cost Storage",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "ActUnitId"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "StgUnit"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "RSC",
-            "value": "Residual Storage Capacity",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "StgUnit"
-                    }
-                ]
-            }
-        }
-    ],
     "RYTM": [
         {
             "id": "VC",
@@ -631,10 +617,66 @@
             }
         }
     ],
-    "RYTSM": [
+    "RS": [
         {
-            "id": "TTS",
-            "value": "Technology To Storage",
+            "id": "OLS",
+            "value": "Operational Life Storage",
+            "default": 1,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "years"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "SLS",
+            "value": "Storage Level Start",
+            "default": 1,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "percent"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "hundert"
+                    }
+                ]
+            }
+        }
+    ],
+    "RYS": [
+        {
+            "id": "CCS",
+            "value": "Capital Cost Storage",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "Currency"
+                    },
+                    {
+                        "var": "divide"
+                    },
+                    {
+                        "var": "StgUnit"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "RSC",
+            "value": "Residual Storage Capacity",
             "default": 0,
             "enable": true,
             "menu": 1,
@@ -642,14 +684,40 @@
                 "cat": [
                     {
                         "var": "StgUnit"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "MSC",
+            "value": "Min Storage Charge",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "percent"
                     },
                     {
                         "var": "divide"
                     },
                     {
-                        "var": "ActUnitId"
+                        "var": "hundert"
                     }
                 ]
+            }
+        }
+    ],
+    "RTSM": [
+        {
+            "id": "TTS",
+            "value": "Technology To Storage",
+            "default": 0,
+            "enable": true,
+            "menu": 1,
+            "unitRule": {
+                "cat": []
             }
         },
         {
@@ -659,17 +727,7 @@
             "enable": true,
             "menu": 1,
             "unitRule": {
-                "cat": [
-                    {
-                        "var": "StgUnit"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "ActUnitId"
-                    }
-                ]
+                "cat": []
             }
         }
     ],
@@ -789,20 +847,6 @@
                     {
                         "var": "divide"
                     },
-                    {
-                        "var": "EmiUnit"
-                    }
-                ]
-            }
-        },
-        {
-            "id": "AEE",
-            "value": "Annual Exogenous Emission",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": [
                     {
                         "var": "EmiUnit"
                     }

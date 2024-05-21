@@ -20,9 +20,6 @@ export class Model {
 
       this.title = "Model configuration";
       this.desc = genData['osy-desc'];
-      //this.date = genData['osy-date'];
-      // this.ns = genData['osy-ns'];
-      // this.dt = genData['osy-dt'];
       this.mo = genData['osy-mo'];
       this.currency = genData['osy-currency'];
       this.years = genData['osy-years'];
@@ -57,21 +54,23 @@ export class Model {
       this.casename = null;
       this.PARAMETERS = PARAMETERS;
       this.techNames = { 'TEC_0': 'TEC_0' };
-      // this.stgNames = { 'STG_0': 'STG_0' };
       this.stgNames = { };
       this.techGroupNames = { 'TG_0': 'TG_0'};
       this.commNames = { 'COM_0': 'COM_0' };
-      this.tsNames = { 'TS_0': 'TS_0' };
-      this.seNames = { 'SE_0': 'SE_0' };
-      this.dtNames = { 'DT_0': 'DT_0' };
-      this.dtbNames = { 'DTB_0': 'DTB_0' };
       this.emiNames = { 'EMI_0': 'EMI_0' };
       this.caserunByScenario = {'SC_0': []};
+
+      this.tsNames = { 'TS_0': 'TS_0' };
+      // this.seNames = { 'SE_0': 'SE_0' };
+      // this.dtNames = { 'DT_0': 'DT_0' };
+      // this.dtbNames = { 'DTB_0': 'DTB_0' };
+      this.seNames = { 'SE_0': 1 };
+      this.dtNames = { 'DT_0': 1 };
+      this.dtbNames = { 'DTB_0': 1 };
+
+
       this.title = "Model configuration";
       this.desc = null;
-      //this.date = null;
-      // this.ns = null;
-      // this.dt = null;
       this.mo = null;
       this.currency = null;
       this.years = years;
@@ -80,11 +79,14 @@ export class Model {
       this.stg = [];
       this.techGroups = DefaultObj.defaultTechGroup(true);
       this.commodities = DefaultObj.defaultComm(true);
+      this.emissions = DefaultObj.defaultEmi(true);
       this.timeslices = DefaultObj.defaultTs(true);
+
       this.seasons = DefaultObj.defaultSe(true);
       this.daytypes = DefaultObj.defaultDt(true);
       this.dailytimebrackets = DefaultObj.defaultDtb(true);
-      this.emissions = DefaultObj.defaultEmi(true);
+
+      
       this.constraints = [];
       this.techCount = 1;
       this.stgCount = 0;

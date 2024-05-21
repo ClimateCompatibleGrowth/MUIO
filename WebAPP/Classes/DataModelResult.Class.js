@@ -1,16 +1,30 @@
 
 import { DataModel} from "./DataModel.Class.js"
+import { UNITDEFINITION, VAR_TECH_GROUPS, VAR_COMM_GROUPS, VAR_EMIS_GROUPS, VAR_STORAGE_GROUPS } from "./Const.Class.js";
 
 export class DataModelResult{
+
+    // static getVarById(VARIABLES){
+    //     let varById = {};
+    //     const cloneData = JSON.parse(JSON.stringify(VARIABLES));
+    //     $.each(cloneData, function (group, array) {
+    //         varById[group] = {};
+    //         $.each(array, function (id, obj) {
+    //             varById[group][obj.id] = obj;
+    //             delete obj.id;
+    //         });
+    //     });
+    //     return varById;       
+    // }
 
     static getVarById(VARIABLES){
         let varById = {};
         const cloneData = JSON.parse(JSON.stringify(VARIABLES));
         $.each(cloneData, function (group, array) {
-            varById[group] = {};
             $.each(array, function (id, obj) {
-                varById[group][obj.id] = obj;
-                delete obj.id;
+                //if(!varById[obj.value]){ varById[obj.value] = {}; }
+                obj.group = group;
+                varById[obj.id] = obj;
             });
         });
         return varById;       
@@ -103,17 +117,12 @@ export class DataModelResult{
         return commData;
     }
 
-    static getVarById(VARIABLES){
-        let varById = {};
-        const cloneData = JSON.parse(JSON.stringify(VARIABLES));
-        $.each(cloneData, function (group, array) {
-            $.each(array, function (id, obj) {
-                if(!varById[obj.value]){ varById[obj.value] = {}; }
-                obj.group = group;
-                varById[obj.id] = obj;
-            });
+    static getStgData(genData){
+        let stgData = {};
+        $.each(genData['osy-stg'], function (id, obj) {
+            stgData[obj.Stg] = obj;
         });
-        return varById;       
+        return stgData;
     }
 
     static getUnitData(genData, parameters){
@@ -121,52 +130,74 @@ export class DataModelResult{
         let techUnits = DataModel.getTechUnits(genData);
         let commUnits = DataModel.getCommUnits(genData);
         let emiUnits = DataModel.getEmiUnits(genData);
+        let stgUnits = DataModel.getStgUnits(genData);
 
         $.each(parameters, function (group, array) {
             unitData[group] = {};
             $.each(array, function (id, obj) {
                 unitData[group][obj.id] = {};
                 //tech parameters
-                $.each(genData['osy-tech'], function (id, tObj) {
-                    unitData[group][obj.id][tObj.Tech] = {};
-                    unitData[group][obj.id][tObj.Tech]['years'] = 'years';
-                    unitData[group][obj.id][tObj.Tech]['percent'] = '%';
-                    unitData[group][obj.id][tObj.Tech]['divide'] = '/';
-                    unitData[group][obj.id][tObj.Tech]['multiply'] = '*';
-                    unitData[group][obj.id][tObj.Tech]['hundert'] = '100';
-                    unitData[group][obj.id][tObj.Tech]['thousand'] = '10<sup>3</sup>';
-                    unitData[group][obj.id][tObj.Tech]['milion'] = '10<sup>6</sup>';
-                    unitData[group][obj.id][tObj.Tech]['CapUnitId'] = techUnits[tObj.TechId]['CapUnitId'];
-                    unitData[group][obj.id][tObj.Tech]['ActUnitId'] = techUnits[tObj.TechId]['ActUnitId'];
-                    unitData[group][obj.id][tObj.Tech]['Currency'] = genData['osy-currency'];
-                });
+                if(VAR_TECH_GROUPS.includes(group)){
+                    $.each(genData['osy-tech'], function (id, tObj) {
+                        unitData[group][obj.id][tObj.Tech] = {};
+                        unitData[group][obj.id][tObj.Tech]['years'] = 'years';
+                        unitData[group][obj.id][tObj.Tech]['percent'] = '%';
+                        unitData[group][obj.id][tObj.Tech]['divide'] = '/';
+                        unitData[group][obj.id][tObj.Tech]['multiply'] = '*';
+                        unitData[group][obj.id][tObj.Tech]['hundert'] = '100';
+                        unitData[group][obj.id][tObj.Tech]['thousand'] = '10<sup>3</sup>';
+                        unitData[group][obj.id][tObj.Tech]['milion'] = '10<sup>6</sup>';
+                        unitData[group][obj.id][tObj.Tech]['CapUnitId'] = techUnits[tObj.TechId]['CapUnitId'];
+                        unitData[group][obj.id][tObj.Tech]['ActUnitId'] = techUnits[tObj.TechId]['ActUnitId'];
+                        unitData[group][obj.id][tObj.Tech]['Currency'] = genData['osy-currency'];
+                    });
+                }
                 //comm parameters
-                $.each(genData['osy-comm'], function (id, cObj) {
-                    unitData[group][obj.id][cObj.Comm] = {};
-                    unitData[group][obj.id][cObj.Comm]['years'] = 'years';
-                    unitData[group][obj.id][cObj.Comm]['percent'] = '%';
-                    unitData[group][obj.id][cObj.Comm]['divide'] = '/';
-                    unitData[group][obj.id][cObj.Comm]['multiply'] = '*';
-                    unitData[group][obj.id][cObj.Comm]['hundert'] = '100';
-                    unitData[group][obj.id][cObj.Comm]['thousand'] = '10<sup>3</sup>';
-                    unitData[group][obj.id][cObj.Comm]['milion'] = '10<sup>6</sup>';
-                    unitData[group][obj.id][cObj.Comm]['CommUnit'] = commUnits[cObj.CommId];
-                    unitData[group][obj.id][cObj.Comm]['Currency'] = genData['osy-currency'];
-                });
+                if(VAR_COMM_GROUPS.includes(group)){
+                    $.each(genData['osy-comm'], function (id, cObj) {
+                        unitData[group][obj.id][cObj.Comm] = {};
+                        unitData[group][obj.id][cObj.Comm]['years'] = 'years';
+                        unitData[group][obj.id][cObj.Comm]['percent'] = '%';
+                        unitData[group][obj.id][cObj.Comm]['divide'] = '/';
+                        unitData[group][obj.id][cObj.Comm]['multiply'] = '*';
+                        unitData[group][obj.id][cObj.Comm]['hundert'] = '100';
+                        unitData[group][obj.id][cObj.Comm]['thousand'] = '10<sup>3</sup>';
+                        unitData[group][obj.id][cObj.Comm]['milion'] = '10<sup>6</sup>';
+                        unitData[group][obj.id][cObj.Comm]['CommUnit'] = commUnits[cObj.CommId];
+                        unitData[group][obj.id][cObj.Comm]['Currency'] = genData['osy-currency'];
+                    });
+                }
                 //emi parameters
-                $.each(genData['osy-emis'], function (id, eObj) {
-                    unitData[group][obj.id][eObj.Emis] = {};
-                    unitData[group][obj.id][eObj.Emis]['years'] = 'years';
-                    unitData[group][obj.id][eObj.Emis]['percent'] = '%';
-                    unitData[group][obj.id][eObj.Emis]['divide'] = '/';
-                    unitData[group][obj.id][eObj.Emis]['multiply'] = '*';
-                    unitData[group][obj.id][eObj.Emis]['hundert'] = '100';
-                    unitData[group][obj.id][eObj.Emis]['thousand'] = '10<sup>3</sup>';
-                    unitData[group][obj.id][eObj.Emis]['milion'] = '10<sup>6</sup>';
-                    unitData[group][obj.id][eObj.Emis]['EmiUnit'] = emiUnits[eObj.EmisId];
-                    unitData[group][obj.id][eObj.Emis]['Currency'] = genData['osy-currency'];
-                });
+                if(VAR_EMIS_GROUPS.includes(group)){
+                    $.each(genData['osy-emis'], function (id, eObj) {
+                        unitData[group][obj.id][eObj.Emis] = {};
+                        unitData[group][obj.id][eObj.Emis]['years'] = 'years';
+                        unitData[group][obj.id][eObj.Emis]['percent'] = '%';
+                        unitData[group][obj.id][eObj.Emis]['divide'] = '/';
+                        unitData[group][obj.id][eObj.Emis]['multiply'] = '*';
+                        unitData[group][obj.id][eObj.Emis]['hundert'] = '100';
+                        unitData[group][obj.id][eObj.Emis]['thousand'] = '10<sup>3</sup>';
+                        unitData[group][obj.id][eObj.Emis]['milion'] = '10<sup>6</sup>';
+                        unitData[group][obj.id][eObj.Emis]['EmiUnit'] = emiUnits[eObj.EmisId];
+                        unitData[group][obj.id][eObj.Emis]['Currency'] = genData['osy-currency'];
+                    });
+                }
+                if(VAR_STORAGE_GROUPS.includes(group)){
+                    $.each(genData['osy-stg'], function (id, eObj) {
+                        unitData[group][obj.id][eObj.Stg] = {};
+                        unitData[group][obj.id][eObj.Stg]['years'] = 'years';
+                        unitData[group][obj.id][eObj.Stg]['percent'] = '%';
+                        unitData[group][obj.id][eObj.Stg]['divide'] = '/';
+                        unitData[group][obj.id][eObj.Stg]['multiply'] = '*';
+                        unitData[group][obj.id][eObj.Stg]['hundert'] = '100';
+                        unitData[group][obj.id][eObj.Stg]['thousand'] = '10<sup>3</sup>';
+                        unitData[group][obj.id][eObj.Stg]['milion'] = '10<sup>6</sup>';
+                        unitData[group][obj.id][eObj.Stg]['StgUnit'] = stgUnits[eObj.StgId];
+                        unitData[group][obj.id][eObj.Stg]['Currency'] = genData['osy-currency'];
+                    });
+                }
                 unitData[group][obj.id]['years'] = 'years';
+                unitData[group][obj.id]['number'] = 'number';
                 unitData[group][obj.id]['percent'] = '%';
                 unitData[group][obj.id]['divide'] = '/';
                 unitData[group][obj.id]['multiply'] = '*';
@@ -188,13 +219,14 @@ export class DataModelResult{
         let paramById = DataModel.getParamById(VARIABLES);
         let techData = this.getTechData(genData);
         let commData = this.getCommData(genData);
+        let stgData = this.getStgData(genData);
         let techGroupData = this.getTechGroupData(genData);
         //console.log('DATA ', DATA)
         let techGroupNames = DataModel.TechGroupName(genData);
         let years = genData['osy-years']
 
-
-        // console.log('techData ', techData)
+        
+        console.log('unitData ', unitData)
         // console.log('techGroupData ', techGroupData)
 
 
@@ -202,9 +234,12 @@ export class DataModelResult{
         let dataT = {};
         let dataC = {};
         let dataE = {};
+        let dataS = {};
 
-        $.each(DATA[param], function (cs, array) {     
+        $.each(DATA[param], function (cs, array) {    
+            console.log('DATA ', DATA[param]) 
             $.each(array, function (id, obj) {
+                //console.log('obj ', obj)
                 $.each(years, function (idY, year) { 
                     let chunk = {};
                     chunk['Case'] = cs;
@@ -221,6 +256,11 @@ export class DataModelResult{
                         chunk['Emi'] = obj.Emi;
                         dataE = unitData[group][param][obj.Emi];
                     }
+                    if(obj.Stg){
+                        chunk['Stg'] = obj.Stg;
+                        chunk['StgDesc'] = stgData[obj.Stg]["Desc"];
+                        dataS = unitData[group][param][obj.Stg];
+                    }
                     if(obj.MoId){
                         chunk['MoId'] = obj.MoId;
                     }
@@ -234,15 +274,14 @@ export class DataModelResult{
                     }
                     else{
                         // console.log('Value ', obj[year], ' cs ', cs,  ' year ', year , ' param ', param)
-                        console.log('Value ', obj[year])
+                        //console.log('Value ', obj[year])
                         chunk['Value'] = null;
                     }
-                    
 
                     let rule = paramById[group][param]['unitRule'];
-                    const data = {...dataT, ...dataC, ...dataE};
+                    const data = {...dataC, ...dataE, ...dataS};
                     chunk['Unit'] = jsonLogic.apply(rule, data);
-      
+                    
                     if(obj.Tech){
                         //console.log('techData ', obj.Tech, '------',  techData[obj.Tech])   //DEMINDLFO 
                         if(techData[obj.Tech].TG.length != 0){
@@ -255,6 +294,7 @@ export class DataModelResult{
                                 tmp['TechDesc'] = techData[obj.Tech]["Desc"];
                                 tmp['TechGroupDesc'] = techGroupData[tg]["Desc"];
                                 dataT = unitData[group][param][obj.Tech];
+                                tmp['Unit'] = jsonLogic.apply(rule, {...dataT});
                                 pivotData.push(tmp);
                             })
                         }else{
@@ -263,9 +303,14 @@ export class DataModelResult{
                             chunk['TechDesc'] = techData[obj.Tech]["Desc"];
                             chunk['TechGroupDesc'] = 'No group';
                             dataT = unitData[group][param][obj.Tech];
+                            chunk['Unit'] = jsonLogic.apply(rule, {...dataT});
                             pivotData.push(chunk);
                         }
+                    
+                        dataT = unitData[group][param][obj.Tech];
                     }
+
+
                     if(!obj.Tech){
                         pivotData.push(chunk);
                     }

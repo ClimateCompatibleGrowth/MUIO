@@ -13,7 +13,7 @@ from Classes.Base.FileClass import File
 class ImportTemplate():
     def __init__(self,template):
         self.PARAMETERS = File.readParamFile(Path(Config.DATA_STORAGE, 'Parameters.json'))
-        self.VARIABLES = File.readParamFile(Path(Config.DATA_STORAGE, 'ResultParameters.json'))
+        self.VARIABLES = File.readParamFile(Path(Config.DATA_STORAGE, 'Variables.json'))
         self.TEMPLATE_PATH = Path(Config.DATA_STORAGE, template)
 
     def getTechById(self, techs):

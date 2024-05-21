@@ -58,9 +58,10 @@ export class Grid {
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
                 { text: 'SeId', datafield: 'SeId', hidden: true },
-                { text: 'Season name', datafield: 'Se', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addSe" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add season</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                //{ text: 'Season name', datafield: 'Se', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Season name', datafield: 'Se', width: '10%', align: 'center', cellsalign: 'left', editable:false  },     
+                { text: 'Description', datafield: 'Desc', width: '90%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addSe" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add season</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false, hidden: true },
             ]
         });
     }
@@ -111,9 +112,10 @@ export class Grid {
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
                 { text: 'DtId', datafield: 'DtId', hidden: true },
-                { text: 'Day type name', datafield: 'Dt', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addDt" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add day type</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                // { text: 'Day type name', datafield: 'Dt', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Day type name', datafield: 'Dt', width: '10%', align: 'center', cellsalign: 'left', editable:false  },
+                { text: 'Description', datafield: 'Desc', width: '90%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addDt" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add day type</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false, hidden: true },
             ]
         });
     }
@@ -164,9 +166,10 @@ export class Grid {
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
                 { text: 'DtbId', datafield: 'DtbId', hidden: true },
-                { text: 'Daily time bracket name', datafield: 'Dtb', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addDtb" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add daily time bracket</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                // { text: 'Daily time bracket name', datafield: 'Dtb', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Daily time bracket name', datafield: 'Dtb', width: '10%', align: 'center', cellsalign: 'left', editable:false },
+                { text: 'Description ', datafield: 'Desc', width: '90%', align: 'center', cellsalign: 'left',sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addDtb" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add daily time bracket</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false, hidden: true },
             ]
         });
     }
@@ -1383,7 +1386,50 @@ export class Grid {
         $divGrid.jqxGrid('applyfilters');
     }
     
-    
+    static applyRSTMFilter($divGrid, sc = null, param = null) {
+        //$('#jqxLoader').jqxLoader('open');
+        //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });
+        $divGrid.jqxGrid('clearfilters');
+
+        //filter column 2
+        if (sc !== null && param != null) {
+
+            var filtergroup2 = new $.jqx.filter();
+            filtergroup2.operator = 'and';
+            var filtertype2 = 'stringfilter';
+            var filter_or_operator2 = 0;
+            var filtervalue2 = sc;
+            var filtercondition2 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter2 = filtergroup2.createfilter(filtertype2, filtervalue2, filtercondition2);
+            filtergroup2.addfilter(filter_or_operator2, filter2);
+            $divGrid.jqxGrid('addfilter', 'Sc', filtergroup2);
+
+            var filtergroup3 = new $.jqx.filter();
+            filtergroup3.operator = 'and';
+            var filtertype3 = 'stringfilter';
+            var filter_or_operator3 = 0;
+            var filtervalue3 = param;
+            var filtercondition3 = 'EQUAL_CASE_SENSITIVE';
+
+            var filter3 = filtergroup3.createfilter(filtertype3, filtervalue3, filtercondition3);
+            filtergroup3.addfilter(filter_or_operator3, filter3);
+            $divGrid.jqxGrid('addfilter', 'Param', filtergroup3);
+        }
+
+        //filter colum 1 null values
+        var filtergroup1 = new $.jqx.filter();
+        filtergroup1.operator = 'or';
+        var filtertype1 = 'numericfilter';
+        var filter_or_operator1 = 1;
+        var filtervalue1 = null;
+        var filtercondition1 = 'NOT_NULL';
+        var filter1 = filtergroup1.createfilter(filtertype1, filtervalue1, filtercondition1);
+        filtergroup1.addfilter(filter_or_operator1, filter1);
+        $divGrid.jqxGrid('addfilter', 'Value', filtergroup1);
+        $divGrid.jqxGrid('applyfilters');
+    }
+
     static applyRSFilter($divGrid, stgs, sc = null, param = null) {
         //$('#jqxLoader').jqxLoader('open');
         //$("#jqxLoader").jqxLoader({theme: 'darkblue', imagePosition:"top", isModal:true,width: 500, height: 70, text: "Uploading Hourly Data Paterns..." });

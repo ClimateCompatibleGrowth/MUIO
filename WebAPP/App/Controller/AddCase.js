@@ -96,8 +96,7 @@ export default class AddCase {
     }
 
     static initEvents(model) {
-
-        console.log('model ', model)
+        //console.log('model ', model)
         let $divTech = $("#osy-gridTech");
         let $divTechGroup = $("#osy-gridTechGroup");
         let $divStg = $("#osy-gridStg");
@@ -426,7 +425,7 @@ export default class AddCase {
             event.stopImmediatePropagation();
             let defaultTs = DefaultObj.defaultTs();
             //console.log('defaultTs ',defaultTs)
-            model.timeslices.push(JSON.parse(JSON.stringify(defaultTs[0], ['TsId', 'Ts', 'Desc'])));
+            model.timeslices.push(JSON.parse(JSON.stringify(defaultTs[0], ['TsId', 'Ts', 'Desc', 'SE', 'DT', 'DTB'])));
 
             //update commnames
             model.tsNames[defaultTs[0]['TsId']] = defaultTs[0]['Ts'];
@@ -475,7 +474,7 @@ export default class AddCase {
             //console.log('add season')
             event.preventDefault();
             event.stopImmediatePropagation();
-            let defaultSe = DefaultObj.defaultSe();
+            let defaultSe = DefaultObj.defaultSe(false, model.seCount);
             //console.log('defaultSe ',defaultSe)
             model.seasons.push(JSON.parse(JSON.stringify(defaultSe[0], ['SeId', 'Se', 'Desc'])));
 
@@ -505,6 +504,47 @@ export default class AddCase {
                 $("#seCount").text(model.seCount);
             }
         });  
+
+        //events by number
+        $('#osy-caseForm').undelegate("#osy-addSeNumber", "click");
+        $('#osy-caseForm').delegate("#osy-addSeNumber", "click", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultSe = DefaultObj.defaultSe(false, model.seCount);
+            model.seasons.push(JSON.parse(JSON.stringify(defaultSe[0], ['SeId', 'Se', 'Desc'])));
+            //update commnames
+            model.seNames[defaultSe[0]['SeId']] = defaultSe[0]['Se'];
+            //add row
+            $divSe.jqxGrid('addrow', null, defaultSe);
+            model.seCount++;
+            $("#seCount").text(model.seCount);
+        });
+        
+        $('#osy-caseForm').undelegate("#deleteSeNumber", "click");
+        $('#osy-caseForm').delegate("#deleteSeNumber", "click", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            let rowId = model.seCount-1;
+            if(rowId == 0){
+                Message.bigBoxWarning('Warning', 'You cannot delete. At least one season is neccessary.', 3000);
+            }else{
+                var seId = $divSe.jqxGrid('getcellvalue', rowId, 'SeId');
+                $divSe.jqxGrid('deleterow',rowId );
+                model.seasons.splice(rowId, 1);
+                //update techNames
+                delete model.seNames[seId];
+                //ovdje trebamo izbaciti season iz timeslice definicije
+                $.each(model.timeslices, function (id, obj) {
+                    if(obj.SE == seId){
+                        obj.SE='SE_0';
+                    }
+                });
+                //update count
+                model.seCount--;
+                $("#seCount").text(model.seCount);
+            }
+        }); 
         
         $divSe.on('cellvaluechanged', function (event) {
             var args = event.args;
@@ -524,7 +564,7 @@ export default class AddCase {
         $('#osy-caseForm').delegate("#osy-addDt", "click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            let defaultDt = DefaultObj.defaultDt();
+            let defaultDt = DefaultObj.defaultDt(false, model.dtCount);
             model.daytypes.push(JSON.parse(JSON.stringify(defaultDt[0], ['DtId', 'Dt', 'Desc'])));
             //update commnames
             model.dtNames[defaultDt[0]['DtId']] = defaultDt[0]['Dt'];
@@ -552,6 +592,47 @@ export default class AddCase {
                 $("#dtCount").text(model.dtCount);
             }
         });  
+
+                //events by number
+        $('#osy-caseForm').undelegate("#osy-addDtNumber", "click");
+        $('#osy-caseForm').delegate("#osy-addDtNumber", "click", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultDt = DefaultObj.defaultDt(false, model.dtCount);
+            model.daytypes.push(JSON.parse(JSON.stringify(defaultDt[0], ['DtId', 'Dt', 'Desc'])));
+            //update commnames
+            model.dtNames[defaultDt[0]['DtId']] = defaultDt[0]['Dt'];
+            //add row
+            $divDt.jqxGrid('addrow', null, defaultDt);
+            model.dtCount++;
+            $("#dtCount").text(model.dtCount);
+        });
+        
+        $('#osy-caseForm').undelegate("#deleteDtNumber", "click");
+        $('#osy-caseForm').delegate("#deleteDtNumber", "click", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            let rowId = model.dtCount-1;
+            if(rowId == 0){
+                Message.bigBoxWarning('Warning', 'You cannot delete. At least one day type is neccessary.', 3000);
+            }else{
+                var dtId = $divDt.jqxGrid('getcellvalue', rowId, 'DtId');
+                $divDt.jqxGrid('deleterow',rowId );
+                model.daytypes.splice(rowId, 1);
+                //update techNames
+                delete model.dtNames[dtId];
+                //ovdje trebamo izbaciti season iz timeslice definicije
+                $.each(model.timeslices, function (id, obj) {
+                    if(obj.DT == dtId){
+                        obj.DT='DT_0';
+                    }
+                });
+                //update count
+                model.dtCount--;
+                $("#dtCount").text(model.dtCount);
+            }
+        }); 
         
         $divDt.on('cellvaluechanged', function (event) {
             var args = event.args;
@@ -570,7 +651,7 @@ export default class AddCase {
         $('#osy-caseForm').delegate("#osy-addDtb", "click", function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            let defaultDtb = DefaultObj.defaultDtb();
+            let defaultDtb = DefaultObj.defaultDtb(false, model.dtbCount);
             model.dailytimebrackets.push(JSON.parse(JSON.stringify(defaultDtb[0], ['DtbId', 'Dtb', 'Desc'])));
             //update commnames
             model.dtbNames[defaultDtb[0]['DtbId']] = defaultDtb[0]['Dtb'];
@@ -598,6 +679,50 @@ export default class AddCase {
                 $("#dtbCount").text(model.dtbCount);
             }
         });  
+
+        //events by number
+        $('#osy-caseForm').undelegate("#osy-addDtbNumber", "click");
+        $('#osy-caseForm').delegate("#osy-addDtbNumber", "click", function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let defaultDtb = DefaultObj.defaultDtb(false, model.dtbCount);
+            model.dailytimebrackets.push(JSON.parse(JSON.stringify(defaultDtb[0], ['DtbId', 'Dtb', 'Desc'])));
+            //update commnames
+            model.dtbNames[defaultDtb[0]['DtbId']] = defaultDtb[0]['Dtb'];
+            //add row
+            $divDtb.jqxGrid('addrow', null, defaultDtb);
+            model.dtbCount++;
+            $("#dtbCount").text(model.dtbCount);
+        });
+        
+        $('#osy-caseForm').undelegate("#deleteDtbNumber", "click");
+        $('#osy-caseForm').delegate("#deleteDtbNumber", "click", function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            let rowId = model.dtbCount-1;
+            var dtbId = $divDtb.jqxGrid('getcellvalue', rowId, 'DtbId');
+            if(rowId == 0){
+                Message.bigBoxWarning('Warning', 'You cannot delete. At least one daily itme bracket is neccessary.', 3000);
+            }else{
+                $divDtb.jqxGrid('deleterow',rowId );
+                model.dailytimebrackets.splice(rowId, 1);
+                //update techNames
+                delete model.dtbNames[dtbId];
+                //ovdje trebamo izbaciti season iz timeslice definicije
+                $.each(model.timeslices, function (id, obj) {
+                    console.log('dtbCount ', id, obj, dtbId)
+                    if(obj.DTB == dtbId){
+                        obj.DTB='DTB_0';
+                    }
+                });
+                //update count
+                model.dtbCount--;
+                $("#dtbCount").text(model.dtbCount);
+            }
+
+
+        }); 
         
         $divDtb.on('cellvaluechanged', function (event) {
             var args = event.args;

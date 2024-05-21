@@ -1,0 +1,118 @@
+{
+    "TTS": {
+        "SC_0": [
+            {
+                "TechId": "TEC_4436c",
+                "StgId": "STG_mg92p",
+                "MoId": 1,
+                "Value": 1
+            },
+            {
+                "TechId": "TEC_4436c",
+                "StgId": "STG_mg92p",
+                "MoId": 2,
+                "Value": 1
+            }
+        ],
+        "SC_m8iy6": [
+            {
+                "TechId": "TEC_4436c",
+                "StgId": "STG_mg92p",
+                "MoId": 1,
+                "Value": null
+            },
+            {
+                "TechId": "TEC_4436c",
+                "StgId": "STG_mg92p",
+                "MoId": 2,
+                "Value": null
+            }
+        ],
+        "SC_wp11f": [
+            {
+                "TechId": "TEC_4436c",
+                "StgId": "STG_mg92p",
+                "MoId": 1,
+                "Value": null
+            },
+            {
+                "TechId": "TEC_4436c",
+                "StgId": "STG_mg92p",
+                "MoId": 2,
+                "Value": null
+            }
+        ],
+        "SC_gbalb": [
+            {
+                "TechId": "TEC_4436c",
+                "StgId": "STG_mg92p",
+                "MoId": 1,
+                "Value": null
+            },
+            {
+                "TechId": "TEC_4436c",
+                "StgId": "STG_mg92p",
+                "MoId": 2,
+                "Value": null
+            }
+        ]
+    },
+    "TFS": {
+        "SC_0": [
+            {
+                "TechId": "TEC_k4chb",
+                "StgId": "STG_mg92p",
+                "MoId": 1,
+                "Value": 1
+            },
+            {
+                "TechId": "TEC_k4chb",
+                "StgId": "STG_mg92p",
+                "MoId": 2,
+                "Value": 1
+            }
+        ],
+        "SC_m8iy6": [
+            {
+                "TechId": "TEC_k4chb",
+                "StgId": "STG_mg92p",
+                "MoId": 1,
+                "Value": null
+            },
+            {
+                "TechId": "TEC_k4chb",
+                "StgId": "STG_mg92p",
+                "MoId": 2,
+                "Value": null
+            }
+        ],
+        "SC_wp11f": [
+            {
+                "TechId": "TEC_k4chb",
+                "StgId": "STG_mg92p",
+                "MoId": 1,
+                "Value": null
+            },
+            {
+                "TechId": "TEC_k4chb",
+                "StgId": "STG_mg92p",
+                "MoId": 2,
+                "Value": null
+            }
+        ],
+        "SC_gbalb": [
+            {
+                "TechId": "TEC_k4chb",
+                "StgId": "STG_mg92p",
+                "MoId": 1,
+                "Value": null
+            },
+            {
+                "TechId": "TEC_k4chb",
+                "StgId": "STG_mg92p",
+                "MoId": 2,
+                "Value": null
+            }
+        ]
+    }
+}

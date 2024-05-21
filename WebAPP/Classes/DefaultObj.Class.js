@@ -5,7 +5,7 @@ export class DefaultObj{
         // after the decimal.
         return type+'_' + Math.random().toString(36).substr(2, 5);
     }
-    static defaultSe(first=false){
+    static defaultSe(first=false, seCount=0){
         let id;
         if(first){
             id = 'SE_0';
@@ -15,14 +15,14 @@ export class DefaultObj{
         let defaultSe = [
             {
                 "SeId": id,
-                "Se":id,
+                "Se":seCount+1,
                 "Desc": "Default season"
             }
         ];
         return defaultSe;
     }
 
-    static defaultDt(first=false){
+    static defaultDt(first=false, dtCount=0){
         let id;
         if(first){
             id = 'DT_0';
@@ -32,15 +32,16 @@ export class DefaultObj{
         let defaultDt = [
             {
                 "DtId": id,
-                "Dt":id,
+                "Dt":dtCount+1,
                 "Desc": "Default day type"
             }
         ];
         return defaultDt;
     }
 
-    static defaultDtb(first=false){
+    static defaultDtb(first=false, dtbCount=0){
         let id;
+        let idNumber;
         if(first){
             id = 'DTB_0';
         }else{
@@ -49,7 +50,7 @@ export class DefaultObj{
         let defaultDtb = [
             {
                 "DtbId": id,
-                "Dtb":id,
+                "Dtb":dtbCount+1,
                 "Desc": "Default dialy time bracket"
             }
         ];
@@ -69,9 +70,9 @@ export class DefaultObj{
                 "TsId": id,
                 "Ts":id,
                 "Desc": "Default year split",
-                "SE": ["SE_0"],
-                "DT": ["DT_0"],
-                "DTB": ["DTB_0"]
+                "SE": "SE_0",
+                "DT": "DT_0",
+                "DTB": "DTB_0"
             }
         ];
         return defaultTs;
@@ -171,6 +172,7 @@ export class DefaultObj{
         ];
         return defaultUnit;
     }
+
     static defaultStg(first=false){
         let id;
         if(first){
@@ -184,13 +186,14 @@ export class DefaultObj{
                 "Stg":id,
                 "Desc": "Default storage",
                 "UnitId": "MW",
-                "TTS": "",
-                "TFS": "",
+                "TTS": "TEC_0",
+                "TFS": "TEC_0",
                 "Operation": "Yearly"
             }
         ];
         return defaultObj;
     }
+
     static defaultScenario(first=false){
         let id;
         if(first){
