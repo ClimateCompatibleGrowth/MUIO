@@ -99,13 +99,13 @@ def updateTimeslices(casename):
     ns = int(genData["osy-ns"])
     nd = int(genData["osy-dt"])
     genData["osy-se"] = []
-    genData["osy-se"].append({"SeId": "SE_0", "Se": "SE_0", "Desc": "Default season"})
+    genData["osy-se"].append({"SeId": "SE_0", "Se": "1", "Desc": "Default season"})
 
     genData["osy-dt"] = []
-    genData["osy-dt"].append({"DtId": "DT_0", "Dt": "DT_0", "Desc": "Default day type"})
+    genData["osy-dt"].append({"DtId": "DT_0", "Dt": "1", "Desc": "Default day type"})
 
     genData["osy-dtb"] = []
-    genData["osy-dtb"].append({"DtbId": "DTB_0", "Dtb": "DTB_0", "Desc": "Default dialy time bracket"})
+    genData["osy-dtb"].append({"DtbId": "DTB_0", "Dtb": "1", "Desc": "Default dialy time bracket"})
 
     genData["osy-ts"] = []
     for season in range(ns):

@@ -174,6 +174,7 @@
     "MSC": {
         "SC_0": [
             {
+                "StgId": "STG_mg92p",
                 "2020": 0,
                 "2021": 0,
                 "2022": 0,
@@ -189,12 +190,12 @@
                 "2032": 0,
                 "2033": 0,
                 "2034": 0,
-                "2035": 0,
-                "StgId": "STG_mg92p"
+                "2035": 0
             }
         ],
         "SC_m8iy6": [
             {
+                "StgId": "STG_mg92p",
                 "2020": null,
                 "2021": null,
                 "2022": null,
@@ -210,12 +211,12 @@
                 "2032": null,
                 "2033": null,
                 "2034": null,
-                "2035": null,
-                "StgId": "STG_mg92p"
+                "2035": null
             }
         ],
         "SC_wp11f": [
             {
+                "StgId": "STG_mg92p",
                 "2020": null,
                 "2021": null,
                 "2022": null,
@@ -231,12 +232,12 @@
                 "2032": null,
                 "2033": null,
                 "2034": null,
-                "2035": null,
-                "StgId": "STG_mg92p"
+                "2035": null
             }
         ],
         "SC_gbalb": [
             {
+                "StgId": "STG_mg92p",
                 "2020": null,
                 "2021": null,
                 "2022": null,
@@ -252,8 +253,7 @@
                 "2032": null,
                 "2033": null,
                 "2034": null,
-                "2035": null,
-                "StgId": "STG_mg92p"
+                "2035": null
             }
         ]
     }

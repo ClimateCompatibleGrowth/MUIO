@@ -2,7 +2,7 @@
     "osy-version": "5.0",
     "osy-casename": "CLEWs intro model",
     "osy-desc": "CLEWs exercise model - demo case update December 2023",
-    "osy-date": "Mon May 20 2024",
+    "osy-date": "Mon Jun 03 2024",
     "osy-currency": "USD",
     "osy-mo": "2",
     "osy-tech": [
@@ -808,9 +808,7 @@
         {
             "TsId": "S12",
             "Ts": "S12",
-            "SE": 
-                "SE_0"
-            ,
+            "SE": "SE_0",
             "DT": "DT_0",
             "DTB": "DTB_4ucg5",
             "Desc": "Default year split"
@@ -819,12 +817,8 @@
             "TsId": "S21",
             "Ts": "S21",
             "SE": "SE_4ai4t",
-            "DT": 
-                "DT_0"
-            ,
-            "DTB": 
-                "DTB_0"
-            ,
+            "DT": "DT_0",
+            "DTB": "DTB_0",
             "Desc": "Default year split"
         },
         {
