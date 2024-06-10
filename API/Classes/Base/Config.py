@@ -152,6 +152,7 @@ VARIABLES_C = {
         'AnnualTechnologyEmission':['r','t','e','y'],
         'AnnualEmissions':['r','e','y'],
         'DiscountedTechnologyEmissionsPenalty':['r','t','y'],
+        'TechnologyEmissionsPenalty':['r','t','y'],
         'RateOfProductionByTechnology':['r','l','t','f','y'],
         'RateOfUseByTechnology':['r','l','t','f','y'],
         'UseByTechnology':['r','l','t','f','y'],

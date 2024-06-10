@@ -87,21 +87,6 @@
             }
         },
         {
-            "id": "DSV",
-            "value": "Discounted Salvage Value",
-            "name": "DiscountedSalvageValue",
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "milion"
-                    },
-                    {
-                        "var": "Currency"
-                    }
-                ]
-            }
-        },
-        {
             "id": "NC",
             "value": "New Capacity",
             "name": "NewCapacity",
@@ -140,6 +125,18 @@
             "id": "TCA",
             "value": "Total Capacity By Technology",
             "name": "TotalCapacityAnnual",
+            "unitRule": {
+                "cat": [
+                    {
+                        "var": "CapUnitId"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "TEP",
+            "value": "Technology Emissions Penalty",
+            "name": "TechnologyEmissionsPenalty",
             "unitRule": {
                 "cat": [
                     {

@@ -17,6 +17,10 @@ API/Routes/Case/__pycache__
 WebAPP/SOLVERs/GLPK
 WebAPP/SOLVERs/COIN-OR
 
+WebAPP/DataStorage/*
+!WebAPP/DataStorage/Parameters.json
+!WebAPP/DataStorage/Variables.json
+
 WebAPP/References/jqwidgets_licenced
 WebAPP/References/jqwidgets_free
 WebAPP/References/jqwidgets/jqx-all-unlisenced.js
