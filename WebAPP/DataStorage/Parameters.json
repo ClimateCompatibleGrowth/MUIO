@@ -105,28 +105,6 @@
             }
         }
     ],
-    "RY": [
-        {
-            "id": "RM",
-            "value": "Reserve Margin",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "percent"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "hundert"
-                    }
-                ]
-            }
-        }
-    ],
     "RE": [
         {
             "id": "MPEL",
@@ -413,16 +391,6 @@
                         "var": "ActUnitId"
                     }
                 ]
-            }
-        },
-        {
-            "id": "RMTT",
-            "value": "Reserve Margin Tag Technology",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": []
             }
         },
         {
@@ -780,16 +748,6 @@
                         "var": "CommUnit"
                     }
                 ]
-            }
-        },
-        {
-            "id": "RMTF",
-            "value": "Reserve Margin Tag Fuel",
-            "default": 0,
-            "enable": true,
-            "menu": 1,
-            "unitRule": {
-                "cat": []
             }
         }
     ],

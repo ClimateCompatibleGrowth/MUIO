@@ -511,6 +511,10 @@ label.select {
     height: 100%;
   }
 
+  #main {
+   padding-bottom: 15px!important;
+}
+
 /*left menu*/
 /* #header>:first-child, aside {
     width: 320px;
@@ -586,7 +590,7 @@ svg[id^="mermaid-"] {
 }
 
 .log-output{
-    height: 675px; 
+    height: 740px; 
     overflow: auto;
 }
 
@@ -635,6 +639,20 @@ li {
 
 .dropdown-menu li>a:hover{
   background-color: var(--second-color)!important;
+}
+
+.dropdown-menu-wide{
+    min-width: 720px!important;
+    z-index: 9000!important;
+    padding: 20px!important;
+    /* padding-top: 15px!important; */
+}
+
+.dropdown-menu-extra-wide{
+    min-width: 1520px!important;
+    z-index: 9000!important;
+    padding: 20px!important;
+    /* padding-top: 15px!important; */
 }
 
 .dropdown-header{

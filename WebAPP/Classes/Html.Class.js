@@ -576,7 +576,7 @@ export class Html {
         });
     }
 
-    static years(from, to, range) {
+    static yearsAllowsInterYear(from, to, range) {
         var container = $('#osy-years');
         container.empty();
         for (var i = from; i <= to; i++) {
@@ -585,6 +585,14 @@ export class Html {
             } else {
                 container.append(' <label class="checkbox"><input type="checkbox" name="Year[' + i + ']" id="' + i + '"/><i></i>' + i + '</label>');
             }
+        }
+    }
+
+    static years(from, to, range) {
+        var container = $('#osy-years');
+        container.empty();
+        for (var i = from; i <= to; i++) {
+            container.append(' <label class="checkbox"><input type="checkbox" name="Year[' + i + ']" id="' + i + '" checked disabled/><i></i>' + i + '</label>');
         }
     }
 

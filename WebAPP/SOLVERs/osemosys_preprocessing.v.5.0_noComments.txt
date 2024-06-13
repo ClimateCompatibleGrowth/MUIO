@@ -47,9 +47,9 @@ param ModelPeriodEmissionLimit{r in REGION, e in EMISSION};
 param ModelPeriodExogenousEmission{r in REGION, e in EMISSION};
 param OperationalLife{r in REGION, t in TECHNOLOGY};
 param OutputActivityRatio{r in REGION, t in TECHNOLOGY, f in COMMODITY, m in MODE_OF_OPERATION, y in YEAR};
-param ReserveMargin{r in REGION, y in YEAR};
-param ReserveMarginTagFuel{r in REGION, f in COMMODITY, y in YEAR};
-param ReserveMarginTagTechnology{r in REGION, t in TECHNOLOGY, y in YEAR};
+#param ReserveMargin{r in REGION, y in YEAR};
+#param ReserveMarginTagFuel{r in REGION, f in COMMODITY, y in YEAR};
+#param ReserveMarginTagTechnology{r in REGION, t in TECHNOLOGY, y in YEAR};
 param ResidualCapacity{r in REGION, t in TECHNOLOGY, y in YEAR};
 param SpecifiedAnnualDemand{r in REGION, f in COMMODITY, y in YEAR};
 param SpecifiedDemandProfile{r in REGION, f in COMMODITY, l in TIMESLICE, y in YEAR};
@@ -127,7 +127,7 @@ var TotalTechnologyAnnualActivity{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
 var TotalTechnologyModelPeriodActivity{r in REGION, t in TECHNOLOGY};
 var Trade{r in REGION, rr in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR};
 var EmissionByActivityChange{r in REGION, t in TECHNOLOGY, e in EMISSION, m in MODE_OF_OPERATION, y in YEAR};
-var TechnologyEmissionsPenalty{r in REGION, t in TECHNOLOGY, y in YEAR} >= 0;
+var TechnologyEmissionsPenalty{r in REGION, t in TECHNOLOGY, y in YEAR};
 
 ########                     Storage                                 #############
 #
@@ -220,7 +220,8 @@ s.t. E9_ModelPeriodEmissionsLimit{r in REGION, e in EMISSION}: sum{(m,t) in MODE
 s.t. EBa11_EnergyBalanceEachTS5{r in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR}: sum{(m,t) in MODExTECHNOLOGYperFUELout[f]} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y]*YearSplit[l,y] >= SpecifiedAnnualDemand[r,f,y]*SpecifiedDemandProfile[r,f,l,y] + sum{(m,t) in MODExTECHNOLOGYperFUELin[f]} RateOfActivity[r,l,t,m,y]*InputActivityRatio[r,t,f,m,y]*YearSplit[l,y] + sum{rr in REGION} Trade[r,rr,l,f,y]*TradeRoute[r,rr,f,y];
 s.t. EBa9_EnergyBalanceEachTS3{r in REGION, l in TIMESLICE, f in COMMODITY, y in YEAR}: SpecifiedAnnualDemand[r,f,y]*SpecifiedDemandProfile[r,f,l,y] = Demand[r,l,f,y];
 s.t. EBb4_EnergyBalanceEachYear4{r in REGION, f in COMMODITY, y in YEAR}: sum{(m,t) in MODExTECHNOLOGYperFUELout[f], l in TIMESLICE} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y]*YearSplit[l,y] >= sum{(m,t) in MODExTECHNOLOGYperFUELin[f], l in TIMESLICE} RateOfActivity[r,l,t,m,y]*InputActivityRatio[r,t,f,m,y]*YearSplit[l,y] + sum{l in TIMESLICE, rr in REGION} Trade[r,rr,l,f,y]*TradeRoute[r,rr,f,y] + AccumulatedAnnualDemand[r,f,y];
-s.t. RM3_ReserveMargin_Constraint{r in REGION, l in TIMESLICE, y in YEAR}: sum{f in COMMODITY, (m,t) in MODExTECHNOLOGYperFUELout[f]} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y] * ReserveMarginTagFuel[r,f,y] * ReserveMargin[r,y]<= sum {t in TECHNOLOGY} ((sum{yy in YEAR: y-yy < OperationalLife[r,t] && y-yy>=0} NewCapacity[r,t,yy])+ ResidualCapacity[r,t,y]) * ReserveMarginTagTechnology[r,t,y] * CapacityToActivityUnit[r,t];
+#20240611 VK commented, 3 params removed
+#s.t. RM3_ReserveMargin_Constraint{r in REGION, l in TIMESLICE, y in YEAR}: sum{f in COMMODITY, (m,t) in MODExTECHNOLOGYperFUELout[f]} RateOfActivity[r,l,t,m,y]*OutputActivityRatio[r,t,f,m,y] * ReserveMarginTagFuel[r,f,y] * ReserveMargin[r,y]<= sum {t in TECHNOLOGY} ((sum{yy in YEAR: y-yy < OperationalLife[r,t] && y-yy>=0} NewCapacity[r,t,yy])+ ResidualCapacity[r,t,y]) * ReserveMarginTagTechnology[r,t,y] * CapacityToActivityUnit[r,t];
 s.t. SV1_SalvageValueAtEndOfPeriod1{r in REGION, t in TECHNOLOGY, y in YEAR: (y + OperationalLife[r,t]-1) > (max{yy in YEAR} max(yy)) && DiscountRate[r]=0}: SalvageValue[r,t,y] = CapitalCost[r,t,y]*NewCapacity[r,t,y]*CapitalRecoveryFactor[r,t] * PvAnnuity[r,t]*(1-(((1+DiscountRate[r])^(max{yy in YEAR} max(yy) - y+1)-1)/((1+DiscountRate[r])^OperationalLife[r,t]-1)));
 s.t. SV2_SalvageValueAtEndOfPeriod2{r in REGION, t in TECHNOLOGY, y in YEAR: (y + OperationalLife[r,t]-1) > (max{yy in YEAR} max(yy)) && DiscountRate[r]>0}: SalvageValue[r,t,y] = CapitalCost[r,t,y]*NewCapacity[r,t,y]*CapitalRecoveryFactor[r,t] * PvAnnuity[r,t]*(1-(max{yy in YEAR} max(yy) - y+1)/OperationalLife[r,t]);
 s.t. TAC2_TotalModelHorizonTechnologyActivityUpperLimit{r in REGION, t in TECHNOLOGY}: sum{l in TIMESLICE, m in MODEperTECHNOLOGY[t], y in YEAR} RateOfActivity[r,l,t,m,y]*YearSplit[l,y] <= TotalTechnologyModelPeriodActivityUpperLimit[r,t] ;

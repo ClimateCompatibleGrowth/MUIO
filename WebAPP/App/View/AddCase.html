@@ -14,19 +14,49 @@
     </div>
 </div>
 
-<div id="row">
+<!-- <div id="row">
     <div class="col-lg-12">
         <div id="definition" style="display:none">
         </div>
     </div>
+</div> -->
+
+<div class="row">
+    <div class="col-md-12">
+        <section>
+            <div class="widget-body-toolbar-osy">
+				<fieldset>
+					<div class="form-inline">
+						<div class="btn-toolbar">
+							<div  class="btn-group ">
+                                <button id="osy-save" class="btn btn btn-white btn-default" style="display: none;">
+                                    <i class="fa fa-save fa-lg success"></i> Save new model
+                                </button>
+                                <button id="osy-update" class="btn btn btn-white btn-default" style="display: none;">
+                                    <i class="fa fa-save fa-lg info"></i> Update model
+                                </button>
+                                <button id="osy-new" class="btn btn btn-white btn-default" style="display: none;">
+                                    <i class="fa fa-plus-square fa-lg success"></i> Configure new model
+                                </button>
+							</div>
+							<div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default" id="showLog" data-toggle="tooltip" data-placement="top"
+                                    title="Parameters definitions">
+                                    <i class="ace-icon fa fa-question-circle fa-lg warning "></i>
+                                </button>
+                                <span class="dropdown-menu dropdown-menu-extra-wide" id="definition"></span>
+							</div>			
+						</div>
+					</div>
+				</fieldset>
+            </div>
+        </section>
+    </div>
 </div>
-
-
-
 
 <div id="osy-caseForm">
     <div class="jarviswidget jarviswidget-noHeader" role="widget">
-        <header role="heading">
+        <!-- <header role="heading">
             <h2></h2>
             <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
             <button id="osy-save" class="btn btn btn-white btn-default" style="display: none;">
@@ -42,7 +72,8 @@
                 title="Parameters definitions">
                 <i class="ace-icon fa fa-question-circle fa-lg warning "></i>
             </button>
-        </header>
+            <span class="dropdown-menu dropdown-menu-wide" id="definition"></span>
+        </header> -->
       
         <div role="content">
             <div class="widget-body">
@@ -212,18 +243,18 @@
                                     <div class="tab-pane fade active in" id="tabYears">
                                         <article class="col-sm-12 col-md-12 col-lg-12 well" style=" margin-bottom: 20px; margin-top: 15px;">
                                             <div class="row" style="padding: 10px; ">
-                                                <button id="osy-checkAll" class="btn btn btn-white btn-default pull-right">
+                                                <button id="osy-checkAll" class="btn btn btn-white btn-default pull-right" style="display: none;">
                                                     <i class="fa fa-calendar-check-o"></i> Check all
                                                 </button>
-                                                <button id="osy-uncheckAll" class="btn btn btn-white btn-default pull-right">
+                                                <button id="osy-uncheckAll" class="btn btn btn-white btn-default pull-right" style="display: none;">
                                                     <i class="fa fa-calendar-check-o"></i> Uncheck all
                                                 </button>
                 
-                                                <button id="osy-x2" class="btn btn btn-white btn-default pull-right">
+                                                <button id="osy-x2" class="btn btn btn-white btn-default pull-right" style="display: none;">
                                                     <i class="fa fa-calendar-check-o"></i> X2
                                                 </button>
                 
-                                                <button id="osy-x5" class="btn btn btn-white btn-default pull-right">
+                                                <button id="osy-x5" class="btn btn btn-white btn-default pull-right" style="display: none;">
                                                     <i class="fa fa-calendar-check-o"></i> X5
                                                 </button>
                                             </div>

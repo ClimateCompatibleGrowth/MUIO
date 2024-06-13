@@ -264,7 +264,8 @@ class DataFile(Osemosys):
                     if defaultValueFlag:
                         if regionHeader:
                             regionHeader = False   
-                            self.f.write('{} {}'.format('[RE1,'+ self.seMap[seId] +',*,*]:', '\n'))
+                            # self.f.write('{} {}'.format('[RE1,'+ self.seMap[seId] +',*,*]:', '\n'))
+                            self.f.write('{} {}'.format('['+self.seMap[seId] +',*,*]:', '\n'))
                             self.f.write('{}{}{}'.format( self.years, ':=', '\n'))
                         self.f.write('{} {}{}'.format(self.dtMap[dtId], rysedtString, '\n'))
         self.f.write('{}{}'.format(';', '\n'))
