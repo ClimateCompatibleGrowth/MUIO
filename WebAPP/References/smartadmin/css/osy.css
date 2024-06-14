@@ -269,7 +269,8 @@ label.select {
     background-color: var(--body-background) !important;
 }
 .jqx-grid-cell-pinned {
-    background-color: var(--body-background) !important;
+    /* background-color: var(--body-background) !important; */
+    background-color: var(--background-color) !important;
 }
 
 .no-gutter {

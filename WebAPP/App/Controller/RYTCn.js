@@ -172,6 +172,7 @@ export default class RYTCn {
             model.srcGrid.root = this.value;
             model.param = this.value;
             $divGrid.jqxGrid('updatebounddata');
+            Grid.applyGridFilter($divGrid, model.years);
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
         });
 

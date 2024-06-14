@@ -456,6 +456,7 @@ class ImportTemplate():
     
     def importProcess(self, data):
         try:
+            print('IMPORT STARTED!')
             start_time = time.time()
             template_file = data['osy-template']
             casename = data['osy-casename']
@@ -812,6 +813,8 @@ class ImportTemplate():
             print('MODEL STRUCTURE FINISHED!')
             print("--- %s seconds ---" % (time.time() - start_time))
             txtOut = txtOut + ("Model structure finished in --- {} seconds ---{}".format(time.time() - start_time, '\n'))
+
+            xlsObject = {}
             
             if data:
                 techName = self.getTechById(techs)
@@ -825,7 +828,7 @@ class ImportTemplate():
                         print(key + ' PARAM')
                         #procitaj json file koji odgovara xls objektu i updatuj podatke
                         path = Path(Config.DATA_STORAGE,casename, key +'.json')
-                        jsonData = File.readFile(path)
+                        jsonData = File.readFile(path)                            
 
                         for a in array:
                             txtOut = txtOut + ("Parameter {} done in  --- {} seconds ---{}".format(a['value'], time.time() - start_time, '\n'))
@@ -844,49 +847,61 @@ class ImportTemplate():
                                 
                             #procitaj podatke iz xls
                             if sheet_name in df_sheet_all:
+                                print('sheet_name ', sheet_name)
                                 #ako ima podataka u xls napravi bjekat od xls podataka
                                 xls = df_sheet_all[sheet_name]
                                 xlsData = xls.to_json(orient='records', indent=2)
                                 xlsArray = json.loads(xlsData)
 
+
                                 if key == 'R':
-                                    xlsObj = self.refR(xlsArray)
-                                    jsonData[a['id']]['SC_0'][0]['value'] = xlsObj['RE1']
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refR(xlsArray)
+                                    #xlsObj = self.refR(xlsArray)
+                                    jsonData[a['id']]['SC_0'][0]['value'] = xlsObject[key]['RE1']
 
                                 if key == 'RT':
-                                    xlsObj = self.refRT(xlsArray)
+                                    #xlsObj = self.refRT(xlsArray)
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRT(xlsArray)
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             for tech, val in el.items():
                                                 t = techName[tech] 
-                                                if t in xlsObj:
-                                                    el[tech] = xlsObj[t]
+                                                if t in xlsObject[key]:
+                                                    el[tech] = xlsObject[key][t]
 
                                 if key == 'RE':
-                                    xlsObj = self.refRE(xlsArray)
+                                    #xlsObj = self.refRE(xlsArray)
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRE(xlsArray)
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             for emi, val in el.items():
                                                 e = emiName[emi] 
-                                                if e in xlsObj:
-                                                    el[emi] = xlsObj[e]
+                                                if e in xlsObject[key]:
+                                                    el[emi] = xlsObject[key][e]
 
                                 if key == 'RS':
-                                    xlsObj = self.refRS(xlsArray)
+                                    #xlsObj = self.refRS(xlsArray)
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRS(xlsArray)
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             for stg, val in el.items():
                                                 e = stgName[stg] 
-                                                if e in xlsObj:
-                                                    el[stg] = xlsObj[e]
+                                                if e in xlsObject[key]:
+                                                    el[stg] = xlsObject[key][e]
 
                                 if key == 'RY':
-                                    xlsObj = self.refRY(xlsArray)
+                                    #xlsObj = self.refRY(xlsArray)
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRY(xlsArray)
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             for yr, val in el.items():
-                                                if int(yr) in xlsObj:
-                                                    el[yr] = xlsObj[int(yr)]
+                                                if int(yr) in xlsObject[key]:
+                                                    el[yr] = xlsObject[key][int(yr)]
 
                                 if key == 'RYT':
                                     for sc, obj in jsonData[a['id']].items():
@@ -942,91 +957,96 @@ class ImportTemplate():
                                                             if str(arr['YEAR']) == yr:
                                                                 el[yr] = arr['VALUE']
                                                                 break
-                                                
-                                    #File.writeFile( jsonData, path)
 
                                 if key == 'RYTCM':
-                                    xlsObj = self.refRYTCM(xlsArray)
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRYTCM(xlsArray)
 
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
-                                            for yr, val in el.items():
-                                                if yr != 'TechId' and yr != 'CommId' and yr != 'MoId':
-                                                    t = techName[el['TechId']] 
-                                                    c = commName[el['CommId']]
-                                                    m = el['MoId']
-                                                    if t in xlsObj:
-                                                        if c in xlsObj[t]:
-                                                            if m in xlsObj[t][c]:
-                                                                el[yr] = xlsObj[t][c][m][yr]
-                            
-                                    #File.writeFile( jsonData, path)
+                                            t = techName[el['TechId']] 
+                                            c = commName[el['CommId']]
+                                            m = el['MoId']
+                                            if t in xlsObject[key]:
+                                                if c in xlsObject[key][t]:
+                                                    if m in xlsObject[key][t][c]:
+                                                        for yr, val in el.items():
+                                                            if yr != 'TechId' and yr != 'CommId' and yr != 'MoId':
+                                                                el[yr] = xlsObject[key][t][c][m][yr]
 
                                 if key == 'RYTEM':
-                                    xlsObj = self.refRYTEM(xlsArray)
+                                    #xlsObj = self.refRYTEM(xlsArray)
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRYTEM(xlsArray)
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
-                                            for yr, val in el.items():
-                                                if yr != 'TechId' and yr != 'EmisId' and yr != 'MoId':
-                                                    t = techName[el['TechId']] 
-                                                    e = emiName[el['EmisId']]
-                                                    m = el['MoId']
-                                                    if t in xlsObj:
-                                                        if e in xlsObj[t]:
-                                                            if m in xlsObj[t][e]:
-                                                                el[yr] = xlsObj[t][e][m][yr]
+                                            t = techName[el['TechId']] 
+                                            e = emiName[el['EmisId']]
+                                            m = el['MoId']
+                                            if t in xlsObject[key]:
+                                                if e in xlsObject[key][t]:
+                                                    if m in xlsObject[key][t][e]:
+                                                        for yr, val in el.items():
+                                                            if yr != 'TechId' and yr != 'EmisId' and yr != 'MoId':
+                                                                el[yr] = xlsObject[key][t][e][m][yr]
 
                                 if key == 'RTSM':
-                                    xlsObj = self.refRTSM(xlsArray)
+                                    #xlsObj = self.refRTSM(xlsArray)
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRTSM(xlsArray)
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             t = techName[el['TechId']] 
                                             s = emiName[el['StgId']]
                                             m = el['MoId']
-                                            if t in xlsObj:
-                                                if s in xlsObj[t]:
-                                                    if m in xlsObj[t][s]:
-                                                        el['Value'] = xlsObj[t][s][m]
+                                            if t in xlsObject[key]:
+                                                if s in xlsObject[key][t]:
+                                                    if m in xlsObject[key][t][s]:
+                                                        el['Value'] = xlsObject[key][t][s][m]
 
                                 if key == 'RYTM':
-                                    xlsObj = self.refRYTM(xlsArray)
-
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRYTM(xlsArray)
+         
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
-                                            for yr, val in el.items():
-                                                if yr != 'TechId' and yr != 'MoId':
-                                                    t = techName[el['TechId']] 
-                                                    m = el['MoId']
-                                                    if t in xlsObj:
-                                                        if m in xlsObj[t]:
-                                                            el[yr] = xlsObj[t][m][yr]
+                                            t = techName[el['TechId']] 
+                                            m = el['MoId']
+                                            if t in xlsObject[key]:
+                                                if m in xlsObject[key][t]:
+                                                    for yr, val in el.items():
+                                                        if yr != 'TechId' and yr != 'MoId':
+                                                            el[yr] = xlsObject[key][t][m][yr]
 
                                 if key == 'RYTTs':
-                                    xlsObj = self.refRYTTs(xlsArray)
+                                    #xlsObj = self.refRYTTs(xlsArray)
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRYTTs(xlsArray)
 
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
-                                            for yr, val in el.items():
-                                                if yr != 'TechId' and yr != 'TsId':
-                                                    t = techName[el['TechId']] 
-                                                    ts = tsName[el['TsId']]
-                                                    if t in xlsObj:
-                                                        if ts in xlsObj[t]:
-                                                            el[yr] = xlsObj[t][ts][yr]
+                                            t = techName[el['TechId']] 
+                                            ts = tsName[el['TsId']]
+                                            if t in xlsObject[key]:
+                                                if ts in xlsObject[key][t]:
+                                                    for yr, val in el.items():
+                                                        if yr != 'TechId' and yr != 'TsId':
+                                                            el[yr] = xlsObject[key][t][ts][yr]
                             
                                 if key == 'RYCTs':
-                                    xlsObj = self.refRYCTs(xlsArray)
-
+                                    #xlsObj = self.refRYCTs(xlsArray)
+                                    if key not in xlsObject:
+                                        xlsObject[key] = self.refRYCTs(xlsArray)
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
-                                            for yr, val in el.items():
-                                                if yr != 'CommId' and yr != 'TsId':
-                                                    c = commName[el['CommId']] 
-                                                    ts = tsName[el['TsId']]
-                                                    if c in xlsObj:
-                                                        if ts in xlsObj[c]:
-                                                            el[yr] = xlsObj[c][ts][yr]
-                                    #File.writeFile( jsonData, path)
+                                            c = commName[el['CommId']] 
+                                            ts = tsName[el['TsId']]
+                                            if c in xlsObject[key]:
+                                                if ts in xlsObject[key][c]:
+                                                    for yr, val in el.items():
+                                                        if yr != 'CommId' and yr != 'TsId':
+                                                            el[yr] = xlsObject[key][c][ts][yr]
+
                         File.writeFile( jsonData, path)
 
             os.remove(self.TEMPLATE_PATH)

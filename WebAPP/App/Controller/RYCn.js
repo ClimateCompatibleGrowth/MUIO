@@ -67,6 +67,7 @@ export default class RYCn {
             Html.lblScenario( model.scenariosCount);
             Html.ddlScenarios(model.scenarios, model.scenarios[1]['ScenarioId']);
             Grid.applyGridFilter($divGrid, model.years);
+            
         }
 
         //var daChart = new $.jqx.dataAdapter(model.srcChart, { autoBind: true });
