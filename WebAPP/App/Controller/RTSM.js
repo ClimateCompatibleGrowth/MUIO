@@ -145,6 +145,7 @@ export default class RTSM {
             RTSM.refreshPage(casename);
             Html.updateCasePicker(casename);
             Message.smallBoxConfirmation("Confirmation!", "Model " + casename + " selected!", 3500);
+
         });
 
         $("#osy-saveRTSMdata").off('click');
@@ -161,9 +162,6 @@ export default class RTSM {
                 saveData[obj.ScId].push(obj);
                 delete obj.ScId;
             });
-
-            console.log('saveData ', saveData)
-
             Osemosys.updateData(saveData, param, "RTSM.json")
                 .then(response => {
                     Message.bigBoxSuccess('Model message', response.message, 3000);
@@ -189,6 +187,7 @@ export default class RTSM {
                 $divGrid.jqxGrid('updatebounddata');
                 model.param =  this.value;
                 Grid.applyRSTMFilter($divGrid);
+                $('#definition').html(`${DEF[model.group][model.param].definition}`);
                 //Grid.applyGridFilter($divGrid, model.years);
                 //update za ddl coms i techs za IAR ili OAR
                 // Html.ddlTechs(model.techs[this.value], model.techs[this.value][0]['TechId']);
@@ -341,6 +340,7 @@ export default class RTSM {
         $("#showLog").off('click');
         $("#showLog").click(function (e) {
             e.preventDefault();
+
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');
         });

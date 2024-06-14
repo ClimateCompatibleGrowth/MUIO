@@ -27,15 +27,8 @@ export const DEF = {
     },
     ViewData: {
         title: `View all parameters data by SETS.`,
-        definition:
-            `
-        <blockquote>
-            <p>
-                user can select one of the sets, technolgy, commodity and emisssion and see all paramteter values in the model. Scenario data is dsplayed only id there are values entered and it is coloured in different..
-            </p>
-            <small>Source <cite title="Osemsys CLEW interface</cite></small>
-        </blockquote>
-
+        definition:`
+        This view displays all input data associated with the selected commodity, technology or emissions
         `
     },
     AddCase: {
@@ -68,9 +61,10 @@ export const DEF = {
         `
     },
     RES: {
-        title: `Reference Energy System`,
+        title: `Model diagram`,
         definition:`
-            The Reference Energy System (RES) is a network representation of all of the technical activities required to supply various forms of energy to end-use activities.
+            The Model diagram is a network representation of all of the technical activities required to supply various forms of energy to end-use activities.
+            The model diagram shows the structure of the model. Technologies are displayed as boxes, while commodities are displayed as lines.
             <br/>
             <small>Acknowledgements <cite title="Source Title">https://plotly.com/</cite></small>
         `
@@ -194,6 +188,23 @@ export const DEF = {
 			The parameter Model Period Emission Limit [Region, Emission] is used to set a cumulative limit on emissions over the entire model horizon (i.e. all years).  <br/>
 			The parameter can for instance be used to model carbon mitigation scenarios and carbon budgets. Since climate change impacts are ultimately determined by total cumulative greenhouse gas emission (GHG), reducing total emissions over time is more important than reaching an emission target for a given year. This parameter therefore lets users directly limit GHG impacts on climate, while allowing for the emission reduction pathway to be optimized. <br/>
 			The ModelPeriodEmissionLimit parameter is time-independent and defined for each emission. It is specified in the applicable units of that emission.  	 
+            `
+        }
+    },
+    RS: {
+        OLS: {
+            title: `Storage parameter`,
+            definition:`
+            <h6>Operational Life Storage [Region, Storage]</h6>
+            The Operational Life Storage [Region, Storage] parameter is used to define the lifespan of a storage asset. It represents the number of years a storage can be operational before it is decommissioned or needs to be replaced. <br/>
+            The OperationalLife parameter is time-independent and defined for each storage. It is specified in number of years.  	 
+            `
+        },
+        SLS: {
+            title: `Storage parameter`,
+            definition:`
+            <h6>Storage Level Start [Region, Storage]</h6>
+            The Storage Level Start [Region, Storage] is used to specify the storage level at the start of the first period. The parameter value is expressed in relation to the maximum capacity of the storage system and given as a fraction (e.g. 0.5 to indicate a storage that is half-full at the start of the model period). 	 
             `
         }
     },
@@ -485,11 +496,59 @@ export const DEF = {
             `
         }
     },
+    RYS: {
+        CCS:{
+            title: `Storage parameters`,
+            definition:
+                `
+            <h6>Capital Cost Storage [Region, Year, Storage]</h6>
+            The Capital Cost Storage [Region, Year, Storage] parameter is used to specify the investment cost associated with the construction or installation of a storage facility. It represents the initial investment required to acquire, construct or expand storage capacity. <br/>
+            Capital Cost Storage is defined for each storage and represents the cost per unit of storage capacity. It includes expenses such as equipment, construction, engineering, installation, land acquisition, and any other costs associated with the capital investment.
+            `
+        },
+        RSC: {
+            title: `Storage parameters`,
+            definition:
+                `
+            <h6>Residual Capacity [Region, Year, Storage]</h6>
+            The Residual Capacity [Region, Year, Storage] parameter represents storage capacity installed prior to the model period and can be used to specify any existing capital stock available in the base year if the analysis.  <br/>
+            Residual Capacity is specified in units of capacity for each storage and should be entered for each year the capital stock is expected to remain available. If capacity is expected to be retired during the model horizon the value provided for this parameter should be reduced accordingly.   
+            `
+        },
+        MSC: {
+            title: `Storage parameters`,
+            definition:
+                `
+            <h6>Min storage charge [Region, Year, Storage]</h6>
+            The Min storage charge [Region, Year, Storage] parameter is used to specify a lower limit on the amount of storage at any given time. This can for instance be used to represent a storage dam, where a certain minimum water level should be maintained at all times or to restrict the operation of a battery to ensure that it is never fully depleted. <br/>
+            The parameter value is expressed in relation to the maximum capacity of the storage system and given as a fraction (e.g. 0.2 to indicate a that the storage level should not drop below 20% of maximum capacity). It is provided for each year for each storage asset in the model.   
+            `
+        }
+    },
+    RTSM: {
+        TTS:{
+            title: `Storage parameters`,
+            definition:
+                `
+            <h6>Technology To Storage [Region, Technology, Storage, Mode of Operation]</h6>
+            The Technology To Storage [Region, Technology, Storage, Mode of Operation] parameter is a tag to identify technologies that provide input to storage. It is set to 1 when the link exists and to 0 when there is no link. For example, a utility scale battery may use electricity provided by the transmission grid as input. In this case a value of 1 should be provided for the combination of the transmission grid technology and the battery storage. <br/>
+            Technology To Storage is dimensionless and can be provided for each region, technology, storage and mode of operation. It should be set to either 0 (no link) or 1 (link exists).
+            `
+        },
+        TFS: {
+            title: `Storage parameters`,
+            definition:
+                `
+            <h6>Technology from Storage [Region, Technology, Storage, Mode of Operation]</h6>
+            The Technology from Storage [Region, Technology, Storage, Mode of Operation] parameter is a tag to identify technologies that receive the output from a storage. It is set to 1 when the link exists and to 0 when there is no link. For example, a utility scale battery may provide electricity for distribution to final users. In this case a value of 1 should be provided for the combination of the distribution grid technology and the battery storage. <br/>
+            Technology from Storage is dimensionless and can be provided for each region, technology, storage and mode of operation. It should be set to either 0 (no link) or 1 (link exists).  
+            `
+        }
+    },
     RYTs: {
         YS: {
             title: `Year & timeslice parameter`,
-            definition:
-                `
+            definition:`
 			<h6>Year Split [Region, Year, Time-slice] </h6>
 			The Year Split [Region, Year, Time-slice] parameter is used to set the duration of each time slice (sub-annual time increment of the model). It is a time-dependent parameter and is specified as a fraction of the total year for each time-slice in each year (i.e. it will have a value between 0 and 1).  <br/>
 			For example, if a time-slice represents peak demand (demand during the hour of the day when demand is highest) in one season of the year (e.g. summer) and that season lasts 3 months (i.e. a quarter of the year), then the Year Split for that time slice would be 0.25 (duration of the season as a share of the full year – i.e. 3 months out of 12 months) times 1/24 (proportional duration of the peak hour over as a share of a day – i.e. 1 hour out of 24 hours) , which equals 0.0104. <br/>
@@ -497,6 +556,28 @@ export const DEF = {
             `
         }
 
+    },
+    RYDtb: {
+        DS:
+        {
+            title: `Year & timeslice parameter`,
+            definition:`
+            <h6>Day Split [Region, Year, Time-slice]</h6>
+            The Day Split [Region, Year, Time-slice] parameter is used to set the duration of an individual occurrence of each time slice (sub-annual time increment of the model).  It is a time-dependent parameter and is specified as a fraction of the total year for each time-slice in each year (i.e. it will have a value between 0 and 1).  The parameter is only used in the representation of storage. <br/>
+            For example, if a time-slice represents peak demand (demand during the hour of the day when demand is highest) then the parameter should be set to 1/8760 = 0.000114 (8760 is the number of hours in a year), while if it represents the base load period (e.g. 9pm to 6am = 9 hours) then it should be set to 9/8760 = 0.001027. <br/>
+            The DaySplit parameter is provided for each timeslice and can change from year to year. 
+            `
+        }
+    },
+    RYSeDt: {
+        DIDT:
+        {
+            title: `Year & timeslice parameter`,
+            definition:`
+            <h6>Days In Day Type [Region, Year, Season, Daytype]</h6>
+            The Days In Day Type [Region, Year, Season, Daytype] is used to specify the number of sequential days in a single occurrence of a day type. For example, if a day type represents weekdays the parameter value should be set to 5, while for a day type representing a weekend it should be set to 2. It is specified for each daytype in each season. It can change from year to year although this would only be applicable in special circumstances when the user wishes to change the time representation at a point within the model horizon.   
+            `
+        }
     },
     RYTTs: {
         CF:{
