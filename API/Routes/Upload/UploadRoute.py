@@ -401,20 +401,26 @@ def uploadXls():
                 filename = secure_filename(submitted_file)
                 #spasiti zip u data storage
                 file.save(os.path.join(Config.DATA_STORAGE, filename))
-                #zipfiles = []
 
-                #os.remove(os.path.join(Config.DATA_STORAGE, filename))
+                #ako ima space u umenu rename file
+                # filename_nosapces = filename[:]
+                # filename_nosapces.replace(" ","")
+                # if( filename_nosapces != filename):
+                #     os.rename(os.path.join(Config.DATA_STORAGE, filename), os.path.join(Config.DATA_STORAGE, filename_nosapces))
+                #     filename = filename_nosapces
         
                 msg.append({
                     "message": "Template " + submitted_file +" have been uploaded!",
                     "status_code": "success",
-                    "casename": case
+                    "casename": case,
+                    "template": filename
                 })
             else:
                 msg.append({
                     "message": "Template " + submitted_file +" is not valid .xlsx file!",
                     "status_code": "warning",
-                    "casename": case
+                    "casename": case,
+                    "template": filename
                 })
 
         response = {

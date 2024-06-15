@@ -853,7 +853,6 @@ class ImportTemplate():
                                 xlsData = xls.to_json(orient='records', indent=2)
                                 xlsArray = json.loads(xlsData)
 
-
                                 if key == 'R':
                                     if key not in xlsObject:
                                         xlsObject[key] = self.refR(xlsArray)

@@ -2,10 +2,10 @@ export class Model {
     constructor (cases) {
         if (cases){
             this.cases = cases; 
-            this.pageID = 'Excel model import'
+            this.pageID = 'ExcelImport'
         }else{
             this.cases = null; 
-            this.pageID = 'Excel model import'
+            this.pageID = 'ExcelImport'
         }
     }
 }

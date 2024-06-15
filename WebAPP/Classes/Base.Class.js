@@ -326,14 +326,16 @@ export class Base {
                 dictInvalidFileType: "Not valid .xlsx file!",
                 success: function (file, response) {
                     //console.log('file ',file )
-                    //console.log('response ', response)
+                    console.log('response ', response)
+                    console.log('response ', response.template)
+                    console.log('file ', file.name)
                     let res = response.response[0];
                     if (res['status_code'] == 'success') {
                         Html.enableImportProcess();
                         Message.successOsy(res['message']);
                         
                         Message.bigBoxSuccess("Upload response", res['message'], 3000);
-                        $("#osy-template").val(file.name);
+                        $("#osy-template").val(res.template);
                         $('#modalrestore').modal('toggle');
 
                     } else if (res['status_code'] == 'warning') {

@@ -1,14 +1,14 @@
 <h3>OSEMOSYS ver.5.0.0, <small>2024____ release</small></h3>
 <ol style="font-style: italic; font-weight: normal;">
-    MODEperTECHNOLOGY
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Implementation of dynamic year split</li>
-    <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Preprocessing for conversions implemented</li>
+    <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Preprocessing for conversions implemented - param Conversionls{l in TIMESLICE, ls in SEASON};param Conversionld{l in TIMESLICE, ld in DAYTYPE};param Conversionlh{l in TIMESLICE, lh in DAILYTIMEBRACKET};</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Storage set implemented</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Storage paramteres included in generation of data file</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Check boxes for years fixed, only continuous selection is allowed</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Parameters definitions update</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Import xls process upgraded</li>
-    <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;New SETS, Storage, Seasons, DayTypes, DailyTimeBrackets</li>
+    <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Import xls process bug fix - space in template name</li>
+    <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;New SETS, Storage, Seasons, DayTypes, DailyTimeBrackets, STORAGEINTRADAY, STORAGEINTRAYEAR</li>
     <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;Preprocessing for MODExTECHNOLOGYperSTORAGEto and MODExTECHNOLOGYperSTORAGEfrom implemented</li>
     <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;Storage added in MODEperTECHNOLOGY preprocessing</li>
     <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;MODExTECHNOLOGYperEMISSIONChange implemented in preprocessing</li>
@@ -16,7 +16,14 @@
     <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;Variable DiscountedTechnologyEmissionsPenalty removed</li>
     <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;Variable TechnologyEmissionsPenalty added</li>
     <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;Parameters ReserveMargin, ReserveMarginTagFuel, ReserveMarginTagTechnology removed</li>
-
+    <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;STORAGE paramteters added
+    <ul><li>param DiscountRateStorage{r in REGION};</li>
+    <li>param OperationalLifeStorage{r in REGION, s in STORAGE};</li>
+    <li>param CapitalCostStorage{r in REGION, s in STORAGE, y in YEAR};</li>
+    <li>param ResidualStorageCapacity{r in REGION, s in STORAGE, y in YEAR};</li>
+    <li>param TechnologyToStorage{r in REGION, t in TECHNOLOGY, s in STORAGE, m in MODE_OF_OPERATION};</li>
+    <li>param TechnologyFromStorage{r in REGION, t in TECHNOLOGY, s in STORAGE, m in MODE_OF_OPERATION};</li>
+    </ul></li>
 </ol> 
 
 <h3>OSEMOSYS ver.4.9.0, <small>20240214 release</small></h3>

@@ -49,7 +49,6 @@ export default class LegacyImport {
             Message.smallBoxInfo("Case selection", casename + " is selected!", 3000);
         });
 
-
         $("#osy-caseForm").jqxValidator({
             hintType: 'label',
             animationDuration: 500,
@@ -65,8 +64,7 @@ export default class LegacyImport {
                 { input: '#osy-date', message: "Date is required field!", action: 'change', rule: 'required' }
             ]
         });
-
-        
+ 
         $("#osy-import").off('click');
         $("#osy-import").on('click', function (event) {
             event.preventDefault();
@@ -95,7 +93,7 @@ export default class LegacyImport {
             event.preventDefault();
             event.stopImmediatePropagation();
             Message.clearMessages();
-
+            $("#ImportOutput").hide();
             Html.newImportProcess();
             Message.smallBoxInfo("Info", 'You have started new import process', 4000)
 
@@ -112,6 +110,7 @@ export default class LegacyImport {
             var date = $("#osy-date").val();
             var currency = $("#osy-currency").val();
             var templateName = $("#osy-template").val();
+            console.log('templateName ', templateName)
             let data = false;
             if ($('#osy-data').is(":checked")){
                 data = true;
@@ -132,6 +131,7 @@ export default class LegacyImport {
                 if (response.status_code == "success") {
                     Message.loaderEnd();
                     //console.log('response ', response)
+                    $("#ImportOutput").show();
                     $("#osy-importOutput").html('<pre class="log-output">' + response.output + '</pre>');
                     $("#osy-newImport").show();
                     Message.successOsy(response.message);
@@ -144,8 +144,6 @@ export default class LegacyImport {
                 Message.bigBoxDanger('Error message', error, null);
             })
         });
-
-
 
         $("#showLog").click(function (e) {
             e.preventDefault();

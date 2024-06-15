@@ -25,6 +25,12 @@ export const DEF = {
             </p>
         `
     },
+    ExcelImport: {
+        title: `Import legacy models via otoole xls template`,
+        definition:`
+        Excel model import allows UI users to import model structure with data through .xls template. Existing data files or csv files should be converted to .xls template using otoole. 
+        `
+    },
     ViewData: {
         title: `View all parameters data by SETS.`,
         definition:`
