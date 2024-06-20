@@ -2397,8 +2397,12 @@ class DataFile(Osemosys):
 
                                 if paramobj['id'] not in viewData:
                                     viewData[paramobj['id']] = {}
-                                if caserunname not in viewData[paramobj['id']]:
-                                    viewData[paramobj['id']][caserunname] = []
+
+                                # if caserunname not in viewData[paramobj['id']]:
+                                #     viewData[paramobj['id']][caserunname] = []
+
+                                #ovdje uvijek moramo napraviti novi niy jer je novi caserun i novi podaci
+                                viewData[paramobj['id']][caserunname] = []
 
                                 if paramobj['group'] == 'R':
                                     tmp = {}
