@@ -416,6 +416,7 @@ export default class DataFile {
             Osemosys.run(model.casename, solver, model.cs)
             .then(response => {
                 Message.clearMessages();
+                console.log('response ',response)
                 if (response.status_code == "success") {
                     Message.loaderEnd();
                     $(".runOutput").show();
@@ -480,6 +481,7 @@ export default class DataFile {
                 }
             })
             .catch(error => {
+                console.log('error ',error)
                 Message.loaderEnd();
                 Message.bigBoxDanger('Error message', error, null);
             })

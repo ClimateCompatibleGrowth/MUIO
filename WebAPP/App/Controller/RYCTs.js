@@ -101,7 +101,7 @@ export default class RYCTs {
             event.stopImmediatePropagation();
             let param = $("#osy-ryt").val();
             let rytData = $divGrid.jqxGrid('getboundrows');
-            let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'CommId', 'Ts'].concat(model.years)));
+            let data = JSON.parse(JSON.stringify(rytData, ['ScId', 'CommId', 'TsId'].concat(model.years)));
             let saveData = {};
             $.each(data, function (id, obj) {
                 if (!saveData[obj.ScId]) { saveData[obj.ScId] = []; }

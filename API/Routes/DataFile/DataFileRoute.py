@@ -223,6 +223,10 @@ def run():
         txtFile = DataFile(casename)
         response = txtFile.run(solver, caserunname)     
         return jsonify(response), 200
+    # except Exception as ex:
+    #     print(ex)
+    #     return ex, 404
+    
     except(IOError):
         return jsonify('No existing cases!'), 404
     

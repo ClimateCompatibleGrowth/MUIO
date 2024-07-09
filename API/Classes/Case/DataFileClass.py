@@ -2108,6 +2108,10 @@ class DataFile(Osemosys):
 
             return response
             # urllib.request.urlretrieve(self.dataFile, dataFile)
+
+        except Exception as ex:
+            print(ex) # do whatever you want for debugging.
+            raise    # re-raise exception.
         except(IOError, IndexError):
             raise IndexError
         except OSError:
@@ -2354,7 +2358,9 @@ class DataFile(Osemosys):
                 df_ACI = df_ACI_temp[['r','t','y','AnnualizedInvestmentCost']]
                 df_ACI = df_ACI[df_ACI['AnnualizedInvestmentCost']!=0]
                 df_ACI.to_csv(os.path.join(base_folder, 'csv', 'AnnualizedInvestmentCost.csv'), index=None)
-
+        except Exception as ex:
+            print(ex) # do whatever you want for debugging.
+            raise    # re-raise exception.
         except(IOError, IndexError):
             raise IndexError
         except OSError:
