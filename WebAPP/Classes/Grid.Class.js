@@ -347,9 +347,9 @@ export class Grid {
                 { text: 'DtbId', datafield: 'DtbId', hidden: true },
                 { text: 'Year split name', datafield: 'Ts', width: '15%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '30%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: 'Season', datafield: 'SE', width: '15%',cellsrenderer: cellsrendererSeasons, columntype: 'dropdownlist', createeditor: ddlSeasons,  align: 'center', cellsalign: 'center', sortable: false },
-                { text: 'Day type', datafield: 'DT', width: '15%', cellsrenderer: cellsrendererDaytypes, columntype: 'dropdownlist', createeditor: ddlDatypes,  align: 'center', cellsalign: 'center', sortable: false },
-                { text: 'Daily time', datafield: 'DTB', width: '15%', cellsrenderer: cellsrendererDailytimebrackets, columntype: 'dropdownlist', createeditor: ddlDilytimebrackets,  align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Season', datafield: 'SE', width: '15%',cellsrenderer: cellsrendererSeasons, geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlSeasons,  align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Day type', datafield: 'DT', width: '15%', cellsrenderer: cellsrendererDaytypes, geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDatypes,  align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Daily time', datafield: 'DTB', width: '15%', cellsrenderer: cellsrendererDailytimebrackets, geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDilytimebrackets,  align: 'center', cellsalign: 'center', sortable: false },
 
                 { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTs" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add year split</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
