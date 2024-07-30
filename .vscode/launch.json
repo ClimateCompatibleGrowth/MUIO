@@ -18,7 +18,7 @@
             "module": "flask",
             "env": {
                 "FLASK_APP": "API/app.py",
-                "FLASK_RUN_PORT": "5001",
+                "FLASK_RUN_PORT": "5002",
                 "FLASK_ENV": "development",
                 "FLASK_DEBUG": "1"
             },

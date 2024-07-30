@@ -115,7 +115,7 @@ if __name__ == '__main__':
     #Flask.__version__
     import mimetypes
     mimetypes.add_type('application/javascript', '.js')
-    port = int(os.environ.get("PORT", 5001))
+    port = int(os.environ.get("PORT", 5002))
     print("PORTTTTTTTTTTT")
     if Config.HEROKU_DEPLOY == 0: 
         #localhost
