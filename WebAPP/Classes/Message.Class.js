@@ -219,6 +219,48 @@ export class Message {
         });
     }
 
+    static confirmationDialog(title, msg, model, $divTech, id, rowid, techId) {
+        console.log('MODEL ', model)
+        $.SmartMessageBox({
+            title : "<i class='fa fa-exclamation-triangle danger'></i> " +title,
+            content : msg,
+            buttons : '[No][Yes]'
+        }, function(ButtonPressed) {
+            if (ButtonPressed === "Yes") {
+
+                $.smallBox({
+                    title : "Confirmation",
+                    content : "<i class='fa fa-clock-o'></i> <i>Technology is deleted!</i>",
+                    color : "#5384AF",
+                    iconSmall : "fa fa-check fa-2x fadeInRight animated",
+                    timeout : 4000
+                });
+                $divTech.jqxGrid('deleterow', rowid);
+                model.techs.splice(id, 1);
+                //update techNames
+                delete model.techNames[techId];
+                //update count
+                model.techCount--;
+                $("#techCount").text(model.techCount);
+                //izbrisati iz model constraints eventualne tehnologijel koje smo izbrisali
+                $.each(model.constraints, function (id, conObj) {
+                    conObj['CM'] = conObj['CM'].filter(item => item !== techId);
+                });
+                console.log('MODEL2 ', model)
+            }
+            if (ButtonPressed === "No") {
+                $.smallBox({
+                    title : "Confirmation",
+                    content : "<i class='fa fa-clock-o'></i> <i>Deletion is aborted!</i>",
+                    color : "#C79121",
+                    iconSmall : "fa fa-times fa-2x fadeInRight animated",
+                    timeout : 4000
+                });
+            }
+
+        });
+    }
+
     static resMessage(message) {
         $("#res-message").html(
             `<div class="alert alert-osy-second-color fade in">

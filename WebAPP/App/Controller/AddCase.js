@@ -321,17 +321,25 @@ export default class AddCase {
             if (id != 0) {
                 var techId = $divTech.jqxGrid('getcellvalue', id, 'TechId');
                 var rowid = $divTech.jqxGrid('getrowid', id);
-                $divTech.jqxGrid('deleterow', rowid);
-                model.techs.splice(id, 1);
-                //update techNames
-                delete model.techNames[techId];
-                //update count
-                model.techCount--;
-                $("#techCount").text(model.techCount);
-                //izbrisati iz model constraints eventualne tehnologijel koje smo izbrisali
-                $.each(model.constraints, function (id, conObj) {
-                    conObj['CM'] = conObj['CM'].filter(item => item !== techId);
-                });
+                console.log('model.techs ',model.techs[rowid])
+                console.log("TG ", model.techs[rowid].TG.length)
+                if(model.techs[rowid].TG.length>0){
+                   
+                    Message.confirmationDialog('Technology deletion warning', `Technology <b>${model.techs[rowid].Tech}</b> has technology group membership(s). Deleting the technology could impact visalisation of results for previously run cases. Are you sure you want to proceed?`, model, $divTech, id, rowid, techId)
+                }
+                else{
+                    $divTech.jqxGrid('deleterow', rowid);
+                    model.techs.splice(id, 1);
+                    //update techNames
+                    delete model.techNames[techId];
+                    //update count
+                    model.techCount--;
+                    $("#techCount").text(model.techCount);
+                    //izbrisati iz model constraints eventualne tehnologijel koje smo izbrisali
+                    $.each(model.constraints, function (id, conObj) {
+                        conObj['CM'] = conObj['CM'].filter(item => item !== techId);
+                    });
+                }
             }
         });
 

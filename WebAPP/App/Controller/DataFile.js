@@ -416,7 +416,7 @@ export default class DataFile {
             Osemosys.run(model.casename, solver, model.cs)
             .then(response => {
                 Message.clearMessages();
-                console.log('response ',response)
+                //console.log('response ',response)
                 if (response.status_code == "success") {
                     Message.loaderEnd();
                     $(".runOutput").show();
@@ -494,7 +494,7 @@ export default class DataFile {
             e.stopImmediatePropagation();
             Html.renderScOrder( model.scBycs[model.cs]);
             Message.clearMessages();
-            console.log('select, ', model)
+            //console.log('select, ', model)
             var caserunanme = $(this).attr('data-ps');
             model.cs = caserunanme;
             Html.renderScOrder( model.scBycs[model.cs]);
@@ -555,10 +555,10 @@ export default class DataFile {
             e.stopImmediatePropagation();
             Message.clearMessages();
             var caserunanme = $(this).attr('data-ps');
-            console.log('caserunanme ', caserunanme)
+            //console.log('caserunanme ', caserunanme)
             Osemosys.validateInputs(model.casename, caserunanme)
             .then(response => {
-                console.log('response ', response)
+                //console.log('response ', response)
                 if (response.status_code == "success") {
                     $('#osy-validation').modal('toggle');
                     $("#valCasrunname").text(caserunanme)

@@ -227,11 +227,11 @@ export default class Pivot {
             wijmo.input.AutoComplete.disposeAll('#cmbParams');
         }
 
-        function parseHtmlData(data){
-            let props = ['Unit'];
-            //console.log('item[prop] ', item[prop] )
-            data.forEach(item => props.forEach(prop => item[prop] = wijmo.toPlainText(item[prop])))
-        }
+        // function parseHtmlData(data){
+        //     let props = ['Unit'];
+        //     console.log('item[prop] ', item[prop] )
+        //     data.forEach(item => props.forEach(prop => item[prop] = wijmo.toPlainText(item[prop])))
+        // }
 
         let app = {};
         app.engine = new wijmo.olap.PivotEngine({
@@ -246,7 +246,12 @@ export default class Pivot {
         });
 
         //wijmo.olap.PivotEngine.invalidate()
+        //console.log('app.engine.fields ', app.engine.fields)
         app.engine.fields.getField('Unit').isContentHtml = true;
+        app.engine.fields.getField('Tech').isContentHtml = true;
+        app.engine.fields.getField('Tech Desc').isContentHtml = true;
+
+
         model.DEFAULTVIEW = app.engine.viewDefinition;
 
         app.panel = new wijmo.olap.PivotPanel('#pivotPanel',{
@@ -395,6 +400,8 @@ export default class Pivot {
             let viewId = DefaultObj.getId('VIEW');
 
             app.engine.fields.getField('Unit').isContentHtml = true;
+            app.engine.fields.getField('Tech').isContentHtml = true;
+            app.engine.fields.getField('Tech Desc').isContentHtml = true;
 
             let POSTDATA = {
                 "osy-viewId": viewId,
@@ -501,12 +508,9 @@ export default class Pivot {
         model.group = model.VARGROUPS[param]['group'];
         model.param = param;
 
-        // console.log('model.param ', model.param)
-        // console.log('model.group ', model.group)
-        // console.log('param,  model, ', param,  model,)
         Osemosys.getResultData(model.casename, model.group+'.json')
         .then(DATA => {
-            //console.log('DATA ', DATA)
+
             if (DATA !== null && model.param in DATA && Object.getOwnPropertyNames(DATA[model.param]).length != 0){
                 let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
                 model.pivotData = pivotData;
@@ -551,6 +555,23 @@ export default class Pivot {
                     Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' - Default view');
                 }
                 app.engine.fields.getField('Unit').isContentHtml = true;
+                if(model.group != "RYS" && model.group != "RYCTs"){
+                    app.engine.fields.getField('Tech').isContentHtml = true;
+                    app.engine.fields.getField('Tech Desc').isContentHtml = true;
+                }
+                if(model.group == "RYTC" || model.group == "RYCTs" || model.group == "RYTCMTs"){
+                    app.engine.fields.getField('Comm').isContentHtml = true;
+                    app.engine.fields.getField('Comm Desc').isContentHtml = true;
+                }
+                if(model.group == "RYTE" || model.group == "RYTEM"){
+                    app.engine.fields.getField('Emi').isContentHtml = true;
+                    app.engine.fields.getField('Emi Desc').isContentHtml = true;
+                }
+                if(model.group == "RYS"){
+                    app.engine.fields.getField('Stg').isContentHtml = true;
+                    app.engine.fields.getField('Stg Desc').isContentHtml = true;
+                }
+
                 Message.loaderEnd();
             }
             else{
@@ -569,6 +590,22 @@ export default class Pivot {
         if(model.VIEW == 'null'){
             app.engine.viewDefinition = model.DEFAULTVIEW;
             app.pivotChart.header = '';
+            if(model.group != "RYS" && model.group != "RYCTs"){
+                app.engine.fields.getField('Tech').isContentHtml = true;
+                app.engine.fields.getField('Tech Desc').isContentHtml = true;
+            }
+            if(model.group == "RYTC" || model.group == "RYCTs" || model.group == "RYTCMTs"){
+                app.engine.fields.getField('Comm').isContentHtml = true;
+                app.engine.fields.getField('Comm Desc').isContentHtml = true;
+            }
+            if(model.group == "RYTE" || model.group == "RYTEM"){
+                app.engine.fields.getField('Emi').isContentHtml = true;
+                app.engine.fields.getField('Emi Desc').isContentHtml = true;
+            }
+            if(model.group == "RYS"){
+                app.engine.fields.getField('Stg').isContentHtml = true;
+                app.engine.fields.getField('Stg Desc').isContentHtml = true;
+            }
             Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' Default view');
         }
         else{
@@ -576,6 +613,7 @@ export default class Pivot {
                 if(obj['osy-viewId'] == model.VIEW){
                     let param = obj['osy-varId'];
                     if (model.VAR_IDS.includes(param)){
+
                         if(param != model.param){
                             model.TriggerUpdate = false;
                             app.cmbParams.selectedValue = param;
@@ -583,9 +621,30 @@ export default class Pivot {
                             Pivot.updateParam(param, app, model, obj);
                         }
                         else{
+                            //console.log('OVDJE RADI HTML!!!')
                             app.engine.viewDefinition = obj['osy-viewdef'];
                             app.pivotChart.header = obj['osy-viewname'];
                             Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' - '+obj['osy-viewname'] +' view');
+                            // app.engine.fields.getField('Unit').isContentHtml = true;
+                            // app.engine.fields.getField('Tech').isContentHtml = true;
+                            // app.engine.fields.getField('Tech Desc').isContentHtml = true;
+                            if(model.group != "RYS" && model.group != "RYCTs"){
+                                app.engine.fields.getField('Tech').isContentHtml = true;
+                                app.engine.fields.getField('Tech Desc').isContentHtml = true;
+                            }
+                            if(model.group == "RYTC" || model.group == "RYCTs" || model.group == "RYTCMTs"){
+                                app.engine.fields.getField('Comm').isContentHtml = true;
+                                app.engine.fields.getField('Comm Desc').isContentHtml = true;
+                            }
+                            if(model.group == "RYTE" || model.group == "RYTEM"){
+                                app.engine.fields.getField('Emi').isContentHtml = true;
+                                app.engine.fields.getField('Emi Desc').isContentHtml = true;
+                            }
+                            if(model.group == "RYS"){
+                                app.engine.fields.getField('Stg').isContentHtml = true;
+                                app.engine.fields.getField('Stg Desc').isContentHtml = true;
+                            }
+
                         } 
                     }
                     else{

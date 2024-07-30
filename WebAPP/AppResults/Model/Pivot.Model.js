@@ -15,7 +15,7 @@ export class Model {
         let pivotData = DataModelResult.getPivot(DATA, genData, VARIABLES, group, param);
         //let VIEWS = DataModelResult.getViews(VIEW['osy-views']);
 
-        //console.log('VARGROUPS ', VARGROUPS)
+        // console.log('pivotData ', pivotData)
 
         let VIEWS = DataModelResult.getAllViews(VIEW['osy-views']);
 

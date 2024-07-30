@@ -91,7 +91,7 @@ export class DefaultObj{
                 "TechId": id,
                 "Tech":id,
                 "Desc": "Default technology",
-                "CapUnitId": "MW",
+                "CapUnitId": "GW",
                 "ActUnitId": "PJ",
                 "TG": emptyArray,
                 "IAR": emptyArray,
@@ -185,7 +185,7 @@ export class DefaultObj{
                 "StgId": id,
                 "Stg":id,
                 "Desc": "Default storage",
-                "UnitId": "MW",
+                "UnitId": "PJ",
                 "TTS": "TEC_0",
                 "TFS": "TEC_0",
                 "Operation": "Yearly"

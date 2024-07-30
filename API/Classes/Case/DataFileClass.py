@@ -2246,118 +2246,120 @@ class DataFile(Osemosys):
                 ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
                 ################################################################################################################
 
-                #year split data frame
-                df_yearsplit = pd.DataFrame(data['YearSplit'], columns=['r','y', 'l','YearSplit'])
-                df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
+                if 'RateOfActivity' in all_params:
+                    #year split data frame
+                    df_yearsplit = pd.DataFrame(data['YearSplit'], columns=['r','y', 'l','YearSplit'])
+                    df_activity = all_params['RateOfActivity'].rename(columns={'value':'RateOfActivity'})
 
-                # df_output = pd.DataFrame(data['OutputActivityRatio'], columns=['r','f','t','y','m','OutputActivityRatio'])
-                df_output = pd.DataFrame(data['OutputActivityRatio'], columns=Config.PARAMETERS_C_full['OutputActivityRatio'])
-                df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
-                df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
-                df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
-                
-                # df_input = pd.DataFrame(data['InputActivityRatio'], columns=['r', 'f','t','y','m','InputActivityRatio'])
-                df_input = pd.DataFrame(data['InputActivityRatio'], columns=Config.PARAMETERS_C_full['InputActivityRatio'])
-                df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
-                df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
-                df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
-                
-                # df_emi = pd.DataFrame(data['EmissionActivityRatio'], columns=['r', 'e','t','y','m','EmissionActivityRatio'])
-                df_emi = pd.DataFrame(data['EmissionActivityRatio'], columns=Config.PARAMETERS_C_full['EmissionActivityRatio'])
-                df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
-                #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
+                    # df_output = pd.DataFrame(data['OutputActivityRatio'], columns=['r','f','t','y','m','OutputActivityRatio'])
+                    df_output = pd.DataFrame(data['OutputActivityRatio'], columns=Config.PARAMETERS_C_full['OutputActivityRatio'])
+                    df_out_ys = pd.merge(df_output, df_yearsplit, on='y')
+                    df_out_ys['OutputActivityRatio'] = df_out_ys['OutputActivityRatio'].astype(float)
+                    df_out_ys['YearSplit'] = df_out_ys['YearSplit'].astype(float)
+                    
+                    # df_input = pd.DataFrame(data['InputActivityRatio'], columns=['r', 'f','t','y','m','InputActivityRatio'])
+                    df_input = pd.DataFrame(data['InputActivityRatio'], columns=Config.PARAMETERS_C_full['InputActivityRatio'])
+                    df_in_ys = pd.merge(df_input, df_yearsplit, on='y')
+                    df_in_ys['InputActivityRatio'] = df_in_ys['InputActivityRatio'].astype(float)
+                    df_in_ys['YearSplit'] = df_in_ys['YearSplit'].astype(float)
+                    
+                    # df_emi = pd.DataFrame(data['EmissionActivityRatio'], columns=['r', 'e','t','y','m','EmissionActivityRatio'])
+                    df_emi = pd.DataFrame(data['EmissionActivityRatio'], columns=Config.PARAMETERS_C_full['EmissionActivityRatio'])
+                    df_emi['EmissionActivityRatio'] = df_emi['EmissionActivityRatio'].astype(float)
+                    #df_emi.to_csv(os.path.join(base_folder, 'emi_table.csv'), index=None)
 
-                #########################################Demand#################################################################
-                #SpecifiedAnnualDemand[r,f,y]*SpecifiedDemandProfile[r,f,l,y]+ AccumulatedAnnualDemand[r,f,y]
-                # df_sad = data['SpecifiedAnnualDemand'].rename(columns={'value':'SpecifiedAnnualDemand'})
-                # df_sdp = data['SpecifiedDemandProfile'].rename(columns={'value':'SpecifiedDemandProfile'})
-                # df_aad = data['AccumulatedAnnualDemand'].rename(columns={'value':'AccumulatedAnnualDemand'})
-   
-                ########################################ProductionByTechnologyByMode############################################
-                df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
-                region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
-                df_prod['r'] = str(region[0])
-                df_prod['RateOfActivity'].fillna(0, inplace=True)
-                df_prod['ProductionByTechnologyByMode'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
-                df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                df_prod['ProductionByTechnologyByMode'] = df_prod['ProductionByTechnologyByMode'].astype(float).round(4)
-                df_prod = df_prod.sort_values(by=['r','l','t','f','y'])
-                df_prod = df_prod[df_prod['ProductionByTechnologyByMode']!=0]
-                df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyByMode.csv'), index=None)
+                    #########################################Demand#################################################################
+                    #SpecifiedAnnualDemand[r,f,y]*SpecifiedDemandProfile[r,f,l,y]+ AccumulatedAnnualDemand[r,f,y]
+                    # df_sad = data['SpecifiedAnnualDemand'].rename(columns={'value':'SpecifiedAnnualDemand'})
+                    # df_sdp = data['SpecifiedDemandProfile'].rename(columns={'value':'SpecifiedDemandProfile'})
+                    # df_aad = data['AccumulatedAnnualDemand'].rename(columns={'value':'AccumulatedAnnualDemand'})
+    
+                    ########################################ProductionByTechnologyByMode############################################
+                    df_prod = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                    region = [x for x in list(df_prod.r.unique()) if str(x) != 'nan']
+                    df_prod['r'] = str(region[0])
+                    df_prod['RateOfActivity'].fillna(0, inplace=True)
+                    df_prod['ProductionByTechnologyByMode'] = df_prod['OutputActivityRatio']*df_prod['YearSplit']*df_prod['RateOfActivity']
+                    df_prod = df_prod.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                    df_prod['ProductionByTechnologyByMode'] = df_prod['ProductionByTechnologyByMode'].astype(float).round(4)
+                    df_prod = df_prod.sort_values(by=['r','l','t','f','y'])
+                    df_prod = df_prod[df_prod['ProductionByTechnologyByMode']!=0]
+                    df_prod.to_csv(os.path.join(base_folder, 'csv', 'ProductionByTechnologyByMode.csv'), index=None)
 
-                ########################################RateOfProductionByTechnologyByMode############################################
-                df_ropbt = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
-                region = [x for x in list(df_ropbt.r.unique()) if str(x) != 'nan']
-                df_ropbt['r'] = str(region[0])
-                df_ropbt['RateOfActivity'].fillna(0, inplace=True)
+                    ########################################RateOfProductionByTechnologyByMode############################################
+                    df_ropbt = pd.merge(df_out_ys, df_activity, how='left', on=['t','m','l','y'])
+                    region = [x for x in list(df_ropbt.r.unique()) if str(x) != 'nan']
+                    df_ropbt['r'] = str(region[0])
+                    df_ropbt['RateOfActivity'].fillna(0, inplace=True)
 
-                df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['OutputActivityRatio']*df_ropbt['RateOfActivity']
-                df_ropbt = df_ropbt.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['RateOfProductionByTechnologyByMode'].astype(float).round(4)
-                df_ropbt = df_ropbt.sort_values(by=['r','l','t','f','y'])
-                df_ropbt = df_ropbt[df_ropbt['RateOfProductionByTechnologyByMode']!=0]
-                df_ropbt.to_csv(os.path.join(base_folder, 'csv', 'RateOfProductionByTechnologyByMode.csv'), index=None)
+                    df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['OutputActivityRatio']*df_ropbt['RateOfActivity']
+                    df_ropbt = df_ropbt.drop(['OutputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                    df_ropbt['RateOfProductionByTechnologyByMode'] = df_ropbt['RateOfProductionByTechnologyByMode'].astype(float).round(4)
+                    df_ropbt = df_ropbt.sort_values(by=['r','l','t','f','y'])
+                    df_ropbt = df_ropbt[df_ropbt['RateOfProductionByTechnologyByMode']!=0]
+                    df_ropbt.to_csv(os.path.join(base_folder, 'csv', 'RateOfProductionByTechnologyByMode.csv'), index=None)
 
-                ######################################UseByTechnologyByMode##############################################
-                df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
-                region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
-                df_use['r'] = str(region[0])
-                df_use['RateOfActivity'].fillna(0, inplace=True)
-       
-                df_use['UseByTechnologyByMode'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
-                df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                df_use['UseByTechnologyByMode'] = df_use['UseByTechnologyByMode'].astype(float).round(4)
-                df_use = df_use.sort_values(by=['r','l','t','f','y'])
-                df_use = df_use[df_use['UseByTechnologyByMode']!=0]
-                df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyByMode.csv'), index=None)
+                    ######################################UseByTechnologyByMode##############################################
+                    df_use = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
+                    region = [x for x in list(df_use.r.unique()) if str(x) != 'nan']
+                    df_use['r'] = str(region[0])
+                    df_use['RateOfActivity'].fillna(0, inplace=True)
+        
+                    df_use['UseByTechnologyByMode'] = df_use['InputActivityRatio']*df_use['YearSplit']*df_use['RateOfActivity']
+                    df_use = df_use.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                    df_use['UseByTechnologyByMode'] = df_use['UseByTechnologyByMode'].astype(float).round(4)
+                    df_use = df_use.sort_values(by=['r','l','t','f','y'])
+                    df_use = df_use[df_use['UseByTechnologyByMode']!=0]
+                    df_use.to_csv(os.path.join(base_folder, 'csv', 'UseByTechnologyByMode.csv'), index=None)
 
-                ######################################RateOfUseByTechnologyByMode##############################################
-                df_roubt = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
-                region = [x for x in list(df_roubt.r.unique()) if str(x) != 'nan']
-                df_roubt['r'] = str(region[0])
-                df_roubt['RateOfActivity'].fillna(0, inplace=True)
-       
-                df_roubt['RateOfUseByTechnologyByMode'] = df_roubt['InputActivityRatio']*df_roubt['RateOfActivity']
-                df_roubt = df_roubt.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
-                df_roubt['RateOfUseByTechnologyByMode'] = df_roubt['RateOfUseByTechnologyByMode'].astype(float).round(4)
-                df_roubt = df_roubt.sort_values(by=['r','l','t','f','y'])
-                df_roubt = df_roubt[df_roubt['RateOfUseByTechnologyByMode']!=0]
-                df_roubt.to_csv(os.path.join(base_folder, 'csv', 'RateOfUseByTechnologyByMode.csv'), index=None)
+                    ######################################RateOfUseByTechnologyByMode##############################################
+                    df_roubt = pd.merge(df_in_ys, df_activity, how='left', on=['t','m','l','y'])
+                    region = [x for x in list(df_roubt.r.unique()) if str(x) != 'nan']
+                    df_roubt['r'] = str(region[0])
+                    df_roubt['RateOfActivity'].fillna(0, inplace=True)
+        
+                    df_roubt['RateOfUseByTechnologyByMode'] = df_roubt['InputActivityRatio']*df_roubt['RateOfActivity']
+                    df_roubt = df_roubt.drop(['InputActivityRatio','YearSplit','RateOfActivity'], axis=1)
+                    df_roubt['RateOfUseByTechnologyByMode'] = df_roubt['RateOfUseByTechnologyByMode'].astype(float).round(4)
+                    df_roubt = df_roubt.sort_values(by=['r','l','t','f','y'])
+                    df_roubt = df_roubt[df_roubt['RateOfUseByTechnologyByMode']!=0]
+                    df_roubt.to_csv(os.path.join(base_folder, 'csv', 'RateOfUseByTechnologyByMode.csv'), index=None)
 
-                #########################################AnnualizedInvestmentCost################################################
-                df_OL = pd.DataFrame(data['OperationalLife'], columns=Config.PARAMETERS_C_full['OperationalLife'])
-                df_OL['OperationalLife'] = df_OL['OperationalLife'].astype(int)
-                df_DRi = pd.DataFrame(data['DiscountRateIdv'], columns=Config.PARAMETERS_C_full['DiscountRateIdv'])
-                df_DRi['DiscountRateIdv'] = df_DRi['DiscountRateIdv'].astype(float)
-                df_CRF = pd.merge(df_DRi, df_OL, on=['r', 't'])
-                df_CRF['CRF'] = (1 - pow( (1+df_CRF['DiscountRateIdv']), -1) ) / (1 - pow( (1+df_CRF['DiscountRateIdv']), -df_CRF['OperationalLife'] ) )
+                if 'CapitalInvestment' in all_params:
+                    #########################################AnnualizedInvestmentCost################################################
+                    df_OL = pd.DataFrame(data['OperationalLife'], columns=Config.PARAMETERS_C_full['OperationalLife'])
+                    df_OL['OperationalLife'] = df_OL['OperationalLife'].astype(int)
+                    df_DRi = pd.DataFrame(data['DiscountRateIdv'], columns=Config.PARAMETERS_C_full['DiscountRateIdv'])
+                    df_DRi['DiscountRateIdv'] = df_DRi['DiscountRateIdv'].astype(float)
+                    df_CRF = pd.merge(df_DRi, df_OL, on=['r', 't'])
+                    df_CRF['CRF'] = (1 - pow( (1+df_CRF['DiscountRateIdv']), -1) ) / (1 - pow( (1+df_CRF['DiscountRateIdv']), -df_CRF['OperationalLife'] ) )
 
-                df_CI = all_params['CapitalInvestment']
-                full_df = pd.DataFrame([(i, s) for i in tech_list for s in year_list], columns=['t', 'y'])
-   
-                df_ACI_temp = pd.merge(df_CI, full_df, on=['t','y'],  how='outer')
-                df_ACI_temp['CapitalInvestment'] = df_ACI_temp['CapitalInvestment'].fillna(0)
-                df_ACI_temp['r'] = df_ACI_temp['r'].fillna('RE1')
-                df_ACI_temp = pd.merge(df_ACI_temp, df_CRF, on=['r', 't'],  how='outer')
-                df_ACI_temp['CIxCRF'] = df_ACI_temp['CapitalInvestment'] * df_ACI_temp['CRF']
-                df_ACI_temp.sort_values(['t','y'], inplace=True)
-                tech_current = ''
-                cumulativeList = []
-                for index, row in df_ACI_temp.iterrows():
-                    if tech_current != row['t']:
-                        cumulativeList = []
-                    cumulativeList.append(row['CIxCRF'])
-                    df_ACI_temp.loc[index,'AnnualizedInvestmentCost'] = sum(cumulativeList[-row['OperationalLife']:])
-                    tech_current = row['t']
-                    # if int(start_year) + row['OperationalLife'] <= int(row['y']) or tech_current != row['t']:
-                    #     Sum = 0
-                    # Sum += row['CIxCRF']
-                    # df_ACI_temp.loc[index,'AnnualizedInvestmentCost'] = Sum
-                    # tech_current = row['t']
+                    df_CI = all_params['CapitalInvestment']
+                    full_df = pd.DataFrame([(i, s) for i in tech_list for s in year_list], columns=['t', 'y'])
+    
+                    df_ACI_temp = pd.merge(df_CI, full_df, on=['t','y'],  how='outer')
+                    df_ACI_temp['CapitalInvestment'] = df_ACI_temp['CapitalInvestment'].fillna(0)
+                    df_ACI_temp['r'] = df_ACI_temp['r'].fillna('RE1')
+                    df_ACI_temp = pd.merge(df_ACI_temp, df_CRF, on=['r', 't'],  how='outer')
+                    df_ACI_temp['CIxCRF'] = df_ACI_temp['CapitalInvestment'] * df_ACI_temp['CRF']
+                    df_ACI_temp.sort_values(['t','y'], inplace=True)
+                    tech_current = ''
+                    cumulativeList = []
+                    for index, row in df_ACI_temp.iterrows():
+                        if tech_current != row['t']:
+                            cumulativeList = []
+                        cumulativeList.append(row['CIxCRF'])
+                        df_ACI_temp.loc[index,'AnnualizedInvestmentCost'] = sum(cumulativeList[-row['OperationalLife']:])
+                        tech_current = row['t']
+                        # if int(start_year) + row['OperationalLife'] <= int(row['y']) or tech_current != row['t']:
+                        #     Sum = 0
+                        # Sum += row['CIxCRF']
+                        # df_ACI_temp.loc[index,'AnnualizedInvestmentCost'] = Sum
+                        # tech_current = row['t']
 
-                df_ACI = df_ACI_temp[['r','t','y','AnnualizedInvestmentCost']]
-                df_ACI = df_ACI[df_ACI['AnnualizedInvestmentCost']!=0]
-                df_ACI.to_csv(os.path.join(base_folder, 'csv', 'AnnualizedInvestmentCost.csv'), index=None)
+                    df_ACI = df_ACI_temp[['r','t','y','AnnualizedInvestmentCost']]
+                    df_ACI = df_ACI[df_ACI['AnnualizedInvestmentCost']!=0]
+                    df_ACI.to_csv(os.path.join(base_folder, 'csv', 'AnnualizedInvestmentCost.csv'), index=None)
         except Exception as ex:
             print(ex) # do whatever you want for debugging.
             raise    # re-raise exception.

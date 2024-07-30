@@ -12,7 +12,7 @@ export class Model {
         let commData = DataModel.getCommData(genData);
         
 
-        console.log('DemandComms ', DemandComms)
+        // console.log('DemandComms ', DemandComms)
 
         let index = 0;
         let labelIndex = {};

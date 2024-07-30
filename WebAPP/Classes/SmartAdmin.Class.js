@@ -17,8 +17,8 @@ export class SmartAdmin {
         let from = Math.min(...years);
         let to = Math.max(...years);
 
-        console.log(from, to);
-        console.log('d5_instance ', d5_instance)
+        // console.log(from, to);
+        // console.log('d5_instance ', d5_instance)
 
         if(d5_instance){
             d5_instance.update({

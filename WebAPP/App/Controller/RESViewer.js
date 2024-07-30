@@ -154,7 +154,7 @@ export default class RESViewer {
     
     static initPage(model) {
 
-        console.log('model js ', model)
+        //console.log('model js ', model)
         Message.clearMessages();
         let $div = 'osy-RESViewer';
 
@@ -209,8 +209,8 @@ export default class RESViewer {
         $("#renderSankey").off('click');
         $("#renderSankey").on('click', function (e) {  
             Message.loaderStart('Preparing RES...'); 
-            console.log('model.selectedTechs ', model.selectedTechs);
-            console.log('model.selectedTechs.length ', model.selectedTechs.length);
+            // console.log('model.selectedTechs ', model.selectedTechs);
+            // console.log('model.selectedTechs.length ', model.selectedTechs.length);
 
             if(model.selectedTechs.length >=2){
                 $('#undoSankey').show();
@@ -239,7 +239,7 @@ export default class RESViewer {
 
             model.selectedTechs.pop();
 
-            console.log('model.selectedTechs ', model.selectedTechs)
+            // console.log('model.selectedTechs ', model.selectedTechs)
       
             let modelNew = new Model(model.casename, model.genData, model.DemandComms, settings, model.selectedTechs);
 
@@ -295,7 +295,7 @@ export default class RESViewer {
             else{
                 //Technology click
 
-                console.log('msgData ', msgData)
+                //console.log('msgData ', msgData)
                 if(msgData.label == 'Missing Source Technology' ){
                     msg = `<i class="fa fa-cog fa-lg osy-second-color-d"></i> <b>WARNING:</b> Your model is missing source technology!`;
                     Message.resMessage(msg);

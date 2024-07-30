@@ -42,12 +42,7 @@ class Osemosys():
         self.rytemPath = Path(Config.DATA_STORAGE,case,'RYTEM.json')
 
         
-        #self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys_preprocessing.txt')
-        #self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys_preprocessing.v.4.5.txt')
-        #self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys_preprocessing.v.5.0.txt')
-        self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosys_preprocessing.v.5.0_noComments.txt')
-        #self.osemosysFile = Path(Config.SOLVERs_FOLDER,'model_cloud.txt') 
-        #self.osemosysFile = Path(Config.SOLVERs_FOLDER,'osemosysUI_EBAC.txt')  
+        self.osemosysFile = Path(Config.SOLVERs_FOLDER,'model.v.5.0.txt') 
         self.osemosysFileOriginal = Path(Config.SOLVERs_FOLDER,'osemosys.txt')
         
         if platform.system() == 'Windows':
@@ -117,17 +112,6 @@ class Osemosys():
     def getYears(self):
         years = self.genData['osy-years']
         return years
-
-    # def getTimeslices(self):
-    #     seasons = int(self.genData['osy-ns'])
-    #     days = int(self.genData['osy-dt'])
-    #     timeslice = []
-    #     for season in range(seasons):
-    #         for day in range(days):
-    #             s = str(season + 1)
-    #             d = str(day + 1)
-    #             timeslice.append("S"+s+d)
-    #     return timeslice 
 
     def getTsIds(self):
         tsIds = [ ts['TsId'] for ts in self.genData["osy-ts"]]
