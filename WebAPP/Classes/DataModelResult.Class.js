@@ -4,19 +4,6 @@ import { UNITDEFINITION, VAR_TECH_GROUPS, VAR_COMM_GROUPS, VAR_EMIS_GROUPS, VAR_
 
 export class DataModelResult{
 
-    // static getVarById(VARIABLES){
-    //     let varById = {};
-    //     const cloneData = JSON.parse(JSON.stringify(VARIABLES));
-    //     $.each(cloneData, function (group, array) {
-    //         varById[group] = {};
-    //         $.each(array, function (id, obj) {
-    //             varById[group][obj.id] = obj;
-    //             delete obj.id;
-    //         });
-    //     });
-    //     return varById;       
-    // }
-
     static getVarById(VARIABLES){
         let varById = {};
         const cloneData = JSON.parse(JSON.stringify(VARIABLES));
