@@ -270,7 +270,7 @@ export default class AddCase {
                     }
                 }
                 if (response.status_code == "edited") {
-                    Html.title(casename, 'Model', 'create & edit');
+                    Html.title(casename, 'Model configuration', 'create & edit');
                     $("#osy-new").show();
                     Navbar.initPage(casename);
                     Sidebar.Reload(casename);

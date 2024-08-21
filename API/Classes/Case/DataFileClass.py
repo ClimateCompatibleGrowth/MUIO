@@ -905,16 +905,16 @@ class DataFile(Osemosys):
             shutil.rmtree(csvPath)
 
         for group, array in self.VARIABLES.items():
-            if group != 'RYS':
-                path = Path(self.viewFolderPath, group+'.json')
-                if path.is_file():
-                    jsonFile = File.readFile(path)
-                    for obj in array:
-                        #potrebna provjera jer smo u 4.5 verziji dodali varijablu EBAC i dolazilo je do greske jer nije bilo u reyultataima
-                        if obj['id'] in jsonFile:
-                            if caserunname in jsonFile[obj['id']]:
-                                del jsonFile[obj['id']][caserunname]
-                    File.writeFile(jsonFile, path)
+            #if group != 'RYS':
+            path = Path(self.viewFolderPath, group+'.json')
+            if path.is_file():
+                jsonFile = File.readFile(path)
+                for obj in array:
+                    #potrebna provjera jer smo u 4.5 verziji dodali varijablu EBAC i dolazilo je do greske jer nije bilo u reyultataima
+                    if obj['id'] in jsonFile:
+                        if caserunname in jsonFile[obj['id']]:
+                            del jsonFile[obj['id']][caserunname]
+                File.writeFile(jsonFile, path)
 
     def deleteCaseRun(self, caserunname):
         try:
@@ -1801,7 +1801,8 @@ class DataFile(Osemosys):
         PvAnnuity = {}
         for tech in tech_list:
             CapitalRecoveryFactor[tech] = (1 - pow( (1 + DRi[tech]), -1) ) / (1 - pow( (1+DRi[tech]), -OL[tech] ) )
-            PvAnnuity[tech] = (1 - pow((1 + DRi[tech]), -OL[tech])) * (1 + DRi[tech]) / DRi[tech]
+            # PvAnnuity[tech] = (1 - pow((1 + DRi[tech]), -OL[tech])) * (1 + DRi[tech]) / DRi[tech]
+            PvAnnuity[tech] = (1 - pow((1 + DR), -OL[tech])) * (1 + DR) / DR
 
         lines.append('{} {} {} {} {} {}'.format('param', 'CapitalRecoveryFactor','default', 0, ':','\n'))
         lines.append('{}{}{}'.format(techs_string, ':=', '\n'))
