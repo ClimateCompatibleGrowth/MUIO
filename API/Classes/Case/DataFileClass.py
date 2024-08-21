@@ -1800,9 +1800,9 @@ class DataFile(Osemosys):
         CapitalRecoveryFactor = {}
         PvAnnuity = {}
         for tech in tech_list:
-            CapitalRecoveryFactor[tech] = (1 - pow( (1 + DRi[tech]), -1) ) / (1 - pow( (1+DRi[tech]), -OL[tech] ) )
+            CapitalRecoveryFactor[tech] = round((1 - pow( (1 + DRi[tech]), -1) ) / (1 - pow( (1+DRi[tech]), -OL[tech] ) ), 4)
             # PvAnnuity[tech] = (1 - pow((1 + DRi[tech]), -OL[tech])) * (1 + DRi[tech]) / DRi[tech]
-            PvAnnuity[tech] = (1 - pow((1 + DR), -OL[tech])) * (1 + DR) / DR
+            PvAnnuity[tech] = round((1 - pow((1 + DR), -OL[tech])) * (1 + DR) / DR, 4 )
 
         lines.append('{} {} {} {} {} {}'.format('param', 'CapitalRecoveryFactor','default', 0, ':','\n'))
         lines.append('{}{}{}'.format(techs_string, ':=', '\n'))
