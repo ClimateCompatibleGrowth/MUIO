@@ -357,6 +357,8 @@ export default class Pivot {
 
     static initEvents(model, app) {
 
+
+        console.log('model ', model)
         $("#casePicker").off('click');
         $("#casePicker").on('click', '.selectCS', function (e) {
             e.preventDefault();
@@ -414,6 +416,7 @@ export default class Pivot {
             .then(response => {
                 Message.clearMessages();
                 Message.bigBoxSuccess('Model message', response.message, 3000);
+                POSTDATA['osy-varId'] = param;
                 model.VIEWS.push(POSTDATA);
                 // Html.ddlViews(model.VIEWS[model.param]);
                 //Html.ddlViews(model.VIEWS);
@@ -612,6 +615,10 @@ export default class Pivot {
             $.each(model.VIEWS, function (id, obj) {
                 if(obj['osy-viewId'] == model.VIEW){
                     let param = obj['osy-varId'];
+                    console.log('model.VIEW ', model.VIEW)
+                    console.log('model.VIEWS ', model.VIEWS)
+                    console.log('obj ', obj)
+                    console.log('param ', param)
                     if (model.VAR_IDS.includes(param)){
 
                         if(param != model.param){

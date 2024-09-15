@@ -137,6 +137,25 @@ def updateStorageSet(casename):
 
     File.writeFile( genData, genDataPath)
 
+def updateViewDefintions(casename):
+    viewDataPath = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
+    viewDefExisting = File.readParamFile(viewDataPath)
+    configPath = Path(Config.DATA_STORAGE, 'Variables.json')
+    vars = File.readParamFile(configPath)
+    viewDef = {}
+    for group, lists in vars.items():
+        for list in lists:
+            if list['id'] not in viewDefExisting["osy-views"]:
+                viewDef[list['id']] = []
+            else:
+                viewDef[list['id']] = viewDefExisting["osy-views"][list['id']]
+
+
+    viewData = {
+        "osy-views": viewDef
+    }
+    File.writeFile( viewData, viewDataPath)
+
 def updateTimeslices_OnlyTs(casename):
     genDataPath = Path(Config.DATA_STORAGE, casename, 'genData.json')
     genData = File.readParamFile(genDataPath)
@@ -318,6 +337,7 @@ def uploadCase():
                                     #update for dynamic timeslicec
                                     updateTimeslices(casename)
                                     updateStorageSet(casename)
+                                    updateViewDefintions(casename)
 
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
@@ -330,6 +350,7 @@ def uploadCase():
                                     #update for dynamic timeslicec
                                     updateTimeslices(casename)
                                     updateStorageSet(casename)
+                                    updateViewDefintions(casename)
                                     #u 4.5 ver dodani paramteri i varijable
                                     # u 4.9 versiji dodano param DiscountRateIdv
                                     msg.append({
@@ -353,6 +374,7 @@ def uploadCase():
 
                                 elif name == '5.0': 
                                     zf.extractall(os.path.join(Config.EXTRACT_FOLDER))
+                                    updateViewDefintions(casename)
                                     msg.append({
                                         "message": "Model " + casename +" have been uploaded!",
                                         "status_code": "success",

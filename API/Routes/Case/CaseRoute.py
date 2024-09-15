@@ -237,12 +237,26 @@ def saveCase():
         casename = genData['osy-casename']
         case = session.get('osycase', None)
 
+        # configPath = Path(Config.DATA_STORAGE, 'Variables.json')
+        # vars = File.readParamFile(configPath)
+        # viewDef = {}
+        # for group, lists in vars.items():
+        #     for list in lists:
+        #         viewDef[list['id']] = []
+
+        #ukoliko dodamo varijablu onda se prilikom update case treba taj var dodati defaultno u view Definition
+        viewDataPath = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
+        viewDefExisting = File.readParamFile(viewDataPath)
         configPath = Path(Config.DATA_STORAGE, 'Variables.json')
         vars = File.readParamFile(configPath)
         viewDef = {}
         for group, lists in vars.items():
             for list in lists:
-                viewDef[list['id']] = []
+                if list['id'] not in viewDefExisting["osy-views"]:
+                    viewDef[list['id']] = []
+                else:
+                    viewDef[list['id']] = viewDefExisting["osy-views"][list['id']]
+
 
         #ako je izabran case, edit mode
         if case != None and case != '':
@@ -253,8 +267,15 @@ def saveCase():
             viewPath = Path(Config.DATA_STORAGE,case,'view')
             resDataPath = Path(Config.DATA_STORAGE,case,'view','resData.json')
             viewDataPath = Path(Config.DATA_STORAGE,case,'view','viewDefinitions.json')
+
+            viewData = {
+                    "osy-views": viewDef
+                }
+            File.writeFile( viewData, viewDataPath)
+            
             if not os.path.exists(resPath):
                 os.makedirs(resPath, mode=0o777, exist_ok=False)
+
             if not os.path.exists(viewPath):
                 os.makedirs(viewPath, mode=0o777, exist_ok=False)
                 resData = {
@@ -262,10 +283,8 @@ def saveCase():
                 }
                 File.writeFile( resData, resDataPath)
 
-                viewData = {
-                    "osy-views": viewDef
-                }
-                File.writeFile( viewData, viewDataPath)
+
+
 
             #edit case sa istim imenom
             if case == casename:

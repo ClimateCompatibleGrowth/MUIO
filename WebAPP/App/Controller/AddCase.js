@@ -318,14 +318,31 @@ export default class AddCase {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
+            console.log('id ', id)
+            
             if (id != 0) {
+                var rows = $divTech.jqxGrid('getboundrows');
                 var techId = $divTech.jqxGrid('getcellvalue', id, 'TechId');
+                console.log('techId ', techId)
+                console.log('tech name', model.techNames[techId])
+                //ovdje moramo korisit id ne rowID koji ostaje nepromjenjen nakon brisanja
                 var rowid = $divTech.jqxGrid('getrowid', id);
-                console.log('model.techs ',model.techs[rowid])
-                console.log("TG ", model.techs[rowid].TG.length)
-                if(model.techs[rowid].TG.length>0){
-                   
-                    Message.confirmationDialog('Technology deletion warning', `Technology <b>${model.techs[rowid].Tech}</b> has technology group membership(s). Deleting the technology could impact visalisation of results for previously run cases. Are you sure you want to proceed?`, model, $divTech, id, rowid, techId)
+                //var rowid = id;
+
+
+                console.log('rowid ', rowid)
+
+                // console.log('rows[rowId].uid ', rows[rowid].uid);
+                // console.log('rows[id]].uid ', rows[id].uid);
+                console.log('model.techs ',model.techs)
+                console.log('rows ', rows)
+                //console.log('model.techs rowid ',model.techs[rowid])
+                console.log('model.techs TECH ',model.techs[id].Tech)
+                // console.log("TG ", model.techs[rowid].TG.length)
+
+
+                if(model.techs[id].TG.length>0){          
+                    Message.confirmationDialog('Technology deletion warning', `Technology <b>${model.techs[id].Tech}</b> has technology group membership(s). Deleting the technology could impact visalisation of results for previously run cases. Are you sure you want to proceed?`, model, $divTech, id, rowid, techId)
                 }
                 else{
                     $divTech.jqxGrid('deleterow', rowid);
@@ -335,6 +352,7 @@ export default class AddCase {
                     //update count
                     model.techCount--;
                     $("#techCount").text(model.techCount);
+                    //$divTech.jqxGrid('updatebounddata');
                     //izbrisati iz model constraints eventualne tehnologijel koje smo izbrisali
                     $.each(model.constraints, function (id, conObj) {
                         conObj['CM'] = conObj['CM'].filter(item => item !== techId);
