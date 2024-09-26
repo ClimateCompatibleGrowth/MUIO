@@ -237,25 +237,25 @@ def saveCase():
         casename = genData['osy-casename']
         case = session.get('osycase', None)
 
-        # configPath = Path(Config.DATA_STORAGE, 'Variables.json')
-        # vars = File.readParamFile(configPath)
-        # viewDef = {}
-        # for group, lists in vars.items():
-        #     for list in lists:
-        #         viewDef[list['id']] = []
-
-        #ukoliko dodamo varijablu onda se prilikom update case treba taj var dodati defaultno u view Definition
-        viewDataPath = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
-        viewDefExisting = File.readParamFile(viewDataPath)
         configPath = Path(Config.DATA_STORAGE, 'Variables.json')
         vars = File.readParamFile(configPath)
         viewDef = {}
         for group, lists in vars.items():
             for list in lists:
-                if list['id'] not in viewDefExisting["osy-views"]:
-                    viewDef[list['id']] = []
-                else:
-                    viewDef[list['id']] = viewDefExisting["osy-views"][list['id']]
+                viewDef[list['id']] = []
+
+        #ukoliko dodamo varijablu onda se prilikom update case treba taj var dodati defaultno u view Definition
+        # viewDataPath = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
+        # viewDefExisting = File.readParamFile(viewDataPath)
+        # configPath = Path(Config.DATA_STORAGE, 'Variables.json')
+        # vars = File.readParamFile(configPath)
+        # viewDef = {}
+        # for group, lists in vars.items():
+        #     for list in lists:
+        #         if list['id'] not in viewDefExisting["osy-views"]:
+        #             viewDef[list['id']] = []
+        #         else:
+        #             viewDef[list['id']] = viewDefExisting["osy-views"][list['id']]
 
 
         #ako je izabran case, edit mode
