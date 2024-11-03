@@ -212,6 +212,8 @@ export const UNITS =
     {id:"Ton/yr",name:"Ton/yr", group: "Capacity"}, 
     {id:"kTon/yr",name:"kTon/yr", group: "Capacity"}, 
     {id:"MTon/yr",name:"MTon/yr", group: "Capacity"}, 
+    {id:"PJ/yr",name:"PJ/yr", group: "Capacity"}, 
+    {id:"TJ/yr",name:"TJ/yr", group: "Capacity"}, 
 
 
     {id:"Ton",name:"Ton", group: "Weight"}, 

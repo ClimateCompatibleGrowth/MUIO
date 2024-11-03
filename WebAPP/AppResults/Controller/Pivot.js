@@ -402,8 +402,17 @@ export default class Pivot {
             let viewId = DefaultObj.getId('VIEW');
 
             app.engine.fields.getField('Unit').isContentHtml = true;
-            app.engine.fields.getField('Tech').isContentHtml = true;
-            app.engine.fields.getField('Tech Desc').isContentHtml = true;
+            console.log('param ', param)
+            //ako nije demand jer ne zavisi od T
+            if(param == 'D'){
+                app.engine.fields.getField('Comm').isContentHtml = true;
+                app.engine.fields.getField('Comm Desc').isContentHtml = true;
+            }
+            else{
+                app.engine.fields.getField('Tech').isContentHtml = true;
+                app.engine.fields.getField('Tech Desc').isContentHtml = true;
+            }
+
 
             let POSTDATA = {
                 "osy-viewId": viewId,
@@ -615,10 +624,10 @@ export default class Pivot {
             $.each(model.VIEWS, function (id, obj) {
                 if(obj['osy-viewId'] == model.VIEW){
                     let param = obj['osy-varId'];
-                    console.log('model.VIEW ', model.VIEW)
-                    console.log('model.VIEWS ', model.VIEWS)
-                    console.log('obj ', obj)
-                    console.log('param ', param)
+                    // console.log('model.VIEW ', model.VIEW)
+                    // console.log('model.VIEWS ', model.VIEWS)
+                    // console.log('obj ', obj)
+                    // console.log('param ', param)
                     if (model.VAR_IDS.includes(param)){
 
                         if(param != model.param){

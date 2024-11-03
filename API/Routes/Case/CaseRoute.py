@@ -239,10 +239,12 @@ def saveCase():
 
         configPath = Path(Config.DATA_STORAGE, 'Variables.json')
         vars = File.readParamFile(configPath)
-        viewDef = {}
-        for group, lists in vars.items():
-            for list in lists:
-                viewDef[list['id']] = []
+
+        
+        # viewDef = {}
+        # for group, lists in vars.items():
+        #     for list in lists:
+        #         viewDef[list['id']] = []
 
         #ukoliko dodamo varijablu onda se prilikom update case treba taj var dodati defaultno u view Definition
         # viewDataPath = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
@@ -267,6 +269,16 @@ def saveCase():
             viewPath = Path(Config.DATA_STORAGE,case,'view')
             resDataPath = Path(Config.DATA_STORAGE,case,'view','resData.json')
             viewDataPath = Path(Config.DATA_STORAGE,case,'view','viewDefinitions.json')
+
+            viewDataPathExisting = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
+            viewDefExisting = File.readParamFile(viewDataPathExisting)
+            viewDef = {}
+            for group, lists in vars.items():
+                for list in lists:
+                    if list['id'] not in viewDefExisting["osy-views"]:
+                        viewDef[list['id']] = []
+                    else:
+                        viewDef[list['id']] = viewDefExisting["osy-views"][list['id']]
 
             viewData = {
                     "osy-views": viewDef
@@ -330,6 +342,11 @@ def saveCase():
         #novi case 
         else:
             if not os.path.exists(Path(Config.DATA_STORAGE,casename)):
+                viewDef = {}
+                for group, lists in vars.items():
+                    for list in lists:
+                        viewDef[list['id']] = []
+
                 session['osycase'] = casename
                 os.makedirs(Path(Config.DATA_STORAGE,casename))
                 genDataPath = Path(Config.DATA_STORAGE, casename, "genData.json")
