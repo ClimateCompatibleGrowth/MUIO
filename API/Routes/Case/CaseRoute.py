@@ -270,8 +270,8 @@ def saveCase():
             resDataPath = Path(Config.DATA_STORAGE,case,'view','resData.json')
             viewDataPath = Path(Config.DATA_STORAGE,case,'view','viewDefinitions.json')
 
-            viewDataPathExisting = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
-            viewDefExisting = File.readParamFile(viewDataPathExisting)
+            # viewDataPathExisting = Path(Config.DATA_STORAGE,casename,'view','viewDefinitions.json')
+            viewDefExisting = File.readParamFile(viewDataPath)
             viewDef = {}
             for group, lists in vars.items():
                 for list in lists:
