@@ -178,7 +178,10 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "StgUnit"
+                        "var": "milion"
+                    },
+                    {
+                        "var": "Currency"
                     }
                 ]
             }
@@ -190,7 +193,10 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "StgUnit"
+                        "var": "milion"
+                    },
+                    {
+                        "var": "Currency"
                     }
                 ]
             }
@@ -204,7 +210,7 @@
             "unitRule": {
                 "cat": [
                     {
-                        "var": "StgUnit"
+                        "var": "ActUnitId"
                     }
                 ]
             }
@@ -219,12 +225,6 @@
                 "cat": [
                     {
                         "var": "CommUnit"
-                    },
-                    {
-                        "var": "divide"
-                    },
-                    {
-                        "var": "ActUnitId"
                     }
                 ]
             }

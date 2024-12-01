@@ -230,6 +230,9 @@ export class DataModelResult{
                     //     chunk['Tech'] = obj.Tech;  
                     //     dataT = unitData[group][param][obj.Tech];
                     // }
+
+                    //provjera da li u obj ima Comm, Tech, Stg, Emi... Redosljed je bitan za one varijable koje zavise vise od jednog seta, definicja 
+                    //unita ce da zavisi od toga
                     if(obj.Comm){
                         
                         //uslov dodan vk 18072924 ako smo izbrisali commodity a postoji u resulttima
@@ -247,21 +250,7 @@ export class DataModelResult{
                             chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
                         }
                     }
-                    if(obj.Emi){
-                        
-                        if(obj.Emi in emiData){
-                            chunk['Emi'] = obj.Emi;
-                            chunk['EmiDesc'] = emiData[obj.Emi]["Desc"];
-                            dataE = unitData[group][param][obj.Emi];
-                            let rule = paramById[group][param]['unitRule'];
-                            chunk['Unit'] = jsonLogic.apply(rule, {...dataE});
-                        }
-                        else{
-                            chunk['Emi'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Emi;
-                            chunk['EmiDesc'] =  '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Emi+' deleted from model';
-                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
-                        }
-                    }
+
                     if(obj.Stg){
                         
                         if(obj.Stg in stgData){
@@ -337,6 +326,21 @@ export class DataModelResult{
                             pivotData.push(chunk);
                         }
 
+                    }
+                    if(obj.Emi){
+                        
+                        if(obj.Emi in emiData){
+                            chunk['Emi'] = obj.Emi;
+                            chunk['EmiDesc'] = emiData[obj.Emi]["Desc"];
+                            dataE = unitData[group][param][obj.Emi];
+                            let rule = paramById[group][param]['unitRule'];
+                            chunk['Unit'] = jsonLogic.apply(rule, {...dataE});
+                        }
+                        else{
+                            chunk['Emi'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Emi;
+                            chunk['EmiDesc'] =  '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Emi+' deleted from model';
+                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
+                        }
                     }
                     if(!obj.Tech){
                         pivotData.push(chunk);
