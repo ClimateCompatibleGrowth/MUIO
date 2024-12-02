@@ -233,39 +233,7 @@ export class DataModelResult{
 
                     //provjera da li u obj ima Comm, Tech, Stg, Emi... Redosljed je bitan za one varijable koje zavise vise od jednog seta, definicja 
                     //unita ce da zavisi od toga
-                    if(obj.Comm){
-                        
-                        //uslov dodan vk 18072924 ako smo izbrisali commodity a postoji u resulttima
-                        if(obj.Comm in commData){
-                            chunk['Comm'] = obj.Comm;
-                            chunk['CommDesc'] = commData[obj.Comm]["Desc"];
-                           
-                            dataC = unitData[group][param][obj.Comm];
-                            let rule = paramById[group][param]['unitRule'];
-                            chunk['Unit'] = jsonLogic.apply(rule, {...dataC});
-                        }
-                        else{
-                            chunk['Comm'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Comm;
-                            chunk['CommDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Comm + " deleted from model";
-                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
-                        }
-                    }
 
-                    if(obj.Stg){
-                        
-                        if(obj.Stg in stgData){
-                            chunk['Stg'] = obj.Stg;
-                            chunk['StgDesc'] = stgData[obj.Stg]["Desc"];
-                            dataS = unitData[group][param][obj.Stg];
-                            let rule = paramById[group][param]['unitRule'];
-                            chunk['Unit'] = jsonLogic.apply(rule, {...dataS});
-                        }
-                        else{
-                            chunk['Stg'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Stg;
-                            chunk['StgDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Stg + " deleted from model";
-                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
-                        }
-                    }
                     if(obj.MoId){
                         chunk['MoId'] = obj.MoId;
                     }
@@ -311,10 +279,14 @@ export class DataModelResult{
                                 chunk['TechDesc'] = techData[obj.Tech]["Desc"];
                                 chunk['TechGroupDesc'] = 'No group';
                                 dataT = unitData[group][param][obj.Tech];
+
                                 chunk['Unit'] = jsonLogic.apply(rule, {...dataT});
                                 pivotData.push(chunk);
                             }
-                        
+
+                            console.log('rule ', rule)
+                            console.log('unitData[group][param] ', unitData[group][param])
+                            console.log('dataT ', dataT)
                             dataT = unitData[group][param][obj.Tech];
                         }
                         else{
@@ -326,6 +298,39 @@ export class DataModelResult{
                             pivotData.push(chunk);
                         }
 
+                    }
+                    if(obj.Comm){
+                        
+                        //uslov dodan vk 18072924 ako smo izbrisali commodity a postoji u resulttima
+                        if(obj.Comm in commData){
+                            chunk['Comm'] = obj.Comm;
+                            chunk['CommDesc'] = commData[obj.Comm]["Desc"];
+                           
+                            dataC = unitData[group][param][obj.Comm];
+                            let rule = paramById[group][param]['unitRule'];
+                            chunk['Unit'] = jsonLogic.apply(rule, {...dataC});
+                        }
+                        else{
+                            chunk['Comm'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Comm;
+                            chunk['CommDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Comm + " deleted from model";
+                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
+                        }
+                    }
+
+                    if(obj.Stg){
+                        
+                        if(obj.Stg in stgData){
+                            chunk['Stg'] = obj.Stg;
+                            chunk['StgDesc'] = stgData[obj.Stg]["Desc"];
+                            dataS = unitData[group][param][obj.Stg];
+                            let rule = paramById[group][param]['unitRule'];
+                            chunk['Unit'] = jsonLogic.apply(rule, {...dataS});
+                        }
+                        else{
+                            chunk['Stg'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Stg;
+                            chunk['StgDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Stg + " deleted from model";
+                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
+                        }
                     }
                     if(obj.Emi){
                         
