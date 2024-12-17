@@ -1982,7 +1982,6 @@ class DataFile(Osemosys):
             self.lpFile = Path(Config.DATA_STORAGE,self.case, 'res',caserunname,'lp.lp')
             self.resPath = Path(Config.DATA_STORAGE,self.case, 'res',caserunname)
             
-
             modelfile = '"{}"'.format(self.osemosysFile.resolve())
             modelfile_original = '"{}"'.format(self.osemosysFileOriginal.resolve())
             datafile = '"{}"'.format(self.dataFile.resolve())
@@ -1991,6 +1990,8 @@ class DataFile(Osemosys):
             logfile = '"{}"'.format(self.logFile.resolve())
             logfiletxt = '"{}"'.format(self.logFileTxt.resolve())
             lpfile = '"{}"'.format(self.lpFile.resolve())
+
+
             
 
             glpfolder =self.glpkFolder.resolve()
@@ -2014,7 +2015,8 @@ class DataFile(Osemosys):
 
                 #return output to variable preprocessed data file
                 glpk_out = subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=glpfolder,  capture_output=True, text=True, shell=True)
-                
+            
+
                 #glpk_out = subprocess.run('glpsol --check -m ' + modelfile +' -d ' + datafile_processed +' --wlp ' + lpfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
                 
 
@@ -2035,7 +2037,7 @@ class DataFile(Osemosys):
                 #     proc.kill()
                 #     outs, errs = proc.communicate()
 
-                cbc_out = subprocess.run('cbc ' + lpfile +' solve  -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                cbc_out = subprocess.run('cbc ' + lpfile +' solve -printing 1  -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
 
 
                 print("SOLUTION DONE! --- %s seconds --- %s" % (time.time() - start_time, caserunname))

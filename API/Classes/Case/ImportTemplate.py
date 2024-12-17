@@ -229,7 +229,7 @@ class ImportTemplate():
         defaultStg = [
             {
                 "StgId": id,
-                "Stg":id,
+                "Stg":name,
                 "Desc": desc,
                 "UnitId": unit,
                 "TTS": "TEC_0",
@@ -443,7 +443,7 @@ class ImportTemplate():
         for obj in xlsObj:
             if obj['TECHNOLOGY'] not in outObj:
                 outObj[obj['TECHNOLOGY']] = {}
-            if obj['STORAGE'] not in outObj[obj['STORAGE']]:
+            if obj['STORAGE'] not in outObj[obj['TECHNOLOGY']]:
                 outObj[obj['TECHNOLOGY']][obj['STORAGE']] = {}
             if obj['MODE_OF_OPERATION'] not in outObj[obj['TECHNOLOGY']][obj['STORAGE']]:
                 outObj[obj['TECHNOLOGY']][obj['STORAGE']][obj['MODE_OF_OPERATION']] = {}
@@ -490,6 +490,10 @@ class ImportTemplate():
             oar_xls = df_sheet_all['OutputActivityRatio']
             ear_xls = df_sheet_all['EmissionActivityRatio']
 
+            #TECHNOLOGY TO AND FROM STORAGE
+            tfs_xls = df_sheet_all['TechnologyFromStorage']
+            tts_xls = df_sheet_all['TechnologyToStorage']
+
 
             techs_xls.rename(columns = {'VALUE':'TECHNOLOGY'}, inplace = True)
             comms_xls.rename(columns = {'VALUE':'COMMODITY'}, inplace = True)
@@ -515,6 +519,10 @@ class ImportTemplate():
             oar_data = oar_xls.to_json(orient='records', indent=2)
             ear_data = ear_xls.to_json(orient='records', indent=2)
 
+            #technology to and from storage
+            tts_data = tts_xls.to_json(orient='records', indent=2)
+            tfs_data = tfs_xls.to_json(orient='records', indent=2)
+
             techsArray = json.loads(techs_data)
             commsArray = json.loads(comms_data)
             emisArray = json.loads(emis_data)
@@ -528,6 +536,10 @@ class ImportTemplate():
             oarArray = json.loads(oar_data)
             earArray = json.loads(ear_data)
 
+            #technology to and from storage
+            ttsArray = json.loads(tts_data)
+            tfsArray = json.loads(tfs_data)
+
             yearsArray = years_xls['YEARS'].astype(str).values.tolist()
             mooValue = moo_xls['MODE_OF_OPERATION'].count()
 
@@ -539,13 +551,13 @@ class ImportTemplate():
             if not tsArray:
                 timeslices.append(self.defaultTs('TS_0', first=True)[0])
             else:
-                for obj in tsArray:
+                for i,obj in enumerate(tsArray):
                     timeslice = obj['TIMESLICE']
                     if obj.get('DESCRIPTION') is not None:
                         desc = obj['DESCRIPTION']
                     else:
                         desc = "Default timeslice"
-                    if obj==0:
+                    if i==0:
                         timeslices.append(self.defaultTs(timeslice, desc, True)[0])
                     else:
                         timeslices.append(self.defaultTs(timeslice, desc)[0])
@@ -554,28 +566,28 @@ class ImportTemplate():
             if not seArray:
                 seasons.append(self.defaultSe(1, first=True)[0])
             else:
-                for obj in seArray:
+                for i,obj in enumerate(seArray):
                     season = obj['SEASON']
                     if obj.get('DESCRIPTION') is not None:
                         desc = obj['DESCRIPTION']
                     else:
                         desc = "Default season"
-                    if obj==0:
+                    if i==0:
                         seasons.append(self.defaultSe(season, desc, True)[0])
                     else:
                         seasons.append(self.defaultSe(season, desc)[0])
 
             daytypes = []
-            if not seArray:
+            if not dtArray:
                 daytypes.append(self.defaultDt(1, first=True)[0])
             else:
-                for obj in dtArray:
-                    daytype = obj['DAYTPE']
+                for i,obj in enumerate(dtArray):
+                    daytype = obj['DAYTYPE']
                     if obj.get('DESCRIPTION') is not None:
                         desc = obj['DESCRIPTION']
                     else:
                         desc = "Default day type"
-                    if obj==0:
+                    if i==0:
                         daytypes.append(self.defaultDt(daytype, desc, True)[0])
                     else:
                         daytypes.append(self.defaultDt(daytype, desc)[0])
@@ -584,13 +596,13 @@ class ImportTemplate():
             if not dtbArray:
                 dailytimebrackets.append(self.defaultDtb(1, first=True)[0])
             else:
-                for obj in dtbArray:
+                for i,obj in enumerate(dtbArray):
                     dtb = obj['DAILYTIMEBRACKET']
                     if obj.get('DESCRIPTION') is not None:
                         desc = obj['DESCRIPTION']
                     else:
                         desc = "Default daily tme bracket"
-                    if obj==0:
+                    if i==0:
                         dailytimebrackets.append(self.defaultDtb(dtb, desc, True)[0])
                     else:
                         dailytimebrackets.append(self.defaultDtb(dtb, desc)[0])
@@ -599,12 +611,12 @@ class ImportTemplate():
             if not tgArray:
                 techgroups.append(self.defaultTechGroup('TG_0', first=True)[0])
             else:
-                for obj in tgArray:
+                for i, obj in enumerate(tgArray):
                     tGroup = obj['TECHGROUP']
                     tGroupDesc = obj['DESCRIPTION']
                     if tGroupDesc is None:
                         tGroupDesc = "Default technology group"
-                    if obj==0:
+                    if i==0:
                         techgroups.append(self.defaultTechGroup(tGroup, tGroupDesc, True)[0])
                     else:
                         techgroups.append(self.defaultTechGroup(tGroup, tGroupDesc)[0])
@@ -697,14 +709,17 @@ class ImportTemplate():
 
             # #populate IAR and OAR
             # stgId = self.getStgByName(stgs)
-            # techId = self.getTechByName(techs)
+            techId = self.getTechByName(techs)
             commId = self.getCommByName(comms)
             emiId = self.getEmiByName(emis)
+            stgId = self.getStgByName(stgs)
             
             tgId = self.getTechGroupByName(techgroups)
 
             iarObj = {}
             oarObj = {}
+            ttsObj = {}
+            tfsObj = {}
             earObj = {}
             techgroupObj = {}
 
@@ -725,6 +740,24 @@ class ImportTemplate():
                     earObj[ear['TECHNOLOGY']] = []
                 if emiId[ear['EMISSION']] not in earObj[ear['TECHNOLOGY']]:
                     earObj[ear['TECHNOLOGY']].append(emiId[ear['EMISSION']])
+
+            for tts in ttsArray:
+                ttsObj[tts['STORAGE']] = techId[tts['TECHNOLOGY']]
+                # if tts['STORAGE'] not in ttsObj:
+                #     ttsObj[tts['STORAGE']] = []
+                # if techId[tts['TECHNOLOGY']] not in ttsObj[tts['STORAGE']]:
+                #     ttsObj[tts['STORAGE']].append(techId[tts['TECHNOLOGY']])
+
+            for tfs in tfsArray:
+                tfsObj[tfs['STORAGE']] = techId[tfs['TECHNOLOGY']]
+                # if tfs['STORAGE'] not in tfsObj:
+                #     tfsObj[tfs['STORAGE']] = []
+                # if techId[tfs['TECHNOLOGY']] not in tfsObj[tfs['STORAGE']]:
+                #     tfsObj[tfs['STORAGE']].append(techId[tfs['TECHNOLOGY']])
+
+
+
+
 
             for tech in techsArray:
                 ##if 'TECHGROUP' in tech:
@@ -749,6 +782,12 @@ class ImportTemplate():
                     tech['EAR'] = earObj[tech['Tech']]
                 if tech['Tech'] in techgroupObj:
                     tech['TG'] = techgroupObj[tech['Tech']]
+
+            for stg in stgs:
+                if stg['Stg'] in ttsObj:
+                    stg['TTS'] = ttsObj[stg['Stg']]
+                if stg['Stg'] in tfsObj:
+                    stg['TFS'] = tfsObj[stg['Stg']]
 
             print('TECHS COMMS IAR OAR DONE!')
             print("--- %s seconds ---" % (time.time() - start_time))
@@ -939,7 +978,7 @@ class ImportTemplate():
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             for arr in xlsArray:
-                                                if arr['STORAGE'] == stgName[el['StgID']]:
+                                                if arr['STORAGE'] == stgName[el['StgId']]:
                                                     for yr, val in el.items():
                                                         if yr != 'StgId':
                                                             el[yr] = arr[yr]
@@ -997,7 +1036,7 @@ class ImportTemplate():
                                     for sc, obj in jsonData[a['id']].items():
                                         for el in obj:
                                             t = techName[el['TechId']] 
-                                            s = emiName[el['StgId']]
+                                            s = stgName[el['StgId']]
                                             m = el['MoId']
                                             if t in xlsObject[key]:
                                                 if s in xlsObject[key][t]:

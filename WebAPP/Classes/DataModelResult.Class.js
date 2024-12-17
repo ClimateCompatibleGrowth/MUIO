@@ -212,7 +212,7 @@ export class DataModelResult{
         let techGroupNames = DataModel.TechGroupName(genData);
         let years = genData['osy-years']
 
-        // console.log('unitData ',unitData)
+        //console.log('unitData ',unitData)
 
         let pivotData = [];
         let dataT = {};
@@ -263,15 +263,24 @@ export class DataModelResult{
                             if(techData[obj.Tech].TG.length != 0){
                                 $.each(techData[obj.Tech].TG, function (id, tg) {
                                     //console.log('tsec hada ', tg, techGroupData[tg])
-                                    let tmp = {};
-                                    tmp = JSON.parse(JSON.stringify(chunk));
-                                    tmp['Tech'] = obj.Tech;  
-                                    tmp['TechGroup'] = techGroupNames[tg];
-                                    tmp['TechDesc'] = techData[obj.Tech]["Desc"];
-                                    tmp['TechGroupDesc'] = techGroupData[tg]["Desc"];
+                                    // let tmp = {};
+                                    // tmp = JSON.parse(JSON.stringify(chunk));
+                                    // tmp['Tech'] = obj.Tech;  
+                                    // tmp['TechGroup'] = techGroupNames[tg];
+                                    // tmp['TechDesc'] = techData[obj.Tech]["Desc"];
+                                    // tmp['TechGroupDesc'] = techGroupData[tg]["Desc"];
+                                    // dataT = unitData[group][param][obj.Tech];
+                                    // tmp['Unit'] = jsonLogic.apply(rule, {...dataT});
+                                    // pivotData.push(tmp);
+
+
+                                    chunk['Tech'] = obj.Tech;  
+                                    chunk['TechGroup'] = techGroupNames[tg];
+                                    chunk['TechDesc'] = techData[obj.Tech]["Desc"];
+                                    chunk['TechGroupDesc'] = techGroupData[tg]["Desc"];
                                     dataT = unitData[group][param][obj.Tech];
-                                    tmp['Unit'] = jsonLogic.apply(rule, {...dataT});
-                                    pivotData.push(tmp);
+                                    chunk['Unit'] = jsonLogic.apply(rule, {...dataT});
+                                    pivotData.push(chunk);
                                 })
                             }else{
                                 chunk['Tech'] = obj.Tech;  
@@ -284,9 +293,9 @@ export class DataModelResult{
                                 pivotData.push(chunk);
                             }
 
-                            console.log('rule ', rule)
-                            console.log('unitData[group][param] ', unitData[group][param])
-                            console.log('dataT ', dataT)
+                            // console.log('rule ', rule)
+                            // console.log('unitData[group][param] ', unitData[group][param])
+                            // console.log('dataT ', dataT)
                             dataT = unitData[group][param][obj.Tech];
                         }
                         else{
@@ -423,7 +432,7 @@ export class DataModelResult{
     // }
 
     ////////////////////////////////////////////////////////JSON data structures
-
+/*
     static RT(RTdata){
         let RT = {};
         const cloneData = JSON.parse(JSON.stringify(RTdata));
@@ -1462,4 +1471,5 @@ export class DataModelResult{
         });  
         return RYTCTschart;
     }
+        */
 }
